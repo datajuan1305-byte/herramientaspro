@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Simulador de retención en la fuente Colombia 2026. Calcula retención en la fuente por salarios, honorarios, servicios, compras, arrendamientos y dividendos. Actualizado UVT 2026." />
+  <meta name="keywords" content="retencion en la fuente colombia 2026, calcular retencion fuente, retencion honorarios colombia, retencion servicios colombia, UVT 2026 retencion" />
+  <title>Simulador Retención en la Fuente Colombia 2026 — HerramientasPro</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #1D9E75; --verde-dark: #0F6E56; --verde-light: #E1F5EE;
+      --azul: #185FA5; --azul-dark: #0C447C; --azul-light: #E6F1FB;
+      --rojo: #A32D2D; --rojo-light: #FCEBEB;
+      --naranja: #854F0B; --naranja-light: #FAEEDA;
+      --morado: #534AB7; --morado-light: #EEEDFE;
+      --text: #1a1a1a; --text-sec: #555; --text-muted: #888;
+      --bg: #f7f7f5; --card: #ffffff; --border: #e0e0dc; --radius: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; height: 54px; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { width: 30px; height: 30px; background: var(--verde); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .nav-sep { color: var(--border); font-size: 18px; }
+    .nav-current { font-size: 13px; color: var(--text-sec); }
+
+    .hero { background: linear-gradient(135deg, #0C447C 0%, #534AB7 100%); padding: 2rem 1.5rem; text-align: center; }
+    .hero-icon { font-size: 42px; margin-bottom: 10px; }
+    .hero h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.85); max-width: 580px; margin: 0 auto; }
+    .hero-params { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .hero-param { font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; padding: 4px 10px; border-radius: 20px; }
+
+    .main { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 500; color: var(--text-sec); }
+    select, input[type="number"] {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text); background: #fff; transition: border-color 0.15s;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--azul); }
+    .hint { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    /* CONCEPTOS RAPIDOS */
+    .conceptos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 8px; margin-bottom: 1rem; }
+    .concepto-btn { padding: 10px 8px; background: #f5f5f2; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; color: var(--text-sec); cursor: pointer; text-align: center; transition: all 0.15s; }
+    .concepto-btn:hover, .concepto-btn.active { background: var(--azul-light); border-color: var(--azul); color: var(--azul); font-weight: 600; }
+    .concepto-emoji { font-size: 18px; display: block; margin-bottom: 4px; }
+    .concepto-nombre { font-size: 11px; font-weight: 600; display: block; }
+    .concepto-tarifa { font-size: 10px; color: var(--text-muted); display: block; margin-top: 2px; }
+
+    .info-concepto { background: var(--azul-light); border: 1px solid #B5D4F4; border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem; font-size: 13px; color: var(--azul-dark); display: none; }
+
+    .btn { width: 100%; padding: 13px; background: var(--azul); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .btn:hover { background: var(--azul-dark); }
+    .btn-reset { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 9px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+
+    #resultados { display: none; }
+
+    /* RESULTADO PRINCIPAL */
+    .result-main { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+    .result-card { border-radius: 10px; padding: 1.1rem; text-align: center; border: 1px solid; }
+    .result-card.pago { background: var(--azul-light); border-color: #B5D4F4; }
+    .result-card.retencion { background: var(--rojo-light); border-color: #F7C1C1; }
+    .result-card.neto { background: var(--verde-light); border-color: #9FE1CB; }
+    .rc-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .rc-valor { font-size: 22px; font-weight: 800; }
+    .result-card.pago .rc-valor { color: var(--azul); }
+    .result-card.retencion .rc-valor { color: var(--rojo); }
+    .result-card.neto .rc-valor { color: var(--verde-dark); }
+    .rc-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+    /* DETALLE */
+    .detalle-box { background: #f9f9f7; border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+    .detalle-fila { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #f0f0ec; font-size: 13px; }
+    .detalle-fila:last-child { border-bottom: none; font-weight: 700; font-size: 14px; }
+    .df-nombre { color: var(--text-sec); }
+    .df-valor { font-weight: 600; }
+    .df-verde { color: var(--verde-dark); }
+    .df-rojo { color: var(--rojo); }
+    .df-azul { color: var(--azul); }
+
+    /* TABLA TARIFAS */
+    .tabla-scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #f5f5f2; color: var(--text-sec); font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); font-size: 12px; }
+    td { padding: 8px 10px; border-bottom: 1px solid #f5f5f2; color: var(--text); font-size: 12px; }
+    tr:last-child td { border-bottom: none; }
+    tr.fila-activa td { background: var(--azul-light); font-weight: 700; color: var(--azul); }
+    .td-pct { font-weight: 700; color: var(--morado); }
+
+    /* NORMA */
+    .norma-box { background: var(--morado-light); border: 1px solid #CECBF6; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--morado); line-height: 1.6; margin-bottom: 1rem; }
+
+    .disclaimer { background: #fffbf0; border: 1px solid #FAC775; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 1rem; }
+    .btn-print { width: 100%; padding: 10px; background: transparent; color: var(--azul); border: 1px solid var(--azul); border-radius: 9px; font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 8px; }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .result-main { grid-template-columns: 1fr; }
+      .conceptos-grid { grid-template-columns: repeat(3,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-text">HerramientasPro</div>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">🧾 Retención en la Fuente 2026</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">🧾</div>
+  <h1>Simulador Retención en la Fuente Colombia 2026</h1>
+  <p>Calcula la retención en la fuente por concepto de pagos a terceros: salarios, honorarios, servicios, compras, arrendamientos y más. Actualizado UVT 2026: $49.799.</p>
+  <div class="hero-params">
+    <span class="hero-param">UVT 2026: $49.799</span>
+    <span class="hero-param">SMMLV 2026: $1.423.500</span>
+    <span class="hero-param">Decreto 2229 de 2023</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="card">
+    <div class="card-title">📋 Selecciona el concepto de pago</div>
+    <div class="conceptos-grid" id="conceptos-grid"></div>
+    <div class="info-concepto" id="info-concepto"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💰 Datos del pago</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="valor-pago">Valor del pago (COP)</label>
+        <input type="number" id="valor-pago" placeholder="Ej: 5000000" min="0" step="1000" />
+        <span class="hint">Valor bruto antes de retención</span>
+      </div>
+      <div class="form-group">
+        <label for="tipo-persona">Tipo de beneficiario</label>
+        <select id="tipo-persona">
+          <option value="declarante">Persona natural declarante de renta</option>
+          <option value="no_declarante">Persona natural NO declarante</option>
+          <option value="juridica">Persona jurídica (empresa)</option>
+          <option value="gran_contribuyente">Gran contribuyente</option>
+          <option value="autoretenedor">Autoretenedor</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="residente">¿Es residente en Colombia?</label>
+        <select id="residente">
+          <option value="si">Sí — residente fiscal Colombia</option>
+          <option value="no">No — no residente / extranjero</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="base-especial">¿Aplica base especial o descuentos?</label>
+        <select id="base-especial">
+          <option value="no">No — base es el valor total del pago</option>
+          <option value="si">Sí — ingresar base gravable diferente</option>
+        </select>
+      </div>
+      <div class="form-group full" id="base-gravable-wrap" style="display:none;">
+        <label for="base-gravable">Base gravable (COP)</label>
+        <input type="number" id="base-gravable" placeholder="Base después de descuentos" min="0" step="1000" />
+        <span class="hint">Para servicios: 100% del pago. Para compras con IVA: valor sin IVA.</span>
+      </div>
+    </div>
+    <button class="btn" onclick="calcular()">🧮 Calcular retención en la fuente</button>
+    <button class="btn-reset" onclick="resetear()">↺ Limpiar</button>
+  </div>
+
+  <div id="resultados">
+
+    <div class="card">
+      <div class="card-title" id="res-titulo">📊 Resultado</div>
+      <div class="result-main">
+        <div class="result-card pago">
+          <div class="rc-label">Valor bruto del pago</div>
+          <div class="rc-valor" id="rc-pago">—</div>
+          <div class="rc-sub">antes de retención</div>
+        </div>
+        <div class="result-card retencion">
+          <div class="rc-label">Retención en la fuente</div>
+          <div class="rc-valor" id="rc-retencion">—</div>
+          <div class="rc-sub" id="rc-pct">—% del pago</div>
+        </div>
+        <div class="result-card neto">
+          <div class="rc-label">Valor neto a pagar</div>
+          <div class="rc-valor" id="rc-neto">—</div>
+          <div class="rc-sub">lo que recibe el beneficiario</div>
+        </div>
+      </div>
+
+      <div class="detalle-box">
+        <div class="detalle-fila"><span class="df-nombre">Concepto de retención</span><span class="df-valor df-azul" id="det-concepto">—</span></div>
+        <div class="detalle-fila"><span class="df-nombre">Tarifa aplicada</span><span class="df-valor df-rojo" id="det-tarifa">—</span></div>
+        <div class="detalle-fila"><span class="df-nombre">Base gravable</span><span class="df-valor df-azul" id="det-base">—</span></div>
+        <div class="detalle-fila"><span class="df-nombre">Cuantía mínima (no aplica retención)</span><span class="df-valor" id="det-minima">—</span></div>
+        <div class="detalle-fila"><span class="df-nombre">¿Aplica retención?</span><span class="df-valor" id="det-aplica">—</span></div>
+        <div class="detalle-fila"><span class="df-nombre">Norma que regula</span><span class="df-valor df-morado" id="det-norma" style="color:var(--morado);">—</span></div>
+      </div>
+    </div>
+
+    <div class="card" id="tabla-tarifas-card">
+      <div class="card-title">📊 Tabla de tarifas del concepto seleccionado</div>
+      <div class="tabla-scroll">
+        <table id="tabla-tarifas">
+          <thead>
+            <tr>
+              <th>Cuantía del pago</th>
+              <th>Tarifa</th>
+              <th>Tipo de beneficiario</th>
+              <th>Observación</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-tarifas-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="norma-box" id="norma-box"></div>
+
+    <div class="disclaimer">
+      ⚠️ <strong>Herramienta orientativa.</strong> Las tarifas corresponden a la normativa vigente 2026 (Estatuto Tributario, Decreto 2229/2023, resoluciones DIAN). Las tarifas pueden variar según convenios de doble tributación, calidad del contribuyente y acuerdos contractuales. Verifique siempre con su contador o con la DIAN. UVT 2026: $49.799.
+    </div>
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
+  </div>
+</div>
+
+<script>
+  const UVT = 49799;
+  const SMMLV = 1423500;
+
+  const conceptos = [
+    {
+      id: 'salarios', nombre: 'Salarios', emoji: '👤',
+      tarifa_display: 'Tabla progresiva',
+      info: 'Retención sobre pagos laborales: salarios, primas, bonificaciones, comisiones salariales. Se calcula por la tabla de rangos del Art. 383 ET.',
+      norma: 'Art. 383, 385 y 386 del Estatuto Tributario. Procedimiento 1 y 2.',
+      minima_uvt: 0,
+      tarifas: [
+        { desde: 0, hasta: 95, tarifa: 0, desc: '< 95 UVT/mes', tipo: 'Todos', obs: 'No hay retención' },
+        { desde: 95, hasta: 150, tarifa: 19, desc: '95–150 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 95 UVT) × 19%' },
+        { desde: 150, hasta: 360, tarifa: 28, desc: '150–360 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 150 UVT) × 28% + 10.71 UVT' },
+        { desde: 360, hasta: 640, tarifa: 33, desc: '360–640 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 360 UVT) × 33% + 69.51 UVT' },
+        { desde: 640, hasta: 945, tarifa: 35, desc: '640–945 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 640 UVT) × 35% + 162.51 UVT' },
+        { desde: 945, hasta: 2300, tarifa: 37, desc: '945–2300 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 945 UVT) × 37% + 269.26 UVT' },
+        { desde: 2300, hasta: 9999, tarifa: 39, desc: '> 2300 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 2300 UVT) × 39% + 770.26 UVT' },
+      ],
+      calcular: (pago, tipo) => {
+        const ingresoUVT = pago / UVT;
+        if (ingresoUVT <= 95) return { retencion: 0, tarifa: 0, aplica: false };
+        let retencion = 0;
+        if (ingresoUVT <= 150) retencion = ((ingresoUVT - 95) * 0.19) * UVT;
+        else if (ingresoUVT <= 360) retencion = ((ingresoUVT - 150) * 0.28 + 10.71) * UVT;
+        else if (ingresoUVT <= 640) retencion = ((ingresoUVT - 360) * 0.33 + 69.51) * UVT;
+        else if (ingresoUVT <= 945) retencion = ((ingresoUVT - 640) * 0.35 + 162.51) * UVT;
+        else if (ingresoUVT <= 2300) retencion = ((ingresoUVT - 945) * 0.37 + 269.26) * UVT;
+        else retencion = ((ingresoUVT - 2300) * 0.39 + 770.26) * UVT;
+        const tarifahEfectiva = (retencion / pago) * 100;
+        return { retencion, tarifa: tarifahEfectiva.toFixed(1) + '%', aplica: true };
+      }
+    },
+    {
+      id: 'honorarios', nombre: 'Honorarios', emoji: '💼',
+      tarifa_display: '10% / 11%',
+      info: 'Retención sobre pagos por servicios profesionales, consultoría, asesoría y similares. Incluye honorarios a médicos, abogados, ingenieros, contadores.',
+      norma: 'Art. 392 ET. Decreto 260/2001. Cuantía mínima: 1 UVT ($49.799)',
+      minima_uvt: 1,
+      tarifas: [
+        { desde: 1, hasta: 9999, tarifa: 10, desc: '≥ 1 UVT', tipo: 'Declarante / Jurídica', obs: '10% del valor del honorario' },
+        { desde: 1, hasta: 9999, tarifa: 11, desc: '≥ 1 UVT', tipo: 'No declarante', obs: '11% del valor del honorario' },
+      ],
+      calcular: (pago, tipo) => {
+        if (pago < UVT) return { retencion: 0, tarifa: 0, aplica: false };
+        const tarifa = tipo === 'no_declarante' ? 0.11 : 0.10;
+        return { retencion: pago * tarifa, tarifa: (tarifa*100) + '%', aplica: true };
+      }
+    },
+    {
+      id: 'servicios', nombre: 'Servicios', emoji: '🔧',
+      tarifa_display: '4% / 6%',
+      info: 'Retención sobre pagos por contratos de servicios en general (aseo, vigilancia, transporte, mantenimiento, etc.) y contratos de obra.',
+      norma: 'Art. 392 ET. Cuantía mínima: 4 UVT ($199.196)',
+      minima_uvt: 4,
+      tarifas: [
+        { desde: 4, hasta: 9999, tarifa: 4, desc: '≥ 4 UVT', tipo: 'Declarante / Jurídica', obs: '4% del valor del servicio' },
+        { desde: 4, hasta: 9999, tarifa: 6, desc: '≥ 4 UVT', tipo: 'No declarante', obs: '6% del valor del servicio' },
+      ],
+      calcular: (pago, tipo) => {
+        if (pago < UVT * 4) return { retencion: 0, tarifa: 0, aplica: false };
+        const tarifa = tipo === 'no_declarante' ? 0.06 : 0.04;
+        return { retencion: pago * tarifa, tarifa: (tarifa*100) + '%', aplica: true };
+      }
+    },
+    {
+      id: 'compras', nombre: 'Compras', emoji: '🛒',
+      tarifa_display: '2.5% / 3.5%',
+      info: 'Retención sobre pagos por compra de bienes raíces, vehículos, combustibles y otros bienes muebles. Uno de los conceptos más frecuentes en empresas.',
+      norma: 'Art. 401 ET. Cuantía mínima: 27 UVT ($1.344.573)',
+      minima_uvt: 27,
+      tarifas: [
+        { desde: 27, hasta: 9999, tarifa: 2.5, desc: '≥ 27 UVT', tipo: 'Declarante / Jurídica', obs: '2.5% del valor de la compra' },
+        { desde: 27, hasta: 9999, tarifa: 3.5, desc: '≥ 27 UVT', tipo: 'No declarante', obs: '3.5% del valor de la compra' },
+      ],
+      calcular: (pago, tipo) => {
+        if (pago < UVT * 27) return { retencion: 0, tarifa: 0, aplica: false };
+        const tarifa = tipo === 'no_declarante' ? 0.035 : 0.025;
+        return { retencion: pago * tarifa, tarifa: (tarifa*100) + '%', aplica: true };
+      }
+    },
+    {
+      id: 'arrendamiento', nombre: 'Arrendamiento', emoji: '🏢',
+      tarifa_display: '3.5% / 4%',
+      info: 'Retención sobre pagos de arrendamiento de bienes inmuebles (locales, oficinas, bodegas, fincas) y bienes muebles.',
+      norma: 'Art. 401 ET. Cuantía mínima: 27 UVT ($1.344.573) para inmuebles.',
+      minima_uvt: 27,
+      tarifas: [
+        { desde: 27, hasta: 9999, tarifa: 3.5, desc: '≥ 27 UVT — Inmueble', tipo: 'Persona natural', obs: '3.5% para persona natural declarante' },
+        { desde: 27, hasta: 9999, tarifa: 4, desc: '≥ 27 UVT — Inmueble', tipo: 'No declarante', obs: '4% para no declarante' },
+        { desde: 1, hasta: 9999, tarifa: 4, desc: '≥ 1 UVT — Muebles', tipo: 'Todos', obs: '4% para bienes muebles' },
+      ],
+      calcular: (pago, tipo) => {
+        if (pago < UVT * 27) return { retencion: 0, tarifa: 0, aplica: false };
+        const tarifa = tipo === 'no_declarante' ? 0.04 : 0.035;
+        return { retencion: pago * tarifa, tarifa: (tarifa*100) + '%', aplica: true };
+      }
+    },
+    {
+      id: 'dividendos', nombre: 'Dividendos', emoji: '📈',
+      tarifa_display: '10% / 20%',
+      info: 'Retención sobre distribución de dividendos y participaciones a socios o accionistas. Aplica según si son gravados o no gravados.',
+      norma: 'Art. 242 ET. Reforma tributaria Ley 2277/2022.',
+      minima_uvt: 0,
+      tarifas: [
+        { desde: 0, hasta: 9999, tarifa: 0, desc: 'Dividendos no gravados', tipo: 'Residente Colombia', obs: 'Sin retención sobre utilidades ya gravadas en la sociedad (tarifa general corporativa)' },
+        { desde: 0, hasta: 9999, tarifa: 10, desc: 'Dividendos no gravados (Ley 2277)', tipo: 'Residente Colombia', obs: '10% sobre dividendos no gravados' },
+        { desde: 0, hasta: 9999, tarifa: 20, desc: 'Dividendos gravados', tipo: 'No residente', obs: '20% sobre dividendos para no residentes' },
+      ],
+      calcular: (pago, tipo, residente) => {
+        const tarifa = residente === 'no' ? 0.20 : 0.10;
+        return { retencion: pago * tarifa, tarifa: (tarifa*100) + '%', aplica: true };
+      }
+    },
+    {
+      id: 'intereses', nombre: 'Intereses', emoji: '🏦',
+      tarifa_display: '7% / 35%',
+      info: 'Retención sobre pagos de intereses bancarios, rendimientos financieros, CDT y similares.',
+      norma: 'Art. 395 ET. Para rendimientos financieros: 7% general.',
+      minima_uvt: 1,
+      tarifas: [
+        { desde: 1, hasta: 9999, tarifa: 7, desc: '≥ 1 UVT', tipo: 'Residente Colombia', obs: '7% sobre intereses y rendimientos financieros' },
+        { desde: 1, hasta: 9999, tarifa: 35, desc: '≥ 1 UVT', tipo: 'No residente', obs: '35% para no residentes (puede reducirse por convenio)' },
+      ],
+      calcular: (pago, tipo, residente) => {
+        const tarifa = residente === 'no' ? 0.35 : 0.07;
+        return { retencion: pago * tarifa, tarifa: (tarifa*100) + '%', aplica: true };
+      }
+    },
+    {
+      id: 'loterias', nombre: 'Loterías / Rifas', emoji: '🎰',
+      tarifa_display: '20%',
+      info: 'Retención sobre premios de loterías, rifas, apuestas y similares. Aplica sobre el valor bruto del premio.',
+      norma: 'Art. 402 ET. Cuantía mínima: 48 UVT ($2.390.352).',
+      minima_uvt: 48,
+      tarifas: [
+        { desde: 48, hasta: 9999, tarifa: 20, desc: '≥ 48 UVT', tipo: 'Todos', obs: '20% sobre el valor del premio' },
+      ],
+      calcular: (pago, tipo) => {
+        if (pago < UVT * 48) return { retencion: 0, tarifa: 0, aplica: false };
+        return { retencion: pago * 0.20, tarifa: '20%', aplica: true };
+      }
+    },
+  ];
+
+  let conceptoSeleccionado = null;
+
+  // Render conceptos
+  document.getElementById('conceptos-grid').innerHTML = conceptos.map((c, i) =>
+    `<button class="concepto-btn" onclick="selConcepto(${i}, this)">
+      <span class="concepto-emoji">${c.emoji}</span>
+      <span class="concepto-nombre">${c.nombre}</span>
+      <span class="concepto-tarifa">${c.tarifa_display}</span>
+    </button>`
+  ).join('');
+
+  function selConcepto(idx, btn) {
+    document.querySelectorAll('.concepto-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    conceptoSeleccionado = conceptos[idx];
+    const info = document.getElementById('info-concepto');
+    info.style.display = 'block';
+    info.innerHTML = `<strong>${conceptoSeleccionado.emoji} ${conceptoSeleccionado.nombre}:</strong> ${conceptoSeleccionado.info}`;
+  }
+
+  document.getElementById('base-especial').addEventListener('change', function() {
+    document.getElementById('base-gravable-wrap').style.display = this.value === 'si' ? 'flex' : 'none';
+  });
+
+  function fmt(n) { return '$' + Math.round(n).toLocaleString('es-CO'); }
+
+  function calcular() {
+    if (!conceptoSeleccionado) { alert('Seleccione un concepto de pago.'); return; }
+    const valorPago = parseFloat(document.getElementById('valor-pago').value) || 0;
+    if (valorPago <= 0) { alert('Ingrese el valor del pago.'); return; }
+
+    const tipo = document.getElementById('tipo-persona').value;
+    const residente = document.getElementById('residente').value;
+    const baseEspecial = document.getElementById('base-especial').value;
+    const baseGravable = baseEspecial === 'si' ? (parseFloat(document.getElementById('base-gravable').value) || valorPago) : valorPago;
+    const c = conceptoSeleccionado;
+
+    const resultado = c.calcular ? c.calcular(baseGravable, tipo, residente) : { retencion: 0, tarifa: 0, aplica: false };
+    const retencion = Math.round(resultado.retencion);
+    const neto = valorPago - retencion;
+    const pctEfectivo = valorPago > 0 ? ((retencion / valorPago) * 100).toFixed(2) : 0;
+    const minimaUVT = c.minima_uvt * UVT;
+
+    document.getElementById('res-titulo').textContent = `📊 Retención — ${c.emoji} ${c.nombre}`;
+    document.getElementById('rc-pago').textContent = fmt(valorPago);
+    document.getElementById('rc-retencion').textContent = fmt(retencion);
+    document.getElementById('rc-pct').textContent = `${pctEfectivo}% del pago`;
+    document.getElementById('rc-neto').textContent = fmt(neto);
+
+    document.getElementById('det-concepto').textContent = `${c.emoji} ${c.nombre}`;
+    document.getElementById('det-tarifa').textContent = resultado.tarifa || '0%';
+    document.getElementById('det-base').textContent = fmt(baseGravable);
+    document.getElementById('det-minima').textContent = minimaUVT > 0 ? `${fmt(minimaUVT)} (${c.minima_uvt} UVT)` : 'No aplica cuantía mínima';
+    document.getElementById('det-aplica').textContent = resultado.aplica ? `✅ Sí aplica retención — ${fmt(retencion)}` : `❌ No aplica — pago por debajo de cuantía mínima (${fmt(minimaUVT)})`;
+    document.getElementById('det-norma').textContent = c.norma;
+
+    // Tabla de tarifas
+    const tbody = document.getElementById('tabla-tarifas-body');
+    tbody.innerHTML = c.tarifas.map(t => `
+      <tr>
+        <td>${t.desc}</td>
+        <td class="td-pct">${t.tarifa}%</td>
+        <td>${t.tipo}</td>
+        <td>${t.obs}</td>
+      </tr>`).join('');
+
+    document.getElementById('norma-box').innerHTML = `📖 <strong>Marco normativo:</strong> ${c.norma}`;
+
+    document.getElementById('resultados').style.display = 'block';
+    document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetear() {
+    document.getElementById('valor-pago').value = '';
+    document.getElementById('base-gravable').value = '';
+    document.getElementById('base-especial').value = 'no';
+    document.getElementById('base-gravable-wrap').style.display = 'none';
+    document.getElementById('tipo-persona').value = 'declarante';
+    document.getElementById('residente').value = 'si';
+    document.querySelectorAll('.concepto-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('info-concepto').style.display = 'none';
+    document.getElementById('resultados').style.display = 'none';
+    conceptoSeleccionado = null;
+  }
+</script>
+</body>
+</html>
