@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora de fertilización NPK para cultivos colombianos. Calcula dosis de nitrógeno, fósforo y potasio por hectárea para banano, piña, cacao, plátano, arroz, ñame, caña y mango." />
+  <meta name="keywords" content="calculadora NPK colombia, fertilizacion banano, fertilizacion cacao, dosis fertilizante colombia, NPK platano, fertilizacion arroz colombia" />
+  <title>Calculadora de Fertilización NPK — HerramientasPro Colombia</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #1D9E75;
+      --verde-dark: #0F6E56;
+      --verde-light: #E1F5EE;
+      --azul: #185FA5;
+      --azul-light: #E6F1FB;
+      --naranja: #854F0B;
+      --naranja-light: #FAEEDA;
+      --text: #1a1a1a;
+      --text-sec: #555;
+      --text-muted: #888;
+      --bg: #f7f7f5;
+      --card: #ffffff;
+      --border: #e0e0dc;
+      --radius: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    /* NAV */
+    nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; height: 54px; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { width: 30px; height: 30px; background: var(--verde); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .nav-sep { color: var(--border); font-size: 18px; }
+    .nav-current { font-size: 13px; color: var(--text-sec); }
+
+    /* HERO */
+    .hero { background: linear-gradient(135deg, #0F6E56 0%, #1D9E75 100%); padding: 2rem 1.5rem; text-align: center; }
+    .hero-icon { font-size: 42px; margin-bottom: 10px; }
+    .hero h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.85); max-width: 520px; margin: 0 auto; }
+
+    /* MAIN */
+    .main { max-width: 860px; margin: 0 auto; padding: 1.5rem; }
+
+    /* CARD */
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; }
+    .card-title { font-size: 14px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+
+    /* FORM */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 500; color: var(--text-sec); }
+    select, input[type="number"] {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text);
+      background: #fff; transition: border-color 0.15s;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--verde); }
+    .hint { font-size: 11px; color: var(--text-muted); }
+
+    /* SUELO GRID */
+    .suelo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .suelo-item { display: flex; flex-direction: column; gap: 4px; }
+    .suelo-label { font-size: 12px; font-weight: 500; color: var(--text-sec); }
+    .suelo-input-wrap { position: relative; }
+    .suelo-input-wrap input { padding-right: 45px; }
+    .suelo-unit { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--text-muted); }
+
+    /* BTN */
+    .btn { width: 100%; padding: 12px; background: var(--verde); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.15s; margin-top: 0.5rem; }
+    .btn:hover { background: var(--verde-dark); }
+    .btn-reset { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 9px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+
+    /* RESULTS */
+    #resultados { display: none; }
+    .result-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.2rem; }
+    .result-header h2 { font-size: 17px; font-weight: 700; color: var(--text); }
+    .result-badge { font-size: 11px; background: var(--verde-light); color: var(--verde-dark); padding: 3px 9px; border-radius: 20px; font-weight: 500; }
+
+    /* NPK CARDS */
+    .npk-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+    .npk-card { border-radius: 10px; padding: 1rem; text-align: center; }
+    .npk-card.n { background: #E6F1FB; border: 1px solid #B5D4F4; }
+    .npk-card.p { background: #FAEEDA; border: 1px solid #FAC775; }
+    .npk-card.k { background: #E1F5EE; border: 1px solid #9FE1CB; }
+    .npk-letra { font-size: 28px; font-weight: 800; }
+    .npk-card.n .npk-letra { color: #185FA5; }
+    .npk-card.p .npk-letra { color: #854F0B; }
+    .npk-card.k .npk-letra { color: #0F6E56; }
+    .npk-nombre { font-size: 11px; color: var(--text-sec); margin-bottom: 6px; }
+    .npk-kg { font-size: 20px; font-weight: 700; color: var(--text); }
+    .npk-unit { font-size: 11px; color: var(--text-muted); }
+    .npk-total { font-size: 13px; color: var(--text-sec); margin-top: 4px; }
+
+    /* FERTILIZANTES TABLE */
+    .fertil-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #f5f5f2; color: var(--text-sec); font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+    td { padding: 9px 10px; border-bottom: 1px solid #f0f0ec; color: var(--text); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafaf8; }
+    .td-bultos { font-weight: 700; color: var(--verde-dark); font-size: 14px; }
+    .td-kg { color: var(--text-sec); }
+
+    /* PLAN */
+    .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .plan-item { background: #fafaf8; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+    .plan-aplicacion { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+    .plan-desc { font-size: 13px; color: var(--text); line-height: 1.4; }
+
+    /* DISCLAIMER */
+    .disclaimer { background: #fffbf0; border: 1px solid #FAC775; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 1rem; }
+
+    /* FUENTE */
+    .fuente { font-size: 11px; color: var(--text-muted); margin-top: 8px; text-align: right; }
+
+    /* PRINT */
+    .btn-print { width: 100%; padding: 10px; background: transparent; color: var(--verde-dark); border: 1px solid var(--verde); border-radius: 9px; font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 8px; }
+
+    @media print {
+      nav, .btn, .btn-reset, .btn-print, .hero { display: none !important; }
+      .card { border: 1px solid #ccc; break-inside: avoid; }
+      body { background: #fff; }
+    }
+
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .suelo-grid { grid-template-columns: 1fr 1fr; }
+      .npk-grid { grid-template-columns: 1fr 1fr 1fr; }
+      .plan-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-text">HerramientasPro</div>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">🌱 Fertilización NPK</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">🌱</div>
+  <h1>Calculadora de Fertilización NPK</h1>
+  <p>Dosis recomendadas de Nitrógeno, Fósforo y Potasio para cultivos colombianos. Incluye tabla de fertilizantes comerciales y plan de aplicación.</p>
+</div>
+
+<div class="main">
+
+  <!-- FORMULARIO -->
+  <div class="card">
+    <div class="card-title">📋 Datos del cultivo y lote</div>
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label for="cultivo">Cultivo</label>
+        <select id="cultivo" onchange="actualizarInfo()">
+          <option value="">— Seleccione cultivo —</option>
+          <option value="banano">🍌 Banano</option>
+          <option value="pina">🍍 Piña</option>
+          <option value="cacao">🍫 Cacao</option>
+          <option value="platano">🫘 Plátano</option>
+          <option value="arroz">🌾 Arroz</option>
+          <option value="name">🍠 Ñame</option>
+          <option value="cana">🎋 Caña de azúcar</option>
+          <option value="mango">🥭 Mango</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="area">Área del lote (hectáreas)</label>
+        <input type="number" id="area" placeholder="Ej: 2.5" min="0.1" max="1000" step="0.1" />
+      </div>
+
+      <div class="form-group">
+        <label for="rendimiento">Rendimiento esperado</label>
+        <select id="rendimiento">
+          <option value="bajo">Bajo (producción limitada)</option>
+          <option value="medio" selected>Medio (producción normal)</option>
+          <option value="alto">Alto (producción intensiva)</option>
+        </select>
+        <span class="hint">Ajusta las dosis según el potencial productivo del lote</span>
+      </div>
+
+      <div class="form-group">
+        <label for="tipo_suelo">Tipo de suelo predominante</label>
+        <select id="tipo_suelo">
+          <option value="franco">Franco</option>
+          <option value="arcilloso">Arcilloso</option>
+          <option value="arenoso">Arenoso</option>
+          <option value="franco_arcilloso">Franco arcilloso</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ANÁLISIS DE SUELO -->
+  <div class="card">
+    <div class="card-title">🧪 Análisis de suelo (opcional)</div>
+    <p style="font-size:13px;color:var(--text-sec);margin-bottom:1rem;">Si tienes análisis de suelo, ingresa los valores para ajustar las dosis. Si no, déjalos en blanco y se usarán valores estándar.</p>
+    <div class="suelo-grid">
+      <div class="suelo-item">
+        <div class="suelo-label">N disponible</div>
+        <div class="suelo-input-wrap">
+          <input type="number" id="n_suelo" placeholder="0" min="0" max="500" step="0.1" />
+          <span class="suelo-unit">ppm</span>
+        </div>
+      </div>
+      <div class="suelo-item">
+        <div class="suelo-label">P disponible</div>
+        <div class="suelo-input-wrap">
+          <input type="number" id="p_suelo" placeholder="0" min="0" max="200" step="0.1" />
+          <span class="suelo-unit">ppm</span>
+        </div>
+      </div>
+      <div class="suelo-item">
+        <div class="suelo-label">K intercambiable</div>
+        <div class="suelo-input-wrap">
+          <input type="number" id="k_suelo" placeholder="0" min="0" max="5" step="0.01" />
+          <span class="suelo-unit">meq/100g</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn" onclick="calcular()">🧮 Calcular dosis de fertilización</button>
+  <button class="btn-reset" onclick="resetear()">↺ Limpiar formulario</button>
+
+  <!-- RESULTADOS -->
+  <div id="resultados">
+
+    <div class="card" style="margin-top:1.2rem;">
+      <div class="result-header">
+        <h2 id="res-titulo">Resultados</h2>
+        <span class="result-badge" id="res-badge">—</span>
+      </div>
+
+      <!-- NPK POR Ha -->
+      <div class="card-title">⚗️ Requerimiento por hectárea</div>
+      <div class="npk-grid">
+        <div class="npk-card n">
+          <div class="npk-nombre">Nitrógeno</div>
+          <div class="npk-letra">N</div>
+          <div class="npk-kg" id="n-ha">—</div>
+          <div class="npk-unit">kg N / ha</div>
+        </div>
+        <div class="npk-card p">
+          <div class="npk-nombre">Fósforo</div>
+          <div class="npk-letra">P</div>
+          <div class="npk-kg" id="p-ha">—</div>
+          <div class="npk-unit">kg P₂O₅ / ha</div>
+        </div>
+        <div class="npk-card k">
+          <div class="npk-nombre">Potasio</div>
+          <div class="npk-letra">K</div>
+          <div class="npk-kg" id="k-ha">—</div>
+          <div class="npk-unit">kg K₂O / ha</div>
+        </div>
+      </div>
+
+      <!-- NPK TOTAL -->
+      <div style="background:#f5f5f2;border-radius:8px;padding:10px 14px;margin:10px 0;font-size:13px;color:var(--text-sec);">
+        <strong style="color:var(--text);">Total para el lote:</strong>
+        &nbsp; N: <strong id="n-total">—</strong> kg &nbsp;|&nbsp;
+        P₂O₅: <strong id="p-total">—</strong> kg &nbsp;|&nbsp;
+        K₂O: <strong id="k-total">—</strong> kg
+      </div>
+    </div>
+
+    <!-- FERTILIZANTES COMERCIALES -->
+    <div class="card">
+      <div class="fertil-title">🛒 Fertilizantes comerciales recomendados</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Fertilizante</th>
+            <th>Fórmula</th>
+            <th>Kg necesarios</th>
+            <th>Bultos × 50 kg</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-fertilizantes"></tbody>
+      </table>
+      <p class="fuente">* Fuente: tablas de requerimientos ICA/Agrosavia. Valores orientativos — verificar con análisis de suelo.</p>
+    </div>
+
+    <!-- PLAN DE APLICACIÓN -->
+    <div class="card">
+      <div class="fertil-title">📅 Plan de aplicación sugerido</div>
+      <div class="plan-grid" id="plan-aplicacion"></div>
+    </div>
+
+    <div class="disclaimer">
+      ⚠️ <strong>Herramienta orientativa.</strong> Las dosis calculadas son recomendaciones generales basadas en requerimientos estándar para cultivos colombianos. Se recomienda realizar análisis de suelo completo y consultar con un ingeniero agrónomo para ajustar las dosis a las condiciones específicas de su lote, variedad y región. Parámetros actualizados 2026.
+    </div>
+
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
+
+  </div>
+</div>
+
+<script>
+const cultivos = {
+  banano: {
+    nombre: 'Banano',
+    emoji: '🍌',
+    n: { bajo: 180, medio: 240, alto: 320 },
+    p: { bajo: 40,  medio: 60,  alto: 80  },
+    k: { bajo: 500, medio: 650, alto: 850 },
+    plan: [
+      { aplicacion: 'Aplicación 1 — Siembra', desc: '30% del N + 50% del P + 30% del K al momento de siembra o inicio del ciclo.' },
+      { aplicacion: 'Aplicación 2 — 2-3 meses', desc: '40% del N + 50% del K. Fase de macollamiento activo.' },
+      { aplicacion: 'Aplicación 3 — 4-5 meses', desc: '30% del N + 20% del K. Pre-floración para llenado del racimo.' },
+      { aplicacion: 'Mantenimiento anual', desc: 'Repetir el ciclo cada cosecha. Ajustar según análisis foliar.' },
+    ]
+  },
+  pina: {
+    nombre: 'Piña',
+    emoji: '🍍',
+    n: { bajo: 200, medio: 280, alto: 380 },
+    p: { bajo: 50,  medio: 70,  alto: 100 },
+    k: { bajo: 350, medio: 500, alto: 650 },
+    plan: [
+      { aplicacion: 'Aplicación 1 — Establecimiento', desc: '25% N + 100% P al momento de siembra.' },
+      { aplicacion: 'Aplicación 2 — 2 meses', desc: '25% N + 25% K. Inicio de crecimiento vegetativo.' },
+      { aplicacion: 'Aplicación 3 — 4 meses', desc: '25% N + 25% K. Desarrollo activo de la planta.' },
+      { aplicacion: 'Aplicación 4 — Inducción floral', desc: '25% N + 50% K. Pre-floración para fructificación.' },
+    ]
+  },
+  cacao: {
+    nombre: 'Cacao',
+    emoji: '🍫',
+    n: { bajo: 80,  medio: 120, alto: 160 },
+    p: { bajo: 30,  medio: 50,  alto: 70  },
+    k: { bajo: 120, medio: 180, alto: 250 },
+    plan: [
+      { aplicacion: 'Aplicación 1 — Inicio lluvias', desc: '50% N + 50% P + 50% K al inicio del período lluvioso.' },
+      { aplicacion: 'Aplicación 2 — Fin lluvias', desc: '50% N + 50% P + 50% K al final del período lluvioso.' },
+      { aplicacion: 'Mantenimiento', desc: 'Aplicación fraccionada anual. Evitar aplicar en sequía.' },
+      { aplicacion: 'Recomendación especial', desc: 'El cacao responde bien a la materia orgánica. Combinar con compost.' },
+    ]
+  },
+  platano: {
+    nombre: 'Plátano',
+    emoji: '🫘',
+    n: { bajo: 160, medio: 200, alto: 280 },
+    p: { bajo: 35,  medio: 55,  alto: 75  },
+    k: { bajo: 380, medio: 520, alto: 700 },
+    plan: [
+      { aplicacion: 'Aplicación 1 — Siembra', desc: '30% N + 100% P + 30% K al momento de siembra.' },
+      { aplicacion: 'Aplicación 2 — 2 meses', desc: '35% N + 35% K. Desarrollo vegetativo.' },
+      { aplicacion: 'Aplicación 3 — 4 meses', desc: '35% N + 35% K. Pre-emisión de la bellota.' },
+      { aplicacion: 'Ciclo de hijos', desc: 'Mantener fertilización en hijos seleccionados para continuidad.' },
+    ]
+  },
+  arroz: {
+    nombre: 'Arroz',
+    emoji: '🌾',
+    n: { bajo: 80,  medio: 120, alto: 160 },
+    p: { bajo: 40,  medio: 60,  alto: 80  },
+    k: { bajo: 60,  medio: 90,  alto: 120 },
+    plan: [
+      { aplicacion: 'Aplicación 1 — Siembra (0-10 DDS)', desc: '100% P + 30% N + 50% K. Fertilización de establecimiento.' },
+      { aplicacion: 'Aplicación 2 — Macollamiento (25-30 DDS)', desc: '40% N. Estimular macollamiento activo.' },
+      { aplicacion: 'Aplicación 3 — Primordio (45-50 DDS)', desc: '30% N + 50% K. Fase crítica para llenado de grano.' },
+      { aplicacion: 'Nota', desc: 'DDS = Días después de siembra. Ajustar según variedad (secano vs riego).' },
+    ]
+  },
+  name: {
+    nombre: 'Ñame',
+    emoji: '🍠',
+    n: { bajo: 80,  medio: 110, alto: 150 },
+    p: { bajo: 60,  medio: 80,  alto: 110 },
+    k: { bajo: 150, medio: 200, alto: 280 },
+    plan: [
+      { aplicacion: 'Aplicación 1 — Siembra', desc: '100% P + 30% N + 30% K en el hoyo de siembra.' },
+      { aplicacion: 'Aplicación 2 — 45 días', desc: '40% N + 35% K. Inicio de tuberización.' },
+      { aplicacion: 'Aplicación 3 — 90 días', desc: '30% N + 35% K. Llenado del tubérculo.' },
+      { aplicacion: 'Recomendación', desc: 'El ñame responde bien al K. Priorizar esta aplicación para buen tamaño.' },
+    ]
+  },
+  cana: {
+    nombre: 'Caña de azúcar',
+    emoji: '🎋',
+    n: { bajo: 100, medio: 150, alto: 200 },
+    p: { bajo: 50,  medio: 70,  alto: 100 },
+    k: { bajo: 150, medio: 220, alto: 300 },
+    plan: [
+      { aplicacion: 'Aplicación 1 — Plantación', desc: '100% P + 30% N + 40% K en el surco de siembra.' },
+      { aplicacion: 'Aplicación 2 — 30-45 días', desc: '40% N + 30% K. Inicio de macollamiento.' },
+      { aplicacion: 'Aplicación 3 — 60-90 días', desc: '30% N + 30% K. Gran crecimiento vegetativo.' },
+      { aplicacion: 'Socas (cortes siguientes)', desc: 'Reducir P al 50%. Mantener N y K por ciclo de corte.' },
+    ]
+  },
+  mango: {
+    nombre: 'Mango',
+    emoji: '🥭',
+    n: { bajo: 80,  medio: 120, alto: 180 },
+    p: { bajo: 40,  medio: 60,  alto: 90  },
+    k: { bajo: 100, medio: 160, alto: 240 },
+    plan: [
+      { aplicacion: 'Aplicación 1 — Post cosecha', desc: '50% N + 100% P + 50% K. Recuperación del árbol.' },
+      { aplicacion: 'Aplicación 2 — Pre floración', desc: '25% N + 25% K. Estimular diferenciación floral.' },
+      { aplicacion: 'Aplicación 3 — Cuajado de fruto', desc: '25% N + 25% K. Llenado y calidad del fruto.' },
+      { aplicacion: 'Recomendación', desc: 'En árboles adultos, aplicar al área de goteo. Evitar N en floración.' },
+    ]
+  }
+};
+
+const fertilizantes = [
+  { nombre: 'Urea',           formula: '46-0-0',   n: 0.46, p: 0,    k: 0    },
+  { nombre: 'DAP',            formula: '18-46-0',  n: 0.18, p: 0.46, k: 0    },
+  { nombre: 'KCl (Cloruro K)',formula: '0-0-60',   n: 0,    p: 0,    k: 0.60 },
+  { nombre: 'Triple 15',      formula: '15-15-15', n: 0.15, p: 0.15, k: 0.15 },
+  { nombre: '10-30-10',       formula: '10-30-10', n: 0.10, p: 0.30, k: 0.10 },
+  { nombre: 'Sulpomag',       formula: '0-0-22',   n: 0,    p: 0,    k: 0.22 },
+];
+
+function actualizarInfo() {
+  const c = document.getElementById('cultivo').value;
+  if (c && cultivos[c]) {
+    const rend = document.getElementById('rendimiento');
+  }
+}
+
+function calcular() {
+  const cultivo = document.getElementById('cultivo').value;
+  const area = parseFloat(document.getElementById('area').value);
+  const rend = document.getElementById('rendimiento').value;
+  const nSuelo = parseFloat(document.getElementById('n_suelo').value) || 0;
+  const pSuelo = parseFloat(document.getElementById('p_suelo').value) || 0;
+  const kSuelo = parseFloat(document.getElementById('k_suelo').value) || 0;
+
+  if (!cultivo) { alert('Por favor seleccione un cultivo.'); return; }
+  if (!area || area <= 0) { alert('Por favor ingrese el área en hectáreas.'); return; }
+
+  const c = cultivos[cultivo];
+  let nHa = c.n[rend];
+  let pHa = c.p[rend];
+  let kHa = c.k[rend];
+
+  // Ajuste por análisis de suelo
+  const factorN = nSuelo > 0 ? Math.max(0, 1 - (nSuelo / 100) * 0.3) : 1;
+  const factorP = pSuelo > 0 ? Math.max(0, 1 - (pSuelo / 50)  * 0.4) : 1;
+  const factorK = kSuelo > 0 ? Math.max(0, 1 - (kSuelo / 0.3) * 0.25) : 1;
+
+  nHa = Math.round(nHa * factorN);
+  pHa = Math.round(pHa * factorP);
+  kHa = Math.round(kHa * factorK);
+
+  const nTotal = Math.round(nHa * area);
+  const pTotal = Math.round(pHa * area);
+  const kTotal = Math.round(kHa * area);
+
+  // Mostrar NPK
+  document.getElementById('res-titulo').textContent = `${c.emoji} ${c.nombre} — ${area} ha`;
+  document.getElementById('res-badge').textContent = `Rendimiento ${rend}`;
+  document.getElementById('n-ha').textContent = nHa;
+  document.getElementById('p-ha').textContent = pHa;
+  document.getElementById('k-ha').textContent = kHa;
+  document.getElementById('n-total').textContent = nTotal;
+  document.getElementById('p-total').textContent = pTotal;
+  document.getElementById('k-total').textContent = kTotal;
+
+  // Tabla fertilizantes
+  const tbody = document.getElementById('tabla-fertilizantes');
+  tbody.innerHTML = '';
+  const recomendados = [
+    { f: fertilizantes[0], kg: fertilizantes[0].n > 0 ? Math.ceil(nTotal / fertilizantes[0].n) : 0 },
+    { f: fertilizantes[1], kg: fertilizantes[1].p > 0 ? Math.ceil(pTotal / fertilizantes[1].p) : 0 },
+    { f: fertilizantes[2], kg: fertilizantes[2].k > 0 ? Math.ceil(kTotal / fertilizantes[2].k) : 0 },
+    { f: fertilizantes[3], kg: Math.ceil((nTotal * 0.3) / fertilizantes[3].n) },
+  ];
+
+  recomendados.forEach(r => {
+    if (r.kg > 0) {
+      const bultos = Math.ceil(r.kg / 50);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.f.nombre}</td>
+        <td>${r.f.formula}</td>
+        <td class="td-kg">${r.kg.toLocaleString()} kg</td>
+        <td class="td-bultos">${bultos} bultos</td>
+      `;
+      tbody.appendChild(tr);
+    }
+  });
+
+  // Plan de aplicación
+  const planDiv = document.getElementById('plan-aplicacion');
+  planDiv.innerHTML = c.plan.map(p => `
+    <div class="plan-item">
+      <div class="plan-aplicacion">${p.aplicacion}</div>
+      <div class="plan-desc">${p.desc}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('resultados').style.display = 'block';
+  document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetear() {
+  document.getElementById('cultivo').value = '';
+  document.getElementById('area').value = '';
+  document.getElementById('rendimiento').value = 'medio';
+  document.getElementById('tipo_suelo').value = 'franco';
+  document.getElementById('n_suelo').value = '';
+  document.getElementById('p_suelo').value = '';
+  document.getElementById('k_suelo').value = '';
+  document.getElementById('resultados').style.display = 'none';
+}
+</script>
+
+</body>
+</html>
