@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora de plan de riego por goteo y aspersión para cultivos colombianos. Calcula lámina de riego, tiempo de riego, número de emisores y volumen de agua por hectárea." />
+  <meta name="keywords" content="plan de riego colombia, calculadora riego goteo, riego por aspersion colombia, lamina de riego cultivos, eficiencia riego agricola colombia" />
+  <title>Plan de Riego por Goteo y Aspersión — HerramientasPro Colombia</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul: #185FA5; --azul-dark: #0C447C; --azul-light: #E6F1FB;
+      --verde: #1D9E75; --verde-dark: #0F6E56; --verde-light: #E1F5EE;
+      --naranja: #854F0B; --naranja-light: #FAEEDA;
+      --morado: #534AB7; --morado-light: #EEEDFE;
+      --text: #1a1a1a; --text-sec: #555; --text-muted: #888;
+      --bg: #f7f7f5; --card: #ffffff; --border: #e0e0dc; --radius: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; height: 54px; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { width: 30px; height: 30px; background: var(--verde); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .nav-sep { color: var(--border); font-size: 18px; }
+    .nav-current { font-size: 13px; color: var(--text-sec); }
+
+    .hero { background: linear-gradient(135deg, #0C447C 0%, #1D9E75 100%); padding: 2rem 1.5rem; text-align: center; }
+    .hero-icon { font-size: 42px; margin-bottom: 10px; }
+    .hero h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.85); max-width: 580px; margin: 0 auto; }
+    .hero-params { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .hero-param { font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; padding: 4px 10px; border-radius: 20px; }
+
+    .modulos { max-width: 960px; margin: 0 auto; padding: 1.2rem 1.5rem 0; }
+    .modulos-tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); }
+    .mod-tab { padding: 10px 16px; font-size: 13px; font-weight: 500; border: none; background: transparent; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; border-radius: 6px 6px 0 0; white-space: nowrap; transition: color 0.15s; }
+    .mod-tab:hover { color: var(--azul); background: var(--azul-light); }
+    .mod-tab.active { color: var(--azul); border-bottom-color: var(--azul); font-weight: 600; }
+    .modulo { display: none; }
+    .modulo.active { display: block; }
+
+    .main { max-width: 960px; margin: 0 auto; padding: 1.2rem 1.5rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 500; color: var(--text-sec); }
+    select, input[type="number"] {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text); background: #fff; transition: border-color 0.15s;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--azul); }
+    .hint { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    .btn { width: 100%; padding: 13px; background: var(--azul); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .btn:hover { background: var(--azul-dark); }
+    .btn-reset { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 9px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+
+    #res-goteo, #res-aspersion { display: none; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 1rem; }
+    .kpi-card { border-radius: 10px; padding: 1rem; text-align: center; border: 1px solid; }
+    .kpi-card.azul { background: var(--azul-light); border-color: #B5D4F4; }
+    .kpi-card.verde { background: var(--verde-light); border-color: #9FE1CB; }
+    .kpi-card.naranja { background: var(--naranja-light); border-color: #FAC775; }
+    .kpi-card.morado { background: var(--morado-light); border-color: #CECBF6; }
+    .kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 5px; }
+    .kpi-valor { font-size: 20px; font-weight: 800; }
+    .kpi-card.azul .kpi-valor { color: var(--azul); }
+    .kpi-card.verde .kpi-valor { color: var(--verde-dark); }
+    .kpi-card.naranja .kpi-valor { color: var(--naranja); }
+    .kpi-card.morado .kpi-valor { color: var(--morado); }
+    .kpi-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+    .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
+    .plan-item { background: #f9f9f7; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+    .plan-titulo { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+    .plan-valor { font-size: 14px; font-weight: 600; color: var(--text); }
+    .plan-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .tabla-scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #f5f5f2; color: var(--text-sec); font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+    td { padding: 8px 10px; border-bottom: 1px solid #f5f5f2; color: var(--text); }
+    tr:last-child td { border-bottom: none; font-weight: 700; background: var(--azul-light); }
+    .td-val { font-weight: 600; color: var(--azul); text-align: right; }
+
+    .prog-bar-wrap { margin-bottom: 1rem; }
+    .prog-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .prog-label { font-size: 12px; color: var(--text-sec); width: 140px; flex-shrink: 0; }
+    .prog-bg { flex: 1; background: #f0f0ec; border-radius: 4px; height: 20px; overflow: hidden; }
+    .prog-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 600; color: #fff; }
+    .prog-val { font-size: 12px; font-weight: 600; color: var(--text); width: 100px; flex-shrink: 0; text-align: right; }
+
+    .semana-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+    .dia-item { background: var(--azul-light); border: 1px solid #B5D4F4; border-radius: 6px; padding: 6px 4px; text-align: center; }
+    .dia-item.no-riego { background: #f5f5f2; border-color: var(--border); }
+    .dia-nombre { font-size: 10px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 2px; }
+    .dia-estado { font-size: 11px; font-weight: 700; }
+    .dia-item .dia-estado { color: var(--azul); }
+    .dia-item.no-riego .dia-estado { color: var(--text-muted); }
+
+    .disclaimer { background: #fffbf0; border: 1px solid #FAC775; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 1rem; }
+    .btn-print { width: 100%; padding: 10px; background: transparent; color: var(--azul); border: 1px solid var(--azul); border-radius: 9px; font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 8px; }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .plan-grid { grid-template-columns: 1fr; }
+      .semana-grid { grid-template-columns: repeat(4,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-text">HerramientasPro</div>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">💧 Plan de Riego</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">💧</div>
+  <h1>Plan de Riego por Goteo y Aspersión</h1>
+  <p>Calcula la lámina de riego, tiempo de operación, número de emisores y volumen de agua para tu cultivo. Adaptado a condiciones agroclimáticas colombianas.</p>
+  <div class="hero-params">
+    <span class="hero-param">💧 Goteo</span>
+    <span class="hero-param">🌧️ Aspersión</span>
+    <span class="hero-param">🇨🇴 Condiciones Colombia</span>
+  </div>
+</div>
+
+<div class="modulos">
+  <div class="modulos-tabs">
+    <button class="mod-tab active" onclick="switchMod('goteo',this)">💧 Riego por Goteo</button>
+    <button class="mod-tab" onclick="switchMod('aspersion',this)">🌧️ Riego por Aspersión</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- MÓDULO GOTEO -->
+  <div class="modulo active" id="mod-goteo">
+    <div class="card">
+      <div class="card-title">🌱 Datos del cultivo y lote</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="g-cultivo">Cultivo</label>
+          <select id="g-cultivo" onchange="actualizarETo('g')">
+            <option value="banano">🍌 Banano / Plátano</option>
+            <option value="pina">🍍 Piña</option>
+            <option value="cacao">🍫 Cacao</option>
+            <option value="tomate">🍅 Tomate / Hortalizas</option>
+            <option value="papa">🥔 Papa</option>
+            <option value="cafe">☕ Café</option>
+            <option value="mango">🥭 Mango / Frutales</option>
+            <option value="flores">💐 Flores / Ornamentales</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="g-area">Área del lote (ha)</label>
+          <input type="number" id="g-area" placeholder="Ej: 1.5" min="0.1" max="500" step="0.1" value="1" />
+        </div>
+        <div class="form-group">
+          <label for="g-eto">Evapotranspiración (ETo mm/día)</label>
+          <input type="number" id="g-eto" placeholder="Ej: 4.5" min="1" max="12" step="0.1" value="4.5" />
+          <span class="hint" id="g-eto-hint">Valor típico para trópico colombiano bajo (0–1000 msnm)</span>
+        </div>
+        <div class="form-group">
+          <label for="g-kc">Coeficiente de cultivo (Kc)</label>
+          <input type="number" id="g-kc" placeholder="Ej: 1.0" min="0.1" max="1.5" step="0.01" value="1.0" />
+          <span class="hint">Kc varía según etapa fenológica. Valor medio del ciclo.</span>
+        </div>
+        <div class="form-group">
+          <label for="g-eficiencia">Eficiencia del sistema (%)</label>
+          <select id="g-eficiencia">
+            <option value="90">90% — Goteo tecnificado</option>
+            <option value="85">85% — Goteo estándar</option>
+            <option value="80">80% — Goteo básico</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="g-precip">Precipitación efectiva (mm/día)</label>
+          <input type="number" id="g-precip" placeholder="0" min="0" max="50" step="0.1" value="0" />
+          <span class="hint">Ingrese 0 en época seca. Precipitación aprovechable por el cultivo.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Parámetros del emisor (gotero)</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="g-caudal">Caudal del gotero (L/hora)</label>
+          <select id="g-caudal">
+            <option value="1">1 L/h — gotero de bajo caudal</option>
+            <option value="2" selected>2 L/h — gotero estándar</option>
+            <option value="4">4 L/h — gotero alta frecuencia</option>
+            <option value="8">8 L/h — gotero alto caudal</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="g-sep-goteros">Separación entre goteros (m)</label>
+          <input type="number" id="g-sep-goteros" placeholder="0.5" min="0.1" max="5" step="0.1" value="0.5" />
+        </div>
+        <div class="form-group">
+          <label for="g-sep-laterales">Separación entre laterales (m)</label>
+          <input type="number" id="g-sep-laterales" placeholder="1.0" min="0.1" max="10" step="0.1" value="1.0" />
+        </div>
+        <div class="form-group">
+          <label for="g-horas-dia">Horas disponibles de riego/día</label>
+          <input type="number" id="g-horas-dia" placeholder="12" min="1" max="24" step="0.5" value="12" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularGoteo()">🧮 Calcular plan de riego por goteo</button>
+      <button class="btn-reset" onclick="resetGoteo()">↺ Limpiar</button>
+    </div>
+
+    <div id="res-goteo">
+      <div class="card">
+        <div class="card-title">📊 Resultados — Riego por Goteo</div>
+        <div class="kpi-grid" id="kpi-goteo"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📋 Detalles del sistema</div>
+        <div class="plan-grid" id="plan-goteo"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📅 Programa semanal de riego</div>
+        <div class="semana-grid" id="semana-goteo"></div>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:8px;">Programa orientativo. Ajustar según lecturas de tensiómetro o sensor de humedad.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">💧 Balance hídrico diario</div>
+        <div class="prog-bar-wrap" id="balance-goteo"></div>
+      </div>
+      <div class="disclaimer">⚠️ <strong>Herramienta orientativa.</strong> El plan de riego debe ajustarse con lecturas de tensiómetros, sensores de humedad o lisímetros. Los valores de ETo y Kc son estimaciones — use datos de la estación meteorológica más cercana (IDEAM) para mayor precisión.</div>
+      <button class="btn-print" onclick="window.print()">🖨️ Imprimir plan</button>
+    </div>
+  </div>
+
+  <!-- MÓDULO ASPERSIÓN -->
+  <div class="modulo" id="mod-aspersion">
+    <div class="card">
+      <div class="card-title">🌱 Datos del cultivo y lote</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="a-cultivo">Cultivo</label>
+          <select id="a-cultivo" onchange="actualizarETo('a')">
+            <option value="papa">🥔 Papa</option>
+            <option value="flores">💐 Flores / Ornamentales</option>
+            <option value="pasto">🌿 Pastos / Forrajes</option>
+            <option value="cereales">🌾 Cereales / Granos</option>
+            <option value="hortalizas">🥬 Hortalizas</option>
+            <option value="cafe">☕ Café (vivero)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="a-area">Área del lote (ha)</label>
+          <input type="number" id="a-area" placeholder="Ej: 2.0" min="0.1" max="500" step="0.1" value="1" />
+        </div>
+        <div class="form-group">
+          <label for="a-eto">Evapotranspiración (ETo mm/día)</label>
+          <input type="number" id="a-eto" placeholder="Ej: 4.0" min="1" max="12" step="0.1" value="4.0" />
+          <span class="hint" id="a-eto-hint">Valor típico zonas altas colombianas (1000–2500 msnm)</span>
+        </div>
+        <div class="form-group">
+          <label for="a-kc">Coeficiente de cultivo (Kc)</label>
+          <input type="number" id="a-kc" placeholder="Ej: 0.9" min="0.1" max="1.5" step="0.01" value="0.9" />
+        </div>
+        <div class="form-group">
+          <label for="a-eficiencia">Eficiencia del sistema (%)</label>
+          <select id="a-eficiencia">
+            <option value="80">80% — Aspersión tecnificada</option>
+            <option value="75" selected>75% — Aspersión estándar</option>
+            <option value="65">65% — Aspersión básica</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="a-precip">Precipitación efectiva (mm/día)</label>
+          <input type="number" id="a-precip" placeholder="0" min="0" max="50" step="0.1" value="0" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Parámetros del aspersor</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="a-caudal">Caudal del aspersor (m³/hora)</label>
+          <input type="number" id="a-caudal" placeholder="Ej: 1.5" min="0.1" max="20" step="0.1" value="1.5" />
+          <span class="hint">Consultar ficha técnica del aspersor</span>
+        </div>
+        <div class="form-group">
+          <label for="a-radio">Radio de cobertura (m)</label>
+          <input type="number" id="a-radio" placeholder="Ej: 12" min="1" max="50" step="0.5" value="12" />
+        </div>
+        <div class="form-group">
+          <label for="a-sep">Separación entre aspersores (m)</label>
+          <input type="number" id="a-sep" placeholder="Ej: 12" min="1" max="50" step="0.5" value="12" />
+          <span class="hint">Generalmente 60–70% del diámetro de cobertura</span>
+        </div>
+        <div class="form-group">
+          <label for="a-horas-dia">Horas disponibles de riego/día</label>
+          <input type="number" id="a-horas-dia" placeholder="10" min="1" max="24" step="0.5" value="10" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularAspersion()">🧮 Calcular plan de riego por aspersión</button>
+      <button class="btn-reset" onclick="resetAspersion()">↺ Limpiar</button>
+    </div>
+
+    <div id="res-aspersion">
+      <div class="card">
+        <div class="card-title">📊 Resultados — Riego por Aspersión</div>
+        <div class="kpi-grid" id="kpi-aspersion"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📋 Detalles del sistema</div>
+        <div class="plan-grid" id="plan-aspersion"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">💧 Balance hídrico diario</div>
+        <div class="prog-bar-wrap" id="balance-aspersion"></div>
+      </div>
+      <div class="disclaimer">⚠️ <strong>Herramienta orientativa.</strong> Para mayor precisión use datos de la estación meteorológica del IDEAM más cercana. Ajuste los valores de ETo y Kc según la etapa fenológica del cultivo y las condiciones locales de suelo.</div>
+      <button class="btn-print" onclick="window.print()">🖨️ Imprimir plan</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const cultivosData = {
+    banano:   { eto: 5.5, kc: 1.1, hint: 'Trópico bajo 0–800 msnm. Alta demanda hídrica.' },
+    pina:     { eto: 4.5, kc: 0.7, hint: 'Trópico bajo-medio. Kc bajo por uso de mulch.' },
+    cacao:    { eto: 4.0, kc: 1.0, hint: 'Trópico bajo-medio. Bajo sombrío.' },
+    tomate:   { eto: 4.5, kc: 1.05, hint: 'Clima medio. Alta demanda en fructificación.' },
+    papa:     { eto: 3.5, kc: 0.9, hint: 'Clima frío 2000–3000 msnm. Kc medio ciclo.' },
+    cafe:     { eto: 4.0, kc: 0.95, hint: 'Clima cafetero 1200–1800 msnm.' },
+    mango:    { eto: 5.0, kc: 0.9, hint: 'Trópico bajo-medio. Reducir en floración.' },
+    flores:   { eto: 3.5, kc: 1.0, hint: 'Sabana de Bogotá / clima frío. Alta precisión.' },
+    pasto:    { eto: 3.8, kc: 0.85, hint: 'Ganadería. Ciclo corto entre cortes.' },
+    cereales: { eto: 4.0, kc: 0.85, hint: 'Llanos / valles. Valor medio del ciclo.' },
+    hortalizas:{ eto: 4.0, kc: 0.95, hint: 'Clima medio a frío. Alta frecuencia de riego.' },
+  };
+
+  function actualizarETo(mod) {
+    const cultivo = document.getElementById(mod + '-cultivo').value;
+    const data = cultivosData[cultivo];
+    if (data) {
+      document.getElementById(mod + '-eto').value = data.eto;
+      document.getElementById(mod + '-kc').value = data.kc;
+      if (document.getElementById(mod + '-eto-hint')) {
+        document.getElementById(mod + '-eto-hint').textContent = data.hint;
+      }
+    }
+  }
+
+  function switchMod(id, el) {
+    document.querySelectorAll('.modulo').forEach(m => m.classList.remove('active'));
+    document.querySelectorAll('.mod-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('mod-' + id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function fmt2(n) { return (Math.round(n * 100) / 100).toLocaleString('es-CO'); }
+  function fmtInt(n) { return Math.round(n).toLocaleString('es-CO'); }
+
+  function calcularGoteo() {
+    const area = parseFloat(document.getElementById('g-area').value) || 1;
+    const eto  = parseFloat(document.getElementById('g-eto').value) || 4.5;
+    const kc   = parseFloat(document.getElementById('g-kc').value) || 1.0;
+    const ef   = parseFloat(document.getElementById('g-eficiencia').value) / 100;
+    const precip = parseFloat(document.getElementById('g-precip').value) || 0;
+    const caudalGotero = parseFloat(document.getElementById('g-caudal').value); // L/h
+    const sepGoteros = parseFloat(document.getElementById('g-sep-goteros').value) || 0.5;
+    const sepLaterales = parseFloat(document.getElementById('g-sep-laterales').value) || 1.0;
+    const horasDia = parseFloat(document.getElementById('g-horas-dia').value) || 12;
+
+    const etc = eto * kc; // Evapotranspiración del cultivo (mm/día)
+    const neta = Math.max(0, etc - precip); // Lámina neta
+    const bruta = neta / ef; // Lámina bruta
+    const areaPorGotero = sepGoteros * sepLaterales; // m² por gotero
+    const numGoteros = Math.ceil((area * 10000) / areaPorGotero);
+    const caudalTotal = numGoteros * caudalGotero / 1000; // m³/h
+    const volDia = bruta * area * 10; // m³/día (1mm/ha = 10m³)
+    const tiempoRiego = volDia / caudalTotal; // horas/día
+    const frecuencia = tiempoRiego <= horasDia ? 1 : Math.ceil(tiempoRiego / horasDia);
+    const tiempoReal = tiempoRiego / frecuencia;
+    const diasRiego = frecuencia === 1 ? 'Diario' : `Cada ${frecuencia} días`;
+
+    // KPIs
+    document.getElementById('kpi-goteo').innerHTML = `
+      <div class="kpi-card azul"><div class="kpi-label">Lámina neta</div><div class="kpi-valor">${fmt2(neta)}</div><div class="kpi-sub">mm/día</div></div>
+      <div class="kpi-card verde"><div class="kpi-label">Volumen/día</div><div class="kpi-valor">${fmtInt(volDia)}</div><div class="kpi-sub">m³/día</div></div>
+      <div class="kpi-card naranja"><div class="kpi-label">Tiempo riego</div><div class="kpi-valor">${fmt2(tiempoReal)}</div><div class="kpi-sub">horas/evento</div></div>
+      <div class="kpi-card morado"><div class="kpi-label">N° goteros</div><div class="kpi-valor">${fmtInt(numGoteros)}</div><div class="kpi-sub">unidades</div></div>
+    `;
+
+    document.getElementById('plan-goteo').innerHTML = `
+      <div class="plan-item"><div class="plan-titulo">ETo del cultivo (ETc)</div><div class="plan-valor">${fmt2(etc)} mm/día</div><div class="plan-sub">ETo ${eto} × Kc ${kc}</div></div>
+      <div class="plan-item"><div class="plan-titulo">Lámina bruta</div><div class="plan-valor">${fmt2(bruta)} mm/día</div><div class="plan-sub">Lámina neta ÷ eficiencia ${Math.round(ef*100)}%</div></div>
+      <div class="plan-item"><div class="plan-titulo">Caudal total sistema</div><div class="plan-valor">${fmt2(caudalTotal)} m³/h</div><div class="plan-sub">${fmtInt(numGoteros)} goteros × ${caudalGotero} L/h</div></div>
+      <div class="plan-item"><div class="plan-titulo">Frecuencia de riego</div><div class="plan-valor">${diasRiego}</div><div class="plan-sub">${fmt2(tiempoReal)} h por evento de riego</div></div>
+      <div class="plan-item"><div class="plan-titulo">Volumen mensual</div><div class="plan-valor">${fmtInt(volDia * 30)} m³/mes</div><div class="plan-sub">Para ${area} ha</div></div>
+      <div class="plan-item"><div class="plan-titulo">Separación emisores</div><div class="plan-valor">${sepGoteros}m × ${sepLaterales}m</div><div class="plan-sub">${fmt2(areaPorGotero)} m² por gotero</div></div>
+    `;
+
+    // Programa semanal
+    const dias = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+    document.getElementById('semana-goteo').innerHTML = dias.map((d, i) => {
+      const riego = frecuencia === 1 || i % frecuencia === 0;
+      return `<div class="dia-item ${riego ? '' : 'no-riego'}">
+        <div class="dia-nombre">${d}</div>
+        <div class="dia-estado">${riego ? '💧' : '—'}</div>
+        <div style="font-size:9px;color:var(--text-muted);margin-top:2px;">${riego ? fmt2(tiempoReal)+'h' : 'sin riego'}</div>
+      </div>`;
+    }).join('');
+
+    // Balance hídrico
+    const maxVal = Math.max(etc, bruta, precip + 1);
+    document.getElementById('balance-goteo').innerHTML = `
+      <div class="prog-row"><div class="prog-label">ETo cultivo (ETc)</div><div class="prog-bg"><div class="prog-fill" style="width:${(etc/maxVal*100).toFixed(0)}%;background:var(--rojo);">${fmt2(etc)}</div></div><div class="prog-val">${fmt2(etc)} mm/día</div></div>
+      <div class="prog-row"><div class="prog-label">Precipitación efectiva</div><div class="prog-bg"><div class="prog-fill" style="width:${(precip/maxVal*100).toFixed(0)}%;background:var(--azul);">${fmt2(precip)}</div></div><div class="prog-val">${fmt2(precip)} mm/día</div></div>
+      <div class="prog-row"><div class="prog-label">Riego aportado</div><div class="prog-bg"><div class="prog-fill" style="width:${(bruta/maxVal*100).toFixed(0)}%;background:var(--verde);">${fmt2(bruta)}</div></div><div class="prog-val">${fmt2(bruta)} mm/día</div></div>
+    `;
+
+    document.getElementById('res-goteo').style.display = 'block';
+    document.getElementById('res-goteo').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function calcularAspersion() {
+    const area = parseFloat(document.getElementById('a-area').value) || 1;
+    const eto  = parseFloat(document.getElementById('a-eto').value) || 4.0;
+    const kc   = parseFloat(document.getElementById('a-kc').value) || 0.9;
+    const ef   = parseFloat(document.getElementById('a-eficiencia').value) / 100;
+    const precip = parseFloat(document.getElementById('a-precip').value) || 0;
+    const caudalAsp = parseFloat(document.getElementById('a-caudal').value) || 1.5; // m³/h
+    const radio = parseFloat(document.getElementById('a-radio').value) || 12;
+    const sep = parseFloat(document.getElementById('a-sep').value) || 12;
+    const horasDia = parseFloat(document.getElementById('a-horas-dia').value) || 10;
+
+    const etc = eto * kc;
+    const neta = Math.max(0, etc - precip);
+    const bruta = neta / ef;
+    const areaPorAsp = sep * sep; // m²
+    const numAsp = Math.ceil((area * 10000) / areaPorAsp);
+    const caudalTotal = numAsp * caudalAsp; // m³/h
+    const volDia = bruta * area * 10; // m³/día
+    const tiempoRiego = volDia / caudalTotal;
+    const frecuencia = tiempoRiego <= horasDia ? 1 : Math.ceil(tiempoRiego / horasDia);
+    const tiempoReal = tiempoRiego / frecuencia;
+    const intensidad = (caudalAsp * 1000) / (areaPorAsp); // mm/h por aspersor
+
+    document.getElementById('kpi-aspersion').innerHTML = `
+      <div class="kpi-card azul"><div class="kpi-label">Lámina neta</div><div class="kpi-valor">${fmt2(neta)}</div><div class="kpi-sub">mm/día</div></div>
+      <div class="kpi-card verde"><div class="kpi-label">Volumen/día</div><div class="kpi-valor">${fmtInt(volDia)}</div><div class="kpi-sub">m³/día</div></div>
+      <div class="kpi-card naranja"><div class="kpi-label">Tiempo riego</div><div class="kpi-valor">${fmt2(tiempoReal)}</div><div class="kpi-sub">horas/evento</div></div>
+      <div class="kpi-card morado"><div class="kpi-label">N° aspersores</div><div class="kpi-valor">${fmtInt(numAsp)}</div><div class="kpi-sub">unidades</div></div>
+    `;
+
+    document.getElementById('plan-aspersion').innerHTML = `
+      <div class="plan-item"><div class="plan-titulo">ETo del cultivo (ETc)</div><div class="plan-valor">${fmt2(etc)} mm/día</div><div class="plan-sub">ETo ${eto} × Kc ${kc}</div></div>
+      <div class="plan-item"><div class="plan-titulo">Lámina bruta</div><div class="plan-valor">${fmt2(bruta)} mm/día</div><div class="plan-sub">Lámina neta ÷ eficiencia ${Math.round(ef*100)}%</div></div>
+      <div class="plan-item"><div class="plan-titulo">Intensidad de aplicación</div><div class="plan-valor">${fmt2(intensidad)} mm/h</div><div class="plan-sub">Por aspersor en su área</div></div>
+      <div class="plan-item"><div class="plan-titulo">Caudal total sistema</div><div class="plan-valor">${fmt2(caudalTotal)} m³/h</div><div class="plan-sub">${fmtInt(numAsp)} aspersores × ${caudalAsp} m³/h</div></div>
+      <div class="plan-item"><div class="plan-titulo">Frecuencia de riego</div><div class="plan-valor">${frecuencia === 1 ? 'Diario' : 'Cada ' + frecuencia + ' días'}</div><div class="plan-sub">${fmt2(tiempoReal)} h por evento</div></div>
+      <div class="plan-item"><div class="plan-titulo">Volumen mensual</div><div class="plan-valor">${fmtInt(volDia * 30)} m³/mes</div><div class="plan-sub">Para ${area} ha</div></div>
+    `;
+
+    const maxVal = Math.max(etc, bruta, precip + 1);
+    document.getElementById('balance-aspersion').innerHTML = `
+      <div class="prog-row"><div class="prog-label">ETo cultivo (ETc)</div><div class="prog-bg"><div class="prog-fill" style="width:${(etc/maxVal*100).toFixed(0)}%;background:var(--rojo);">${fmt2(etc)}</div></div><div class="prog-val">${fmt2(etc)} mm/día</div></div>
+      <div class="prog-row"><div class="prog-label">Precipitación efectiva</div><div class="prog-bg"><div class="prog-fill" style="width:${(precip/maxVal*100).toFixed(0)}%;background:var(--azul);">${fmt2(precip)}</div></div><div class="prog-val">${fmt2(precip)} mm/día</div></div>
+      <div class="prog-row"><div class="prog-label">Riego aportado</div><div class="prog-bg"><div class="prog-fill" style="width:${(bruta/maxVal*100).toFixed(0)}%;background:var(--verde);">${fmt2(bruta)}</div></div><div class="prog-val">${fmt2(bruta)} mm/día</div></div>
+    `;
+
+    document.getElementById('res-aspersion').style.display = 'block';
+    document.getElementById('res-aspersion').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetGoteo() {
+    document.getElementById('g-area').value = 1;
+    document.getElementById('g-precip').value = 0;
+    document.getElementById('res-goteo').style.display = 'none';
+  }
+  function resetAspersion() {
+    document.getElementById('a-area').value = 1;
+    document.getElementById('a-precip').value = 0;
+    document.getElementById('res-aspersion').style.display = 'none';
+  }
+</script>
+</body>
+</html>
