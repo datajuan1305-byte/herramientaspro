@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora médica Colombia: IMC, peso ideal, superficie corporal y dosis de medicamentos pediátricos y adultos por peso. Para médicos, enfermeras y personal de salud." />
+  <meta name="keywords" content="calculadora IMC medico colombia, dosis medicamentos pediatricos peso, superficie corporal dubois, peso ideal broca, calculadora medica colombia" />
+  <title>Calculadora Médica — IMC y Dosis de Medicamentos — HerramientasPro</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #1D9E75; --verde-dark: #0F6E56; --verde-light: #E1F5EE;
+      --azul: #185FA5; --azul-light: #E6F1FB;
+      --rojo: #A32D2D; --rojo-light: #FCEBEB;
+      --naranja: #854F0B; --naranja-light: #FAEEDA;
+      --morado: #534AB7; --morado-light: #EEEDFE;
+      --amarillo: #BA7517; --amarillo-light: #FAEEDA;
+      --text: #1a1a1a; --text-sec: #555; --text-muted: #888;
+      --bg: #f7f7f5; --card: #ffffff; --border: #e0e0dc; --radius: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; height: 54px; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { width: 30px; height: 30px; background: var(--verde); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .nav-sep { color: var(--border); font-size: 18px; }
+    .nav-current { font-size: 13px; color: var(--text-sec); }
+
+    .hero { background: linear-gradient(135deg, #A32D2D 0%, #185FA5 100%); padding: 2rem 1.5rem; text-align: center; }
+    .hero-icon { font-size: 42px; margin-bottom: 10px; }
+    .hero h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.85); max-width: 580px; margin: 0 auto; }
+
+    /* TABS MÓDULOS */
+    .modulos { max-width: 960px; margin: 0 auto; padding: 1.2rem 1.5rem 0; }
+    .modulos-tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); }
+    .mod-tab { padding: 10px 16px; font-size: 13px; font-weight: 500; border: none; background: transparent; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; border-radius: 6px 6px 0 0; white-space: nowrap; transition: color 0.15s; }
+    .mod-tab:hover { color: var(--rojo); background: var(--rojo-light); }
+    .mod-tab.active { color: var(--rojo); border-bottom-color: var(--rojo); font-weight: 600; }
+
+    .modulo { display: none; }
+    .modulo.active { display: block; }
+
+    .main { max-width: 960px; margin: 0 auto; padding: 1.2rem 1.5rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 500; color: var(--text-sec); }
+    input[type="number"], input[type="text"], select {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text); background: #fff; transition: border-color 0.15s;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--rojo); }
+    .hint { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    .btn { width: 100%; padding: 12px; background: var(--rojo); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .btn:hover { background: #791F1F; }
+    .btn-reset { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 9px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+    .btn-azul { background: var(--azul); }
+    .btn-azul:hover { background: #0C447C; }
+
+    /* IMC RESULTADO */
+    .imc-result-box { border-radius: 12px; padding: 1.4rem; margin-bottom: 1rem; border: 2px solid; text-align: center; }
+    .imc-valor { font-size: 52px; font-weight: 900; margin-bottom: 4px; }
+    .imc-clasificacion { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .imc-desc { font-size: 13px; opacity: 0.8; }
+
+    .imc-escala { display: flex; gap: 4px; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; }
+    .imc-rango { flex: 1; padding: 8px 4px; text-align: center; font-size: 10px; font-weight: 600; }
+    .rango-bajo { background: #E6F1FB; color: #185FA5; }
+    .rango-normal { background: #E1F5EE; color: #0F6E56; }
+    .rango-sobrepeso { background: #FAEEDA; color: #854F0B; }
+    .rango-obesidad1 { background: #FCEBEB; color: #A32D2D; }
+    .rango-obesidad2 { background: #F7C1C1; color: #791F1F; }
+    .rango-obesidad3 { background: #E24B4A; color: #fff; }
+    .rango-activo { outline: 3px solid #1a1a1a; outline-offset: -2px; }
+
+    .kpi-grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 1rem; }
+    .kpi-sm { background: #f9f9f7; border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; }
+    .kpi-sm-val { font-size: 16px; font-weight: 800; color: var(--text); }
+    .kpi-sm-lab { font-size: 10px; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; }
+
+    /* DOSIS */
+    .med-buscar { display: flex; gap: 8px; margin-bottom: 1rem; }
+    .med-buscar input { flex: 1; }
+    .med-buscar button { padding: 9px 16px; background: var(--azul); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+
+    .med-lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin-bottom: 1rem; }
+    .med-btn { padding: 8px 10px; background: #f5f5f2; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; color: var(--text-sec); cursor: pointer; text-align: left; transition: all 0.15s; }
+    .med-btn:hover, .med-btn.active { background: var(--azul-light); border-color: var(--azul); color: var(--azul); font-weight: 600; }
+
+    .dosis-result { background: var(--azul-light); border: 1px solid #B5D4F4; border-radius: 10px; padding: 1.2rem; margin-top: 1rem; }
+    .dosis-nombre { font-size: 16px; font-weight: 700; color: var(--azul); margin-bottom: 8px; }
+    .dosis-tabla { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .dosis-tabla th { background: rgba(24,95,165,0.1); padding: 7px 10px; text-align: left; font-size: 12px; color: var(--azul); font-weight: 600; }
+    .dosis-tabla td { padding: 7px 10px; border-bottom: 1px solid rgba(24,95,165,0.1); }
+    .dosis-tabla tr:last-child td { border-bottom: none; }
+    .dosis-destacada { font-weight: 800; color: var(--azul); font-size: 15px; }
+    .dosis-alerta { background: var(--rojo-light); border: 1px solid #F7C1C1; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--rojo); margin-top: 8px; line-height: 1.5; }
+
+    .disclaimer { background: #fffbf0; border: 1px solid #FAC775; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 1rem; }
+    .btn-print { width: 100%; padding: 10px; background: transparent; color: var(--rojo); border: 1px solid var(--rojo); border-radius: 9px; font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 8px; }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .kpi-grid-4 { grid-template-columns: 1fr 1fr; }
+      .modulos-tabs { overflow-x: auto; }
+      .imc-valor { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-text">HerramientasPro</div>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">🩺 Calculadora Médica</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">🩺</div>
+  <h1>Calculadora Médica — IMC y Dosis</h1>
+  <p>IMC, peso ideal, superficie corporal y dosis de medicamentos pediátricos y adultos por peso. Para uso clínico rápido en consulta y guardia.</p>
+</div>
+
+<!-- TABS MÓDULOS -->
+<div class="modulos">
+  <div class="modulos-tabs">
+    <button class="mod-tab active" onclick="switchModulo('imc', this)">⚖️ IMC y Antropometría</button>
+    <button class="mod-tab" onclick="switchModulo('dosis', this)">💊 Dosis por Peso</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- MÓDULO IMC -->
+  <div class="modulo active" id="mod-imc">
+    <div class="card">
+      <div class="card-title">⚖️ Datos del paciente</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="peso">Peso (kg)</label>
+          <input type="number" id="peso" placeholder="Ej: 70" min="1" max="300" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label for="talla">Talla (cm)</label>
+          <input type="number" id="talla" placeholder="Ej: 170" min="30" max="250" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label for="edad">Edad (años)</label>
+          <input type="number" id="edad" placeholder="Ej: 35" min="2" max="120" />
+        </div>
+        <div class="form-group">
+          <label for="sexo">Sexo biológico</label>
+          <select id="sexo">
+            <option value="m">Masculino</option>
+            <option value="f">Femenino</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularIMC()">🧮 Calcular IMC y antropometría</button>
+      <button class="btn-reset" onclick="resetIMC()">↺ Limpiar</button>
+    </div>
+
+    <div id="imc-resultados" style="display:none;">
+      <div class="imc-result-box" id="imc-result-box">
+        <div class="imc-valor" id="imc-valor">—</div>
+        <div class="imc-clasificacion" id="imc-clasif">—</div>
+        <div class="imc-desc" id="imc-desc">—</div>
+      </div>
+
+      <div class="imc-escala">
+        <div class="imc-rango rango-bajo" id="r-bajo">Bajo peso<br>&lt;18.5</div>
+        <div class="imc-rango rango-normal" id="r-normal">Normal<br>18.5–24.9</div>
+        <div class="imc-rango rango-sobrepeso" id="r-sobrepeso">Sobrepeso<br>25–29.9</div>
+        <div class="imc-rango rango-obesidad1" id="r-ob1">Obesidad I<br>30–34.9</div>
+        <div class="imc-rango rango-obesidad2" id="r-ob2">Obesidad II<br>35–39.9</div>
+        <div class="imc-rango rango-obesidad3" id="r-ob3">Obesidad III<br>≥40</div>
+      </div>
+
+      <div class="kpi-grid-4">
+        <div class="kpi-sm"><div class="kpi-sm-val" id="kpi-peso-ideal">—</div><div class="kpi-sm-lab">Peso ideal (Broca)</div></div>
+        <div class="kpi-sm"><div class="kpi-sm-val" id="kpi-sc">—</div><div class="kpi-sm-lab">Sup. corporal (m²)</div></div>
+        <div class="kpi-sm"><div class="kpi-sm-val" id="kpi-imc-kg">—</div><div class="kpi-sm-lab">kg a perder/ganar</div></div>
+        <div class="kpi-sm"><div class="kpi-sm-val" id="kpi-peso-ajust">—</div><div class="kpi-sm-lab">Peso ajustado</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📋 Interpretación clínica</div>
+        <div id="imc-interpretacion" style="font-size:13px;color:var(--text-sec);line-height:1.7;"></div>
+      </div>
+
+      <div class="disclaimer">⚠️ <strong>Uso clínico.</strong> El IMC es un indicador de referencia poblacional. La evaluación del estado nutricional debe complementarse con medidas de composición corporal, perímetro abdominal y contexto clínico del paciente. Los rangos corresponden a la clasificación OMS para adultos ≥18 años.</div>
+      <button class="btn-print" onclick="window.print()">🖨️ Imprimir</button>
+    </div>
+  </div>
+
+  <!-- MÓDULO DOSIS -->
+  <div class="modulo" id="mod-dosis">
+    <div class="card">
+      <div class="card-title">👤 Datos del paciente</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="d-peso">Peso del paciente (kg)</label>
+          <input type="number" id="d-peso" placeholder="Ej: 15" min="0.5" max="300" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label for="d-tipo">Tipo de paciente</label>
+          <select id="d-tipo">
+            <option value="pediatrico">Pediátrico (< 12 años)</option>
+            <option value="adolescente">Adolescente (12–17 años)</option>
+            <option value="adulto">Adulto (≥ 18 años)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💊 Selecciona el medicamento</div>
+      <div class="med-lista" id="med-lista"></div>
+    </div>
+
+    <div id="dosis-resultado" style="display:none;"></div>
+
+    <div class="disclaimer">⚠️ <strong>Uso clínico exclusivo.</strong> Las dosis presentadas son rangos de referencia basados en bibliografía farmacológica estándar (Taketomo, Nelson, BNF). Siempre verifique con el vademécum actualizado, ajuste según función renal/hepática, peso real vs. ideal, y condición clínica del paciente. Esta herramienta NO reemplaza el criterio médico.</div>
+  </div>
+
+</div>
+
+<script>
+  // ======= IMC =======
+  function switchModulo(id, el) {
+    document.querySelectorAll('.modulo').forEach(m => m.classList.remove('active'));
+    document.querySelectorAll('.mod-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('mod-' + id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function calcularIMC() {
+    const peso = parseFloat(document.getElementById('peso').value);
+    const talla = parseFloat(document.getElementById('talla').value);
+    const edad = parseFloat(document.getElementById('edad').value);
+    const sexo = document.getElementById('sexo').value;
+
+    if (!peso || !talla || peso <= 0 || talla <= 0) { alert('Ingrese peso y talla válidos.'); return; }
+
+    const tallaMt = talla / 100;
+    const imc = peso / (tallaMt * tallaMt);
+
+    // Clasificación OMS
+    let clasif, desc, bg, color, rangoId;
+    if (imc < 18.5) {
+      clasif = 'Bajo peso'; desc = 'El peso está por debajo del rango saludable para la talla.';
+      bg = '#E6F1FB'; color = '#185FA5'; rangoId = 'r-bajo';
+    } else if (imc < 25) {
+      clasif = 'Peso normal'; desc = 'El peso se encuentra dentro del rango saludable para la talla.';
+      bg = '#E1F5EE'; color = '#0F6E56'; rangoId = 'r-normal';
+    } else if (imc < 30) {
+      clasif = 'Sobrepeso'; desc = 'El peso supera el rango saludable. Se recomienda intervención nutricional.';
+      bg = '#FAEEDA'; color = '#854F0B'; rangoId = 'r-sobrepeso';
+    } else if (imc < 35) {
+      clasif = 'Obesidad Grado I'; desc = 'Obesidad moderada. Riesgo cardiovascular y metabólico aumentado.';
+      bg = '#FCEBEB'; color = '#A32D2D'; rangoId = 'r-ob1';
+    } else if (imc < 40) {
+      clasif = 'Obesidad Grado II'; desc = 'Obesidad severa. Alto riesgo de comorbilidades. Intervención prioritaria.';
+      bg = '#F7C1C1'; color = '#791F1F'; rangoId = 'r-ob2';
+    } else {
+      clasif = 'Obesidad Grado III (mórbida)'; desc = 'Obesidad muy severa. Evaluación multidisciplinaria urgente.';
+      bg = '#E24B4A'; color = '#fff'; rangoId = 'r-ob3';
+    }
+
+    // Peso ideal (Broca modificado)
+    const pesoIdeal = sexo === 'm' ? talla - 100 - ((talla - 150) / 4) : talla - 100 - ((talla - 150) / 2.5);
+    // Superficie corporal Dubois
+    const sc = 0.007184 * Math.pow(talla, 0.725) * Math.pow(peso, 0.425);
+    // Peso ajustado (para obesos)
+    const pesoAjust = pesoIdeal + 0.4 * (peso - pesoIdeal);
+    const difPeso = peso - pesoIdeal;
+
+    document.getElementById('imc-result-box').style.background = bg;
+    document.getElementById('imc-result-box').style.borderColor = color;
+    document.getElementById('imc-valor').style.color = color;
+    document.getElementById('imc-valor').textContent = imc.toFixed(1);
+    document.getElementById('imc-clasif').style.color = color;
+    document.getElementById('imc-clasif').textContent = clasif;
+    document.getElementById('imc-desc').textContent = desc;
+
+    document.querySelectorAll('.imc-rango').forEach(r => r.classList.remove('rango-activo'));
+    document.getElementById(rangoId).classList.add('rango-activo');
+
+    document.getElementById('kpi-peso-ideal').textContent = pesoIdeal.toFixed(1) + ' kg';
+    document.getElementById('kpi-sc').textContent = sc.toFixed(2) + ' m²';
+    document.getElementById('kpi-imc-kg').textContent = (difPeso > 0 ? '+' : '') + difPeso.toFixed(1) + ' kg';
+    document.getElementById('kpi-peso-ajust').textContent = imc >= 30 ? pesoAjust.toFixed(1) + ' kg' : 'N/A';
+
+    document.getElementById('imc-interpretacion').innerHTML = `
+      <strong>Paciente:</strong> ${sexo === 'm' ? 'Masculino' : 'Femenino'}, ${edad || '—'} años &nbsp;|&nbsp;
+      <strong>Peso:</strong> ${peso} kg &nbsp;|&nbsp; <strong>Talla:</strong> ${talla} cm<br>
+      <strong>IMC:</strong> ${imc.toFixed(2)} kg/m² — <strong>${clasif}</strong><br>
+      <strong>Peso ideal (Broca modificado):</strong> ${pesoIdeal.toFixed(1)} kg
+      ${difPeso > 0 ? ` — exceso de <strong>${difPeso.toFixed(1)} kg</strong>` : difPeso < 0 ? ` — déficit de <strong>${Math.abs(difPeso).toFixed(1)} kg</strong>` : ' — peso exactamente en rango ideal'}<br>
+      <strong>Superficie corporal (Dubois):</strong> ${sc.toFixed(3)} m² — útil para dosificación oncológica y pediátrica<br>
+      ${imc >= 30 ? `<strong>Peso ajustado (Devine/Obeso):</strong> ${pesoAjust.toFixed(1)} kg — usar para dosificación en pacientes obesos<br>` : ''}
+      <strong>Clasificación OMS:</strong> ${clasif}
+    `;
+
+    document.getElementById('imc-resultados').style.display = 'block';
+    document.getElementById('imc-resultados').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetIMC() {
+    ['peso','talla','edad'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('imc-resultados').style.display = 'none';
+  }
+
+  // ======= DOSIS MEDICAMENTOS =======
+  const medicamentos = [
+    { nombre: 'Amoxicilina', grupo: 'Antibiótico',
+      pediatrico: [{ rango: '25–50 mg/kg/día', intervalo: 'c/8h', dosis_mg_kg: [25,50], max: 3000, forma: 'suspensión 250mg/5ml o cápsulas 500mg', via: 'Oral' }],
+      adulto: [{ rango: '500–1000 mg', intervalo: 'c/8h', dosis_mg_kg: null, max: 3000, forma: 'cápsulas 500mg', via: 'Oral' }],
+      alerta: 'Verificar alergia a penicilinas. Ajustar en insuficiencia renal (ClCr < 30 ml/min).' },
+    { nombre: 'Ibuprofeno', grupo: 'AINE / Analgésico',
+      pediatrico: [{ rango: '5–10 mg/kg/dosis', intervalo: 'c/6–8h', dosis_mg_kg: [5,10], max: 40, forma: 'suspensión 100mg/5ml o tabletas 200mg', via: 'Oral' }],
+      adulto: [{ rango: '400–800 mg', intervalo: 'c/6–8h', dosis_mg_kg: null, max: 3200, forma: 'tabletas 400–600mg', via: 'Oral' }],
+      alerta: 'No usar en < 6 meses. Contraindicado en úlcera péptica, insuficiencia renal grave y tercer trimestre embarazo.' },
+    { nombre: 'Acetaminofén', grupo: 'Analgésico / Antipirético',
+      pediatrico: [{ rango: '10–15 mg/kg/dosis', intervalo: 'c/4–6h', dosis_mg_kg: [10,15], max: 75, forma: 'gotas 100mg/ml o suspensión 160mg/5ml', via: 'Oral/Rectal' }],
+      adulto: [{ rango: '500–1000 mg', intervalo: 'c/4–6h', dosis_mg_kg: null, max: 4000, forma: 'tabletas 500mg', via: 'Oral' }],
+      alerta: 'Dosis máxima adulto: 4g/día. En hepatopatía reducir a 2g/día. No superponer con otros productos que contengan acetaminofén.' },
+    { nombre: 'Azitromicina', grupo: 'Antibiótico macrólido',
+      pediatrico: [{ rango: '10 mg/kg/día (día 1), 5 mg/kg/día (días 2–5)', intervalo: 'c/24h', dosis_mg_kg: [10,10], max: 500, forma: 'suspensión 200mg/5ml', via: 'Oral' }],
+      adulto: [{ rango: '500 mg día 1, luego 250 mg/día', intervalo: 'c/24h', dosis_mg_kg: null, max: 500, forma: 'tabletas 500mg', via: 'Oral' }],
+      alerta: 'Interacciones con antiarrítmicos. Monitorear QT. Tomar en ayunas o con alimentos (no afecta absorción).' },
+    { nombre: 'Metronidazol', grupo: 'Antiparasitario / Antibiótico',
+      pediatrico: [{ rango: '15–30 mg/kg/día', intervalo: 'c/8h', dosis_mg_kg: [15,30], max: 2000, forma: 'suspensión 125mg/5ml o tabletas 250mg', via: 'Oral' }],
+      adulto: [{ rango: '500–750 mg', intervalo: 'c/8h', dosis_mg_kg: null, max: 2250, forma: 'tabletas 500mg', via: 'Oral/IV' }],
+      alerta: 'Evitar alcohol durante y 48h después del tratamiento. Puede causar neuropatía periférica en tratamientos prolongados.' },
+    { nombre: 'Cetirizina', grupo: 'Antihistamínico',
+      pediatrico: [{ rango: '0.25 mg/kg/dosis (2–5 años: 2.5mg; 6–11: 5mg)', intervalo: 'c/12–24h', dosis_mg_kg: [0.25,0.25], max: 10, forma: 'jarabe 5mg/5ml o tabletas 10mg', via: 'Oral' }],
+      adulto: [{ rango: '10 mg/día', intervalo: 'c/24h', dosis_mg_kg: null, max: 10, forma: 'tabletas 10mg', via: 'Oral' }],
+      alerta: 'No usar en < 2 años sin indicación médica. Puede causar somnolencia. Ajustar en insuficiencia renal.' },
+    { nombre: 'Salbutamol (Albuterol)', grupo: 'Broncodilatador β2',
+      pediatrico: [{ rango: '0.1–0.15 mg/kg/dosis nebulizado (mín 2.5mg)', intervalo: 'c/4–6h o según respuesta', dosis_mg_kg: [0.1,0.15], max: 5, forma: 'solución nebulización 0.5%', via: 'Inhalado/Nebulizado' }],
+      adulto: [{ rango: '2.5–5 mg nebulizado o 2 puff inhalador', intervalo: 'c/4–6h', dosis_mg_kg: null, max: 20, forma: 'solución 0.5% o inhalador 100mcg/dosis', via: 'Inhalado/Nebulizado' }],
+      alerta: 'Monitorear frecuencia cardíaca y K+ en dosis altas. Taquicardia es efecto adverso frecuente.' },
+    { nombre: 'Ranitidina / Omeprazol', grupo: 'Protector gástrico',
+      pediatrico: [{ rango: 'Omeprazol: 0.7–1.4 mg/kg/día', intervalo: 'c/24h (antes del desayuno)', dosis_mg_kg: [0.7,1.4], max: 20, forma: 'cápsulas 20mg o suspensión magistral', via: 'Oral' }],
+      adulto: [{ rango: 'Omeprazol 20–40 mg', intervalo: 'c/24h', dosis_mg_kg: null, max: 40, forma: 'cápsulas 20mg', via: 'Oral' }],
+      alerta: 'Tomar 30 min antes del desayuno. Uso prolongado asociado a hipomagnesemia y déficit de B12.' },
+  ];
+
+  let medSeleccionado = null;
+
+  function renderMedLista() {
+    const lista = document.getElementById('med-lista');
+    lista.innerHTML = medicamentos.map((m, i) => `
+      <button class="med-btn" onclick="seleccionarMed(${i}, this)">
+        <strong style="display:block;margin-bottom:2px;">${m.nombre}</strong>
+        <span style="font-size:10px;color:var(--text-muted);">${m.grupo}</span>
+      </button>`).join('');
+  }
+
+  function seleccionarMed(idx, btn) {
+    document.querySelectorAll('.med-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    medSeleccionado = medicamentos[idx];
+    calcularDosis();
+  }
+
+  function calcularDosis() {
+    const peso = parseFloat(document.getElementById('d-peso').value);
+    const tipo = document.getElementById('d-tipo').value;
+    if (!peso || !medSeleccionado) {
+      if (!peso) alert('Ingrese el peso del paciente.');
+      return;
+    }
+    const med = medSeleccionado;
+    const dosajeArr = tipo === 'adulto' ? med.adulto : med.pediatrico;
+
+    let html = `<div class="card dosis-result" style="margin-top:1rem;">`;
+    html += `<div class="dosis-nombre">💊 ${med.nombre} — ${med.grupo}</div>`;
+    html += `<p style="font-size:12px;color:var(--text-sec);margin-bottom:10px;">Paciente: <strong>${peso} kg</strong> — ${tipo === 'adulto' ? 'Adulto' : tipo === 'adolescente' ? 'Adolescente' : 'Pediátrico'}</p>`;
+    html += `<table class="dosis-tabla"><thead><tr><th>Indicación</th><th>Dosis calculada</th><th>Intervalo</th><th>Vía</th><th>Presentación</th></tr></thead><tbody>`;
+
+    dosajeArr.forEach(d => {
+      let dosisCalc = '';
+      if (d.dosis_mg_kg) {
+        const dMin = (d.dosis_mg_kg[0] * peso).toFixed(1);
+        const dMax = (d.dosis_mg_kg[1] * peso).toFixed(1);
+        const maxDia = d.max;
+        dosisCalc = `<span class="dosis-destacada">${dMin}–${dMax} mg/dosis</span><br><span style="font-size:11px;color:var(--text-muted);">Máx: ${maxDia} mg/día</span>`;
+      } else {
+        dosisCalc = `<span class="dosis-destacada">${d.rango}</span>`;
+      }
+      html += `<tr><td>${d.rango}</td><td>${dosisCalc}</td><td>${d.intervalo}</td><td>${d.via}</td><td style="font-size:11px;">${d.forma}</td></tr>`;
+    });
+
+    html += `</tbody></table>`;
+    if (med.alerta) html += `<div class="dosis-alerta">⚠️ <strong>Precaución:</strong> ${med.alerta}</div>`;
+    html += `</div>`;
+
+    const div = document.getElementById('dosis-resultado');
+    div.innerHTML = html;
+    div.style.display = 'block';
+    div.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Recalcular si cambia el peso con medicamento ya seleccionado
+  document.addEventListener('DOMContentLoaded', () => {
+    renderMedLista();
+    document.getElementById('d-peso').addEventListener('input', () => { if (medSeleccionado) calcularDosis(); });
+    document.getElementById('d-tipo').addEventListener('change', () => { if (medSeleccionado) calcularDosis(); });
+  });
+</script>
+</body>
+</html>
