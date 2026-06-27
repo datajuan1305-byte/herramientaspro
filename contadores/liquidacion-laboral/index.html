@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Liquidador laboral Colombia 2026. Calcula prima de servicios, cesantías, intereses sobre cesantías, vacaciones e indemnización por despido. Actualizado con SMMLV 2026." />
+  <meta name="keywords" content="liquidador laboral colombia 2026, calcular prima servicios, cesantias colombia, vacaciones colombia, indemnizacion despido, SMMLV 2026" />
+  <title>Liquidador Laboral Colombia 2026 — HerramientasPro</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #1D9E75;
+      --verde-dark: #0F6E56;
+      --verde-light: #E1F5EE;
+      --azul: #185FA5;
+      --azul-light: #E6F1FB;
+      --naranja: #854F0B;
+      --naranja-light: #FAEEDA;
+      --rojo: #A32D2D;
+      --rojo-light: #FCEBEB;
+      --text: #1a1a1a;
+      --text-sec: #555;
+      --text-muted: #888;
+      --bg: #f7f7f5;
+      --card: #ffffff;
+      --border: #e0e0dc;
+      --radius: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; height: 54px; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { width: 30px; height: 30px; background: var(--verde); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .nav-sep { color: var(--border); font-size: 18px; }
+    .nav-current { font-size: 13px; color: var(--text-sec); }
+
+    .hero { background: linear-gradient(135deg, #185FA5 0%, #1D9E75 100%); padding: 2rem 1.5rem; text-align: center; }
+    .hero-icon { font-size: 42px; margin-bottom: 10px; }
+    .hero h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.85); max-width: 560px; margin: 0 auto 10px; }
+    .hero-params { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+    .hero-param { font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; padding: 4px 10px; border-radius: 20px; }
+
+    .main { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 500; color: var(--text-sec); }
+    select, input[type="number"], input[type="date"], input[type="text"] {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text); background: #fff; transition: border-color 0.15s;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--verde); }
+    .hint { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    .checkbox-group { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .checkbox-group input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+    .checkbox-group label { font-size: 13px; color: var(--text-sec); margin: 0; cursor: pointer; }
+
+    .btn { width: 100%; padding: 13px; background: var(--verde); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+    .btn:hover { background: var(--verde-dark); }
+    .btn-reset { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 9px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+
+    #resultados { display: none; }
+
+    .empleado-header { background: var(--azul-light); border: 1px solid #B5D4F4; border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+    .empleado-nombre { font-size: 17px; font-weight: 700; color: var(--azul); margin-bottom: 4px; }
+    .empleado-datos { font-size: 13px; color: var(--text-sec); display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .conceptos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+    .concepto-card { border-radius: 10px; padding: 1rem; border: 1px solid; }
+    .concepto-card.prima { background: #E1F5EE; border-color: #9FE1CB; }
+    .concepto-card.cesantias { background: #E6F1FB; border-color: #B5D4F4; }
+    .concepto-card.intereses { background: #EAF3DE; border-color: #C0DD97; }
+    .concepto-card.vacaciones { background: #FAEEDA; border-color: #FAC775; }
+    .concepto-card.indemnizacion { background: #FCEBEB; border-color: #F7C1C1; }
+    .concepto-card.salarios { background: #EEEDFE; border-color: #CECBF6; }
+
+    .concepto-titulo { font-size: 12px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .concepto-valor { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+    .concepto-dias { font-size: 12px; color: var(--text-muted); }
+    .concepto-formula { font-size: 11px; color: var(--text-muted); margin-top: 6px; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 6px; line-height: 1.4; }
+
+    .total-box { background: var(--verde-dark); border-radius: 12px; padding: 1.2rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .total-label { font-size: 14px; color: rgba(255,255,255,0.8); font-weight: 500; }
+    .total-valor { font-size: 28px; font-weight: 800; color: #fff; }
+
+    .detalle-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .detalle-table th { background: #f5f5f2; color: var(--text-sec); font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+    .detalle-table td { padding: 9px 10px; border-bottom: 1px solid #f0f0ec; }
+    .detalle-table tr:last-child td { border-bottom: none; font-weight: 700; background: #f9f9f7; }
+    .td-valor { text-align: right; font-weight: 600; color: var(--verde-dark); }
+    .td-concepto { color: var(--text); }
+    .td-base { color: var(--text-muted); font-size: 12px; }
+
+    .base-calculo { background: #f9f9f7; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--text-sec); line-height: 1.8; }
+    .base-calculo strong { color: var(--text); }
+
+    .disclaimer { background: #fffbf0; border: 1px solid #FAC775; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 1rem; }
+
+    .btn-print { width: 100%; padding: 10px; background: transparent; color: var(--verde-dark); border: 1px solid var(--verde); border-radius: 9px; font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 8px; }
+
+    .smmlv-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); color: #fff; font-size: 12px; padding: 5px 12px; border-radius: 20px; margin-top: 8px; }
+
+    @media print {
+      nav, .btn, .btn-reset, .btn-print, .hero, .card:first-of-type { display: none !important; }
+      .card { border: 1px solid #ccc; break-inside: avoid; }
+      body { background: #fff; }
+      #resultados { display: block !important; }
+    }
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .conceptos-grid { grid-template-columns: 1fr; }
+      .total-box { flex-direction: column; gap: 4px; text-align: center; }
+      .total-valor { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-text">HerramientasPro</div>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">📋 Liquidador Laboral 2026</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">📋</div>
+  <h1>Liquidador Laboral Colombia 2026</h1>
+  <p>Calcula prima de servicios, cesantías, intereses, vacaciones e indemnización por despido. Actualizado con los parámetros legales vigentes 2026.</p>
+  <div class="hero-params">
+    <span class="hero-param">SMMLV 2026: $1.423.500</span>
+    <span class="hero-param">Auxilio transporte: $200.000</span>
+    <span class="hero-param">UVT 2026: $49.799</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="card">
+    <div class="card-title">👤 Datos del empleado</div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label for="nombre">Nombre del empleado</label>
+        <input type="text" id="nombre" placeholder="Ej: Juan Carlos Martínez" />
+      </div>
+      <div class="form-group">
+        <label for="salario">Salario mensual (COP)</label>
+        <input type="number" id="salario" placeholder="Ej: 1423500" min="1423500" step="1000" />
+        <span class="hint">Mínimo SMMLV 2026: $1.423.500</span>
+      </div>
+      <div class="form-group">
+        <label for="auxilio">¿Devenga auxilio de transporte?</label>
+        <select id="auxilio">
+          <option value="si">Sí — salario ≤ 2 SMMLV ($2.847.000)</option>
+          <option value="no">No — salario > 2 SMMLV</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="fecha_ingreso">Fecha de ingreso</label>
+        <input type="date" id="fecha_ingreso" />
+      </div>
+      <div class="form-group">
+        <label for="fecha_retiro">Fecha de retiro / liquidación</label>
+        <input type="date" id="fecha_retiro" />
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚖️ Tipo de retiro e indemnización</div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label for="tipo_retiro">Causa del retiro</label>
+        <select id="tipo_retiro" onchange="toggleIndemnizacion()">
+          <option value="renuncia">Renuncia voluntaria del trabajador</option>
+          <option value="mutuo">Mutuo acuerdo</option>
+          <option value="justa">Despido con justa causa</option>
+          <option value="injusta">Despido sin justa causa (con indemnización)</option>
+          <option value="obra">Terminación de contrato de obra o labor</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label for="tipo_contrato">Tipo de contrato</label>
+        <select id="tipo_contrato">
+          <option value="indefinido">Contrato a término indefinido</option>
+          <option value="fijo">Contrato a término fijo</option>
+          <option value="obra">Contrato de obra o labor</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💰 Conceptos a liquidar</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div class="checkbox-group">
+        <input type="checkbox" id="cb_prima" checked />
+        <label for="cb_prima">Prima de servicios</label>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="cb_cesantias" checked />
+        <label for="cb_cesantias">Cesantías</label>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="cb_intereses" checked />
+        <label for="cb_intereses">Intereses sobre cesantías</label>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="cb_vacaciones" checked />
+        <label for="cb_vacaciones">Vacaciones</label>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="cb_salarios" checked />
+        <label for="cb_salarios">Salarios pendientes</label>
+      </div>
+      <div class="checkbox-group" id="cb_indem_wrap">
+        <input type="checkbox" id="cb_indemnizacion" />
+        <label for="cb_indemnizacion">Indemnización por despido</label>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn" onclick="calcular()">🧮 Calcular liquidación</button>
+  <button class="btn-reset" onclick="resetear()">↺ Limpiar formulario</button>
+
+  <div id="resultados">
+
+    <div class="card" style="margin-top:1.2rem;">
+      <div class="empleado-header">
+        <div class="empleado-nombre" id="res-nombre">—</div>
+        <div class="empleado-datos">
+          <span id="res-periodo">—</span>
+          <span id="res-dias-total">—</span>
+          <span id="res-salario-base">—</span>
+        </div>
+      </div>
+
+      <div class="card-title">📊 Detalle por concepto</div>
+      <div class="conceptos-grid" id="conceptos-grid"></div>
+    </div>
+
+    <div class="total-box">
+      <div class="total-label">💵 Total a pagar al empleado</div>
+      <div class="total-valor" id="total-pagar">$0</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Resumen de liquidación</div>
+      <table class="detalle-table">
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th>Base de cálculo</th>
+            <th>Días</th>
+            <th style="text-align:right;">Valor</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-resumen"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔢 Base de cálculo utilizada</div>
+      <div class="base-calculo" id="base-calculo-detalle"></div>
+    </div>
+
+    <div class="disclaimer">
+      ⚠️ <strong>Herramienta orientativa.</strong> Esta liquidación se calcula con base en el Código Sustantivo del Trabajo (CST) y los parámetros vigentes para 2026 (SMMLV $1.423.500 — Auxilio de transporte $200.000). Los resultados deben ser verificados por un contador público o abogado laboral. No incluye deducciones de nómina (salud, pensión, retención). Parámetros actualizados enero 2026.
+    </div>
+
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
+
+  </div>
+</div>
+
+<script>
+  // Parámetros 2026
+  const SMMLV = 1423500;
+  const AUX_TRANSPORTE = 200000;
+  const DIAS_ANO = 360;
+
+  function toggleIndemnizacion() {
+    const tipo = document.getElementById('tipo_retiro').value;
+    const cb = document.getElementById('cb_indemnizacion');
+    if (tipo === 'injusta') {
+      cb.checked = true;
+    } else {
+      cb.checked = false;
+    }
+  }
+
+  function diasEntre(f1, f2) {
+    // Método 30/360 (comercial colombiano)
+    let d1 = new Date(f1), d2 = new Date(f2);
+    let y1 = d1.getFullYear(), m1 = d1.getMonth() + 1, dia1 = d1.getDate();
+    let y2 = d2.getFullYear(), m2 = d2.getMonth() + 1, dia2 = d2.getDate();
+    if (dia1 === 31) dia1 = 30;
+    if (dia2 === 31) dia2 = 30;
+    return (y2 - y1) * 360 + (m2 - m1) * 30 + (dia2 - dia1);
+  }
+
+  function fmt(n) {
+    return '$' + Math.round(n).toLocaleString('es-CO');
+  }
+
+  function calcular() {
+    const nombre = document.getElementById('nombre').value || 'Empleado';
+    const salario = parseFloat(document.getElementById('salario').value);
+    const auxilioSel = document.getElementById('auxilio').value;
+    const fechaIngreso = document.getElementById('fecha_ingreso').value;
+    const fechaRetiro = document.getElementById('fecha_retiro').value;
+    const tipoRetiro = document.getElementById('tipo_retiro').value;
+    const tipoContrato = document.getElementById('tipo_contrato').value;
+
+    if (!salario || salario < SMMLV) { alert('Ingrese un salario válido (mínimo SMMLV 2026: $1.423.500)'); return; }
+    if (!fechaIngreso || !fechaRetiro) { alert('Ingrese las fechas de ingreso y retiro.'); return; }
+    if (fechaRetiro <= fechaIngreso) { alert('La fecha de retiro debe ser posterior al ingreso.'); return; }
+
+    const auxilio = auxilioSel === 'si' ? AUX_TRANSPORTE : 0;
+    const baseIBC = salario; // base para cesantías e intereses
+    const basePrima = salario + auxilio; // prima incluye auxilio de transporte
+    const baseCesantias = salario + auxilio;
+
+    const diasTotales = diasEntre(fechaIngreso, fechaRetiro);
+    const anos = Math.floor(diasTotales / 360);
+    const diasRestantes = diasTotales % 360;
+
+    // CÁLCULOS
+    let prima = 0, cesantias = 0, intereses = 0, vacaciones = 0, salariosPend = 0, indemnizacion = 0;
+    let cards = [];
+    let filas = [];
+    let total = 0;
+
+    // PRIMA DE SERVICIOS (Art. 306 CST)
+    if (document.getElementById('cb_prima').checked) {
+      prima = (basePrima * diasTotales) / DIAS_ANO;
+      cards.push({
+        clase: 'prima', titulo: 'Prima de servicios', valor: prima,
+        dias: diasTotales, formula: `(${fmt(basePrima)} × ${diasTotales} días) ÷ 360`
+      });
+      filas.push({ concepto: 'Prima de servicios', base: fmt(basePrima) + '/mes', dias: diasTotales, valor: prima });
+      total += prima;
+    }
+
+    // CESANTÍAS (Art. 249 CST)
+    if (document.getElementById('cb_cesantias').checked) {
+      cesantias = (baseCesantias * diasTotales) / DIAS_ANO;
+      cards.push({
+        clase: 'cesantias', titulo: 'Cesantías', valor: cesantias,
+        dias: diasTotales, formula: `(${fmt(baseCesantias)} × ${diasTotales} días) ÷ 360`
+      });
+      filas.push({ concepto: 'Cesantías', base: fmt(baseCesantias) + '/mes', dias: diasTotales, valor: cesantias });
+      total += cesantias;
+    }
+
+    // INTERESES SOBRE CESANTÍAS (Art. 99 Ley 50/1990 — 12% anual)
+    if (document.getElementById('cb_intereses').checked) {
+      intereses = cesantias * 0.12 * (diasTotales / DIAS_ANO);
+      cards.push({
+        clase: 'intereses', titulo: 'Intereses cesantías', valor: intereses,
+        dias: diasTotales, formula: `Cesantías × 12% × (${diasTotales} ÷ 360)`
+      });
+      filas.push({ concepto: 'Intereses sobre cesantías (12% anual)', base: fmt(cesantias), dias: diasTotales, valor: intereses });
+      total += intereses;
+    }
+
+    // VACACIONES (Art. 186 CST — 15 días hábiles por año)
+    if (document.getElementById('cb_vacaciones').checked) {
+      vacaciones = (salario * diasTotales) / (DIAS_ANO * 2);
+      cards.push({
+        clase: 'vacaciones', titulo: 'Vacaciones', valor: vacaciones,
+        dias: diasTotales, formula: `(${fmt(salario)} × ${diasTotales} días) ÷ 720`
+      });
+      filas.push({ concepto: 'Vacaciones (15 días × año)', base: fmt(salario) + '/mes', dias: diasTotales, valor: vacaciones });
+      total += vacaciones;
+    }
+
+    // SALARIOS PENDIENTES
+    if (document.getElementById('cb_salarios').checked) {
+      const diasMes = diasEntre(
+        new Date(fechaRetiro).toISOString().slice(0,8) + '01',
+        fechaRetiro
+      );
+      salariosPend = (salario / 30) * diasMes;
+      if (salariosPend > 0) {
+        cards.push({
+          clase: 'salarios', titulo: 'Salarios pendientes', valor: salariosPend,
+          dias: diasMes, formula: `(${fmt(salario)} ÷ 30) × ${diasMes} días del último mes`
+        });
+        filas.push({ concepto: 'Salarios pendientes del último mes', base: fmt(salario) + '/mes', dias: diasMes, valor: salariosPend });
+        total += salariosPend;
+      }
+    }
+
+    // INDEMNIZACIÓN POR DESPIDO SIN JUSTA CAUSA (Art. 64 CST)
+    if (document.getElementById('cb_indemnizacion').checked && tipoRetiro === 'injusta') {
+      if (tipoContrato === 'indefinido') {
+        if (salario <= 10 * SMMLV) {
+          // Primer año: 30 días; adicionales: 20 días por año
+          indemnizacion = (salario / 30) * 30; // primer año
+          if (anos > 1) {
+            indemnizacion += (salario / 30) * 20 * (anos - 1);
+            if (diasRestantes > 0) indemnizacion += (salario / 30) * 20 * (diasRestantes / 360);
+          }
+        } else {
+          // Salario > 10 SMMLV: 20 días por año
+          indemnizacion = (salario / 30) * 20 * anos;
+          if (diasRestantes > 0) indemnizacion += (salario / 30) * 20 * (diasRestantes / 360);
+          if (indemnizacion < salario * 15 / 30) indemnizacion = salario * 15 / 30;
+        }
+        cards.push({
+          clase: 'indemnizacion', titulo: 'Indemnización (sin justa causa)', valor: indemnizacion,
+          dias: diasTotales, formula: `${anos} año(s) × 20 días + proporcional. Art. 64 CST`
+        });
+        filas.push({ concepto: 'Indemnización por despido sin justa causa', base: fmt(salario) + '/mes', dias: diasTotales, valor: indemnizacion });
+        total += indemnizacion;
+      }
+    }
+
+    // Renderizar
+    document.getElementById('res-nombre').textContent = nombre;
+    document.getElementById('res-periodo').textContent = `Período: ${fechaIngreso} al ${fechaRetiro}`;
+    document.getElementById('res-dias-total').textContent = `${diasTotales} días laborados`;
+    document.getElementById('res-salario-base').textContent = `Salario: ${fmt(salario)}${auxilio > 0 ? ' + auxilio transporte' : ''}`;
+
+    const grid = document.getElementById('conceptos-grid');
+    grid.innerHTML = cards.map(c => `
+      <div class="concepto-card ${c.clase}">
+        <div class="concepto-titulo">${c.titulo}</div>
+        <div class="concepto-valor">${fmt(c.valor)}</div>
+        <div class="concepto-dias">${c.dias} días</div>
+        <div class="concepto-formula">${c.formula}</div>
+      </div>
+    `).join('');
+
+    const tbody = document.getElementById('tabla-resumen');
+    tbody.innerHTML = filas.map(f => `
+      <tr>
+        <td class="td-concepto">${f.concepto}</td>
+        <td class="td-base">${f.base}</td>
+        <td>${f.dias}</td>
+        <td class="td-valor">${fmt(f.valor)}</td>
+      </tr>
+    `).join('') + `
+      <tr>
+        <td colspan="3"><strong>TOTAL A PAGAR</strong></td>
+        <td class="td-valor" style="font-size:15px;">${fmt(total)}</td>
+      </tr>
+    `;
+
+    document.getElementById('total-pagar').textContent = fmt(total);
+
+    document.getElementById('base-calculo-detalle').innerHTML = `
+      <strong>SMMLV 2026:</strong> $1.423.500 &nbsp;|&nbsp;
+      <strong>Auxilio de transporte 2026:</strong> $200.000 &nbsp;|&nbsp;
+      <strong>UVT 2026:</strong> $49.799<br>
+      <strong>Salario del trabajador:</strong> ${fmt(salario)} &nbsp;|&nbsp;
+      <strong>Auxilio incluido:</strong> ${auxilio > 0 ? fmt(auxilio) : 'No aplica'}<br>
+      <strong>Base prima y cesantías:</strong> ${fmt(baseCesantias)} (salario + auxilio de transporte)<br>
+      <strong>Base vacaciones:</strong> ${fmt(salario)} (solo salario — Art. 186 CST)<br>
+      <strong>Intereses sobre cesantías:</strong> 12% anual — Art. 99 Ley 50 de 1990<br>
+      <strong>Método de cálculo de días:</strong> Comercial 30/360 (estándar laboral colombiano)
+    `;
+
+    document.getElementById('resultados').style.display = 'block';
+    document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetear() {
+    document.getElementById('nombre').value = '';
+    document.getElementById('salario').value = '';
+    document.getElementById('fecha_ingreso').value = '';
+    document.getElementById('fecha_retiro').value = '';
+    document.getElementById('tipo_retiro').value = 'renuncia';
+    document.getElementById('tipo_contrato').value = 'indefinido';
+    document.getElementById('auxilio').value = 'si';
+    ['cb_prima','cb_cesantias','cb_intereses','cb_vacaciones','cb_salarios'].forEach(id => {
+      document.getElementById(id).checked = true;
+    });
+    document.getElementById('cb_indemnizacion').checked = false;
+    document.getElementById('resultados').style.display = 'none';
+  }
+
+  // Auto-detectar auxilio según salario
+  document.getElementById('salario') && document.getElementById('salario').addEventListener('input', function() {
+    const s = parseFloat(this.value);
+    if (s > 0) {
+      document.getElementById('auxilio').value = s <= (SMMLV * 2) ? 'si' : 'no';
+    }
+  });
+</script>
+
+</body>
+</html>
