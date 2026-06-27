@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora de dosis de agroquímicos por hectárea Colombia. Calcula cantidad de fungicidas, herbicidas, insecticidas y fertilizantes foliares según etiqueta del producto." />
+  <meta name="keywords" content="calculadora dosis agroquimicos colombia, dosis herbicida hectarea, dosis fungicida cultivo, calculo agroquimico litros hectarea, dosis insecticida colombia" />
+  <title>Calculadora de Dosis de Agroquímicos — HerramientasPro Colombia</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #1D9E75; --verde-dark: #0F6E56; --verde-light: #E1F5EE;
+      --azul: #185FA5; --azul-light: #E6F1FB;
+      --rojo: #A32D2D; --rojo-light: #FCEBEB;
+      --naranja: #854F0B; --naranja-light: #FAEEDA;
+      --morado: #534AB7; --morado-light: #EEEDFE;
+      --amarillo: #BA7517; --amarillo-light: #FAEEDA;
+      --text: #1a1a1a; --text-sec: #555; --text-muted: #888;
+      --bg: #f7f7f5; --card: #ffffff; --border: #e0e0dc; --radius: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; height: 54px; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { width: 30px; height: 30px; background: var(--verde); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .nav-sep { color: var(--border); font-size: 18px; }
+    .nav-current { font-size: 13px; color: var(--text-sec); }
+
+    .hero { background: linear-gradient(135deg, #3B6D11 0%, #1D9E75 100%); padding: 2rem 1.5rem; text-align: center; }
+    .hero-icon { font-size: 42px; margin-bottom: 10px; }
+    .hero h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.85); max-width: 580px; margin: 0 auto; }
+    .hero-params { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .hero-param { font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; padding: 4px 10px; border-radius: 20px; }
+
+    .modulos { max-width: 960px; margin: 0 auto; padding: 1.2rem 1.5rem 0; }
+    .modulos-tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+    .mod-tab { padding: 10px 16px; font-size: 13px; font-weight: 500; border: none; background: transparent; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; border-radius: 6px 6px 0 0; white-space: nowrap; transition: color 0.15s; }
+    .mod-tab:hover { color: var(--verde-dark); background: var(--verde-light); }
+    .mod-tab.active { color: var(--verde-dark); border-bottom-color: var(--verde); font-weight: 600; }
+    .modulo { display: none; }
+    .modulo.active { display: block; }
+
+    .main { max-width: 960px; margin: 0 auto; padding: 1.2rem 1.5rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 500; color: var(--text-sec); }
+    select, input[type="number"], input[type="text"] {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text); background: #fff; transition: border-color 0.15s;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--verde); }
+    .hint { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    /* TIPO PRODUCTO TABS */
+    .tipo-tabs { display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
+    .tipo-tab { padding: 8px 14px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); background: #f5f5f2; border-radius: 8px; cursor: pointer; transition: all 0.15s; color: var(--text-sec); }
+    .tipo-tab.herb.active { background: #FCEBEB; border-color: #F7C1C1; color: var(--rojo); }
+    .tipo-tab.fung.active { background: var(--azul-light); border-color: #B5D4F4; color: var(--azul); }
+    .tipo-tab.insec.active { background: var(--naranja-light); border-color: #FAC775; color: var(--naranja); }
+    .tipo-tab.foliar.active { background: var(--verde-light); border-color: #9FE1CB; color: var(--verde-dark); }
+    .tipo-tab.otro.active { background: var(--morado-light); border-color: #CECBF6; color: var(--morado); }
+
+    .btn { width: 100%; padding: 13px; background: var(--verde); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .btn:hover { background: var(--verde-dark); }
+    .btn-reset { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 9px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+
+    #resultados { display: none; }
+
+    /* KPI */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 1rem; }
+    .kpi { border-radius: 10px; padding: 1rem; text-align: center; border: 1px solid; }
+    .kpi.verde { background: var(--verde-light); border-color: #9FE1CB; }
+    .kpi.azul { background: var(--azul-light); border-color: #B5D4F4; }
+    .kpi.naranja { background: var(--naranja-light); border-color: #FAC775; }
+    .kpi.morado { background: var(--morado-light); border-color: #CECBF6; }
+    .kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 5px; }
+    .kpi-valor { font-size: 20px; font-weight: 800; }
+    .kpi.verde .kpi-valor { color: var(--verde-dark); }
+    .kpi.azul .kpi-valor { color: var(--azul); }
+    .kpi.naranja .kpi-valor { color: var(--naranja); }
+    .kpi.morado .kpi-valor { color: var(--morado); }
+    .kpi-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+    /* DETALLE */
+    .detalle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
+    .det-item { background: #f9f9f7; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+    .det-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 3px; font-weight: 600; }
+    .det-valor { font-size: 14px; font-weight: 700; color: var(--text); }
+    .det-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* MEZCLA DE TANQUE */
+    .tanque-header { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin-bottom: 6px; }
+    .tanque-header span { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+    .tanque-item { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; align-items: center; margin-bottom: 8px; }
+    .tanque-item input, .tanque-item select { padding: 7px 10px; font-size: 13px; }
+    .btn-remove-t { width: 32px; height: 32px; background: var(--rojo-light); border: 1px solid #F7C1C1; border-radius: 6px; color: var(--rojo); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .btn-add-t { padding: 8px 14px; background: transparent; border: 1px dashed var(--border); border-radius: 8px; color: var(--text-muted); font-size: 13px; cursor: pointer; width: 100%; margin-top: 6px; }
+    .btn-add-t:hover { border-color: var(--verde); color: var(--verde-dark); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #f5f5f2; color: var(--text-sec); font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); font-size: 12px; }
+    td { padding: 8px 10px; border-bottom: 1px solid #f5f5f2; }
+    tr:last-child td { border-bottom: none; font-weight: 700; background: var(--verde-light); }
+    .td-val { font-weight: 700; color: var(--verde-dark); }
+
+    /* ALERTA TOXICIDAD */
+    .toxicidad-box { border-radius: 8px; padding: 10px 14px; font-size: 12px; line-height: 1.5; margin-top: 1rem; border: 1px solid; }
+    .tox-1 { background: #FCEBEB; border-color: #F7C1C1; color: var(--rojo); }
+    .tox-2 { background: var(--naranja-light); border-color: #FAC775; color: var(--naranja); }
+    .tox-3 { background: var(--azul-light); border-color: #B5D4F4; color: var(--azul); }
+    .tox-4 { background: var(--verde-light); border-color: #9FE1CB; color: var(--verde-dark); }
+
+    .disclaimer { background: #fffbf0; border: 1px solid #FAC775; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 1rem; }
+    .btn-print { width: 100%; padding: 10px; background: transparent; color: var(--verde-dark); border: 1px solid var(--verde); border-radius: 9px; font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 8px; }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .detalle-grid { grid-template-columns: 1fr; }
+      .tanque-header { display: none; }
+      .tanque-item { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-text">HerramientasPro</div>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">🌿 Dosis de Agroquímicos</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">🌿</div>
+  <h1>Calculadora de Dosis de Agroquímicos</h1>
+  <p>Calcula la cantidad exacta de herbicidas, fungicidas, insecticidas y fertilizantes foliares por hectárea y por tanque de aspersión. Basado en la etiqueta del producto.</p>
+  <div class="hero-params">
+    <span class="hero-param">🌾 Por hectárea</span>
+    <span class="hero-param">🪣 Por tanque</span>
+    <span class="hero-param">🧪 Mezcla de tanque</span>
+    <span class="hero-param">⚠️ Toxicidad ICA</span>
+  </div>
+</div>
+
+<div class="modulos">
+  <div class="modulos-tabs">
+    <button class="mod-tab active" onclick="switchMod('simple',this)">🌿 Cálculo simple</button>
+    <button class="mod-tab" onclick="switchMod('mezcla',this)">🧪 Mezcla de tanque</button>
+    <button class="mod-tab" onclick="switchMod('referencia',this)">📋 Tabla de referencia</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- MÓDULO SIMPLE -->
+  <div class="modulo active" id="mod-simple">
+    <div class="card">
+      <div class="card-title">🏷️ Tipo de agroquímico</div>
+      <div class="tipo-tabs">
+        <button class="tipo-tab herb active" onclick="setTipo('herbicida',this)">🌱 Herbicida</button>
+        <button class="tipo-tab fung" onclick="setTipo('fungicida',this)">🍄 Fungicida</button>
+        <button class="tipo-tab insec" onclick="setTipo('insecticida',this)">🐛 Insecticida</button>
+        <button class="tipo-tab foliar" onclick="setTipo('foliar',this)">🌿 Foliar / Estimulante</button>
+        <button class="tipo-tab otro" onclick="setTipo('otro',this)">🧴 Otro</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Datos del producto (según etiqueta)</div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label for="s-producto">Nombre del producto</label>
+          <input type="text" id="s-producto" placeholder="Ej: Glifosato 480 SL, Mancozeb 80 WP, Clorpirifos 480 EC" />
+        </div>
+        <div class="form-group">
+          <label for="s-dosis">Dosis recomendada (etiqueta)</label>
+          <input type="number" id="s-dosis" placeholder="Ej: 2" min="0" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label for="s-unidad-dosis">Unidad de la dosis</label>
+          <select id="s-unidad-dosis">
+            <option value="cc_ha">cc / L por hectárea</option>
+            <option value="g_ha">g / kg por hectárea</option>
+            <option value="cc_100l">cc / L por 100 litros de agua</option>
+            <option value="g_100l">g / kg por 100 litros de agua</option>
+            <option value="kg_ha">kg por hectárea</option>
+            <option value="l_ha">Litros por hectárea</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="s-presentacion">Presentación del envase</label>
+          <select id="s-presentacion">
+            <option value="1000">Galón (3.785 L / ~3785 cc)</option>
+            <option value="1000">Litro (1000 cc)</option>
+            <option value="500">500 cc / 500 g</option>
+            <option value="250">250 cc / 250 g</option>
+            <option value="1000">1 kg / 1000 g</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="s-toxicidad">Categoría toxicológica (ICA)</label>
+          <select id="s-toxicidad">
+            <option value="1">Categoría I — Extremadamente tóxico (rojo)</option>
+            <option value="2">Categoría II — Altamente tóxico (amarillo)</option>
+            <option value="3" selected>Categoría III — Moderadamente tóxico (azul)</option>
+            <option value="4">Categoría IV — Ligeramente tóxico (verde)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="s-periodo-carencia">Período de carencia (días)</label>
+          <input type="number" id="s-periodo-carencia" placeholder="Ej: 14" min="0" max="365" value="14" />
+          <span class="hint">Días entre última aplicación y cosecha. Ver etiqueta.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🌾 Datos del lote y equipo de aspersión</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="s-area">Área a tratar (hectáreas)</label>
+          <input type="number" id="s-area" placeholder="Ej: 2.5" min="0.01" max="10000" step="0.1" value="1" />
+        </div>
+        <div class="form-group">
+          <label for="s-volumen">Volumen de agua por hectárea (L/ha)</label>
+          <select id="s-volumen">
+            <option value="200">200 L/ha — Aspersora de espalda manual</option>
+            <option value="300" selected>300 L/ha — Aspersora motorizada</option>
+            <option value="400">400 L/ha — Cultivos densos / follaje alto</option>
+            <option value="600">600 L/ha — Aplicación dirigida al suelo</option>
+            <option value="custom">Otro volumen (ingresar)</option>
+          </select>
+        </div>
+        <div class="form-group" id="volumen-custom-wrap" style="display:none;">
+          <label for="s-volumen-custom">Volumen personalizado (L/ha)</label>
+          <input type="number" id="s-volumen-custom" placeholder="Ej: 250" min="50" max="2000" />
+        </div>
+        <div class="form-group">
+          <label for="s-tanque">Capacidad del tanque (litros)</label>
+          <select id="s-tanque">
+            <option value="20">20 L — Aspersora de espalda</option>
+            <option value="60">60 L — Aspersora motorizada pequeña</option>
+            <option value="200" selected>200 L — Tanque mediano</option>
+            <option value="400">400 L — Tanque grande</option>
+            <option value="600">600 L — Tanque industrial</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularSimple()">🧮 Calcular dosis</button>
+      <button class="btn-reset" onclick="resetSimple()">↺ Limpiar</button>
+    </div>
+
+    <div id="resultados">
+      <div class="card">
+        <div class="card-title">📊 Resultados de la aplicación</div>
+        <div class="kpi-grid" id="kpi-simple"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📋 Detalles de la aplicación</div>
+        <div class="detalle-grid" id="detalle-simple"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📅 Plan de aplicación por tanques</div>
+        <div class="table-wrap" style="overflow-x:auto;">
+          <table id="tabla-tanques">
+            <thead>
+              <tr>
+                <th>Tanque N°</th>
+                <th>Área que cubre</th>
+                <th>Producto a agregar</th>
+                <th>Agua a completar</th>
+                <th>Acumulado área</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-tanques"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="toxicidad-alerta"></div>
+      <div class="disclaimer">
+        ⚠️ <strong>Herramienta orientativa.</strong> Siempre lea y siga las instrucciones de la etiqueta del producto registrada ante el ICA. Las dosis aquí calculadas son matemáticas — la dosis agronómica correcta depende del cultivo, la plaga, el estado fenológico y las condiciones del lote. Use los EPP indicados en la etiqueta. Respete el período de carencia antes de cosechar.
+      </div>
+      <button class="btn-print" onclick="window.print()">🖨️ Imprimir plan de aplicación</button>
+    </div>
+  </div>
+
+  <!-- MÓDULO MEZCLA DE TANQUE -->
+  <div class="modulo" id="mod-mezcla">
+    <div class="card">
+      <div class="card-title">🧪 Mezcla de tanque — varios productos</div>
+      <p style="font-size:13px;color:var(--text-sec);margin-bottom:1rem;">Agrega todos los productos que vas a mezclar en el tanque y calcula cuánto de cada uno necesitas.</p>
+
+      <div class="form-grid" style="margin-bottom:1rem;">
+        <div class="form-group">
+          <label for="m-area">Área a tratar (ha)</label>
+          <input type="number" id="m-area" placeholder="Ej: 1.5" min="0.01" step="0.1" value="1" oninput="calcMezcla()" />
+        </div>
+        <div class="form-group">
+          <label for="m-vol">Volumen de agua (L/ha)</label>
+          <input type="number" id="m-vol" placeholder="300" min="50" max="2000" value="300" oninput="calcMezcla()" />
+        </div>
+        <div class="form-group">
+          <label for="m-tanque">Capacidad del tanque (L)</label>
+          <input type="number" id="m-tanque" placeholder="200" min="1" max="2000" value="200" oninput="calcMezcla()" />
+        </div>
+      </div>
+
+      <div class="tanque-header">
+        <span>Producto</span>
+        <span>Tipo</span>
+        <span>Dosis</span>
+        <span>Unidad</span>
+        <span></span>
+      </div>
+      <div id="mezcla-lista">
+        <div class="tanque-item">
+          <input type="text" placeholder="Nombre del producto" oninput="calcMezcla()" />
+          <select onchange="calcMezcla()">
+            <option value="herbicida">Herbicida</option>
+            <option value="fungicida">Fungicida</option>
+            <option value="insecticida">Insecticida</option>
+            <option value="foliar">Foliar</option>
+          </select>
+          <input type="number" placeholder="2" min="0" step="0.01" oninput="calcMezcla()" />
+          <select onchange="calcMezcla()">
+            <option value="cc_ha">cc/L por ha</option>
+            <option value="g_ha">g/kg por ha</option>
+            <option value="cc_100l">cc por 100L</option>
+            <option value="g_100l">g por 100L</option>
+          </select>
+          <button class="btn-remove-t" onclick="removerMezcla(this)">×</button>
+        </div>
+        <div class="tanque-item">
+          <input type="text" placeholder="Nombre del producto" oninput="calcMezcla()" />
+          <select onchange="calcMezcla()">
+            <option value="herbicida">Herbicida</option>
+            <option value="fungicida" selected>Fungicida</option>
+            <option value="insecticida">Insecticida</option>
+            <option value="foliar">Foliar</option>
+          </select>
+          <input type="number" placeholder="1.5" min="0" step="0.01" oninput="calcMezcla()" />
+          <select onchange="calcMezcla()">
+            <option value="cc_ha">cc/L por ha</option>
+            <option value="g_ha">g/kg por ha</option>
+            <option value="cc_100l" selected>cc por 100L</option>
+            <option value="g_100l">g por 100L</option>
+          </select>
+          <button class="btn-remove-t" onclick="removerMezcla(this)">×</button>
+        </div>
+      </div>
+      <button class="btn-add-t" onclick="agregarMezcla()">+ Agregar producto a la mezcla</button>
+    </div>
+
+    <div id="res-mezcla" style="display:none;">
+      <div class="card">
+        <div class="card-title">🧪 Resumen de la mezcla de tanque</div>
+        <div style="background:var(--verde-light);border:1px solid #9FE1CB;border-radius:8px;padding:10px 14px;margin-bottom:1rem;font-size:13px;color:var(--verde-dark);" id="mezcla-resumen"></div>
+        <div style="overflow-x:auto;">
+          <table id="tabla-mezcla">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Tipo</th>
+                <th>Dosis/ha</th>
+                <th>Por tanque</th>
+                <th>Total lote</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-mezcla"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📋 Orden de preparación de la mezcla</div>
+        <div id="orden-mezcla" style="font-size:13px;color:var(--text-sec);line-height:2;"></div>
+      </div>
+      <div class="disclaimer">⚠️ Verifique la compatibilidad entre productos antes de mezclar. No todos los agroquímicos son compatibles entre sí. Consulte la hoja de seguridad (MSDS) y la etiqueta de cada producto. Use los EPP adecuados.</div>
+    </div>
+  </div>
+
+  <!-- MÓDULO REFERENCIA -->
+  <div class="modulo" id="mod-referencia">
+    <div class="card">
+      <div class="card-title">📋 Dosis de referencia — productos comunes en Colombia</div>
+      <p style="font-size:13px;color:var(--text-sec);margin-bottom:1rem;">Valores orientativos. Siempre consulte y siga la etiqueta del producto registrada ante el ICA Colombia.</p>
+      <table>
+        <thead>
+          <tr><th>Producto</th><th>Tipo</th><th>Dosis orientativa</th><th>Cultivos principales</th><th>Carencia</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Glifosato 480 SL</strong></td><td>🌱 Herbicida</td><td>1.5–3 L/ha</td><td>No selectivo — pre-siembra</td><td>No aplica</td></tr>
+          <tr><td><strong>Paraquat 200 SL</strong></td><td>🌱 Herbicida</td><td>1.5–2 L/ha</td><td>No selectivo — contacto</td><td>No aplica</td></tr>
+          <tr><td><strong>Mancozeb 80 WP</strong></td><td>🍄 Fungicida</td><td>1.5–2.5 kg/ha</td><td>Papa, tomate, banano, cebolla</td><td>7 días</td></tr>
+          <tr><td><strong>Propiconazol 250 EC</strong></td><td>🍄 Fungicida</td><td>0.5–1 L/ha</td><td>Banano, arroz, flores</td><td>14 días</td></tr>
+          <tr><td><strong>Clorpirifos 480 EC</strong></td><td>🐛 Insecticida</td><td>1–2 L/ha</td><td>Banano, maíz, arroz, caña</td><td>21 días</td></tr>
+          <tr><td><strong>Imidacloprid 350 SC</strong></td><td>🐛 Insecticida</td><td>300–500 cc/ha</td><td>Flores, hortalizas, banano</td><td>14 días</td></tr>
+          <tr><td><strong>Lambda-cialotrina 50 EC</strong></td><td>🐛 Insecticida</td><td>200–300 cc/ha</td><td>Maíz, soya, papa, hortalizas</td><td>7 días</td></tr>
+          <tr><td><strong>Fosetil-Al 80 WP</strong></td><td>🍄 Fungicida</td><td>2–3 kg/ha</td><td>Aguacate, cítricos, piña</td><td>7 días</td></tr>
+          <tr><td><strong>Ácido bórico / Borax</strong></td><td>🌿 Foliar</td><td>200–400 g/ha</td><td>Café, cacao, palma, frutales</td><td>0 días</td></tr>
+          <tr><td><strong>Nitrato de calcio</strong></td><td>🌿 Foliar</td><td>2–4 kg/100L</td><td>Frutas, hortalizas, flores</td><td>0 días</td></tr>
+          <tr><td><strong>Aminoácidos / Bioestimulantes</strong></td><td>🌿 Estimulante</td><td>0.5–1 L/ha</td><td>Todos los cultivos</td><td>0 días</td></tr>
+          <tr><td><strong>Totales / Tabla</strong></td><td colspan="4" style="color:var(--text-muted);font-size:11px;">Fuente orientativa ICA Colombia. Verificar registro vigente y etiqueta del lote.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚠️ Categorías toxicológicas ICA Colombia</div>
+      <table>
+        <thead><tr><th>Categoría</th><th>Color banda</th><th>Toxicidad</th><th>DL50 oral (mg/kg)</th><th>EPP mínimo</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Categoría I</strong></td><td style="color:var(--rojo);font-weight:700;">🔴 Roja</td><td>Extremadamente tóxico</td><td>&lt; 5 mg/kg</td><td>Traje completo, respirador, guantes, botas</td></tr>
+          <tr><td><strong>Categoría II</strong></td><td style="color:var(--naranja);font-weight:700;">🟡 Amarilla</td><td>Altamente tóxico</td><td>5–50 mg/kg</td><td>Overol, guantes, botas, gafas, máscara</td></tr>
+          <tr><td><strong>Categoría III</strong></td><td style="color:var(--azul);font-weight:700;">🔵 Azul</td><td>Moderadamente tóxico</td><td>50–500 mg/kg</td><td>Overol, guantes, botas, gafas</td></tr>
+          <tr><td><strong>Categoría IV</strong></td><td style="color:var(--verde-dark);font-weight:700;">🟢 Verde</td><td>Ligeramente tóxico</td><td>&gt; 500 mg/kg</td><td>Overol, guantes, botas</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="disclaimer">⚠️ Consulte siempre el registro ICA vigente del producto en ica.gov.co antes de aplicar. El uso de agroquímicos sin registro ICA es ilegal en Colombia.</div>
+  </div>
+
+</div>
+
+<script>
+  let tipoActual = 'herbicida';
+
+  function switchMod(id, el) {
+    document.querySelectorAll('.modulo').forEach(m => m.classList.remove('active'));
+    document.querySelectorAll('.mod-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('mod-' + id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function setTipo(tipo, btn) {
+    tipoActual = tipo;
+    document.querySelectorAll('.tipo-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  document.getElementById('s-volumen').addEventListener('change', function() {
+    document.getElementById('volumen-custom-wrap').style.display = this.value === 'custom' ? 'flex' : 'none';
+  });
+
+  function fmt2(n) { return (Math.round(n * 100) / 100).toLocaleString('es-CO'); }
+  function fmt0(n) { return Math.round(n).toLocaleString('es-CO'); }
+
+  function calcDosisHa(dosis, unidad, volHa) {
+    switch(unidad) {
+      case 'cc_ha': return { porHa: dosis, unidadResult: 'cc o mL / ha' };
+      case 'g_ha':  return { porHa: dosis, unidadResult: 'g o kg / ha' };
+      case 'cc_100l': return { porHa: dosis * volHa / 100, unidadResult: 'cc o mL / ha' };
+      case 'g_100l':  return { porHa: dosis * volHa / 100, unidadResult: 'g / ha' };
+      case 'kg_ha': return { porHa: dosis * 1000, unidadResult: 'g / ha' };
+      case 'l_ha':  return { porHa: dosis * 1000, unidadResult: 'cc o mL / ha' };
+      default: return { porHa: dosis, unidadResult: 'unidades / ha' };
+    }
+  }
+
+  function calcularSimple() {
+    const producto = document.getElementById('s-producto').value || 'Agroquímico';
+    const dosis = parseFloat(document.getElementById('s-dosis').value) || 0;
+    const unidad = document.getElementById('s-unidad-dosis').value;
+    const area = parseFloat(document.getElementById('s-area').value) || 1;
+    const volSel = document.getElementById('s-volumen').value;
+    const volHa = volSel === 'custom' ? (parseFloat(document.getElementById('s-volumen-custom').value) || 300) : parseFloat(volSel);
+    const tanque = parseFloat(document.getElementById('s-tanque').value) || 200;
+    const toxicidad = document.getElementById('s-toxicidad').value;
+    const carencia = document.getElementById('s-periodo-carencia').value;
+
+    if (!dosis || dosis <= 0) { alert('Ingrese la dosis del producto según la etiqueta.'); return; }
+
+    const calc = calcDosisHa(dosis, unidad, volHa);
+    const porHa = calc.porHa;
+    const totalLote = porHa * area;
+    const aguaTotalLote = volHa * area;
+    const numTanques = aguaTotalLote / tanque;
+    const productoPorTanque = porHa * (tanque / volHa);
+    const areaXtanque = tanque / volHa;
+
+    document.getElementById('kpi-simple').innerHTML = `
+      <div class="kpi verde"><div class="kpi-label">Dosis por hectárea</div><div class="kpi-valor">${fmt2(porHa)}</div><div class="kpi-sub">${calc.unidadResult}</div></div>
+      <div class="kpi azul"><div class="kpi-label">Total para el lote</div><div class="kpi-valor">${fmt2(totalLote)}</div><div class="kpi-sub">${calc.unidadResult.replace('/ ha','')}</div></div>
+      <div class="kpi naranja"><div class="kpi-label">Por tanque (${tanque}L)</div><div class="kpi-valor">${fmt2(productoPorTanque)}</div><div class="kpi-sub">${calc.unidadResult.replace('/ ha','/ tanque')}</div></div>
+      <div class="kpi morado"><div class="kpi-label">Tanques necesarios</div><div class="kpi-valor">${fmt2(numTanques)}</div><div class="kpi-sub">para ${area} ha</div></div>
+    `;
+
+    document.getElementById('detalle-simple').innerHTML = `
+      <div class="det-item"><div class="det-label">Producto</div><div class="det-valor">${producto}</div><div class="det-sub">Tipo: ${tipoActual}</div></div>
+      <div class="det-item"><div class="det-label">Área tratada</div><div class="det-valor">${area} ha</div><div class="det-sub">${fmt0(area * 10000)} m²</div></div>
+      <div class="det-item"><div class="det-label">Agua total</div><div class="det-valor">${fmt0(aguaTotalLote)} litros</div><div class="det-sub">${volHa} L/ha × ${area} ha</div></div>
+      <div class="det-item"><div class="det-label">Período de carencia</div><div class="det-valor">${carencia} días</div><div class="det-sub">Entre última aplicación y cosecha</div></div>
+    `;
+
+    // Tabla de tanques
+    const tbody = document.getElementById('tbody-tanques');
+    tbody.innerHTML = '';
+    let areaAcum = 0;
+    for (let i = 1; i <= Math.ceil(numTanques); i++) {
+      const esParcial = i === Math.ceil(numTanques) && numTanques % 1 !== 0;
+      const fraccion = esParcial ? numTanques % 1 : 1;
+      const areaTanque = areaXtanque * fraccion;
+      areaAcum += areaTanque;
+      const prodTanque = productoPorTanque * fraccion;
+      const aguaTanque = tanque * fraccion;
+      tbody.innerHTML += `<tr ${i === Math.ceil(numTanques) ? 'style="font-weight:600;"' : ''}>
+        <td>Tanque ${i}${esParcial ? ' (parcial)' : ''}</td>
+        <td>${fmt2(areaTanque)} ha</td>
+        <td class="td-val">${fmt2(prodTanque)} ${calc.unidadResult.replace('/ ha','')}</td>
+        <td>${fmt0(aguaTanque)} L</td>
+        <td>${fmt2(areaAcum)} ha</td>
+      </tr>`;
+    }
+    // Total
+    tbody.innerHTML += `<tr><td>TOTAL</td><td>${area} ha</td><td class="td-val">${fmt2(totalLote)} ${calc.unidadResult.replace('/ ha','')}</td><td>${fmt0(aguaTotalLote)} L</td><td>${area} ha</td></tr>`;
+
+    // Alerta toxicidad
+    const tox = { '1': { cls: 'tox-1', msg: '🔴 CATEGORÍA I — EXTREMADAMENTE TÓXICO. Use equipo de protección personal completo: traje impermeable, respirador con filtro, guantes de nitrilo, botas de caucho, gafas de seguridad. No ingrese al lote sin EPP.' }, '2': { cls: 'tox-2', msg: '🟡 CATEGORÍA II — ALTAMENTE TÓXICO. Use overol impermeable, guantes, botas, gafas y máscara respiratoria. No comer, beber ni fumar durante la aplicación.' }, '3': { cls: 'tox-3', msg: '🔵 CATEGORÍA III — MODERADAMENTE TÓXICO. Use overol, guantes de caucho, botas y gafas de seguridad. Evite el contacto con piel y mucosas.' }, '4': { cls: 'tox-4', msg: '🟢 CATEGORÍA IV — LIGERAMENTE TÓXICO. Use overol, guantes y botas. Siga las instrucciones de la etiqueta.' } };
+    const t = tox[toxicidad];
+    document.getElementById('toxicidad-alerta').innerHTML = `<div class="toxicidad-box ${t.cls}" style="margin-bottom:1rem;"><strong>Toxicología:</strong> ${t.msg}</div>`;
+
+    document.getElementById('resultados').style.display = 'block';
+    document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetSimple() {
+    document.getElementById('s-producto').value = '';
+    document.getElementById('s-dosis').value = '';
+    document.getElementById('s-area').value = 1;
+    document.getElementById('resultados').style.display = 'none';
+  }
+
+  function agregarMezcla() {
+    const lista = document.getElementById('mezcla-lista');
+    const div = document.createElement('div');
+    div.className = 'tanque-item';
+    div.innerHTML = `
+      <input type="text" placeholder="Nombre del producto" oninput="calcMezcla()" />
+      <select onchange="calcMezcla()"><option value="herbicida">Herbicida</option><option value="fungicida">Fungicida</option><option value="insecticida">Insecticida</option><option value="foliar">Foliar</option></select>
+      <input type="number" placeholder="0" min="0" step="0.01" oninput="calcMezcla()" />
+      <select onchange="calcMezcla()"><option value="cc_ha">cc/L por ha</option><option value="g_ha">g/kg por ha</option><option value="cc_100l">cc por 100L</option><option value="g_100l">g por 100L</option></select>
+      <button class="btn-remove-t" onclick="removerMezcla(this)">×</button>`;
+    lista.appendChild(div);
+  }
+
+  function removerMezcla(btn) {
+    const lista = document.getElementById('mezcla-lista');
+    if (lista.children.length > 1) btn.parentElement.remove();
+    calcMezcla();
+  }
+
+  function calcMezcla() {
+    const area = parseFloat(document.getElementById('m-area').value) || 1;
+    const volHa = parseFloat(document.getElementById('m-vol').value) || 300;
+    const tanque = parseFloat(document.getElementById('m-tanque').value) || 200;
+    const numTanques = (volHa * area) / tanque;
+    const areaXTanque = tanque / volHa;
+
+    const items = document.querySelectorAll('#mezcla-lista .tanque-item');
+    const productos = [];
+    items.forEach(item => {
+      const inputs = item.querySelectorAll('input');
+      const selects = item.querySelectorAll('select');
+      const nombre = inputs[0].value || '—';
+      const tipo = selects[0].value;
+      const dosis = parseFloat(inputs[1].value) || 0;
+      const unidad = selects[1].value;
+      const calc = calcDosisHa(dosis, unidad, volHa);
+      const porTanque = calc.porHa * (tanque / volHa);
+      const totalLote = calc.porHa * area;
+      productos.push({ nombre, tipo, dosisHa: calc.porHa, unidad: calc.unidadResult, porTanque, totalLote });
+    });
+
+    document.getElementById('mezcla-resumen').innerHTML =
+      `Área: <strong>${area} ha</strong> &nbsp;|&nbsp; Volumen: <strong>${volHa} L/ha</strong> &nbsp;|&nbsp; Tanque: <strong>${tanque} L</strong> &nbsp;|&nbsp; Tanques necesarios: <strong>${fmt2(numTanques)}</strong> &nbsp;|&nbsp; Área por tanque: <strong>${fmt2(areaXTanque)} ha</strong>`;
+
+    document.getElementById('tbody-mezcla').innerHTML = productos.map(p => `
+      <tr>
+        <td><strong>${p.nombre}</strong></td>
+        <td>${p.tipo}</td>
+        <td>${fmt2(p.dosisHa)} ${p.unidad}</td>
+        <td class="td-val">${fmt2(p.porTanque)} ${p.unidad.replace('/ ha','')}</td>
+        <td>${fmt2(p.totalLote)} ${p.unidad.replace('/ ha','')}</td>
+      </tr>`).join('') + `<tr><td colspan="2">Agua por tanque</td><td>—</td><td class="td-val">${tanque} L</td><td>${fmt0(volHa * area)} L total</td></tr>`;
+
+    const orden = ['1️⃣ Llene el tanque con la mitad del agua limpia.',
+      '2️⃣ Agregue primero los productos en polvo (WP, WG) con agitación constante.',
+      '3️⃣ Luego agregue los concentrados emulsionables (EC) uno a uno.',
+      '4️⃣ Agregue los concentrados solubles (SL) y suspensiones (SC).',
+      '5️⃣ Complete con el resto del agua hasta la capacidad del tanque.',
+      '6️⃣ Mantenga agitación durante toda la aplicación.',
+      '<strong>⚠️ Nunca mezcle herbicidas con otros agroquímicos sin verificar compatibilidad.</strong>'];
+    document.getElementById('orden-mezcla').innerHTML = orden.map(o => `<div style="padding:4px 0;border-bottom:1px solid #f0f0ec;">${o}</div>`).join('');
+
+    document.getElementById('res-mezcla').style.display = 'block';
+  }
+</script>
+</body>
+</html>
