@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Simulador de crédito bancario Colombia 2026. Calcula cuota mensual, tabla de amortización, total de intereses y compara diferentes bancos colombianos. Libre inversión, hipotecario y empresarial." />
+  <meta name="keywords" content="simulador credito bancario colombia 2026, calculadora prestamo colombia, cuota credito banco colombia, tabla amortizacion colombia, credito hipotecario colombia" />
+  <title>Simulador de Crédito Bancario Colombia 2026 — HerramientasPro</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #1D9E75; --verde-dark: #0F6E56; --verde-light: #E1F5EE;
+      --azul: #185FA5; --azul-dark: #0C447C; --azul-light: #E6F1FB;
+      --rojo: #A32D2D; --rojo-light: #FCEBEB;
+      --naranja: #854F0B; --naranja-light: #FAEEDA;
+      --morado: #534AB7; --morado-light: #EEEDFE;
+      --text: #1a1a1a; --text-sec: #555; --text-muted: #888;
+      --bg: #f7f7f5; --card: #ffffff; --border: #e0e0dc; --radius: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; height: 54px; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { width: 30px; height: 30px; background: var(--verde); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .nav-sep { color: var(--border); font-size: 18px; }
+    .nav-current { font-size: 13px; color: var(--text-sec); }
+
+    .hero { background: linear-gradient(135deg, #0C447C 0%, #185FA5 100%); padding: 2rem 1.5rem; text-align: center; }
+    .hero-icon { font-size: 42px; margin-bottom: 10px; }
+    .hero h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.85); max-width: 580px; margin: 0 auto; }
+    .hero-params { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .hero-param { font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; padding: 4px 10px; border-radius: 20px; }
+
+    .modulos { max-width: 960px; margin: 0 auto; padding: 1.2rem 1.5rem 0; }
+    .modulos-tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+    .mod-tab { padding: 10px 16px; font-size: 13px; font-weight: 500; border: none; background: transparent; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; border-radius: 6px 6px 0 0; white-space: nowrap; }
+    .mod-tab:hover { color: var(--azul); background: var(--azul-light); }
+    .mod-tab.active { color: var(--azul); border-bottom-color: var(--azul); font-weight: 600; }
+    .modulo { display: none; }
+    .modulo.active { display: block; }
+
+    .main { max-width: 960px; margin: 0 auto; padding: 1.2rem 1.5rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 500; color: var(--text-sec); }
+    select, input[type="number"] {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text); background: #fff; transition: border-color 0.15s;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--azul); }
+    .hint { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    /* SLIDER */
+    .slider-wrap { display: flex; flex-direction: column; gap: 6px; }
+    .slider-row { display: flex; align-items: center; gap: 10px; }
+    input[type="range"] { flex: 1; padding: 0; height: 6px; border: none; border-radius: 3px; background: #e0e0dc; accent-color: var(--azul); cursor: pointer; }
+    .slider-val { font-size: 15px; font-weight: 700; color: var(--azul); min-width: 140px; text-align: right; }
+
+    /* TIPO CREDITO */
+    .tipo-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 1rem; }
+    .tipo-btn { padding: 10px 8px; background: #f5f5f2; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; color: var(--text-sec); cursor: pointer; text-align: center; transition: all 0.15s; }
+    .tipo-btn.active { background: var(--azul-light); border-color: var(--azul); color: var(--azul); font-weight: 700; }
+    .tipo-emoji { font-size: 20px; display: block; margin-bottom: 4px; }
+
+    .btn { width: 100%; padding: 13px; background: var(--azul); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .btn:hover { background: var(--azul-dark); }
+    .btn-reset { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 9px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+
+    #resultados { display: none; }
+
+    /* CUOTA DESTACADA */
+    .cuota-box { background: var(--azul); border-radius: 14px; padding: 1.5rem; text-align: center; margin-bottom: 1rem; }
+    .cuota-label { font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 6px; }
+    .cuota-valor { font-size: 40px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+    .cuota-sub { font-size: 12px; color: rgba(255,255,255,0.6); }
+
+    /* KPI GRID */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 1rem; }
+    .kpi { border-radius: 10px; padding: 1rem; text-align: center; border: 1px solid; }
+    .kpi.azul { background: var(--azul-light); border-color: #B5D4F4; }
+    .kpi.rojo { background: var(--rojo-light); border-color: #F7C1C1; }
+    .kpi.verde { background: var(--verde-light); border-color: #9FE1CB; }
+    .kpi.naranja { background: var(--naranja-light); border-color: #FAC775; }
+    .kpi-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 5px; }
+    .kpi-valor { font-size: 17px; font-weight: 800; }
+    .kpi.azul .kpi-valor { color: var(--azul); }
+    .kpi.rojo .kpi-valor { color: var(--rojo); }
+    .kpi.verde .kpi-valor { color: var(--verde-dark); }
+    .kpi.naranja .kpi-valor { color: var(--naranja); }
+    .kpi-sub { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+
+    /* BARRA COMPOSICION */
+    .barra-comp { margin-bottom: 1rem; }
+    .barra-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .barra-label { font-size: 12px; color: var(--text-sec); width: 100px; flex-shrink: 0; }
+    .barra-bg { flex: 1; background: #f0f0ec; border-radius: 4px; height: 22px; overflow: hidden; }
+    .barra-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; }
+    .barra-val { font-size: 12px; font-weight: 600; color: var(--text); width: 120px; flex-shrink: 0; text-align: right; }
+
+    /* TABLA AMORTIZACION */
+    .tabla-wrap { max-height: 340px; overflow-y: auto; overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { background: #f5f5f2; color: var(--text-sec); font-weight: 600; padding: 8px 10px; text-align: right; border-bottom: 1px solid var(--border); position: sticky; top: 0; font-size: 11px; }
+    th:first-child { text-align: left; }
+    td { padding: 7px 10px; border-bottom: 1px solid #f5f5f2; text-align: right; }
+    td:first-child { text-align: left; color: var(--text-muted); }
+    tr:last-child td { font-weight: 700; background: var(--azul-light); border-top: 1px solid #B5D4F4; }
+    tr:nth-child(even) td { background: #fafaf8; }
+    .td-cuota { color: var(--azul); font-weight: 700; }
+    .td-int { color: var(--rojo); }
+    .td-cap { color: var(--verde-dark); }
+
+    /* COMPARADOR BANCOS */
+    .bancos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 10px; }
+    .banco-card { border: 1px solid var(--border); border-radius: 10px; padding: 1rem; background: #fff; transition: border-color 0.15s; }
+    .banco-card:hover { border-color: var(--azul); }
+    .banco-nombre { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .banco-tasa { font-size: 20px; font-weight: 800; color: var(--azul); }
+    .banco-cuota { font-size: 13px; color: var(--verde-dark); font-weight: 600; margin-top: 4px; }
+    .banco-total { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .banco-badge { font-size: 10px; padding: 2px 7px; border-radius: 10px; margin-top: 6px; display: inline-block; font-weight: 600; }
+    .badge-mejor { background: var(--verde-light); color: var(--verde-dark); }
+    .badge-normal { background: #f0f0ec; color: #666; }
+
+    .disclaimer { background: #fffbf0; border: 1px solid #FAC775; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 1rem; }
+    .btn-print { width: 100%; padding: 10px; background: transparent; color: var(--azul); border: 1px solid var(--azul); border-radius: 9px; font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 8px; }
+
+    @media print {
+      nav, .btn, .btn-reset, .btn-print, .hero, .modulos, .card:first-of-type { display: none !important; }
+      .card { border: 1px solid #ccc; break-inside: avoid; }
+      body { background: #fff; }
+      #resultados { display: block !important; }
+      .tabla-wrap { max-height: none; overflow: visible; }
+    }
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .tipo-grid { grid-template-columns: repeat(2,1fr); }
+      .cuota-valor { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-text">HerramientasPro</div>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">🏦 Simulador Crédito Bancario</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">🏦</div>
+  <h1>Simulador de Crédito Bancario Colombia 2026</h1>
+  <p>Calcula tu cuota mensual, total de intereses y tabla de amortización para créditos de libre inversión, hipotecario, vehicular y empresarial. Compara tasas de bancos colombianos.</p>
+  <div class="hero-params">
+    <span class="hero-param">Tasa usura 2026: ~28% EA</span>
+    <span class="hero-param">Sistema francés</span>
+    <span class="hero-param">Comparador de bancos</span>
+  </div>
+</div>
+
+<div class="modulos">
+  <div class="modulos-tabs">
+    <button class="mod-tab active" onclick="switchMod('simulador',this)">🧮 Simulador</button>
+    <button class="mod-tab" onclick="switchMod('comparador',this)">🏦 Comparar bancos</button>
+    <button class="mod-tab" onclick="switchMod('capacidad',this)">💪 Capacidad de pago</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- MÓDULO SIMULADOR -->
+  <div class="modulo active" id="mod-simulador">
+
+    <div class="card">
+      <div class="card-title">🏷️ Tipo de crédito</div>
+      <div class="tipo-grid" id="tipo-grid">
+        <button class="tipo-btn active" onclick="setTipo('libre',this,'22.5')"><span class="tipo-emoji">💳</span>Libre inversión<br><small>~22.5% EA</small></button>
+        <button class="tipo-btn" onclick="setTipo('hipotecario',this,'13.5')"><span class="tipo-emoji">🏠</span>Hipotecario<br><small>~13.5% EA</small></button>
+        <button class="tipo-btn" onclick="setTipo('vehicular',this,'18.0')"><span class="tipo-emoji">🚗</span>Vehicular<br><small>~18% EA</small></button>
+        <button class="tipo-btn" onclick="setTipo('empresarial',this,'20.0')"><span class="tipo-emoji">🏢</span>Empresarial<br><small>~20% EA</small></button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💰 Parámetros del crédito</div>
+      <div class="form-grid">
+
+        <div class="form-group full">
+          <label>Monto del crédito</label>
+          <div class="slider-wrap">
+            <div class="slider-row">
+              <input type="range" id="monto" min="1000000" max="500000000" step="1000000" value="20000000" oninput="actualizarSliders()" />
+              <span class="slider-val" id="monto-val">$20.000.000</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <label>Plazo del crédito</label>
+          <div class="slider-wrap">
+            <div class="slider-row">
+              <input type="range" id="plazo" min="6" max="360" step="6" value="36" oninput="actualizarSliders()" />
+              <span class="slider-val" id="plazo-val">36 meses (3 años)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="tasa-ea">Tasa de interés anual (EA %)</label>
+          <input type="number" id="tasa-ea" value="22.5" min="0.1" max="35" step="0.1" />
+          <span class="hint">Tasa efectiva anual. Tasa usura 2026: ~28% EA. Consulte con su banco.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="seguro">Seguro de vida mensual (COP)</label>
+          <input type="number" id="seguro" value="0" min="0" step="1000" />
+          <span class="hint">Seguro de vida deudores. Varía según edad y monto. Opcional.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="abono-inicial">Abono inicial / cuota inicial (COP)</label>
+          <input type="number" id="abono-inicial" value="0" min="0" step="100000" />
+          <span class="hint">Para hipotecario y vehicular. Se descuenta del monto financiado.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="periodo-gracia">Período de gracia (meses)</label>
+          <input type="number" id="periodo-gracia" value="0" min="0" max="12" step="1" />
+          <span class="hint">Meses donde solo se pagan intereses. Algunos créditos empresariales lo incluyen.</span>
+        </div>
+
+      </div>
+      <button class="btn" onclick="calcularCredito()">🧮 Simular crédito</button>
+      <button class="btn-reset" onclick="resetCredito()">↺ Limpiar</button>
+    </div>
+
+    <div id="resultados">
+      <div class="cuota-box">
+        <div class="cuota-label">Cuota mensual estimada</div>
+        <div class="cuota-valor" id="res-cuota">$0</div>
+        <div class="cuota-sub" id="res-cuota-sub">sin seguro</div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi azul"><div class="kpi-label">Monto financiado</div><div class="kpi-valor" id="kpi-monto">—</div><div class="kpi-sub">capital</div></div>
+        <div class="kpi rojo"><div class="kpi-label">Total intereses</div><div class="kpi-valor" id="kpi-int">—</div><div class="kpi-sub">costo financiero</div></div>
+        <div class="kpi naranja"><div class="kpi-label">Total a pagar</div><div class="kpi-valor" id="kpi-total">—</div><div class="kpi-sub">capital + intereses</div></div>
+        <div class="kpi verde"><div class="kpi-label">Tasa mensual</div><div class="kpi-valor" id="kpi-tasa-m">—</div><div class="kpi-sub">equivalente</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📊 Composición del crédito</div>
+        <div class="barra-comp" id="barra-comp"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📅 Tabla de amortización</div>
+        <div class="tabla-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mes</th>
+                <th>Cuota</th>
+                <th>Interés</th>
+                <th>Capital</th>
+                <th>Saldo</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-amort"></tbody>
+          </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:6px;">Sistema francés (cuota fija). Scroll para ver todos los meses.</p>
+      </div>
+
+      <div class="disclaimer">⚠️ <strong>Simulación orientativa.</strong> Las tasas son referencias del mercado colombiano 2026. La tasa real depende de tu perfil crediticio, historial en centrales de riesgo y la política comercial del banco. Tasa de usura vigente: consulte la Superintendencia Financiera de Colombia. Esta herramienta no constituye oferta comercial.</div>
+      <button class="btn-print" onclick="window.print()">🖨️ Imprimir simulación</button>
+    </div>
+  </div>
+
+  <!-- MÓDULO COMPARADOR -->
+  <div class="modulo" id="mod-comparador">
+    <div class="card">
+      <div class="card-title">🏦 Compara crédito entre bancos colombianos</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="c-monto">Monto del crédito (COP)</label>
+          <input type="number" id="c-monto" placeholder="20000000" min="1000000" step="1000000" value="20000000" />
+        </div>
+        <div class="form-group">
+          <label for="c-plazo">Plazo (meses)</label>
+          <input type="number" id="c-plazo" placeholder="36" min="6" max="240" value="36" />
+        </div>
+        <div class="form-group full">
+          <label for="c-tipo">Tipo de crédito</label>
+          <select id="c-tipo">
+            <option value="libre">Libre inversión</option>
+            <option value="hipotecario">Hipotecario</option>
+            <option value="vehicular">Vehicular</option>
+            <option value="empresarial">Empresarial PYME</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="compararBancos()">🏦 Comparar bancos</button>
+    </div>
+    <div id="res-comparador" style="display:none;">
+      <div class="card">
+        <div class="card-title">📊 Comparación de tasas — Bancos Colombia 2026</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Tasas referenciales. Consulte directamente con cada banco para obtener su tasa personalizada.</p>
+        <div class="bancos-grid" id="bancos-grid"></div>
+      </div>
+      <div class="disclaimer">⚠️ Tasas referenciales del mercado colombiano primer semestre 2026. Las tasas reales varían según perfil del cliente, garantías, historial crediticio y condiciones comerciales del banco. Consulte directamente en la entidad financiera.</div>
+    </div>
+  </div>
+
+  <!-- MÓDULO CAPACIDAD -->
+  <div class="modulo" id="mod-capacidad">
+    <div class="card">
+      <div class="card-title">💪 Calculadora de capacidad de pago</div>
+      <p style="font-size:13px;color:var(--text-sec);margin-bottom:1rem;">Calcula cuánto puedes pagar de cuota mensual y cuánto puedes pedir prestado según tus ingresos.</p>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="cp-ingresos">Ingresos mensuales netos (COP)</label>
+          <input type="number" id="cp-ingresos" placeholder="Ej: 4000000" min="0" step="100000" />
+          <span class="hint">Salario neto + otros ingresos fijos comprobables</span>
+        </div>
+        <div class="form-group">
+          <label for="cp-gastos">Gastos fijos mensuales (COP)</label>
+          <input type="number" id="cp-gastos" placeholder="Ej: 1500000" min="0" step="100000" />
+          <span class="hint">Arriendo, servicios, alimentación, transporte, otras deudas</span>
+        </div>
+        <div class="form-group">
+          <label for="cp-deudas">Cuotas de otras deudas actuales (COP)</label>
+          <input type="number" id="cp-deudas" placeholder="0" min="0" step="50000" value="0" />
+          <span class="hint">Suma de cuotas de créditos que ya tienes activos</span>
+        </div>
+        <div class="form-group">
+          <label for="cp-tasa">Tasa EA del nuevo crédito (%)</label>
+          <input type="number" id="cp-tasa" placeholder="22.5" min="1" max="35" step="0.1" value="22.5" />
+        </div>
+        <div class="form-group">
+          <label for="cp-plazo">Plazo deseado (meses)</label>
+          <input type="number" id="cp-plazo" placeholder="36" min="6" max="360" value="36" />
+        </div>
+        <div class="form-group">
+          <label for="cp-pct">% máximo de endeudamiento</label>
+          <select id="cp-pct">
+            <option value="30">30% — Conservador (recomendado bancos)</option>
+            <option value="35" selected>35% — Estándar mercado colombiano</option>
+            <option value="40">40% — Máximo aceptable</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcCapacidad()">💪 Calcular capacidad de pago</button>
+    </div>
+    <div id="res-capacidad" style="display:none;">
+      <div class="card">
+        <div class="card-title">📊 Tu capacidad de endeudamiento</div>
+        <div id="capacidad-resultado"></div>
+      </div>
+      <div class="disclaimer">⚠️ Este cálculo es orientativo. Los bancos colombianos aplican sus propios modelos de scoring crediticio y pueden aprobar o negar según el historial en DataCrédito, Transunión y otras centrales de riesgo.</div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+  const bancosTasas = {
+    libre: [
+      { nombre: 'Bancolombia', tasa: 22.5 }, { nombre: 'Davivienda', tasa: 23.0 },
+      { nombre: 'Banco de Bogotá', tasa: 21.8 }, { nombre: 'BBVA Colombia', tasa: 22.0 },
+      { nombre: 'Banco Popular', tasa: 24.5 }, { nombre: 'Scotiabank Colpatria', tasa: 23.5 },
+      { nombre: 'AV Villas', tasa: 24.0 }, { nombre: 'Banco Caja Social', tasa: 22.8 },
+    ],
+    hipotecario: [
+      { nombre: 'Bancolombia', tasa: 13.5 }, { nombre: 'Davivienda', tasa: 12.8 },
+      { nombre: 'Banco de Bogotá', tasa: 13.2 }, { nombre: 'BBVA Colombia', tasa: 13.0 },
+      { nombre: 'Banco Popular', tasa: 14.0 }, { nombre: 'Scotiabank Colpatria', tasa: 13.8 },
+      { nombre: 'AV Villas', tasa: 13.5 }, { nombre: 'Banco Caja Social', tasa: 13.0 },
+    ],
+    vehicular: [
+      { nombre: 'Bancolombia', tasa: 17.5 }, { nombre: 'Davivienda', tasa: 18.0 },
+      { nombre: 'Banco de Bogotá', tasa: 17.8 }, { nombre: 'BBVA Colombia', tasa: 17.2 },
+      { nombre: 'Banco Popular', tasa: 19.0 }, { nombre: 'Scotiabank Colpatria', tasa: 18.5 },
+      { nombre: 'AV Villas', tasa: 18.2 }, { nombre: 'Banco Caja Social', tasa: 17.9 },
+    ],
+    empresarial: [
+      { nombre: 'Bancolombia', tasa: 19.5 }, { nombre: 'Davivienda', tasa: 20.0 },
+      { nombre: 'Banco de Bogotá', tasa: 19.8 }, { nombre: 'BBVA Colombia', tasa: 19.0 },
+      { nombre: 'Banco Popular', tasa: 21.0 }, { nombre: 'Scotiabank Colpatria', tasa: 20.5 },
+      { nombre: 'Bancoldex', tasa: 16.5 }, { nombre: 'Finagro', tasa: 14.0 },
+    ],
+  };
+
+  function switchMod(id, el) {
+    document.querySelectorAll('.modulo').forEach(m => m.classList.remove('active'));
+    document.querySelectorAll('.mod-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('mod-' + id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function setTipo(tipo, btn, tasa) {
+    document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tasa-ea').value = tasa;
+    const plazos = { libre: 60, hipotecario: 240, vehicular: 60, empresarial: 60 };
+    document.getElementById('plazo').value = plazos[tipo] || 36;
+    actualizarSliders();
+  }
+
+  function actualizarSliders() {
+    const monto = parseInt(document.getElementById('monto').value);
+    const plazo = parseInt(document.getElementById('plazo').value);
+    document.getElementById('monto-val').textContent = fmt(monto);
+    document.getElementById('plazo-val').textContent = `${plazo} meses (${(plazo/12).toFixed(1)} años)`;
+  }
+
+  function fmt(n) { return '$' + Math.round(n).toLocaleString('es-CO'); }
+  function fmtPct(n) { return (Math.round(n * 100) / 100).toFixed(2) + '%'; }
+
+  function cuotaFrances(capital, tasaEA, plazo) {
+    const tm = Math.pow(1 + tasaEA / 100, 1 / 12) - 1;
+    return capital * (tm * Math.pow(1 + tm, plazo)) / (Math.pow(1 + tm, plazo) - 1);
+  }
+
+  function calcularCredito() {
+    const montoTotal = parseInt(document.getElementById('monto').value);
+    const abono = parseFloat(document.getElementById('abono-inicial').value) || 0;
+    const capital = montoTotal - abono;
+    const plazo = parseInt(document.getElementById('plazo').value);
+    const tasaEA = parseFloat(document.getElementById('tasa-ea').value);
+    const seguro = parseFloat(document.getElementById('seguro').value) || 0;
+    const gracia = parseInt(document.getElementById('periodo-gracia').value) || 0;
+
+    if (capital <= 0 || plazo <= 0 || tasaEA <= 0) { alert('Complete todos los campos.'); return; }
+
+    const tm = Math.pow(1 + tasaEA / 100, 1 / 12) - 1;
+    const cuota = cuotaFrances(capital, tasaEA, plazo - gracia);
+    const totalPagar = cuota * (plazo - gracia);
+    const totalIntereses = totalPagar - capital;
+
+    document.getElementById('res-cuota').textContent = fmt(cuota);
+    document.getElementById('res-cuota-sub').textContent = seguro > 0 ? `Con seguro: ${fmt(cuota + seguro)}/mes` : 'Sistema francés — cuota fija';
+    document.getElementById('kpi-monto').textContent = fmt(capital);
+    document.getElementById('kpi-int').textContent = fmt(totalIntereses);
+    document.getElementById('kpi-total').textContent = fmt(totalPagar);
+    document.getElementById('kpi-tasa-m').textContent = fmtPct(tm * 100);
+
+    // Barras
+    const maxVal = Math.max(capital, totalIntereses);
+    document.getElementById('barra-comp').innerHTML = `
+      <div class="barra-row"><div class="barra-label">Capital</div><div class="barra-bg"><div class="barra-fill" style="width:${(capital/totalPagar*100).toFixed(0)}%;background:var(--azul);">${(capital/totalPagar*100).toFixed(0)}%</div></div><div class="barra-val">${fmt(capital)}</div></div>
+      <div class="barra-row"><div class="barra-label">Intereses</div><div class="barra-bg"><div class="barra-fill" style="width:${(totalIntereses/totalPagar*100).toFixed(0)}%;background:var(--rojo);">${(totalIntereses/totalPagar*100).toFixed(0)}%</div></div><div class="barra-val">${fmt(totalIntereses)}</div></div>
+      ${seguro > 0 ? `<div class="barra-row"><div class="barra-label">Seguros</div><div class="barra-bg"><div class="barra-fill" style="width:${(seguro*plazo/totalPagar*100).toFixed(0)}%;background:var(--naranja);">seguros</div></div><div class="barra-val">${fmt(seguro * plazo)}</div></div>` : ''}
+    `;
+
+    // Tabla amortización
+    let saldo = capital;
+    let tbody = '';
+    let totalCuotas = 0, totalInts = 0, totalCaps = 0;
+
+    // Período de gracia
+    for (let i = 1; i <= gracia; i++) {
+      const intMes = saldo * tm;
+      tbody += `<tr><td>${i} <small>(gracia)</small></td><td class="td-cuota">${fmt(intMes)}</td><td class="td-int">${fmt(intMes)}</td><td class="td-cap">$0</td><td>${fmt(saldo)}</td></tr>`;
+      totalCuotas += intMes; totalInts += intMes;
+    }
+
+    for (let i = gracia + 1; i <= plazo; i++) {
+      const intMes = saldo * tm;
+      const capMes = cuota - intMes;
+      saldo = Math.max(0, saldo - capMes);
+      totalCuotas += cuota; totalInts += intMes; totalCaps += capMes;
+      tbody += `<tr><td>${i}</td><td class="td-cuota">${fmt(cuota)}</td><td class="td-int">${fmt(intMes)}</td><td class="td-cap">${fmt(capMes)}</td><td>${fmt(saldo)}</td></tr>`;
+    }
+    tbody += `<tr><td>TOTAL</td><td class="td-cuota">${fmt(totalCuotas)}</td><td class="td-int">${fmt(totalInts)}</td><td class="td-cap">${fmt(totalCaps)}</td><td>$0</td></tr>`;
+    document.getElementById('tbody-amort').innerHTML = tbody;
+
+    document.getElementById('resultados').style.display = 'block';
+    document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function compararBancos() {
+    const monto = parseFloat(document.getElementById('c-monto').value) || 20000000;
+    const plazo = parseInt(document.getElementById('c-plazo').value) || 36;
+    const tipo = document.getElementById('c-tipo').value;
+    const bancos = bancosTasas[tipo].sort((a,b) => a.tasa - b.tasa);
+    const mejor = bancos[0].tasa;
+
+    document.getElementById('bancos-grid').innerHTML = bancos.map(b => {
+      const cuota = cuotaFrances(monto, b.tasa, plazo);
+      const total = cuota * plazo;
+      const esMejor = b.tasa === mejor;
+      return `<div class="banco-card" ${esMejor ? 'style="border-color:var(--verde);border-width:2px;"' : ''}>
+        <div class="banco-nombre">${b.nombre}</div>
+        <div class="banco-tasa">${b.tasa}% EA</div>
+        <div class="banco-cuota">Cuota: ${fmt(cuota)}/mes</div>
+        <div class="banco-total">Total: ${fmt(total)}</div>
+        <span class="banco-badge ${esMejor ? 'badge-mejor' : 'badge-normal'}">${esMejor ? '✅ Mejor tasa' : 'Comparar'}</span>
+      </div>`;
+    }).join('');
+    document.getElementById('res-comparador').style.display = 'block';
+    document.getElementById('res-comparador').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function calcCapacidad() {
+    const ingresos = parseFloat(document.getElementById('cp-ingresos').value) || 0;
+    const gastos = parseFloat(document.getElementById('cp-gastos').value) || 0;
+    const deudas = parseFloat(document.getElementById('cp-deudas').value) || 0;
+    const tasa = parseFloat(document.getElementById('cp-tasa').value) || 22.5;
+    const plazo = parseInt(document.getElementById('cp-plazo').value) || 36;
+    const pct = parseFloat(document.getElementById('cp-pct').value) / 100;
+
+    if (ingresos <= 0) { alert('Ingrese sus ingresos mensuales.'); return; }
+
+    const cuotaMaxTotal = ingresos * pct;
+    const cuotaDisponible = Math.max(0, cuotaMaxTotal - deudas);
+    const tm = Math.pow(1 + tasa / 100, 1/12) - 1;
+    const montoMaximo = cuotaDisponible * (Math.pow(1 + tm, plazo) - 1) / (tm * Math.pow(1 + tm, plazo));
+    const ingresoDisponible = ingresos - gastos - deudas;
+    const nivelEndeudamiento = ((deudas / ingresos) * 100).toFixed(1);
+
+    const color = montoMaximo > 0 ? 'var(--verde-dark)' : 'var(--rojo)';
+    document.getElementById('capacidad-resultado').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;">
+        <div style="background:var(--verde-light);border:1px solid #9FE1CB;border-radius:10px;padding:1rem;text-align:center;">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;">Cuota máxima disponible</div>
+          <div style="font-size:22px;font-weight:800;color:var(--verde-dark);">${fmt(cuotaDisponible)}</div>
+          <div style="font-size:11px;color:var(--text-muted);">después de deudas actuales</div>
+        </div>
+        <div style="background:var(--azul-light);border:1px solid #B5D4F4;border-radius:10px;padding:1rem;text-align:center;">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;">Monto máximo a solicitar</div>
+          <div style="font-size:22px;font-weight:800;color:var(--azul);">${fmt(montoMaximo)}</div>
+          <div style="font-size:11px;color:var(--text-muted);">a ${tasa}% EA — ${plazo} meses</div>
+        </div>
+      </div>
+      <div style="background:#f9f9f7;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:13px;line-height:2;">
+        <strong>Ingresos netos:</strong> ${fmt(ingresos)} &nbsp;|&nbsp; <strong>Gastos fijos:</strong> ${fmt(gastos)} &nbsp;|&nbsp; <strong>Deudas actuales:</strong> ${fmt(deudas)}<br>
+        <strong>Cuota máxima (${(pct*100).toFixed(0)}% ingresos):</strong> ${fmt(cuotaMaxTotal)} &nbsp;|&nbsp; <strong>Cuota disponible nueva deuda:</strong> ${fmt(cuotaDisponible)}<br>
+        <strong>Nivel de endeudamiento actual:</strong> ${nivelEndeudamiento}% &nbsp;
+        <span style="background:${parseFloat(nivelEndeudamiento) > 35 ? 'var(--rojo-light)' : 'var(--verde-light)'};color:${parseFloat(nivelEndeudamiento) > 35 ? 'var(--rojo)' : 'var(--verde-dark)'};padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;">
+          ${parseFloat(nivelEndeudamiento) > 40 ? '⚠️ Alto' : parseFloat(nivelEndeudamiento) > 30 ? '⚡ Moderado' : '✅ Saludable'}
+        </span>
+      </div>
+    `;
+    document.getElementById('res-capacidad').style.display = 'block';
+    document.getElementById('res-capacidad').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetCredito() {
+    document.getElementById('monto').value = 20000000;
+    document.getElementById('plazo').value = 36;
+    document.getElementById('tasa-ea').value = 22.5;
+    document.getElementById('seguro').value = 0;
+    document.getElementById('abono-inicial').value = 0;
+    document.getElementById('periodo-gracia').value = 0;
+    actualizarSliders();
+    document.getElementById('resultados').style.display = 'none';
+  }
+
+  actualizarSliders();
+</script>
+</body>
+</html>
