@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Simulador de crédito FNA 2026 para docentes colombianos. Calcula cuota mensual, total a pagar, tabla de amortización y beneficios del Fondo Nacional del Ahorro." />
+  <meta name="keywords" content="simulador credito FNA 2026, credito FNA docentes colombia, fondo nacional ahorro, cuota credito FNA, tabla amortizacion FNA" />
+  <title>Simulador Crédito FNA 2026 — Docentes Colombia — HerramientasPro</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #1D9E75;
+      --verde-dark: #0F6E56;
+      --verde-light: #E1F5EE;
+      --azul: #185FA5;
+      --azul-dark: #0C447C;
+      --azul-light: #E6F1FB;
+      --naranja: #854F0B;
+      --naranja-light: #FAEEDA;
+      --text: #1a1a1a;
+      --text-sec: #555;
+      --text-muted: #888;
+      --bg: #f7f7f5;
+      --card: #ffffff;
+      --border: #e0e0dc;
+      --radius: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; height: 54px; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { width: 30px; height: 30px; background: var(--verde); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .nav-sep { color: var(--border); font-size: 18px; }
+    .nav-current { font-size: 13px; color: var(--text-sec); }
+
+    .hero { background: linear-gradient(135deg, #0C447C 0%, #185FA5 100%); padding: 2rem 1.5rem; text-align: center; }
+    .hero-icon { font-size: 42px; margin-bottom: 10px; }
+    .hero h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.85); max-width: 560px; margin: 0 auto; }
+    .hero-params { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .hero-param { font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; padding: 4px 10px; border-radius: 20px; }
+
+    .main { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 500; color: var(--text-sec); }
+    select, input[type="number"], input[type="range"] {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text); background: #fff; transition: border-color 0.15s;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--azul); }
+    .hint { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    /* SLIDER */
+    .slider-wrap { display: flex; flex-direction: column; gap: 6px; }
+    .slider-row { display: flex; align-items: center; gap: 10px; }
+    input[type="range"] { flex: 1; padding: 0; height: 6px; border: none; border-radius: 3px; background: #e0e0dc; accent-color: var(--azul); cursor: pointer; }
+    .slider-val { font-size: 15px; font-weight: 700; color: var(--azul); min-width: 130px; text-align: right; }
+
+    /* TABS MODALIDAD */
+    .modalidad-tabs { display: flex; gap: 6px; margin-bottom: 1rem; }
+    .mod-tab { flex: 1; padding: 9px; font-size: 13px; font-weight: 500; border: 1px solid var(--border); background: #f5f5f2; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.15s; color: var(--text-sec); }
+    .mod-tab.active { background: var(--azul); color: #fff; border-color: var(--azul); }
+
+    .btn { width: 100%; padding: 13px; background: var(--azul); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+    .btn:hover { background: var(--azul-dark); }
+    .btn-reset { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 9px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+
+    #resultados { display: none; }
+
+    /* RESUMEN CARDS */
+    .resumen-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1rem; }
+    .resumen-card { background: #f9f9f7; border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; }
+    .resumen-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .resumen-valor { font-size: 18px; font-weight: 800; color: var(--text); line-height: 1.2; }
+    .resumen-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+    .resumen-card.destacado { background: var(--azul); border-color: var(--azul-dark); }
+    .resumen-card.destacado .resumen-label { color: rgba(255,255,255,0.7); }
+    .resumen-card.destacado .resumen-valor { color: #fff; font-size: 22px; }
+    .resumen-card.destacado .resumen-sub { color: rgba(255,255,255,0.6); }
+
+    /* GRAFICA BARRAS SIMPLE */
+    .barra-wrap { margin-bottom: 1rem; }
+    .barra-titulo { font-size: 13px; color: var(--text-sec); margin-bottom: 8px; font-weight: 500; }
+    .barra-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .barra-label { font-size: 12px; color: var(--text-sec); width: 80px; text-align: right; flex-shrink: 0; }
+    .barra-bg { flex: 1; background: #f0f0ec; border-radius: 4px; height: 22px; overflow: hidden; }
+    .barra-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 600; color: #fff; transition: width 0.5s; }
+    .barra-fill.capital { background: var(--azul); }
+    .barra-fill.intereses { background: #E24B4A; }
+    .barra-val { font-size: 12px; font-weight: 600; color: var(--text); width: 110px; flex-shrink: 0; }
+
+    /* TABLA AMORTIZACIÓN */
+    .tabla-scroll { overflow-x: auto; max-height: 320px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { background: #f5f5f2; color: var(--text-sec); font-weight: 600; padding: 8px 10px; text-align: right; border-bottom: 1px solid var(--border); position: sticky; top: 0; }
+    th:first-child { text-align: left; }
+    td { padding: 7px 10px; border-bottom: 1px solid #f5f5f2; text-align: right; color: var(--text); }
+    td:first-child { text-align: left; color: var(--text-sec); }
+    tr:last-child td { font-weight: 700; background: #f9f9f7; border-top: 1px solid var(--border); }
+    tr:nth-child(even) td { background: #fafaf8; }
+
+    .td-cuota { font-weight: 700; color: var(--azul); }
+    .td-interes { color: #A32D2D; }
+    .td-capital { color: var(--verde-dark); }
+    .td-saldo { color: var(--text-sec); }
+
+    /* BENEFICIOS */
+    .beneficios-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .beneficio-item { display: flex; gap: 10px; align-items: flex-start; background: #f9f9f7; border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
+    .beneficio-icon { font-size: 20px; flex-shrink: 0; }
+    .beneficio-texto { font-size: 12px; color: var(--text-sec); line-height: 1.4; }
+    .beneficio-texto strong { color: var(--text); display: block; margin-bottom: 2px; font-size: 13px; }
+
+    .disclaimer { background: #fffbf0; border: 1px solid #FAC775; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 1rem; }
+    .btn-print { width: 100%; padding: 10px; background: transparent; color: var(--azul); border: 1px solid var(--azul); border-radius: 9px; font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 8px; }
+
+    @media print {
+      nav, .btn, .btn-reset, .btn-print, .hero, .card:first-of-type { display: none !important; }
+      .card { border: 1px solid #ccc; break-inside: avoid; }
+      body { background: #fff; }
+      #resultados { display: block !important; }
+      .tabla-scroll { max-height: none; overflow: visible; }
+    }
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .resumen-grid { grid-template-columns: 1fr 1fr; }
+      .beneficios-grid { grid-template-columns: 1fr; }
+      .modalidad-tabs { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-text">HerramientasPro</div>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">🏠 Simulador Crédito FNA 2026</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">🏠</div>
+  <h1>Simulador Crédito FNA 2026</h1>
+  <p>Calcula tu cuota mensual, total a pagar e intereses para créditos de vivienda y libre inversión del Fondo Nacional del Ahorro. Exclusivo para docentes y servidores públicos.</p>
+  <div class="hero-params">
+    <span class="hero-param">Vivienda VIS: desde 9.9% EA</span>
+    <span class="hero-param">Vivienda NO VIS: desde 11.5% EA</span>
+    <span class="hero-param">Libre inversión: desde 14.5% EA</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="card">
+    <div class="card-title">🏷️ Tipo de crédito FNA</div>
+    <div class="modalidad-tabs">
+      <button class="mod-tab active" onclick="setModalidad('vis', this)">🏘️ Vivienda VIS</button>
+      <button class="mod-tab" onclick="setModalidad('novis', this)">🏡 Vivienda NO VIS</button>
+      <button class="mod-tab" onclick="setModalidad('libre', this)">💳 Libre inversión</button>
+    </div>
+    <div class="hint" id="modalidad-hint">Vivienda de interés social — hasta 135 SMMLV. Tasa preferencial para docentes oficiales y servidores públicos afiliados al FNA.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💰 Parámetros del crédito</div>
+    <div class="form-grid">
+
+      <div class="form-group full">
+        <label>Monto del crédito</label>
+        <div class="slider-wrap">
+          <div class="slider-row">
+            <input type="range" id="monto" min="5000000" max="500000000" step="1000000" value="80000000" oninput="actualizarSliders()" />
+            <span class="slider-val" id="monto-val">$80.000.000</span>
+          </div>
+        </div>
+        <span class="hint">VIS máximo: ~$192.000.000 (135 SMMLV 2026)</span>
+      </div>
+
+      <div class="form-group full">
+        <label>Plazo del crédito</label>
+        <div class="slider-wrap">
+          <div class="slider-row">
+            <input type="range" id="plazo" min="12" max="240" step="12" value="120" oninput="actualizarSliders()" />
+            <span class="slider-val" id="plazo-val">120 meses (10 años)</span>
+          </div>
+        </div>
+        <span class="hint">FNA permite hasta 20 años (240 meses) para vivienda</span>
+      </div>
+
+      <div class="form-group">
+        <label for="tasa">Tasa de interés anual (EA %)</label>
+        <input type="number" id="tasa" value="9.9" min="1" max="40" step="0.1" oninput="actualizarTasa()" />
+        <span class="hint" id="tasa-hint">Tasa referencial FNA VIS 2026. Consultar tasa exacta en fna.gov.co</span>
+      </div>
+
+      <div class="form-group">
+        <label for="seguro">Seguro mensual estimado (COP)</label>
+        <input type="number" id="seguro" value="50000" min="0" step="1000" />
+        <span class="hint">Seguro de vida + seguro de vivienda (varía según edad y valor inmueble)</span>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="btn" onclick="calcular()">🧮 Simular crédito FNA</button>
+  <button class="btn-reset" onclick="resetear()">↺ Limpiar</button>
+
+  <div id="resultados">
+
+    <div class="card" style="margin-top:1.2rem;">
+      <div class="card-title">📊 Resumen del crédito</div>
+      <div class="resumen-grid">
+        <div class="resumen-card destacado">
+          <div class="resumen-label">Cuota mensual</div>
+          <div class="resumen-valor" id="res-cuota">—</div>
+          <div class="resumen-sub">sin seguro</div>
+        </div>
+        <div class="resumen-card">
+          <div class="resumen-label">Cuota con seguro</div>
+          <div class="resumen-valor" id="res-cuota-seguro">—</div>
+          <div class="resumen-sub">incluye seguros</div>
+        </div>
+        <div class="resumen-card">
+          <div class="resumen-label">Total intereses</div>
+          <div class="resumen-valor" id="res-intereses">—</div>
+          <div class="resumen-sub">costo financiero</div>
+        </div>
+        <div class="resumen-card">
+          <div class="resumen-label">Total a pagar</div>
+          <div class="resumen-valor" id="res-total">—</div>
+          <div class="resumen-sub">capital + intereses</div>
+        </div>
+      </div>
+
+      <div class="barra-wrap">
+        <div class="barra-titulo">Composición del crédito</div>
+        <div class="barra-row">
+          <div class="barra-label">Capital</div>
+          <div class="barra-bg"><div class="barra-fill capital" id="barra-capital" style="width:0%">Capital</div></div>
+          <div class="barra-val" id="barra-capital-val">—</div>
+        </div>
+        <div class="barra-row">
+          <div class="barra-label">Intereses</div>
+          <div class="barra-bg"><div class="barra-fill intereses" id="barra-intereses" style="width:0%">Intereses</div></div>
+          <div class="barra-val" id="barra-intereses-val">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📅 Tabla de amortización</div>
+      <div class="tabla-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Mes</th>
+              <th>Cuota</th>
+              <th>Interés</th>
+              <th>Capital</th>
+              <th>Saldo</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-amort"></tbody>
+        </table>
+      </div>
+      <p style="font-size:11px;color:var(--text-muted);margin-top:6px;">Sistema francés de amortización (cuota fija). Scroll horizontal en móvil.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✅ Beneficios del crédito FNA para docentes</div>
+      <div class="beneficios-grid">
+        <div class="beneficio-item">
+          <div class="beneficio-icon">📉</div>
+          <div class="beneficio-texto">
+            <strong>Tasas preferenciales</strong>
+            Las tasas FNA son menores a las del mercado bancario comercial, especialmente para VIS y docentes oficiales afiliados.
+          </div>
+        </div>
+        <div class="beneficio-item">
+          <div class="beneficio-icon">🔒</div>
+          <div class="beneficio-texto">
+            <strong>Descuento por nómina</strong>
+            La cuota se descuenta directamente del salario del docente, sin riesgo de mora ni trámites adicionales.
+          </div>
+        </div>
+        <div class="beneficio-item">
+          <div class="beneficio-icon">🏠</div>
+          <div class="beneficio-texto">
+            <strong>Subsidio de vivienda</strong>
+            Los docentes pueden combinar el crédito FNA con subsidios del Gobierno Nacional (Mi Casa Ya, FRECH) para reducir el valor financiado.
+          </div>
+        </div>
+        <div class="beneficio-item">
+          <div class="beneficio-icon">📅</div>
+          <div class="beneficio-texto">
+            <strong>Plazos hasta 20 años</strong>
+            El FNA ofrece uno de los plazos más largos del mercado, lo que permite cuotas más bajas y mayor capacidad de endeudamiento.
+          </div>
+        </div>
+        <div class="beneficio-item">
+          <div class="beneficio-icon">💰</div>
+          <div class="beneficio-texto">
+            <strong>Abono de cesantías</strong>
+            Las cesantías acumuladas en el FNA pueden abonarse al capital del crédito, reduciendo la deuda y los intereses pagados.
+          </div>
+        </div>
+        <div class="beneficio-item">
+          <div class="beneficio-icon">🎓</div>
+          <div class="beneficio-texto">
+            <strong>Crédito educativo</strong>
+            El FNA también ofrece crédito educativo para el docente y su familia a tasas de interés muy favorables.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      ⚠️ <strong>Simulación orientativa.</strong> Las tasas presentadas son referenciales para 2026 y pueden variar según el perfil del afiliado, el tipo de inmueble, la zona geográfica y las condiciones del mercado. Consulte la tasa exacta y condiciones vigentes directamente en <strong>fna.gov.co</strong> o en las oficinas del FNA. Esta herramienta no constituye oferta comercial.
+    </div>
+
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
+
+  </div>
+</div>
+
+<script>
+  const modalidades = {
+    vis:   { tasa: 9.9,  hint: 'Vivienda de interés social — hasta 135 SMMLV. Tasa preferencial para docentes oficiales y servidores públicos afiliados al FNA.', montoMax: 192000000 },
+    novis: { tasa: 11.5, hint: 'Vivienda NO VIS — sin límite de valor. Aplica para inmuebles por encima de 135 SMMLV.', montoMax: 500000000 },
+    libre: { tasa: 14.5, hint: 'Libre inversión — para educación, vehículo, remodelación u otros fines. Plazo máximo 5 años.', montoMax: 100000000 },
+  };
+  let modalidadActual = 'vis';
+
+  function setModalidad(m, el) {
+    modalidadActual = m;
+    document.querySelectorAll('.mod-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('tasa').value = modalidades[m].tasa;
+    document.getElementById('modalidad-hint').textContent = modalidades[m].hint;
+    document.getElementById('tasa-hint').textContent = `Tasa referencial FNA ${m.toUpperCase()} 2026. Consultar tasa exacta en fna.gov.co`;
+    if (m === 'libre') {
+      document.getElementById('plazo').max = 60;
+      document.getElementById('monto').max = 100000000;
+    } else {
+      document.getElementById('plazo').max = 240;
+      document.getElementById('monto').max = 500000000;
+    }
+    actualizarSliders();
+  }
+
+  function actualizarSliders() {
+    const monto = parseInt(document.getElementById('monto').value);
+    const plazo = parseInt(document.getElementById('plazo').value);
+    document.getElementById('monto-val').textContent = fmt(monto);
+    document.getElementById('plazo-val').textContent = `${plazo} meses (${Math.round(plazo/12 * 10)/10} años)`;
+  }
+
+  function actualizarTasa() {}
+
+  function fmt(n) { return '$' + Math.round(n).toLocaleString('es-CO'); }
+
+  function calcular() {
+    const monto = parseInt(document.getElementById('monto').value);
+    const plazo = parseInt(document.getElementById('plazo').value);
+    const tasaEA = parseFloat(document.getElementById('tasa').value) / 100;
+    const seguro = parseFloat(document.getElementById('seguro').value) || 0;
+
+    if (!monto || !plazo || !tasaEA) { alert('Complete todos los campos.'); return; }
+
+    // Tasa mensual equivalente
+    const tasaMensual = Math.pow(1 + tasaEA, 1/12) - 1;
+
+    // Cuota fija sistema francés
+    const cuota = monto * (tasaMensual * Math.pow(1 + tasaMensual, plazo)) / (Math.pow(1 + tasaMensual, plazo) - 1);
+
+    let saldo = monto;
+    let totalIntereses = 0;
+    const filas = [];
+
+    for (let i = 1; i <= plazo; i++) {
+      const interesMes = saldo * tasaMensual;
+      const capitalMes = cuota - interesMes;
+      saldo -= capitalMes;
+      totalIntereses += interesMes;
+      filas.push({
+        mes: i,
+        cuota: cuota,
+        interes: interesMes,
+        capital: capitalMes,
+        saldo: Math.max(0, saldo)
+      });
+    }
+
+    const totalPagar = cuota * plazo;
+
+    // Resumen
+    document.getElementById('res-cuota').textContent = fmt(cuota);
+    document.getElementById('res-cuota-seguro').textContent = fmt(cuota + seguro);
+    document.getElementById('res-intereses').textContent = fmt(totalIntereses);
+    document.getElementById('res-total').textContent = fmt(totalPagar);
+
+    // Barras
+    const pctCapital = Math.round((monto / totalPagar) * 100);
+    const pctIntereses = 100 - pctCapital;
+    document.getElementById('barra-capital').style.width = pctCapital + '%';
+    document.getElementById('barra-capital').textContent = pctCapital + '%';
+    document.getElementById('barra-intereses').style.width = pctIntereses + '%';
+    document.getElementById('barra-intereses').textContent = pctIntereses + '%';
+    document.getElementById('barra-capital-val').textContent = fmt(monto);
+    document.getElementById('barra-intereses-val').textContent = fmt(totalIntereses);
+
+    // Tabla amortización
+    const tbody = document.getElementById('tabla-amort');
+    tbody.innerHTML = filas.map(f => `
+      <tr>
+        <td>${f.mes}</td>
+        <td class="td-cuota">${fmt(f.cuota)}</td>
+        <td class="td-interes">${fmt(f.interes)}</td>
+        <td class="td-capital">${fmt(f.capital)}</td>
+        <td class="td-saldo">${fmt(f.saldo)}</td>
+      </tr>
+    `).join('') + `
+      <tr>
+        <td><strong>TOTAL</strong></td>
+        <td class="td-cuota"><strong>${fmt(totalPagar)}</strong></td>
+        <td class="td-interes"><strong>${fmt(totalIntereses)}</strong></td>
+        <td class="td-capital"><strong>${fmt(monto)}</strong></td>
+        <td>—</td>
+      </tr>
+    `;
+
+    document.getElementById('resultados').style.display = 'block';
+    document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetear() {
+    document.getElementById('monto').value = 80000000;
+    document.getElementById('plazo').value = 120;
+    document.getElementById('tasa').value = 9.9;
+    document.getElementById('seguro').value = 50000;
+    actualizarSliders();
+    document.getElementById('resultados').style.display = 'none';
+  }
+
+  actualizarSliders();
+</script>
+</body>
+</html>
