@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora de nómina mensual Colombia 2026. Calcula salario neto, deducciones de salud, pensión, retención en la fuente y aportes parafiscales. Actualizado SMMLV 2026." />
+  <meta name="keywords" content="calculadora nomina colombia 2026, nomina mensual colombia, salud pension nomina, deduccion nomina, SMMLV 2026, aportes parafiscales colombia" />
+  <title>Calculadora de Nómina Mensual Colombia 2026 — HerramientasPro</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #1D9E75; --verde-dark: #0F6E56; --verde-light: #E1F5EE;
+      --azul: #185FA5; --azul-light: #E6F1FB;
+      --rojo: #A32D2D; --rojo-light: #FCEBEB;
+      --naranja: #854F0B; --naranja-light: #FAEEDA;
+      --morado: #534AB7; --morado-light: #EEEDFE;
+      --text: #1a1a1a; --text-sec: #555; --text-muted: #888;
+      --bg: #f7f7f5; --card: #ffffff; --border: #e0e0dc; --radius: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; height: 54px; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { width: 30px; height: 30px; background: var(--verde); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .nav-sep { color: var(--border); font-size: 18px; }
+    .nav-current { font-size: 13px; color: var(--text-sec); }
+
+    .hero { background: linear-gradient(135deg, #0F6E56 0%, #185FA5 100%); padding: 2rem 1.5rem; text-align: center; }
+    .hero-icon { font-size: 42px; margin-bottom: 10px; }
+    .hero h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.85); max-width: 580px; margin: 0 auto; }
+    .hero-params { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .hero-param { font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; padding: 4px 10px; border-radius: 20px; }
+
+    .main { max-width: 960px; margin: 0 auto; padding: 1.5rem; }
+    .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 500; color: var(--text-sec); }
+    select, input[type="number"], input[type="text"] {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text); background: #fff; transition: border-color 0.15s;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--verde); }
+    .hint { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    .checkbox-group { display: flex; align-items: center; gap: 8px; }
+    .checkbox-group input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; }
+    .checkbox-group label { font-size: 13px; color: var(--text-sec); margin: 0; cursor: pointer; font-weight: 400; }
+
+    .extras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .extra-item { background: #fafaf8; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+    .extra-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+    .extra-input { display: flex; gap: 6px; align-items: center; }
+    .extra-input input { flex: 1; padding: 6px 10px; font-size: 13px; }
+    .extra-input select { flex: 1; padding: 6px 10px; font-size: 13px; }
+
+    .btn { width: 100%; padding: 13px; background: var(--verde); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+    .btn:hover { background: var(--verde-dark); }
+    .btn-reset { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 9px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+
+    #resultados { display: none; }
+
+    /* NETO DESTACADO */
+    .neto-box { background: var(--verde-dark); border-radius: 12px; padding: 1.4rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px; }
+    .neto-info { }
+    .neto-label { font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 4px; }
+    .neto-valor { font-size: 32px; font-weight: 800; color: #fff; }
+    .neto-sub { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+    .neto-badges { display: flex; flex-direction: column; gap: 6px; }
+    .neto-badge { font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; padding: 4px 12px; border-radius: 20px; text-align: center; }
+
+    /* COLUMNAS DEVENGADO / DEDUCCIONES */
+    .dos-columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .col-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid; }
+    .col-title.devengado { color: var(--verde-dark); border-color: var(--verde); }
+    .col-title.deducciones { color: var(--rojo); border-color: var(--rojo); }
+    .fila-concepto { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #f0f0ec; font-size: 13px; }
+    .fila-concepto:last-child { border-bottom: none; font-weight: 700; padding-top: 10px; }
+    .fila-nombre { color: var(--text-sec); }
+    .fila-valor-verde { color: var(--verde-dark); font-weight: 600; }
+    .fila-valor-rojo { color: var(--rojo); font-weight: 600; }
+    .fila-valor-total-verde { color: var(--verde-dark); font-size: 15px; font-weight: 800; }
+    .fila-valor-total-rojo { color: var(--rojo); font-size: 15px; font-weight: 800; }
+
+    /* APORTES EMPLEADOR */
+    .aportes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .aporte-card { background: #f9f9f7; border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; }
+    .aporte-pct { font-size: 18px; font-weight: 800; color: var(--morado); }
+    .aporte-nombre { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .aporte-valor { font-size: 13px; font-weight: 600; color: var(--text); margin-top: 4px; }
+
+    /* COSTO TOTAL EMPRESA */
+    .costo-box { background: var(--morado-light); border: 1px solid #AFA9EC; border-radius: 10px; padding: 1rem 1.2rem; display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+    .costo-label { font-size: 13px; color: var(--morado); font-weight: 600; }
+    .costo-valor { font-size: 22px; font-weight: 800; color: var(--morado); }
+
+    .base-box { background: #f9f9f7; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--text-sec); line-height: 1.8; }
+    .base-box strong { color: var(--text); }
+
+    .disclaimer { background: #fffbf0; border: 1px solid #FAC775; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 1rem; }
+    .btn-print { width: 100%; padding: 10px; background: transparent; color: var(--verde-dark); border: 1px solid var(--verde); border-radius: 9px; font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 8px; }
+
+    @media print {
+      nav, .btn, .btn-reset, .btn-print, .hero { display: none !important; }
+      .card { border: 1px solid #ccc; break-inside: avoid; }
+      body { background: #fff; }
+      #resultados { display: block !important; }
+    }
+    @media (max-width: 640px) {
+      .form-grid, .dos-columnas, .extras-grid, .aportes-grid { grid-template-columns: 1fr; }
+      .neto-box { flex-direction: column; text-align: center; }
+      .neto-badges { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+      .costo-box { flex-direction: column; gap: 4px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-text">HerramientasPro</div>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">👥 Calculadora de Nómina 2026</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">👥</div>
+  <h1>Calculadora de Nómina Mensual Colombia 2026</h1>
+  <p>Calcula el salario neto del empleado, todas las deducciones y el costo total para la empresa. Incluye salud, pensión, parafiscales y retención en la fuente.</p>
+  <div class="hero-params">
+    <span class="hero-param">SMMLV 2026: $1.423.500</span>
+    <span class="hero-param">Salud empleado: 4%</span>
+    <span class="hero-param">Pensión empleado: 4%</span>
+    <span class="hero-param">Aux. transporte: $200.000</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="card">
+    <div class="card-title">👤 Datos del empleado</div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label for="nombre">Nombre del empleado</label>
+        <input type="text" id="nombre" placeholder="Ej: María Fernanda López" />
+      </div>
+      <div class="form-group">
+        <label for="salario">Salario básico mensual (COP)</label>
+        <input type="number" id="salario" placeholder="1423500" min="1423500" step="1000" oninput="autoAuxilio()" />
+        <span class="hint">Mínimo SMMLV 2026: $1.423.500</span>
+      </div>
+      <div class="form-group">
+        <label for="dias">Días trabajados en el mes</label>
+        <input type="number" id="dias" value="30" min="1" max="30" />
+        <span class="hint">Máximo 30 días (mes comercial colombiano)</span>
+      </div>
+      <div class="form-group">
+        <label for="tipo_contrato">Tipo de contrato</label>
+        <select id="tipo_contrato">
+          <option value="indefinido">Término indefinido</option>
+          <option value="fijo">Término fijo</option>
+          <option value="obra">Obra o labor</option>
+          <option value="aprendizaje">Contrato de aprendizaje (SENA)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="auxilio">Auxilio de transporte</label>
+        <select id="auxilio">
+          <option value="si">Sí — salario ≤ 2 SMMLV</option>
+          <option value="no">No — salario > 2 SMMLV</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">➕ Ingresos adicionales</div>
+    <div class="extras-grid">
+      <div class="extra-item">
+        <div class="extra-label">Horas extras diurnas (25%)</div>
+        <div class="extra-input">
+          <input type="number" id="he_diurnas" placeholder="0" min="0" />
+          <span style="font-size:12px;color:var(--text-muted);">horas</span>
+        </div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-label">Horas extras nocturnas (75%)</div>
+        <div class="extra-input">
+          <input type="number" id="he_nocturnas" placeholder="0" min="0" />
+          <span style="font-size:12px;color:var(--text-muted);">horas</span>
+        </div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-label">Horas dominicales / festivos (100%)</div>
+        <div class="extra-input">
+          <input type="number" id="he_dominicales" placeholder="0" min="0" />
+          <span style="font-size:12px;color:var(--text-muted);">horas</span>
+        </div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-label">Comisiones / bonificaciones (COP)</div>
+        <div class="extra-input">
+          <input type="number" id="comisiones" placeholder="0" min="0" />
+        </div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-label">Recargo nocturno (35%) — horas</div>
+        <div class="extra-input">
+          <input type="number" id="recargo_nocturno" placeholder="0" min="0" />
+          <span style="font-size:12px;color:var(--text-muted);">horas</span>
+        </div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-label">Otros ingresos no constitutivos (COP)</div>
+        <div class="extra-input">
+          <input type="number" id="otros_ingresos" placeholder="0" min="0" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">➖ Deducciones adicionales</div>
+    <div class="extras-grid">
+      <div class="extra-item">
+        <div class="extra-label">Préstamo / libranza empresa (COP)</div>
+        <div class="extra-input">
+          <input type="number" id="prestamo" placeholder="0" min="0" />
+        </div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-label">Embargo judicial (COP)</div>
+        <div class="extra-input">
+          <input type="number" id="embargo" placeholder="0" min="0" />
+        </div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-label">Fondo de empleados / cooperativa (COP)</div>
+        <div class="extra-input">
+          <input type="number" id="fondo_empl" placeholder="0" min="0" />
+        </div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-label">Otras deducciones (COP)</div>
+        <div class="extra-input">
+          <input type="number" id="otras_ded" placeholder="0" min="0" />
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:10px;">
+      <div class="checkbox-group">
+        <input type="checkbox" id="cb_retencion" />
+        <label for="cb_retencion">Aplicar retención en la fuente (procedimiento 1 — estimación)</label>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn" onclick="calcular()">🧮 Calcular nómina</button>
+  <button class="btn-reset" onclick="resetear()">↺ Limpiar formulario</button>
+
+  <div id="resultados">
+
+    <div class="neto-box" style="margin-top:1.2rem;">
+      <div class="neto-info">
+        <div class="neto-label" id="res-nombre-label">Nómina del empleado</div>
+        <div class="neto-valor" id="res-neto">$0</div>
+        <div class="neto-sub">Salario neto a pagar</div>
+      </div>
+      <div class="neto-badges">
+        <div class="neto-badge" id="badge-devengado">Devengado: —</div>
+        <div class="neto-badge" id="badge-deducciones">Deducciones: —</div>
+        <div class="neto-badge" id="badge-dias">Días: 30</div>
+      </div>
+    </div>
+
+    <div class="dos-columnas">
+      <div class="card" style="margin-bottom:0;">
+        <div class="col-title devengado">✅ Devengado</div>
+        <div id="filas-devengado"></div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="col-title deducciones">❌ Deducciones empleado</div>
+        <div id="filas-deducciones"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <div class="card-title">🏢 Aportes a cargo del empleador</div>
+      <div class="aportes-grid" id="aportes-grid"></div>
+      <div class="costo-box">
+        <div class="costo-label">💼 Costo total mensual para la empresa</div>
+        <div class="costo-valor" id="costo-empresa">—</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔢 Base de cálculo</div>
+      <div class="base-box" id="base-box"></div>
+    </div>
+
+    <div class="disclaimer">
+      ⚠️ <strong>Herramienta orientativa.</strong> Calculado con base en la normativa laboral colombiana vigente 2026 (CST, Ley 100/1993, Ley 789/2002). La retención en la fuente es una estimación por procedimiento 1 — el valor exacto debe calcularse con el procedimiento oficial de la DIAN. Los porcentajes de aportes parafiscales aplican para empresas con más de 10 trabajadores. Verifique con su contador.
+    </div>
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
+  </div>
+</div>
+
+<script>
+  const SMMLV = 1423500;
+  const AUX_TRANSPORTE = 200000;
+  const HORA_ORDINARIA = SMMLV / 240; // 30 días × 8 horas
+
+  function autoAuxilio() {
+    const s = parseFloat(document.getElementById('salario').value) || 0;
+    document.getElementById('auxilio').value = s <= SMMLV * 2 ? 'si' : 'no';
+  }
+
+  function fmt(n) { return '$' + Math.round(n).toLocaleString('es-CO'); }
+  function pct(n) { return (Math.round(n * 10) / 10) + '%'; }
+
+  function filaHTML(nombre, valor, esTotal, colorClass) {
+    return `<div class="fila-concepto">
+      <span class="fila-nombre">${nombre}</span>
+      <span class="${esTotal ? (colorClass === 'verde' ? 'fila-valor-total-verde' : 'fila-valor-total-rojo') : (colorClass === 'verde' ? 'fila-valor-verde' : 'fila-valor-rojo')}">${fmt(valor)}</span>
+    </div>`;
+  }
+
+  function calcular() {
+    const nombre = document.getElementById('nombre').value || 'Empleado';
+    const salarioBasico = parseFloat(document.getElementById('salario').value) || 0;
+    const dias = parseFloat(document.getElementById('dias').value) || 30;
+    const tipoContrato = document.getElementById('tipo_contrato').value;
+    const auxilioSel = document.getElementById('auxilio').value;
+
+    if (salarioBasico < SMMLV) { alert('El salario mínimo para 2026 es $1.423.500'); return; }
+
+    const auxilio = auxilioSel === 'si' ? AUX_TRANSPORTE : 0;
+    const salarioProporcional = (salarioBasico / 30) * dias;
+    const auxilioProporcional = (auxilio / 30) * dias;
+
+    // Extras
+    const heDiurnas   = parseFloat(document.getElementById('he_diurnas').value) || 0;
+    const heNocturnas  = parseFloat(document.getElementById('he_nocturnas').value) || 0;
+    const heDominicales= parseFloat(document.getElementById('he_dominicales').value) || 0;
+    const comisiones   = parseFloat(document.getElementById('comisiones').value) || 0;
+    const recargoNoc   = parseFloat(document.getElementById('recargo_nocturno').value) || 0;
+    const otrosIng     = parseFloat(document.getElementById('otros_ingresos').value) || 0;
+
+    const valorHED  = heDiurnas    * HORA_ORDINARIA * 1.25;
+    const valorHEN  = heNocturnas  * HORA_ORDINARIA * 1.75;
+    const valorHEDom= heDominicales* HORA_ORDINARIA * 2.00;
+    const valorRN   = recargoNoc   * HORA_ORDINARIA * 0.35;
+
+    // Deducciones adicionales
+    const prestamo   = parseFloat(document.getElementById('prestamo').value) || 0;
+    const embargo    = parseFloat(document.getElementById('embargo').value) || 0;
+    const fondoEmpl  = parseFloat(document.getElementById('fondo_empl').value) || 0;
+    const otrasDed   = parseFloat(document.getElementById('otras_ded').value) || 0;
+    const cbRetencion= document.getElementById('cb_retencion').checked;
+
+    // DEVENGADO
+    const devengado = salarioProporcional + auxilioProporcional + valorHED + valorHEN + valorHEDom + valorRN + comisiones + otrosIng;
+
+    // BASE IBC (no incluye auxilio de transporte ni no constitutivos)
+    const ibc = salarioProporcional + valorHED + valorHEN + valorHEDom + valorRN + comisiones;
+
+    // DEDUCCIONES EMPLEADO
+    const saludEmpleado   = ibc * 0.04;
+    const pensionEmpleado = ibc * 0.04;
+    let retencion = 0;
+    if (cbRetencion) {
+      // Procedimiento 1 simplificado — estimación
+      const uvt = 49799;
+      const ingresosUVT = ibc / uvt;
+      if (ingresosUVT > 128) retencion = ibc * 0.19;
+      else if (ingresosUVT > 95) retencion = ibc * 0.15;
+      else if (ingresosUVT > 69) retencion = ibc * 0.12;
+      else if (ingresosUVT > 40) retencion = ibc * 0.07;
+    }
+
+    const totalDeducciones = saludEmpleado + pensionEmpleado + retencion + prestamo + embargo + fondoEmpl + otrasDed;
+    const neto = devengado - totalDeducciones;
+
+    // APORTES EMPLEADOR
+    const saludEmpleador     = ibc * 0.085;
+    const pensionEmpleador   = ibc * 0.12;
+    const arlEmpleador       = ibc * 0.00522; // riesgo I (promedio bajo)
+    const cajaCompensacion   = ibc * 0.04;
+    const icbf               = tipoContrato === 'aprendizaje' ? 0 : ibc * 0.03;
+    const sena               = tipoContrato === 'aprendizaje' ? 0 : ibc * 0.02;
+    const totalEmpleador     = saludEmpleador + pensionEmpleador + arlEmpleador + cajaCompensacion + icbf + sena;
+    const costoEmpresa       = salarioProporcional + auxilioProporcional + totalEmpleador;
+
+    // RENDER DEVENGADO
+    let htmlDev = '';
+    htmlDev += filaHTML(`Salario básico (${dias} días)`, salarioProporcional, false, 'verde');
+    if (auxilioProporcional > 0) htmlDev += filaHTML('Auxilio de transporte', auxilioProporcional, false, 'verde');
+    if (valorHED  > 0) htmlDev += filaHTML(`H.E. diurnas (${heDiurnas}h × 125%)`, valorHED, false, 'verde');
+    if (valorHEN  > 0) htmlDev += filaHTML(`H.E. nocturnas (${heNocturnas}h × 175%)`, valorHEN, false, 'verde');
+    if (valorHEDom> 0) htmlDev += filaHTML(`Dominicales/festivos (${heDominicales}h × 200%)`, valorHEDom, false, 'verde');
+    if (valorRN   > 0) htmlDev += filaHTML(`Recargo nocturno (${recargoNoc}h × 35%)`, valorRN, false, 'verde');
+    if (comisiones> 0) htmlDev += filaHTML('Comisiones / bonificaciones', comisiones, false, 'verde');
+    if (otrosIng  > 0) htmlDev += filaHTML('Otros ingresos', otrosIng, false, 'verde');
+    htmlDev += filaHTML('Total devengado', devengado, true, 'verde');
+    document.getElementById('filas-devengado').innerHTML = htmlDev;
+
+    // RENDER DEDUCCIONES
+    let htmlDed = '';
+    htmlDed += filaHTML('Salud (4% IBC)', saludEmpleado, false, 'rojo');
+    htmlDed += filaHTML('Pensión (4% IBC)', pensionEmpleado, false, 'rojo');
+    if (retencion > 0) htmlDed += filaHTML('Retención en la fuente', retencion, false, 'rojo');
+    if (prestamo  > 0) htmlDed += filaHTML('Préstamo / libranza', prestamo, false, 'rojo');
+    if (embargo   > 0) htmlDed += filaHTML('Embargo judicial', embargo, false, 'rojo');
+    if (fondoEmpl > 0) htmlDed += filaHTML('Fondo de empleados', fondoEmpl, false, 'rojo');
+    if (otrasDed  > 0) htmlDed += filaHTML('Otras deducciones', otrasDed, false, 'rojo');
+    htmlDed += filaHTML('Total deducciones', totalDeducciones, true, 'rojo');
+    document.getElementById('filas-deducciones').innerHTML = htmlDed;
+
+    // APORTES EMPLEADOR
+    const aportes = [
+      { nombre: 'Salud empleador', pct: '8.5%', valor: saludEmpleador },
+      { nombre: 'Pensión empleador', pct: '12%', valor: pensionEmpleador },
+      { nombre: 'ARL (riesgo I)', pct: '0.52%', valor: arlEmpleador },
+      { nombre: 'Caja compensación', pct: '4%', valor: cajaCompensacion },
+      { nombre: 'ICBF', pct: tipoContrato === 'aprendizaje' ? 'Exento' : '3%', valor: icbf },
+      { nombre: 'SENA', pct: tipoContrato === 'aprendizaje' ? 'Exento' : '2%', valor: sena },
+    ];
+    document.getElementById('aportes-grid').innerHTML = aportes.map(a => `
+      <div class="aporte-card">
+        <div class="aporte-pct">${a.pct}</div>
+        <div class="aporte-nombre">${a.nombre}</div>
+        <div class="aporte-valor">${fmt(a.valor)}</div>
+      </div>
+    `).join('');
+
+    // NETO Y TOTALES
+    document.getElementById('res-nombre-label').textContent = `Nómina — ${nombre}`;
+    document.getElementById('res-neto').textContent = fmt(neto);
+    document.getElementById('badge-devengado').textContent = `Devengado: ${fmt(devengado)}`;
+    document.getElementById('badge-deducciones').textContent = `Deducciones: ${fmt(totalDeducciones)}`;
+    document.getElementById('badge-dias').textContent = `${dias} días trabajados`;
+    document.getElementById('costo-empresa').textContent = fmt(costoEmpresa);
+
+    document.getElementById('base-box').innerHTML = `
+      <strong>SMMLV 2026:</strong> $1.423.500 &nbsp;|&nbsp; <strong>Aux. transporte:</strong> $200.000 &nbsp;|&nbsp; <strong>UVT 2026:</strong> $49.799<br>
+      <strong>IBC (base de cotización):</strong> ${fmt(ibc)} &nbsp;|&nbsp; <strong>Hora ordinaria:</strong> ${fmt(HORA_ORDINARIA)}<br>
+      <strong>Salud empleado:</strong> 4% &nbsp;|&nbsp; <strong>Pensión empleado:</strong> 4% &nbsp;|&nbsp; <strong>Salud empleador:</strong> 8.5% &nbsp;|&nbsp; <strong>Pensión empleador:</strong> 12%<br>
+      <strong>Parafiscales:</strong> Caja 4% + ICBF 3% + SENA 2% = 9% sobre IBC (exentos contratos aprendizaje)
+    `;
+
+    document.getElementById('resultados').style.display = 'block';
+    document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetear() {
+    ['nombre','salario','he_diurnas','he_nocturnas','he_dominicales','comisiones','recargo_nocturno','otros_ingresos','prestamo','embargo','fondo_empl','otras_ded'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('dias').value = 30;
+    document.getElementById('tipo_contrato').value = 'indefinido';
+    document.getElementById('auxilio').value = 'si';
+    document.getElementById('cb_retencion').checked = false;
+    document.getElementById('resultados').style.display = 'none';
+  }
+</script>
+</body>
+</html>
