@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora de IVA Colombia 2026. Calcula IVA del 19%, 5% y 0%, desglose de factura electrónica, IVA incluido y excluido, retención de IVA y base gravable." />
+  <meta name="keywords" content="calculadora IVA colombia 2026, IVA 19 colombia, facturacion electronica colombia, calcular IVA incluido excluido, retencion IVA colombia" />
+  <title>Calculadora de IVA Colombia 2026 — HerramientasPro</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #1D9E75; --verde-dark: #0F6E56; --verde-light: #E1F5EE;
+      --azul: #185FA5; --azul-light: #E6F1FB;
+      --rojo: #A32D2D; --rojo-light: #FCEBEB;
+      --naranja: #854F0B; --naranja-light: #FAEEDA;
+      --morado: #534AB7; --morado-light: #EEEDFE;
+      --text: #1a1a1a; --text-sec: #555; --text-muted: #888;
+      --bg: #f7f7f5; --card: #ffffff; --border: #e0e0dc; --radius: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; height: 54px; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { width: 30px; height: 30px; background: var(--verde); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .nav-sep { color: var(--border); font-size: 18px; }
+    .nav-current { font-size: 13px; color: var(--text-sec); }
+
+    .hero { background: linear-gradient(135deg, #0F6E56 0%, #534AB7 100%); padding: 2rem 1.5rem; text-align: center; }
+    .hero-icon { font-size: 42px; margin-bottom: 10px; }
+    .hero h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.85); max-width: 580px; margin: 0 auto; }
+    .hero-params { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .hero-param { font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; padding: 4px 10px; border-radius: 20px; }
+
+    .modulos { max-width: 960px; margin: 0 auto; padding: 1.2rem 1.5rem 0; }
+    .modulos-tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+    .mod-tab { padding: 10px 16px; font-size: 13px; font-weight: 500; border: none; background: transparent; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; border-radius: 6px 6px 0 0; white-space: nowrap; transition: color 0.15s; }
+    .mod-tab:hover { color: var(--verde-dark); background: var(--verde-light); }
+    .mod-tab.active { color: var(--verde-dark); border-bottom-color: var(--verde); font-weight: 600; }
+    .modulo { display: none; }
+    .modulo.active { display: block; }
+
+    .main { max-width: 960px; margin: 0 auto; padding: 1.2rem 1.5rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 500; color: var(--text-sec); }
+    select, input[type="number"], input[type="text"] {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text); background: #fff; transition: border-color 0.15s;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--verde); }
+    .hint { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    /* TARIFA TABS */
+    .tarifa-tabs { display: flex; gap: 6px; margin-bottom: 1rem; }
+    .tarifa-tab { flex: 1; padding: 10px; font-size: 14px; font-weight: 700; border: 1px solid var(--border); background: #f5f5f2; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.15s; color: var(--text-sec); }
+    .tarifa-tab.t19.active { background: var(--verde); color: #fff; border-color: var(--verde-dark); }
+    .tarifa-tab.t5.active { background: var(--azul); color: #fff; border-color: var(--azul); }
+    .tarifa-tab.t0.active { background: var(--morado); color: #fff; border-color: var(--morado); }
+
+    .btn { width: 100%; padding: 12px; background: var(--verde); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .btn:hover { background: var(--verde-dark); }
+    .btn-reset { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 9px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+
+    /* FACTURA VISUAL */
+    .factura-box { background: #fff; border: 2px solid var(--border); border-radius: 12px; padding: 1.4rem; margin-bottom: 1rem; }
+    .factura-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 2px dashed var(--border); }
+    .factura-empresa { font-size: 16px; font-weight: 700; color: var(--text); }
+    .factura-numero { font-size: 12px; color: var(--text-muted); text-align: right; }
+    .factura-fila { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 1px solid #f5f5f2; }
+    .factura-fila:last-child { border-bottom: none; }
+    .factura-fila.subtotal { font-weight: 600; padding-top: 10px; border-top: 1px solid var(--border); margin-top: 4px; }
+    .factura-fila.total { font-size: 16px; font-weight: 800; color: var(--verde-dark); border-top: 2px solid var(--verde); margin-top: 4px; padding-top: 10px; }
+    .factura-fila.iva { color: var(--morado); font-weight: 600; }
+    .factura-fila.retencion { color: var(--rojo); }
+    .f-label { color: var(--text-sec); }
+    .f-valor { font-weight: 600; }
+
+    /* RESULT CARDS */
+    .result-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1rem; }
+    .rc { border-radius: 10px; padding: 1rem; text-align: center; border: 1px solid; }
+    .rc.base { background: var(--azul-light); border-color: #B5D4F4; }
+    .rc.iva { background: var(--morado-light); border-color: #CECBF6; }
+    .rc.total { background: var(--verde-light); border-color: #9FE1CB; }
+    .rc-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 5px; }
+    .rc-valor { font-size: 20px; font-weight: 800; }
+    .rc.base .rc-valor { color: var(--azul); }
+    .rc.iva .rc-valor { color: var(--morado); }
+    .rc.total .rc-valor { color: var(--verde-dark); }
+    .rc-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+    /* TABLA PRODUCTOS */
+    .productos-wrap { margin-bottom: 1rem; }
+    .producto-item { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 36px; gap: 8px; align-items: center; margin-bottom: 8px; }
+    .producto-item input, .producto-item select { padding: 7px 10px; font-size: 13px; }
+    .producto-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 36px; gap: 8px; margin-bottom: 6px; }
+    .producto-header span { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+    .btn-remove-p { width: 36px; height: 36px; background: var(--rojo-light); border: 1px solid #F7C1C1; border-radius: 7px; color: var(--rojo); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .btn-add-p { padding: 8px 14px; background: transparent; border: 1px dashed var(--border); border-radius: 8px; color: var(--text-muted); font-size: 13px; cursor: pointer; width: 100%; }
+    .btn-add-p:hover { border-color: var(--verde); color: var(--verde-dark); }
+
+    /* TABLA TARIFAS IVA */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #f5f5f2; color: var(--text-sec); font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); font-size: 12px; }
+    td { padding: 8px 10px; border-bottom: 1px solid #f5f5f2; }
+    tr:last-child td { border-bottom: none; }
+    .td-pct { font-weight: 700; color: var(--morado); font-size: 14px; }
+    .tag { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 600; }
+    .tag-19 { background: var(--verde-light); color: var(--verde-dark); }
+    .tag-5 { background: var(--azul-light); color: var(--azul); }
+    .tag-0 { background: var(--morado-light); color: var(--morado); }
+    .tag-ex { background: #f0f0ec; color: #666; }
+
+    .disclaimer { background: #fffbf0; border: 1px solid #FAC775; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 1rem; }
+    .btn-print { width: 100%; padding: 10px; background: transparent; color: var(--verde-dark); border: 1px solid var(--verde); border-radius: 9px; font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 8px; }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .result-grid { grid-template-columns: 1fr; }
+      .producto-item { grid-template-columns: 1fr 1fr; }
+      .producto-header { display: none; }
+      .tarifa-tabs { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-text">HerramientasPro</div>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">💹 Calculadora de IVA 2026</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">💹</div>
+  <h1>Calculadora de IVA Colombia 2026</h1>
+  <p>Calcula IVA del 19%, 5% y 0%, desglose de factura electrónica, retención de IVA y base gravable. Actualizado con la normativa tributaria vigente 2026.</p>
+  <div class="hero-params">
+    <span class="hero-param">IVA general: 19%</span>
+    <span class="hero-param">IVA diferencial: 5%</span>
+    <span class="hero-param">Excluidos y exentos: 0%</span>
+    <span class="hero-param">UVT 2026: $49.799</span>
+  </div>
+</div>
+
+<div class="modulos">
+  <div class="modulos-tabs">
+    <button class="mod-tab active" onclick="switchMod('rapido',this)">⚡ Cálculo rápido</button>
+    <button class="mod-tab" onclick="switchMod('factura',this)">🧾 Factura completa</button>
+    <button class="mod-tab" onclick="switchMod('tarifas',this)">📋 Tabla de tarifas</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- MÓDULO RÁPIDO -->
+  <div class="modulo active" id="mod-rapido">
+    <div class="card">
+      <div class="card-title">⚡ Calculadora rápida de IVA</div>
+
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:13px;font-weight:500;color:var(--text-sec);display:block;margin-bottom:8px;">Tarifa de IVA</label>
+        <div class="tarifa-tabs">
+          <button class="tarifa-tab t19 active" onclick="setTarifa(19,this)">19% — General</button>
+          <button class="tarifa-tab t5" onclick="setTarifa(5,this)">5% — Diferencial</button>
+          <button class="tarifa-tab t0" onclick="setTarifa(0,this)">0% — Exento/Excluido</button>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="r-valor">Valor a calcular (COP)</label>
+          <input type="number" id="r-valor" placeholder="Ej: 1000000" min="0" step="1000" oninput="calcRapido()" />
+        </div>
+        <div class="form-group">
+          <label for="r-tipo">El valor ingresado es</label>
+          <select id="r-tipo" onchange="calcRapido()">
+            <option value="sin">Valor sin IVA (base gravable)</option>
+            <option value="con">Valor con IVA incluido</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="r-retencion">¿Aplica retención de IVA?</label>
+          <select id="r-retencion" onchange="calcRapido()">
+            <option value="no">No aplica</option>
+            <option value="50">Sí — 50% del IVA (régimen simple)</option>
+            <option value="100">Sí — 100% del IVA (gran contribuyente)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="r-cantidad">Cantidad de unidades</label>
+          <input type="number" id="r-cantidad" value="1" min="1" step="1" oninput="calcRapido()" />
+        </div>
+      </div>
+    </div>
+
+    <div id="res-rapido" style="display:none;">
+      <div class="result-grid">
+        <div class="rc base"><div class="rc-label">Base gravable</div><div class="rc-valor" id="rr-base">—</div><div class="rc-sub">sin IVA</div></div>
+        <div class="rc iva"><div class="rc-label">Valor IVA</div><div class="rc-valor" id="rr-iva">—</div><div class="rc-sub" id="rr-iva-sub">—% del valor</div></div>
+        <div class="rc total"><div class="rc-label">Total con IVA</div><div class="rc-valor" id="rr-total">—</div><div class="rc-sub">valor final</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📋 Desglose detallado</div>
+        <div id="rr-detalle"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÓDULO FACTURA -->
+  <div class="modulo" id="mod-factura">
+    <div class="card">
+      <div class="card-title">🏢 Datos del emisor</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="f-empresa">Nombre empresa / razón social</label>
+          <input type="text" id="f-empresa" placeholder="Ej: Comercializadora ABC S.A.S." />
+        </div>
+        <div class="form-group">
+          <label for="f-nit">NIT</label>
+          <input type="text" id="f-nit" placeholder="Ej: 900.123.456-7" />
+        </div>
+        <div class="form-group">
+          <label for="f-numero">N° Factura</label>
+          <input type="text" id="f-numero" placeholder="Ej: FE-001" />
+        </div>
+        <div class="form-group">
+          <label for="f-cliente">Cliente</label>
+          <input type="text" id="f-cliente" placeholder="Nombre del cliente" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📦 Productos / Servicios</div>
+      <div class="producto-header">
+        <span>Descripción</span>
+        <span>Cantidad</span>
+        <span>Precio unit.</span>
+        <span>IVA %</span>
+        <span></span>
+      </div>
+      <div class="productos-wrap" id="productos-lista">
+        <div class="producto-item">
+          <input type="text" placeholder="Descripción del producto/servicio" />
+          <input type="number" placeholder="1" min="1" value="1" oninput="calcFactura()" />
+          <input type="number" placeholder="100000" min="0" step="1000" oninput="calcFactura()" />
+          <select onchange="calcFactura()">
+            <option value="19">19%</option>
+            <option value="5">5%</option>
+            <option value="0">0%</option>
+          </select>
+          <button class="btn-remove-p" onclick="removerProducto(this)">×</button>
+        </div>
+      </div>
+      <button class="btn-add-p" onclick="agregarProducto()">+ Agregar producto o servicio</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Opciones adicionales</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="f-descuento">Descuento global (%)</label>
+          <input type="number" id="f-descuento" placeholder="0" min="0" max="100" step="0.1" value="0" oninput="calcFactura()" />
+        </div>
+        <div class="form-group">
+          <label for="f-ret-iva">Retención de IVA</label>
+          <select id="f-ret-iva" onchange="calcFactura()">
+            <option value="0">No aplica</option>
+            <option value="50">50% del IVA</option>
+            <option value="100">100% del IVA</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="f-ret-fuente">Retención en la fuente (%)</label>
+          <input type="number" id="f-ret-fuente" placeholder="0" min="0" max="100" step="0.1" value="0" oninput="calcFactura()" />
+          <span class="hint">Ej: 3.5% compras, 4% servicios, 10% honorarios</span>
+        </div>
+        <div class="form-group">
+          <label for="f-ica">Reteica (%)</label>
+          <input type="number" id="f-ica" placeholder="0" min="0" max="1" step="0.001" value="0" oninput="calcFactura()" />
+          <span class="hint">Varía según municipio y actividad. Ej: Bogotá: 0.414% a 1.104%</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="generarFactura()">🧾 Generar factura</button>
+    <button class="btn-reset" onclick="resetFactura()">↺ Limpiar</button>
+
+    <div id="res-factura" style="display:none;margin-top:1rem;">
+      <div class="factura-box" id="factura-visual"></div>
+      <div class="disclaimer">⚠️ Esta es una factura de referencia para cálculo de impuestos. La factura electrónica oficial debe ser emitida a través de un software habilitado por la DIAN.</div>
+      <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
+    </div>
+  </div>
+
+  <!-- MÓDULO TARIFAS -->
+  <div class="modulo" id="mod-tarifas">
+    <div class="card">
+      <div class="card-title">📋 Tabla de tarifas de IVA en Colombia 2026</div>
+      <table>
+        <thead>
+          <tr><th>Tarifa</th><th>Categoría</th><th>Ejemplos de bienes y servicios</th><th>Norma</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-pct"><span class="tag tag-19">19%</span></td><td>General</td><td>Ropa, electrodomésticos, vehículos, servicios generales, software, consultoría, publicidad, restaurantes, hoteles</td><td>Art. 468 ET</td></tr>
+          <tr><td class="td-pct"><span class="tag tag-5">5%</span></td><td>Diferencial</td><td>Maíz para consumo humano, café sin tostar, arroz para consumo humano, planes de medicina prepagada, seguros agrícolas, venta de bienes inmuebles nuevos (vivienda NO VIS ≤ 26.800 UVT)</td><td>Art. 468-1 ET</td></tr>
+          <tr><td class="td-pct"><span class="tag tag-0">0%</span></td><td>Exentos (con derecho a devolución)</td><td>Carne, pollo, pescado, leche, huevos, frutas y verduras frescas, libros, cuadernos, medicamentos, dispositivos médicos, exportaciones, servicios hoteleros a extranjeros</td><td>Art. 477, 481 ET</td></tr>
+          <tr><td class="td-pct"><span class="tag tag-ex">Excluido</span></td><td>Excluidos (sin IVA, sin devolución)</td><td>Servicios de educación, servicios de salud, transporte público, arrendamiento de vivienda, servicios públicos domiciliarios residenciales, intereses bancarios</td><td>Art. 476 ET</td></tr>
+          <tr><td class="td-pct"><span class="tag tag-19">19%</span></td><td>Servicios profesionales</td><td>Honorarios, consultorías, asesorías, servicios de publicidad, servicios de tecnología, servicios de construcción</td><td>Art. 468 ET</td></tr>
+          <tr><td class="td-pct"><span class="tag tag-5">5%</span></td><td>Medicina prepagada</td><td>Planes de medicina prepagada, pólizas de seguros de salud individuales</td><td>Art. 468-3 ET</td></tr>
+          <tr><td class="td-pct"><span class="tag tag-19">19%</span></td><td>Licores y cigarrillos</td><td>Bebidas alcohólicas, cigarrillos, tabaco. IVA además del impuesto al consumo.</td><td>Art. 468 ET</td></tr>
+          <tr><td class="td-pct"><span class="tag tag-0">0%</span></td><td>Canasta familiar básica</td><td>Sal, azúcar, panela, papa, yuca, plátano, aceite de palma crudo, fríjoles, lentejas, garbanzos</td><td>Art. 477 ET</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔄 Retención de IVA — ¿cuándo aplica?</div>
+      <table>
+        <thead>
+          <tr><th>Agente retenedor</th><th>Tarifa ReteIVA</th><th>Cuándo aplica</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Gran contribuyente</td><td class="td-pct">50%</td><td>Compras a personas naturales no responsables del régimen simple</td></tr>
+          <tr><td>Gran contribuyente</td><td class="td-pct">100%</td><td>Cuando el proveedor pertenece al régimen simple de tributación</td></tr>
+          <tr><td>Entidades del Estado</td><td class="td-pct">50%</td><td>Pagos a responsables del IVA por compras y servicios</td></tr>
+          <tr><td>Personas jurídicas</td><td class="td-pct">15%</td><td>Servicios gravados prestados por personas naturales independientes</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="disclaimer">⚠️ La normativa tributaria puede sufrir modificaciones. Verifique siempre con la última versión del Estatuto Tributario y las resoluciones vigentes de la DIAN en dian.gov.co</div>
+  </div>
+
+</div>
+
+<script>
+  let tarifaActual = 19;
+
+  function switchMod(id, el) {
+    document.querySelectorAll('.modulo').forEach(m => m.classList.remove('active'));
+    document.querySelectorAll('.mod-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('mod-' + id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function setTarifa(t, btn) {
+    tarifaActual = t;
+    document.querySelectorAll('.tarifa-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    calcRapido();
+  }
+
+  function fmt(n) { return '$' + Math.round(n).toLocaleString('es-CO'); }
+
+  function calcRapido() {
+    const valor = parseFloat(document.getElementById('r-valor').value) || 0;
+    const tipo = document.getElementById('r-tipo').value;
+    const retPct = parseFloat(document.getElementById('r-retencion').value) || 0;
+    const cantidad = parseFloat(document.getElementById('r-cantidad').value) || 1;
+    if (valor <= 0) { document.getElementById('res-rapido').style.display = 'none'; return; }
+
+    const valorTotal = valor * cantidad;
+    let base, iva, total;
+    if (tipo === 'sin') {
+      base = valorTotal;
+      iva = base * tarifaActual / 100;
+      total = base + iva;
+    } else {
+      total = valorTotal;
+      base = total / (1 + tarifaActual / 100);
+      iva = total - base;
+    }
+    const retIva = iva * retPct / 100;
+    const netoPagar = total - retIva;
+
+    document.getElementById('rr-base').textContent = fmt(base);
+    document.getElementById('rr-iva').textContent = fmt(iva);
+    document.getElementById('rr-iva-sub').textContent = `${tarifaActual}% sobre base`;
+    document.getElementById('rr-total').textContent = fmt(total);
+
+    let detalle = '';
+    if (cantidad > 1) detalle += `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0ec;font-size:13px;"><span style="color:var(--text-sec);">Cantidad</span><span>${cantidad} unidades</span></div>`;
+    detalle += `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0ec;font-size:13px;"><span style="color:var(--text-sec);">Valor unitario (${tipo === 'sin' ? 'sin IVA' : 'con IVA'})</span><span>${fmt(valor)}</span></div>`;
+    detalle += `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0ec;font-size:13px;"><span style="color:var(--text-sec);">Base gravable</span><span style="color:var(--azul);font-weight:600;">${fmt(base)}</span></div>`;
+    detalle += `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0ec;font-size:13px;"><span style="color:var(--text-sec);">IVA ${tarifaActual}%</span><span style="color:var(--morado);font-weight:600;">${fmt(iva)}</span></div>`;
+    if (retIva > 0) detalle += `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0ec;font-size:13px;"><span style="color:var(--text-sec);">Retención IVA (${retPct}%)</span><span style="color:var(--rojo);font-weight:600;">- ${fmt(retIva)}</span></div>`;
+    detalle += `<div style="display:flex;justify-content:space-between;padding:8px 0;font-size:15px;font-weight:800;border-top:2px solid var(--verde);margin-top:4px;"><span>Total a pagar</span><span style="color:var(--verde-dark);">${fmt(netoPagar)}</span></div>`;
+    document.getElementById('rr-detalle').innerHTML = detalle;
+    document.getElementById('res-rapido').style.display = 'block';
+  }
+
+  function agregarProducto() {
+    const lista = document.getElementById('productos-lista');
+    const div = document.createElement('div');
+    div.className = 'producto-item';
+    div.innerHTML = `
+      <input type="text" placeholder="Descripción" />
+      <input type="number" placeholder="1" min="1" value="1" oninput="calcFactura()" />
+      <input type="number" placeholder="100000" min="0" step="1000" oninput="calcFactura()" />
+      <select onchange="calcFactura()">
+        <option value="19">19%</option>
+        <option value="5">5%</option>
+        <option value="0">0%</option>
+      </select>
+      <button class="btn-remove-p" onclick="removerProducto(this)">×</button>`;
+    lista.appendChild(div);
+  }
+
+  function removerProducto(btn) {
+    const lista = document.getElementById('productos-lista');
+    if (lista.children.length > 1) btn.parentElement.remove();
+    calcFactura();
+  }
+
+  function calcFactura() {
+    const items = document.querySelectorAll('#productos-lista .producto-item');
+    let subtotal = 0, totalIva = 0;
+    items.forEach(item => {
+      const inputs = item.querySelectorAll('input');
+      const qty = parseFloat(inputs[1].value) || 1;
+      const precio = parseFloat(inputs[2].value) || 0;
+      const iva = parseFloat(item.querySelector('select').value) || 0;
+      const lineaBase = qty * precio;
+      subtotal += lineaBase;
+      totalIva += lineaBase * iva / 100;
+    });
+    return { subtotal, totalIva };
+  }
+
+  function generarFactura() {
+    const empresa = document.getElementById('f-empresa').value || 'Mi Empresa S.A.S.';
+    const nit = document.getElementById('f-nit').value || '—';
+    const numero = document.getElementById('f-numero').value || 'FE-001';
+    const cliente = document.getElementById('f-cliente').value || 'Cliente';
+    const descPct = parseFloat(document.getElementById('f-descuento').value) || 0;
+    const retIvaPct = parseFloat(document.getElementById('f-ret-iva').value) || 0;
+    const retFuentePct = parseFloat(document.getElementById('f-ret-fuente').value) || 0;
+    const retIcaPct = parseFloat(document.getElementById('f-ica').value) || 0;
+
+    const items = document.querySelectorAll('#productos-lista .producto-item');
+    let lineas = [], subtotal = 0, totalIva = 0;
+    items.forEach(item => {
+      const inputs = item.querySelectorAll('input');
+      const desc = inputs[0].value || 'Producto/Servicio';
+      const qty = parseFloat(inputs[1].value) || 1;
+      const precio = parseFloat(inputs[2].value) || 0;
+      const iva = parseFloat(item.querySelector('select').value) || 0;
+      const lineaBase = qty * precio;
+      const lineaIva = lineaBase * iva / 100;
+      subtotal += lineaBase;
+      totalIva += lineaIva;
+      lineas.push({ desc, qty, precio, iva, lineaBase, lineaIva });
+    });
+
+    const descuento = subtotal * descPct / 100;
+    const baseDescuento = subtotal - descuento;
+    const totalIvaDesc = totalIva * (1 - descPct / 100);
+    const retIva = totalIvaDesc * retIvaPct / 100;
+    const retFuente = baseDescuento * retFuentePct / 100;
+    const retIca = baseDescuento * retIcaPct / 100;
+    const totalBruto = baseDescuento + totalIvaDesc;
+    const totalRetenciones = retIva + retFuente + retIca;
+    const netoPagar = totalBruto - totalRetenciones;
+
+    const fecha = new Date().toLocaleDateString('es-CO');
+    let html = `
+      <div class="factura-header">
+        <div><div class="factura-empresa">${empresa}</div><div style="font-size:12px;color:var(--text-muted);">NIT: ${nit}</div></div>
+        <div class="factura-numero"><strong>Factura ${numero}</strong><br>${fecha}<br><span style="background:var(--verde-light);color:var(--verde-dark);padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;">ELECTRÓNICA</span></div>
+      </div>
+      <div style="font-size:12px;color:var(--text-sec);margin-bottom:1rem;">Cliente: <strong>${cliente}</strong></div>`;
+
+    lineas.forEach(l => {
+      html += `<div class="factura-fila"><span class="f-label">${l.desc} (${l.qty} × ${fmt(l.precio)})</span><span class="f-valor">${fmt(l.lineaBase)}</span></div>`;
+      if (l.iva > 0) html += `<div class="factura-fila iva"><span class="f-label">&nbsp;&nbsp;&nbsp;IVA ${l.iva}%</span><span>${fmt(l.lineaIva)}</span></div>`;
+    });
+
+    html += `<div class="factura-fila subtotal"><span>Subtotal</span><span>${fmt(subtotal)}</span></div>`;
+    if (descuento > 0) html += `<div class="factura-fila" style="color:var(--rojo);"><span>Descuento (${descPct}%)</span><span>- ${fmt(descuento)}</span></div>`;
+    html += `<div class="factura-fila"><span>IVA total</span><span style="color:var(--morado);font-weight:600;">${fmt(totalIvaDesc)}</span></div>`;
+    if (retIva > 0) html += `<div class="factura-fila retencion"><span>Retención IVA (${retIvaPct}%)</span><span>- ${fmt(retIva)}</span></div>`;
+    if (retFuente > 0) html += `<div class="factura-fila retencion"><span>Retención fuente (${retFuentePct}%)</span><span>- ${fmt(retFuente)}</span></div>`;
+    if (retIca > 0) html += `<div class="factura-fila retencion"><span>ReteICA (${retIcaPct}%)</span><span>- ${fmt(retIca)}</span></div>`;
+    html += `<div class="factura-fila total"><span>TOTAL A PAGAR</span><span>${fmt(netoPagar)}</span></div>`;
+
+    document.getElementById('factura-visual').innerHTML = html;
+    document.getElementById('res-factura').style.display = 'block';
+    document.getElementById('res-factura').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetFactura() {
+    ['f-empresa','f-nit','f-numero','f-cliente'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-descuento').value = 0;
+    document.getElementById('f-ret-iva').value = 0;
+    document.getElementById('f-ret-fuente').value = 0;
+    document.getElementById('f-ica').value = 0;
+    document.getElementById('res-factura').style.display = 'none';
+  }
+</script>
+</body>
+</html>
