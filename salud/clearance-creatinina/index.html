@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Clearance de Creatinina 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de clearance de creatinina y TFG para médicos colombianos. Fórmulas Cockcroft-Gault, CKD-EPI y MDRD. Estadificación ERC según KDIGO. Gratis." />
+  <meta name="keywords" content="clearance creatinina colombia, tasa filtracion glomerular, cockcroft gault, CKD-EPI, enfermedad renal cronica, nefrologia colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --rojo: #c62828;
+      --rojo-claro: #ffebee;
+      --naranja: #e65100;
+      --verde: #2e7d32;
+      --amarillo: #f9a825;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: #f5a623; }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: #f5a623; color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #c62828 60%, #e57373 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio);
+      box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 120px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--rojo); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--rojo); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--rojo); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: #8b0000; }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--rojo-claro); border-left: 4px solid var(--rojo); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: #8b0000; }
+
+    /* RESULTADO PRINCIPAL */
+    .resultado-principal {
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
+    .resultado-tfg { font-size: 3rem; font-weight: 900; line-height: 1; }
+    .resultado-unidad { font-size: 1rem; font-weight: 600; opacity: 0.85; }
+    .resultado-estadio { font-size: 1.1rem; font-weight: 800; margin-top: 0.4rem; }
+    .resultado-desc { font-size: 0.88rem; opacity: 0.9; margin-top: 0.3rem; }
+
+    .formulas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .formula-item { background: rgba(255,255,255,0.13); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .formula-valor { font-size: 1.3rem; font-weight: 800; color: #ffe082; }
+    .formula-nombre { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 1.9; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* ESTADIOS */
+    .estadios-grid { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-top: 0.8rem; }
+    .estadio-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0.6rem 1rem; border-radius: 8px; border: 1.5px solid var(--borde);
+      font-size: 0.85rem;
+    }
+    .estadio-row.activo { border-width: 2.5px; font-weight: 700; }
+    .estadio-color { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+    .estadio-nombre { flex: 1; }
+    .estadio-rango { color: var(--texto-suave); font-size: 0.78rem; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--rojo-claro); }
+
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🩺 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Clearance Creatinina</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🫘 Nefrología — Medicina Interna</div>
+  <h1>Clearance de Creatinina y TFG 2026</h1>
+  <p>Cálculo de la Tasa de Filtración Glomerular estimada (TFGe) con fórmulas Cockcroft-Gault, CKD-EPI y MDRD. Estadificación ERC según guías KDIGO.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Para médicos colombianos</span>
+    <span class="hero-chip">3 fórmulas validadas</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+    <span class="hero-chip">📊 Estadificación KDIGO</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('calculadora', this)">🧮 Calculadora TFG</button>
+    <button class="tab-btn" onclick="mostrarTab('estadios', this)">📊 Estadios ERC</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Ajuste de Dosis</button>
+  </div>
+
+  <!-- TAB 1: CALCULADORA -->
+  <div id="tab-calculadora" class="tab-panel active">
+    <div class="card">
+      <h2>🧮 Tasa de Filtración Glomerular Estimada (TFGe)</h2>
+      <div class="info-box">
+        <strong>¿Qué fórmula usar?</strong> <b>CKD-EPI</b> es la más precisa para adultos (recomendada por KDIGO 2022). <b>Cockcroft-Gault</b> es útil para ajuste de dosis de medicamentos. <b>MDRD</b> se sigue usando en reportes de laboratorio.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Creatinina sérica (mg/dL)</label>
+          <input type="number" id="creatinina" value="1.2" min="0.1" max="20" step="0.1" />
+          <span class="form-hint">Valor del laboratorio en mg/dL</span>
+        </div>
+        <div class="form-group">
+          <label>Edad (años)</label>
+          <input type="number" id="edad" value="55" min="18" max="120" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Sexo biológico</label>
+          <select id="sexo">
+            <option value="M" selected>Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Peso (kg)</label>
+          <input type="number" id="peso" value="70" min="20" max="200" step="1" />
+          <span class="form-hint">Requerido para Cockcroft-Gault</span>
+        </div>
+        <div class="form-group">
+          <label>Raza / Etnia</label>
+          <select id="raza">
+            <option value="otras" selected>Mestizo / Otras (Colombia)</option>
+            <option value="negra">Afrodescendiente</option>
+          </select>
+          <span class="form-hint">Afecta la fórmula MDRD (factor ×1.212)</span>
+        </div>
+        <div class="form-group">
+          <label>Creatinina en orina 24h (mg/dL)</label>
+          <input type="number" id="cr-orina" value="" min="0" step="1" placeholder="Opcional" />
+          <span class="form-hint">Para clearance medido (opcional)</span>
+        </div>
+        <div class="form-group">
+          <label>Volumen orina 24h (mL)</label>
+          <input type="number" id="vol-orina" value="" min="0" step="50" placeholder="Opcional" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularTFG()">🧮 Calcular TFGe</button>
+    </div>
+
+    <div id="resultado-tfg" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: ESTADIOS ERC -->
+  <div id="tab-estadios" class="tab-panel">
+    <div class="card">
+      <h2>📊 Estadificación ERC — Guías KDIGO 2022</h2>
+      <div class="info-box">
+        <strong>Enfermedad Renal Crónica (ERC)</strong> se define como alteraciones de la estructura o función renal durante más de 3 meses. La estadificación combina TFG (G1–G5) con albuminuria (A1–A3).
+      </div>
+      <div class="estadios-grid" id="estadios-lista">
+        <div class="estadio-row" style="background:#e8f5e9; border-color:#2e7d32;">
+          <div class="estadio-color" style="background:#2e7d32;"></div>
+          <div class="estadio-nombre"><b>G1</b> — Función normal o aumentada</div>
+          <div class="estadio-rango">TFG ≥ 90 mL/min/1.73m²</div>
+        </div>
+        <div class="estadio-row" style="background:#f1f8e9; border-color:#558b2f;">
+          <div class="estadio-color" style="background:#558b2f;"></div>
+          <div class="estadio-nombre"><b>G2</b> — Leve disminución</div>
+          <div class="estadio-rango">TFG 60–89 mL/min/1.73m²</div>
+        </div>
+        <div class="estadio-row" style="background:#fffde7; border-color:#f9a825;">
+          <div class="estadio-color" style="background:#f9a825;"></div>
+          <div class="estadio-nombre"><b>G3a</b> — Leve a moderada disminución</div>
+          <div class="estadio-rango">TFG 45–59 mL/min/1.73m²</div>
+        </div>
+        <div class="estadio-row" style="background:#fff8e1; border-color:#f57c00;">
+          <div class="estadio-color" style="background:#f57c00;"></div>
+          <div class="estadio-nombre"><b>G3b</b> — Moderada a severa disminución</div>
+          <div class="estadio-rango">TFG 30–44 mL/min/1.73m²</div>
+        </div>
+        <div class="estadio-row" style="background:#fce4ec; border-color:#c62828;">
+          <div class="estadio-color" style="background:#c62828;"></div>
+          <div class="estadio-nombre"><b>G4</b> — Disminución severa</div>
+          <div class="estadio-rango">TFG 15–29 mL/min/1.73m²</div>
+        </div>
+        <div class="estadio-row" style="background:#f3e5f5; border-color:#6a1b9a;">
+          <div class="estadio-color" style="background:#6a1b9a;"></div>
+          <div class="estadio-nombre"><b>G5</b> — Falla renal (diálisis si síntomas)</div>
+          <div class="estadio-rango">TFG &lt; 15 mL/min/1.73m²</div>
+        </div>
+      </div>
+      <hr class="sep" />
+      <h2 style="margin-top:0.5rem;">📊 Categorías de Albuminuria (KDIGO)</h2>
+      <div style="overflow-x:auto; margin-top:0.8rem;">
+        <table class="ref-table">
+          <thead><tr><th>Categoría</th><th>RAC (mg/g)</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><b>A1</b></td><td>&lt; 30</td><td style="color:#2e7d32; font-weight:600;">Normal a levemente aumentada</td></tr>
+            <tr><td><b>A2</b></td><td>30–300</td><td style="color:#f57c00; font-weight:600;">Moderadamente aumentada (microalbuminuria)</td></tr>
+            <tr><td><b>A3</b></td><td>&gt; 300</td><td style="color:#c62828; font-weight:600;">Severamente aumentada (macroalbuminuria)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: AJUSTE DE DOSIS -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Ajuste de Dosis de Medicamentos según TFG</h2>
+      <div class="info-box">
+        <strong>Referencia:</strong> Los ajustes se basan en Cockcroft-Gault según ficha técnica de cada medicamento. Siempre verificar con el prospecto vigente o fuentes como Micromedex / UpToDate.
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead>
+            <tr>
+              <th>Medicamento</th>
+              <th>TFG ≥ 60</th>
+              <th>TFG 30–59</th>
+              <th>TFG 15–29</th>
+              <th>TFG &lt; 15 / Diálisis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Metformina</b></td>
+              <td style="color:#2e7d32;">Dosis normal</td>
+              <td style="color:#f57c00;">Reducir 50%</td>
+              <td style="color:#c62828;">Contraindicada</td>
+              <td style="color:#c62828;">Contraindicada</td>
+            </tr>
+            <tr>
+              <td><b>Amoxicilina</b></td>
+              <td style="color:#2e7d32;">Dosis normal</td>
+              <td style="color:#2e7d32;">Dosis normal</td>
+              <td style="color:#f57c00;">c/12h máx</td>
+              <td style="color:#f57c00;">c/24h</td>
+            </tr>
+            <tr>
+              <td><b>Ciprofloxacino</b></td>
+              <td style="color:#2e7d32;">Dosis normal</td>
+              <td style="color:#2e7d32;">Dosis normal</td>
+              <td style="color:#f57c00;">50–75%</td>
+              <td style="color:#c62828;">50% c/24h</td>
+            </tr>
+            <tr>
+              <td><b>Vancomicina</b></td>
+              <td style="color:#2e7d32;">Normal (monitorear)</td>
+              <td style="color:#f57c00;">Ajustar por niveles</td>
+              <td style="color:#c62828;">Ajustar por niveles</td>
+              <td style="color:#c62828;">Dosis post-diálisis</td>
+            </tr>
+            <tr>
+              <td><b>Digoxina</b></td>
+              <td style="color:#2e7d32;">Dosis normal</td>
+              <td style="color:#f57c00;">Reducir 25–50%</td>
+              <td style="color:#c62828;">Reducir 50–75%</td>
+              <td style="color:#c62828;">Evitar o mínima dosis</td>
+            </tr>
+            <tr>
+              <td><b>Enoxaparina</b></td>
+              <td style="color:#2e7d32;">Dosis normal</td>
+              <td style="color:#2e7d32;">Dosis normal</td>
+              <td style="color:#f57c00;">Reducir 50%</td>
+              <td style="color:#c62828;">HNF preferible</td>
+            </tr>
+            <tr>
+              <td><b>Enalapril</b></td>
+              <td style="color:#2e7d32;">Dosis normal</td>
+              <td style="color:#f57c00;">Iniciar con dosis baja</td>
+              <td style="color:#f57c00;">Monitorear K⁺ y Cr</td>
+              <td style="color:#c62828;">Con precaución extrema</td>
+            </tr>
+            <tr>
+              <td><b>Ibuprofeno / AINEs</b></td>
+              <td style="color:#2e7d32;">Con precaución</td>
+              <td style="color:#f57c00;">Evitar si posible</td>
+              <td style="color:#c62828;">Contraindicado</td>
+              <td style="color:#c62828;">Contraindicado</td>
+            </tr>
+            <tr>
+              <td><b>Alopurinol</b></td>
+              <td style="color:#2e7d32;">Dosis normal</td>
+              <td style="color:#f57c00;">100–200 mg/día</td>
+              <td style="color:#f57c00;">100 mg/día</td>
+              <td style="color:#c62828;">100 mg c/48h</td>
+            </tr>
+            <tr>
+              <td><b>Gabapentina</b></td>
+              <td style="color:#2e7d32;">Dosis normal</td>
+              <td style="color:#f57c00;">Reducir 50%</td>
+              <td style="color:#c62828;">Reducir 75%</td>
+              <td style="color:#c62828;">Dosis post-diálisis</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.8rem;">⚠️ Esta tabla es orientativa. Verificar siempre con el prospecto del medicamento y fuentes clínicas actualizadas (Micromedex, UpToDate, fichas técnicas INVIMA).</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo clínico.</strong> Los valores de TFGe son estimaciones y no reemplazan la medición directa del clearance. Las fórmulas CKD-EPI y MDRD no son válidas en embarazo, malnutrición severa, amputaciones o masa muscular extrema. Decisiones terapéuticas a cargo del médico tratante. Referencias: KDIGO 2022, Cockcroft & Gault 1976, Levey et al. CKD-EPI 2009.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n, dec=1) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+function calcularTFG() {
+  const cr    = parseFloat(document.getElementById('creatinina').value);
+  const edad  = parseFloat(document.getElementById('edad').value);
+  const sexo  = document.getElementById('sexo').value;
+  const peso  = parseFloat(document.getElementById('peso').value);
+  const raza  = document.getElementById('raza').value;
+  const crO   = parseFloat(document.getElementById('cr-orina').value) || null;
+  const volO  = parseFloat(document.getElementById('vol-orina').value) || null;
+
+  if (!cr || !edad || !peso) { alert('Completa creatinina, edad y peso.'); return; }
+
+  // ── Cockcroft-Gault ──
+  let cg = ((140 - edad) * peso) / (72 * cr);
+  if (sexo === 'F') cg *= 0.85;
+
+  // ── MDRD-4 ──
+  let mdrd = 175 * Math.pow(cr, -1.154) * Math.pow(edad, -0.203);
+  if (sexo === 'F') mdrd *= 0.742;
+  if (raza === 'negra') mdrd *= 1.212;
+
+  // ── CKD-EPI 2009 ──
+  let ckdepi;
+  const kappa = sexo === 'F' ? 0.7 : 0.9;
+  const alpha = sexo === 'F' ? -0.329 : -0.411;
+  const crK   = cr / kappa;
+  if (crK < 1) {
+    ckdepi = 141 * Math.pow(crK, alpha) * Math.pow(0.9929, edad);
+  } else {
+    ckdepi = 141 * Math.pow(crK, -1.209) * Math.pow(0.9929, edad);
+  }
+  if (sexo === 'F') ckdepi *= 1.018;
+  if (raza === 'negra') ckdepi *= 1.159;
+
+  // ── Clearance medido (si hay orina 24h) ──
+  let clMedido = null;
+  if (crO && volO) {
+    clMedido = (crO * volO) / (cr * 1440); // mL/min
+  }
+
+  // ── Estadio KDIGO según CKD-EPI ──
+  const estadio = getEstadio(ckdepi);
+
+  // ── Color según estadio ──
+  const colores = {
+    'G1':  { bg: 'linear-gradient(135deg,#1b5e20,#2e7d32)', label: 'Función normal o aumentada' },
+    'G2':  { bg: 'linear-gradient(135deg,#33691e,#558b2f)', label: 'Leve disminución' },
+    'G3a': { bg: 'linear-gradient(135deg,#f57f17,#f9a825)', label: 'Leve a moderada disminución' },
+    'G3b': { bg: 'linear-gradient(135deg,#e65100,#f57c00)', label: 'Moderada a severa disminución' },
+    'G4':  { bg: 'linear-gradient(135deg,#b71c1c,#c62828)', label: 'Disminución severa — Preparar para TRR' },
+    'G5':  { bg: 'linear-gradient(135deg,#4a148c,#6a1b9a)', label: 'Falla renal — Evaluar terapia de reemplazo renal' },
+  };
+  const color = colores[estadio];
+
+  document.getElementById('resultado-tfg').style.display = 'block';
+  document.getElementById('resultado-tfg').innerHTML = `
+    <div class="resultado-principal" style="background:${color.bg}; color:#fff;">
+      <div class="resultado-titulo">Resultado — Tasa de Filtración Glomerular Estimada</div>
+      <div class="resultado-tfg">${fmt(ckdepi)} <span class="resultado-unidad">mL/min/1.73m²</span></div>
+      <div class="resultado-estadio">Estadio ${estadio} — ${color.label}</div>
+      <div class="resultado-desc">Fórmula principal: CKD-EPI 2009 (recomendada por KDIGO 2022)</div>
+      <div class="formulas-grid">
+        <div class="formula-item">
+          <div class="formula-valor">${fmt(ckdepi)}</div>
+          <div class="formula-nombre">CKD-EPI (mL/min/1.73m²)</div>
+        </div>
+        <div class="formula-item">
+          <div class="formula-valor">${fmt(cg)}</div>
+          <div class="formula-nombre">Cockcroft-Gault (mL/min)</div>
+        </div>
+        <div class="formula-item">
+          <div class="formula-valor">${fmt(mdrd)}</div>
+          <div class="formula-nombre">MDRD-4 (mL/min/1.73m²)</div>
+        </div>
+        ${clMedido !== null ? `<div class="formula-item"><div class="formula-valor">${fmt(clMedido)}</div><div class="formula-nombre">Clearance medido 24h (mL/min)</div></div>` : ''}
+      </div>
+      <div class="resultado-detalle">
+        <b>Datos ingresados:</b><br>
+        Creatinina: ${cr} mg/dL | Edad: ${edad} años | Sexo: ${sexo === 'M' ? 'Masculino' : 'Femenino'} | Peso: ${peso} kg | Raza: ${raza === 'negra' ? 'Afrodescendiente' : 'Mestizo/Otras'}<br><br>
+        <b>Interpretación clínica — Estadio ${estadio}:</b><br>
+        ${getRecomendaciones(estadio)}
+      </div>
+    </div>`;
+}
+
+function getEstadio(tfg) {
+  if (tfg >= 90) return 'G1';
+  if (tfg >= 60) return 'G2';
+  if (tfg >= 45) return 'G3a';
+  if (tfg >= 30) return 'G3b';
+  if (tfg >= 15) return 'G4';
+  return 'G5';
+}
+
+function getRecomendaciones(estadio) {
+  const rec = {
+    'G1':  'TFG normal. Si hay ERC confirmada (albuminuria, hallazgos estructurales): monitoreo anual, control de factores de riesgo cardiovascular.',
+    'G2':  'Leve disminución. Controlar PA (meta &lt;130/80), evitar AINEs y nefrotóxicos, monitoreo cada 6–12 meses.',
+    'G3a': 'Iniciar manejo de complicaciones: anemia, metabolismo mineral óseo, acidosis. Control estricto de PA y glucemia. Derivar a nefrología.',
+    'G3b': 'Preparar para terapia de reemplazo renal a largo plazo. Ajustar dosis de medicamentos. Vacunación hepatitis B. Nefrología obligatoria.',
+    'G4':  'Derivación urgente a nefrología. Educación en modalidades de TRR (hemodiálisis, diálisis peritoneal, trasplante). Ajuste estricto de medicamentos.',
+    'G5':  'Falla renal. Evaluar inicio de terapia de reemplazo renal según síntomas urémicos. Manejo interdisciplinario: nefrología, nutrición, trabajo social.',
+  };
+  return rec[estadio] || '';
+}
+</script>
+</body>
+</html>
