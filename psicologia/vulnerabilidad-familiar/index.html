@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vulnerabilidad Familiar NBI Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de vulnerabilidad familiar e índice NBI para trabajadores sociales colombianos. Evaluación de necesidades básicas insatisfechas y riesgo psicosocial." />
+  <meta name="keywords" content="vulnerabilidad familiar colombia, NBI necesidades basicas insatisfechas, trabajador social colombia, riesgo psicosocial familia colombia, ICBF colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --teal: #00695c;
+      --teal-medio: #00897b;
+      --teal-claro: #e0f2f1;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #00695c 60%, #26a69a 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 110px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--teal-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--teal-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--teal-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--teal-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    /* PREGUNTAS CON RADIO */
+    .pregunta-nbi {
+      background: var(--gris-bg); border-radius: 10px; padding: 1rem;
+      margin-bottom: 0.8rem; border: 1.5px solid var(--borde); transition: border-color 0.2s;
+    }
+    .pregunta-nbi.si { border-color: #c62828; background: #fff5f5; }
+    .pregunta-nbi.no { border-color: var(--teal-medio); background: var(--teal-claro); }
+    .pregunta-num { font-size: 0.72rem; font-weight: 700; color: var(--teal-medio); text-transform: uppercase; margin-bottom: 3px; }
+    .pregunta-texto { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.6rem; }
+    .radio-opciones { display: flex; gap: 1rem; }
+    .radio-btn {
+      flex: 1; padding: 8px; border: 1.5px solid var(--borde); border-radius: 8px;
+      background: #fff; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      text-align: center; transition: all 0.15s;
+    }
+    .radio-btn:hover { border-color: var(--teal-medio); }
+    .radio-btn.si-sel { background: #c62828; color: #fff; border-color: #c62828; }
+    .radio-btn.no-sel { background: var(--teal-medio); color: #fff; border-color: var(--teal-medio); }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--teal-medio); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--teal); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--teal-claro); border-left: 4px solid var(--teal-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--teal); }
+
+    .resultado-box {
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-box.bajo     { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+    .resultado-box.moderado { background: linear-gradient(135deg, #e65100, #f57c00); }
+    .resultado-box.alto     { background: linear-gradient(135deg, #b71c1c, #c62828); }
+    .resultado-box.critico  { background: linear-gradient(135deg, #4a148c, #6a1b9a); }
+
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-score  { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-clase  { font-size: 1.2rem; font-weight: 800; margin-top: 0.3rem; }
+    .resultado-sub    { font-size: 0.88rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid   { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item   { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor  { font-size: 1.2rem; font-weight: 800; color: #ffe082; }
+    .resultado-label  { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle{ margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* INDICADORES NBI */
+    .nbi-indicador {
+      display: flex; align-items: center; gap: 10px; padding: 6px 10px;
+      border-radius: 8px; margin-bottom: 5px; font-size: 0.83rem;
+    }
+    .nbi-ok  { background: rgba(255,255,255,0.1); }
+    .nbi-mal { background: rgba(198,40,40,0.3); }
+    .nbi-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* PLAN DE ACCIÓN */
+    .accion-item { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.7rem 0.9rem; margin-bottom: 0.5rem; font-size: 0.83rem; }
+    .accion-prioridad { font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-right: 6px; }
+    .p-alta { background: #c62828; color: #fff; }
+    .p-media { background: #f57c00; color: #fff; }
+    .p-baja { background: #2e7d32; color: #fff; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--teal-claro); }
+
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-mal  { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🏠 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Vulnerabilidad Familiar</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🏠 Trabajadores Sociales — Psicólogos</div>
+  <h1>Vulnerabilidad Familiar e Índice NBI 2026</h1>
+  <p>Evaluación del riesgo psicosocial familiar y necesidades básicas insatisfechas (NBI) para intervención social. Metodología DANE adaptada para Colombia 2026.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Metodología DANE</span>
+    <span class="hero-chip">👨‍👩‍👧 NBI Colombia</span>
+    <span class="hero-chip">📋 Plan de acción</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('nbi', this)">📊 Índice NBI</button>
+    <button class="tab-btn" onclick="mostrarTab('vulnerabilidad', this)">🏠 Vulnerabilidad Familiar</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Marco de Referencia</button>
+  </div>
+
+  <!-- TAB 1: NBI -->
+  <div id="tab-nbi" class="tab-panel active">
+    <div class="card">
+      <h2>📊 Índice de Necesidades Básicas Insatisfechas (NBI)</h2>
+      <div class="info-box">
+        <strong>Metodología DANE:</strong> El NBI identifica hogares en condición de pobreza mediante 5 indicadores estructurales. Un hogar con al menos 1 indicador insatisfecho es <strong>pobre</strong>. Con 2 o más indicadores es <strong>en miseria</strong>.
+      </div>
+
+      <div class="form-grid" style="margin-bottom:1rem;">
+        <div class="form-group">
+          <label>Nombre de la familia / caso</label>
+          <input type="text" id="nbi-familia" placeholder="Ej: Familia García López" />
+        </div>
+        <div class="form-group">
+          <label>Municipio / Barrio</label>
+          <input type="text" id="nbi-municipio" placeholder="Ej: Medellín — Barrio Doce de Octubre" />
+        </div>
+        <div class="form-group">
+          <label>Número de personas en el hogar</label>
+          <input type="number" id="nbi-personas" value="5" min="1" max="20" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Número de menores de 18 años</label>
+          <input type="number" id="nbi-menores" value="3" min="0" max="15" step="1" />
+        </div>
+      </div>
+
+      <div id="nbi-preguntas"></div>
+
+      <button class="btn" onclick="calcularNBI()">📊 Calcular Índice NBI</button>
+    </div>
+    <div id="resultado-nbi" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: VULNERABILIDAD FAMILIAR -->
+  <div id="tab-vulnerabilidad" class="tab-panel">
+    <div class="card">
+      <h2>🏠 Escala de Vulnerabilidad Psicosocial Familiar</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> Evalúa los factores de riesgo y protectores de la familia en las dimensiones: económica, habitacional, salud, educación, dinámica familiar y redes de apoyo. Genera un plan de intervención priorizado.
+      </div>
+
+      <div class="form-grid" style="margin-bottom:1rem;">
+        <div class="form-group">
+          <label>Familia / Caso</label>
+          <input type="text" id="vf-familia" placeholder="Nombre de la familia" />
+        </div>
+        <div class="form-group">
+          <label>Trabajador social responsable</label>
+          <input type="text" id="vf-profesional" placeholder="Nombre del profesional" />
+        </div>
+        <div class="form-group">
+          <label>Fecha de evaluación</label>
+          <input type="date" id="vf-fecha" />
+        </div>
+        <div class="form-group">
+          <label>Número de integrantes</label>
+          <input type="number" id="vf-integrantes" value="4" min="1" max="20" step="1" />
+        </div>
+      </div>
+
+      <div id="vf-preguntas"></div>
+
+      <button class="btn" onclick="calcularVulnerabilidad()">🏠 Evaluar Vulnerabilidad Familiar</button>
+    </div>
+    <div id="resultado-vulnerabilidad" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Indicadores NBI — Definiciones DANE Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Indicador</th><th>Condición de carencia</th><th>Umbral</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>1. Vivienda inadecuada</b></td>
+              <td>Material de paredes o pisos deficientes</td>
+              <td>Paredes: zinc, tela, cartón, desechos, sin paredes<br>Pisos: tierra sin revestimiento</td>
+            </tr>
+            <tr>
+              <td><b>2. Servicios insuficientes</b></td>
+              <td>Sin acceso a agua potable o alcantarillado</td>
+              <td>Sin acueducto ni alcantarillado (área urbana)<br>Sin fuente de agua adecuada (área rural)</td>
+            </tr>
+            <tr>
+              <td><b>3. Hacinamiento crítico</b></td>
+              <td>Más de 3 personas por cuarto</td>
+              <td>Cocina, baños y garajes no cuentan<br>≥ 3 personas por habitación de dormir</td>
+            </tr>
+            <tr>
+              <td><b>4. Inasistencia escolar</b></td>
+              <td>Al menos un menor de 6–11 años sin asistir a la escuela</td>
+              <td>Niños en edad escolar (6 a 11 años) fuera del sistema educativo</td>
+            </tr>
+            <tr>
+              <td><b>5. Alta dependencia económica</b></td>
+              <td>Más de 3 personas por ocupado Y jefe del hogar con máximo 2 años de educación primaria</td>
+              <td>Razón de dependencia > 3 personas por persona ocupada</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Clasificación NBI y Subsidios Colombia 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Condición</th><th>Criterio NBI</th><th>Programas disponibles</th></tr></thead>
+          <tbody>
+            <tr><td><b style="color:#2e7d32;">Sin pobreza NBI</b></td><td>0 indicadores insatisfechos</td><td>Ninguno específico por NBI</td></tr>
+            <tr><td><b style="color:#e65100;">Pobreza NBI</b></td><td>1 indicador insatisfecho</td><td>Familias en Acción, Colombia Mayor, Mi Casa Ya</td></tr>
+            <tr><td><b style="color:#c62828;">Miseria NBI</b></td><td>2 o más indicadores insatisfechos</td><td>Acceso prioritario a todos los programas</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Programas Sociales Colombia 2026</h2>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; font-size:0.85rem;">
+        <div style="background:var(--teal-claro); border-radius:8px; padding:0.9rem;">
+          <strong style="color:var(--teal);">👨‍👩‍👧 Familias en Acción</strong><br>
+          Transferencia monetaria para familias con menores de 18 años en situación de pobreza.<br>
+          <b>Monto:</b> $60.000–$270.000/mes según municipio y edad hijos.<br>
+          Registro: Prosperidad Social — DPS
+        </div>
+        <div style="background:#fff8e1; border-radius:8px; padding:0.9rem;">
+          <strong style="color:#e65100;">👴 Colombia Mayor</strong><br>
+          Subsidio para adultos mayores de 60 años en pobreza extrema.<br>
+          <b>Monto:</b> $80.000/mes (ciudades principales)<br>
+          Registro: Alcaldía municipal
+        </div>
+        <div style="background:#e3f2fd; border-radius:8px; padding:0.9rem;">
+          <strong style="color:#1565c0;">🏠 Mi Casa Ya</strong><br>
+          Subsidio de vivienda para hogares con ingresos hasta 8 SMMLV.<br>
+          <b>Monto:</b> hasta 30 SMMLV según categoría.<br>
+          Registro: Caja de Compensación o Fonvivienda
+        </div>
+        <div style="background:#fce4ec; border-radius:8px; padding:0.9rem;">
+          <strong style="color:#880e4f;">🍽️ ICBF — PAIPI / CDI</strong><br>
+          Atención integral a primera infancia (0–5 años) en vulnerabilidad.<br>
+          Modalidad: Centros de Desarrollo Infantil.<br>
+          Registro: ICBF regional
+        </div>
+        <div style="background:#e8f5e9; border-radius:8px; padding:0.9rem;">
+          <strong style="color:#1b5e20;">💊 Salud — Sisbén</strong><br>
+          Acceso a EPS subsidiada (Régimen Subsidiado).<br>
+          Clasificación A y B: acceso gratuito a salud.<br>
+          Registro: Alcaldía — encuesta Sisbén IV
+        </div>
+        <div style="background:#f3e5f5; border-radius:8px; padding:0.9rem;">
+          <strong style="color:#6a1b9a;">📚 Generación E / Ser Pilo</strong><br>
+          Acceso a educación superior gratuita para jóvenes en pobreza.<br>
+          Sisbén IV grupo A o B.<br>
+          Registro: Ministerio de Educación Nacional
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> La evaluación de vulnerabilidad familiar debe ser realizada por un <strong>Trabajador Social o Psicólogo graduado</strong> integrando el contexto familiar completo. Los resultados son orientativos y no reemplazan el juicio profesional ni los instrumentos oficiales del DANE, ICBF o DPS. Metodología: DANE NBI 2018, Res. ICBF 2016.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── NBI ──
+const preguntasNBI = [
+  {
+    id: 'nbi1', num: 1, dimension: 'Vivienda',
+    texto: '¿Las paredes de la vivienda son de zinc, tela, cartón, material de desecho o no tiene paredes? ¿O el piso es de tierra sin revestimiento?',
+    si: 'Vivienda inadecuada', no: 'Vivienda adecuada'
+  },
+  {
+    id: 'nbi2', num: 2, dimension: 'Servicios públicos',
+    texto: '¿La vivienda NO tiene acceso a agua potable por acueducto? ¿O no tiene servicio de alcantarillado / sanitario conectado?',
+    si: 'Servicios insuficientes', no: 'Servicios adecuados'
+  },
+  {
+    id: 'nbi3', num: 3, dimension: 'Hacinamiento',
+    texto: '¿Hay 3 o más personas durmiendo por habitación (sin contar cocina, baño o sala)?',
+    si: 'Hacinamiento crítico', no: 'Sin hacinamiento'
+  },
+  {
+    id: 'nbi4', num: 4, dimension: 'Educación',
+    texto: '¿Hay algún niño o niña entre 6 y 11 años en el hogar que NO asiste a ningún establecimiento educativo?',
+    si: 'Inasistencia escolar', no: 'Asistencia escolar adecuada'
+  },
+  {
+    id: 'nbi5', num: 5, dimension: 'Dependencia económica',
+    texto: '¿Hay más de 3 personas dependientes por cada persona que genera ingresos en el hogar, Y el jefe del hogar tiene máximo 2 años de educación primaria aprobados?',
+    si: 'Alta dependencia económica', no: 'Dependencia económica adecuada'
+  },
+];
+
+const respuestasNBI = {};
+
+function renderNBI() {
+  const cont = document.getElementById('nbi-preguntas');
+  cont.innerHTML = '';
+  preguntasNBI.forEach(p => {
+    cont.innerHTML += `
+      <div class="pregunta-nbi" id="card-${p.id}">
+        <div class="pregunta-num">Indicador ${p.num} — ${p.dimension}</div>
+        <div class="pregunta-texto">${p.texto}</div>
+        <div class="radio-opciones">
+          <button class="radio-btn" id="${p.id}-si" onclick="selNBI('${p.id}', true)">❌ SÍ — Carencia presente</button>
+          <button class="radio-btn" id="${p.id}-no" onclick="selNBI('${p.id}', false)">✅ NO — Condición adecuada</button>
+        </div>
+      </div>`;
+  });
+}
+
+function selNBI(id, valor) {
+  respuestasNBI[id] = valor;
+  const card = document.getElementById('card-' + id);
+  card.classList.toggle('si', valor);
+  card.classList.toggle('no', !valor);
+  document.getElementById(id + '-si').classList.toggle('si-sel', valor);
+  document.getElementById(id + '-si').classList.toggle('no-sel', false);
+  document.getElementById(id + '-no').classList.toggle('no-sel', !valor);
+  document.getElementById(id + '-no').classList.toggle('si-sel', false);
+}
+
+function calcularNBI() {
+  const respondidas = Object.keys(respuestasNBI).length;
+  if (respondidas < 5) { alert(`Por favor responde los 5 indicadores. Llevas ${respondidas} de 5.`); return; }
+
+  const familia   = document.getElementById('nbi-familia').value || 'Familia evaluada';
+  const municipio = document.getElementById('nbi-municipio').value || '—';
+  const personas  = parseInt(document.getElementById('nbi-personas').value) || 5;
+  const menores   = parseInt(document.getElementById('nbi-menores').value) || 0;
+
+  const insatisfechos = preguntasNBI.filter(p => respuestasNBI[p.id] === true);
+  const n = insatisfechos.length;
+
+  let condicion, colorClass, recom;
+  if (n === 0) { condicion = 'Sin pobreza NBI'; colorClass = 'bajo'; recom = 'La familia no presenta necesidades básicas insatisfechas según los indicadores DANE. Continuar seguimiento preventivo.'; }
+  else if (n === 1) { condicion = 'Pobreza NBI'; colorClass = 'moderado'; recom = 'La familia presenta pobreza por NBI. Orientar hacia programas sociales: Familias en Acción, Sisbén IV, Mi Casa Ya.'; }
+  else { condicion = 'Miseria (Pobreza Extrema NBI)'; colorClass = 'critico'; recom = 'La familia se encuentra en situación de miseria. Activar ruta de atención prioritaria: ICBF, DPS, alcaldía, Comisaría de Familia.'; }
+
+  const indicadoresHTML = preguntasNBI.map(p => {
+    const mal = respuestasNBI[p.id];
+    return `<div class="nbi-indicador ${mal ? 'nbi-mal' : 'nbi-ok'}">
+      <div class="nbi-dot" style="background:${mal ? '#c62828' : '#2e7d32'};"></div>
+      <span>${mal ? '❌' : '✅'} <b>${p.dimension}:</b> ${mal ? p.si : p.no}</span>
+    </div>`;
+  }).join('');
+
+  const programas = [];
+  if (n >= 1) { programas.push({ p:'alta', txt:'Registro Sisbén IV — Alcaldía municipal (acceso a régimen subsidiado de salud)' }); }
+  if (n >= 1 && menores > 0) { programas.push({ p:'alta', txt:'Vinculación a Familias en Acción — DPS Prosperidad Social' }); }
+  if (n >= 1 && menores <= 5) { programas.push({ p:'alta', txt:'Modalidad CDI o FAMI del ICBF (menores de 5 años)' }); }
+  if (respuestasNBI['nbi1']) { programas.push({ p:'alta', txt:'Postulación a subsidio Mi Casa Ya o mejoramiento de vivienda' }); }
+  if (respuestasNBI['nbi2']) { programas.push({ p:'alta', txt:'Solicitud de conexión a servicios públicos — empresa prestadora o alcaldía' }); }
+  if (respuestasNBI['nbi4']) { programas.push({ p:'alta', txt:'Matrícula escolar urgente — Secretaría de Educación municipal' }); }
+  if (respuestasNBI['nbi5']) { programas.push({ p:'media', txt:'Ruta de empleabilidad — SENA, alcaldía, agencia de empleo' }); }
+
+  document.getElementById('resultado-nbi').style.display = 'block';
+  document.getElementById('resultado-nbi').innerHTML = `
+    <div class="resultado-box ${colorClass}">
+      <div class="resultado-titulo">Índice NBI — ${familia} | ${municipio}</div>
+      <div class="resultado-score">${n}/5</div>
+      <div class="resultado-clase">${condicion}</div>
+      <div class="resultado-sub">${n} indicador(es) de necesidades básicas insatisfechas</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${n}</div><div class="resultado-label">Indicadores NBI insatisfechos</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${5-n}</div><div class="resultado-label">Indicadores satisfechos</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${personas}</div><div class="resultado-label">Personas en el hogar</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${menores}</div><div class="resultado-label">Menores de 18 años</div></div>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <div style="font-size:0.78rem; opacity:0.7; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.5px;">Diagnóstico por indicador</div>
+        ${indicadoresHTML}
+      </div>
+
+      ${programas.length > 0 ? `
+        <div style="margin-top:1rem;">
+          <div style="font-size:0.78rem; opacity:0.7; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.5px;">Plan de acción recomendado</div>
+          ${programas.map(a => `<div class="accion-item"><span class="accion-prioridad ${a.p === 'alta' ? 'p-alta' : 'p-media'}">${a.p.toUpperCase()}</span>${a.txt}</div>`).join('')}
+        </div>` : ''}
+
+      <div class="resultado-detalle">
+        <b>Clasificación NBI:</b> ${condicion}<br>
+        ${n === 0 ? '✅ No pobreza: 0 indicadores insatisfechos' : n === 1 ? '⚠️ Pobreza NBI: 1 indicador insatisfecho' : `🔴 Miseria: ${n} indicadores insatisfechos`}<br>
+        <b>Recomendación:</b> ${recom}
+      </div>
+    </div>`;
+}
+
+// ── VULNERABILIDAD FAMILIAR ──
+const dimensionesVF = [
+  {
+    dim: '💰 Dimensión Económica', preguntas: [
+      { id:'e1', texto:'¿El hogar no tiene ningún integrante con empleo formal o ingresos estables?', peso:3 },
+      { id:'e2', texto:'¿Los ingresos del hogar son inferiores a 1 SMMLV mensual?', peso:3 },
+      { id:'e3', texto:'¿La familia tiene deudas que no puede pagar y que generan riesgo de pérdida de vivienda?', peso:2 },
+    ]
+  },
+  {
+    dim: '🏠 Dimensión Habitacional', preguntas: [
+      { id:'h1', texto:'¿La vivienda tiene paredes, piso o techo en mal estado que representan riesgo físico?', peso:2 },
+      { id:'h2', texto:'¿La familia NO tiene garantía de permanencia en la vivienda (arriendo sin contrato, invasión)?', peso:2 },
+      { id:'h3', texto:'¿Hay hacinamiento (más de 3 personas por habitación)?', peso:2 },
+    ]
+  },
+  {
+    dim: '🏥 Dimensión Salud', preguntas: [
+      { id:'s1', texto:'¿Algún integrante no está afiliado a ningún sistema de salud (EPS ni Sisbén)?', peso:3 },
+      { id:'s2', texto:'¿Hay algún integrante con enfermedad crónica sin tratamiento o discapacidad sin atención?', peso:3 },
+      { id:'s3', texto:'¿Los menores del hogar no tienen esquema de vacunación completo?', peso:2 },
+    ]
+  },
+  {
+    dim: '📚 Dimensión Educación', preguntas: [
+      { id:'ed1', texto:'¿Hay menores en edad escolar (6–17 años) que no asisten a ninguna institución educativa?', peso:3 },
+      { id:'ed2', texto:'¿El jefe del hogar tiene menos de 5 años de educación formal aprobados?', peso:2 },
+      { id:'ed3', texto:'¿Los niños menores de 5 años no asisten a ningún programa de primera infancia (CDI, FAMI, jardín)?', peso:2 },
+    ]
+  },
+  {
+    dim: '👨‍👩‍👧 Dinámica Familiar', preguntas: [
+      { id:'df1', texto:'¿Hay antecedentes de violencia intrafamiliar en el hogar (física, psicológica o sexual)?', peso:4 },
+      { id:'df2', texto:'¿Algún integrante tiene problemas de consumo de sustancias psicoactivas o alcohol?', peso:3 },
+      { id:'df3', texto:'¿La familia tiene dificultades severas en comunicación, roles o normas que afectan la convivencia?', peso:2 },
+    ]
+  },
+  {
+    dim: '🤝 Redes de Apoyo', preguntas: [
+      { id:'r1', texto:'¿La familia no tiene ninguna red de apoyo familiar o comunitaria (sin familiares, amigos ni vecinos que ayuden)?', peso:2 },
+      { id:'r2', texto:'¿La familia NO está vinculada a ningún programa social del Estado?', peso:2 },
+      { id:'r3', texto:'¿La familia es migrante reciente (menos de 1 año) o desplazada sin proceso de restablecimiento?', peso:2 },
+    ]
+  },
+];
+
+const respuestasVF = {};
+
+function renderVF() {
+  const cont = document.getElementById('vf-preguntas');
+  cont.innerHTML = '';
+  dimensionesVF.forEach(dim => {
+    cont.innerHTML += `<div class="card h3" style="font-size:0.9rem; font-weight:700; color:var(--teal-medio); margin:0.8rem 0 0.5rem;">${dim.dim}</div>`;
+    dim.preguntas.forEach(p => {
+      cont.innerHTML += `
+        <div class="pregunta-nbi" id="vcard-${p.id}">
+          <div class="pregunta-num">Peso de riesgo: ${p.peso}</div>
+          <div class="pregunta-texto">${p.texto}</div>
+          <div class="radio-opciones">
+            <button class="radio-btn" id="vf-${p.id}-si" onclick="selVF('${p.id}', true, ${p.peso})">❌ SÍ — Factor de riesgo</button>
+            <button class="radio-btn" id="vf-${p.id}-no" onclick="selVF('${p.id}', false, ${p.peso})">✅ NO — Factor protector</button>
+          </div>
+        </div>`;
+    });
+  });
+}
+
+function selVF(id, valor, peso) {
+  respuestasVF[id] = { valor, peso };
+  const card = document.getElementById('vcard-' + id);
+  card.classList.toggle('si', valor);
+  card.classList.toggle('no', !valor);
+  document.getElementById(`vf-${id}-si`).classList.toggle('si-sel', valor);
+  document.getElementById(`vf-${id}-si`).classList.toggle('no-sel', false);
+  document.getElementById(`vf-${id}-no`).classList.toggle('no-sel', !valor);
+  document.getElementById(`vf-${id}-no`).classList.toggle('si-sel', false);
+}
+
+function calcularVulnerabilidad() {
+  const totalPreguntas = dimensionesVF.reduce((s, d) => s + d.preguntas.length, 0);
+  const respondidas = Object.keys(respuestasVF).length;
+  if (respondidas < totalPreguntas) {
+    alert(`Por favor responde todas las preguntas. Llevas ${respondidas} de ${totalPreguntas}.`);
+    return;
+  }
+
+  const familia     = document.getElementById('vf-familia').value || 'Familia evaluada';
+  const profesional = document.getElementById('vf-profesional').value || '—';
+  const fecha       = document.getElementById('vf-fecha').value || new Date().toISOString().split('T')[0];
+  const integrantes = parseInt(document.getElementById('vf-integrantes').value) || 4;
+
+  // Calcular puntaje por dimensión
+  const pesoMax = dimensionesVF.reduce((s,d) => s + d.preguntas.reduce((ss,p)=>ss+p.peso,0), 0);
+  let puntajeTotal = 0;
+  const porDimension = [];
+
+  dimensionesVF.forEach(dim => {
+    let pts = 0, maxD = 0;
+    dim.preguntas.forEach(p => {
+      maxD += p.peso;
+      if (respuestasVF[p.id]?.valor) pts += p.peso;
+    });
+    puntajeTotal += pts;
+    porDimension.push({ dim: dim.dim, pts, maxD, pct: (pts/maxD*100) });
+  });
+
+  const pctRiesgo = (puntajeTotal / pesoMax) * 100;
+  let nivel, colorClass;
+  if      (pctRiesgo < 25) { nivel = 'Bajo riesgo';     colorClass = 'bajo'; }
+  else if (pctRiesgo < 50) { nivel = 'Riesgo moderado'; colorClass = 'moderado'; }
+  else if (pctRiesgo < 75) { nivel = 'Riesgo alto';     colorClass = 'alto'; }
+  else                     { nivel = 'Riesgo crítico';   colorClass = 'critico'; }
+
+  // Generar plan de acción por dimensión de mayor riesgo
+  const acciones = [];
+  if (porDimension[4].pct >= 50) acciones.push({ p:'alta', txt:'Activar Comisaría de Familia / ICBF — Violencia intrafamiliar o consumo SPA' });
+  if (porDimension[2].pct >= 50) acciones.push({ p:'alta', txt:'Vinculación urgente a EPS subsidiada — Sisbén IV y atención en salud' });
+  if (porDimension[3].pct >= 50) acciones.push({ p:'alta', txt:'Gestión de matrícula escolar y vinculación a programa ICBF primera infancia' });
+  if (porDimension[0].pct >= 50) acciones.push({ p:'alta', txt:'Ruta de empleabilidad SENA / alcaldía — Familias en Acción DPS' });
+  if (porDimension[1].pct >= 50) acciones.push({ p:'media', txt:'Postulación a mejoramiento de vivienda o subsidio Mi Casa Ya' });
+  if (porDimension[5].pct >= 50) acciones.push({ p:'media', txt:'Vinculación a programas sociales y redes comunitarias — JAC, iglesia, vecinos' });
+  if (acciones.length === 0) acciones.push({ p:'baja', txt:'Seguimiento semestral y prevención — La familia presenta factores protectores adecuados' });
+
+  document.getElementById('resultado-vulnerabilidad').style.display = 'block';
+  document.getElementById('resultado-vulnerabilidad').innerHTML = `
+    <div class="resultado-box ${colorClass}">
+      <div class="resultado-titulo">Vulnerabilidad Familiar — ${familia} | ${fecha}</div>
+      <div class="resultado-score">${puntajeTotal}/${pesoMax}</div>
+      <div class="resultado-clase">${nivel}</div>
+      <div class="resultado-sub">${pctRiesgo.toFixed(0)}% de los factores de riesgo evaluados están presentes</div>
+      <div class="resultado-grid">
+        ${porDimension.map(d => `
+          <div class="resultado-item">
+            <div class="resultado-valor">${d.pts}/${d.maxD}</div>
+            <div class="resultado-label">${d.dim.split(' ').slice(1).join(' ')}</div>
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:1rem;">
+        <div style="font-size:0.78rem; opacity:0.7; margin-bottom:0.5rem; text-transform:uppercase;">Plan de Intervención Prioritario</div>
+        ${acciones.map(a=>`<div class="accion-item"><span class="accion-prioridad ${a.p==='alta'?'p-alta':a.p==='media'?'p-media':'p-baja'}">${a.p.toUpperCase()}</span>${a.txt}</div>`).join('')}
+      </div>
+      <div class="resultado-detalle">
+        <b>Profesional:</b> ${profesional} | <b>Integrantes:</b> ${integrantes}<br>
+        <b>Puntaje:</b> ${puntajeTotal} / ${pesoMax} puntos (${pctRiesgo.toFixed(1)}% de riesgo)<br>
+        <b>Nivel de vulnerabilidad:</b> ${nivel}<br>
+        <b>Dimensión de mayor riesgo:</b> ${porDimension.reduce((a,b)=>a.pct>b.pct?a:b).dim}
+      </div>
+    </div>`;
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
+  renderNBI();
+  renderVF();
+  document.getElementById('vf-fecha').value = new Date().toISOString().split('T')[0];
+});
+</script>
+</body>
+</html>
