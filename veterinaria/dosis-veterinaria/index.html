@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dosis Medicamentos Veterinarios 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de dosis de medicamentos veterinarios por especie y peso para veterinarios colombianos. Antibióticos, antiparasitarios, analgésicos y vacunas." />
+  <meta name="keywords" content="dosis medicamentos veterinarios colombia, calculadora veterinaria, dosis bovinos porcinos aves colombia, ICA colombia veterinaria" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --verde-vet: #1b5e20;
+      --verde-medio: #2e7d32;
+      --verde-claro: #e8f5e9;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #1b5e20 60%, #4caf50 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 110px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--verde-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--verde-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--verde-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--verde-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--verde-medio); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--verde-vet); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--verde-claro); border-left: 4px solid var(--verde-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--verde-vet); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #1b5e20 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-dosis { font-size: 2.8rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.2rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+    .ref-table tr:hover td { background: var(--verde-claro); }
+
+    .alerta { padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+    .alerta-error{ background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+    .badge-ok { background: #d4edda; color: #155724; }
+    .badge-warn { background: #fff3cd; color: #856404; }
+    .badge-mal { background: #f8d7da; color: #721c24; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🐄 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Dosis Veterinarias</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🐄 Veterinarios y Zootecnistas</div>
+  <h1>Dosis de Medicamentos Veterinarios 2026</h1>
+  <p>Calculadora de dosis por especie y peso corporal. Antibióticos, antiparasitarios, analgésicos, vitaminas y vacunas para el sector pecuario colombiano.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Normativa ICA Colombia</span>
+    <span class="hero-chip">🐄 🐷 🐔 🐑 🐟</span>
+    <span class="hero-chip">💊 Múltiples vías</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('calculadora', this)">💊 Calculadora de Dosis</button>
+    <button class="tab-btn" onclick="mostrarTab('lote', this)">🐄 Dosis para Lote</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Dosis de Referencia</button>
+  </div>
+
+  <!-- TAB 1: CALCULADORA -->
+  <div id="tab-calculadora" class="tab-panel active">
+    <div class="card">
+      <h2>💊 Calculadora de Dosis por Especie y Peso</h2>
+      <div class="info-box">
+        <strong>Instrucciones:</strong> Selecciona la especie, el medicamento y el peso del animal. La calculadora entrega la dosis total, el volumen a administrar y la pauta de tratamiento. Siempre verifique con el prospecto del producto y la prescripción del veterinario.
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Especie animal</label>
+          <select id="d-especie" onchange="actualizarMedicamentos()">
+            <option value="bovino">🐄 Bovino</option>
+            <option value="porcino">🐷 Porcino</option>
+            <option value="aviar">🐔 Aves (pollo/gallina)</option>
+            <option value="ovino">🐑 Ovino / Caprino</option>
+            <option value="equino">🐎 Equino</option>
+            <option value="canino">🐕 Canino</option>
+            <option value="felino">🐱 Felino</option>
+            <option value="pez">🐟 Peces (tilapia/trucha)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Categoría del medicamento</label>
+          <select id="d-categoria" onchange="actualizarMedicamentos()">
+            <option value="antibiotico">Antibiótico</option>
+            <option value="antiparasitario">Antiparasitario</option>
+            <option value="analgesico">Analgésico / Antiinflamatorio</option>
+            <option value="vitamina">Vitamina / Suplemento</option>
+            <option value="hormona">Hormona / Reproductivo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Medicamento</label>
+          <select id="d-medicamento" onchange="autoConcentracion()"></select>
+        </div>
+        <div class="form-group">
+          <label>Peso del animal (kg)</label>
+          <input type="number" id="d-peso" value="450" min="0.1" max="1000" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Concentración del producto (mg/mL o %)</label>
+          <input type="number" id="d-concentracion" value="200" min="0.1" step="0.1" />
+          <span class="form-hint">Revisar el prospecto del producto comercial</span>
+        </div>
+        <div class="form-group">
+          <label>Vía de administración</label>
+          <select id="d-via">
+            <option value="IM">Intramuscular (IM)</option>
+            <option value="IV">Intravenosa (IV)</option>
+            <option value="SC">Subcutánea (SC)</option>
+            <option value="PO">Oral (PO)</option>
+            <option value="tópico">Tópico / Pour-on</option>
+            <option value="intramamario">Intramamario</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Indicación / Patología</label>
+          <input type="text" id="d-indicacion" placeholder="Ej: neumonía bovina, parasitosis gastrointestinal" />
+        </div>
+        <div class="form-group">
+          <label>Número de dosis / días de tratamiento</label>
+          <input type="number" id="d-dias" value="3" min="1" max="30" step="1" />
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularDosis()">💊 Calcular Dosis</button>
+    </div>
+    <div id="resultado-dosis" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: LOTE -->
+  <div id="tab-lote" class="tab-panel">
+    <div class="card">
+      <h2>🐄 Cálculo de Dosis para un Lote de Animales</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> Calcula la cantidad total de medicamento necesaria para tratar un lote completo, el costo estimado y cuántos envases necesitas comprar.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Especie</label>
+          <select id="l-especie">
+            <option value="bovino">🐄 Bovino</option>
+            <option value="porcino">🐷 Porcino</option>
+            <option value="aviar" selected>🐔 Aves</option>
+            <option value="ovino">🐑 Ovino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Número de animales del lote</label>
+          <input type="number" id="l-animales" value="1000" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Peso promedio por animal (kg)</label>
+          <input type="number" id="l-peso" value="2.0" min="0.1" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Dosis del medicamento (mg/kg)</label>
+          <input type="number" id="l-dosis" value="10" min="0.1" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Concentración del producto (mg/mL)</label>
+          <input type="number" id="l-conc" value="50" min="0.1" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Días de tratamiento</label>
+          <input type="number" id="l-dias" value="5" min="1" max="30" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Volumen del envase comercial (mL)</label>
+          <input type="number" id="l-envase" value="100" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Precio por envase ($ COP)</label>
+          <input type="number" id="l-precio" value="45000" min="0" step="1000" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularLote()">🐄 Calcular para el Lote</button>
+    </div>
+    <div id="resultado-lote" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Dosis de Referencia — Antibióticos en Bovinos</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Medicamento</th><th>Dosis (mg/kg)</th><th>Vía</th><th>Intervalo</th><th>Período retiro</th></tr></thead>
+          <tbody>
+            <tr><td><b>Oxitetraciclina LA</b></td><td>20 mg/kg</td><td>IM</td><td>72h (1 vez)</td><td>Carne: 28 días | Leche: 7 días</td></tr>
+            <tr><td><b>Penicilina G procaína</b></td><td>22.000 UI/kg</td><td>IM</td><td>24h</td><td>Carne: 10 días | Leche: 3 días</td></tr>
+            <tr><td><b>Enrofloxacina</b></td><td>5 mg/kg</td><td>IM/SC</td><td>24h</td><td>Carne: 28 días | ⛔ Leche: prohibido</td></tr>
+            <tr><td><b>Amoxicilina</b></td><td>7–15 mg/kg</td><td>IM</td><td>24–48h</td><td>Carne: 25 días | Leche: 4 días</td></tr>
+            <tr><td><b>Ceftiofur</b></td><td>1–2 mg/kg</td><td>IM/SC</td><td>24h</td><td>Carne: 14 días | Leche: 0 días</td></tr>
+            <tr><td><b>Florfenicol</b></td><td>20 mg/kg</td><td>IM</td><td>48h</td><td>Carne: 30 días | ⛔ Leche: prohibido</td></tr>
+            <tr><td><b>Tulathromicina</b></td><td>2.5 mg/kg</td><td>SC</td><td>Dosis única</td><td>Carne: 49 días | Leche: no aprobado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Antiparasitarios — Bovinos y Pequeños Rumiantes</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Medicamento</th><th>Especie</th><th>Dosis</th><th>Vía</th><th>Período retiro</th></tr></thead>
+          <tbody>
+            <tr><td><b>Ivermectina 1%</b></td><td>Bovino</td><td>0.2 mg/kg (1 mL/50 kg)</td><td>SC / Pour-on</td><td>Carne: 35 días</td></tr>
+            <tr><td><b>Ivermectina 1%</b></td><td>Porcino</td><td>0.3 mg/kg</td><td>SC</td><td>Carne: 28 días</td></tr>
+            <tr><td><b>Doramectina</b></td><td>Bovino</td><td>0.2 mg/kg</td><td>IM/SC</td><td>Carne: 70 días</td></tr>
+            <tr><td><b>Albendazol</b></td><td>Bovino/Ovino</td><td>7.5 mg/kg</td><td>PO</td><td>Carne: 14 días | Leche: 4 días</td></tr>
+            <tr><td><b>Fenbendazol</b></td><td>Bovino</td><td>5 mg/kg</td><td>PO</td><td>Carne: 13 días</td></tr>
+            <tr><td><b>Closantel</b></td><td>Ovino</td><td>10 mg/kg</td><td>PO/SC</td><td>Carne: 28 días | Leche: 28 días</td></tr>
+            <tr><td><b>Triclabendazol</b></td><td>Bovino/Ovino</td><td>12 mg/kg</td><td>PO</td><td>Carne: 56 días | Leche: 5 días</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 AINEs y Analgésicos Veterinarios</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Medicamento</th><th>Especie</th><th>Dosis</th><th>Vía</th><th>Intervalo</th></tr></thead>
+          <tbody>
+            <tr><td><b>Flunixin meglumina</b></td><td>Bovino / Equino</td><td>1.1–2.2 mg/kg</td><td>IV/IM</td><td>24h (máx 5 días)</td></tr>
+            <tr><td><b>Ketoprofeno</b></td><td>Bovino / Equino</td><td>3 mg/kg</td><td>IV/IM</td><td>24h</td></tr>
+            <tr><td><b>Meloxicam</b></td><td>Bovino</td><td>0.5 mg/kg</td><td>IV/SC</td><td>24h</td></tr>
+            <tr><td><b>Dipirona (metamizol)</b></td><td>Bovino / Equino</td><td>25–50 mg/kg</td><td>IV/IM</td><td>8–12h</td></tr>
+            <tr><td><b>Dexametasona</b></td><td>Bovino</td><td>0.05–0.2 mg/kg</td><td>IM/IV</td><td>24–48h</td></tr>
+            <tr><td><b>Carprofeno</b></td><td>Canino</td><td>4.4 mg/kg</td><td>PO/SC</td><td>24h</td></tr>
+            <tr><td><b>Meloxicam</b></td><td>Canino / Felino</td><td>0.2 mg/kg (inicio)</td><td>PO/SC</td><td>24h</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">⚠️ Los períodos de retiro son orientativos. Siempre verificar con el prospecto del producto comercial registrado ante el ICA Colombia.</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Las dosis presentadas son rangos de referencia de la literatura veterinaria. El tratamiento definitivo debe ser prescrito por un <strong>Médico Veterinario matriculado ante el ICA Colombia</strong>. El uso de medicamentos veterinarios en Colombia está regulado por la Resolución ICA 00001167/2020 y sus actualizaciones. Respete siempre los períodos de retiro antes del sacrificio o del ordeño.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n, dec=2) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+function fmtInt(n) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+
+// Base de datos de medicamentos
+const medicamentos = {
+  bovino: {
+    antibiotico: [
+      { nombre: 'Oxitetraciclina LA 20%', dosis: 20, conc: 200, intervalo: '72h', retiro: 'Carne: 28 días | Leche: 7 días' },
+      { nombre: 'Penicilina G procaína 400.000 UI/mL', dosis: 22, conc: 400, intervalo: '24h', retiro: 'Carne: 10 días | Leche: 3 días', unidadDosis: 'UI/kg' },
+      { nombre: 'Enrofloxacina 10%', dosis: 5, conc: 100, intervalo: '24h', retiro: 'Carne: 28 días | Leche: PROHIBIDO' },
+      { nombre: 'Amoxicilina 15%', dosis: 10, conc: 150, intervalo: '24-48h', retiro: 'Carne: 25 días | Leche: 4 días' },
+      { nombre: 'Ceftiofur 50 mg/mL', dosis: 1.5, conc: 50, intervalo: '24h', retiro: 'Carne: 14 días | Leche: 0 días' },
+      { nombre: 'Florfenicol 30%', dosis: 20, conc: 300, intervalo: '48h', retiro: 'Carne: 30 días | Leche: PROHIBIDO' },
+      { nombre: 'Tulathromicina 100 mg/mL', dosis: 2.5, conc: 100, intervalo: 'Dosis única', retiro: 'Carne: 49 días' },
+    ],
+    antiparasitario: [
+      { nombre: 'Ivermectina 1%', dosis: 0.2, conc: 10, intervalo: 'Dosis única', retiro: 'Carne: 35 días' },
+      { nombre: 'Doramectina 1%', dosis: 0.2, conc: 10, intervalo: 'Dosis única', retiro: 'Carne: 70 días' },
+      { nombre: 'Albendazol 10%', dosis: 7.5, conc: 100, intervalo: 'Dosis única', retiro: 'Carne: 14 días | Leche: 4 días' },
+      { nombre: 'Fenbendazol 10%', dosis: 5, conc: 100, intervalo: 'Dosis única', retiro: 'Carne: 13 días' },
+      { nombre: 'Triclabendazol 12%', dosis: 12, conc: 120, intervalo: 'Dosis única', retiro: 'Carne: 56 días | Leche: 5 días' },
+    ],
+    analgesico: [
+      { nombre: 'Flunixin meglumina 50 mg/mL', dosis: 2.2, conc: 50, intervalo: '24h (máx 5d)', retiro: 'Carne: 4 días | Leche: 36h' },
+      { nombre: 'Ketoprofeno 10%', dosis: 3, conc: 100, intervalo: '24h', retiro: 'Carne: 4 días' },
+      { nombre: 'Meloxicam 20 mg/mL', dosis: 0.5, conc: 20, intervalo: '24h', retiro: 'Carne: 15 días | Leche: 5 días' },
+      { nombre: 'Dexametasona 8 mg/mL', dosis: 0.1, conc: 8, intervalo: '24-48h', retiro: 'Carne: 8 días | Leche: 3 días' },
+      { nombre: 'Dipirona 50%', dosis: 30, conc: 500, intervalo: '8-12h', retiro: 'Carne: 1 día' },
+    ],
+    vitamina: [
+      { nombre: 'Complejo B inyectable', dosis: 5, conc: 0, intervalo: '7 días', retiro: 'Sin período' },
+      { nombre: 'Vitamina ADE inyectable', dosis: 1, conc: 0, intervalo: '30 días', retiro: 'Sin período' },
+      { nombre: 'Selenio-Vitamina E', dosis: 1, conc: 0, intervalo: '30 días', retiro: 'Carne: 30 días' },
+    ],
+    hormona: [
+      { nombre: 'Oxitocina 10 UI/mL', dosis: 0.05, conc: 10, intervalo: 'Dosis única', retiro: 'Sin período', unidadDosis: 'UI/kg' },
+      { nombre: 'GnRH (Gonadorelina)', dosis: 0.002, conc: 0.05, intervalo: 'Dosis única', retiro: 'Sin período' },
+    ],
+  },
+  porcino: {
+    antibiotico: [
+      { nombre: 'Amoxicilina 15%', dosis: 15, conc: 150, intervalo: '24h', retiro: 'Carne: 30 días' },
+      { nombre: 'Enrofloxacina 10%', dosis: 5, conc: 100, intervalo: '24h', retiro: 'Carne: 10 días' },
+      { nombre: 'Oxitetraciclina 20%', dosis: 20, conc: 200, intervalo: '24h', retiro: 'Carne: 28 días' },
+      { nombre: 'Tilosina 20%', dosis: 10, conc: 200, intervalo: '24h', retiro: 'Carne: 14 días' },
+      { nombre: 'Lincomicina 10%', dosis: 11, conc: 100, intervalo: '24h', retiro: 'Carne: 6 días' },
+    ],
+    antiparasitario: [
+      { nombre: 'Ivermectina 1%', dosis: 0.3, conc: 10, intervalo: 'Dosis única (repetir 14d)', retiro: 'Carne: 28 días' },
+      { nombre: 'Albendazol 10%', dosis: 5, conc: 100, intervalo: 'Dosis única', retiro: 'Carne: 14 días' },
+    ],
+    analgesico: [
+      { nombre: 'Flunixin meglumina 50 mg/mL', dosis: 2.2, conc: 50, intervalo: '24h', retiro: 'Carne: 12 días' },
+      { nombre: 'Meloxicam 20 mg/mL', dosis: 0.4, conc: 20, intervalo: '24h', retiro: 'Carne: 5 días' },
+    ],
+    vitamina: [
+      { nombre: 'Complejo B inyectable', dosis: 2, conc: 0, intervalo: '7 días', retiro: 'Sin período' },
+      { nombre: 'Vitamina C + E', dosis: 5, conc: 0, intervalo: '7 días', retiro: 'Sin período' },
+    ],
+    hormona: [
+      { nombre: 'Oxitocina 10 UI/mL', dosis: 0.1, conc: 10, intervalo: 'Dosis única', retiro: 'Sin período', unidadDosis: 'UI/kg' },
+    ],
+  },
+  aviar: {
+    antibiotico: [
+      { nombre: 'Enrofloxacina solución oral 10%', dosis: 10, conc: 100, intervalo: '24h (5 días)', retiro: 'Carne: 7 días | ⛔ Ponedoras: PROHIBIDO' },
+      { nombre: 'Amoxicilina soluble 50%', dosis: 15, conc: 500, intervalo: '24h (5 días)', retiro: 'Carne: 7 días' },
+      { nombre: 'Oxitetraciclina soluble 50%', dosis: 50, conc: 500, intervalo: '24h (5 días)', retiro: 'Carne: 7 días | ⛔ Huevos: PROHIBIDO' },
+      { nombre: 'Tilosina 50%', dosis: 25, conc: 500, intervalo: '24h (5 días)', retiro: 'Carne: 5 días' },
+    ],
+    antiparasitario: [
+      { nombre: 'Amprolium 20% (coccidiosis)', dosis: 240, conc: 200, intervalo: '5-7 días', retiro: 'Carne: 3 días | Huevos: 0 días' },
+      { nombre: 'Diclazuril 0.5%', dosis: 1, conc: 5, intervalo: '2 días', retiro: 'Carne: 0 días | Huevos: 0 días' },
+    ],
+    analgesico: [
+      { nombre: 'Meloxicam 1.5 mg/mL oral', dosis: 0.5, conc: 1.5, intervalo: '24h', retiro: 'Carne: 7 días' },
+    ],
+    vitamina: [
+      { nombre: 'Electrolitos + Vitaminas agua', dosis: 1, conc: 0, intervalo: 'A demanda', retiro: 'Sin período' },
+      { nombre: 'Vitamina AD3E soluble', dosis: 2, conc: 0, intervalo: '7 días', retiro: 'Sin período' },
+    ],
+    hormona: [],
+  },
+  ovino: {
+    antibiotico: [
+      { nombre: 'Oxitetraciclina LA 20%', dosis: 20, conc: 200, intervalo: '72h', retiro: 'Carne: 28 días | Leche: 7 días' },
+      { nombre: 'Penicilina G procaína', dosis: 22, conc: 400, intervalo: '24h', retiro: 'Carne: 10 días' },
+    ],
+    antiparasitario: [
+      { nombre: 'Ivermectina 1%', dosis: 0.2, conc: 10, intervalo: 'Dosis única', retiro: 'Carne: 35 días' },
+      { nombre: 'Closantel 10%', dosis: 10, conc: 100, intervalo: 'Dosis única', retiro: 'Carne: 28 días' },
+      { nombre: 'Albendazol 10%', dosis: 7.5, conc: 100, intervalo: 'Dosis única', retiro: 'Carne: 14 días' },
+      { nombre: 'Triclabendazol 12%', dosis: 12, conc: 120, intervalo: 'Dosis única', retiro: 'Carne: 56 días' },
+    ],
+    analgesico: [
+      { nombre: 'Flunixin meglumina 50 mg/mL', dosis: 2.2, conc: 50, intervalo: '24h', retiro: 'Carne: 4 días' },
+      { nombre: 'Meloxicam 20 mg/mL', dosis: 0.5, conc: 20, intervalo: '24h', retiro: 'Carne: 15 días' },
+    ],
+    vitamina: [
+      { nombre: 'Complejo B', dosis: 2, conc: 0, intervalo: '7 días', retiro: 'Sin período' },
+    ],
+    hormona: [],
+  },
+  equino: {
+    antibiotico: [
+      { nombre: 'Penicilina G procaína', dosis: 22, conc: 400, intervalo: '24h', retiro: 'No aplica (uso no alimentario)' },
+      { nombre: 'Enrofloxacina 10%', dosis: 5, conc: 100, intervalo: '24h', retiro: 'No aplica' },
+      { nombre: 'Trimetoprim/Sulfadiazina', dosis: 30, conc: 240, intervalo: '12h', retiro: 'No aplica' },
+    ],
+    antiparasitario: [
+      { nombre: 'Ivermectina pasta 1.87%', dosis: 0.2, conc: 18.7, intervalo: 'Cada 2 meses', retiro: 'No aplica' },
+      { nombre: 'Moxidectina gel 2%', dosis: 0.4, conc: 20, intervalo: 'Cada 3 meses', retiro: 'No aplica' },
+      { nombre: 'Fenbendazol 10%', dosis: 5, conc: 100, intervalo: 'Dosis única', retiro: 'No aplica' },
+    ],
+    analgesico: [
+      { nombre: 'Flunixin meglumina 50 mg/mL', dosis: 1.1, conc: 50, intervalo: '24h (máx 5d)', retiro: 'No aplica' },
+      { nombre: 'Fenilbutazona 20%', dosis: 4.4, conc: 200, intervalo: '24h', retiro: 'No aplica' },
+      { nombre: 'Ketoprofeno 10%', dosis: 2.2, conc: 100, intervalo: '24h', retiro: 'No aplica' },
+    ],
+    vitamina: [
+      { nombre: 'Vitamina E + Selenio', dosis: 1, conc: 0, intervalo: 'Mensual', retiro: 'No aplica' },
+    ],
+    hormona: [
+      { nombre: 'Oxitocina 10 UI/mL', dosis: 0.05, conc: 10, intervalo: 'Dosis única', retiro: 'No aplica' },
+    ],
+  },
+  canino: {
+    antibiotico: [
+      { nombre: 'Amoxicilina + Ac. Clavulánico 50 mg/mL', dosis: 12.5, conc: 50, intervalo: '12h', retiro: 'No aplica' },
+      { nombre: 'Enrofloxacina 5%', dosis: 5, conc: 50, intervalo: '24h', retiro: 'No aplica' },
+      { nombre: 'Metronidazol 5 mg/mL', dosis: 15, conc: 5, intervalo: '12h', retiro: 'No aplica' },
+      { nombre: 'Cefalexina 250 mg cápsulas', dosis: 25, conc: 0, intervalo: '12h', retiro: 'No aplica' },
+    ],
+    antiparasitario: [
+      { nombre: 'Ivermectina 1%', dosis: 0.05, conc: 10, intervalo: 'Mensual', retiro: 'No aplica' },
+      { nombre: 'Milbemicina oxima', dosis: 0.5, conc: 0, intervalo: 'Mensual', retiro: 'No aplica' },
+      { nombre: 'Praziquantel + Pirantel', dosis: 5, conc: 0, intervalo: 'Dosis única', retiro: 'No aplica' },
+    ],
+    analgesico: [
+      { nombre: 'Carprofeno 50 mg/mL', dosis: 4.4, conc: 50, intervalo: '24h', retiro: 'No aplica' },
+      { nombre: 'Meloxicam 1.5 mg/mL', dosis: 0.2, conc: 1.5, intervalo: '24h (inicio 0.2, luego 0.1)', retiro: 'No aplica' },
+      { nombre: 'Tramadol 50 mg/mL', dosis: 2, conc: 50, intervalo: '8-12h', retiro: 'No aplica' },
+    ],
+    vitamina: [
+      { nombre: 'Complejo B canino', dosis: 0.5, conc: 0, intervalo: '7 días', retiro: 'No aplica' },
+    ],
+    hormona: [
+      { nombre: 'Oxitocina 10 UI/mL', dosis: 0.1, conc: 10, intervalo: 'Dosis única', retiro: 'No aplica' },
+    ],
+  },
+  felino: {
+    antibiotico: [
+      { nombre: 'Amoxicilina 50 mg/mL', dosis: 11, conc: 50, intervalo: '12h', retiro: 'No aplica' },
+      { nombre: 'Enrofloxacina 5%', dosis: 5, conc: 50, intervalo: '24h', retiro: 'No aplica' },
+      { nombre: 'Azitromicina 100 mg/5mL', dosis: 5, conc: 20, intervalo: '24h (5d)', retiro: 'No aplica' },
+    ],
+    antiparasitario: [
+      { nombre: 'Ivermectina 1% (con precaución)', dosis: 0.024, conc: 10, intervalo: 'Mensual', retiro: 'No aplica' },
+      { nombre: 'Praziquantel 56.8 mg/mL', dosis: 8, conc: 56.8, intervalo: 'Dosis única', retiro: 'No aplica' },
+    ],
+    analgesico: [
+      { nombre: 'Meloxicam 1.5 mg/mL (con precaución)', dosis: 0.1, conc: 1.5, intervalo: '24-48h (máx 3d)', retiro: 'No aplica' },
+      { nombre: 'Buprenorfina 0.3 mg/mL', dosis: 0.02, conc: 0.3, intervalo: '8h', retiro: 'No aplica' },
+    ],
+    vitamina: [
+      { nombre: 'Complejo B felino', dosis: 0.25, conc: 0, intervalo: '7 días', retiro: 'No aplica' },
+    ],
+    hormona: [],
+  },
+  pez: {
+    antibiotico: [
+      { nombre: 'Oxitetraciclina polvos solubles', dosis: 75, conc: 500, intervalo: '10 días (en agua)', retiro: 'Carne: 500 grados-día' },
+      { nombre: 'Florfenicol 50% alimento medicado', dosis: 10, conc: 500, intervalo: '10 días', retiro: 'Carne: 12 días (a 20°C)' },
+    ],
+    antiparasitario: [
+      { nombre: 'Triclorofón (Masoten) baño', dosis: 0.25, conc: 0, intervalo: 'Baño semanal', retiro: 'Carne: 7 días' },
+      { nombre: 'Sal común (NaCl) baño', dosis: 5000, conc: 0, intervalo: 'Baño 30 min', retiro: 'No aplica' },
+    ],
+    analgesico: [
+      { nombre: 'Clove oil (eugenol) anestesia', dosis: 0.1, conc: 1000, intervalo: 'Procedimiento', retiro: 'No aplica' },
+    ],
+    vitamina: [
+      { nombre: 'Vitamina C estabilizada', dosis: 500, conc: 0, intervalo: 'Diario (alimento)', retiro: 'No aplica' },
+    ],
+    hormona: [],
+  },
+};
+
+function actualizarMedicamentos() {
+  const especie   = document.getElementById('d-especie').value;
+  const categoria = document.getElementById('d-categoria').value;
+  const select    = document.getElementById('d-medicamento');
+  select.innerHTML = '';
+
+  const lista = medicamentos[especie]?.[categoria] || [];
+  if (lista.length === 0) {
+    select.innerHTML = '<option value="">No disponible para esta especie/categoría</option>';
+    return;
+  }
+  lista.forEach((m, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = m.nombre;
+    select.appendChild(opt);
+  });
+  autoConcentracion();
+}
+
+function autoConcentracion() {
+  const especie   = document.getElementById('d-especie').value;
+  const categoria = document.getElementById('d-categoria').value;
+  const idx       = parseInt(document.getElementById('d-medicamento').value);
+  const lista     = medicamentos[especie]?.[categoria] || [];
+  if (lista[idx] && lista[idx].conc > 0) {
+    document.getElementById('d-concentracion').value = lista[idx].conc;
+  }
+}
+
+function calcularDosis() {
+  const especie   = document.getElementById('d-especie').value;
+  const categoria = document.getElementById('d-categoria').value;
+  const idx       = parseInt(document.getElementById('d-medicamento').value);
+  const peso      = parseFloat(document.getElementById('d-peso').value) || 0;
+  const conc      = parseFloat(document.getElementById('d-concentracion').value) || 0;
+  const via       = document.getElementById('d-via').value;
+  const indicacion= document.getElementById('d-indicacion').value || '—';
+  const dias      = parseInt(document.getElementById('d-dias').value) || 1;
+
+  const lista = medicamentos[especie]?.[categoria] || [];
+  const med   = lista[idx];
+  if (!med) { alert('Selecciona un medicamento válido.'); return; }
+
+  const dosisMgKg  = med.dosis;
+  const dosisMgTotal = dosisMgKg * peso;
+  const volML      = conc > 0 ? dosisMgTotal / conc : null;
+  const volTotalTratamiento = volML !== null ? volML * dias : null;
+
+  document.getElementById('resultado-dosis').style.display = 'block';
+  document.getElementById('resultado-dosis').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Resultado — Dosis Calculada</div>
+      <div class="resultado-dosis">${fmt(dosisMgTotal, 1)} mg</div>
+      <div class="resultado-sub">${med.nombre} — ${via} — Animal de ${peso} kg</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(dosisMgKg, 3)} mg/kg</div><div class="resultado-label">Dosis (mg/kg)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(dosisMgTotal, 1)} mg</div><div class="resultado-label">Dosis total por aplicación</div></div>
+        ${volML !== null ? `<div class="resultado-item"><div class="resultado-valor">${fmt(volML, 2)} mL</div><div class="resultado-label">Volumen a administrar</div></div>` : ''}
+        <div class="resultado-item"><div class="resultado-valor">${med.intervalo}</div><div class="resultado-label">Intervalo de dosificación</div></div>
+        ${volTotalTratamiento !== null ? `<div class="resultado-item"><div class="resultado-valor">${fmt(volTotalTratamiento, 1)} mL</div><div class="resultado-label">Volumen total (${dias} dosis)</div></div>` : ''}
+      </div>
+      <div class="resultado-detalle">
+        <b>Medicamento:</b> ${med.nombre}<br>
+        <b>Especie:</b> ${especie} | <b>Peso:</b> ${peso} kg | <b>Vía:</b> ${via}<br>
+        <b>Indicación:</b> ${indicacion}<br>
+        <b>Dosis:</b> ${fmt(dosisMgKg, 3)} mg/kg × ${peso} kg = <b>${fmt(dosisMgTotal, 2)} mg</b><br>
+        ${conc > 0 ? `<b>Concentración:</b> ${conc} mg/mL → Volumen: ${fmt(dosisMgTotal,2)} mg ÷ ${conc} mg/mL = <b>${fmt(volML,2)} mL</b><br>` : ''}
+        <b>Intervalo:</b> ${med.intervalo} | <b>Tratamiento:</b> ${dias} dosis<br>
+        <b>⏱️ Período de retiro:</b> ${med.retiro}
+      </div>
+    </div>
+    <div class="alerta alerta-warn" style="margin-top:0.8rem;">
+      ⚠️ <strong>Período de retiro:</strong> ${med.retiro}. No sacrificar ni ordeñar antes de cumplir el período de retiro. Según Resolución ICA 00001167/2020.
+    </div>`;
+}
+
+function calcularLote() {
+  const animales = parseInt(document.getElementById('l-animales').value) || 0;
+  const peso     = parseFloat(document.getElementById('l-peso').value) || 0;
+  const dosis    = parseFloat(document.getElementById('l-dosis').value) || 0;
+  const conc     = parseFloat(document.getElementById('l-conc').value) || 0;
+  const dias     = parseInt(document.getElementById('l-dias').value) || 1;
+  const envase   = parseFloat(document.getElementById('l-envase').value) || 100;
+  const precio   = parseFloat(document.getElementById('l-precio').value) || 0;
+
+  const dosisPorAnimal = (dosis * peso) / conc;        // mL/animal/dosis
+  const volTotalDia    = dosisPorAnimal * animales;     // mL/día
+  const volTotal       = volTotalDia * dias;            // mL total
+  const envases        = Math.ceil(volTotal / envase);  // envases necesarios
+  const costoTotal     = envases * precio;
+  const costoPorAnimal = costoTotal / animales;
+
+  document.getElementById('resultado-lote').style.display = 'block';
+  document.getElementById('resultado-lote').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Resultado — Medicamento para el Lote Completo</div>
+      <div class="resultado-dosis">${fmt(volTotal, 0)} mL</div>
+      <div class="resultado-sub">Volumen total para ${fmtInt(animales)} animales durante ${dias} días</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(dosisPorAnimal, 2)} mL</div><div class="resultado-label">Dosis por animal / aplicación</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(volTotalDia, 1)} mL</div><div class="resultado-label">Volumen total / día</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(volTotal, 0)} mL</div><div class="resultado-label">Volumen total tratamiento</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${envases}</div><div class="resultado-label">Envases de ${envase} mL</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(costoTotal)}</div><div class="resultado-label">Costo total (COP)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(costoPorAnimal, 0)}</div><div class="resultado-label">Costo por animal</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Cálculo:</b><br>
+        Dosis por animal: (${dosis} mg/kg × ${peso} kg) ÷ ${conc} mg/mL = <b>${fmt(dosisPorAnimal,2)} mL/animal/dosis</b><br>
+        Volumen diario: ${fmt(dosisPorAnimal,2)} mL × ${fmtInt(animales)} animales = <b>${fmt(volTotalDia,1)} mL/día</b><br>
+        Volumen total: ${fmt(volTotalDia,1)} mL × ${dias} días = <b>${fmt(volTotal,1)} mL</b><br>
+        Envases necesarios: ${fmt(volTotal,1)} mL ÷ ${envase} mL/envase = <b>${envases} envases</b><br>
+        Costo total: ${envases} × $ ${fmtInt(precio)} = <b>$ ${fmtInt(costoTotal)}</b>
+      </div>
+    </div>`;
+}
+
+// Inicializar
+actualizarMedicamentos();
+</script>
+</body>
+</html>
