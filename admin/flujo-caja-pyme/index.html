@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Simulador de flujo de caja PYME Colombia 2026. Proyecta ingresos, egresos, saldo mensual y acumulado. Detecta meses críticos, calcula cobertura y genera estado de flujo de caja a 12 meses." />
+  <meta name="keywords" content="flujo de caja PYME Colombia, simulador flujo caja mensual, proyeccion ingresos egresos negocio, cash flow PYME Colombia 2026" />
+  <title>Simulador Flujo de Caja PYME Colombia | HerramientasPro Colombia</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #222; min-height: 100vh; }
+
+    nav { background: #1a3a5c; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    nav a { color: #fff; text-decoration: none; font-size: 14px; opacity: .8; }
+    nav a:hover { opacity: 1; }
+    nav .brand { font-weight: 700; font-size: 17px; opacity: 1; margin-right: 8px; }
+    nav .sep { color: #7aa3c8; }
+
+    .hero { background: linear-gradient(135deg, #1b2a6b 0%, #2c3e8c 60%, #3d52b8 100%); color: #fff; text-align: center; padding: 36px 20px 28px; }
+    .hero .badge { background: rgba(255,255,255,.18); display: inline-block; border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+    .hero h1 { font-size: clamp(20px, 4vw, 30px); font-weight: 800; margin-bottom: 8px; }
+    .hero p { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto 16px; }
+    .hero .chips { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .hero .chip { background: rgba(255,255,255,.15); border-radius: 20px; padding: 5px 14px; font-size: 13px; }
+
+    .container { max-width: 1060px; margin: 0 auto; padding: 28px 16px 60px; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+    .tab-btn { padding: 9px 18px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; background: #fff; color: #555; box-shadow: 0 1px 4px rgba(0,0,0,.1); transition: all .2s; }
+    .tab-btn.active { background: #1b2a6b; color: #fff; }
+
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 24px; margin-bottom: 20px; }
+    .card h2 { font-size: 16px; font-weight: 700; color: #1b2a6b; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid #dce4f5; }
+
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+    .grid3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 12px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 13px; font-weight: 600; color: #444; }
+    input, select { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color .2s; background: #fafafa; }
+    input:focus, select:focus { outline: none; border-color: #2c3e8c; background: #fff; }
+    .hint { font-size: 11px; color: #888; margin-top: 2px; line-height: 1.4; }
+
+    /* Tabla de entrada mensual */
+    .mes-table-wrap { overflow-x: auto; }
+    .mes-table { border-collapse: collapse; font-size: 13px; min-width: 860px; width: 100%; }
+    .mes-table th { background: #1b2a6b; color: #fff; padding: 9px 10px; text-align: center; white-space: nowrap; font-size: 12px; }
+    .mes-table th.lbl { text-align: left; min-width: 160px; }
+    .mes-table td { padding: 6px 6px; border-bottom: 1px solid #dce4f5; }
+    .mes-table td.lbl { font-size: 13px; font-weight: 600; color: #444; padding-left: 10px; white-space: nowrap; }
+    .mes-table td.seccion { background: #dce4f5; font-weight: 700; color: #1b2a6b; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; padding: 8px 10px; }
+    .mes-table input { padding: 7px 8px; font-size: 13px; border: 1px solid #d0d8f0; border-radius: 6px; background: #f8f9ff; min-width: 80px; width: 100%; }
+    .mes-table input:focus { border-color: #2c3e8c; background: #fff; outline: none; }
+    .btn-apply-all { background: #2c3e8c; color: #fff; border: none; border-radius: 6px; padding: 5px 10px; font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 6px; }
+    .btn-apply-all:hover { background: #1b2a6b; }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+    .btn-calc { background: #1b2a6b; color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; min-width: 160px; transition: background .2s; }
+    .btn-calc:hover { background: #111d4a; }
+    .btn-reset { background: #ecf0f1; color: #555; border: none; border-radius: 8px; padding: 13px 20px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+    /* RESULTADO */
+    .result-box { display: none; margin-top: 24px; }
+
+    .resumen-banner { background: linear-gradient(135deg, #1b2a6b, #2c3e8c); color: #fff; border-radius: 14px; padding: 22px 26px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+    .rb-item .rblbl { font-size: 11px; opacity: .8; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+    .rb-item .rbval { font-size: 22px; font-weight: 900; line-height: 1.1; }
+    .rb-item .rbsub { font-size: 11px; opacity: .75; margin-top: 2px; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.07); padding: 14px; text-align: center; border-top: 4px solid #2c3e8c; }
+    .kpi.verde  { border-top-color: #27ae60; }
+    .kpi.rojo   { border-top-color: #e74c3c; }
+    .kpi.naranja{ border-top-color: #e67e22; }
+    .kpi.morado { border-top-color: #8e44ad; }
+    .kpi .klbl  { font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 5px; }
+    .kpi .kval  { font-size: 17px; font-weight: 800; color: #1b2a6b; line-height: 1.2; }
+    .kpi.verde .kval  { color: #1e8449; }
+    .kpi.rojo .kval   { color: #922b21; }
+    .kpi.naranja .kval{ color: #ca6f1e; }
+    .kpi.morado .kval { color: #6c3483; }
+    .kpi .ksub  { font-size: 11px; color: #aaa; margin-top: 3px; }
+
+    /* Tabla resultado */
+    .res-table-wrap { overflow-x: auto; }
+    .res-table { border-collapse: collapse; font-size: 13px; min-width: 900px; width: 100%; }
+    .res-table th { background: #1b2a6b; color: #fff; padding: 9px 10px; text-align: right; white-space: nowrap; font-size: 12px; }
+    .res-table th:first-child { text-align: left; }
+    .res-table td { padding: 8px 10px; border-bottom: 1px solid #dce4f5; text-align: right; white-space: nowrap; }
+    .res-table td:first-child { text-align: left; font-weight: 600; color: #333; }
+    .res-table .seccion td { background: #dce4f5; font-weight: 700; color: #1b2a6b; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+    .res-table .subtotal td { background: #eef1fb; font-weight: 700; }
+    .res-table .neto td { background: #1b2a6b; color: #fff; font-weight: 800; font-size: 14px; }
+    .res-table .saldo td { background: #f8f9ff; font-weight: 700; font-size: 13px; }
+    .res-table .acum td { background: #dce4f5; font-weight: 800; color: #1b2a6b; font-size: 13px; }
+    .res-table .negativo { color: #e74c3c !important; }
+    .res-table .positivo { color: #27ae60 !important; }
+    .res-table .critico td { background: #fff0f0 !important; }
+    .res-table .critico td:first-child::after { content: ' ⚠️'; }
+
+    /* Gráfico barras */
+    .chart-wrap { overflow-x: auto; margin-top: 8px; }
+
+    .alert { border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-top: 14px; line-height: 1.5; }
+    .alert-info   { background: #eaf4fb; border-left: 4px solid #2980b9; color: #1a5276; }
+    .alert-warn   { background: #fef9e7; border-left: 4px solid #f39c12; color: #7d6608; }
+    .alert-success{ background: #eafaf1; border-left: 4px solid #27ae60; color: #1e8449; }
+    .alert-danger { background: #fdedec; border-left: 4px solid #e74c3c; color: #7b241c; }
+
+    .meses-criticos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .mes-chip { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+    .mes-chip.ok   { background: #eafaf1; color: #1e8449; border: 1px solid #a9dfbf; }
+    .mes-chip.warn { background: #fef9e7; color: #7d6608; border: 1px solid #f9e79f; }
+    .mes-chip.crit { background: #fdedec; color: #922b21; border: 1px solid #f5b7b1; }
+
+    .disclaimer { background: #ecf0f1; border-radius: 10px; padding: 14px 18px; font-size: 12px; color: #636e72; margin-top: 28px; line-height: 1.6; }
+
+    @media (max-width: 600px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .resumen-banner { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="brand">🛠️ HerramientasPro</a>
+  <span class="sep">›</span>
+  <a href="../../index.html#admin">Administración</a>
+  <span class="sep">›</span>
+  <span style="color:#fff;opacity:.7;">Flujo de Caja PYME</span>
+</nav>
+
+<div class="hero">
+  <div class="badge">💰 Finanzas · PYME Colombia 2026</div>
+  <h1>Simulador de Flujo de Caja PYME</h1>
+  <p>Proyecta mes a mes los ingresos, egresos y saldo de caja de tu negocio durante 12 meses. Identifica los meses críticos y planea con anticipación tus necesidades de liquidez.</p>
+  <div class="chips">
+    <span class="chip">📅 12 meses</span>
+    <span class="chip">📊 Gráfico de barras</span>
+    <span class="chip">⚠️ Alerta meses críticos</span>
+    <span class="chip">📋 Estado de flujo completo</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('entrada')">Ingresar datos</button>
+    <button class="tab-btn" onclick="showTab('conceptos')">¿Qué es el flujo de caja?</button>
+  </div>
+
+  <div id="tab-entrada">
+
+    <!-- SALDO INICIAL Y CONFIGURACIÓN -->
+    <div class="card">
+      <h2>⚙️ Configuración inicial</h2>
+      <div class="grid3">
+        <div class="field">
+          <label>Nombre del negocio</label>
+          <input type="text" id="nombre-negocio" placeholder="Ej: Empanadas Doña Rosa" />
+        </div>
+        <div class="field">
+          <label>Saldo inicial en caja / banco (COP)</label>
+          <input type="number" id="saldo-inicial" placeholder="Ej: 5000000" min="0" />
+          <span class="hint">Dinero disponible hoy en caja y cuentas bancarias.</span>
+        </div>
+        <div class="field">
+          <label>Mes de inicio</label>
+          <select id="mes-inicio">
+            <option value="0">Enero</option><option value="1">Febrero</option>
+            <option value="2">Marzo</option><option value="3">Abril</option>
+            <option value="4">Mayo</option><option value="5">Junio</option>
+            <option value="6">Julio</option><option value="7">Agosto</option>
+            <option value="8">Septiembre</option><option value="9">Octubre</option>
+            <option value="10">Noviembre</option><option value="11">Diciembre</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Saldo mínimo de caja deseado (COP)</label>
+          <input type="number" id="saldo-minimo" placeholder="Ej: 2000000" min="0" />
+          <span class="hint">Colchón de seguridad. Meses por debajo de este valor se marcan como críticos.</span>
+        </div>
+        <div class="field">
+          <label>Crecimiento mensual de ventas (%)</label>
+          <input type="number" id="crec-ventas" placeholder="0" step="0.5" />
+          <span class="hint">Si se aplica a todas las filas de ingreso. Dejar en 0 para valores fijos.</span>
+        </div>
+        <div class="field">
+          <label>Sector del negocio</label>
+          <select id="sector">
+            <option value="comercio">Comercio / Retail</option>
+            <option value="servicios">Servicios / Consultoría</option>
+            <option value="manufactura">Manufactura / Producción</option>
+            <option value="alimentos">Alimentos y Bebidas</option>
+            <option value="construccion">Construcción</option>
+            <option value="agro">Agropecuario</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLA PRINCIPAL -->
+    <div class="card">
+      <h2>📋 Proyección mensual de ingresos y egresos</h2>
+      <div class="alert alert-info" style="margin-bottom:16px;">
+        ℹ️ Ingrese los valores para cada mes. Use el botón <strong>"→ todos"</strong> para copiar un valor a los 12 meses de esa fila. Los campos vacíos se toman como $0.
+      </div>
+      <div class="mes-table-wrap">
+        <table class="mes-table" id="tabla-entrada">
+          <thead>
+            <tr>
+              <th class="lbl">Concepto</th>
+              <th id="th0">Ene</th><th id="th1">Feb</th><th id="th2">Mar</th>
+              <th id="th3">Abr</th><th id="th4">May</th><th id="th5">Jun</th>
+              <th id="th6">Jul</th><th id="th7">Ago</th><th id="th8">Sep</th>
+              <th id="th9">Oct</th><th id="th10">Nov</th><th id="th11">Dic</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-calc" onclick="calcFlujo()">💰 Proyectar flujo de caja</button>
+      <button class="btn-reset" onclick="resetFlujo()">Limpiar todo</button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="resultado" class="result-box">
+
+      <div class="resumen-banner">
+        <div class="rb-item"><div class="rblbl">Total ingresos 12m</div><div class="rbval" id="rb-ing">$0</div><div class="rbsub">proyectado anual</div></div>
+        <div class="rb-item"><div class="rblbl">Total egresos 12m</div><div class="rbval" id="rb-egr">$0</div><div class="rbsub">proyectado anual</div></div>
+        <div class="rb-item"><div class="rblbl">Flujo neto anual</div><div class="rbval" id="rb-neto">$0</div><div class="rbsub">superávit / déficit</div></div>
+        <div class="rb-item"><div class="rblbl">Saldo final proyectado</div><div class="rbval" id="rb-saldo">$0</div><div class="rbsub">al mes 12</div></div>
+        <div class="rb-item"><div class="rblbl">Meses críticos</div><div class="rbval" id="rb-criticos">0</div><div class="rbsub">por debajo del mínimo</div></div>
+        <div class="rb-item"><div class="rblbl">Mejor mes</div><div class="rbval" id="rb-mejor">—</div><div class="rbsub">mayor flujo neto</div></div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi verde"><div class="klbl">Promedio ingresos/mes</div><div class="kval" id="kpi-avg-ing">$0</div><div class="ksub">promedio mensual</div></div>
+        <div class="kpi rojo"><div class="klbl">Promedio egresos/mes</div><div class="kval" id="kpi-avg-egr">$0</div><div class="ksub">promedio mensual</div></div>
+        <div class="kpi naranja"><div class="klbl">Mes de menor saldo</div><div class="kval" id="kpi-min-saldo">—</div><div class="ksub">punto más crítico</div></div>
+        <div class="kpi morado"><div class="klbl">Cobertura de egresos</div><div class="kval" id="kpi-cobertura">0 meses</div><div class="ksub">saldo inicial / egr.prom.</div></div>
+        <div class="kpi"><div class="klbl">Margen operativo prom.</div><div class="kval" id="kpi-margen">0%</div><div class="ksub">flujo neto / ingresos</div></div>
+        <div class="kpi azul" style="border-top-color:#2980b9"><div class="klbl">Saldo mínimo alcanzado</div><div class="kval" id="kpi-saldo-min">$0</div><div class="ksub">el mes más apretado</div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h2>📊 Gráfico de flujo de caja mensual</h2>
+        <div class="chart-wrap">
+          <svg id="grafico-flujo" viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;display:block;margin:0 auto 10px;"></svg>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h2>📋 Estado de flujo de caja — Proyección 12 meses</h2>
+        <div class="res-table-wrap">
+          <table class="res-table">
+            <thead><tr id="res-thead"></tr></thead>
+            <tbody id="res-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>⚠️ Análisis de meses críticos</h2>
+        <div id="meses-criticos-wrap"></div>
+        <div id="recomendaciones-flujo" style="margin-top:14px;"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB CONCEPTOS -->
+  <div id="tab-conceptos" style="display:none">
+    <div class="card">
+      <h2>📖 ¿Qué es el flujo de caja y por qué es crítico para tu PYME?</h2>
+      <div class="alert alert-danger" style="margin-bottom:18px;">
+        🚨 <strong>El 82% de las PYME que quiebran no lo hacen por falta de utilidades, sino por falta de liquidez.</strong> Un negocio puede ser rentable en el papel y quedarse sin efectivo para pagar la nómina o los proveedores.
+      </div>
+
+      <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px;">
+        <thead><tr style="background:#1b2a6b;color:#fff;"><th style="padding:9px 12px;text-align:left;">Concepto</th><th style="padding:9px 12px;">Definición</th><th style="padding:9px 12px;">Ejemplo PYME</th></tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #dce4f5;"><td style="padding:9px 12px;font-weight:700;">Flujo de caja operativo</td><td style="padding:9px 12px;">Efectivo generado o consumido por la operación normal del negocio</td><td style="padding:9px 12px;">Ventas cobradas - pagos a proveedores - nómina - servicios</td></tr>
+          <tr style="border-bottom:1px solid #dce4f5;background:#eef1fb;"><td style="padding:9px 12px;font-weight:700;">Flujo de caja de inversión</td><td style="padding:9px 12px;">Compra o venta de activos fijos (maquinaria, vehículos, equipos)</td><td style="padding:9px 12px;">Compra de horno = salida de caja grande en un mes</td></tr>
+          <tr style="border-bottom:1px solid #dce4f5;"><td style="padding:9px 12px;font-weight:700;">Flujo de caja de financiación</td><td style="padding:9px 12px;">Préstamos recibidos, pagos de deuda, aportes de socios</td><td style="padding:9px 12px;">Desembolso de crédito Bancolombia = entrada de caja</td></tr>
+          <tr style="border-bottom:1px solid #dce4f5;background:#eef1fb;"><td style="padding:9px 12px;font-weight:700;">Saldo de caja</td><td style="padding:9px 12px;">Acumulado de todos los flujos + saldo inicial</td><td style="padding:9px 12px;">Lo que hay en caja y banco al final de cada mes</td></tr>
+          <tr><td style="padding:9px 12px;font-weight:700;">Mes crítico</td><td style="padding:9px 12px;">Mes donde el saldo cae por debajo del mínimo operativo</td><td style="padding:9px 12px;">Diciembre: ventas bajas + prima de navidad = crisis de caja</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="color:#1b2a6b;font-size:15px;margin-bottom:10px;">💡 Estrategias para mejorar el flujo de caja en una PYME colombiana</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
+        <div style="background:#eef1fb;border-radius:10px;padding:14px;border-left:4px solid #2c3e8c;">
+          <div style="font-weight:700;color:#1b2a6b;margin-bottom:6px;">⏱️ Reducir días de cobro</div>
+          <div style="font-size:13px;color:#555;">Ofrecer descuento por pronto pago (2–3%). Facturar el mismo día de la venta. Cobrar anticipo del 30–50% en pedidos grandes.</div>
+        </div>
+        <div style="background:#eafaf1;border-radius:10px;padding:14px;border-left:4px solid #27ae60;">
+          <div style="font-weight:700;color:#145a32;margin-bottom:6px;">📅 Negociar plazos de pago</div>
+          <div style="font-size:13px;color:#555;">Pedir 30–60 días a proveedores. Alinear pagos con los días de mayor ingreso. Escalonar compras grandes.</div>
+        </div>
+        <div style="background:#fef9e7;border-radius:10px;padding:14px;border-left:4px solid #f39c12;">
+          <div style="font-weight:700;color:#7d6608;margin-bottom:6px;">💳 Líneas de crédito rotativas</div>
+          <div style="font-size:13px;color:#555;">Tener pre-aprobado un cupo de crédito en el banco para cubrir brechas temporales. Costo menor que un pagaré de urgencia.</div>
+        </div>
+        <div style="background:#fdedec;border-radius:10px;padding:14px;border-left:4px solid #e74c3c;">
+          <div style="font-weight:700;color:#7b241c;margin-bottom:6px;">📦 Gestión de inventario</div>
+          <div style="font-size:13px;color:#555;">Inventario parado es caja inmovilizada. Implementar método PEPS. Liquidar inventario antiguo con descuento antes de comprar más.</div>
+        </div>
+        <div style="background:#f5eef8;border-radius:10px;padding:14px;border-left:4px solid #8e44ad;">
+          <div style="font-weight:700;color:#6c3483;margin-bottom:6px;">🏦 Factoring (cartera)</div>
+          <div style="font-size:13px;color:#555;">Vender facturas por cobrar a una entidad financiera (Bancoldex, Confecámaras). Recibe el 80–90% inmediato y el resto al cobro.</div>
+        </div>
+        <div style="background:#eaf4fb;border-radius:10px;padding:14px;border-left:4px solid #2980b9;">
+          <div style="font-weight:700;color:#1a5276;margin-bottom:6px;">📊 Presupuesto de caja</div>
+          <div style="font-size:13px;color:#555;">Proyectar el flujo con 3 meses de anticipación. Actuar antes de la crisis, no durante. Este simulador es tu primer paso.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>⚠️ Herramienta orientativa.</strong> Este simulador es una proyección basada en los datos ingresados. Los flujos reales dependen del comportamiento del mercado, la cartera de clientes, los plazos de pago reales y factores macroeconómicos. Para estados de flujo de caja con fines bancarios, tributarios o de inversión, elaborelos con un contador público certificado bajo las normas NIIF o PCGA colombianas vigentes.
+    <br><br>
+    🗓️ <em>Actualización: Junio 2026 | SMMLV 2026: $1.423.500 | Para PYME Colombia bajo NIIF para Pymes (Decreto 3022 de 2013)</em>
+  </div>
+
+</div>
+
+<script>
+  const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const MESES_FULL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const fmt  = v => new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',minimumFractionDigits:0,maximumFractionDigits:0}).format(v);
+  const fmtN = (v,d=1) => new Intl.NumberFormat('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}).format(v);
+  const fmtM = v => v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? (v/1e3).toFixed(0)+'K' : Math.round(v).toString();
+
+  // ── FILAS DE LA TABLA ─────────────────────────────────────────────
+  const FILAS = [
+    { id:'ing', tipo:'seccion', label:'INGRESOS' },
+    { id:'ventas-contado', tipo:'ingreso', label:'Ventas de contado' },
+    { id:'cobros-cartera', tipo:'ingreso', label:'Cobros de cartera (crédito)' },
+    { id:'anticipos-clientes', tipo:'ingreso', label:'Anticipos de clientes' },
+    { id:'otros-ingresos', tipo:'ingreso', label:'Otros ingresos operativos' },
+    { id:'prestamos-rec', tipo:'ingreso', label:'Préstamos / aportes recibidos' },
+    { id:'egr', tipo:'seccion', label:'EGRESOS — COSTOS VARIABLES' },
+    { id:'mp-mercancias', tipo:'egreso', label:'Compra materias primas / mercancía' },
+    { id:'mano-obra-var', tipo:'egreso', label:'Mano de obra variable' },
+    { id:'comisiones', tipo:'egreso', label:'Comisiones de ventas' },
+    { id:'empaque-envio', tipo:'egreso', label:'Empaque y envío' },
+    { id:'egr2', tipo:'seccion', label:'EGRESOS — COSTOS FIJOS' },
+    { id:'nomina-fija', tipo:'egreso', label:'Nómina fija (salarios + prestaciones)' },
+    { id:'arriendo', tipo:'egreso', label:'Arriendo local / bodega' },
+    { id:'servicios-pub', tipo:'egreso', label:'Servicios públicos' },
+    { id:'credito-cuota', tipo:'egreso', label:'Cuota crédito / leasing' },
+    { id:'contador-asesor', tipo:'egreso', label:'Contador / asesoría externa' },
+    { id:'marketing', tipo:'egreso', label:'Marketing y publicidad' },
+    { id:'seguros-otros', tipo:'egreso', label:'Seguros y otros fijos' },
+    { id:'egr3', tipo:'seccion', label:'EGRESOS — IMPUESTOS Y OBLIGACIONES' },
+    { id:'iva-pagar', tipo:'egreso', label:'IVA a pagar (bimestral/mensual)' },
+    { id:'retencion-pagar', tipo:'egreso', label:'Retención en la fuente' },
+    { id:'imp-renta', tipo:'egreso', label:'Impuesto de renta (cuotas)' },
+    { id:'industria-comercio', tipo:'egreso', label:'Industria y comercio (ICA)' },
+    { id:'egr4', tipo:'seccion', label:'EGRESOS — INVERSIÓN' },
+    { id:'compra-activos', tipo:'egreso', label:'Compra de equipos / activos' },
+    { id:'remodelaciones', tipo:'egreso', label:'Adecuaciones / remodelaciones' },
+  ];
+
+  function buildTablaEntrada() {
+    const tbody = document.getElementById('tabla-body');
+    tbody.innerHTML = '';
+    FILAS.forEach(fila => {
+      const tr = document.createElement('tr');
+      if (fila.tipo === 'seccion') {
+        tr.innerHTML = `<td colspan="13" class="seccion">${fila.label}</td>`;
+      } else {
+        let celdas = `<td class="lbl">${fila.label} <button class="btn-apply-all" onclick="aplicarATodos('${fila.id}')">→ todos</button></td>`;
+        for (let m = 0; m < 12; m++) {
+          celdas += `<td><input type="number" id="${fila.id}-${m}" placeholder="0" min="0" /></td>`;
+        }
+        tr.innerHTML = celdas;
+      }
+      tbody.appendChild(tr);
+    });
+  }
+
+  function aplicarATodos(rowId) {
+    const val = document.getElementById(rowId + '-0').value;
+    for (let m = 1; m < 12; m++) {
+      const el = document.getElementById(rowId + '-' + m);
+      if (el && !el.value) el.value = val;
+    }
+  }
+
+  function showTab(t) {
+    ['entrada','conceptos'].forEach(id => {
+      document.getElementById('tab-'+id).style.display = id===t?'block':'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+      b.classList.toggle('active',['entrada','conceptos'][i]===t);
+    });
+  }
+
+  function getVal(rowId, mes) {
+    const el = document.getElementById(rowId + '-' + mes);
+    return el ? (parseFloat(el.value) || 0) : 0;
+  }
+
+  function calcFlujo() {
+    const saldoIni  = parseFloat(document.getElementById('saldo-inicial').value) || 0;
+    const saldoMin  = parseFloat(document.getElementById('saldo-minimo').value) || 0;
+    const crecMens  = (parseFloat(document.getElementById('crec-ventas').value) || 0) / 100;
+    const mesInicio = parseInt(document.getElementById('mes-inicio').value) || 0;
+    const negocio   = document.getElementById('nombre-negocio').value || 'Mi negocio';
+
+    // Actualizar encabezados con los meses correctos
+    for (let m = 0; m < 12; m++) {
+      const th = document.getElementById('th' + m);
+      if (th) th.textContent = MESES[(mesInicio + m) % 12];
+    }
+
+    const ingresoRows = FILAS.filter(f => f.tipo === 'ingreso').map(f => f.id);
+    const egresoRows  = FILAS.filter(f => f.tipo === 'egreso').map(f => f.id);
+
+    const datos = [];
+    let saldoAcum = saldoIni;
+    let totalIng = 0, totalEgr = 0;
+
+    for (let m = 0; m < 12; m++) {
+      const factor = Math.pow(1 + crecMens, m);
+      let ing = 0, egr = 0;
+      const detIng = {}, detEgr = {};
+
+      ingresoRows.forEach(id => {
+        const v = getVal(id, m) * (id.startsWith('ventas') || id.startsWith('cobros') || id.startsWith('anticipos') || id.startsWith('otros-ing') ? factor : 1);
+        detIng[id] = v;
+        ing += v;
+      });
+      egresoRows.forEach(id => {
+        const v = getVal(id, m);
+        detEgr[id] = v;
+        egr += v;
+      });
+
+      const flujoNeto = ing - egr;
+      saldoAcum += flujoNeto;
+      totalIng += ing;
+      totalEgr += egr;
+
+      datos.push({ mes: (mesInicio + m) % 12, ing, egr, flujoNeto, saldoAcum, detIng, detEgr });
+    }
+
+    if (totalIng === 0 && totalEgr === 0) {
+      alert('Ingrese al menos algunos valores de ingresos o egresos para proyectar el flujo.');
+      return;
+    }
+
+    // ── RESUMEN BANNER ────────────────────────────────────────────────
+    const flujoNetaAnual = totalIng - totalEgr;
+    const saldoFinal = datos[11].saldoAcum;
+    const mesesCriticos = datos.filter(d => d.saldoAcum < saldoMin).length;
+    const mejorMes = datos.reduce((a,b) => b.flujoNeto > a.flujoNeto ? b : a);
+    const minSaldo = Math.min(...datos.map(d => d.saldoAcum));
+    const avgIng = totalIng / 12;
+    const avgEgr = totalEgr / 12;
+    const coberturaEgr = avgEgr > 0 ? saldoIni / avgEgr : 0;
+    const margenProm = totalIng > 0 ? (flujoNetaAnual / totalIng) * 100 : 0;
+
+    document.getElementById('rb-ing').textContent     = fmt(totalIng);
+    document.getElementById('rb-egr').textContent     = fmt(totalEgr);
+    document.getElementById('rb-neto').textContent    = fmt(flujoNetaAnual);
+    document.getElementById('rb-saldo').textContent   = fmt(saldoFinal);
+    document.getElementById('rb-criticos').textContent= mesesCriticos;
+    document.getElementById('rb-mejor').textContent   = MESES_FULL[mejorMes.mes];
+
+    document.getElementById('kpi-avg-ing').textContent  = fmt(avgIng);
+    document.getElementById('kpi-avg-egr').textContent  = fmt(avgEgr);
+    document.getElementById('kpi-min-saldo').textContent= MESES_FULL[datos.reduce((a,b)=>b.saldoAcum<a.saldoAcum?b:a).mes];
+    document.getElementById('kpi-cobertura').textContent= fmtN(coberturaEgr,1) + ' meses';
+    document.getElementById('kpi-margen').textContent   = fmtN(margenProm,1) + '%';
+    document.getElementById('kpi-saldo-min').textContent= fmt(minSaldo);
+
+    // ── GRÁFICO ───────────────────────────────────────────────────────
+    dibujarGrafico(datos, saldoMin, mesInicio);
+
+    // ── TABLA RESULTADO ───────────────────────────────────────────────
+    const thead = document.getElementById('res-thead');
+    thead.innerHTML = '<th>Concepto</th>' + datos.map(d => `<th>${MESES[d.mes]}</th>`).join('') + '<th>TOTAL</th>';
+
+    const tbody = document.getElementById('res-tbody');
+    let htmlT = '';
+
+    // Sección ingresos
+    htmlT += `<tr class="seccion"><td colspan="${14}">INGRESOS</td></tr>`;
+    ingresoRows.forEach(id => {
+      const fila = FILAS.find(f => f.id === id);
+      const vals = datos.map(d => d.detIng[id] || 0);
+      const total = vals.reduce((a,b)=>a+b,0);
+      if (total === 0) return;
+      htmlT += `<tr><td>${fila.label}</td>${vals.map(v=>`<td class="${v>0?'positivo':''}">${v>0?fmt(v):'—'}</td>`).join('')}<td>${fmt(total)}</td></tr>`;
+    });
+    htmlT += `<tr class="subtotal"><td>TOTAL INGRESOS</td>${datos.map(d=>`<td class="positivo">${fmt(d.ing)}</td>`).join('')}<td>${fmt(totalIng)}</td></tr>`;
+
+    // Sección egresos
+    htmlT += `<tr class="seccion"><td colspan="${14}">EGRESOS</td></tr>`;
+    egresoRows.forEach(id => {
+      const fila = FILAS.find(f => f.id === id);
+      const vals = datos.map(d => d.detEgr[id] || 0);
+      const total = vals.reduce((a,b)=>a+b,0);
+      if (total === 0) return;
+      htmlT += `<tr><td>${fila.label}</td>${vals.map(v=>`<td class="${v>0?'negativo':''}">${v>0?'- '+fmt(v):'—'}</td>`).join('')}<td>- ${fmt(total)}</td></tr>`;
+    });
+    htmlT += `<tr class="subtotal"><td>TOTAL EGRESOS</td>${datos.map(d=>`<td class="negativo">- ${fmt(d.egr)}</td>`).join('')}<td>- ${fmt(totalEgr)}</td></tr>`;
+
+    // Flujo neto y saldos
+    htmlT += `<tr class="neto"><td>FLUJO NETO DEL PERÍODO</td>${datos.map(d=>`<td class="${d.flujoNeto>=0?'positivo':'negativo'}">${d.flujoNeto>=0?'+':''}${fmt(d.flujoNeto)}</td>`).join('')}<td>${fmt(flujoNetaAnual)}</td></tr>`;
+    htmlT += `<tr class="saldo"><td>Saldo inicial de caja</td>${datos.map((_,i)=>`<td>${i===0?fmt(saldoIni):'—'}</td>`).join('')}<td>${fmt(saldoIni)}</td></tr>`;
+    htmlT += `<tr class="acum ${datos.some(d=>d.saldoAcum<0)?'':''}"><td>SALDO ACUMULADO EN CAJA</td>${datos.map(d=>`<td class="${d.saldoAcum<0?'negativo':d.saldoAcum<saldoMin?'negativo':''}">${fmt(d.saldoAcum)}</td>`).join('')}<td>${fmt(saldoFinal)}</td></tr>`;
+
+    tbody.innerHTML = htmlT;
+
+    // ── MESES CRÍTICOS ────────────────────────────────────────────────
+    let chipsHtml = '<div class="meses-criticos">';
+    datos.forEach(d => {
+      let cls = 'ok', ico = '✅';
+      if (d.saldoAcum < 0)       { cls = 'crit'; ico = '🔴'; }
+      else if (d.saldoAcum < saldoMin) { cls = 'warn'; ico = '🟡'; }
+      chipsHtml += `<div class="mes-chip ${cls}">${ico} ${MESES_FULL[d.mes]}: ${fmt(d.saldoAcum)}</div>`;
+    });
+    chipsHtml += '</div>';
+    document.getElementById('meses-criticos-wrap').innerHTML = chipsHtml;
+
+    // Recomendaciones
+    const recs = [];
+    if (mesesCriticos > 0) recs.push({ cls:'alert-danger', txt:`🚨 <strong>${mesesCriticos} mes(es) con saldo por debajo del mínimo de caja (${fmt(saldoMin)}).</strong> Planea con anticipación: gestiona anticipos de clientes, aplaza compras no urgentes o activa una línea de crédito rotativa antes de estos meses.` });
+    if (datos.some(d => d.saldoAcum < 0)) recs.push({ cls:'alert-danger', txt:`🔴 <strong>Hay meses con saldo NEGATIVO.</strong> Esto significa que el negocio no tendrá suficiente efectivo para cubrir sus obligaciones. Acción urgente: aumentar ingresos, reducir egresos o conseguir financiación.` });
+    if (coberturaEgr < 1) recs.push({ cls:'alert-warn', txt:`⚠️ <strong>El saldo inicial solo cubre ${fmtN(coberturaEgr,1)} meses de egresos promedio.</strong> Considera mantener una reserva de al menos 2 meses de egresos fijos como colchón de liquidez.` });
+    if (margenProm > 20) recs.push({ cls:'alert-success', txt:`✅ <strong>Excelente margen operativo del ${fmtN(margenProm,1)}%.</strong> El negocio genera flujo de caja positivo sólido. Considera destinar parte del excedente a un fondo de reserva o a inversiones productivas.` });
+    recs.push({ cls:'alert-info', txt:`💡 <strong>Tip:</strong> Comparte este flujo de caja proyectado con tu contador y banco. Es el documento más importante para negociar mejores condiciones de crédito con entidades financieras colombianas.` });
+
+    document.getElementById('recomendaciones-flujo').innerHTML = recs.map(r => `<div class="alert ${r.cls}">${r.txt}</div>`).join('');
+
+    document.getElementById('resultado').style.display = 'block';
+    document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function dibujarGrafico(datos, saldoMin, mesInicio) {
+    const svg = document.getElementById('grafico-flujo');
+    const W=900, H=300, PAD={t:30,r:20,b:50,l:80};
+    const n = datos.length;
+    const barW = (W - PAD.l - PAD.r) / n;
+    const vals = datos.map(d => d.flujoNeto);
+    const saldos = datos.map(d => d.saldoAcum);
+    const maxV = Math.max(...vals, ...saldos, 0);
+    const minV = Math.min(...vals, ...saldos, 0);
+    const range = maxV - minV || 1;
+    const toY = v => PAD.t + (1 - (v - minV) / range) * (H - PAD.t - PAD.b);
+    const toX = i => PAD.l + i * barW + barW / 2;
+
+    let html = '';
+    // Cuadrícula
+    for (let i = 0; i <= 4; i++) {
+      const v = minV + (range * i / 4);
+      const y = toY(v);
+      html += `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="#e0e8f5" stroke-width="1"/>`;
+      html += `<text x="${PAD.l-8}" y="${y+4}" text-anchor="end" font-size="10" fill="#888">${fmtM(v)}</text>`;
+    }
+    // Línea cero
+    const y0 = toY(0);
+    html += `<line x1="${PAD.l}" y1="${y0}" x2="${W-PAD.r}" y2="${y0}" stroke="#888" stroke-width="1.5"/>`;
+    // Línea saldo mínimo
+    if (saldoMin > 0) {
+      const yMin = toY(saldoMin);
+      html += `<line x1="${PAD.l}" y1="${yMin}" x2="${W-PAD.r}" y2="${yMin}" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="6,4"/>`;
+      html += `<text x="${PAD.l+6}" y="${yMin-4}" font-size="10" fill="#e74c3c">Mín. caja</text>`;
+    }
+    // Barras flujo neto
+    datos.forEach((d, i) => {
+      const x = PAD.l + i * barW + barW * 0.15;
+      const bw = barW * 0.45;
+      const y = d.flujoNeto >= 0 ? toY(d.flujoNeto) : y0;
+      const h = Math.abs(toY(d.flujoNeto) - y0);
+      const col = d.flujoNeto >= 0 ? '#27ae60' : '#e74c3c';
+      html += `<rect x="${x}" y="${y}" width="${bw}" height="${Math.max(h,1)}" fill="${col}" rx="3" opacity="0.85"/>`;
+    });
+    // Línea saldo acumulado
+    const pts = datos.map((d,i) => `${toX(i)},${toY(d.saldoAcum)}`).join(' ');
+    html += `<polyline points="${pts}" fill="none" stroke="#1b2a6b" stroke-width="2.5" stroke-linejoin="round"/>`;
+    datos.forEach((d,i) => {
+      const col = d.saldoAcum < saldoMin ? '#e74c3c' : '#1b2a6b';
+      html += `<circle cx="${toX(i)}" cy="${toY(d.saldoAcum)}" r="5" fill="${col}" stroke="#fff" stroke-width="1.5"/>`;
+    });
+    // Etiquetas X
+    datos.forEach((d,i) => {
+      html += `<text x="${toX(i)}" y="${H-PAD.b+18}" text-anchor="middle" font-size="11" fill="#555">${MESES[d.mes]}</text>`;
+    });
+    // Leyenda
+    html += `<rect x="${PAD.l+20}" y="${PAD.t}" width="14" height="12" fill="#27ae60" rx="2"/>
+             <text x="${PAD.l+38}" y="${PAD.t+10}" font-size="11" fill="#555">Flujo positivo</text>
+             <rect x="${PAD.l+140}" y="${PAD.t}" width="14" height="12" fill="#e74c3c" rx="2"/>
+             <text x="${PAD.l+158}" y="${PAD.t+10}" font-size="11" fill="#555">Flujo negativo</text>
+             <line x1="${PAD.l+270}" y1="${PAD.t+6}" x2="${PAD.l+294}" y2="${PAD.t+6}" stroke="#1b2a6b" stroke-width="2.5"/>
+             <circle cx="${PAD.l+282}" cy="${PAD.t+6}" r="4" fill="#1b2a6b"/>
+             <text x="${PAD.l+298}" y="${PAD.t+10}" font-size="11" fill="#555">Saldo acumulado</text>`;
+    // Ejes
+    html += `<line x1="${PAD.l}" y1="${PAD.t}" x2="${PAD.l}" y2="${H-PAD.b}" stroke="#888" stroke-width="1.5"/>`;
+    svg.innerHTML = html;
+  }
+
+  function resetFlujo() {
+    document.getElementById('saldo-inicial').value = '';
+    document.getElementById('saldo-minimo').value  = '';
+    document.getElementById('crec-ventas').value   = '';
+    document.getElementById('nombre-negocio').value= '';
+    FILAS.filter(f => f.tipo !== 'seccion').forEach(fila => {
+      for (let m = 0; m < 12; m++) {
+        const el = document.getElementById(fila.id + '-' + m);
+        if (el) el.value = '';
+      }
+    });
+    document.getElementById('resultado').style.display = 'none';
+  }
+
+  // Inicializar tabla y mes de inicio
+  buildTablaEntrada();
+  document.getElementById('mes-inicio').addEventListener('change', function() {
+    const ini = parseInt(this.value);
+    for (let m = 0; m < 12; m++) {
+      const th = document.getElementById('th' + m);
+      if (th) th.textContent = MESES[(ini + m) % 12];
+    }
+  });
+  // Setear mes actual
+  const mesActual = new Date().getMonth();
+  document.getElementById('mes-inicio').value = mesActual;
+  for (let m = 0; m < 12; m++) {
+    const th = document.getElementById('th' + m);
+    if (th) th.textContent = MESES[(mesActual + m) % 12];
+  }
+</script>
+</body>
+</html>
