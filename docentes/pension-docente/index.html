@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Pensión Docente Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de pensión docente Colombia 2026. Régimen especial del magisterio, Ley 91/1989, Decreto 2277/1979 y Decreto 1278/2002. FOMAG." />
+  <meta name="keywords" content="pension docente colombia 2026, regimen especial magisterio, FOMAG pension, ley 91 1989 docentes, decreto 2277 escalafon, pension magisterio colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --morado: #6a1b9a;
+      --morado-medio: #8e24aa;
+      --morado-claro: #f3e5f5;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #6a1b9a 60%, #ab47bc 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 110px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--morado-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--morado-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--morado-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--morado-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--morado-medio); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--morado); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--morado-claro); border-left: 4px solid var(--morado-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--morado); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #6a1b9a 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-pension { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.15rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .liquidacion-tabla { width: 100%; border-collapse: collapse; font-size: 0.84rem; margin-top: 0.8rem; }
+    .liquidacion-tabla td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .liquidacion-tabla td:last-child { text-align: right; font-weight: 700; }
+    .liquidacion-tabla tr.total-row td { background: rgba(255,215,0,0.2); font-weight: 900; color: #ffe082; }
+    .liquidacion-tabla tr.seccion td { background: rgba(255,255,255,0.08); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; color: rgba(255,255,255,0.75); }
+
+    /* BARRA PROGRESO */
+    .progreso-wrap { margin: 1rem 0; }
+    .progreso-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: rgba(255,255,255,0.75); margin-bottom: 4px; }
+    .progreso-bg { height: 10px; background: rgba(255,255,255,0.15); border-radius: 5px; overflow: hidden; }
+    .progreso-fill { height: 100%; background: #ffe082; border-radius: 5px; transition: width 0.5s; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--morado-claro); }
+
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-info { background: var(--morado-claro); color: var(--morado); border-left: 4px solid var(--morado-medio); border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">📚 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Pensión Docente</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">📚 Docentes — Régimen Especial Magisterio</div>
+  <h1>Calculadora Pensión Docente Colombia 2026</h1>
+  <p>Estima la pensión de jubilación para docentes del sector oficial según el régimen especial del Magisterio (Ley 91/1989), Decreto 2277/1979 y Decreto 1278/2002. FOMAG.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Ley 91/1989</span>
+    <span class="hero-chip">📋 Decreto 2277 y 1278</span>
+    <span class="hero-chip">🏦 FOMAG</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('pension', this)">🎓 Pensión de Jubilación</button>
+    <button class="tab-btn" onclick="mostrarTab('proyeccion', this)">📈 Proyección a Futuro</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Régimen y Escalafón</button>
+  </div>
+
+  <!-- TAB 1: PENSIÓN -->
+  <div id="tab-pension" class="tab-panel active">
+    <div class="card">
+      <h2>🎓 Estimación de Pensión de Jubilación Docente</h2>
+      <div class="info-box">
+        <strong>Régimen especial del Magisterio:</strong> Los docentes vinculados antes del 27 de junio de 2003 pertenecen al régimen especial de la Ley 91/1989 (FOMAG). Los vinculados después, al régimen general de la Ley 100/1993 administrado por Colpensiones, con excepción de algunos casos de transición.
+      </div>
+
+      <h3>Datos personales y laborales</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Régimen pensional aplicable</label>
+          <select id="p-regimen" onchange="actualizarRegimen()">
+            <option value="ley91" selected>Ley 91/1989 — FOMAG (vinculado antes 27/06/2003)</option>
+            <option value="ley100">Ley 100/1993 — Colpensiones (vinculado después 27/06/2003)</option>
+            <option value="transicion">Régimen de transición — Art. 36 Ley 100</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Decreto de vinculación</label>
+          <select id="p-decreto">
+            <option value="2277" selected>Decreto 2277/1979 (escalafón tradicional)</option>
+            <option value="1278">Decreto 1278/2002 (carrera docente)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fecha de nacimiento</label>
+          <input type="date" id="p-nacimiento" />
+        </div>
+        <div class="form-group">
+          <label>Fecha de vinculación al magisterio</label>
+          <input type="date" id="p-vinculacion" />
+        </div>
+        <div class="form-group">
+          <label>Sexo</label>
+          <select id="p-sexo">
+            <option value="M" selected>Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nivel de escalafón actual</label>
+          <select id="p-escalafon">
+            <option value="2A">Decreto 2277 — Grado 2A</option>
+            <option value="4">Decreto 2277 — Grado 4</option>
+            <option value="6">Decreto 2277 — Grado 6</option>
+            <option value="8">Decreto 2277 — Grado 8</option>
+            <option value="10">Decreto 2277 — Grado 10</option>
+            <option value="12" selected>Decreto 2277 — Grado 12</option>
+            <option value="14">Decreto 2277 — Grado 14</option>
+            <option value="1278-1A">Decreto 1278 — Nivel 1 Categoría A</option>
+            <option value="1278-1B">Decreto 1278 — Nivel 1 Categoría B</option>
+            <option value="1278-1C">Decreto 1278 — Nivel 1 Categoría C</option>
+            <option value="1278-2A">Decreto 1278 — Nivel 2 Categoría A</option>
+            <option value="1278-2B">Decreto 1278 — Nivel 2 Categoría B</option>
+            <option value="1278-3A">Decreto 1278 — Nivel 3 Categoría A</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Salario mensual actual ($ COP)</label>
+          <input type="number" id="p-salario" value="3200000" min="1423500" step="50000" />
+        </div>
+        <div class="form-group">
+          <label>Tiempo adicional en otros empleos públicos (años)</label>
+          <input type="number" id="p-tiempo-adicional" value="0" min="0" max="30" step="1" />
+          <span class="form-hint">Tiempo que se puede acumular para pensión</span>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularPension()">🎓 Calcular Pensión</button>
+    </div>
+    <div id="resultado-pension" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: PROYECCIÓN -->
+  <div id="tab-proyeccion" class="tab-panel">
+    <div class="card">
+      <h2>📈 Proyección — ¿Cuándo me pensiono?</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> Calcula cuántos años faltan para cumplir los requisitos de pensión y proyecta el monto estimado según el escalafón y el incremento anual del SMMLV.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Fecha de nacimiento</label>
+          <input type="date" id="pr-nacimiento" />
+        </div>
+        <div class="form-group">
+          <label>Fecha de vinculación</label>
+          <input type="date" id="pr-vinculacion" />
+        </div>
+        <div class="form-group">
+          <label>Régimen</label>
+          <select id="pr-regimen">
+            <option value="ley91" selected>Ley 91/1989 — FOMAG</option>
+            <option value="ley100">Ley 100/1993 — Colpensiones</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Sexo</label>
+          <select id="pr-sexo">
+            <option value="M" selected>Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Salario actual ($ COP/mes)</label>
+          <input type="number" id="pr-salario" value="3200000" min="1423500" step="50000" />
+        </div>
+        <div class="form-group">
+          <label>Incremento salarial anual estimado (%)</label>
+          <input type="number" id="pr-incremento" value="6" min="0" max="20" step="0.5" />
+          <span class="form-hint">Promedio histórico IPC + escalafón: ~6% anual</span>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularProyeccion()">📈 Calcular Proyección</button>
+    </div>
+    <div id="resultado-proyeccion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Requisitos de Pensión — Régimen Especial Magisterio</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Régimen</th><th>Edad (H/M)</th><th>Tiempo de servicio</th><th>% del salario</th><th>Base legal</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Ley 91/1989 — FOMAG</b></td>
+              <td>Sin requisito de edad</td>
+              <td><b>20 años de servicio</b> en el magisterio</td>
+              <td>75% del último salario</td>
+              <td>Ley 91/89 Art. 15</td>
+            </tr>
+            <tr>
+              <td><b>Ley 91/1989 — FOMAG (vejez)</b></td>
+              <td>60 años (H) / 55 años (M)</td>
+              <td>Sin requisito mínimo</td>
+              <td>75% proporcional</td>
+              <td>Ley 91/89 Art. 15</td>
+            </tr>
+            <tr>
+              <td><b>Ley 100/1993 — Colpensiones</b></td>
+              <td>62 años (H) / 57 años (M)</td>
+              <td>1.300 semanas cotizadas</td>
+              <td>65%–80% del IBL</td>
+              <td>Ley 797/2003</td>
+            </tr>
+            <tr>
+              <td><b>Régimen transición Art. 36</b></td>
+              <td>55/50 (si tenía 35/30 años en 1994)</td>
+              <td>15 años de servicios</td>
+              <td>75% del promedio</td>
+              <td>Ley 100/93 Art. 36</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Escalafón Decreto 2277/1979 — Salarios 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Grado</th><th>Salario mensual 2026</th><th>Requisito</th></tr></thead>
+          <tbody>
+            <tr><td><b>Grado 2A</b></td><td>$1.720.000 – $1.850.000</td><td>Bachiller pedagógico, sin título</td></tr>
+            <tr><td><b>Grado 4</b></td><td>$1.900.000 – $2.050.000</td><td>Normalista superior</td></tr>
+            <tr><td><b>Grado 6</b></td><td>$2.100.000 – $2.300.000</td><td>Tecnólogo en educación</td></tr>
+            <tr><td><b>Grado 8</b></td><td>$2.400.000 – $2.700.000</td><td>Licenciado / profesional</td></tr>
+            <tr><td><b>Grado 10</b></td><td>$2.800.000 – $3.200.000</td><td>Licenciado + experiencia</td></tr>
+            <tr><td><b>Grado 12</b></td><td>$3.300.000 – $3.800.000</td><td>Especialización</td></tr>
+            <tr><td><b>Grado 14</b></td><td>$4.000.000 – $4.800.000</td><td>Maestría / Doctorado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Escalafón Decreto 1278/2002 — Salarios 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Nivel/Cat.</th><th>Salario mensual 2026</th><th>Título requerido</th></tr></thead>
+          <tbody>
+            <tr><td><b>Nivel 1 — Cat. A</b></td><td>$2.200.000 – $2.500.000</td><td>Normalista superior o tecnólogo</td></tr>
+            <tr><td><b>Nivel 1 — Cat. B</b></td><td>$2.600.000 – $2.900.000</td><td>Licenciado o profesional universitario</td></tr>
+            <tr><td><b>Nivel 1 — Cat. C</b></td><td>$3.000.000 – $3.400.000</td><td>Especialización</td></tr>
+            <tr><td><b>Nivel 2 — Cat. A</b></td><td>$3.500.000 – $4.000.000</td><td>Maestría + evaluación</td></tr>
+            <tr><td><b>Nivel 2 — Cat. B</b></td><td>$4.100.000 – $4.800.000</td><td>Maestría avanzada</td></tr>
+            <tr><td><b>Nivel 3 — Cat. A</b></td><td>$5.000.000 – $6.000.000</td><td>Doctorado</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Aporte al FOMAG — Docentes 2026</h2>
+      <div style="font-size:0.88rem; line-height:2;'>
+        <p>El Fondo Nacional de Prestaciones Sociales del Magisterio <strong>(FOMAG)</strong> administra las pensiones de los docentes del régimen especial.</p>
+        <br>
+        <p><strong>Aporte del docente:</strong> 5% del salario mensual → FOMAG</p>
+        <p><strong>Aporte del empleador (Nación):</strong> El porcentaje varía según la nómina regional</p>
+        <p><strong>Administrador:</strong> Fiduciaria La Previsora S.A. (por encargo de la Nación)</p>
+        <p><strong>Trámite de pensión:</strong> Secretaría de Educación departamental → MEN → FOMAG</p>
+        <p><strong>Tiempo de reconocimiento:</strong> 6 a 18 meses desde la solicitud</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los valores son estimaciones con base en la normativa vigente. La pensión definitiva es reconocida por el <strong>FOMAG / Colpensiones</strong> según historia laboral certificada. Para asesoría personalizada, consulte con la Secretaría de Educación de su departamento o un abogado especialista en derecho pensional. Parámetros: Ley 91/1989, Ley 100/1993, Decreto 2277/1979, Decreto 1278/2002, SMMLV 2026 $1.423.500.
+  </div>
+</div>
+
+<script>
+const SMMLV = 1423500;
+
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+function fmtD(n, d=1) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: d, maximumFractionDigits: d });
+}
+
+function calcTiempo(inicio, fin) {
+  const d1 = new Date(inicio), d2 = new Date(fin);
+  const totalDias = Math.round((d2 - d1) / 86400000);
+  const anios = totalDias / 365.25;
+  return { anios, totalDias, aniosInt: Math.floor(anios), meses: Math.floor((anios % 1) * 12) };
+}
+
+function actualizarRegimen() { }
+
+function calcularPension() {
+  const regimen    = document.getElementById('p-regimen').value;
+  const decreto    = document.getElementById('p-decreto').value;
+  const nacimiento = document.getElementById('p-nacimiento').value;
+  const vinculacion= document.getElementById('p-vinculacion').value;
+  const sexo       = document.getElementById('p-sexo').value;
+  const salario    = parseFloat(document.getElementById('p-salario').value) || SMMLV;
+  const tiempoAd   = parseFloat(document.getElementById('p-tiempo-adicional').value) || 0;
+
+  if (!nacimiento || !vinculacion) { alert('Ingresa fecha de nacimiento y vinculación.'); return; }
+
+  const hoy = new Date().toISOString().split('T')[0];
+  const tiempoServ = calcTiempo(vinculacion, hoy);
+  const edad       = calcTiempo(nacimiento, hoy);
+  const tiempoTotal= tiempoServ.anios + tiempoAd;
+
+  let pension = 0, pct = 0, cumpleRequisito = false, requisito = '', faltaTexto = '';
+  let edadPension = 0, tiempoPension = 0;
+  let colorClass = 'normal';
+
+  if (regimen === 'ley91') {
+    // Ley 91/1989: 20 años de servicio → 75% del salario
+    // Con menos tiempo: proporcional
+    tiempoPension = 20;
+    edadPension   = sexo === 'M' ? 60 : 55;
+    cumpleRequisito = tiempoTotal >= 20;
+
+    if (cumpleRequisito) {
+      pct = 75;
+      pension = salario * 0.75;
+      requisito = '✅ Cumple 20 años de servicio (Ley 91/1989 Art. 15)';
+    } else {
+      // Proporcional: por cada año trabajado, acumula 75/20 = 3.75%
+      pct = Math.min(75, tiempoTotal * 3.75);
+      pension = salario * pct / 100;
+      const faltaAnios = 20 - tiempoTotal;
+      requisito = `⚠️ Le faltan ${fmtD(faltaAnios)} años para completar los 20 años requeridos`;
+      faltaTexto = `Falta: ${fmtD(faltaAnios)} años`;
+    }
+    // Mínimo: 1 SMMLV
+    pension = Math.max(pension, SMMLV);
+
+  } else if (regimen === 'ley100') {
+    // Ley 100: 62H/57M años + 1.300 semanas (25 años)
+    edadPension   = sexo === 'M' ? 62 : 57;
+    tiempoPension = 25; // 1300 semanas ≈ 25 años
+    const semanas = tiempoTotal * 52;
+    cumpleRequisito = edad.anios >= edadPension && semanas >= 1300;
+
+    // IBL = promedio últimos 10 años (simplificado: salario actual)
+    // Tasa: 65% + 1.5% por cada 50 semanas sobre 1000
+    const semanasExtra = Math.max(0, semanas - 1000);
+    pct = Math.min(80, 65 + 1.5 * Math.floor(semanasExtra / 50));
+    pension = Math.max(SMMLV, salario * pct / 100);
+    requisito = cumpleRequisito
+      ? `✅ Cumple requisitos: ${fmtD(edad.anios)} años y ${fmt(semanas)} semanas`
+      : `⚠️ Le falta edad (${fmtD(edadPension - edad.anios)} años) o semanas (${fmt(Math.max(0, 1300-semanas))} semanas)`;
+
+  } else {
+    // Transición
+    edadPension = sexo === 'M' ? 55 : 50;
+    tiempoPension = 15;
+    cumpleRequisito = tiempoTotal >= 15 && edad.anios >= edadPension;
+    pct = 75;
+    pension = Math.max(SMMLV, salario * 0.75);
+    requisito = cumpleRequisito
+      ? '✅ Cumple régimen de transición Art. 36 Ley 100'
+      : `⚠️ Verifique condiciones específicas del régimen de transición`;
+  }
+
+  const progresoTiempo = Math.min(100, (tiempoTotal / tiempoPension) * 100);
+  const progresoEdad   = Math.min(100, (edad.anios / edadPension) * 100);
+
+  document.getElementById('resultado-pension').style.display = 'block';
+  document.getElementById('resultado-pension').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Estimación Pensión ${regimen === 'ley91' ? 'FOMAG — Ley 91/1989' : regimen === 'ley100' ? 'Colpensiones — Ley 100/1993' : 'Régimen Transición'}</div>
+      <div class="resultado-pension">$ ${fmt(Math.round(pension))}</div>
+      <div class="resultado-sub">Mesada pensional estimada mensual — ${pct.toFixed(1)}% del salario</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(tiempoTotal)} años</div><div class="resultado-label">Tiempo total de servicio</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(edad.anios)} años</div><div class="resultado-label">Edad actual</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${pct.toFixed(1)}%</div><div class="resultado-label">% del salario</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(pension))}</div><div class="resultado-label">Mesada mensual</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(pension * 13))}</div><div class="resultado-label">Ingreso anual (×13)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${edadPension} años</div><div class="resultado-label">Edad requerida</div></div>
+      </div>
+
+      <div class="progreso-wrap">
+        <div class="progreso-label"><span>Tiempo de servicio</span><span>${fmtD(tiempoTotal)} / ${tiempoPension} años</span></div>
+        <div class="progreso-bg"><div class="progreso-fill" style="width:${progresoTiempo}%"></div></div>
+      </div>
+      <div class="progreso-wrap">
+        <div class="progreso-label"><span>Edad</span><span>${fmtD(edad.anios)} / ${edadPension} años</span></div>
+        <div class="progreso-bg"><div class="progreso-fill" style="width:${progresoEdad}%"></div></div>
+      </div>
+
+      <table class="liquidacion-tabla" style="margin-top:0.8rem;">
+        <tr class="seccion"><td colspan="2">Datos del docente</td></tr>
+        <tr><td>Régimen pensional</td><td>${regimen === 'ley91' ? 'Ley 91/1989 — FOMAG' : 'Ley 100/1993 — Colpensiones'}</td></tr>
+        <tr><td>Decreto de vinculación</td><td>Decreto ${decreto}</td></tr>
+        <tr><td>Tiempo en el magisterio</td><td>${tiempoServ.aniosInt} años, ${tiempoServ.meses} meses</td></tr>
+        <tr><td>Tiempo adicional otros cargos</td><td>${tiempoAd} años</td></tr>
+        <tr><td>Tiempo total acumulado</td><td>${fmtD(tiempoTotal)} años</td></tr>
+        <tr class="seccion"><td colspan="2">Cálculo de la pensión</td></tr>
+        <tr><td>Salario base</td><td>$ ${fmt(salario)}</td></tr>
+        <tr><td>Porcentaje reconocido</td><td>${pct.toFixed(2)}%</td></tr>
+        <tr><td>Mesada mensual estimada</td><td>$ ${fmt(Math.round(pension))}</td></tr>
+        <tr><td>Prima de servicios (mesada 13)</td><td>$ ${fmt(Math.round(pension))}</td></tr>
+        <tr class="total-row"><td>INGRESO ANUAL ESTIMADO</td><td>$ ${fmt(Math.round(pension * 13))}</td></tr>
+      </table>
+      <div class="resultado-detalle">
+        <b>Estado:</b> ${requisito}<br>
+        ${regimen === 'ley91' ? `<b>Fórmula Ley 91/1989:</b> Pensión = Salario × 75% = $ ${fmt(salario)} × 75% = $ ${fmt(Math.round(salario*0.75))}<br>Mínimo: 1 SMMLV ($ ${fmt(SMMLV)})` : ''}
+      </div>
+    </div>
+    <div class="${cumpleRequisito ? 'alerta-ok' : 'alerta-warn'}" style="margin-top:0.8rem;">
+      ${cumpleRequisito
+        ? `✅ <strong>Cumple los requisitos de pensión.</strong> Puede iniciar el trámite ante la Secretaría de Educación de su departamento.`
+        : `⚠️ <strong>Aún no cumple los requisitos.</strong> ${faltaTexto || requisito}`}
+    </div>
+    <div class="alerta-info" style="margin-top:0.6rem;">
+      📌 <strong>Trámite FOMAG:</strong> Solicitud → Secretaría de Educación → MEN → FOMAG (Fiduprevisora). Tiempo estimado: 6–18 meses. Adjuntar: hoja de vida laboral, resoluciones de nombramiento, certificado de tiempo de servicios.
+    </div>`;
+}
+
+function calcularProyeccion() {
+  const nacimiento  = document.getElementById('pr-nacimiento').value;
+  const vinculacion = document.getElementById('pr-vinculacion').value;
+  const regimen     = document.getElementById('pr-regimen').value;
+  const sexo        = document.getElementById('pr-sexo').value;
+  const salario     = parseFloat(document.getElementById('pr-salario').value) || SMMLV;
+  const incremento  = parseFloat(document.getElementById('pr-incremento').value) / 100;
+
+  if (!nacimiento || !vinculacion) { alert('Ingresa fechas de nacimiento y vinculación.'); return; }
+
+  const hoy         = new Date().toISOString().split('T')[0];
+  const edad        = calcTiempo(nacimiento, hoy).anios;
+  const tiempoServ  = calcTiempo(vinculacion, hoy).anios;
+
+  const edadPension = regimen === 'ley91' ? (sexo === 'M' ? 60 : 55) : (sexo === 'M' ? 62 : 57);
+  const tiempoReq   = regimen === 'ley91' ? 20 : 25;
+
+  // Cuántos años faltan para cada requisito
+  const faltaEdad   = Math.max(0, edadPension - edad);
+  const faltaTiempo = Math.max(0, tiempoReq - tiempoServ);
+  const faltaTotal  = Math.max(faltaEdad, faltaTiempo);
+
+  // Salario proyectado al momento de pensión
+  const salarioProy = salario * Math.pow(1 + incremento, faltaTotal);
+  const pension75   = salarioProy * 0.75;
+  const pension65   = salarioProy * 0.65;
+  const pensionMin  = Math.max(pension75, SMMLV * Math.pow(1.06, faltaTotal));
+
+  const anoPension  = new Date().getFullYear() + Math.ceil(faltaTotal);
+  const edadAlPens  = edad + faltaTotal;
+
+  document.getElementById('resultado-proyeccion').style.display = 'block';
+  document.getElementById('resultado-proyeccion').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Proyección Pensional — ${regimen === 'ley91' ? 'FOMAG Ley 91/89' : 'Colpensiones Ley 100'}</div>
+      <div class="resultado-pension">$ ${fmt(Math.round(pensionMin))}</div>
+      <div class="resultado-sub">Mesada estimada al momento de pensionarse (~año ${anoPension})</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(faltaTotal)} años</div><div class="resultado-label">Años que faltan</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${anoPension}</div><div class="resultado-label">Año estimado de pensión</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(edadAlPens)} años</div><div class="resultado-label">Edad al pensionarse</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(salarioProy))}</div><div class="resultado-label">Salario proyectado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(pensionMin))}</div><div class="resultado-label">Mesada mensual (75%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(pensionMin*13))}</div><div class="resultado-label">Ingreso anual (×13)</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Situación actual:</b><br>
+        Edad: ${fmtD(edad)} años | Tiempo de servicio: ${fmtD(tiempoServ)} años<br>
+        Falta por edad: ${fmtD(faltaEdad)} años | Falta por tiempo: ${fmtD(faltaTiempo)} años<br>
+        <b>Tiempo total que falta: ${fmtD(faltaTotal)} años → Pensión estimada en ${anoPension}</b><br><br>
+        <b>Proyección salarial:</b><br>
+        Salario actual: $ ${fmt(salario)} × (1 + ${(incremento*100).toFixed(1)}%)^${fmtD(faltaTotal)} años = <b>$ ${fmt(Math.round(salarioProy))}</b><br>
+        Mesada al 75%: $ ${fmt(Math.round(salarioProy))} × 75% = <b>$ ${fmt(Math.round(pension75))}</b><br>
+        <b>Mesada estimada (mínimo 1 SMMLV de ${anoPension}): $ ${fmt(Math.round(pensionMin))}/mes</b>
+      </div>
+    </div>`;
+}
+
+// Inicializar fechas de ejemplo
+document.addEventListener('DOMContentLoaded', () => {
+  const hoy = new Date();
+  const nac = new Date(hoy.getFullYear()-45, hoy.getMonth(), hoy.getDate()).toISOString().split('T')[0];
+  const vinc = new Date(hoy.getFullYear()-18, hoy.getMonth(), hoy.getDate()).toISOString().split('T')[0];
+  ['p-nacimiento','pr-nacimiento'].forEach(id => document.getElementById(id).value = nac);
+  ['p-vinculacion','pr-vinculacion'].forEach(id => document.getElementById(id).value = vinc);
+});
+</script>
+</body>
+</html>
