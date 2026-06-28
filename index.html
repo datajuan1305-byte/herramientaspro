@@ -3,537 +3,466 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HerramientasPro Colombia — Herramientas digitales gratuitas para profesionales</title>
-  <meta name="description" content="Herramientas digitales gratuitas para profesionales colombianos. Calculadoras y simuladores adaptados a la normativa colombiana 2026. Sin registro, sin suscripción." />
-  <meta name="keywords" content="herramientas profesionales colombia, calculadora laboral, liquidacion colombia, fertilizacion NPK, nomina colombia, punto equilibrio, retención fuente" />
+  <meta name="description" content="Herramientas digitales gratuitas para profesionales colombianos. Calculadoras y simuladores adaptados a la normativa colombiana 2026." />
+  <meta name="keywords" content="herramientas profesionales colombia, calculadora laboral, liquidacion colombia, fertilizacion NPK, nomina colombia" />
+  <title>HerramientasPro Colombia — Herramientas digitales gratuitas</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
+      --verde: #1D9E75;
+      --verde-dark: #0F6E56;
+      --verde-light: #E1F5EE;
       --azul: #1a3a5c;
-      --azul-medio: #2a5298;
-      --amarillo: #f5a623;
-      --gris-bg: #f0f2f5;
-      --gris-card: #ffffff;
-      --texto: #1e2d3d;
-      --texto-suave: #5a6a7a;
-      --borde: #dde3ea;
-      --sombra: 0 2px 12px rgba(26,58,92,0.09);
-      --radio: 14px;
+      --text: #1a1a1a;
+      --text-sec: #555;
+      --text-muted: #888;
+      --bg: #f7f7f5;
+      --card: #ffffff;
+      --border: #e0e0dc;
+      --radius: 12px;
     }
 
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+    }
 
-    /* ── NAVBAR ── */
-    nav {
-      background: var(--azul);
-      padding: 0 1.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 58px;
+    /* HEADER */
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.5rem;
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
-    .nav-brand { color: #fff; font-weight: 800; font-size: 1.15rem; text-decoration: none; letter-spacing: -0.3px; }
-    .nav-brand span { color: var(--amarillo); }
-    .nav-meta { color: rgba(255,255,255,0.6); font-size: 0.78rem; }
-
-    /* ── HERO ── */
-    .hero {
-      background: linear-gradient(135deg, #0f2540 0%, #1a3a5c 45%, #2a5298 100%);
-      padding: 3rem 1.4rem 2.5rem;
-      text-align: center;
-      color: #fff;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -60px;
-      width: 280px; height: 280px;
-      background: rgba(245,166,35,0.08);
-      border-radius: 50%;
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -80px; left: -40px;
-      width: 220px; height: 220px;
-      background: rgba(255,255,255,0.04);
-      border-radius: 50%;
-    }
-    .hero-eyebrow {
-      display: inline-block;
-      background: var(--amarillo);
-      color: var(--azul);
-      border-radius: 20px;
-      padding: 4px 16px;
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-    .hero h1 {
-      font-size: clamp(1.6rem, 5vw, 2.6rem);
-      font-weight: 900;
-      line-height: 1.15;
-      margin-bottom: 0.8rem;
-      letter-spacing: -0.5px;
-    }
-    .hero h1 span { color: var(--amarillo); }
-    .hero p { font-size: 1rem; opacity: 0.88; max-width: 580px; margin: 0 auto 1.6rem; }
-
-    .stats-row {
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
       display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.8rem;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
     }
-    .stat { text-align: center; }
-    .stat-num { font-size: 2rem; font-weight: 900; color: var(--amarillo); line-height: 1; }
-    .stat-label { font-size: 0.75rem; opacity: 0.75; margin-top: 2px; }
-
-    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-    .hero-chip {
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 20px;
-      padding: 4px 14px;
-      font-size: 0.78rem;
-      font-weight: 600;
-    }
-
-    /* ── BUSCADOR ── */
-    .search-wrap { max-width: 500px; margin: -1.4rem auto 0; padding: 0 1rem; position: relative; z-index: 10; }
-    .search-box {
-      width: 100%;
-      padding: 14px 20px 14px 46px;
-      border: 2px solid var(--borde);
-      border-radius: 30px;
-      font-size: 0.95rem;
-      background: #fff;
-      box-shadow: 0 4px 20px rgba(26,58,92,0.15);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .search-box:focus { border-color: var(--amarillo); }
-    .search-icon { position: absolute; left: 1.9rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; pointer-events: none; }
-
-    /* ── CONTENEDOR ── */
-    .container { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 3rem; }
-
-    /* ── SECCIÓN PROFESIÓN ── */
-    .seccion {
-      margin-bottom: 2.2rem;
-      display: block;
-    }
-    .seccion.oculta { display: none; }
-
-    .seccion-header {
+    .logo {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 1rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 2px solid var(--borde);
-    }
-    .seccion-emoji { font-size: 1.5rem; }
-    .seccion-titulo { font-size: 1.1rem; font-weight: 800; color: var(--azul); }
-    .seccion-count {
-      background: var(--azul);
-      color: #fff;
-      border-radius: 20px;
-      padding: 2px 10px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      margin-left: auto;
-    }
-
-    /* ── GRID DE APPS ── */
-    .apps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 0.9rem;
-    }
-
-    /* ── APP CARD ── */
-    .app-card {
-      background: var(--gris-card);
-      border-radius: var(--radio);
-      box-shadow: var(--sombra);
-      padding: 1.1rem 1.2rem;
       text-decoration: none;
-      color: var(--texto);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      border: 1.5px solid transparent;
-      transition: all 0.2s;
-      position: relative;
-      overflow: hidden;
     }
-    .app-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--color-prof);
-      border-radius: var(--radio) var(--radio) 0 0;
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--verde);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
     }
-    .app-card:hover {
-      border-color: var(--color-prof);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(26,58,92,0.14);
-    }
-    .app-nombre {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--texto);
-      line-height: 1.3;
-    }
-    .app-desc {
-      font-size: 0.76rem;
-      color: var(--texto-suave);
-      line-height: 1.4;
-    }
-    .app-arrow {
-      font-size: 0.78rem;
-      color: var(--color-prof);
-      font-weight: 700;
-      margin-top: auto;
+    .logo-text { font-size: 17px; font-weight: 600; color: var(--text); }
+    .logo-sub  { font-size: 11px; color: var(--text-muted); }
+    .header-badge {
+      font-size: 12px;
+      background: var(--verde-light);
+      color: var(--verde-dark);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 500;
     }
 
-    /* COLORES POR PROFESIÓN */
-    .prof-agro    { --color-prof: #2e7d32; }
-    .prof-conta   { --color-prof: #1565c0; }
-    .prof-admin   { --color-prof: #1a7a4a; }
-    .prof-docente { --color-prof: #6a1b9a; }
-    .prof-salud   { --color-prof: #c62828; }
-    .prof-vet     { --color-prof: #e65100; }
-
-    /* ── SIN RESULTADOS ── */
-    .sin-resultados {
+    /* HERO */
+    .hero {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 1.5rem 2rem;
       text-align: center;
-      padding: 3rem 1rem;
-      color: var(--texto-suave);
-      display: none;
     }
-    .sin-resultados.visible { display: block; }
+    .hero h1 {
+      font-size: 28px; font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px; line-height: 1.3;
+    }
+    .hero h1 span { color: var(--verde); }
+    .hero p {
+      font-size: 16px; color: var(--text-sec);
+      max-width: 600px; margin: 0 auto 1.2rem;
+    }
+    .hero-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .badge { font-size: 12px; padding: 5px 12px; border-radius: 20px; font-weight: 500; }
+    .badge-green { background: var(--verde-light); color: var(--verde-dark); }
+    .badge-gray  { background: #f0f0ec; color: #555; }
 
-    /* ── FOOTER ── */
+    /* STATS */
+    .stats {
+      display: flex; justify-content: center; gap: 2rem;
+      padding: 1.2rem 1.5rem;
+      background: var(--verde-dark);
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-n { font-size: 22px; font-weight: 700; color: #fff; }
+    .stat-l { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+
+    /* TABS */
+    .tabs-section {
+      max-width: 1100px;
+      margin: 2rem auto 0;
+      padding: 0 1.5rem;
+    }
+    .tabs-title {
+      font-size: 13px; color: var(--text-muted);
+      margin-bottom: 10px;
+      text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;
+    }
+    .tabs-scroll { overflow-x: auto; padding-bottom: 2px; }
+    .tabs {
+      display: flex; gap: 6px;
+      min-width: max-content;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+    .tab {
+      padding: 10px 16px; font-size: 13px; font-weight: 500;
+      border: none; background: transparent; cursor: pointer;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      border-radius: 6px 6px 0 0;
+      white-space: nowrap; transition: color 0.15s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tab:hover { color: var(--verde-dark); background: var(--verde-light); }
+    .tab.active { color: var(--verde-dark); border-bottom-color: var(--verde); font-weight: 600; }
+    .tab-emoji { font-size: 15px; }
+
+    /* CONTENT */
+    .content-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 3rem;
+    }
+    .section-header { margin-bottom: 1.2rem; }
+    .section-header h2 { font-size: 20px; font-weight: 700; color: var(--text); }
+    .section-header p  { font-size: 14px; color: var(--text-sec); margin-top: 4px; }
+
+    /* TOOLS GRID */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .tool-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      text-decoration: none;
+      color: var(--text);
+      display: flex; flex-direction: column; gap: 6px;
+      transition: box-shadow 0.15s, transform 0.15s;
+      cursor: pointer;
+    }
+    .tool-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    .tool-card.disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .tool-card.disabled:hover {
+      box-shadow: none;
+      transform: none;
+    }
+    .tool-card-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    .tool-card-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+    .tool-card-desc { font-size: 12px; color: var(--text-sec); line-height: 1.4; flex: 1; }
+    .tool-status {
+      font-size: 11px; font-weight: 500;
+      padding: 3px 8px; border-radius: 10px;
+      display: inline-block; width: fit-content; margin-top: 4px;
+    }
+    .status-ready { background: var(--verde-light); color: var(--verde-dark); }
+    .status-soon  { background: #f0f0ec; color: var(--text-muted); }
+
+    /* FOOTER */
     footer {
       background: var(--azul);
       color: rgba(255,255,255,0.7);
       text-align: center;
       padding: 1.8rem 1rem;
-      font-size: 0.82rem;
+      font-size: 13px;
     }
-    footer a { color: var(--amarillo); text-decoration: none; }
-    footer strong { color: #fff; }
-
+    footer a { color: #f5a623; text-decoration: none; }
     .disclaimer {
-      background: #fff8e1;
-      border: 1px solid #ffc107;
-      border-radius: var(--radio);
-      padding: 1rem 1.2rem;
-      font-size: 0.8rem;
-      color: #5a4a00;
-      margin-bottom: 2rem;
+      background: #fff8e1; border: 1px solid #ffc107;
+      border-radius: 8px; padding: 0.8rem 1rem;
+      font-size: 12px; color: #5a4a00;
+      margin: 1.5rem auto 0; max-width: 1100px;
       text-align: center;
     }
 
-    @media(max-width: 500px) {
-      .apps-grid { grid-template-columns: 1fr 1fr; }
-      .stats-row { gap: 1.2rem; }
+    @media(max-width: 600px) {
+      .tools-grid { grid-template-columns: 1fr 1fr; }
+      .hero h1 { font-size: 22px; }
     }
   </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav>
-  <a href="#" class="nav-brand">🔧 <span>HerramientasPro</span> Colombia</a>
-  <span class="nav-meta">✅ 100% Gratuito · 2026</span>
-</nav>
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">🔧</div>
+      <div>
+        <div class="logo-text">HerramientasPro Colombia</div>
+        <div class="logo-sub">Herramientas digitales para profesionales</div>
+      </div>
+    </a>
+    <span class="header-badge">✅ 100% Gratuito</span>
+  </div>
+</header>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-eyebrow">🇨🇴 Normativa colombiana vigente</div>
   <h1>Herramientas digitales gratuitas<br>para <span>profesionales colombianos</span></h1>
-  <p>Calculadoras y simuladores adaptados a la normativa colombiana 2026. Sin registro, sin suscripción, sin límites.</p>
-  <div class="stats-row">
-    <div class="stat"><div class="stat-num">21</div><div class="stat-label">Herramientas</div></div>
-    <div class="stat"><div class="stat-num">6</div><div class="stat-label">Profesiones</div></div>
-    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Gratuito</div></div>
-    <div class="stat"><div class="stat-num">2026</div><div class="stat-label">Normativa vigente</div></div>
-  </div>
-  <div class="hero-chips">
-    <span class="hero-chip">📱 Funciona en celular</span>
-    <span class="hero-chip">⚡ Sin registro</span>
-    <span class="hero-chip">🔄 Actualizado 2026</span>
-    <span class="hero-chip">SMMLV $1.423.500</span>
-    <span class="hero-chip">UVT $47.065</span>
+  <p>Calculadoras y simuladores adaptados a la normativa colombiana vigente. Sin registro, sin suscripción, sin límites.</p>
+  <div class="hero-badges">
+    <span class="badge badge-green">🔄 Actualizado 2026</span>
+    <span class="badge badge-gray">📱 Funciona en celular</span>
+    <span class="badge badge-green">⚡ Sin registro</span>
+    <span class="badge badge-gray">🇨🇴 Normativa colombiana</span>
   </div>
 </div>
 
-<!-- BUSCADOR -->
-<div class="search-wrap">
-  <span class="search-icon">🔍</span>
-  <input class="search-box" type="text" id="buscador" placeholder="Buscar herramienta... ej: liquidación, NPK, nómina" oninput="buscar()" />
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-n">21</div><div class="stat-l">Herramientas</div></div>
+  <div class="stat"><div class="stat-n">12</div><div class="stat-l">Profesiones</div></div>
+  <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Gratuito</div></div>
+  <div class="stat"><div class="stat-n">2026</div><div class="stat-l">Normativa vigente</div></div>
 </div>
 
-<div class="container">
+<!-- TABS -->
+<div class="tabs-section">
+  <div class="tabs-title">Selecciona tu profesión</div>
+  <div class="tabs-scroll">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab(this,'agro')"><span class="tab-emoji">🌱</span> Agrónomos</button>
+      <button class="tab" onclick="switchTab(this,'contadores')"><span class="tab-emoji">🧮</span> Contadores</button>
+      <button class="tab" onclick="switchTab(this,'admin')"><span class="tab-emoji">📊</span> Administradores</button>
+      <button class="tab" onclick="switchTab(this,'docentes')"><span class="tab-emoji">📚</span> Docentes</button>
+      <button class="tab" onclick="switchTab(this,'medicos')"><span class="tab-emoji">🩺</span> Médicos</button>
+      <button class="tab" onclick="switchTab(this,'veterinarios')"><span class="tab-emoji">🐄</span> Veterinarios</button>
+      <button class="tab" onclick="switchTab(this,'civiles')"><span class="tab-emoji">🏗️</span> Ing. Civil</button>
+      <button class="tab" onclick="switchTab(this,'electricos')"><span class="tab-emoji">⚡</span> Ing. Eléctricos</button>
+      <button class="tab" onclick="switchTab(this,'nutricion')"><span class="tab-emoji">🥗</span> Nutricionistas</button>
+      <button class="tab" onclick="switchTab(this,'abogados')"><span class="tab-emoji">⚖️</span> Abogados</button>
+      <button class="tab" onclick="switchTab(this,'psicologia')"><span class="tab-emoji">🧠</span> Psicólogos</button>
+      <button class="tab" onclick="switchTab(this,'alimentos')"><span class="tab-emoji">🧪</span> Ing. Alimentos</button>
+    </div>
+  </div>
+</div>
 
+<!-- CONTENT -->
+<div class="content-section">
+  <div id="content"></div>
   <div class="disclaimer">
     ⚠️ <strong>Uso orientativo.</strong> Los resultados deben verificarse con un profesional idóneo. Parámetros 2026: SMMLV $1.423.500 · Aux. transporte $162.000 · UVT $47.065.
   </div>
-
-  <!-- ══════════════════════════════════════
-       AGRÓNOMOS
-  ══════════════════════════════════════ -->
-  <div class="seccion" id="sec-agro">
-    <div class="seccion-header">
-      <span class="seccion-emoji">🌱</span>
-      <span class="seccion-titulo">Ingenieros Agrónomos y del Agro</span>
-      <span class="seccion-count">5 herramientas</span>
-    </div>
-    <div class="apps-grid">
-      <a class="app-card prof-agro" href="./agro/fertilizacion-npk/">
-        <div class="app-nombre">Calculadora NPK</div>
-        <div class="app-desc">Fertilización por cultivo según análisis de suelo</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-agro" href="./agro/plan-riego/">
-        <div class="app-nombre">Plan de Riego</div>
-        <div class="app-desc">Goteo y aspersión por cultivo y tipo de suelo</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-agro" href="./agro/dosis-agroquimicos/">
-        <div class="app-nombre">Dosis de Agroquímicos</div>
-        <div class="app-desc">Cálculo de dosis por hectárea según producto</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-agro" href="./agro/analisis-suelo/">
-        <div class="app-nombre">Interpretador Análisis de Suelo</div>
-        <div class="app-desc">pH, materia orgánica, nutrientes y recomendaciones</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-agro" href="./agro/rendimiento-cultivos/">
-        <div class="app-nombre">Estimador de Rendimiento</div>
-        <div class="app-desc">Proyección de rendimiento por cultivo y área</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       CONTADORES
-  ══════════════════════════════════════ -->
-  <div class="seccion" id="sec-conta">
-    <div class="seccion-header">
-      <span class="seccion-emoji">🧮</span>
-      <span class="seccion-titulo">Contadores Públicos</span>
-      <span class="seccion-count">7 herramientas</span>
-    </div>
-    <div class="apps-grid">
-      <a class="app-card prof-conta" href="./contadores/liquidacion-laboral/">
-        <div class="app-nombre">Liquidador Laboral 2026</div>
-        <div class="app-desc">Prima, cesantías, vacaciones e indemnización</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-conta" href="./contadores/nomina-mensual/">
-        <div class="app-nombre">Calculadora de Nómina</div>
-        <div class="app-desc">Nómina mensual completa con deducciones</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-conta" href="./contadores/retencion-fuente/">
-        <div class="app-nombre">Retención en la Fuente</div>
-        <div class="app-desc">Simulador según tabla DIAN y UVT 2026</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-conta" href="./contadores/calculadora-iva/">
-        <div class="app-nombre">IVA y Facturación</div>
-        <div class="app-desc">Cálculo de IVA, base gravable y facturación electrónica</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-conta" href="./contadores/depreciacion-activos/">
-        <div class="app-nombre">Depreciación de Activos</div>
-        <div class="app-desc">Línea recta y reducción de saldos</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-conta" href="./contadores/intereses-mora-dian/">
-        <div class="app-nombre">Intereses de Mora DIAN</div>
-        <div class="app-desc">Cálculo de mora tributaria según tasa vigente</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-conta" href="./contadores/declaracion-renta/">
-        <div class="app-nombre">Declaración de Renta</div>
-        <div class="app-desc">Simulador para personas naturales 2026</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       ADMINISTRADORES
-  ══════════════════════════════════════ -->
-  <div class="seccion" id="sec-admin">
-    <div class="seccion-header">
-      <span class="seccion-emoji">📊</span>
-      <span class="seccion-titulo">Administradores de Empresas</span>
-      <span class="seccion-count">4 herramientas</span>
-    </div>
-    <div class="apps-grid">
-      <a class="app-card prof-admin" href="./admin/punto-equilibrio/">
-        <div class="app-nombre">Punto de Equilibrio Básico</div>
-        <div class="app-desc">PE en unidades y pesos, margen de contribución</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-admin" href="./admin/punto-equilibrio-pyme/">
-        <div class="app-nombre">Punto de Equilibrio PYME</div>
-        <div class="app-desc">Análisis avanzado con escenarios y multiproducto</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-admin" href="./admin/credito-bancario/">
-        <div class="app-nombre">Simulador Crédito Bancario</div>
-        <div class="app-desc">Cuota, plazo, tasa y tabla de amortización</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-admin" href="./admin/flujo-caja-pyme/">
-        <div class="app-nombre">Flujo de Caja PYME</div>
-        <div class="app-desc">Proyección mensual de ingresos y egresos</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       DOCENTES
-  ══════════════════════════════════════ -->
-  <div class="seccion" id="sec-docente">
-    <div class="seccion-header">
-      <span class="seccion-emoji">📚</span>
-      <span class="seccion-titulo">Docentes y Educadores</span>
-      <span class="seccion-count">2 herramientas</span>
-    </div>
-    <div class="apps-grid">
-      <a class="app-card prof-docente" href="./docentes/credito-fna/">
-        <div class="app-nombre">Simulador Crédito FNA</div>
-        <div class="app-desc">Crédito Fondo Nacional del Ahorro para docentes</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-docente" href="./docentes/escalafon-docente/">
-        <div class="app-nombre">Escalafón Docente 2026</div>
-        <div class="app-desc">Proyección salarial por grado y título</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       SALUD
-  ══════════════════════════════════════ -->
-  <div class="seccion" id="sec-salud">
-    <div class="seccion-header">
-      <span class="seccion-emoji">🩺</span>
-      <span class="seccion-titulo">Médicos y Personal de Salud</span>
-      <span class="seccion-count">2 herramientas</span>
-    </div>
-    <div class="apps-grid">
-      <a class="app-card prof-salud" href="./salud/imc-dosis-medicos/">
-        <div class="app-nombre">IMC y Dosis Pediátricas</div>
-        <div class="app-desc">Índice de masa corporal y dosis por peso corporal</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-      <a class="app-card prof-salud" href="./salud/framingham-cardiovascular/">
-        <div class="app-nombre">Score Framingham</div>
-        <div class="app-desc">Riesgo cardiovascular a 10 años</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       VETERINARIA
-  ══════════════════════════════════════ -->
-  <div class="seccion" id="sec-vet">
-    <div class="seccion-header">
-      <span class="seccion-emoji">🐄</span>
-      <span class="seccion-titulo">Veterinarios y Zootecnistas</span>
-      <span class="seccion-count">1 herramienta</span>
-    </div>
-    <div class="apps-grid">
-      <a class="app-card prof-vet" href="./veterinaria/raciones-bovinas/">
-        <div class="app-nombre">Calculadora de Raciones Bovinas</div>
-        <div class="app-desc">Raciones para bovinos según peso y ganancia esperada</div>
-        <div class="app-arrow">Abrir →</div>
-      </a>
-    </div>
-  </div>
-
-  <!-- SIN RESULTADOS -->
-  <div class="sin-resultados" id="sin-resultados">
-    <div style="font-size:2.5rem; margin-bottom:0.5rem;">🔍</div>
-    <strong>No encontramos esa herramienta</strong>
-    <p style="font-size:0.88rem; margin-top:0.4rem;">Prueba con otro término o navega por profesión.</p>
-  </div>
-
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <strong>HerramientasPro Colombia</strong> — Plataforma de herramientas digitales gratuitas<br>
-  Desarrollado para profesionales colombianos · <a href="mailto:datajuan1305@gmail.com">Contacto</a><br><br>
-  <span style="font-size:0.75rem;">⚠️ Herramienta de uso orientativo. Los resultados deben ser verificados con un profesional idóneo. Parámetros normativos vigentes 2026.</span>
+  <strong style="color:#fff;">HerramientasPro Colombia</strong> — Plataforma de herramientas digitales gratuitas<br>
+  Desarrollado para profesionales colombianos · <a href="mailto:datajuan1305@gmail.com">Contacto</a>
 </footer>
 
 <script>
-  // Índice de búsqueda: [texto a buscar, id de sección, elemento card]
-  const todasLasApps = [];
-  document.querySelectorAll('.app-card').forEach(card => {
-    const seccion = card.closest('.seccion');
-    todasLasApps.push({
-      card,
-      seccion,
-      texto: (card.querySelector('.app-nombre').textContent + ' ' + card.querySelector('.app-desc').textContent).toLowerCase()
-    });
-  });
-
-  function buscar() {
-    const q = document.getElementById('buscador').value.toLowerCase().trim();
-    const secciones = document.querySelectorAll('.seccion');
-
-    if (!q) {
-      // Mostrar todo
-      todasLasApps.forEach(a => a.card.style.display = '');
-      secciones.forEach(s => s.classList.remove('oculta'));
-      document.getElementById('sin-resultados').classList.remove('visible');
-      return;
-    }
-
-    // Filtrar cards
-    const seccionesConResultados = new Set();
-    todasLasApps.forEach(a => {
-      const coincide = a.texto.includes(q);
-      a.card.style.display = coincide ? '' : 'none';
-      if (coincide) seccionesConResultados.add(a.seccion.id);
-    });
-
-    // Ocultar secciones sin resultados
-    secciones.forEach(s => {
-      s.classList.toggle('oculta', !seccionesConResultados.has(s.id));
-    });
-
-    // Mensaje sin resultados
-    document.getElementById('sin-resultados').classList.toggle('visible', seccionesConResultados.size === 0);
+const profesiones = {
+  agro: {
+    titulo: 'Ingenieros Agrónomos y del Agro',
+    desc: 'Fertilización, riego, agroquímicos y análisis de suelo — adaptados a cultivos colombianos',
+    apps: [
+      { emoji: '🌿', bg: '#E1F5EE', name: 'Calculadora NPK', desc: 'Fertilización por cultivo según análisis de suelo', url: 'agro/fertilizacion-npk/', ready: true },
+      { emoji: '💧', bg: '#E6F1FB', name: 'Plan de riego goteo y aspersión', desc: 'Diseño de riego por cultivo y tipo de suelo', url: 'agro/plan-riego/', ready: true },
+      { emoji: '🐛', bg: '#FAEEDA', name: 'Dosis de agroquímicos por hectárea', desc: 'Cálculo según etiqueta del producto', url: 'agro/dosis-agroquimicos/', ready: true },
+      { emoji: '🌍', bg: '#EEEDFE', name: 'Interpretador análisis de suelo', desc: 'pH, materia orgánica, nutrientes y recomendaciones', url: 'agro/analisis-suelo/', ready: true },
+      { emoji: '🌾', bg: '#EAF3DE', name: 'Estimador de rendimiento por cultivo', desc: 'Proyección de producción por lote', url: 'agro/rendimiento-cultivos/', ready: true },
+      { emoji: '💰', bg: '#FAEEDA', name: 'Presupuesto de producción agrícola', desc: 'Costos por lote y ciclo productivo', url: '', ready: false },
+      { emoji: '🌿', bg: '#E1F5EE', name: 'Materia orgánica y enmiendas', desc: 'Cálculo de compost y enmiendas al suelo', url: '', ready: false },
+      { emoji: '📐', bg: '#E6F1FB', name: 'Índice de área foliar (IAF)', desc: 'Estimación de cobertura vegetal', url: '', ready: false },
+    ]
+  },
+  contadores: {
+    titulo: 'Contadores Públicos',
+    desc: 'Liquidaciones laborales, nómina y tributario — normativa colombiana 2026',
+    apps: [
+      { emoji: '📋', bg: '#E1F5EE', name: 'Liquidador laboral completo', desc: 'Prima, cesantías, vacaciones, indemnización', url: 'contadores/liquidacion-laboral/', ready: true },
+      { emoji: '👥', bg: '#E6F1FB', name: 'Calculadora de nómina mensual', desc: 'Con todos los descuentos y aportes', url: 'contadores/nomina-mensual/', ready: true },
+      { emoji: '🧾', bg: '#EEEDFE', name: 'Retención en la fuente', desc: 'Simulador por tipo de ingreso y UVT 2026', url: 'contadores/retencion-fuente/', ready: true },
+      { emoji: '💹', bg: '#FAEEDA', name: 'Calculadora de IVA y facturación', desc: 'Facturación electrónica incluida', url: 'contadores/calculadora-iva/', ready: true },
+      { emoji: '📉', bg: '#EAF3DE', name: 'Depreciación de activos', desc: 'Línea recta y reducción de saldos', url: 'contadores/depreciacion-activos/', ready: true },
+      { emoji: '⏰', bg: '#E6F1FB', name: 'Intereses de mora DIAN', desc: 'Cálculo por período vencido', url: 'contadores/intereses-mora-dian/', ready: true },
+      { emoji: '📊', bg: '#FCEBEB', name: 'Declaración de renta PN', desc: 'Simulador personas naturales 2026', url: 'contadores/declaracion-renta/', ready: true },
+      { emoji: '🏦', bg: '#E1F5EE', name: 'Conciliación bancaria', desc: 'Cuadre automático de saldos', url: '', ready: false },
+    ]
+  },
+  admin: {
+    titulo: 'Administradores de Empresas',
+    desc: 'Indicadores financieros y herramientas de gestión para PYME colombianas',
+    apps: [
+      { emoji: '📊', bg: '#E1F5EE', name: 'Punto de equilibrio básico', desc: 'En unidades y en pesos colombianos', url: 'admin/punto-equilibrio/', ready: true },
+      { emoji: '🏭', bg: '#E6F1FB', name: 'Punto de equilibrio PYME avanzado', desc: 'Multiproducto y escenarios de utilidad', url: 'admin/punto-equilibrio-pyme/', ready: true },
+      { emoji: '🏦', bg: '#FAEEDA', name: 'Simulador de crédito bancario', desc: 'Cuota, plazo y tabla de amortización', url: 'admin/credito-bancario/', ready: true },
+      { emoji: '💰', bg: '#EAF3DE', name: 'Flujo de caja PYME', desc: 'Proyección mensual de ingresos y egresos', url: 'admin/flujo-caja-pyme/', ready: true },
+      { emoji: '📈', bg: '#EEEDFE', name: 'Análisis financiero ROI/TIR/VPN', desc: 'Evaluación de proyectos de inversión', url: '', ready: false },
+      { emoji: '💼', bg: '#FCEBEB', name: 'Indicadores financieros', desc: 'Liquidez, endeudamiento, rentabilidad', url: '', ready: false },
+      { emoji: '📋', bg: '#EAF3DE', name: 'Estado de resultados', desc: 'P&G automático para PYME', url: '', ready: false },
+    ]
+  },
+  docentes: {
+    titulo: 'Docentes y Educadores',
+    desc: 'Simuladores de FNA, pensión y escalafón para el magisterio colombiano',
+    apps: [
+      { emoji: '🏠', bg: '#E6F1FB', name: 'Simulador crédito FNA', desc: 'Cuota, plazo y tasa vigente 2026', url: 'docentes/credito-fna/', ready: true },
+      { emoji: '📈', bg: '#EAF3DE', name: 'Escalafón docente 2026', desc: 'Proyección salarial por grado y título', url: 'docentes/escalafon-docente/', ready: true },
+      { emoji: '🎓', bg: '#EEEDFE', name: 'Pensión docente', desc: 'Régimen especial del magisterio', url: '', ready: false },
+      { emoji: '💵', bg: '#FAEEDA', name: 'Deducciones nómina docente', desc: 'Descuentos, aportes y neto a pagar', url: '', ready: false },
+      { emoji: '⭐', bg: '#E1F5EE', name: 'Promedio ponderado estudiantil', desc: 'Evaluación y desempeño escolar', url: '', ready: false },
+    ]
+  },
+  medicos: {
+    titulo: 'Médicos y Personal de Salud',
+    desc: 'Calculadoras clínicas validadas para el entorno médico colombiano',
+    apps: [
+      { emoji: '⚖️', bg: '#FCEBEB', name: 'IMC y dosis pediátricas', desc: 'Peso ideal, IMC y dosis por peso corporal', url: 'salud/imc-dosis-medicos/', ready: true },
+      { emoji: '❤️', bg: '#FCEBEB', name: 'Score Framingham cardiovascular', desc: 'Riesgo cardiovascular a 10 años', url: 'salud/framingham-cardiovascular/', ready: true },
+      { emoji: '💊', bg: '#E1F5EE', name: 'Dosis de medicamentos adulto', desc: 'Por peso y función renal', url: '', ready: false },
+      { emoji: '👶', bg: '#EEEDFE', name: 'Fecha probable de parto (FPP)', desc: 'Regla de Naegele + ecografía', url: '', ready: false },
+      { emoji: '💉', bg: '#FAEEDA', name: 'Calculadora de goteo IV', desc: 'Soluciones y velocidad de infusión', url: '', ready: false },
+      { emoji: '🫁', bg: '#E6F1FB', name: 'Gases arteriales', desc: 'Interpretación de gasometría', url: '', ready: false },
+      { emoji: '🧪', bg: '#EAF3DE', name: 'Clearance de creatinina', desc: 'Fórmula Cockcroft-Gault', url: '', ready: false },
+      { emoji: '🏥', bg: '#FCEBEB', name: 'Score APACHE II / SOFA', desc: 'Pronóstico en paciente crítico UCI', url: '', ready: false },
+    ]
+  },
+  veterinarios: {
+    titulo: 'Veterinarios y Zootecnistas',
+    desc: 'Herramientas para el sector pecuario y de salud animal colombiano',
+    apps: [
+      { emoji: '🐄', bg: '#FAEEDA', name: 'Calculadora de raciones bovinas', desc: 'Ganancia de peso y conversión alimenticia', url: 'veterinaria/raciones-bovinas/', ready: true },
+      { emoji: '💉', bg: '#E1F5EE', name: 'Dosis de medicamentos veterinarios', desc: 'Por especie y peso corporal', url: '', ready: false },
+      { emoji: '🌿', bg: '#EAF3DE', name: 'Capacidad de carga por hectárea', desc: 'Unidades animales por área de pastoreo', url: '', ready: false },
+      { emoji: '🐔', bg: '#EEEDFE', name: 'Densidad en galpones avícolas', desc: 'Aves por m² según normativa ICA', url: '', ready: false },
+      { emoji: '📊', bg: '#E6F1FB', name: 'Índice de conversión alimenticia (ICA)', desc: 'Eficiencia alimentaria por especie', url: '', ready: false },
+    ]
+  },
+  civiles: {
+    titulo: 'Ingenieros Civiles y Constructores',
+    desc: 'Cálculos estructurales, presupuestos y materiales para obra colombiana',
+    apps: [
+      { emoji: '🏢', bg: '#E1F5EE', name: 'Presupuesto de construcción por m²', desc: 'Con análisis de precios unitarios (APU)', url: '', ready: false },
+      { emoji: '🪨', bg: '#E6F1FB', name: 'Diseño de mezclas de concreto', desc: 'Proporciones fc, relación agua/cemento', url: '', ready: false },
+      { emoji: '📏', bg: '#EEEDFE', name: 'Cálculo de acero de refuerzo', desc: 'Varillas, traslapes y peso total', url: '', ready: false },
+      { emoji: '🧱', bg: '#FAEEDA', name: 'Mampostería', desc: 'Bloques, ladrillos y mortero por m²', url: '', ready: false },
+      { emoji: '⛏️', bg: '#EAF3DE', name: 'Excavaciones y rellenos', desc: 'Volumen de corte y terraplén', url: '', ready: false },
+      { emoji: '🚿', bg: '#E6F1FB', name: 'Instalaciones hidráulicas', desc: 'Tuberías, presión y caudal', url: '', ready: false },
+    ]
+  },
+  electricos: {
+    titulo: 'Ingenieros Eléctricos y Electrónicos',
+    desc: 'Cálculos bajo norma RETIE y NTC 2050 para instalaciones colombianas',
+    apps: [
+      { emoji: '⚡', bg: '#FAEEDA', name: 'Carga eléctrica residencial/industrial', desc: 'Demanda máxima y factor de demanda', url: '', ready: false },
+      { emoji: '🔌', bg: '#E6F1FB', name: 'Dimensionamiento de conductores', desc: 'Calibre según NTC 2050', url: '', ready: false },
+      { emoji: '🔋', bg: '#EEEDFE', name: 'Banco de condensadores', desc: 'Corrección de factor de potencia', url: '', ready: false },
+      { emoji: '🌍', bg: '#EAF3DE', name: 'Puesta a tierra', desc: 'Diseño según RETIE artículo 15', url: '', ready: false },
+      { emoji: '💡', bg: '#FAEEDA', name: 'Iluminación (luxes)', desc: 'Número de luminarias por área', url: '', ready: false },
+    ]
+  },
+  nutricion: {
+    titulo: 'Nutricionistas y Dietistas',
+    desc: 'Planificación nutricional y cálculo de requerimientos calóricos',
+    apps: [
+      { emoji: '🥗', bg: '#EAF3DE', name: 'Requerimiento calórico total (VCT)', desc: 'Por actividad física y composición corporal', url: '', ready: false },
+      { emoji: '🍗', bg: '#FAEEDA', name: 'Calculadora de macronutrientes', desc: 'Proteína, carbohidratos y grasas', url: '', ready: false },
+      { emoji: '👶', bg: '#FCEBEB', name: 'IMC niños y adolescentes', desc: 'Percentiles OMS por edad y sexo', url: '', ready: false },
+      { emoji: '💧', bg: '#E6F1FB', name: 'Necesidades hídricas', desc: 'Agua recomendada por peso y actividad', url: '', ready: false },
+    ]
+  },
+  abogados: {
+    titulo: 'Abogados y Profesionales del Derecho',
+    desc: 'Calculadoras jurídicas adaptadas al ordenamiento colombiano',
+    apps: [
+      { emoji: '📅', bg: '#E6F1FB', name: 'Términos procesales', desc: 'Cómputo de días hábiles y calendario', url: '', ready: false },
+      { emoji: '⚖️', bg: '#EEEDFE', name: 'Indemnizaciones laborales', desc: 'Cálculo por tipo de despido', url: '', ready: false },
+      { emoji: '👨‍👧', bg: '#EAF3DE', name: 'Simulador de alimentos', desc: 'Cuota alimentaria según ingresos', url: '', ready: false },
+      { emoji: '💸', bg: '#FCEBEB', name: 'Multas y sanciones DIAN', desc: 'Cálculo en UVT vigentes 2026', url: '', ready: false },
+    ]
+  },
+  psicologia: {
+    titulo: 'Psicólogos y Trabajadores Sociales',
+    desc: 'Escalas de valoración clínica y herramientas de diagnóstico social',
+    apps: [
+      { emoji: '😔', bg: '#EEEDFE', name: 'Escala de depresión PHQ-9', desc: 'Puntuación automática e interpretación', url: '', ready: false },
+      { emoji: '😰', bg: '#FBEAF0', name: 'Escala de ansiedad GAD-7', desc: 'Evaluación del trastorno de ansiedad', url: '', ready: false },
+      { emoji: '🍺', bg: '#FAEEDA', name: 'Test AUDIT', desc: 'Valoración de consumo de alcohol', url: '', ready: false },
+      { emoji: '👨‍👩‍👧', bg: '#E1F5EE', name: 'Vulnerabilidad familiar', desc: 'Índice DANE — línea de pobreza', url: '', ready: false },
+    ]
+  },
+  alimentos: {
+    titulo: 'Ingenieros de Alimentos',
+    desc: 'Cálculos para la industria alimentaria colombiana — procesos y formulación',
+    apps: [
+      { emoji: '⏱️', bg: '#FAEEDA', name: 'Vida útil de alimentos (Arrhenius)', desc: 'Estimación por temperatura y actividad de agua', url: '', ready: false },
+      { emoji: '⚖️', bg: '#E1F5EE', name: 'Balance de masa en producción', desc: 'Entradas, salidas y mermas del proceso', url: '', ready: false },
+      { emoji: '🧫', bg: '#EAF3DE', name: 'pH y acidez titulable', desc: 'Cálculos de control de calidad', url: '', ready: false },
+      { emoji: '🌡️', bg: '#FCEBEB', name: 'Pasteurización (tiempo-temperatura)', desc: 'Equivalencia de tratamiento térmico', url: '', ready: false },
+    ]
   }
+};
+
+function switchTab(el, key) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderContent(key);
+}
+
+function renderContent(key) {
+  const d = profesiones[key];
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="section-header">
+      <h2>${d.titulo}</h2>
+      <p>${d.desc}</p>
+    </div>
+    <div class="tools-grid">
+      ${d.apps.map(app => `
+        <a class="tool-card ${!app.ready ? 'disabled' : ''}"
+           href="${app.ready && app.url ? app.url : '#'}"
+           ${!app.ready ? 'onclick="return false;"' : ''}>
+          <div class="tool-card-icon" style="background:${app.bg}">${app.emoji}</div>
+          <div class="tool-card-name">${app.name}</div>
+          <div class="tool-card-desc">${app.desc}</div>
+          <span class="tool-status ${app.ready ? 'status-ready' : 'status-soon'}">
+            ${app.ready ? '✅ Disponible' : '🔜 Próximamente'}
+          </span>
+        </a>
+      `).join('')}
+    </div>
+  `;
+}
+
+renderContent('agro');
 </script>
 </body>
 </html>
-
