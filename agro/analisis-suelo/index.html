@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Interpretador de análisis de suelo Colombia. Interpreta pH, materia orgánica, fósforo, potasio, calcio, magnesio y micronutrientes. Recomendaciones de enmiendas y fertilización." />
+  <meta name="keywords" content="interpretacion analisis de suelo colombia, pH suelo colombia, materia organica suelo, encalamiento suelo colombia, fertilidad suelo colombia, resultado analisis suelo" />
+  <title>Interpretador de Análisis de Suelo — HerramientasPro Colombia</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #1D9E75; --verde-dark: #0F6E56; --verde-light: #E1F5EE;
+      --azul: #185FA5; --azul-light: #E6F1FB;
+      --rojo: #A32D2D; --rojo-light: #FCEBEB;
+      --naranja: #854F0B; --naranja-light: #FAEEDA;
+      --morado: #534AB7; --morado-light: #EEEDFE;
+      --amarillo-light: #FAEEDA;
+      --text: #1a1a1a; --text-sec: #555; --text-muted: #888;
+      --bg: #f7f7f5; --card: #ffffff; --border: #e0e0dc; --radius: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; height: 54px; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { width: 30px; height: 30px; background: var(--verde); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .nav-sep { color: var(--border); font-size: 18px; }
+    .nav-current { font-size: 13px; color: var(--text-sec); }
+
+    .hero { background: linear-gradient(135deg, #27500A 0%, #1D9E75 100%); padding: 2rem 1.5rem; text-align: center; }
+    .hero-icon { font-size: 42px; margin-bottom: 10px; }
+    .hero h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.85); max-width: 580px; margin: 0 auto; }
+    .hero-params { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .hero-param { font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; padding: 4px 10px; border-radius: 20px; }
+
+    .main { max-width: 960px; margin: 0 auto; padding: 1.5rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 500; color: var(--text-sec); }
+    select, input[type="number"], input[type="text"] {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text); background: #fff; transition: border-color 0.15s;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--verde); }
+    .hint { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+    .unidad { font-size: 11px; color: var(--text-muted); background: #f0f0ec; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 2px; }
+
+    .btn { width: 100%; padding: 13px; background: var(--verde); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .btn:hover { background: var(--verde-dark); }
+    .btn-reset { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 9px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+
+    #resultados { display: none; }
+
+    /* SEMAFORO PARAMETROS */
+    .params-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 10px; margin-bottom: 1rem; }
+    .param-card { border-radius: 10px; padding: 1rem; border: 1px solid; text-align: center; }
+    .param-nombre { font-size: 11px; font-weight: 700; color: var(--text-sec); text-transform: uppercase; margin-bottom: 4px; }
+    .param-valor { font-size: 22px; font-weight: 900; margin-bottom: 2px; }
+    .param-unidad { font-size: 10px; color: var(--text-muted); margin-bottom: 6px; }
+    .param-nivel { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 10px; display: inline-block; }
+
+    /* Niveles */
+    .nivel-muy-bajo { background: #FCEBEB; border-color: #F7C1C1; }
+    .nivel-muy-bajo .param-valor { color: var(--rojo); }
+    .nivel-muy-bajo .param-nivel { background: var(--rojo); color: #fff; }
+
+    .nivel-bajo { background: var(--naranja-light); border-color: #FAC775; }
+    .nivel-bajo .param-valor { color: var(--naranja); }
+    .nivel-bajo .param-nivel { background: var(--naranja); color: #fff; }
+
+    .nivel-medio { background: var(--amarillo-light); border-color: #FAC775; }
+    .nivel-medio .param-valor { color: #BA7517; }
+    .nivel-medio .param-nivel { background: #BA7517; color: #fff; }
+
+    .nivel-adecuado { background: var(--verde-light); border-color: #9FE1CB; }
+    .nivel-adecuado .param-valor { color: var(--verde-dark); }
+    .nivel-adecuado .param-nivel { background: var(--verde); color: #fff; }
+
+    .nivel-alto { background: var(--azul-light); border-color: #B5D4F4; }
+    .nivel-alto .param-valor { color: var(--azul); }
+    .nivel-alto .param-nivel { background: var(--azul); color: #fff; }
+
+    /* BARRA PH */
+    .ph-barra-wrap { margin-bottom: 1rem; }
+    .ph-escala { display: flex; border-radius: 8px; overflow: hidden; height: 32px; }
+    .ph-seg { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; }
+    .ph-marker-wrap { position: relative; height: 20px; margin-top: 4px; }
+    .ph-marker { position: absolute; transform: translateX(-50%); font-size: 11px; font-weight: 700; color: var(--text); }
+    .ph-marker::before { content: '▲'; display: block; text-align: center; font-size: 14px; color: var(--verde-dark); }
+
+    /* RECOMENDACIONES */
+    .rec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
+    .rec-item { border-radius: 8px; padding: 10px 12px; border: 1px solid; }
+    .rec-item.urgente { background: var(--rojo-light); border-color: #F7C1C1; }
+    .rec-item.importante { background: var(--naranja-light); border-color: #FAC775; }
+    .rec-item.sugerido { background: var(--verde-light); border-color: #9FE1CB; }
+    .rec-item.info { background: var(--azul-light); border-color: #B5D4F4; }
+    .rec-titulo { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+    .rec-item.urgente .rec-titulo { color: var(--rojo); }
+    .rec-item.importante .rec-titulo { color: var(--naranja); }
+    .rec-item.sugerido .rec-titulo { color: var(--verde-dark); }
+    .rec-item.info .rec-titulo { color: var(--azul); }
+    .rec-desc { font-size: 12px; color: var(--text-sec); line-height: 1.4; }
+
+    /* TABLA INTERPRETACION */
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { background: #f5f5f2; color: var(--text-sec); font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+    td { padding: 8px 10px; border-bottom: 1px solid #f5f5f2; }
+    tr:last-child td { border-bottom: none; }
+    .nivel-tag { padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; }
+
+    .disclaimer { background: #fffbf0; border: 1px solid #FAC775; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 1rem; }
+    .btn-print { width: 100%; padding: 10px; background: transparent; color: var(--verde-dark); border: 1px solid var(--verde); border-radius: 9px; font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 8px; }
+
+    @media (max-width: 640px) {
+      .form-grid, .form-grid-3 { grid-template-columns: 1fr; }
+      .rec-grid { grid-template-columns: 1fr; }
+      .params-grid { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-text">HerramientasPro</div>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">🌍 Análisis de Suelo</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">🌍</div>
+  <h1>Interpretador de Análisis de Suelo</h1>
+  <p>Ingresa los resultados de tu análisis de suelo y obtén una interpretación completa con niveles de fertilidad, recomendaciones de encalamiento y correcciones nutricionales.</p>
+  <div class="hero-params">
+    <span class="hero-param">🧪 pH y materia orgánica</span>
+    <span class="hero-param">⚗️ Macronutrientes NPK</span>
+    <span class="hero-param">🔬 Bases intercambiables</span>
+    <span class="hero-param">🌿 Micronutrientes</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="card">
+    <div class="card-title">🌱 Información del lote</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="nombre-lote">Nombre del lote / finca</label>
+        <input type="text" id="nombre-lote" placeholder="Ej: Lote 1 — Finca El Progreso" />
+      </div>
+      <div class="form-group">
+        <label for="cultivo">Cultivo a establecer</label>
+        <select id="cultivo">
+          <option value="cafe">☕ Café</option>
+          <option value="banano">🍌 Banano / Plátano</option>
+          <option value="cacao">🍫 Cacao</option>
+          <option value="papa">🥔 Papa</option>
+          <option value="maiz">🌽 Maíz</option>
+          <option value="arroz">🌾 Arroz</option>
+          <option value="pina">🍍 Piña</option>
+          <option value="mango">🥭 Mango / Frutales</option>
+          <option value="hortalizas">🥬 Hortalizas</option>
+          <option value="pasto">🌿 Pastos / Forrajes</option>
+          <option value="flores">💐 Flores</option>
+          <option value="palma">🌴 Palma de aceite</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="textura">Textura del suelo</label>
+        <select id="textura">
+          <option value="arcilloso">Arcilloso</option>
+          <option value="franco">Franco</option>
+          <option value="franco-arcilloso" selected>Franco arcilloso</option>
+          <option value="arenoso">Arenoso</option>
+          <option value="franco-arenoso">Franco arenoso</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="area">Área del lote (ha)</label>
+        <input type="number" id="area" placeholder="Ej: 2" min="0.1" step="0.1" value="1" />
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧪 Propiedades físico-químicas</div>
+    <div class="form-grid-3">
+      <div class="form-group">
+        <label for="ph">pH (unidades)</label>
+        <input type="number" id="ph" placeholder="Ej: 5.8" min="3" max="10" step="0.1" />
+        <span class="unidad">unidades pH</span>
+      </div>
+      <div class="form-group">
+        <label for="mo">Materia orgánica (%)</label>
+        <input type="number" id="mo" placeholder="Ej: 3.5" min="0" max="30" step="0.1" />
+        <span class="unidad">% MO</span>
+      </div>
+      <div class="form-group">
+        <label for="ce">Conductividad eléctrica</label>
+        <input type="number" id="ce" placeholder="Ej: 0.3" min="0" max="20" step="0.01" />
+        <span class="unidad">dS/m</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚗️ Macronutrientes</div>
+    <div class="form-grid-3">
+      <div class="form-group">
+        <label for="p">Fósforo disponible (P)</label>
+        <input type="number" id="p" placeholder="Ej: 15" min="0" max="500" step="0.1" />
+        <span class="unidad">ppm (mg/kg)</span>
+      </div>
+      <div class="form-group">
+        <label for="k">Potasio intercambiable (K)</label>
+        <input type="number" id="k" placeholder="Ej: 0.25" min="0" max="5" step="0.01" />
+        <span class="unidad">meq/100g</span>
+      </div>
+      <div class="form-group">
+        <label for="n">Nitrógeno total (N)</label>
+        <input type="number" id="n" placeholder="Ej: 0.18" min="0" max="5" step="0.01" />
+        <span class="unidad">% N total</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔬 Bases intercambiables (meq/100g)</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="ca">Calcio (Ca)</label>
+        <input type="number" id="ca" placeholder="Ej: 4.5" min="0" max="30" step="0.1" />
+        <span class="unidad">meq/100g</span>
+      </div>
+      <div class="form-group">
+        <label for="mg">Magnesio (Mg)</label>
+        <input type="number" id="mg" placeholder="Ej: 1.2" min="0" max="10" step="0.1" />
+        <span class="unidad">meq/100g</span>
+      </div>
+      <div class="form-group">
+        <label for="na">Sodio (Na)</label>
+        <input type="number" id="na" placeholder="Ej: 0.1" min="0" max="5" step="0.01" />
+        <span class="unidad">meq/100g</span>
+      </div>
+      <div class="form-group">
+        <label for="al">Aluminio + Acidez (Al+H)</label>
+        <input type="number" id="al" placeholder="Ej: 0.5" min="0" max="10" step="0.01" />
+        <span class="unidad">meq/100g</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔬 Micronutrientes (ppm)</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="fe">Hierro (Fe)</label>
+        <input type="number" id="fe" placeholder="Ej: 120" min="0" max="2000" step="0.1" />
+        <span class="unidad">ppm</span>
+      </div>
+      <div class="form-group">
+        <label for="mn">Manganeso (Mn)</label>
+        <input type="number" id="mn" placeholder="Ej: 15" min="0" max="500" step="0.1" />
+        <span class="unidad">ppm</span>
+      </div>
+      <div class="form-group">
+        <label for="zn">Zinc (Zn)</label>
+        <input type="number" id="zn" placeholder="Ej: 2.5" min="0" max="100" step="0.1" />
+        <span class="unidad">ppm</span>
+      </div>
+      <div class="form-group">
+        <label for="cu">Cobre (Cu)</label>
+        <input type="number" id="cu" placeholder="Ej: 1.5" min="0" max="100" step="0.1" />
+        <span class="unidad">ppm</span>
+      </div>
+      <div class="form-group">
+        <label for="b">Boro (B)</label>
+        <input type="number" id="b" placeholder="Ej: 0.4" min="0" max="10" step="0.01" />
+        <span class="unidad">ppm</span>
+      </div>
+      <div class="form-group">
+        <label for="s">Azufre (S)</label>
+        <input type="number" id="s" placeholder="Ej: 12" min="0" max="200" step="0.1" />
+        <span class="unidad">ppm</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn" onclick="interpretar()">🔬 Interpretar análisis de suelo</button>
+  <button class="btn-reset" onclick="resetear()">↺ Limpiar</button>
+
+  <div id="resultados">
+
+    <div class="card" style="margin-top:1.2rem;">
+      <div class="card-title" id="res-titulo">📊 Resultados del análisis</div>
+
+      <!-- BARRA pH -->
+      <div class="ph-barra-wrap" id="ph-barra-section" style="display:none;">
+        <p style="font-size:13px;font-weight:600;color:var(--text-sec);margin-bottom:8px;">Escala de pH del suelo</p>
+        <div class="ph-escala">
+          <div class="ph-seg" style="background:#E24B4A;flex:0.5;">3–4</div>
+          <div class="ph-seg" style="background:#D85A30;">4–5</div>
+          <div class="ph-seg" style="background:#BA7517;">5–5.5</div>
+          <div class="ph-seg" style="background:#639922;">5.5–6</div>
+          <div class="ph-seg" style="background:#1D9E75;">6–7</div>
+          <div class="ph-seg" style="background:#185FA5;">7–7.5</div>
+          <div class="ph-seg" style="background:#534AB7;">7.5–8.5</div>
+          <div class="ph-seg" style="background:#3C3489;flex:0.5;">8.5+</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-top:4px;">
+          <span>Muy ácido</span><span>Ácido</span><span>Ligeramente ácido</span><span>Neutro</span><span>Alcalino</span><span>Muy alcalino</span>
+        </div>
+        <div style="margin-top:8px;text-align:center;" id="ph-interpretacion"></div>
+      </div>
+
+      <!-- SEMAFORO PARAMETROS -->
+      <div class="card-title" style="margin-top:1rem;">🚦 Niveles de fertilidad</div>
+      <div class="params-grid" id="params-grid"></div>
+    </div>
+
+    <!-- CAPACIDAD DE INTERCAMBIO -->
+    <div class="card" id="cic-card" style="display:none;">
+      <div class="card-title">⚖️ Capacidad de intercambio catiónico (CIC) y saturaciones</div>
+      <div id="cic-contenido"></div>
+    </div>
+
+    <!-- RECOMENDACIONES -->
+    <div class="card">
+      <div class="card-title">💡 Recomendaciones de manejo</div>
+      <div class="rec-grid" id="rec-grid"></div>
+    </div>
+
+    <!-- ENMIENDAS -->
+    <div class="card" id="enmiendas-card" style="display:none;">
+      <div class="card-title">🪨 Cálculo de enmiendas (encalamiento)</div>
+      <div id="enmiendas-contenido"></div>
+    </div>
+
+    <!-- TABLA INTERPRETACION -->
+    <div class="card">
+      <div class="card-title">📋 Tabla de interpretación detallada</div>
+      <div style="overflow-x:auto;">
+        <table id="tabla-interpretacion">
+          <thead>
+            <tr>
+              <th>Parámetro</th>
+              <th>Valor ingresado</th>
+              <th>Unidad</th>
+              <th>Nivel</th>
+              <th>Rango óptimo</th>
+              <th>Observación</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-interpretacion"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      ⚠️ <strong>Herramienta orientativa.</strong> La interpretación se basa en rangos estándar para suelos colombianos (IGAC, Corpoica/Agrosavia, ICA). Los rangos óptimos varían según el cultivo, la zona agroecológica y el método de extracción usado en el laboratorio. Siempre consulte con un ingeniero agrónomo para validar las recomendaciones en campo.
+    </div>
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimir informe</button>
+  </div>
+</div>
+
+<script>
+  // Rangos de interpretación para suelos colombianos (IGAC/Agrosavia)
+  const rangos = {
+    ph: {
+      nombre: 'pH', unidad: 'unidades',
+      niveles: [
+        { max: 4.5, label: 'Muy ácido', cls: 'nivel-muy-bajo', obs: 'Alta toxicidad por Al y Mn. Encalamiento urgente.' },
+        { max: 5.5, label: 'Ácido', cls: 'nivel-bajo', obs: 'Deficiencias de P, Ca, Mg. Encalamiento recomendado.' },
+        { max: 6.0, label: 'Ligeramente ácido', cls: 'nivel-medio', obs: 'Adecuado para muchos cultivos. Monitorear P.' },
+        { max: 7.0, label: 'Neutro / Óptimo', cls: 'nivel-adecuado', obs: 'pH ideal para la mayoría de cultivos colombianos.' },
+        { max: 7.5, label: 'Ligeramente alcalino', cls: 'nivel-medio', obs: 'Posibles deficiencias de Fe, Mn, Zn, B.' },
+        { max: 9.0, label: 'Alcalino', cls: 'nivel-alto', obs: 'Deficiencias de micronutrientes. Aplicar azufre.' },
+        { max: 99,  label: 'Muy alcalino', cls: 'nivel-muy-bajo', obs: 'Suelo problemático. Evaluar sodicidad.' },
+      ],
+      optimo: '6.0 – 7.0'
+    },
+    mo: {
+      nombre: 'Materia orgánica', unidad: '%',
+      niveles: [
+        { max: 1.0, label: 'Muy bajo', cls: 'nivel-muy-bajo', obs: 'Aplicar materia orgánica urgente (compost, abono verde).' },
+        { max: 2.0, label: 'Bajo', cls: 'nivel-bajo', obs: 'Incorporar residuos de cosecha y MO.' },
+        { max: 3.5, label: 'Medio', cls: 'nivel-medio', obs: 'Nivel aceptable. Mantener con enmiendas orgánicas.' },
+        { max: 6.0, label: 'Alto', cls: 'nivel-adecuado', obs: 'Buena reserva de nutrientes y actividad biológica.' },
+        { max: 99,  label: 'Muy alto', cls: 'nivel-alto', obs: 'Excelente. Propio de suelos andinos de alta altitud.' },
+      ],
+      optimo: '3.5 – 6.0 %'
+    },
+    p: {
+      nombre: 'Fósforo (P)', unidad: 'ppm',
+      niveles: [
+        { max: 5,   label: 'Muy bajo', cls: 'nivel-muy-bajo', obs: 'Fertilización fosfórica urgente. DAP o superfosfato.' },
+        { max: 10,  label: 'Bajo', cls: 'nivel-bajo', obs: 'Respuesta esperada a la fertilización con P.' },
+        { max: 20,  label: 'Medio', cls: 'nivel-medio', obs: 'Nivel adecuado para la mayoría de cultivos.' },
+        { max: 40,  label: 'Alto', cls: 'nivel-adecuado', obs: 'Buena disponibilidad. Reducir dosis de P.' },
+        { max: 999, label: 'Muy alto', cls: 'nivel-alto', obs: 'Exceso. Puede bloquear Zn y Fe. No fertilizar con P.' },
+      ],
+      optimo: '20 – 40 ppm'
+    },
+    k: {
+      nombre: 'Potasio (K)', unidad: 'meq/100g',
+      niveles: [
+        { max: 0.10, label: 'Muy bajo', cls: 'nivel-muy-bajo', obs: 'Aplicar KCl o K2SO4 urgente. Cultivos lo requieren.' },
+        { max: 0.20, label: 'Bajo', cls: 'nivel-bajo', obs: 'Fertilización potásica necesaria.' },
+        { max: 0.35, label: 'Medio', cls: 'nivel-medio', obs: 'Adecuado para muchos cultivos.' },
+        { max: 0.60, label: 'Alto', cls: 'nivel-adecuado', obs: 'Buena disponibilidad de K.' },
+        { max: 9.99, label: 'Muy alto', cls: 'nivel-alto', obs: 'Exceso. Puede interferir con Ca y Mg.' },
+      ],
+      optimo: '0.20 – 0.35 meq/100g'
+    },
+    n: {
+      nombre: 'Nitrógeno (N)', unidad: '% N',
+      niveles: [
+        { max: 0.06, label: 'Muy bajo', cls: 'nivel-muy-bajo', obs: 'Fertilización nitrogenada urgente.' },
+        { max: 0.12, label: 'Bajo', cls: 'nivel-bajo', obs: 'Aplicar fuentes nitrogenadas (urea, sulfato de amonio).' },
+        { max: 0.20, label: 'Medio', cls: 'nivel-medio', obs: 'Nivel adecuado. Mantener con MO y fertilización.' },
+        { max: 0.35, label: 'Alto', cls: 'nivel-adecuado', obs: 'Buena disponibilidad de N.' },
+        { max: 9.99, label: 'Muy alto', cls: 'nivel-alto', obs: 'Alto. Riesgo de pérdidas por lixiviación.' },
+      ],
+      optimo: '0.12 – 0.20 %'
+    },
+    ca: {
+      nombre: 'Calcio (Ca)', unidad: 'meq/100g',
+      niveles: [
+        { max: 1.0, label: 'Muy bajo', cls: 'nivel-muy-bajo', obs: 'Encalamiento urgente con cal agrícola o cal dolomita.' },
+        { max: 2.0, label: 'Bajo', cls: 'nivel-bajo', obs: 'Aplicar cal agrícola o superfosfato triple.' },
+        { max: 5.0, label: 'Medio', cls: 'nivel-medio', obs: 'Nivel adecuado para la mayoría de cultivos.' },
+        { max: 10.0,label: 'Alto', cls: 'nivel-adecuado', obs: 'Buena disponibilidad de Ca.' },
+        { max: 99,  label: 'Muy alto', cls: 'nivel-alto', obs: 'Exceso. Puede causar déficit de Mg y K.' },
+      ],
+      optimo: '2.0 – 10.0 meq/100g'
+    },
+    mg: {
+      nombre: 'Magnesio (Mg)', unidad: 'meq/100g',
+      niveles: [
+        { max: 0.3, label: 'Muy bajo', cls: 'nivel-muy-bajo', obs: 'Aplicar cal dolomita o sulfato de magnesio urgente.' },
+        { max: 0.6, label: 'Bajo', cls: 'nivel-bajo', obs: 'Fertilización con Mg. Cal dolomita o MgSO4.' },
+        { max: 1.5, label: 'Medio', cls: 'nivel-medio', obs: 'Nivel adecuado.' },
+        { max: 4.0, label: 'Alto', cls: 'nivel-adecuado', obs: 'Buena disponibilidad.' },
+        { max: 99,  label: 'Muy alto', cls: 'nivel-alto', obs: 'Posible antagonismo con K y Ca.' },
+      ],
+      optimo: '0.6 – 4.0 meq/100g'
+    },
+    al: {
+      nombre: 'Aluminio (Al)', unidad: 'meq/100g',
+      niveles: [
+        { max: 0.1, label: 'Bajo / Óptimo', cls: 'nivel-adecuado', obs: 'Sin toxicidad alumínica. No requiere encalamiento por Al.' },
+        { max: 0.5, label: 'Moderado', cls: 'nivel-medio', obs: 'Riesgo de toxicidad. Monitorear pH.' },
+        { max: 1.0, label: 'Alto', cls: 'nivel-bajo', obs: 'Toxicidad alumínica probable. Encalar.' },
+        { max: 99,  label: 'Muy alto', cls: 'nivel-muy-bajo', obs: 'Alta toxicidad. Encalamiento urgente.' },
+      ],
+      optimo: '< 0.1 meq/100g'
+    },
+    fe: { nombre: 'Hierro (Fe)', unidad: 'ppm', niveles: [{ max: 10, label: 'Bajo', cls: 'nivel-bajo', obs: 'Aplicar quelato de Fe.' }, { max: 50, label: 'Medio', cls: 'nivel-medio', obs: 'Monitorear disponibilidad según pH.' }, { max: 999, label: 'Alto', cls: 'nivel-adecuado', obs: 'Buena disponibilidad.' }], optimo: '10 – 50 ppm' },
+    zn: { nombre: 'Zinc (Zn)', unidad: 'ppm', niveles: [{ max: 1, label: 'Bajo', cls: 'nivel-muy-bajo', obs: 'Aplicar sulfato de zinc o quelato.' }, { max: 3, label: 'Medio', cls: 'nivel-medio', obs: 'Nivel aceptable.' }, { max: 999, label: 'Alto', cls: 'nivel-adecuado', obs: 'Adecuado.' }], optimo: '1.5 – 10 ppm' },
+    cu: { nombre: 'Cobre (Cu)', unidad: 'ppm', niveles: [{ max: 0.5, label: 'Bajo', cls: 'nivel-muy-bajo', obs: 'Aplicar sulfato de cobre.' }, { max: 2, label: 'Medio', cls: 'nivel-medio', obs: 'Nivel aceptable.' }, { max: 999, label: 'Alto', cls: 'nivel-adecuado', obs: 'Adecuado.' }], optimo: '0.5 – 3 ppm' },
+    mn: { nombre: 'Manganeso (Mn)', unidad: 'ppm', niveles: [{ max: 5, label: 'Bajo', cls: 'nivel-bajo', obs: 'Puede ser deficiente.' }, { max: 20, label: 'Medio', cls: 'nivel-medio', obs: 'Adecuado.' }, { max: 100, label: 'Alto', cls: 'nivel-adecuado', obs: 'Bueno.' }, { max: 999, label: 'Muy alto', cls: 'nivel-alto', obs: 'Posible toxicidad en pH < 5.5' }], optimo: '5 – 50 ppm' },
+    b: { nombre: 'Boro (B)', unidad: 'ppm', niveles: [{ max: 0.2, label: 'Bajo', cls: 'nivel-muy-bajo', obs: 'Aplicar bórax o ácido bórico.' }, { max: 0.5, label: 'Medio', cls: 'nivel-medio', obs: 'Monitorear.' }, { max: 2, label: 'Alto', cls: 'nivel-adecuado', obs: 'Adecuado.' }, { max: 999, label: 'Muy alto', cls: 'nivel-alto', obs: 'Tóxico en exceso. No fertilizar.' }], optimo: '0.2 – 1.5 ppm' },
+    s: { nombre: 'Azufre (S)', unidad: 'ppm', niveles: [{ max: 10, label: 'Bajo', cls: 'nivel-bajo', obs: 'Aplicar sulfato de amonio o yeso agrícola.' }, { max: 20, label: 'Medio', cls: 'nivel-medio', obs: 'Adecuado.' }, { max: 999, label: 'Alto', cls: 'nivel-adecuado', obs: 'Buena disponibilidad.' }], optimo: '10 – 30 ppm' },
+    ce: { nombre: 'C.E.', unidad: 'dS/m', niveles: [{ max: 0.5, label: 'Normal', cls: 'nivel-adecuado', obs: 'Sin restricción salina.' }, { max: 1.0, label: 'Ligera', cls: 'nivel-medio', obs: 'Leve salinidad. Monitorear cultivos sensibles.' }, { max: 2.0, label: 'Moderada', cls: 'nivel-bajo', obs: 'Afecta cultivos sensibles. Lavar suelo.' }, { max: 4.0, label: 'Alta', cls: 'nivel-muy-bajo', obs: 'Afecta mayoría de cultivos.' }, { max: 99, label: 'Muy alta', cls: 'nivel-muy-bajo', obs: 'Suelo salino severo.' }], optimo: '< 0.5 dS/m' },
+  };
+
+  function getNivel(param, valor) {
+    const r = rangos[param];
+    if (!r) return null;
+    for (const n of r.niveles) {
+      if (valor <= n.max) return { ...n, param, valor, optimo: r.optimo, unidad: r.unidad, nombre: r.nombre };
+    }
+    return { ...r.niveles[r.niveles.length-1], param, valor, optimo: r.optimo, unidad: r.unidad, nombre: r.nombre };
+  }
+
+  function interpretar() {
+    const lote = document.getElementById('nombre-lote').value || 'Lote sin nombre';
+    const cultivo = document.getElementById('cultivo').options[document.getElementById('cultivo').selectedIndex].text;
+    const area = document.getElementById('area').value;
+
+    const vals = {
+      ph: parseFloat(document.getElementById('ph').value),
+      mo: parseFloat(document.getElementById('mo').value),
+      p:  parseFloat(document.getElementById('p').value),
+      k:  parseFloat(document.getElementById('k').value),
+      n:  parseFloat(document.getElementById('n').value),
+      ca: parseFloat(document.getElementById('ca').value),
+      mg: parseFloat(document.getElementById('mg').value),
+      al: parseFloat(document.getElementById('al').value),
+      fe: parseFloat(document.getElementById('fe').value),
+      mn: parseFloat(document.getElementById('mn').value),
+      zn: parseFloat(document.getElementById('zn').value),
+      cu: parseFloat(document.getElementById('cu').value),
+      b:  parseFloat(document.getElementById('b').value),
+      s:  parseFloat(document.getElementById('s').value),
+      ce: parseFloat(document.getElementById('ce').value),
+    };
+
+    document.getElementById('res-titulo').textContent = `📊 Informe — ${lote} | ${cultivo} | ${area} ha`;
+
+    // pH barra
+    if (!isNaN(vals.ph)) {
+      document.getElementById('ph-barra-section').style.display = 'block';
+      const nivel = getNivel('ph', vals.ph);
+      document.getElementById('ph-interpretacion').innerHTML =
+        `<span class="param-nivel ${nivel.cls}" style="font-size:13px;padding:5px 14px;">pH ${vals.ph} — ${nivel.label}</span>
+         <p style="font-size:12px;color:var(--text-sec);margin-top:8px;">${nivel.obs}</p>`;
+    }
+
+    // Semaforo parametros
+    const paramsMostrar = ['ph','mo','p','k','n','ca','mg','al','ce','fe','zn','cu','mn','b','s'];
+    let paramsHTML = '';
+    paramsMostrar.forEach(p => {
+      const v = vals[p];
+      if (isNaN(v)) return;
+      const n = getNivel(p, v);
+      paramsHTML += `<div class="param-card ${n.cls}">
+        <div class="param-nombre">${n.nombre}</div>
+        <div class="param-valor">${v}</div>
+        <div class="param-unidad">${n.unidad}</div>
+        <span class="param-nivel">${n.label}</span>
+      </div>`;
+    });
+    document.getElementById('params-grid').innerHTML = paramsHTML || '<p style="color:var(--text-muted);font-size:13px;">Ingrese los valores del análisis para ver los resultados.</p>';
+
+    // CIC
+    const ca = vals.ca, mg = vals.mg, k = vals.k, na = parseFloat(document.getElementById('na').value) || 0, al = vals.al;
+    if (!isNaN(ca) && !isNaN(mg) && !isNaN(k)) {
+      const cic = ca + mg + k + na + al;
+      const satCa = ((ca/cic)*100).toFixed(1);
+      const satMg = ((mg/cic)*100).toFixed(1);
+      const satK  = ((k/cic)*100).toFixed(1);
+      const satAl = ((al/cic)*100).toFixed(1);
+      const relCaMg = (ca/mg).toFixed(2);
+      const relCaK = (ca/k).toFixed(1);
+      document.getElementById('cic-contenido').innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem;">
+          <div style="background:var(--azul-light);border:1px solid #B5D4F4;border-radius:8px;padding:10px;text-align:center;"><div style="font-size:11px;color:var(--text-muted);">CIC total</div><div style="font-size:18px;font-weight:800;color:var(--azul);">${cic.toFixed(1)}</div><div style="font-size:10px;color:var(--text-muted);">meq/100g</div></div>
+          <div style="background:var(--verde-light);border:1px solid #9FE1CB;border-radius:8px;padding:10px;text-align:center;"><div style="font-size:11px;color:var(--text-muted);">Sat. Ca</div><div style="font-size:18px;font-weight:800;color:var(--verde-dark);">${satCa}%</div><div style="font-size:10px;color:var(--text-muted);">óptimo: 65-80%</div></div>
+          <div style="background:var(--morado-light);border:1px solid #CECBF6;border-radius:8px;padding:10px;text-align:center;"><div style="font-size:11px;color:var(--text-muted);">Sat. Mg</div><div style="font-size:18px;font-weight:800;color:var(--morado);">${satMg}%</div><div style="font-size:10px;color:var(--text-muted);">óptimo: 15-20%</div></div>
+          <div style="background:var(--naranja-light);border:1px solid #FAC775;border-radius:8px;padding:10px;text-align:center;"><div style="font-size:11px;color:var(--text-muted);">Sat. Al</div><div style="font-size:18px;font-weight:800;color:var(--naranja);">${satAl}%</div><div style="font-size:10px;color:var(--text-muted);">óptimo: < 10%</div></div>
+        </div>
+        <div style="font-size:13px;color:var(--text-sec);line-height:1.8;">
+          <strong>Relación Ca/Mg:</strong> ${relCaMg} (óptimo: 3-8) &nbsp;|&nbsp;
+          <strong>Relación Ca/K:</strong> ${relCaK} (óptimo: 10-30) &nbsp;|&nbsp;
+          <strong>Saturación Al:</strong> ${satAl}% ${parseFloat(satAl) > 20 ? '⚠️ Alta — encalar urgente' : parseFloat(satAl) > 10 ? '— Moderada' : '✅ Normal'}
+        </div>`;
+      document.getElementById('cic-card').style.display = 'block';
+    }
+
+    // Recomendaciones
+    const recs = [];
+    if (!isNaN(vals.ph)) {
+      if (vals.ph < 5.5) recs.push({ tipo: 'urgente', titulo: '🪨 Encalamiento urgente', desc: `pH ${vals.ph} es muy ácido. Aplicar cal agrícola o cal dolomita. Calcular dosis según textura y pH objetivo.` });
+      else if (vals.ph < 6.0) recs.push({ tipo: 'importante', titulo: '🪨 Encalamiento recomendado', desc: `pH ${vals.ph}. Aplicar cal agrícola para elevar a 6.0–6.5.` });
+      if (vals.ph > 7.5) recs.push({ tipo: 'importante', titulo: '⚗️ Corrección de alcalinidad', desc: `pH ${vals.ph} es alcalino. Aplicar azufre elemental o sulfato de hierro para reducir pH.` });
+    }
+    if (!isNaN(vals.mo) && vals.mo < 2) recs.push({ tipo: 'urgente', titulo: '🌿 Materia orgánica crítica', desc: `MO ${vals.mo}% es muy baja. Incorporar compost, abono verde o residuos de cosecha. Meta: > 3.5%` });
+    if (!isNaN(vals.p) && vals.p < 10) recs.push({ tipo: 'importante', titulo: '⚗️ Deficiencia de fósforo', desc: `P ${vals.p} ppm. Aplicar DAP, superfosfato triple o roca fosfórica. Prioridad en siembra.` });
+    if (!isNaN(vals.k) && vals.k < 0.2) recs.push({ tipo: 'importante', titulo: '🧪 Deficiencia de potasio', desc: `K ${vals.k} meq/100g. Aplicar KCl (0-0-60) o K2SO4. Especialmente en frutales y tubérculos.` });
+    if (!isNaN(vals.zn) && vals.zn < 1.5) recs.push({ tipo: 'sugerido', titulo: '🔬 Deficiencia de zinc', desc: `Zn ${vals.zn} ppm. Aplicar sulfato de zinc o quelato de Zn. Especialmente en maíz y arroz.` });
+    if (!isNaN(vals.b) && vals.b < 0.2) recs.push({ tipo: 'sugerido', titulo: '🔬 Deficiencia de boro', desc: `B ${vals.b} ppm. Aplicar bórax (11% B) o ácido bórico foliar. Importante en café, cacao y frutales.` });
+    if (!isNaN(vals.mo) && vals.mo > 3.5) recs.push({ tipo: 'info', titulo: '✅ Buena materia orgánica', desc: `MO ${vals.mo}% es adecuada. Mantener con incorporación de residuos y abonos orgánicos.` });
+    if (!isNaN(vals.ph) && vals.ph >= 6.0 && vals.ph <= 7.0) recs.push({ tipo: 'info', titulo: '✅ pH óptimo', desc: `pH ${vals.ph} está en el rango ideal para la mayoría de cultivos colombianos.` });
+
+    if (recs.length === 0) recs.push({ tipo: 'info', titulo: 'ℹ️ Ingrese más parámetros', desc: 'Complete los campos del análisis para obtener recomendaciones específicas.' });
+
+    document.getElementById('rec-grid').innerHTML = recs.map(r =>
+      `<div class="rec-item ${r.tipo}"><div class="rec-titulo">${r.titulo}</div><div class="rec-desc">${r.desc}</div></div>`
+    ).join('');
+
+    // Encalamiento
+    if (!isNaN(vals.ph) && vals.ph < 6.0) {
+      const textura = document.getElementById('textura').value;
+      const factorTextura = { 'arcilloso': 2.5, 'franco-arcilloso': 2.0, 'franco': 1.5, 'franco-arenoso': 1.0, 'arenoso': 0.8 };
+      const ft = factorTextura[textura] || 1.5;
+      const phObj = 6.2;
+      const tCal_ha = ((phObj - vals.ph) * ft).toFixed(2);
+      const tCal_lote = (tCal_ha * parseFloat(area || 1)).toFixed(2);
+      document.getElementById('enmiendas-contenido').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:1rem;">
+          <div style="background:var(--verde-light);border:1px solid #9FE1CB;border-radius:8px;padding:12px;text-align:center;"><div style="font-size:11px;color:var(--text-muted);">Cal agrícola / ha</div><div style="font-size:22px;font-weight:800;color:var(--verde-dark);">${tCal_ha} t</div></div>
+          <div style="background:var(--azul-light);border:1px solid #B5D4F4;border-radius:8px;padding:12px;text-align:center;"><div style="font-size:11px;color:var(--text-muted);">Total para el lote</div><div style="font-size:22px;font-weight:800;color:var(--azul);">${tCal_lote} t</div></div>
+          <div style="background:var(--morado-light);border:1px solid #CECBF6;border-radius:8px;padding:12px;text-align:center;"><div style="font-size:11px;color:var(--text-muted);">pH objetivo</div><div style="font-size:22px;font-weight:800;color:var(--morado);">${phObj}</div></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-sec);line-height:1.8;">
+          <strong>Textura:</strong> ${textura} (factor ${ft}) &nbsp;|&nbsp; <strong>Método:</strong> Cálculo empírico IGAC<br>
+          <strong>Alternativa 1:</strong> Cal dolomita (mayor si hay déficit de Mg) — misma dosis<br>
+          <strong>Alternativa 2:</strong> Roca fosfórica calcárea — aporta Ca + P simultáneamente<br>
+          <strong>Aplicación:</strong> Incorporar al suelo 30–60 días antes de la siembra. Distribuir uniformemente.
+        </div>`;
+      document.getElementById('enmiendas-card').style.display = 'block';
+    }
+
+    // Tabla interpretación
+    const tablaParams = Object.keys(vals).filter(p => !isNaN(vals[p]) && rangos[p]);
+    document.getElementById('tbody-interpretacion').innerHTML = tablaParams.map(p => {
+      const v = vals[p];
+      const n = getNivel(p, v);
+      const colores = { 'nivel-muy-bajo': '#FCEBEB', 'nivel-bajo': '#FAEEDA', 'nivel-medio': '#FAEEDA', 'nivel-adecuado': '#E1F5EE', 'nivel-alto': '#E6F1FB' };
+      return `<tr style="background:${colores[n.cls] || '#fff'}">
+        <td><strong>${n.nombre}</strong></td>
+        <td><strong>${v}</strong></td>
+        <td>${n.unidad}</td>
+        <td><span class="nivel-tag" style="background:${colores[n.cls]};color:var(--text);">${n.label}</span></td>
+        <td>${n.optimo}</td>
+        <td style="font-size:12px;color:var(--text-sec);">${n.obs}</td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('resultados').style.display = 'block';
+    document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetear() {
+    ['nombre-lote','ph','mo','p','k','n','ca','mg','na','al','fe','mn','zn','cu','b','s','ce'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.type !== 'select-one') el.value = '';
+    });
+    document.getElementById('area').value = 1;
+    document.getElementById('resultados').style.display = 'none';
+    document.getElementById('ph-barra-section').style.display = 'none';
+    document.getElementById('cic-card').style.display = 'none';
+    document.getElementById('enmiendas-card').style.display = 'none';
+  }
+</script>
+</body>
+</html>
