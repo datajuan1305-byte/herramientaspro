@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Acero de Refuerzo Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de acero de refuerzo para ingenieros civiles colombianos. Varillas, traslapes, dobleces, peso y cantidad por elemento estructural." />
+  <meta name="keywords" content="acero refuerzo colombia, varillas hierro construccion, calculo acero columnas vigas losas colombia, NSR-10 acero, ingeniero civil colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --naranja: #bf360c;
+      --naranja-medio: #e64a19;
+      --naranja-claro: #fbe9e7;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #bf360c 60%, #ff7043 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 110px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--naranja-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--naranja-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--naranja-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--naranja-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--naranja-medio); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--naranja); }
+    .btn:active { transform: scale(0.98); }
+    .btn-sm { padding: 7px 14px; font-size: 0.82rem; font-weight: 700; border: none; border-radius: 20px; cursor: pointer; background: var(--naranja-medio); color: #fff; }
+    .btn-sm:hover { background: var(--naranja); }
+
+    .info-box { background: var(--naranja-claro); border-left: 4px solid var(--naranja-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--naranja); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #bf360c 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grande { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.2rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .tabla-acero { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .tabla-acero th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: left; }
+    .tabla-acero th:not(:first-child) { text-align: right; }
+    .tabla-acero td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .tabla-acero td:not(:first-child) { text-align: right; }
+    .tabla-acero tr.total td { background: rgba(255,215,0,0.2); font-weight: 800; color: #ffe082; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--naranja-claro); }
+
+    /* FILAS DINÁMICAS */
+    .varilla-row {
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 40px;
+      gap: 6px; align-items: center; margin-bottom: 6px;
+    }
+    .varilla-input { padding: 8px 10px; border: 1.5px solid var(--borde); border-radius: 7px; font-size: 0.85rem; background: var(--gris-bg); width: 100%; }
+    .varilla-input:focus { outline: none; border-color: var(--naranja-medio); background: #fff; }
+    .varilla-delete { background: none; border: none; cursor: pointer; color: #c62828; font-size: 1.1rem; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🏗️ <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Acero de Refuerzo</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🏗️ Ingenieros Civiles y Constructores</div>
+  <h1>Calculadora de Acero de Refuerzo 2026</h1>
+  <p>Calcula varillas, traslapes, longitudes de desarrollo, peso total y costo de acero para columnas, vigas, losas y cimentaciones. NSR-10 Colombia.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 NSR-10 Colombia</span>
+    <span class="hero-chip">📏 Varillas #2 a #11</span>
+    <span class="hero-chip">⚖️ Peso y costo</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('elemento', this)">🏛️ Por Elemento</button>
+    <button class="tab-btn" onclick="mostrarTab('listado', this)">📋 Listado de Varillas</button>
+    <button class="tab-btn" onclick="mostrarTab('traslapes', this)">🔗 Traslapes y Desarrollo</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📊 Tabla de Varillas</button>
+  </div>
+
+  <!-- TAB 1: POR ELEMENTO -->
+  <div id="tab-elemento" class="tab-panel active">
+    <div class="card">
+      <h2>🏛️ Acero por Elemento Estructural</h2>
+      <div class="info-box">
+        <strong>¿Cómo funciona?</strong> Selecciona el tipo de elemento, ingresa las dimensiones y el refuerzo. La calculadora entrega el peso de acero, longitudes de varillas, traslapes y costo estimado.
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de elemento</label>
+          <select id="el-tipo" onchange="actualizarElemento()">
+            <option value="columna">Columna rectangular</option>
+            <option value="viga">Viga rectangular</option>
+            <option value="losa">Losa maciza</option>
+            <option value="zapata">Zapata aislada</option>
+            <option value="viga-ciment">Viga de cimentación</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Número de elementos iguales</label>
+          <input type="number" id="el-cantidad" value="4" min="1" step="1" />
+        </div>
+      </div>
+
+      <div id="el-parametros"></div>
+
+      <hr class="sep" />
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Precio del acero ($ COP/kg)</label>
+          <input type="number" id="el-precio-kg" value="3200" min="0" step="100" />
+          <span class="form-hint">Precio varilla corrugada Grado 60 en Colombia 2026</span>
+        </div>
+        <div class="form-group">
+          <label>Desperdicio y cortes (%)</label>
+          <input type="number" id="el-desperdicio" value="5" min="0" max="20" step="1" />
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularElemento()">🏛️ Calcular Acero del Elemento</button>
+    </div>
+    <div id="resultado-elemento" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: LISTADO DE VARILLAS -->
+  <div id="tab-listado" class="tab-panel">
+    <div class="card">
+      <h2>📋 Listado General de Varillas</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> Ingresa todas las varillas del proyecto para obtener el peso total, cantidad por diámetro y costo global del acero de refuerzo.
+      </div>
+
+      <div style="display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr 1fr 40px; gap:6px; margin-bottom:4px;">
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Descripción / Ubicación</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Diámetro</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Cant. varillas</span>
+        <span style="font-size:0.75cual; font-weight:700; color:var(--texto-suave);">Long. (m)</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Peso (kg)</span>
+        <span></span>
+      </div>
+      <div id="listado-container"></div>
+
+      <div style="display:flex; gap:0.8rem; margin-top:0.8rem; flex-wrap:wrap;">
+        <button class="btn-sm" onclick="agregarVarilla()">+ Agregar varilla</button>
+        <button class="btn-sm" style="background:var(--azul-navbar);" onclick="recalcularListado()">🔄 Recalcular pesos</button>
+      </div>
+
+      <hr class="sep" />
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Precio acero ($ COP/kg)</label>
+          <input type="number" id="lst-precio" value="3200" min="0" step="100" />
+        </div>
+        <div class="form-group">
+          <label>Desperdicio (%)</label>
+          <input type="number" id="lst-desperdicio" value="5" min="0" max="20" step="1" />
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularListado()">📋 Calcular Listado Total</button>
+    </div>
+    <div id="resultado-listado" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: TRASLAPES -->
+  <div id="tab-traslapes" class="tab-panel">
+    <div class="card">
+      <h2>🔗 Traslapes y Longitudes de Desarrollo — NSR-10</h2>
+      <div class="info-box">
+        <strong>NSR-10 Capítulo C.12:</strong> La longitud de traslape depende del diámetro de la varilla, la resistencia del concreto (f'c), el esfuerzo del acero (fy) y la clase de traslape (A o B).
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Diámetro de la varilla</label>
+          <select id="tr-diametro">
+            <option value="2">#2 — 6.35 mm</option>
+            <option value="3">#3 — 9.53 mm</option>
+            <option value="4" selected>#4 — 12.7 mm</option>
+            <option value="5">#5 — 15.88 mm</option>
+            <option value="6">#6 — 19.05 mm</option>
+            <option value="7">#7 — 22.23 mm</option>
+            <option value="8">#8 — 25.40 mm</option>
+            <option value="9">#9 — 28.65 mm</option>
+            <option value="10">#10 — 32.26 mm</option>
+            <option value="11">#11 — 35.81 mm</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Resistencia del concreto f'c (MPa)</label>
+          <select id="tr-fc">
+            <option value="17.5">17.5 MPa — 175 kg/cm²</option>
+            <option value="21" selected>21 MPa — 210 kg/cm²</option>
+            <option value="24">24 MPa — 240 kg/cm²</option>
+            <option value="28">28 MPa — 280 kg/cm²</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Esfuerzo del acero fy (MPa)</label>
+          <select id="tr-fy">
+            <option value="280">280 MPa — Grado 40</option>
+            <option value="420" selected>420 MPa — Grado 60 (más común)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Clase de traslape</label>
+          <select id="tr-clase">
+            <option value="A">Clase A (≤50% traslapes en zona)</option>
+            <option value="B" selected>Clase B (>50% traslapes en zona)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Recubrimiento mínimo (cm)</label>
+          <input type="number" id="tr-recub" value="4" min="2" max="10" step="0.5" />
+          <span class="form-hint">Columnas: 4 cm | Vigas: 4 cm | Losas: 2 cm | Cimentación: 7.5 cm</span>
+        </div>
+        <div class="form-group">
+          <label>Número de varillas a traslapar</label>
+          <input type="number" id="tr-cantidad" value="10" min="1" step="1" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularTraslapes()">🔗 Calcular Traslapes</button>
+    </div>
+    <div id="resultado-traslapes" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 4: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📊 Propiedades de Varillas de Acero — Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead>
+            <tr>
+              <th>Designación</th><th>Diámetro (mm)</th><th>Área (cm²)</th>
+              <th>Peso (kg/m)</th><th>Peso varilla 6m (kg)</th><th>Uso típico</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-varillas-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📊 Traslapes Mínimos NSR-10 — Grado 60, f'c 21 MPa</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Varilla</th><th>Ld (cm)</th><th>Traslape Clase A (cm)</th><th>Traslape Clase B (cm)</th></tr></thead>
+          <tbody id="tabla-traslapes-body"></tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">Ld = longitud de desarrollo básica. Clase A = 1.0×Ld | Clase B = 1.3×Ld. Mínimo 30 cm siempre.</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los cálculos de acero deben ser verificados por un <strong>Ingeniero Civil matriculado ante el COPNIA</strong>. El diseño estructural debe cumplir la NSR-10 y ser firmado por profesional responsable. Los precios son referencias del mercado colombiano 2026.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n, dec=2) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+function fmtInt(n) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+
+// ── TABLA DE VARILLAS ──
+const varillas = [
+  { num:2,  db:6.35,  area:0.316, peso:0.249, uso:'Estribos losas, malla' },
+  { num:3,  db:9.53,  area:0.713, peso:0.560, uso:'Estribos columnas y vigas' },
+  { num:4,  db:12.70, area:1.267, peso:0.994, uso:'Losas, vigas pequeñas' },
+  { num:5,  db:15.88, area:1.979, peso:1.552, uso:'Vigas, columnas medianas' },
+  { num:6,  db:19.05, area:2.850, peso:2.235, uso:'Columnas, vigas principales' },
+  { num:7,  db:22.23, area:3.871, peso:3.042, uso:'Columnas, vigas grandes' },
+  { num:8,  db:25.40, area:5.067, peso:3.973, uso:'Columnas grandes, cimentación' },
+  { num:9,  db:28.65, area:6.452, peso:5.060, uso:'Elementos especiales' },
+  { num:10, db:32.26, area:8.171, peso:6.404, uso:'Elementos de gran sección' },
+  { num:11, db:35.81, area:10.06, peso:7.907, uso:'Pilotes, muros de contención' },
+];
+
+// Llenar tabla de referencia
+window.addEventListener('DOMContentLoaded', () => {
+  const tbody = document.getElementById('tabla-varillas-body');
+  varillas.forEach(v => {
+    tbody.innerHTML += `<tr>
+      <td><b>#${v.num}</b></td>
+      <td>${v.db} mm</td>
+      <td>${v.area} cm²</td>
+      <td>${v.peso} kg/m</td>
+      <td>${fmt(v.peso*6,2)} kg</td>
+      <td>${v.uso}</td>
+    </tr>`;
+  });
+
+  // Tabla traslapes NSR-10 (Grado 60, f'c 21 MPa)
+  // Ld ≈ (fy/(1.1√f'c)) × db × factor
+  const tbodyTr = document.getElementById('tabla-traslapes-body');
+  varillas.forEach(v => {
+    const fy = 420, fc = 21;
+    const Ld = Math.max(30, Math.ceil((fy * v.db / (10 * 1.1 * Math.sqrt(fc))) * 1.0));
+    const trA = Math.max(30, Math.ceil(1.0 * Ld));
+    const trB = Math.max(30, Math.ceil(1.3 * Ld));
+    tbodyTr.innerHTML += `<tr>
+      <td><b>#${v.num}</b> (${v.db} mm)</td>
+      <td>${Ld} cm</td>
+      <td>${trA} cm</td>
+      <td>${trB} cm</td>
+    </tr>`;
+  });
+
+  // Inicializar formulario elemento
+  actualizarElemento();
+
+  // Agregar varillas de ejemplo al listado
+  agregarVarilla();
+  document.querySelector('#listado-container .varilla-row #lst-v1-desc').value = 'Columna C1 — Longitudinal';
+  agregarVarilla();
+  agregarVarilla();
+});
+
+function getVarilla(num) {
+  return varillas.find(v => v.num === parseInt(num)) || varillas[3];
+}
+
+// ── TAB 1: ELEMENTO ──
+const elementosConfig = {
+  columna: {
+    campos: [
+      { id:'el-b', label:'Ancho b (cm)', val:30 },
+      { id:'el-h', label:'Alto h (cm)', val:30 },
+      { id:'el-l', label:'Altura libre (m)', val:3.0 },
+      { id:'el-nlong', label:'N° varillas longitudinales', val:8 },
+      { id:'el-vlong', label:'Diámetro longitudinal', tipo:'select-var', val:5 },
+      { id:'el-nestr', label:'N° estribos por varilla 6m', val:14, hint:'Separación est. zona confinada ≈ 10–15 cm' },
+      { id:'el-vestr', label:'Diámetro estribo', tipo:'select-var', val:3 },
+    ]
+  },
+  viga: {
+    campos: [
+      { id:'el-b', label:'Ancho b (cm)', val:30 },
+      { id:'el-h', label:'Peralte h (cm)', val:50 },
+      { id:'el-l', label:'Longitud libre (m)', val:5.0 },
+      { id:'el-nlong', label:'N° varillas inferiores (tensión)', val:3 },
+      { id:'el-vlong', label:'Diámetro varilla inferior', tipo:'select-var', val:6 },
+      { id:'el-ncomp', label:'N° varillas superiores (compresión)', val:2 },
+      { id:'el-vcomp', label:'Diámetro varilla superior', tipo:'select-var', val:5 },
+      { id:'el-nestr', label:'N° estribos totales', val:28 },
+      { id:'el-vestr', label:'Diámetro estribo', tipo:'select-var', val:3 },
+    ]
+  },
+  losa: {
+    campos: [
+      { id:'el-l1', label:'Longitud L1 (m)', val:4.0 },
+      { id:'el-l2', label:'Longitud L2 (m)', val:5.0 },
+      { id:'el-espesor', label:'Espesor e (cm)', val:12 },
+      { id:'el-sep', label:'Separación varillas (cm)', val:20 },
+      { id:'el-vlong', label:'Diámetro varilla malla', tipo:'select-var', val:4 },
+    ]
+  },
+  zapata: {
+    campos: [
+      { id:'el-b', label:'Ancho B (m)', val:1.5 },
+      { id:'el-l', label:'Longitud L (m)', val:1.5 },
+      { id:'el-h', label:'Peralte h (cm)', val:40 },
+      { id:'el-sep', label:'Separación varillas (cm)', val:20 },
+      { id:'el-vlong', label:'Diámetro varilla', tipo:'select-var', val:5 },
+    ]
+  },
+  'viga-ciment': {
+    campos: [
+      { id:'el-b', label:'Ancho b (cm)', val:30 },
+      { id:'el-h', label:'Peralte h (cm)', val:50 },
+      { id:'el-l', label:'Longitud (m)', val:5.0 },
+      { id:'el-nlong', label:'N° varillas longitudinales', val:4 },
+      { id:'el-vlong', label:'Diámetro longitudinal', tipo:'select-var', val:6 },
+      { id:'el-nestr', label:'N° estribos totales', val:25 },
+      { id:'el-vestr', label:'Diámetro estribo', tipo:'select-var', val:3 },
+    ]
+  },
+};
+
+function actualizarElemento() {
+  const tipo = document.getElementById('el-tipo').value;
+  const cfg  = elementosConfig[tipo];
+  const cont = document.getElementById('el-parametros');
+  cont.innerHTML = `<div class="form-grid" style="margin-top:0.8rem;">`;
+  cfg.campos.forEach(c => {
+    if (c.tipo === 'select-var') {
+      cont.innerHTML += `<div class="form-group">
+        <label>${c.label}</label>
+        <select id="${c.id}">
+          ${varillas.map(v => `<option value="${v.num}" ${v.num===c.val?'selected':''}>#${v.num} — ${v.db}mm (${v.peso} kg/m)</option>`).join('')}
+        </select>
+      </div>`;
+    } else {
+      cont.innerHTML += `<div class="form-group">
+        <label>${c.label}</label>
+        <input type="number" id="${c.id}" value="${c.val}" min="0" step="0.01" />
+        ${c.hint ? `<span class="form-hint">${c.hint}</span>` : ''}
+      </div>`;
+    }
+  });
+  cont.innerHTML += `</div>`;
+}
+
+function getVal(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
+function getInt(id) { return parseInt(document.getElementById(id)?.value) || 0; }
+
+function calcularElemento() {
+  const tipo     = document.getElementById('el-tipo').value;
+  const cantidad = getInt('el-cantidad');
+  const precioKg = getVal('el-precio-kg');
+  const desp     = getVal('el-desperdicio') / 100;
+
+  let filas = [], pesoTotal = 0, titulo = '';
+
+  if (tipo === 'columna') {
+    const L    = getVal('el-l');
+    const nL   = getInt('el-nlong');
+    const vL   = getVarilla(getVal('el-vlong'));
+    const nE   = getInt('el-nestr');
+    const vE   = getVarilla(getVal('el-vestr'));
+    const b    = getVal('el-b') / 100;
+    const h    = getVal('el-h') / 100;
+    const recub= 0.04;
+    const recub2= 0.03;
+
+    const longLong   = L + 0.60; // traslape aprox
+    const pesoLong   = nL * longLong * vL.peso;
+    const perEstribo = 2*(b-2*recub) + 2*(h-2*recub) + 0.24; // perímetro + ganchos
+    const pesoEstr   = nE * perEstribo * vE.peso;
+    const pesoUnit   = pesoLong + pesoEstr;
+    pesoTotal = pesoUnit * cantidad;
+
+    titulo = `Columna ${getVal('el-b')}×${getVal('el-h')} cm — H=${L} m`;
+    filas = [
+      { desc:`Longitudinal #${vL.num} (${nL} var × ${fmt(longLong,2)} m)`, kg: pesoLong, und:'kg/col' },
+      { desc:`Estribos #${vE.num} (${nE} est × ${fmt(perEstribo,2)} m)`, kg: pesoEstr, und:'kg/col' },
+      { desc:`TOTAL por columna`, kg: pesoUnit, und:'kg/col', bold:true },
+      { desc:`TOTAL ${cantidad} columnas`, kg: pesoTotal, und:'kg', bold:true },
+    ];
+
+  } else if (tipo === 'viga') {
+    const L    = getVal('el-l');
+    const nI   = getInt('el-nlong');
+    const vI   = getVarilla(getVal('el-vlong'));
+    const nS   = getInt('el-ncomp');
+    const vS   = getVarilla(getVal('el-vcomp'));
+    const nE   = getInt('el-nestr');
+    const vE   = getVarilla(getVal('el-vestr'));
+    const b    = getVal('el-b') / 100;
+    const h    = getVal('el-h') / 100;
+
+    const longVar    = L + 0.40;
+    const pesoInf    = nI * longVar * vI.peso;
+    const pesoSup    = nS * longVar * vS.peso;
+    const perEstr    = 2*(b-0.08) + 2*(h-0.08) + 0.24;
+    const pesoEstr   = nE * perEstr * vE.peso;
+    const pesoUnit   = pesoInf + pesoSup + pesoEstr;
+    pesoTotal = pesoUnit * cantidad;
+
+    titulo = `Viga ${getVal('el-b')}×${getVal('el-h')} cm — L=${L} m`;
+    filas = [
+      { desc:`Inf. #${vI.num} (${nI} var × ${fmt(longVar,2)} m)`, kg: pesoInf, und:'kg/viga' },
+      { desc:`Sup. #${vS.num} (${nS} var × ${fmt(longVar,2)} m)`, kg: pesoSup, und:'kg/viga' },
+      { desc:`Estribos #${vE.num} (${nE} est)`, kg: pesoEstr, und:'kg/viga' },
+      { desc:`TOTAL por viga`, kg: pesoUnit, und:'kg/viga', bold:true },
+      { desc:`TOTAL ${cantidad} vigas`, kg: pesoTotal, und:'kg', bold:true },
+    ];
+
+  } else if (tipo === 'losa') {
+    const L1   = getVal('el-l1');
+    const L2   = getVal('el-l2');
+    const sep  = getVal('el-sep') / 100;
+    const vM   = getVarilla(getVal('el-vlong'));
+
+    const nDir1 = Math.ceil(L2 / sep) + 1;
+    const nDir2 = Math.ceil(L1 / sep) + 1;
+    const longDir1 = L1 + 0.30;
+    const longDir2 = L2 + 0.30;
+    const pesoCapa1 = nDir1 * longDir1 * vM.peso;
+    const pesoCapa2 = nDir2 * longDir2 * vM.peso;
+    const pesoUnit  = pesoCapa1 + pesoCapa2;
+    pesoTotal = pesoUnit * cantidad;
+
+    titulo = `Losa ${L1}×${L2} m — e=${getVal('el-espesor')} cm`;
+    filas = [
+      { desc:`Dirección L1: ${nDir1} var × ${fmt(longDir1,2)} m`, kg: pesoCapa1, und:'kg/losa' },
+      { desc:`Dirección L2: ${nDir2} var × ${fmt(longDir2,2)} m`, kg: pesoCapa2, und:'kg/losa' },
+      { desc:`TOTAL por losa`, kg: pesoUnit, und:'kg/losa', bold:true },
+      { desc:`TOTAL ${cantidad} losas`, kg: pesoTotal, und:'kg', bold:true },
+    ];
+
+  } else if (tipo === 'zapata') {
+    const B    = getVal('el-b');
+    const L    = getVal('el-l');
+    const sep  = getVal('el-sep') / 100;
+    const vM   = getVarilla(getVal('el-vlong'));
+
+    const nDir1 = Math.ceil(B / sep) + 1;
+    const nDir2 = Math.ceil(L / sep) + 1;
+    const pesoDir1 = nDir1 * (L + 0.30) * vM.peso;
+    const pesoDir2 = nDir2 * (B + 0.30) * vM.peso;
+    const pesoUnit = pesoDir1 + pesoDir2;
+    pesoTotal = pesoUnit * cantidad;
+
+    titulo = `Zapata ${B}×${L} m`;
+    filas = [
+      { desc:`Dir. B: ${nDir1} var × ${fmt(L+0.30,2)} m`, kg: pesoDir1, und:'kg/zap' },
+      { desc:`Dir. L: ${nDir2} var × ${fmt(B+0.30,2)} m`, kg: pesoDir2, und:'kg/zap' },
+      { desc:`TOTAL por zapata`, kg: pesoUnit, und:'kg/zap', bold:true },
+      { desc:`TOTAL ${cantidad} zapatas`, kg: pesoTotal, und:'kg', bold:true },
+    ];
+  } else {
+    // viga-ciment
+    const L  = getVal('el-l');
+    const nL = getInt('el-nlong');
+    const vL = getVarilla(getVal('el-vlong'));
+    const nE = getInt('el-nestr');
+    const vE = getVarilla(getVal('el-vestr'));
+    const b  = getVal('el-b') / 100;
+    const h  = getVal('el-h') / 100;
+
+    const longL   = L + 0.50;
+    const pesoL   = nL * longL * vL.peso;
+    const perE    = 2*(b-0.08) + 2*(h-0.08) + 0.24;
+    const pesoE   = nE * perE * vE.peso;
+    const pesoUnit= pesoL + pesoE;
+    pesoTotal = pesoUnit * cantidad;
+
+    titulo = `Viga cimentación ${getVal('el-b')}×${getVal('el-h')} cm`;
+    filas = [
+      { desc:`Long. #${vL.num} (${nL} var × ${fmt(longL,2)} m)`, kg: pesoL, und:'kg/viga' },
+      { desc:`Estribos #${vE.num} (${nE})`, kg: pesoE, und:'kg/viga' },
+      { desc:`TOTAL por viga`, kg: pesoUnit, und:'kg/viga', bold:true },
+      { desc:`TOTAL ${cantidad} vigas`, kg: pesoTotal, und:'kg', bold:true },
+    ];
+  }
+
+  const pesoConDesp = pesoTotal * (1 + desp);
+  const costo = pesoConDesp * precioKg;
+  const varillas6m = Math.ceil(pesoConDesp / (varillas[3].peso * 6));
+
+  document.getElementById('resultado-elemento').style.display = 'block';
+  document.getElementById('resultado-elemento').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">${titulo} — ${cantidad} elemento(s)</div>
+      <div class="resultado-grande">${fmt(pesoConDesp,1)} kg</div>
+      <div class="resultado-sub">Peso total con ${(desp*100).toFixed(0)}% desperdicio</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pesoTotal,1)} kg</div><div class="resultado-label">Peso neto</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pesoConDesp,1)} kg</div><div class="resultado-label">Con desperdicio</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(costo)}</div><div class="resultado-label">Costo estimado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pesoConDesp/cantidad,1)} kg</div><div class="resultado-label">kg por elemento</div></div>
+      </div>
+      <table class="tabla-acero" style="margin-top:1rem;">
+        <thead><tr><th>Descripción</th><th>kg</th></tr></thead>
+        <tbody>
+          ${filas.map(f => `<tr ${f.bold?'class="total"':''}><td>${f.desc}</td><td>${fmt(f.kg,2)}</td></tr>`).join('')}
+        </tbody>
+      </table>
+      <div class="resultado-detalle">
+        Peso neto: ${fmt(pesoTotal,2)} kg | Desperdicio (${(desp*100).toFixed(0)}%): ${fmt(pesoTotal*desp,2)} kg<br>
+        <b>Peso total con desperdicio: ${fmt(pesoConDesp,2)} kg</b><br>
+        Precio: ${fmtInt(precioKg)} $/kg → <b>Costo: $ ${fmtInt(costo)} COP</b>
+      </div>
+    </div>`;
+}
+
+// ── TAB 2: LISTADO ──
+let nVarillas = 0;
+
+function agregarVarilla() {
+  nVarillas++;
+  const c = document.getElementById('listado-container');
+  const div = document.createElement('div');
+  div.className = 'varilla-row';
+  div.id = `lst-v${nVarillas}`;
+  div.innerHTML = `
+    <input class="varilla-input" type="text"   id="lst-v${nVarillas}-desc"  value="Elemento ${nVarillas}" />
+    <select class="varilla-input" id="lst-v${nVarillas}-num" onchange="calcPesoFila(${nVarillas})">
+      ${varillas.map(v=>`<option value="${v.num}" ${v.num===4?'selected':''}>#${v.num}</option>`).join('')}
+    </select>
+    <input class="varilla-input" type="number" id="lst-v${nVarillas}-cant"   value="10" min="1" step="1" oninput="calcPesoFila(${nVarillas})" />
+    <input class="varilla-input" type="number" id="lst-v${nVarillas}-long"   value="3.0" min="0.1" step="0.1" oninput="calcPesoFila(${nVarillas})" />
+    <input class="varilla-input" type="number" id="lst-v${nVarillas}-peso"   value="${fmt(10*3.0*0.994,2)}" readonly style="background:#e8f5e9; font-weight:700;" />
+    <button class="varilla-delete" onclick="document.getElementById('lst-v${nVarillas}').remove()">✕</button>`;
+  c.appendChild(div);
+}
+
+function calcPesoFila(n) {
+  const num  = parseInt(document.getElementById(`lst-v${n}-num`)?.value);
+  const cant = parseFloat(document.getElementById(`lst-v${n}-cant`)?.value) || 0;
+  const long = parseFloat(document.getElementById(`lst-v${n}-long`)?.value) || 0;
+  const v    = getVarilla(num);
+  const peso = cant * long * v.peso;
+  const el   = document.getElementById(`lst-v${n}-peso`);
+  if (el) el.value = fmt(peso, 2);
+}
+
+function recalcularListado() {
+  for (let i = 1; i <= nVarillas; i++) {
+    if (document.getElementById(`lst-v${i}`)) calcPesoFila(i);
+  }
+}
+
+function calcularListado() {
+  const precio = parseFloat(document.getElementById('lst-precio').value) || 3200;
+  const desp   = parseFloat(document.getElementById('lst-desperdicio').value) / 100;
+
+  let pesoTotal = 0;
+  const resumen = {};
+  varillas.forEach(v => resumen[v.num] = 0);
+
+  let filasHTML = '';
+  document.querySelectorAll('#listado-container .varilla-row').forEach(row => {
+    const n    = row.id.replace('lst-v','');
+    const desc = document.getElementById(`lst-v${n}-desc`)?.value || '';
+    const num  = parseInt(document.getElementById(`lst-v${n}-num`)?.value);
+    const cant = parseFloat(document.getElementById(`lst-v${n}-cant`)?.value) || 0;
+    const long = parseFloat(document.getElementById(`lst-v${n}-long`)?.value) || 0;
+    const v    = getVarilla(num);
+    const peso = cant * long * v.peso;
+    pesoTotal += peso;
+    resumen[num] = (resumen[num] || 0) + peso;
+    filasHTML += `<tr><td>${desc}</td><td>#${num}</td><td>${cant}</td><td>${long}</td><td>${fmt(peso,2)}</td></tr>`;
+  });
+
+  const pesoConDesp = pesoTotal * (1 + desp);
+  const costo = pesoConDesp * precio;
+
+  let resumenHTML = '';
+  varillas.forEach(v => {
+    if (resumen[v.num] > 0) {
+      const longTotal = resumen[v.num] / v.peso;
+      const varillas6m = Math.ceil(longTotal / 6);
+      resumenHTML += `<tr><td>#${v.num}</td><td>${fmt(resumen[v.num],2)} kg</td><td>${fmt(longTotal,1)} m</td><td>${varillas6m} varillas de 6m</td></tr>`;
+    }
+  });
+
+  document.getElementById('resultado-listado').style.display = 'block';
+  document.getElementById('resultado-listado').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Listado Total de Acero</div>
+      <div class="resultado-grande">${fmt(pesoConDesp,1)} kg</div>
+      <div class="resultado-sub">Peso total con ${(desp*100).toFixed(0)}% desperdicio — Costo: $ ${fmtInt(costo)}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pesoTotal,1)} kg</div><div class="resultado-label">Peso neto</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pesoConDesp,1)} kg</div><div class="resultado-label">Con desperdicio</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(costo)}</div><div class="resultado-label">Costo total COP</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(precio)}/kg</div><div class="resultado-label">Precio unitario</div></div>
+      </div>
+      <table class="tabla-acero" style="margin-top:1rem;">
+        <thead><tr><th>Diámetro</th><th>Peso (kg)</th><th>Longitud total</th><th>Pedido</th></tr></thead>
+        <tbody>${resumenHTML}</tbody>
+        <tr class="total"><td>TOTAL</td><td>${fmt(pesoConDesp,2)} kg</td><td colspan="2">Con ${(desp*100).toFixed(0)}% desperdicio</td></tr>
+      </table>
+    </div>`;
+}
+
+// ── TAB 3: TRASLAPES ──
+function calcularTraslapes() {
+  const num    = parseInt(document.getElementById('tr-diametro').value);
+  const fc     = parseFloat(document.getElementById('tr-fc').value);
+  const fy     = parseFloat(document.getElementById('tr-fy').value);
+  const clase  = document.getElementById('tr-clase').value;
+  const recub  = getVal('tr-recub');
+  const cant   = getInt('tr-cantidad');
+  const v      = getVarilla(num);
+
+  // Longitud de desarrollo NSR-10 C.12.2
+  // Ld = (fy/(1.1*λ*√f'c)) * (db/10) * factores
+  // Simplificado para λ=1 (concreto normal), barras en condición A
+  const lambda = 1.0;
+  const factor = (recub >= v.db*0.1*1.5) ? 1.0 : 1.5; // factor posición
+  const Ld = Math.max(30, Math.ceil((fy * v.db/10) / (1.1 * lambda * Math.sqrt(fc) * 10) * factor * 10));
+
+  const trA = Math.max(30, Math.ceil(1.0 * Ld));
+  const trB = Math.max(30, Math.ceil(1.3 * Ld));
+  const tr  = clase === 'A' ? trA : trB;
+
+  // Longitud adicional total por traslapes
+  const longAdicional = cant * tr / 100; // en metros
+  const pesoAdicional = longAdicional * v.peso;
+
+  document.getElementById('resultado-traslapes').style.display = 'block';
+  document.getElementById('resultado-traslapes').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Traslapes y Desarrollo — Varilla #${num} (${v.db} mm) — Grado ${fy===420?60:40}</div>
+      <div class="resultado-grande">${tr} cm</div>
+      <div class="resultado-sub">Longitud de traslape Clase ${clase} mínima</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${Ld} cm</div><div class="resultado-label">Longitud de desarrollo (Ld)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${trA} cm</div><div class="resultado-label">Traslape Clase A (1.0×Ld)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${trB} cm</div><div class="resultado-label">Traslape Clase B (1.3×Ld)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${tr} cm</div><div class="resultado-label">Traslape aplicado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(longAdicional,2)} m</div><div class="resultado-label">Long. adicional (${cant} traslapes)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pesoAdicional,2)} kg</div><div class="resultado-label">Peso adicional traslapes</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Varilla #${num}</b> | db = ${v.db} mm | Peso = ${v.peso} kg/m | Área = ${v.area} cm²<br>
+        f'c = ${fc} MPa | fy = ${fy} MPa | Recubrimiento = ${recub} cm<br>
+        Ld = (${fy} × ${v.db/10}) ÷ (1.1 × √${fc} × 10) × factor = <b>${Ld} cm</b><br>
+        Traslape Clase A = 1.0 × ${Ld} = <b>${trA} cm</b><br>
+        Traslape Clase B = 1.3 × ${Ld} = <b>${trB} cm</b><br>
+        Para ${cant} traslapes Clase ${clase}: ${cant} × ${tr} cm = <b>${fmt(longAdicional*100,0)} cm = ${fmt(longAdicional,2)} m adicionales</b>
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
