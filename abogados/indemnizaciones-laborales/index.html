@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Indemnizaciones Laborales Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de indemnizaciones laborales Colombia 2026. Despido sin justa causa, contrato fijo, obra o labor. CST Arts. 64 y 65. SMMLV $1.423.500." />
+  <meta name="keywords" content="indemnizacion laboral colombia 2026, despido sin justa causa colombia, calculo indemnizacion contrato indefinido, CST articulo 64, abogado laboral colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --morado: #4a148c;
+      --morado-medio: #7b1fa2;
+      --morado-claro: #f3e5f5;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #4a148c 60%, #9c27b0 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 120px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--morado-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--morado-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--morado-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--morado-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--morado-medio); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--morado); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--morado-claro); border-left: 4px solid var(--morado-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--morado); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #4a148c 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-total { font-size: 2.8rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.15rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .liquidacion-tabla { width: 100%; border-collapse: collapse; font-size: 0.84rem; margin-top: 0.8rem; }
+    .liquidacion-tabla td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .liquidacion-tabla td:last-child { text-align: right; font-weight: 700; }
+    .liquidacion-tabla tr.total-row td { background: rgba(255,215,0,0.2); font-weight: 900; color: #ffe082; font-size: 0.95rem; }
+    .liquidacion-tabla tr.concepto-titulo td { background: rgba(255,255,255,0.08); font-weight: 700; color: rgba(255,255,255,0.8); font-size: 0.78rem; text-transform: uppercase; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+    .ref-table tr:hover td { background: var(--morado-claro); }
+
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">⚖️ <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Indemnizaciones Laborales</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">⚖️ Abogados — Derecho Laboral</div>
+  <h1>Calculadora Indemnizaciones Laborales 2026</h1>
+  <p>Calcula la indemnización por despido sin justa causa según el tipo de contrato, salario y tiempo de servicio. CST Arts. 64 y 65. SMMLV 2026: $1.423.500.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 CST Colombia</span>
+    <span class="hero-chip">💼 Art. 64 y 65</span>
+    <span class="hero-chip">📊 SMMLV $1.423.500</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('indemnizacion', this)">💼 Indemnización</button>
+    <button class="tab-btn" onclick="mostrarTab('liquidacion', this)">📋 Liquidación Final</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📚 Marco Legal</button>
+  </div>
+
+  <!-- TAB 1: INDEMNIZACIÓN -->
+  <div id="tab-indemnizacion" class="tab-panel active">
+    <div class="card">
+      <h2>💼 Indemnización por Despido Sin Justa Causa</h2>
+      <div class="info-box">
+        <strong>CST Art. 64 (Ley 789/2002):</strong> El empleador que despida sin justa causa a un trabajador deberá pagarle una indemnización que depende del tipo de contrato, el salario y el tiempo de servicio.
+      </div>
+
+      <h3>Datos del contrato</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de contrato</label>
+          <select id="i-tipo" onchange="actualizarTipo()">
+            <option value="indefinido" selected>Término indefinido</option>
+            <option value="fijo">Término fijo</option>
+            <option value="obra">Obra o labor</option>
+            <option value="accidental">Accidental o transitorio (< 30 días)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Salario mensual ($ COP)</label>
+          <input type="number" id="i-salario" value="2000000" min="1423500" step="50000" />
+          <span class="form-hint">SMMLV 2026: $1.423.500</span>
+        </div>
+        <div class="form-group">
+          <label>Fecha de inicio del contrato</label>
+          <input type="date" id="i-fecha-inicio" />
+        </div>
+        <div class="form-group">
+          <label>Fecha de terminación / despido</label>
+          <input type="date" id="i-fecha-fin" />
+        </div>
+        <div class="form-group" id="grp-fijo" style="display:none;">
+          <label>Tiempo restante del contrato (meses)</label>
+          <input type="number" id="i-meses-restantes" value="6" min="0" step="1" />
+          <span class="form-hint">Para contrato a término fijo: tiempo que faltaba para terminar</span>
+        </div>
+        <div class="form-group">
+          <label>¿Incluye auxilio de transporte?</label>
+          <select id="i-transporte">
+            <option value="si" selected>Sí — salario ≤ 2 SMMLV ($2.847.000)</option>
+            <option value="no">No — salario > 2 SMMLV</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Días de vacaciones pendientes</label>
+          <input type="number" id="i-vacaciones" value="0" min="0" step="1" />
+        </div>
+        <div class="form-group">
+          <label>¿Deuda de salarios pendientes? ($ COP)</label>
+          <input type="number" id="i-salarios-pend" value="0" min="0" step="50000" />
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularIndemnizacion()">💼 Calcular Indemnización</button>
+    </div>
+    <div id="resultado-indemnizacion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: LIQUIDACIÓN FINAL -->
+  <div id="tab-liquidacion" class="tab-panel">
+    <div class="card">
+      <h2>📋 Liquidación Final de Contrato</h2>
+      <div class="info-box">
+        <strong>¿Qué incluye la liquidación?</strong> Prima de servicios, cesantías, intereses sobre cesantías, vacaciones proporcionales, auxilio de transporte proporcional e indemnización (si aplica).
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Salario mensual básico ($ COP)</label>
+          <input type="number" id="lq-salario" value="2000000" min="1423500" step="50000" />
+        </div>
+        <div class="form-group">
+          <label>Fecha de inicio</label>
+          <input type="date" id="lq-inicio" />
+        </div>
+        <div class="form-group">
+          <label>Fecha de retiro</label>
+          <input type="date" id="lq-fin" />
+        </div>
+        <div class="form-group">
+          <label>¿Recibe auxilio de transporte?</label>
+          <select id="lq-transporte">
+            <option value="si" selected>Sí ($162.000/mes)</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Motivo de terminación</label>
+          <select id="lq-motivo">
+            <option value="sin-justa-causa" selected>Despido sin justa causa</option>
+            <option value="justa-causa">Despido con justa causa</option>
+            <option value="renuncia">Renuncia voluntaria</option>
+            <option value="mutuo-acuerdo">Mutuo acuerdo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Indemnización calculada ($ COP)</label>
+          <input type="number" id="lq-indemnizacion" value="0" min="0" step="100000" />
+          <span class="form-hint">Cálcular en pestaña "Indemnización" y copiar aquí</span>
+        </div>
+        <div class="form-group">
+          <label>Anticipos de cesantías ya pagados ($ COP)</label>
+          <input type="number" id="lq-anticipos" value="0" min="0" step="100000" />
+        </div>
+        <div class="form-group">
+          <label>Días de vacaciones disfrutadas este año</label>
+          <input type="number" id="lq-vac-disfrutadas" value="0" min="0" max="15" step="1" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularLiquidacion()">📋 Calcular Liquidación Final</button>
+    </div>
+    <div id="resultado-liquidacion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📚 Indemnizaciones por Tipo de Contrato — CST Art. 64</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Tipo contrato</th><th>Indemnización</th><th>Base legal</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Indefinido — Salario ≤ 10 SMMLV</b></td>
+              <td>
+                Hasta 1 año: 30 días de salario<br>
+                Por cada año adicional: 20 días<br>
+                Fracción de año: proporcional
+              </td>
+              <td>CST Art. 64 num. 6a</td>
+            </tr>
+            <tr>
+              <td><b>Indefinido — Salario > 10 SMMLV</b></td>
+              <td>
+                Hasta 1 año: 20 días de salario<br>
+                Por cada año adicional: 15 días<br>
+                Fracción de año: proporcional
+              </td>
+              <td>CST Art. 64 num. 6b</td>
+            </tr>
+            <tr>
+              <td><b>Término fijo</b></td>
+              <td>Salarios correspondientes al tiempo que faltaba para cumplir el plazo pactado (mínimo 30 días)</td>
+              <td>CST Art. 64 num. 3</td>
+            </tr>
+            <tr>
+              <td><b>Obra o labor</b></td>
+              <td>30 días de salario × años trabajados (con base en el tiempo laborado hasta la fecha)</td>
+              <td>CST Art. 64 num. 5</td>
+            </tr>
+            <tr>
+              <td><b>Accidental o transitorio</b></td>
+              <td>El valor de los salarios del tiempo que falte (si se termina antes)</td>
+              <td>CST Art. 64 num. 2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 Parámetros Laborales Colombia 2026</h2>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; font-size:0.85rem;">
+        <div style="background:var(--morado-claro); border-radius:8px; padding:0.9rem;">
+          <strong style="color:var(--morado);">Valores 2026</strong><br>
+          SMMLV: <b>$1.423.500</b>/mes<br>
+          Auxilio de transporte: <b>$162.000</b>/mes<br>
+          10 SMMLV: <b>$14.235.000</b>/mes<br>
+          Salario diario SMMLV: <b>$47.450</b>
+        </div>
+        <div style="background:#e8f5e9; border-radius:8px; padding:0.9rem;">
+          <strong style="color:#1b5e20;">Prestaciones sociales</strong><br>
+          Prima de servicios: 15 días/semestre<br>
+          Cesantías: 1 mes/año (8.33%)<br>
+          Intereses cesantías: 12% anual<br>
+          Vacaciones: 15 días hábiles/año
+        </div>
+        <div style="background:#e3f2fd; border-radius:8px; padding:0.9rem;">
+          <strong style="color:#0d47a1;">Aportes empleador</strong><br>
+          Salud: 8.5% del salario<br>
+          Pensión: 12% del salario<br>
+          ARL: 0.348%–8.7% (según riesgo)<br>
+          SENA + ICBF + CCF: 9%
+        </div>
+        <div style="background:#fff3e0; border-radius:8px; padding:0.9rem;">
+          <strong style="color:#e65100;">Descuentos empleado</strong><br>
+          Salud: 4% del salario<br>
+          Pensión: 4% del salario<br>
+          Fondo solidaridad: 1% (si > 4 SMMLV)<br>
+          Retención en fuente: según tabla
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 Justas Causas de Despido — CST Art. 62</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>N°</th><th>Causa</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Haber engañado al empleador con certificados o referencias falsas</td></tr>
+            <tr><td>2</td><td>Todo acto de violencia, injuria, malos tratamientos o grave indisciplina</td></tr>
+            <tr><td>3</td><td>Todo acto grave de inmoralidad o deshonestidad</td></tr>
+            <tr><td>4</td><td>Todo daño material causado intencionalmente a edificios, maquinaria, etc.</td></tr>
+            <tr><td>5</td><td>Todo acto que implique revelación de secretos técnicos o comerciales</td></tr>
+            <tr><td>6</td><td>Todo vicio del trabajador que perturbe la disciplina del establecimiento</td></tr>
+            <tr><td>7</td><td>La detención preventiva del trabajador por más de treinta (30) días</td></tr>
+            <tr><td>8</td><td>El deficiente rendimiento en el trabajo (con proceso disciplinario previo)</td></tr>
+            <tr><td>9</td><td>El sistemático incumplimiento de las obligaciones contractuales</td></tr>
+            <tr><td>10</td><td>Todo vicio o enfermedad contagiosa no proveniente del trabajo</td></tr>
+            <tr><td>15</td><td>La renuncia del trabajador (causal para el trabajador, no para el empleador)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los resultados son estimaciones con base en el Código Sustantivo del Trabajo (CST) y la Ley 789/2002. La liquidación definitiva debe ser elaborada y revisada por un <strong>abogado laboralista</strong>. Para procesos judiciales, siempre acuda a profesional idóneo. SMMLV 2026: $1.423.500 | Aux. transporte: $162.000.
+  </div>
+</div>
+
+<script>
+const SMMLV = 1423500;
+const AUX_TRANSPORTE = 162000;
+
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+function fmtD(n) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function actualizarTipo() {
+  const tipo = document.getElementById('i-tipo').value;
+  document.getElementById('grp-fijo').style.display = tipo === 'fijo' ? 'flex' : 'none';
+}
+
+// Calcular tiempo entre dos fechas
+function calcTiempo(inicio, fin) {
+  const d1 = new Date(inicio), d2 = new Date(fin);
+  let anios = d2.getFullYear() - d1.getFullYear();
+  let meses = d2.getMonth() - d1.getMonth();
+  let dias  = d2.getDate() - d1.getDate();
+  if (dias < 0) { meses--; dias += 30; }
+  if (meses < 0) { anios--; meses += 12; }
+  const totalDias = Math.round((d2 - d1) / 86400000);
+  return { anios, meses, dias, totalDias };
+}
+
+function calcularIndemnizacion() {
+  const tipo    = document.getElementById('i-tipo').value;
+  const salario = parseFloat(document.getElementById('i-salario').value) || SMMLV;
+  const inicio  = document.getElementById('i-fecha-inicio').value;
+  const fin     = document.getElementById('i-fecha-fin').value;
+  const transp  = document.getElementById('i-transporte').value;
+  const vacPend = parseInt(document.getElementById('i-vacaciones').value) || 0;
+  const salPend = parseFloat(document.getElementById('i-salarios-pend').value) || 0;
+  const mesesRest = parseInt(document.getElementById('i-meses-restantes').value) || 0;
+
+  if (!inicio || !fin) { alert('Ingresa las fechas de inicio y terminación.'); return; }
+
+  const tiempo = calcTiempo(inicio, fin);
+  const salarioDia = salario / 30;
+  const esAltoSalario = salario > SMMLV * 10;
+  const aux = transp === 'si' ? AUX_TRANSPORTE : 0;
+
+  let indemnizacion = 0;
+  let formula = '';
+
+  if (tipo === 'indefinido') {
+    if (!esAltoSalario) {
+      // ≤ 10 SMMLV: 30 días primer año + 20 días por año adicional
+      const primerAnio = Math.min(tiempo.totalDias / 360, 1) * 30 * salarioDia;
+      const diasAdicionales = Math.max(0, (tiempo.totalDias / 360 - 1));
+      const anosAdicionales = diasAdicionales * 20 * salarioDia;
+      indemnizacion = primerAnio + anosAdicionales;
+      formula = `Primer año: ${Math.min(fmtD(tiempo.totalDias/360),1)} × 30 días = $ ${fmt(primerAnio)}\nAños adicionales: ${fmtD(Math.max(0,tiempo.totalDias/360-1))} × 20 días = $ ${fmt(anosAdicionales)}`;
+    } else {
+      // > 10 SMMLV: 20 días primer año + 15 días por año adicional
+      const primerAnio = Math.min(tiempo.totalDias / 360, 1) * 20 * salarioDia;
+      const diasAdicionales = Math.max(0, (tiempo.totalDias / 360 - 1));
+      const anosAdicionales = diasAdicionales * 15 * salarioDia;
+      indemnizacion = primerAnio + anosAdicionales;
+      formula = `Primer año: ${Math.min(fmtD(tiempo.totalDias/360),1)} × 20 días = $ ${fmt(primerAnio)}\nAños adicionales: ${fmtD(Math.max(0,tiempo.totalDias/360-1))} × 15 días = $ ${fmt(anosAdicionales)}`;
+    }
+  } else if (tipo === 'fijo') {
+    indemnizacion = Math.max(30 * salarioDia, mesesRest * salario);
+    formula = `Salarios por tiempo restante: ${mesesRest} meses × $ ${fmt(salario)} = $ ${fmt(indemnizacion)}`;
+  } else if (tipo === 'obra') {
+    indemnizacion = 30 * salarioDia * Math.max(1, tiempo.totalDias / 360);
+    formula = `30 días × ${fmtD(Math.max(1,tiempo.totalDias/360))} años = $ ${fmt(indemnizacion)}`;
+  } else {
+    // accidental
+    indemnizacion = 30 * salarioDia;
+    formula = `30 días de salario = $ ${fmt(indemnizacion)}`;
+  }
+
+  // Vacaciones pendientes
+  const vacValor = vacPend * salarioDia;
+  const totalAPagar = indemnizacion + vacValor + salPend;
+
+  document.getElementById('resultado-indemnizacion').style.display = 'block';
+  document.getElementById('resultado-indemnizacion').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Indemnización por Despido Sin Justa Causa — CST Art. 64</div>
+      <div class="resultado-total">$ ${fmt(Math.round(indemnizacion))}</div>
+      <div class="resultado-sub">Indemnización base — Contrato ${tipo.replace(/-/g,' ')} — ${esAltoSalario?'Salario > 10 SMMLV':'Salario ≤ 10 SMMLV'}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${tiempo.anios} años ${tiempo.meses} meses</div><div class="resultado-label">Tiempo de servicio</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(salarioDia)}/día</div><div class="resultado-label">Salario diario</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(indemnizacion))}</div><div class="resultado-label">Indemnización</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalAPagar))}</div><div class="resultado-label">Total a recibir</div></div>
+      </div>
+      <table class="liquidacion-tabla" style="margin-top:1rem;">
+        <tr class="concepto-titulo"><td colspan="2">Cálculo de la indemnización</td></tr>
+        <tr><td>Salario mensual</td><td>$ ${fmt(salario)}</td></tr>
+        <tr><td>Salario diario (÷ 30)</td><td>$ ${fmt(salarioDia)}</td></tr>
+        <tr><td>Tiempo de servicio</td><td>${tiempo.anios} años, ${tiempo.meses} meses, ${tiempo.dias} días (${tiempo.totalDias} días)</td></tr>
+        <tr><td>Fórmula aplicada (${esAltoSalario?'> 10 SMMLV':'≤ 10 SMMLV'})</td><td>${formula.replace(/\n/g,'<br>')}</td></tr>
+        <tr class="concepto-titulo"><td colspan="2">Otros conceptos adeudados</td></tr>
+        <tr><td>Vacaciones pendientes (${vacPend} días)</td><td>$ ${fmt(vacValor)}</td></tr>
+        <tr><td>Salarios pendientes</td><td>$ ${fmt(salPend)}</td></tr>
+        <tr class="total-row"><td>TOTAL ESTIMADO A PAGAR</td><td>$ ${fmt(Math.round(totalAPagar))}</td></tr>
+      </table>
+      <div class="resultado-detalle">
+        <b>Nota legal:</b> La indemnización por despido sin justa causa no está sujeta a retención en la fuente (Sentencia C-009/2010, Corte Constitucional). Sin embargo, indemnizaciones superiores a $ ${fmt(SMMLV*870)} pueden estar sujetas a impuesto de ganancias ocasionales. Consulte con el abogado.
+      </div>
+    </div>
+    <div class="alerta-warn" style="margin-top:0.8rem;">
+      ⚠️ El empleador tiene <strong>15 días hábiles</strong> para pagar la liquidación desde la fecha de terminación. Si no paga, incurre en <strong>sanción moratoria</strong> (CST Art. 65): 1 día de salario por cada día de retardo.
+    </div>`;
+
+  // Pasar indemnización a la pestaña liquidación
+  document.getElementById('lq-indemnizacion').value = Math.round(indemnizacion);
+}
+
+function calcularLiquidacion() {
+  const salario   = parseFloat(document.getElementById('lq-salario').value) || SMMLV;
+  const inicio    = document.getElementById('lq-inicio').value;
+  const fin       = document.getElementById('lq-fin').value;
+  const transp    = document.getElementById('lq-transporte').value;
+  const motivo    = document.getElementById('lq-motivo').value;
+  const indemn    = parseFloat(document.getElementById('lq-indemnizacion').value) || 0;
+  const anticipos = parseFloat(document.getElementById('lq-anticipos').value) || 0;
+  const vacDisf   = parseInt(document.getElementById('lq-vac-disfrutadas').value) || 0;
+
+  if (!inicio || !fin) { alert('Ingresa las fechas de inicio y retiro.'); return; }
+
+  const t         = calcTiempo(inicio, fin);
+  const dias      = t.totalDias;
+  const aux       = transp === 'si' ? AUX_TRANSPORTE : 0;
+  const salDia    = salario / 30;
+  const baseIBC   = salario + aux; // base para cesantías incluye aux. transporte
+
+  // Prima de servicios: 15 días por cada semestre (proporcional)
+  const prima = (salario + aux) * dias / 360;
+
+  // Cesantías: 1 mes por año (proporcional)
+  const cesantias = baseIBC * dias / 360 - anticipos;
+
+  // Intereses sobre cesantías: 12% anual sobre el saldo de cesantías
+  const intCesantias = cesantias * 0.12 * dias / 360;
+
+  // Vacaciones: 15 días hábiles por año (proporcional) - lo disfrutado
+  const vacTotal = salario * dias / 720; // 15 días / 360 × salario
+  const vacPendPago = Math.max(0, vacTotal - vacDisf * salDia);
+
+  // Aux transporte proporcional (si aplica)
+  const auxProp = aux * dias / 360;
+
+  const subtotal = prima + Math.max(0,cesantias) + Math.max(0,intCesantias) + vacPendPago;
+  const totalLiq = subtotal + indemn;
+
+  document.getElementById('resultado-liquidacion').style.display = 'block';
+  document.getElementById('resultado-liquidacion').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Liquidación Final — ${motivo.replace(/-/g,' ').toUpperCase()}</div>
+      <div class="resultado-total">$ ${fmt(Math.round(totalLiq))}</div>
+      <div class="resultado-sub">Total a recibir — ${t.anios} años, ${t.meses} meses, ${t.dias} días de servicio</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(prima))}</div><div class="resultado-label">Prima de servicios</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(Math.max(0,cesantias)))}</div><div class="resultado-label">Cesantías</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(Math.max(0,intCesantias)))}</div><div class="resultado-label">Intereses cesantías</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(vacPendPago))}</div><div class="resultado-label">Vacaciones proporcionales</div></div>
+        ${indemn > 0 ? `<div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(indemn))}</div><div class="resultado-label">Indemnización</div></div>` : ''}
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalLiq))}</div><div class="resultado-label">TOTAL LIQUIDACIÓN</div></div>
+      </div>
+      <table class="liquidacion-tabla" style="margin-top:1rem;">
+        <tr class="concepto-titulo"><td colspan="2">Detalle de la liquidación</td></tr>
+        <tr><td>Salario mensual</td><td>$ ${fmt(salario)}</td></tr>
+        <tr><td>Auxilio de transporte</td><td>$ ${fmt(aux)}/mes</td></tr>
+        <tr><td>Días laborados</td><td>${dias} días (${t.anios}a ${t.meses}m ${t.dias}d)</td></tr>
+        <tr class="concepto-titulo"><td colspan="2">Prestaciones sociales</td></tr>
+        <tr><td>Prima de servicios: ($ ${fmt(salario+aux)} × ${dias}) ÷ 360</td><td>$ ${fmt(Math.round(prima))}</td></tr>
+        <tr><td>Cesantías: ($ ${fmt(baseIBC)} × ${dias}) ÷ 360 − anticipos $ ${fmt(anticipos)}</td><td>$ ${fmt(Math.round(Math.max(0,cesantias)))}</td></tr>
+        <tr><td>Intereses s/cesantías: $ ${fmt(Math.round(Math.max(0,cesantias)))} × 12% × ${dias}/360</td><td>$ ${fmt(Math.round(Math.max(0,intCesantias)))}</td></tr>
+        <tr><td>Vacaciones proporcionales (${vacDisf} días disfrutados)</td><td>$ ${fmt(Math.round(vacPendPago))}</td></tr>
+        ${indemn > 0 ? `<tr><td>Indemnización por despido sin justa causa</td><td>$ ${fmt(Math.round(indemn))}</td></tr>` : ''}
+        <tr class="total-row"><td>TOTAL LIQUIDACIÓN</td><td>$ ${fmt(Math.round(totalLiq))}</td></tr>
+      </table>
+    </div>
+    <div class="alerta-ok" style="margin-top:0.8rem;">
+      ✅ <strong>Plazo de pago:</strong> El empleador debe pagar la liquidación dentro de los <strong>15 días hábiles</strong> siguientes a la terminación del contrato. Pasado este plazo, debe pagar la sanción moratoria del Art. 65 CST: 1 día de salario por cada día de retardo.
+    </div>`;
+}
+
+// Inicializar fechas
+document.addEventListener('DOMContentLoaded', () => {
+  const hoy = new Date().toISOString().split('T')[0];
+  const hace2 = new Date();
+  hace2.setFullYear(hace2.getFullYear() - 2);
+  const hace2Str = hace2.toISOString().split('T')[0];
+  document.getElementById('i-fecha-inicio').value = hace2Str;
+  document.getElementById('i-fecha-fin').value = hoy;
+  document.getElementById('lq-inicio').value = hace2Str;
+  document.getElementById('lq-fin').value = hoy;
+});
+</script>
+</body>
+</html>
