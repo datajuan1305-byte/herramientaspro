@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Estimador de rendimiento por cultivo Colombia. Calcula producción esperada, ingresos, costos y rentabilidad para café, maíz, arroz, papa, cacao, aguacate, caña, plátano y más cultivos colombianos." />
+  <meta name="keywords" content="rendimiento cultivos Colombia, estimador producción agrícola, rentabilidad cultivos Colombia, toneladas por hectárea Colombia, cálculo cosecha café maíz papa" />
+  <title>Estimador de Rendimiento por Cultivo Colombia | HerramientasPro Colombia</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #222; min-height: 100vh; }
+
+    nav { background: #1a3a5c; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    nav a { color: #fff; text-decoration: none; font-size: 14px; opacity: .8; }
+    nav a:hover { opacity: 1; }
+    nav .brand { font-weight: 700; font-size: 17px; opacity: 1; margin-right: 8px; }
+    nav .sep { color: #7aa3c8; }
+
+    .hero { background: linear-gradient(135deg, #1e6b31 0%, #27ae60 100%); color: #fff; text-align: center; padding: 36px 20px 28px; }
+    .hero .badge { background: rgba(255,255,255,.18); display: inline-block; border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+    .hero h1 { font-size: clamp(20px, 4vw, 30px); font-weight: 800; margin-bottom: 8px; }
+    .hero p { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto 16px; }
+    .hero .chips { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .hero .chip { background: rgba(255,255,255,.15); border-radius: 20px; padding: 5px 14px; font-size: 13px; }
+
+    .container { max-width: 940px; margin: 0 auto; padding: 28px 16px 60px; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+    .tab-btn { padding: 9px 18px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; background: #fff; color: #555; box-shadow: 0 1px 4px rgba(0,0,0,.1); transition: all .2s; }
+    .tab-btn.active { background: #1e6b31; color: #fff; }
+
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 24px; margin-bottom: 20px; }
+    .card h2 { font-size: 16px; font-weight: 700; color: #1e6b31; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid #d5f5e3; }
+
+    .cultivo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 6px; }
+    .cultivo-btn { padding: 10px 8px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; background: #fafafa; text-align: center; font-size: 13px; font-weight: 600; color: #444; transition: all .2s; line-height: 1.3; }
+    .cultivo-btn:hover { border-color: #27ae60; background: #eafaf1; }
+    .cultivo-btn.selected { border-color: #1e6b31; background: #eafaf1; color: #1e6b31; }
+    .cultivo-btn .emoji { font-size: 22px; display: block; margin-bottom: 4px; }
+
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+    .grid3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 13px; font-weight: 600; color: #444; }
+    label span.req { color: #c0392b; }
+    input, select { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color .2s; background: #fafafa; }
+    input:focus, select:focus { outline: none; border-color: #27ae60; background: #fff; }
+    .hint { font-size: 11px; color: #888; margin-top: 2px; line-height: 1.4; }
+
+    .info-cultivo { background: #eafaf1; border: 1px solid #a9dfbf; border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; font-size: 13px; display: none; }
+    .info-cultivo .ic-title { font-weight: 700; color: #1e6b31; font-size: 14px; margin-bottom: 8px; }
+    .ic-row { display: flex; gap: 20px; flex-wrap: wrap; }
+    .ic-item { flex: 1; min-width: 120px; }
+    .ic-item span { display: block; font-size: 11px; color: #555; margin-bottom: 2px; }
+    .ic-item strong { font-size: 14px; color: #1e6b31; }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+    .btn-calc { background: #1e6b31; color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; min-width: 160px; transition: background .2s; }
+    .btn-calc:hover { background: #145a27; }
+    .btn-reset { background: #ecf0f1; color: #555; border: none; border-radius: 8px; padding: 13px 20px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+    /* RESULTADO */
+    .result-box { display: none; margin-top: 24px; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.08); padding: 16px; text-align: center; border-top: 4px solid #27ae60; }
+    .kpi.rojo { border-top-color: #e74c3c; }
+    .kpi.azul { border-top-color: #2980b9; }
+    .kpi.naranja { border-top-color: #e67e22; }
+    .kpi.morado { border-top-color: #8e44ad; }
+    .kpi .klbl { font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+    .kpi .kval { font-size: 22px; font-weight: 800; color: #1e6b31; line-height: 1; }
+    .kpi.rojo .kval { color: #e74c3c; }
+    .kpi.azul .kval { color: #2980b9; }
+    .kpi.naranja .kval { color: #e67e22; }
+    .kpi.morado .kval { color: #8e44ad; }
+    .kpi .ksub { font-size: 11px; color: #aaa; margin-top: 4px; }
+
+    .flujo-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .flujo-table th { background: #1e6b31; color: #fff; padding: 10px 14px; text-align: left; }
+    .flujo-table td { padding: 10px 14px; border-bottom: 1px solid #d5f5e3; }
+    .flujo-table tr:hover td { background: #f0faf4; }
+    .flujo-table .total-row td { background: #eafaf1; font-weight: 700; color: #1e6b31; font-size: 15px; border-top: 2px solid #27ae60; }
+    .flujo-table .ingreso { color: #27ae60; font-weight: 700; }
+    .flujo-table .costo { color: #e74c3c; font-weight: 700; }
+    .flujo-table .utilidad { color: #8e44ad; font-weight: 800; }
+
+    .semaforo { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 10px; margin-top: 16px; font-size: 14px; font-weight: 600; }
+    .semaforo.verde { background: #eafaf1; border-left: 5px solid #27ae60; color: #1e6b31; }
+    .semaforo.amarillo { background: #fef9e7; border-left: 5px solid #f39c12; color: #7d6608; }
+    .semaforo.rojo { background: #fdedec; border-left: 5px solid #e74c3c; color: #922b21; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .ref-table th { background: #1e6b31; color: #fff; padding: 9px 12px; text-align: left; }
+    .ref-table td { padding: 9px 12px; border-bottom: 1px solid #d5f5e3; }
+    .ref-table tr:nth-child(even) td { background: #f0faf4; }
+    .ref-table tr:hover td { background: #d5f5e3; }
+
+    .alert { border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-top: 14px; line-height: 1.5; }
+    .alert-info { background: #eaf4fb; border-left: 4px solid #2980b9; color: #1a5276; }
+    .alert-warn { background: #fef9e7; border-left: 4px solid #f39c12; color: #7d6608; }
+
+    .disclaimer { background: #ecf0f1; border-radius: 10px; padding: 14px 18px; font-size: 12px; color: #636e72; margin-top: 28px; line-height: 1.6; }
+
+    @media (max-width: 600px) {
+      .cultivo-grid { grid-template-columns: repeat(3, 1fr); }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .grid2, .grid3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="brand">🛠️ HerramientasPro</a>
+  <span class="sep">›</span>
+  <a href="../../index.html#agro">Agro</a>
+  <span class="sep">›</span>
+  <span style="color:#fff;opacity:.7;">Rendimiento por Cultivo</span>
+</nav>
+
+<div class="hero">
+  <div class="badge">🌱 Agronomía · Producción 2026</div>
+  <h1>Estimador de Rendimiento por Cultivo</h1>
+  <p>Calcula la producción esperada, ingresos, costos y rentabilidad de los principales cultivos colombianos por hectárea. Precios de referencia actualizados 2026.</p>
+  <div class="chips">
+    <span class="chip">🌾 15 cultivos colombianos</span>
+    <span class="chip">📊 Análisis de rentabilidad</span>
+    <span class="chip">💰 Precios SIPSA 2026</span>
+    <span class="chip">📋 Punto de equilibrio</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('est')">Estimador de Rendimiento</button>
+    <button class="tab-btn" onclick="showTab('ref')">Rendimientos de Referencia</button>
+    <button class="tab-btn" onclick="showTab('precios')">Precios de Referencia 2026</button>
+  </div>
+
+  <!-- TAB 1: ESTIMADOR -->
+  <div id="tab-est">
+
+    <div class="card">
+      <h2>🌿 1. Seleccione el cultivo</h2>
+      <div class="cultivo-grid" id="cultivo-grid">
+        <div class="cultivo-btn" onclick="selCultivo('cafe')"><span class="emoji">☕</span>Café</div>
+        <div class="cultivo-btn" onclick="selCultivo('maiz')"><span class="emoji">🌽</span>Maíz</div>
+        <div class="cultivo-btn" onclick="selCultivo('arroz')"><span class="emoji">🌾</span>Arroz</div>
+        <div class="cultivo-btn" onclick="selCultivo('papa')"><span class="emoji">🥔</span>Papa</div>
+        <div class="cultivo-btn" onclick="selCultivo('cacao')"><span class="emoji">🍫</span>Cacao</div>
+        <div class="cultivo-btn" onclick="selCultivo('aguacate')"><span class="emoji">🥑</span>Aguacate</div>
+        <div class="cultivo-btn" onclick="selCultivo('platano')"><span class="emoji">🍌</span>Plátano</div>
+        <div class="cultivo-btn" onclick="selCultivo('cana')"><span class="emoji">🎋</span>Caña panelera</div>
+        <div class="cultivo-btn" onclick="selCultivo('tomate')"><span class="emoji">🍅</span>Tomate</div>
+        <div class="cultivo-btn" onclick="selCultivo('frijol')"><span class="emoji">🫘</span>Fríjol</div>
+        <div class="cultivo-btn" onclick="selCultivo('soya')"><span class="emoji">🌱</span>Soya</div>
+        <div class="cultivo-btn" onclick="selCultivo('yuca')"><span class="emoji">🥖</span>Yuca</div>
+        <div class="cultivo-btn" onclick="selCultivo('mora')"><span class="emoji">🫐</span>Mora</div>
+        <div class="cultivo-btn" onclick="selCultivo('palma')"><span class="emoji">🌴</span>Palma de aceite</div>
+        <div class="cultivo-btn" onclick="selCultivo('limon')"><span class="emoji">🍋</span>Limón/Cítricos</div>
+      </div>
+
+      <div class="info-cultivo" id="info-cultivo">
+        <div class="ic-title" id="ic-title">Café</div>
+        <div class="ic-row">
+          <div class="ic-item"><span>Rendimiento típico</span><strong id="ic-rend">—</strong></div>
+          <div class="ic-item"><span>Ciclo productivo</span><strong id="ic-ciclo">—</strong></div>
+          <div class="ic-item"><span>Precio ref. mercado</span><strong id="ic-precio">—</strong></div>
+          <div class="ic-item"><span>Costo producción/ha</span><strong id="ic-costo">—</strong></div>
+          <div class="ic-item"><span>Zona apta Colombia</span><strong id="ic-zona">—</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📐 2. Datos del lote</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Área del lote (hectáreas) <span class="req">*</span></label>
+          <input type="number" id="area" placeholder="Ej: 2.5" min="0.1" step="0.1" />
+        </div>
+        <div class="field">
+          <label>Rendimiento esperado (ton/ha o unidad/ha)</label>
+          <input type="number" id="rendimiento" placeholder="Se autocompleta al seleccionar cultivo" step="0.1" />
+          <span class="hint">Puede ajustar según condiciones reales del lote.</span>
+        </div>
+        <div class="field">
+          <label>Precio de venta (COP / kg o unidad)</label>
+          <input type="number" id="precio-venta" placeholder="Se autocompleta al seleccionar cultivo" />
+          <span class="hint">Precio en finca o plaza de mercado. Ajuste al precio real de su zona.</span>
+        </div>
+        <div class="field">
+          <label>Unidad de medida del rendimiento</label>
+          <input type="text" id="unidad" placeholder="ton/ha, bultos/ha, racimos/ha..." readonly style="background:#f0f0f0;" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>💸 3. Costos de producción por hectárea</h2>
+      <div class="grid3">
+        <div class="field">
+          <label>Preparación de suelo (COP/ha)</label>
+          <input type="number" id="c-suelo" placeholder="0" min="0" />
+          <span class="hint">Labranza, rastrillada, surqueo.</span>
+        </div>
+        <div class="field">
+          <label>Semilla / material vegetal (COP/ha)</label>
+          <input type="number" id="c-semilla" placeholder="0" min="0" />
+          <span class="hint">Semilla certificada, plántulas, estacas.</span>
+        </div>
+        <div class="field">
+          <label>Fertilizantes (COP/ha)</label>
+          <input type="number" id="c-fertilizantes" placeholder="0" min="0" />
+          <span class="hint">Abonos orgánicos e inorgánicos.</span>
+        </div>
+        <div class="field">
+          <label>Agroquímicos (COP/ha)</label>
+          <input type="number" id="c-agroquimicos" placeholder="0" min="0" />
+          <span class="hint">Herbicidas, fungicidas, insecticidas.</span>
+        </div>
+        <div class="field">
+          <label>Mano de obra (COP/ha)</label>
+          <input type="number" id="c-mano-obra" placeholder="0" min="0" />
+          <span class="hint">Siembra, deshierbe, cosecha, aplicaciones.</span>
+        </div>
+        <div class="field">
+          <label>Riego (COP/ha)</label>
+          <input type="number" id="c-riego" placeholder="0" min="0" />
+          <span class="hint">Energía, combustible, mantenimiento.</span>
+        </div>
+        <div class="field">
+          <label>Transporte y poscosecha (COP/ha)</label>
+          <input type="number" id="c-transporte" placeholder="0" min="0" />
+          <span class="hint">Empaque, flete, almacenamiento.</span>
+        </div>
+        <div class="field">
+          <label>Asistencia técnica (COP/ha)</label>
+          <input type="number" id="c-asistencia" placeholder="0" min="0" />
+        </div>
+        <div class="field">
+          <label>Otros costos (COP/ha)</label>
+          <input type="number" id="c-otros" placeholder="0" min="0" />
+          <span class="hint">Arriendos, crédito, imprevistos (10-15%).</span>
+        </div>
+      </div>
+
+      <div class="alert alert-info" style="margin-top:14px;">
+        💡 Si no tiene datos exactos, puede dejar los costos en 0 y usar el costo de referencia que se carga automáticamente al seleccionar el cultivo. Se incluirá en el análisis como costo estimado total.
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-calc" onclick="calcularRendimiento()">🌾 Calcular rendimiento y rentabilidad</button>
+      <button class="btn-reset" onclick="resetCalc()">Limpiar</button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="resultado" class="result-box">
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="klbl">Producción total estimada</div>
+          <div class="kval" id="kpi-produccion">0</div>
+          <div class="ksub" id="kpi-prod-sub">toneladas</div>
+        </div>
+        <div class="kpi azul">
+          <div class="klbl">Ingreso bruto total</div>
+          <div class="kval" id="kpi-ingresos">$0</div>
+          <div class="ksub" id="kpi-ing-sub">para el área del lote</div>
+        </div>
+        <div class="kpi rojo">
+          <div class="klbl">Costos totales</div>
+          <div class="kval" id="kpi-costos">$0</div>
+          <div class="ksub" id="kpi-cos-sub">para el área del lote</div>
+        </div>
+        <div class="kpi morado">
+          <div class="klbl">Utilidad neta</div>
+          <div class="kval" id="kpi-utilidad">$0</div>
+          <div class="ksub" id="kpi-util-sub">para el área del lote</div>
+        </div>
+        <div class="kpi naranja">
+          <div class="klbl">Rentabilidad</div>
+          <div class="kval" id="kpi-rentabilidad">0%</div>
+          <div class="ksub">sobre costos totales</div>
+        </div>
+        <div class="kpi azul">
+          <div class="klbl">Punto de equilibrio</div>
+          <div class="kval" id="kpi-pe">0</div>
+          <div class="ksub" id="kpi-pe-sub">kg/ton mínimo a vender</div>
+        </div>
+        <div class="kpi">
+          <div class="klbl">Ingreso por hectárea</div>
+          <div class="kval" id="kpi-ing-ha">$0</div>
+          <div class="ksub">ingresos brutos/ha</div>
+        </div>
+        <div class="kpi morado">
+          <div class="klbl">Utilidad por hectárea</div>
+          <div class="kval" id="kpi-util-ha">$0</div>
+          <div class="ksub">utilidad neta/ha</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>📊 Estado de resultados del cultivo</h2>
+        <table class="flujo-table">
+          <thead>
+            <tr><th>Concepto</th><th>Por hectárea</th><th>Total lote (<span id="th-area">?</span> ha)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>📦 Producción estimada</td><td id="f-prod-ha">—</td><td id="f-prod-tot">—</td></tr>
+            <tr><td>💰 Ingreso bruto</td><td class="ingreso" id="f-ing-ha">$0</td><td class="ingreso" id="f-ing-tot">$0</td></tr>
+            <tr><td>🌱 Preparación de suelo</td><td id="f-suelo-ha">$0</td><td id="f-suelo-tot">$0</td></tr>
+            <tr><td>🌾 Semilla / material vegetal</td><td id="f-semilla-ha">$0</td><td id="f-semilla-tot">$0</td></tr>
+            <tr><td>🧪 Fertilizantes</td><td id="f-fert-ha">$0</td><td id="f-fert-tot">$0</td></tr>
+            <tr><td>🧴 Agroquímicos</td><td id="f-agro-ha">$0</td><td id="f-agro-tot">$0</td></tr>
+            <tr><td>👷 Mano de obra</td><td id="f-mo-ha">$0</td><td id="f-mo-tot">$0</td></tr>
+            <tr><td>💧 Riego</td><td id="f-riego-ha">$0</td><td id="f-riego-tot">$0</td></tr>
+            <tr><td>🚚 Transporte y poscosecha</td><td id="f-transp-ha">$0</td><td id="f-transp-tot">$0</td></tr>
+            <tr><td>👨‍🔬 Asistencia técnica</td><td id="f-asist-ha">$0</td><td id="f-asist-tot">$0</td></tr>
+            <tr><td>📋 Otros costos</td><td id="f-otros-ha">$0</td><td id="f-otros-tot">$0</td></tr>
+            <tr class="total-row"><td>💸 COSTO TOTAL</td><td id="f-costo-ha">$0</td><td id="f-costo-tot">$0</td></tr>
+            <tr class="total-row"><td class="utilidad">✅ UTILIDAD NETA</td><td class="utilidad" id="f-util-ha">$0</td><td class="utilidad" id="f-util-tot">$0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="semaforo-box" class="semaforo verde">
+        <span style="font-size:28px;" id="sem-emoji">🟢</span>
+        <div id="sem-texto">El cultivo es rentable.</div>
+      </div>
+
+      <div class="alert alert-warn" style="margin-top:14px;">
+        ⚠️ <strong>Nota:</strong> Los rendimientos y precios son estimaciones de referencia basadas en promedios regionales colombianos (SIPSA-DANE, Agronet 2025-2026). Los resultados reales dependen de condiciones del suelo, clima, manejo agronómico, variedad y canal de comercialización. Consulte con el ICA o asistencia técnica local.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: REFERENCIA RENDIMIENTOS -->
+  <div id="tab-ref" style="display:none">
+    <div class="card">
+      <h2>📋 Rendimientos de referencia por cultivo — Colombia</h2>
+      <div class="alert alert-info" style="margin-bottom:14px;">
+        ℹ️ Rendimientos promedio nacionales según Agronet-MADR y evaluaciones agropecuarias municipales (EVA). Los valores óptimos corresponden a tecnología alta (riego, semilla certificada, fertilización técnica).
+      </div>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Cultivo</th><th>Rendimiento promedio</th><th>Rendimiento óptimo</th><th>Unidad</th><th>Ciclo</th><th>Zonas principales</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>☕ Café (tecnificado)</td><td>1.0 – 1.5</td><td>2.5 – 3.5</td><td>ton café pergamino/ha</td><td>Perenne (cosecha anual)</td><td>Eje Cafetero, Nariño, Huila</td></tr>
+          <tr><td>🌽 Maíz tecnificado</td><td>4.0 – 5.5</td><td>7.0 – 10.0</td><td>ton/ha</td><td>110–130 días</td><td>Córdoba, Tolima, Meta, Valle</td></tr>
+          <tr><td>🌾 Arroz riego</td><td>5.5 – 6.5</td><td>7.5 – 9.0</td><td>ton/ha</td><td>120–140 días</td><td>Tolima, Meta, Casanare</td></tr>
+          <tr><td>🥔 Papa (Nariño/Cundinamarca)</td><td>18 – 25</td><td>35 – 45</td><td>ton/ha</td><td>130–180 días</td><td>Cundinamarca, Nariño, Boyacá</td></tr>
+          <tr><td>🍫 Cacao</td><td>0.5 – 0.8</td><td>1.2 – 2.0</td><td>ton grano seco/ha</td><td>Perenne (cosecha 2×/año)</td><td>Santander, Arauca, Huila</td></tr>
+          <tr><td>🥑 Aguacate Hass</td><td>8 – 12</td><td>18 – 25</td><td>ton/ha</td><td>Perenne (2 cosechas/año)</td><td>Antioquia, Tolima, Caldas</td></tr>
+          <tr><td>🍌 Plátano dominico hartón</td><td>7 – 10</td><td>15 – 20</td><td>ton/ha (o 800–1.200 racimos)</td><td>Perenne (cosecha mensual)</td><td>Urabá, Nariño, Llanos</td></tr>
+          <tr><td>🎋 Caña panelera</td><td>60 – 80</td><td>120 – 160</td><td>ton caña/ha → 6–8 ton panela</td><td>12–14 meses primer corte</td><td>Boyacá, Cundinamarca, Nariño</td></tr>
+          <tr><td>🍅 Tomate invernadero</td><td>80 – 120</td><td>150 – 200</td><td>ton/ha</td><td>5–6 meses ciclo</td><td>Cundinamarca, Boyacá, Antioquia</td></tr>
+          <tr><td>🫘 Fríjol</td><td>1.0 – 1.5</td><td>2.0 – 3.0</td><td>ton/ha</td><td>75–90 días</td><td>Antioquia, Nariño, Huila</td></tr>
+          <tr><td>🌱 Soya</td><td>1.8 – 2.5</td><td>3.0 – 4.0</td><td>ton/ha</td><td>110–120 días</td><td>Meta, Orinoquia, Valle</td></tr>
+          <tr><td>🥖 Yuca</td><td>12 – 18</td><td>25 – 35</td><td>ton/ha</td><td>8–12 meses</td><td>Costa Atlántica, Llanos, Cauca</td></tr>
+          <tr><td>🫐 Mora de castilla</td><td>8 – 12</td><td>18 – 25</td><td>ton/ha/año</td><td>Perenne (cosecha quincenal)</td><td>Cundinamarca, Boyacá, Nariño</td></tr>
+          <tr><td>🌴 Palma de aceite</td><td>16 – 20</td><td>25 – 30</td><td>ton RFF/ha/año</td><td>Perenne (cosecha quincenal)</td><td>Llanos, Magdalena Medio, Costa</td></tr>
+          <tr><td>🍋 Limón / Cítricos</td><td>12 – 18</td><td>25 – 35</td><td>ton/ha/año</td><td>Perenne</td><td>Valle, Tolima, Meta, Costa</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: PRECIOS -->
+  <div id="tab-precios" style="display:none">
+    <div class="card">
+      <h2>💰 Precios de referencia en finca / mayorista — 2026</h2>
+      <div class="alert alert-warn" style="margin-bottom:14px;">
+        ⚠️ Precios orientativos basados en promedios SIPSA-DANE y boletines Agronet primer semestre 2026. Los precios varían significativamente por región, temporada, calidad y canal de comercialización. Consulte el Sistema de Información de Precios del Sector Agropecuario (SIPSA) para datos actualizados.
+      </div>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Cultivo</th><th>Precio finca (COP/kg)</th><th>Precio mayorista (COP/kg)</th><th>Unidad comercial</th><th>Observación</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>☕ Café pergamino seco</td><td>$5.800 – $7.200</td><td>$7.500 – $9.000</td><td>Arroba (12.5 kg)</td><td>Depende cotización NYC</td></tr>
+          <tr><td>🌽 Maíz amarillo</td><td>$700 – $900</td><td>$850 – $1.100</td><td>Bulto 50 kg</td><td>Compite con importado</td></tr>
+          <tr><td>🌾 Arroz paddy verde</td><td>$1.000 – $1.300</td><td>—</td><td>Kg paddy</td><td>Precio molino</td></tr>
+          <tr><td>🥔 Papa pastusa</td><td>$600 – $1.200</td><td>$900 – $1.800</td><td>Bulto 50 kg</td><td>Alta volatilidad estacional</td></tr>
+          <tr><td>🍫 Cacao grano seco</td><td>$10.000 – $14.000</td><td>$13.000 – $17.000</td><td>Kg grano seco</td><td>Premium fino aroma hasta $20.000</td></tr>
+          <tr><td>🥑 Aguacate Hass</td><td>$1.800 – $3.500</td><td>$2.500 – $5.000</td><td>Kg</td><td>Exportación hasta $5.000+</td></tr>
+          <tr><td>🍌 Plátano dominico</td><td>$400 – $700</td><td>$600 – $1.000</td><td>Racimo / kg</td><td>Varía mucho por zona</td></tr>
+          <tr><td>🎋 Panela</td><td>$2.800 – $4.000</td><td>$3.500 – $5.000</td><td>Kg panela</td><td>8–9 kg panela por 100 kg caña</td></tr>
+          <tr><td>🍅 Tomate chonto</td><td>$800 – $2.000</td><td>$1.200 – $3.000</td><td>Kg</td><td>Alta volatilidad</td></tr>
+          <tr><td>🫘 Fríjol cargamanto</td><td>$3.000 – $5.000</td><td>$4.000 – $6.500</td><td>Kg</td><td>Mayor valor en cosecha baja</td></tr>
+          <tr><td>🌱 Soya</td><td>$1.400 – $1.800</td><td>—</td><td>Ton</td><td>Precio industria aceite</td></tr>
+          <tr><td>🥖 Yuca</td><td>$350 – $600</td><td>$500 – $900</td><td>Bulto 50 kg</td><td>Industrial hasta $700/kg</td></tr>
+          <tr><td>🫐 Mora de castilla</td><td>$1.800 – $3.500</td><td>$2.500 – $5.000</td><td>Kg</td><td>Pulpa industrial $2.500</td></tr>
+          <tr><td>🌴 Racimos fruta fresca (RFF)</td><td>$400 – $600</td><td>—</td><td>Ton RFF</td><td>Precio extractora</td></tr>
+          <tr><td>🍋 Limón Tahití</td><td>$500 – $1.200</td><td>$800 – $1.800</td><td>Kg</td><td>Exportación hasta $2.500/kg</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>⚠️ Herramienta orientativa.</strong> Los rendimientos, precios y costos de referencia son promedios nacionales y pueden diferir significativamente según la región, el piso térmico, la variedad cultivada, el nivel tecnológico y las condiciones de mercado locales. Esta herramienta no reemplaza la asistencia técnica agropecuaria profesional. Para decisiones de inversión, consulte con un ingeniero agrónomo o la Unidad Local de Asistencia Técnica Agropecuaria (UMATA) de su municipio.
+    <br><br>
+    🗓️ <em>Fuentes: Agronet-MADR, SIPSA-DANE, EVA 2024-2025, ICA Colombia. Actualización: Junio 2026.</em>
+  </div>
+
+</div>
+
+<script>
+  const fmt = v => new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',minimumFractionDigits:0,maximumFractionDigits:0}).format(v);
+  const fmtN = (v,dec=1) => new Intl.NumberFormat('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}).format(v);
+
+  const CULTIVOS = {
+    cafe:     { nom:'☕ Café (tecnificado)',        rend:1.2,  unidad:'ton café pergamino/ha', precio:6500,   costoRef:6500000,  ciclo:'Perenne – cosecha anual',          zona:'Eje Cafetero, Nariño, Huila' },
+    maiz:     { nom:'🌽 Maíz amarillo tecnificado', rend:5.0,  unidad:'ton/ha',                precio:850,    costoRef:2800000,  ciclo:'110–130 días',                     zona:'Córdoba, Tolima, Meta' },
+    arroz:    { nom:'🌾 Arroz riego',               rend:6.0,  unidad:'ton/ha',                precio:1150,   costoRef:5200000,  ciclo:'120–140 días',                     zona:'Tolima, Meta, Casanare' },
+    papa:     { nom:'🥔 Papa (Nariño/Cund.)',       rend:22.0, unidad:'ton/ha',                precio:850,    costoRef:12000000, ciclo:'130–180 días',                     zona:'Cundinamarca, Nariño, Boyacá' },
+    cacao:    { nom:'🍫 Cacao grano seco',          rend:0.7,  unidad:'ton grano seco/ha',     precio:12000,  costoRef:4500000,  ciclo:'Perenne – 2 cosechas/año',         zona:'Santander, Arauca, Huila' },
+    aguacate: { nom:'🥑 Aguacate Hass',             rend:10.0, unidad:'ton/ha',                precio:2500,   costoRef:8000000,  ciclo:'Perenne – 2 cosechas/año',         zona:'Antioquia, Tolima, Caldas' },
+    platano:  { nom:'🍌 Plátano dominico hartón',   rend:8.5,  unidad:'ton/ha',                precio:550,    costoRef:5500000,  ciclo:'Perenne – cosecha mensual',        zona:'Urabá, Nariño, Llanos' },
+    cana:     { nom:'🎋 Caña panelera (panela)',    rend:6.5,  unidad:'ton panela/ha',         precio:3200,   costoRef:9000000,  ciclo:'12–14 meses primer corte',         zona:'Boyacá, Cundinamarca, Nariño' },
+    tomate:   { nom:'🍅 Tomate (invernadero)',      rend:100,  unidad:'ton/ha',                precio:1200,   costoRef:45000000, ciclo:'5–6 meses',                        zona:'Cundinamarca, Boyacá, Antioquia' },
+    frijol:   { nom:'🫘 Fríjol cargamanto',        rend:1.2,  unidad:'ton/ha',                precio:4000,   costoRef:3200000,  ciclo:'75–90 días',                       zona:'Antioquia, Nariño, Huila' },
+    soya:     { nom:'🌱 Soya',                      rend:2.2,  unidad:'ton/ha',                precio:1600,   costoRef:3800000,  ciclo:'110–120 días',                     zona:'Meta, Orinoquia, Valle' },
+    yuca:     { nom:'🥖 Yuca',                      rend:15.0, unidad:'ton/ha',                precio:480,    costoRef:4200000,  ciclo:'8–12 meses',                       zona:'Costa Atlántica, Llanos, Cauca' },
+    mora:     { nom:'🫐 Mora de castilla',          rend:10.0, unidad:'ton/ha/año',            precio:2500,   costoRef:9500000,  ciclo:'Perenne – cosecha quincenal',      zona:'Cundinamarca, Boyacá, Nariño' },
+    palma:    { nom:'🌴 Palma de aceite (RFF)',     rend:18.0, unidad:'ton RFF/ha/año',        precio:500,    costoRef:6500000,  ciclo:'Perenne – cosecha quincenal',      zona:'Llanos, Magdalena Medio, Costa' },
+    limon:    { nom:'🍋 Limón/Cítricos',            rend:15.0, unidad:'ton/ha/año',            precio:900,    costoRef:7000000,  ciclo:'Perenne',                          zona:'Valle, Tolima, Meta, Costa' },
+  };
+
+  let cultivoSel = null;
+
+  function selCultivo(key) {
+    cultivoSel = key;
+    document.querySelectorAll('.cultivo-btn').forEach(b => b.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+
+    const c = CULTIVOS[key];
+    document.getElementById('info-cultivo').style.display = 'block';
+    document.getElementById('ic-title').textContent = c.nom;
+    document.getElementById('ic-rend').textContent  = c.rend + ' ' + c.unidad;
+    document.getElementById('ic-ciclo').textContent = c.ciclo;
+    document.getElementById('ic-precio').textContent = fmt(c.precio) + '/kg';
+    document.getElementById('ic-costo').textContent = fmt(c.costoRef);
+    document.getElementById('ic-zona').textContent  = c.zona;
+
+    document.getElementById('rendimiento').value   = c.rend;
+    document.getElementById('precio-venta').value  = c.precio;
+    document.getElementById('unidad').value        = c.unidad;
+  }
+
+  function showTab(t) {
+    ['est','ref','precios'].forEach(id => {
+      document.getElementById('tab-'+id).style.display = id===t?'block':'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+      b.classList.toggle('active',['est','ref','precios'][i]===t);
+    });
+  }
+
+  function calcularRendimiento() {
+    const area     = parseFloat(document.getElementById('area').value);
+    const rend     = parseFloat(document.getElementById('rendimiento').value);
+    const precio   = parseFloat(document.getElementById('precio-venta').value);
+    const unidad   = document.getElementById('unidad').value || 'ton';
+
+    if (!area || area <= 0) { alert('Ingrese el área del lote en hectáreas.'); return; }
+    if (!rend || rend <= 0) { alert('Ingrese o seleccione un rendimiento esperado.'); return; }
+    if (!precio || precio <= 0) { alert('Ingrese el precio de venta.'); return; }
+
+    const v = id => parseFloat(document.getElementById(id).value) || 0;
+
+    // Costos por ha (ingresados)
+    const costos = {
+      suelo:      v('c-suelo'),
+      semilla:    v('c-semilla'),
+      fert:       v('c-fertilizantes'),
+      agro:       v('c-agroquimicos'),
+      mo:         v('c-mano-obra'),
+      riego:      v('c-riego'),
+      transp:     v('c-transporte'),
+      asist:      v('c-asistencia'),
+      otros:      v('c-otros'),
+    };
+
+    let costoHa = Object.values(costos).reduce((a,b)=>a+b,0);
+
+    // Si no ingresó costos, usar referencia del cultivo
+    if (costoHa === 0 && cultivoSel) {
+      costoHa = CULTIVOS[cultivoSel].costoRef;
+    }
+
+    const produccionHa  = rend;                        // unidades/ha (ton o lo que sea)
+    const produccionTot = rend * area;
+    // precio está en COP/kg, convertir si la unidad es ton
+    const precioKg = precio; // COP/kg
+    const factorConv = unidad.includes('ton') ? 1000 : 1; // ton→kg = 1000, demás =1
+    const ingresoHa  = produccionHa  * precioKg * factorConv;
+    const ingresoTot = produccionTot * precioKg * factorConv;
+    const costoTot   = costoHa * area;
+    const utilHa     = ingresoHa - costoHa;
+    const utilTot    = ingresoTot - costoTot;
+    const rentab     = costoTot > 0 ? (utilTot / costoTot) * 100 : 0;
+    // Punto de equilibrio en unidades
+    const peKg       = costoTot / precioKg;          // kg totales para cubrir costos
+    const peUnidad   = peKg / factorConv / area;     // unidades/ha
+
+    // KPIs
+    document.getElementById('kpi-produccion').textContent = fmtN(produccionTot);
+    document.getElementById('kpi-prod-sub').textContent   = unidad.replace('/ha','') + ' (lote total)';
+    document.getElementById('kpi-ingresos').textContent   = fmt(ingresoTot);
+    document.getElementById('kpi-ing-sub').textContent    = `para ${fmtN(area)} ha`;
+    document.getElementById('kpi-costos').textContent     = fmt(costoTot);
+    document.getElementById('kpi-cos-sub').textContent    = `para ${fmtN(area)} ha`;
+    document.getElementById('kpi-utilidad').textContent   = fmt(utilTot);
+    document.getElementById('kpi-util-sub').textContent   = utilTot >= 0 ? 'ganancia neta' : 'pérdida estimada';
+    document.getElementById('kpi-rentabilidad').textContent = fmtN(rentab,1) + '%';
+    document.getElementById('kpi-pe').textContent         = fmtN(peUnidad,2);
+    document.getElementById('kpi-pe-sub').textContent     = unidad.replace('/ha','') + '/ha mínimo a vender';
+    document.getElementById('kpi-ing-ha').textContent     = fmt(ingresoHa);
+    document.getElementById('kpi-util-ha').textContent    = fmt(utilHa);
+
+    // Tabla
+    document.getElementById('th-area').textContent = fmtN(area);
+    const setCosto = (id, val) => {
+      document.getElementById('f-'+id+'-ha').textContent  = fmt(val);
+      document.getElementById('f-'+id+'-tot').textContent = fmt(val * area);
+    };
+    document.getElementById('f-prod-ha').textContent  = fmtN(produccionHa) + ' ' + unidad;
+    document.getElementById('f-prod-tot').textContent = fmtN(produccionTot) + ' ' + unidad.replace('/ha','');
+    document.getElementById('f-ing-ha').textContent   = fmt(ingresoHa);
+    document.getElementById('f-ing-tot').textContent  = fmt(ingresoTot);
+    setCosto('suelo',   costos.suelo   || (cultivoSel && costoHa===CULTIVOS[cultivoSel]?.costoRef ? 0 : costos.suelo));
+    setCosto('semilla', costos.semilla);
+    setCosto('fert',    costos.fert);
+    setCosto('agro',    costos.agro);
+    setCosto('mo',      costos.mo);
+    setCosto('riego',   costos.riego);
+    setCosto('transp',  costos.transp);
+    setCosto('asist',   costos.asist);
+    // Si costos todos en 0 → mostrar costoRef como "otros"
+    const costosIngresados = Object.values(costos).reduce((a,b)=>a+b,0);
+    document.getElementById('f-otros-ha').textContent  = fmt(costos.otros + (costosIngresados===0 ? costoHa : 0));
+    document.getElementById('f-otros-tot').textContent = fmt((costos.otros + (costosIngresados===0 ? costoHa : 0)) * area);
+    document.getElementById('f-costo-ha').textContent  = fmt(costoHa);
+    document.getElementById('f-costo-tot').textContent = fmt(costoTot);
+    document.getElementById('f-util-ha').textContent   = fmt(utilHa);
+    document.getElementById('f-util-tot').textContent  = fmt(utilTot);
+
+    // Semáforo
+    const sem = document.getElementById('semaforo-box');
+    const semT = document.getElementById('sem-texto');
+    if (rentab >= 30) {
+      sem.className = 'semaforo verde';
+      document.getElementById('sem-emoji').textContent = '🟢';
+      semT.innerHTML = `<strong>Cultivo muy rentable.</strong> La rentabilidad del ${fmtN(rentab,1)}% supera ampliamente el costo de oportunidad del capital. Excelentes condiciones para escalar la producción.`;
+    } else if (rentab >= 10) {
+      sem.className = 'semaforo verde';
+      document.getElementById('sem-emoji').textContent = '🟡';
+      semT.innerHTML = `<strong>Cultivo rentable.</strong> Rentabilidad del ${fmtN(rentab,1)}%. Los ingresos cubren los costos con un margen aceptable. Evalúe opciones para reducir costos o mejorar precio de venta.`;
+    } else if (rentab >= 0) {
+      sem.className = 'semaforo amarillo';
+      document.getElementById('sem-emoji').textContent = '🟡';
+      semT.innerHTML = `<strong>Rentabilidad baja (${fmtN(rentab,1)}%).</strong> El cultivo cubre costos pero el margen es estrecho. Revise el precio de venta, reduzca insumos o mejore el rendimiento con asistencia técnica.`;
+    } else {
+      sem.className = 'semaforo rojo';
+      document.getElementById('sem-emoji').textContent = '🔴';
+      semT.innerHTML = `<strong>El cultivo genera pérdidas (${fmtN(rentab,1)}%).</strong> Los costos superan los ingresos esperados. Revise los precios de venta, el manejo de costos o considere otro cultivo más rentable para las condiciones de su lote.`;
+    }
+
+    document.getElementById('resultado').style.display = 'block';
+    document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetCalc() {
+    cultivoSel = null;
+    document.querySelectorAll('.cultivo-btn').forEach(b=>b.classList.remove('selected'));
+    document.getElementById('info-cultivo').style.display = 'none';
+    ['area','rendimiento','precio-venta','c-suelo','c-semilla','c-fertilizantes',
+     'c-agroquimicos','c-mano-obra','c-riego','c-transporte','c-asistencia','c-otros']
+      .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('unidad').value = '';
+    document.getElementById('resultado').style.display = 'none';
+  }
+</script>
+</body>
+</html>
