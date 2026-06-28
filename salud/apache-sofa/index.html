@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Score APACHE II y SOFA UCI 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora Score APACHE II y SOFA para UCI. Evaluación de pronóstico en paciente crítico. Herramienta gratuita para médicos colombianos." />
+  <meta name="keywords" content="score APACHE II colombia, SOFA UCI, calculadora apache ii, pronostico paciente critico, medicina intensiva colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --rojo: #c62828;
+      --rojo-claro: #ffebee;
+      --rojo-oscuro: #8b0000;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: #f5a623; }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: #f5a623; color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #c62828 60%, #e57373 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio);
+      box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 120px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--rojo); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.9rem; font-weight: 700; color: var(--rojo); margin: 1rem 0 0.6rem; border-left: 3px solid var(--rojo); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--rojo); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--rojo); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--rojo-oscuro); }
+    .btn:active { transform: scale(0.98); }
+    .btn-reset { background: var(--azul-navbar); margin-top: 0.5rem; }
+    .btn-reset:hover { background: #0f2540; }
+
+    .resultado-box {
+      border-radius: var(--radio); padding: 1.2rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-box.verde  { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+    .resultado-box.amarillo { background: linear-gradient(135deg, #e65100, #f57c00); }
+    .resultado-box.naranja  { background: linear-gradient(135deg, #b71c1c, #c62828); }
+    .resultado-box.rojo     { background: linear-gradient(135deg, #4a0000, #7b0000); }
+
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-score { font-size: 3rem; font-weight: 900; color: #fff; line-height: 1; }
+    .resultado-mortalidad { font-size: 1.1rem; font-weight: 700; color: rgba(255,255,255,0.9); margin-top: 0.3rem; }
+    .resultado-interpretacion { font-size: 0.88rem; opacity: 0.9; margin-top: 0.5rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.7rem; text-align: center; }
+    .resultado-valor { font-size: 1.3rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 1.9; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .info-box { background: var(--rojo-claro); border-left: 4px solid var(--rojo); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--rojo-oscuro); }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+
+    .score-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 6px;
+      font-size: 0.75rem; font-weight: 700; margin-left: 6px;
+    }
+    .badge-pts { background: #e3f2fd; color: #0d47a1; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 7px 10px; text-align: left; }
+    .ref-table td { padding: 6px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--rojo-claro); }
+
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+
+    .puntos-label { font-size: 0.7rem; font-weight: 700; color: #0d47a1; background: #e3f2fd; border-radius: 4px; padding: 1px 5px; float: right; margin-top: 2px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🩺 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">APACHE II / SOFA</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🏥 Médicos UCI — Medicina Crítica</div>
+  <h1>Score APACHE II y SOFA 2026</h1>
+  <p>Calculadora de pronóstico para paciente crítico en UCI. Estimación de mortalidad hospitalaria y falla orgánica.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Para UCI colombianas</span>
+    <span class="hero-chip">📊 APACHE II + SOFA</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+    <span class="hero-chip">🔁 Uso ilimitado</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('apache', this)">🔴 Score APACHE II</button>
+    <button class="tab-btn" onclick="mostrarTab('sofa', this)">🟠 Score SOFA</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Tablas de Referencia</button>
+  </div>
+
+  <!-- ══════════════ TAB 1: APACHE II ══════════════ -->
+  <div id="tab-apache" class="tab-panel active">
+    <div class="card">
+      <h2>🔴 Score APACHE II — Acute Physiology and Chronic Health Evaluation</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> El APACHE II predice la mortalidad hospitalaria de pacientes en UCI. Se calcula en las primeras 24 horas de ingreso. Puntaje máximo: 71 puntos. A mayor puntaje, mayor mortalidad esperada.
+      </div>
+
+      <!-- A. VARIABLES FISIOLÓGICAS AGUDAS -->
+      <h3>A. Variables Fisiológicas Agudas <span class="score-badge badge-pts">Máx. 60 pts</span></h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Temperatura rectal (°C)</label>
+          <select id="a-temp">
+            <option value="4">≥ 41°C (+4)</option>
+            <option value="3">39–40.9°C (+3)</option>
+            <option value="1">38.5–38.9°C (+1)</option>
+            <option value="0" selected>36–38.4°C (0)</option>
+            <option value="1">34–35.9°C (+1)</option>
+            <option value="2">32–33.9°C (+2)</option>
+            <option value="3">30–31.9°C (+3)</option>
+            <option value="4">≤ 29.9°C (+4)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Presión arterial media (mmHg)</label>
+          <select id="a-pam">
+            <option value="4">≥ 160 (+4)</option>
+            <option value="3">130–159 (+3)</option>
+            <option value="2">110–129 (+2)</option>
+            <option value="0" selected>70–109 (0)</option>
+            <option value="2">50–69 (+2)</option>
+            <option value="4">≤ 49 (+4)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Frecuencia cardíaca (lpm)</label>
+          <select id="a-fc">
+            <option value="4">≥ 180 (+4)</option>
+            <option value="3">140–179 (+3)</option>
+            <option value="2">110–139 (+2)</option>
+            <option value="0" selected>70–109 (0)</option>
+            <option value="2">55–69 (+2)</option>
+            <option value="3">40–54 (+3)</option>
+            <option value="4">≤ 39 (+4)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Frecuencia respiratoria (rpm)</label>
+          <select id="a-fr">
+            <option value="4">≥ 50 (+4)</option>
+            <option value="3">35–49 (+3)</option>
+            <option value="1">25–34 (+1)</option>
+            <option value="0" selected>12–24 (0)</option>
+            <option value="1">10–11 (+1)</option>
+            <option value="2">6–9 (+2)</option>
+            <option value="4">≤ 5 (+4)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Oxigenación</label>
+          <select id="a-o2">
+            <option value="0">FiO₂ &lt; 0.5: PaO₂ ≥ 70 (0)</option>
+            <option value="1">FiO₂ &lt; 0.5: PaO₂ 61–70 (+1)</option>
+            <option value="3">FiO₂ &lt; 0.5: PaO₂ 55–60 (+3)</option>
+            <option value="4">FiO₂ &lt; 0.5: PaO₂ &lt; 55 (+4)</option>
+            <option value="0" selected>FiO₂ ≥ 0.5: A-aDO₂ &lt; 200 (0)</option>
+            <option value="2">FiO₂ ≥ 0.5: A-aDO₂ 200–349 (+2)</option>
+            <option value="3">FiO₂ ≥ 0.5: A-aDO₂ 350–499 (+3)</option>
+            <option value="4">FiO₂ ≥ 0.5: A-aDO₂ ≥ 500 (+4)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>pH arterial</label>
+          <select id="a-ph">
+            <option value="4">≥ 7.70 (+4)</option>
+            <option value="3">7.60–7.69 (+3)</option>
+            <option value="1">7.50–7.59 (+1)</option>
+            <option value="0" selected>7.33–7.49 (0)</option>
+            <option value="2">7.25–7.32 (+2)</option>
+            <option value="3">7.15–7.24 (+3)</option>
+            <option value="4">≤ 7.15 (+4)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Sodio sérico (mEq/L)</label>
+          <select id="a-na">
+            <option value="4">≥ 180 (+4)</option>
+            <option value="3">160–179 (+3)</option>
+            <option value="2">155–159 (+2)</option>
+            <option value="1">150–154 (+1)</option>
+            <option value="0" selected>130–149 (0)</option>
+            <option value="2">120–129 (+2)</option>
+            <option value="3">111–119 (+3)</option>
+            <option value="4">≤ 110 (+4)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Potasio sérico (mEq/L)</label>
+          <select id="a-k">
+            <option value="4">≥ 7.0 (+4)</option>
+            <option value="3">6.0–6.9 (+3)</option>
+            <option value="1">5.5–5.9 (+1)</option>
+            <option value="0" selected>3.5–5.4 (0)</option>
+            <option value="1">3.0–3.4 (+1)</option>
+            <option value="2">2.5–2.9 (+2)</option>
+            <option value="4">≤ 2.5 (+4)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Creatinina sérica (mg/dL)</label>
+          <select id="a-cr">
+            <option value="4">≥ 3.5 (+4) — con IRA doble</option>
+            <option value="3">2.0–3.4 (+3) — con IRA doble</option>
+            <option value="2">1.5–1.9 (+2) — con IRA doble</option>
+            <option value="4">≥ 3.5 (+4) — sin IRA</option>
+            <option value="3">2.0–3.4 (+3) — sin IRA</option>
+            <option value="2">1.5–1.9 (+2) — sin IRA</option>
+            <option value="0" selected>0.6–1.4 (0)</option>
+            <option value="2">≤ 0.6 (+2)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Hematocrito (%)</label>
+          <select id="a-hto">
+            <option value="4">≥ 60 (+4)</option>
+            <option value="2">50–59.9 (+2)</option>
+            <option value="1">46–49.9 (+1)</option>
+            <option value="0" selected>30–45.9 (0)</option>
+            <option value="2">20–29.9 (+2)</option>
+            <option value="4">≤ 20 (+4)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Leucocitos (×10³/mm³)</label>
+          <select id="a-wbc">
+            <option value="4">≥ 40 (+4)</option>
+            <option value="2">20–39.9 (+2)</option>
+            <option value="1">15–19.9 (+1)</option>
+            <option value="0" selected>3–14.9 (0)</option>
+            <option value="2">1–2.9 (+2)</option>
+            <option value="4">≤ 1 (+4)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Escala de Glasgow (GCS)</label>
+          <select id="a-gcs">
+            <option value="0" selected>15 — Alerta total (0)</option>
+            <option value="1">13–14 (+1)</option>
+            <option value="2">11–12 (+2)</option>
+            <option value="3">9–10 (+3)</option>
+            <option value="4">7–8 (+4)</option>
+            <option value="5">5–6 (+5)</option>
+            <option value="6">3–4 (+6)</option>
+          </select>
+          <span class="form-hint">Puntos = 15 − GCS</span>
+        </div>
+      </div>
+
+      <hr class="sep" />
+
+      <!-- B. EDAD -->
+      <h3>B. Puntos por Edad <span class="score-badge badge-pts">Máx. 6 pts</span></h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Edad del paciente</label>
+          <select id="a-edad">
+            <option value="0" selected>≤ 44 años (0)</option>
+            <option value="2">45–54 años (+2)</option>
+            <option value="3">55–64 años (+3)</option>
+            <option value="5">65–74 años (+5)</option>
+            <option value="6">≥ 75 años (+6)</option>
+          </select>
+        </div>
+      </div>
+
+      <hr class="sep" />
+
+      <!-- C. SALUD CRÓNICA -->
+      <h3>C. Puntos por Salud Crónica <span class="score-badge badge-pts">Máx. 5 pts</span></h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de cirugía / admisión</label>
+          <select id="a-cronico">
+            <option value="0" selected>Sin enfermedad crónica grave (0)</option>
+            <option value="2">Cirugía electiva con enfermedad crónica (+2)</option>
+            <option value="5">No quirúrgico o cirugía urgente con enfermedad crónica (+5)</option>
+          </select>
+          <span class="form-hint">Enf. crónica: hepática, cardiovascular severa, respiratoria, renal, inmunosupresión</span>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularApache()">🔴 Calcular Score APACHE II</button>
+      <button class="btn btn-reset" onclick="resetApache()">↺ Limpiar formulario</button>
+    </div>
+
+    <div id="resultado-apache" style="display:none;"></div>
+  </div>
+
+  <!-- ══════════════ TAB 2: SOFA ══════════════ -->
+  <div id="tab-sofa" class="tab-panel">
+    <div class="card">
+      <h2>🟠 Score SOFA — Sequential Organ Failure Assessment</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> El SOFA evalúa la disfunción de 6 sistemas orgánicos en pacientes críticos. Se usa para diagnóstico de sepsis (aumento ≥ 2 puntos) y para monitoreo diario en UCI. Rango: 0–24 puntos.
+      </div>
+
+      <div class="form-grid">
+        <!-- RESPIRATORIO -->
+        <div class="form-group">
+          <label>🫁 Respiratorio — PaO₂/FiO₂ (mmHg)</label>
+          <select id="s-resp">
+            <option value="0" selected>≥ 400 (0)</option>
+            <option value="1">300–399 (+1)</option>
+            <option value="2">200–299 (+2)</option>
+            <option value="3">100–199 con VM (+3)</option>
+            <option value="4">&lt; 100 con VM (+4)</option>
+          </select>
+        </div>
+        <!-- COAGULACIÓN -->
+        <div class="form-group">
+          <label>🩸 Coagulación — Plaquetas (×10³/μL)</label>
+          <select id="s-coag">
+            <option value="0" selected>≥ 150 (0)</option>
+            <option value="1">100–149 (+1)</option>
+            <option value="2">50–99 (+2)</option>
+            <option value="3">20–49 (+3)</option>
+            <option value="4">&lt; 20 (+4)</option>
+          </select>
+        </div>
+        <!-- HEPÁTICO -->
+        <div class="form-group">
+          <label>🫀 Hepático — Bilirrubina (mg/dL)</label>
+          <select id="s-hepa">
+            <option value="0" selected>&lt; 1.2 (0)</option>
+            <option value="1">1.2–1.9 (+1)</option>
+            <option value="2">2.0–5.9 (+2)</option>
+            <option value="3">6.0–11.9 (+3)</option>
+            <option value="4">≥ 12.0 (+4)</option>
+          </select>
+        </div>
+        <!-- CARDIOVASCULAR -->
+        <div class="form-group">
+          <label>❤️ Cardiovascular — Hipotensión</label>
+          <select id="s-cardio">
+            <option value="0" selected>PAM ≥ 70 mmHg (0)</option>
+            <option value="1">PAM &lt; 70 mmHg (+1)</option>
+            <option value="2">Dopamina ≤ 5 o Dobutamina (+2)</option>
+            <option value="3">Dopamina 5.1–15 o Norepi ≤ 0.1 (+3)</option>
+            <option value="4">Dopamina &gt; 15 o Norepi &gt; 0.1 (+4)</option>
+          </select>
+        </div>
+        <!-- NEUROLÓGICO -->
+        <div class="form-group">
+          <label>🧠 Neurológico — Glasgow (GCS)</label>
+          <select id="s-neuro">
+            <option value="0" selected>15 (0)</option>
+            <option value="1">13–14 (+1)</option>
+            <option value="2">10–12 (+2)</option>
+            <option value="3">6–9 (+3)</option>
+            <option value="4">&lt; 6 (+4)</option>
+          </select>
+        </div>
+        <!-- RENAL -->
+        <div class="form-group">
+          <label>🫘 Renal — Creatinina (mg/dL) o diuresis</label>
+          <select id="s-renal">
+            <option value="0" selected>&lt; 1.2 mg/dL (0)</option>
+            <option value="1">1.2–1.9 mg/dL (+1)</option>
+            <option value="2">2.0–3.4 mg/dL (+2)</option>
+            <option value="3">3.5–4.9 mg/dL o diuresis &lt; 500 mL/día (+3)</option>
+            <option value="4">≥ 5.0 mg/dL o diuresis &lt; 200 mL/día (+4)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularSofa()">🟠 Calcular Score SOFA</button>
+      <button class="btn btn-reset" onclick="resetSofa()">↺ Limpiar formulario</button>
+    </div>
+
+    <div id="resultado-sofa" style="display:none;"></div>
+  </div>
+
+  <!-- ══════════════ TAB 3: REFERENCIA ══════════════ -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Interpretación APACHE II — Mortalidad Esperada</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Score APACHE II</th><th>Mortalidad no quirúrgica</th><th>Mortalidad post-quirúrgica</th><th>Riesgo</th></tr></thead>
+          <tbody>
+            <tr><td>0 – 4</td><td>4%</td><td>1%</td><td style="color:#2e7d32; font-weight:700;">Muy bajo</td></tr>
+            <tr><td>5 – 9</td><td>8%</td><td>3%</td><td style="color:#2e7d32; font-weight:700;">Bajo</td></tr>
+            <tr><td>10 – 14</td><td>15%</td><td>7%</td><td style="color:#f57c00; font-weight:700;">Moderado</td></tr>
+            <tr><td>15 – 19</td><td>25%</td><td>12%</td><td style="color:#f57c00; font-weight:700;">Moderado-alto</td></tr>
+            <tr><td>20 – 24</td><td>40%</td><td>30%</td><td style="color:#c62828; font-weight:700;">Alto</td></tr>
+            <tr><td>25 – 29</td><td>55%</td><td>35%</td><td style="color:#c62828; font-weight:700;">Muy alto</td></tr>
+            <tr><td>30 – 34</td><td>73%</td><td>73%</td><td style="color:#7b0000; font-weight:700;">Crítico</td></tr>
+            <tr><td>≥ 35</td><td>85%</td><td>88%</td><td style="color:#7b0000; font-weight:700;">Crítico extremo</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Interpretación SOFA — Disfunción Orgánica y Mortalidad</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Score SOFA</th><th>Mortalidad estimada</th><th>Interpretación clínica</th></tr></thead>
+          <tbody>
+            <tr><td>0 – 1</td><td>&lt; 10%</td><td style="color:#2e7d32; font-weight:700;">Sin disfunción significativa</td></tr>
+            <tr><td>2 – 3</td><td>10–20%</td><td style="color:#2e7d32; font-weight:700;">Disfunción leve</td></tr>
+            <tr><td>4 – 5</td><td>20–30%</td><td style="color:#f57c00; font-weight:700;">Disfunción moderada</td></tr>
+            <tr><td>6 – 8</td><td>30–40%</td><td style="color:#f57c00; font-weight:700;">Disfunción moderada-severa</td></tr>
+            <tr><td>9 – 11</td><td>40–50%</td><td style="color:#c62828; font-weight:700;">Falla orgánica severa</td></tr>
+            <tr><td>12 – 14</td><td>50–60%</td><td style="color:#c62828; font-weight:700;">Falla orgánica múltiple</td></tr>
+            <tr><td>≥ 15</td><td>&gt; 90%</td><td style="color:#7b0000; font-weight:700;">Falla orgánica múltiple crítica</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.8rem; color:var(--texto-suave); margin-top:0.8rem;">⚠️ Un aumento de ≥ 2 puntos en el SOFA respecto al basal es criterio diagnóstico de <strong>sepsis</strong> según Sepsis-3 (2016).</p>
+    </div>
+
+    <div class="card">
+      <h2>📋 Escala de Glasgow (GCS)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Componente</th><th>Respuesta</th><th>Puntos</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="4"><b>Ocular</b></td><td>Espontánea</td><td>4</td></tr>
+            <tr><td>A la voz</td><td>3</td></tr>
+            <tr><td>Al dolor</td><td>2</td></tr>
+            <tr><td>Ninguna</td><td>1</td></tr>
+            <tr><td rowspan="5"><b>Verbal</b></td><td>Orientado</td><td>5</td></tr>
+            <tr><td>Confuso</td><td>4</td></tr>
+            <tr><td>Palabras inapropiadas</td><td>3</td></tr>
+            <tr><td>Sonidos incomprensibles</td><td>2</td></tr>
+            <tr><td>Ninguna</td><td>1</td></tr>
+            <tr><td rowspan="6"><b>Motora</b></td><td>Obedece órdenes</td><td>6</td></tr>
+            <tr><td>Localiza dolor</td><td>5</td></tr>
+            <tr><td>Retira al dolor</td><td>4</td></tr>
+            <tr><td>Flexión anormal</td><td>3</td></tr>
+            <tr><td>Extensión anormal</td><td>2</td></tr>
+            <tr><td>Ninguna</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo exclusivamente clínico.</strong> El Score APACHE II y el SOFA son herramientas de apoyo pronóstico, <strong>no reemplazan el juicio clínico del médico intensivista</strong>. Las decisiones terapéuticas deben ser tomadas por el equipo médico tratante. Referencias: Knaus et al. 1985 (APACHE II), Vincent et al. 1996 (SOFA), Sepsis-3 2016.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── APACHE II ──
+function calcularApache() {
+  const temp  = parseInt(document.getElementById('a-temp').value);
+  const pam   = parseInt(document.getElementById('a-pam').value);
+  const fc    = parseInt(document.getElementById('a-fc').value);
+  const fr    = parseInt(document.getElementById('a-fr').value);
+  const o2    = parseInt(document.getElementById('a-o2').value);
+  const ph    = parseInt(document.getElementById('a-ph').value);
+  const na    = parseInt(document.getElementById('a-na').value);
+  const k     = parseInt(document.getElementById('a-k').value);
+  const cr    = parseInt(document.getElementById('a-cr').value);
+  const hto   = parseInt(document.getElementById('a-hto').value);
+  const wbc   = parseInt(document.getElementById('a-wbc').value);
+  const gcs   = parseInt(document.getElementById('a-gcs').value);
+  const edad  = parseInt(document.getElementById('a-edad').value);
+  const cron  = parseInt(document.getElementById('a-cronico').value);
+
+  const fisiologico = temp+pam+fc+fr+o2+ph+na+k+cr+hto+wbc+gcs;
+  const total = fisiologico + edad + cron;
+
+  // Mortalidad aproximada según tablas originales de Knaus 1985
+  let mortalidad, clase, colorClass;
+  if      (total <= 4)  { mortalidad = 4;  clase = 'Riesgo muy bajo';     colorClass = 'verde'; }
+  else if (total <= 9)  { mortalidad = 8;  clase = 'Riesgo bajo';         colorClass = 'verde'; }
+  else if (total <= 14) { mortalidad = 15; clase = 'Riesgo moderado';     colorClass = 'amarillo'; }
+  else if (total <= 19) { mortalidad = 25; clase = 'Riesgo moderado-alto';colorClass = 'amarillo'; }
+  else if (total <= 24) { mortalidad = 40; clase = 'Riesgo alto';         colorClass = 'naranja'; }
+  else if (total <= 29) { mortalidad = 55; clase = 'Riesgo muy alto';     colorClass = 'naranja'; }
+  else if (total <= 34) { mortalidad = 73; clase = 'Riesgo crítico';      colorClass = 'rojo'; }
+  else                  { mortalidad = 85; clase = 'Riesgo crítico extremo'; colorClass = 'rojo'; }
+
+  document.getElementById('resultado-apache').style.display = 'block';
+  document.getElementById('resultado-apache').innerHTML = `
+    <div class="resultado-box ${colorClass}">
+      <div class="resultado-titulo">Score APACHE II — Resultado</div>
+      <div class="resultado-score">${total} pts</div>
+      <div class="resultado-mortalidad">Mortalidad hospitalaria estimada: ~${mortalidad}%</div>
+      <div class="resultado-interpretacion">${clase}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item">
+          <div class="resultado-valor">${fisiologico}</div>
+          <div class="resultado-label">Puntos fisiológicos (A)</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">${edad}</div>
+          <div class="resultado-label">Puntos por edad (B)</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">${cron}</div>
+          <div class="resultado-label">Salud crónica (C)</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">${mortalidad}%</div>
+          <div class="resultado-label">Mortalidad estimada</div>
+        </div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Desglose — Variables fisiológicas:</b><br>
+        Temperatura: ${temp} | PAM: ${pam} | FC: ${fc} | FR: ${fr} | O₂: ${o2}<br>
+        pH: ${ph} | Na: ${na} | K: ${k} | Creatinina: ${cr} | Hematocrito: ${hto}<br>
+        Leucocitos: ${wbc} | GCS: ${gcs}<br>
+        <b>Subtotal fisiológico (A): ${fisiologico} | Edad (B): ${edad} | Crónico (C): ${cron}</b><br>
+        <b>APACHE II Total = ${fisiologico} + ${edad} + ${cron} = ${total} puntos</b><br>
+        ${total >= 25 ? '⚠️ Score elevado: considerar metas de tratamiento y discusión con familia.' : ''}
+        ${total >= 35 ? '🔴 Score crítico: mortalidad esperada > 85%.' : ''}
+      </div>
+    </div>`;
+}
+
+function resetApache() {
+  document.querySelectorAll('#tab-apache select').forEach(s => s.selectedIndex = 0);
+  document.getElementById('resultado-apache').style.display = 'none';
+}
+
+// ── SOFA ──
+function calcularSofa() {
+  const resp   = parseInt(document.getElementById('s-resp').value);
+  const coag   = parseInt(document.getElementById('s-coag').value);
+  const hepa   = parseInt(document.getElementById('s-hepa').value);
+  const cardio = parseInt(document.getElementById('s-cardio').value);
+  const neuro  = parseInt(document.getElementById('s-neuro').value);
+  const renal  = parseInt(document.getElementById('s-renal').value);
+
+  const total = resp + coag + hepa + cardio + neuro + renal;
+
+  let mortalidad, clase, colorClass;
+  if      (total <= 1)  { mortalidad = '<10'; clase = 'Sin disfunción significativa';      colorClass = 'verde'; }
+  else if (total <= 3)  { mortalidad = '10–20'; clase = 'Disfunción orgánica leve';       colorClass = 'verde'; }
+  else if (total <= 5)  { mortalidad = '20–30'; clase = 'Disfunción moderada';            colorClass = 'amarillo'; }
+  else if (total <= 8)  { mortalidad = '30–40'; clase = 'Disfunción moderada-severa';     colorClass = 'amarillo'; }
+  else if (total <= 11) { mortalidad = '40–50'; clase = 'Falla orgánica severa';          colorClass = 'naranja'; }
+  else if (total <= 14) { mortalidad = '50–60'; clase = 'Falla orgánica múltiple';        colorClass = 'naranja'; }
+  else                  { mortalidad = '>90';   clase = 'Falla orgánica múltiple crítica';colorClass = 'rojo'; }
+
+  const organos = ['Respiratorio','Coagulación','Hepático','Cardiovascular','Neurológico','Renal'];
+  const vals    = [resp, coag, hepa, cardio, neuro, renal];
+  const fallan  = organos.filter((_,i) => vals[i] >= 3);
+
+  document.getElementById('resultado-sofa').style.display = 'block';
+  document.getElementById('resultado-sofa').innerHTML = `
+    <div class="resultado-box ${colorClass}">
+      <div class="resultado-titulo">Score SOFA — Resultado</div>
+      <div class="resultado-score">${total} pts</div>
+      <div class="resultado-mortalidad">Mortalidad estimada: ~${mortalidad}%</div>
+      <div class="resultado-interpretacion">${clase}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${resp}</div><div class="resultado-label">Respiratorio</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${coag}</div><div class="resultado-label">Coagulación</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${hepa}</div><div class="resultado-label">Hepático</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${cardio}</div><div class="resultado-label">Cardiovascular</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${neuro}</div><div class="resultado-label">Neurológico</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${renal}</div><div class="resultado-label">Renal</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Total SOFA: ${total} puntos</b><br>
+        ${fallan.length > 0 ? `<b>Órganos con disfunción severa (≥3 pts):</b> ${fallan.join(', ')}<br>` : 'Sin órganos en falla severa.<br>'}
+        ${total >= 2 ? '⚠️ Aumento de ≥2 pts sobre basal: criterio diagnóstico de <b>SEPSIS</b> (Sepsis-3, 2016).' : ''}
+        ${total >= 11 ? '<br>🔴 Falla orgánica múltiple: evaluar medidas de soporte avanzado.' : ''}
+      </div>
+    </div>`;
+}
+
+function resetSofa() {
+  document.querySelectorAll('#tab-sofa select').forEach(s => s.selectedIndex = 0);
+  document.getElementById('resultado-sofa').style.display = 'none';
+}
+</script>
+</body>
+</html>
