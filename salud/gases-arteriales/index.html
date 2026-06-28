@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interpretador Gases Arteriales 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Interpretador de gases arteriales para médicos colombianos. Análisis de pH, PaCO2, HCO3, PaO2, compensaciones y trastornos ácido-base mixtos." />
+  <meta name="keywords" content="gases arteriales colombia, gasometria arterial, pH PaCO2 HCO3, acido base trastornos, interpretacion gasometria, medicina interna colombia UCI" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --azul: #1565c0;
+      --azul-claro: #e3f2fd;
+      --azul-oscuro: #0d47a1;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #1565c0 60%, #42a5f5 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 110px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--azul); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--azul); margin: 1rem 0 0.6rem; border-left: 3px solid var(--azul); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+
+    /* INPUTS CON INDICADOR DE NORMALIDAD */
+    .input-wrap { position: relative; }
+    input.normal-range { border-color: #28a745; background: #f0fff4; }
+    input.alto-range   { border-color: #c62828; background: #fff5f5; }
+    input.bajo-range   { border-color: #e65100; background: #fff8f0; }
+
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s, background 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--azul); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+    .rango-normal { font-size: 0.72rem; color: #2e7d32; font-weight: 600; margin-top: 2px; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--azul); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--azul-oscuro); }
+    .btn:active { transform: scale(0.98); }
+    .btn-reset { background: var(--azul-navbar); margin-top: 0.5rem; }
+
+    .info-box { background: var(--azul-claro); border-left: 4px solid var(--azul); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--azul-oscuro); }
+
+    /* RESULTADO */
+    .resultado-box {
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-box.acidosis-resp   { background: linear-gradient(135deg, #1a3a5c, #c62828); }
+    .resultado-box.alcalosis-resp  { background: linear-gradient(135deg, #1a3a5c, #1565c0); }
+    .resultado-box.acidosis-met    { background: linear-gradient(135deg, #1a3a5c, #e65100); }
+    .resultado-box.alcalosis-met   { background: linear-gradient(135deg, #1a3a5c, #2e7d32); }
+    .resultado-box.mixto           { background: linear-gradient(135deg, #4a148c, #1a3a5c); }
+    .resultado-box.normal          { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
+    .resultado-diagnostico { font-size: 1.6rem; font-weight: 900; color: #ffe082; line-height: 1.2; }
+    .resultado-sub { font-size: 0.9rem; opacity: 0.85; margin-top: 0.4rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.7rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.7rem; text-align: center; }
+    .resultado-valor { font-size: 1.2rem; font-weight: 800; color: #ffe082; }
+    .resultado-normal { font-size: 0.68rem; opacity: 0.75; }
+    .resultado-estado { font-size: 0.72rem; font-weight: 700; margin-top: 2px; }
+    .estado-normal { color: #a5d6a7; }
+    .estado-alto   { color: #ef9a9a; }
+    .estado-bajo   { color: #ffcc80; }
+
+    .analisis-box { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 1rem; font-size: 0.84rem; line-height: 2; }
+    .analisis-box b { color: #ffe082; }
+    .analisis-paso { background: rgba(255,255,255,0.07); border-radius: 6px; padding: 0.5rem 0.8rem; margin: 0.4rem 0; border-left: 3px solid #ffe082; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--azul-claro); }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🫁 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Gases Arteriales</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🫁 Medicina Interna — Neumología — UCI</div>
+  <h1>Interpretador de Gases Arteriales 2026</h1>
+  <p>Análisis paso a paso de gasometría arterial: pH, PaCO₂, HCO₃⁻, PaO₂, compensaciones, trastornos mixtos, gradiente A-a y oxigenación.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Para médicos colombianos</span>
+    <span class="hero-chip">🔬 Análisis paso a paso</span>
+    <span class="hero-chip">⚡ Compensaciones automáticas</span>
+    <span class="hero-chip">📊 Gradiente A-a</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('gasometria', this)">🔬 Gasometría</button>
+    <button class="tab-btn" onclick="mostrarTab('oxigenacion', this)">💨 Oxigenación</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Valores de Referencia</button>
+  </div>
+
+  <!-- TAB 1: GASOMETRÍA -->
+  <div id="tab-gasometria" class="tab-panel active">
+    <div class="card">
+      <h2>🔬 Interpretación de Gasometría Arterial</h2>
+      <div class="info-box">
+        <strong>Método de los 5 pasos:</strong> (1) Evaluar pH, (2) Identificar trastorno primario, (3) Verificar compensación esperada, (4) Calcular AG y delta-delta, (5) Evaluar oxigenación.
+      </div>
+
+      <h3>Parámetros de la gasometría</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>pH arterial</label>
+          <input type="number" id="ph" value="7.35" min="6.5" max="7.9" step="0.01" oninput="colorearInput(this,7.35,7.45)" />
+          <span class="rango-normal">Normal: 7.35 – 7.45</span>
+        </div>
+        <div class="form-group">
+          <label>PaCO₂ (mmHg)</label>
+          <input type="number" id="paco2" value="40" min="5" max="120" step="1" oninput="colorearInput(this,35,45)" />
+          <span class="rango-normal">Normal: 35 – 45 mmHg</span>
+        </div>
+        <div class="form-group">
+          <label>HCO₃⁻ (mEq/L)</label>
+          <input type="number" id="hco3" value="24" min="1" max="60" step="0.5" oninput="colorearInput(this,22,26)" />
+          <span class="rango-normal">Normal: 22 – 26 mEq/L</span>
+        </div>
+        <div class="form-group">
+          <label>PaO₂ (mmHg)</label>
+          <input type="number" id="pao2" value="90" min="20" max="600" step="1" oninput="colorearInput(this,80,100)" />
+          <span class="rango-normal">Normal: 80 – 100 mmHg (aire ambiente)</span>
+        </div>
+        <div class="form-group">
+          <label>SaO₂ (%)</label>
+          <input type="number" id="sao2" value="97" min="50" max="100" step="0.1" oninput="colorearInput(this,95,100)" />
+          <span class="rango-normal">Normal: 95 – 100%</span>
+        </div>
+        <div class="form-group">
+          <label>Na⁺ sérico (mEq/L)</label>
+          <input type="number" id="na" value="140" min="100" max="170" step="1" oninput="colorearInput(this,135,145)" />
+          <span class="rango-normal">Normal: 135 – 145 mEq/L (para AG)</span>
+        </div>
+        <div class="form-group">
+          <label>Cl⁻ sérico (mEq/L)</label>
+          <input type="number" id="cl" value="104" min="80" max="130" step="1" oninput="colorearInput(this,98,106)" />
+          <span class="rango-normal">Normal: 98 – 106 mEq/L (para AG)</span>
+        </div>
+        <div class="form-group">
+          <label>Albúmina sérica (g/dL)</label>
+          <input type="number" id="albumina" value="4.0" min="1" max="6" step="0.1" />
+          <span class="rango-normal">Normal: 3.5 – 5.0 g/dL (para AG corregido)</span>
+        </div>
+        <div class="form-group">
+          <label>FiO₂ (fracción O₂ inspirado)</label>
+          <input type="number" id="fio2" value="0.21" min="0.21" max="1.0" step="0.01" />
+          <span class="rango-normal">Aire ambiente = 0.21 | O₂ 100% = 1.0</span>
+        </div>
+        <div class="form-group">
+          <label>Altitud / Presión barométrica (mmHg)</label>
+          <input type="number" id="patm" value="760" min="400" max="760" step="1" />
+          <span class="rango-normal">Bogotá ~560 mmHg | Medellín ~640 mmHg | Costa ~760 mmHg</span>
+        </div>
+      </div>
+
+      <button class="btn" onclick="interpretarGases()">🔬 Interpretar Gasometría</button>
+      <button class="btn btn-reset" onclick="resetGases()">↺ Limpiar</button>
+    </div>
+    <div id="resultado-gases" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: OXIGENACIÓN -->
+  <div id="tab-oxigenacion" class="tab-panel">
+    <div class="card">
+      <h2>💨 Índices de Oxigenación</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> Evalúa la eficiencia del intercambio gaseoso pulmonar mediante el gradiente A-a, índice PaO₂/FiO₂ (índice de Kirby) y otros parámetros usados en el diagnóstico de SDRA y falla respiratoria.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>PaO₂ (mmHg)</label>
+          <input type="number" id="ox-pao2" value="80" min="20" max="600" step="1" />
+        </div>
+        <div class="form-group">
+          <label>FiO₂</label>
+          <input type="number" id="ox-fio2" value="0.40" min="0.21" max="1.0" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label>PaCO₂ (mmHg)</label>
+          <input type="number" id="ox-paco2" value="40" min="10" max="120" step="1" />
+        </div>
+        <div class="form-group">
+          <label>SaO₂ (%)</label>
+          <input type="number" id="ox-sao2" value="95" min="50" max="100" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Hemoglobina (g/dL)</label>
+          <input type="number" id="ox-hb" value="13" min="3" max="20" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Presión barométrica (mmHg)</label>
+          <input type="number" id="ox-patm" value="760" min="400" max="760" step="1" />
+        </div>
+        <div class="form-group">
+          <label>PEEP (cmH₂O) — si en VM</label>
+          <input type="number" id="ox-peep" value="5" min="0" max="30" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Presión meseta (cmH₂O) — si en VM</label>
+          <input type="number" id="ox-pplat" value="25" min="0" max="60" step="1" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularOxigenacion()">💨 Calcular Índices de Oxigenación</button>
+    </div>
+    <div id="resultado-oxigenacion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Valores Normales de Gases Arteriales</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Parámetro</th><th>Valor normal</th><th>Unidad</th><th>Significado</th></tr></thead>
+          <tbody>
+            <tr><td><b>pH</b></td><td>7.35 – 7.45</td><td>—</td><td>Acidemia &lt;7.35 | Alcalemia &gt;7.45</td></tr>
+            <tr><td><b>PaCO₂</b></td><td>35 – 45</td><td>mmHg</td><td>Control respiratorio del ácido carbónico</td></tr>
+            <tr><td><b>HCO₃⁻</b></td><td>22 – 26</td><td>mEq/L</td><td>Componente metabólico (riñón)</td></tr>
+            <tr><td><b>PaO₂</b></td><td>80 – 100</td><td>mmHg</td><td>Presión parcial de O₂ en sangre arterial</td></tr>
+            <tr><td><b>SaO₂</b></td><td>95 – 100</td><td>%</td><td>Saturación de hemoglobina con O₂</td></tr>
+            <tr><td><b>Exceso de base (BE)</b></td><td>−2 a +2</td><td>mEq/L</td><td>Componente metabólico neto</td></tr>
+            <tr><td><b>Anión Gap (AG)</b></td><td>8 – 12</td><td>mEq/L</td><td>Aniones no medibles: lactato, cetonas, etc.</td></tr>
+            <tr><td><b>Gradiente A-a O₂</b></td><td>&lt;15 (aire)</td><td>mmHg</td><td>Eficiencia del intercambio gaseoso</td></tr>
+            <tr><td><b>PaO₂/FiO₂</b></td><td>&gt;400</td><td>mmHg</td><td>Índice de Kirby — SDRA: &lt;300</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Compensaciones Esperadas</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Trastorno primario</th><th>Compensación esperada</th><th>Fórmula</th></tr></thead>
+          <tbody>
+            <tr><td><b>Acidosis respiratoria aguda</b></td><td>↑ HCO₃⁻</td><td>ΔHCO₃ = 0.1 × ΔPaCO₂ (+1 por cada 10 ↑PaCO₂)</td></tr>
+            <tr><td><b>Acidosis respiratoria crónica</b></td><td>↑ HCO₃⁻</td><td>ΔHCO₃ = 0.35 × ΔPaCO₂ (+3.5 por cada 10 ↑PaCO₂)</td></tr>
+            <tr><td><b>Alcalosis respiratoria aguda</b></td><td>↓ HCO₃⁻</td><td>ΔHCO₃ = 0.2 × ΔPaCO₂ (−2 por cada 10 ↓PaCO₂)</td></tr>
+            <tr><td><b>Alcalosis respiratoria crónica</b></td><td>↓ HCO₃⁻</td><td>ΔHCO₃ = 0.5 × ΔPaCO₂ (−5 por cada 10 ↓PaCO₂)</td></tr>
+            <tr><td><b>Acidosis metabólica</b></td><td>↓ PaCO₂</td><td>PaCO₂ esperada = 1.5×HCO₃ + 8 ± 2 (Winter)</td></tr>
+            <tr><td><b>Alcalosis metabólica</b></td><td>↑ PaCO₂</td><td>PaCO₂ esperada = 0.7×HCO₃ + 21 ± 2</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Clasificación SDRA — Berlín 2012</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Severidad</th><th>PaO₂/FiO₂</th><th>PEEP mínimo</th><th>Mortalidad estimada</th></tr></thead>
+          <tbody>
+            <tr><td><b style="color:#2e7d32;">Sin SDRA</b></td><td>&gt; 300 mmHg</td><td>—</td><td>&lt;10%</td></tr>
+            <tr><td><b style="color:#f57c00;">SDRA leve</b></td><td>201 – 300 mmHg</td><td>≥ 5 cmH₂O</td><td>27%</td></tr>
+            <tr><td><b style="color:#c62828;">SDRA moderado</b></td><td>101 – 200 mmHg</td><td>≥ 5 cmH₂O</td><td>32%</td></tr>
+            <tr><td><b style="color:#7b0000;">SDRA severo</b></td><td>≤ 100 mmHg</td><td>≥ 5 cmH₂O</td><td>45%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo clínico.</strong> La interpretación de gases arteriales debe ser realizada por el <strong>médico tratante</strong> integrando el contexto clínico completo del paciente. Esta calculadora es un apoyo educativo y no reemplaza el juicio clínico. Referencias: Narins & Emmett 1980, Winter et al. 1969, Definición Berlín SDRA 2012.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n, dec=2) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+function colorearInput(el, min, max) {
+  const v = parseFloat(el.value);
+  el.classList.remove('normal-range','alto-range','bajo-range');
+  if      (v < min) el.classList.add('bajo-range');
+  else if (v > max) el.classList.add('alto-range');
+  else              el.classList.add('normal-range');
+}
+
+function estadoValor(v, min, max) {
+  if (v < min) return { label:'↓ Bajo', cls:'estado-bajo' };
+  if (v > max) return { label:'↑ Alto', cls:'estado-alto' };
+  return              { label:'✓ Normal', cls:'estado-normal' };
+}
+
+function resetGases() {
+  ['ph','paco2','hco3','pao2','sao2','na','cl','albumina','fio2','patm'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('normal-range','alto-range','bajo-range');
+  });
+  document.getElementById('resultado-gases').style.display = 'none';
+}
+
+function interpretarGases() {
+  const ph      = parseFloat(document.getElementById('ph').value);
+  const paco2   = parseFloat(document.getElementById('paco2').value);
+  const hco3    = parseFloat(document.getElementById('hco3').value);
+  const pao2    = parseFloat(document.getElementById('pao2').value);
+  const sao2    = parseFloat(document.getElementById('sao2').value);
+  const na      = parseFloat(document.getElementById('na').value);
+  const cl      = parseFloat(document.getElementById('cl').value);
+  const alb     = parseFloat(document.getElementById('albumina').value);
+  const fio2    = parseFloat(document.getElementById('fio2').value);
+  const patm    = parseFloat(document.getElementById('patm').value);
+
+  // ── PASO 1: pH ──
+  const esAcidemia  = ph < 7.35;
+  const esAlcalemia = ph > 7.45;
+  const phNormal    = !esAcidemia && !esAlcalemia;
+
+  // ── PASO 2: Trastorno primario ──
+  let trastornoPrimario = '';
+  let colorClass = 'normal';
+
+  if (esAcidemia) {
+    if (paco2 > 45) { trastornoPrimario = 'Acidosis Respiratoria'; colorClass = 'acidosis-resp'; }
+    else if (hco3 < 22) { trastornoPrimario = 'Acidosis Metabólica'; colorClass = 'acidosis-met'; }
+    else { trastornoPrimario = 'Acidosis — origen mixto'; colorClass = 'mixto'; }
+  } else if (esAlcalemia) {
+    if (paco2 < 35) { trastornoPrimario = 'Alcalosis Respiratoria'; colorClass = 'alcalosis-resp'; }
+    else if (hco3 > 26) { trastornoPrimario = 'Alcalosis Metabólica'; colorClass = 'alcalosis-met'; }
+    else { trastornoPrimario = 'Alcalosis — origen mixto'; colorClass = 'mixto'; }
+  } else {
+    trastornoPrimario = 'pH Normal — evaluar trastornos mixtos compensados';
+    colorClass = 'normal';
+  }
+
+  // ── PASO 3: Compensación esperada ──
+  let compTexto = '';
+  let trastornoMixto = '';
+
+  if (colorClass === 'acidosis-resp') {
+    const hco3EspAgudo   = 24 + 0.1 * (paco2 - 40);
+    const hco3EspCronico = 24 + 0.35 * (paco2 - 40);
+    compTexto = `HCO₃ esperado: agudo = ${fmt(hco3EspAgudo,1)} | crónico = ${fmt(hco3EspCronico,1)} mEq/L | Observado: ${hco3}`;
+    if (hco3 < hco3EspAgudo - 2) trastornoMixto = '⚠️ HCO₃ menor de lo esperado → posible acidosis metabólica concomitante';
+    else if (hco3 > hco3EspCronico + 2) trastornoMixto = '⚠️ HCO₃ mayor de lo esperado → posible alcalosis metabólica concomitante';
+    else trastornoMixto = '✅ Compensación adecuada';
+  } else if (colorClass === 'alcalosis-resp') {
+    const hco3EspAgudo   = 24 - 0.2 * (40 - paco2);
+    const hco3EspCronico = 24 - 0.5 * (40 - paco2);
+    compTexto = `HCO₃ esperado: agudo = ${fmt(hco3EspAgudo,1)} | crónico = ${fmt(hco3EspCronico,1)} mEq/L | Observado: ${hco3}`;
+    if (hco3 > hco3EspAgudo + 2) trastornoMixto = '⚠️ HCO₃ mayor de lo esperado → posible alcalosis metabólica concomitante';
+    else if (hco3 < hco3EspCronico - 2) trastornoMixto = '⚠️ HCO₃ menor de lo esperado → posible acidosis metabólica concomitante';
+    else trastornoMixto = '✅ Compensación adecuada';
+  } else if (colorClass === 'acidosis-met') {
+    const paco2Esp = 1.5 * hco3 + 8;
+    compTexto = `PaCO₂ esperada (Winter): ${fmt(paco2Esp,1)} ± 2 mmHg | Observada: ${paco2}`;
+    if (paco2 > paco2Esp + 2) trastornoMixto = '⚠️ PaCO₂ mayor de lo esperado → posible acidosis respiratoria concomitante';
+    else if (paco2 < paco2Esp - 2) trastornoMixto = '⚠️ PaCO₂ menor de lo esperado → posible alcalosis respiratoria concomitante';
+    else trastornoMixto = '✅ Compensación respiratoria adecuada (Fórmula de Winter)';
+  } else if (colorClass === 'alcalosis-met') {
+    const paco2Esp = 0.7 * hco3 + 21;
+    compTexto = `PaCO₂ esperada: ${fmt(paco2Esp,1)} ± 2 mmHg | Observada: ${paco2}`;
+    if (paco2 < paco2Esp - 2) trastornoMixto = '⚠️ PaCO₂ menor de lo esperado → posible alcalosis respiratoria concomitante';
+    else if (paco2 > paco2Esp + 2) trastornoMixto = '⚠️ PaCO₂ mayor de lo esperado → posible acidosis respiratoria concomitante';
+    else trastornoMixto = '✅ Compensación adecuada';
+  }
+
+  // ── PASO 4: Anión Gap ──
+  const ag       = na - (cl + hco3);
+  const agCorr   = ag + 2.5 * (4 - alb); // AG corregido por albúmina
+  const agElevado= agCorr > 12;
+  const deltaDelta = agElevado ? (agCorr - 12) / (24 - hco3) : null;
+  let ddTexto = '';
+  if (deltaDelta !== null) {
+    if      (deltaDelta < 1)   ddTexto = `Δ/Δ = ${fmt(deltaDelta,2)} → Acidosis metabólica mixta (AG elevado + brecha aniónica normal)`;
+    else if (deltaDelta <= 2)  ddTexto = `Δ/Δ = ${fmt(deltaDelta,2)} → Acidosis metabólica pura con AG elevado`;
+    else                       ddTexto = `Δ/Δ = ${fmt(deltaDelta,2)} → Alcalosis metabólica subyacente adicional`;
+  }
+
+  // ── PASO 5: Oxigenación ──
+  const pao2AlvEsp = (patm - 47) * fio2 - paco2 / 0.8;
+  const gradAa     = pao2AlvEsp - pao2;
+  const pafio2     = pao2 / fio2;
+  const gradNormal = 4 + 0.04 * 40; // aprox 2.5 × edad / 4 — aquí usamos ~15
+  const hipoxemia  = pao2 < 60 ? 'Hipoxemia severa' : pao2 < 80 ? 'Hipoxemia leve-moderada' : 'Sin hipoxemia';
+
+  // ── Clasificar causas de hipoxemia ──
+  let causaHipox = '';
+  if (pao2 < 80) {
+    if (gradAa <= 15) causaHipox = 'Gradiente A-a normal → causa probable: hipoventilación, FiO₂ baja, altitud';
+    else if (pafio2 >= 300) causaHipox = 'Gradiente A-a elevado → causa probable: alteración V/Q (EPOC, asma, TEP)';
+    else causaHipox = 'Gradiente A-a elevado + PaO₂/FiO₂ bajo → shunt, SDRA o enfermedad intersticial severa';
+  }
+
+  const estPh    = estadoValor(ph, 7.35, 7.45);
+  const estCo2   = estadoValor(paco2, 35, 45);
+  const estHco3  = estadoValor(hco3, 22, 26);
+  const estPao2  = estadoValor(pao2, 80, 100);
+  const estSao2  = estadoValor(sao2, 95, 100);
+
+  document.getElementById('resultado-gases').style.display = 'block';
+  document.getElementById('resultado-gases').innerHTML = `
+    <div class="resultado-box ${colorClass}">
+      <div class="resultado-titulo">Interpretación Gasometría Arterial</div>
+      <div class="resultado-diagnostico">${trastornoPrimario}</div>
+      <div class="resultado-sub">pH ${ph} | PaCO₂ ${paco2} | HCO₃⁻ ${hco3} | PaO₂ ${pao2} | SaO₂ ${sao2}%</div>
+      <div class="resultado-grid">
+        <div class="resultado-item">
+          <div class="resultado-valor">${ph}</div>
+          <div class="resultado-normal">Normal: 7.35–7.45</div>
+          <div class="resultado-estado ${estPh.cls}">${estPh.label}</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">${paco2}</div>
+          <div class="resultado-normal">Normal: 35–45 mmHg</div>
+          <div class="resultado-estado ${estCo2.cls}">${estCo2.label}</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">${hco3}</div>
+          <div class="resultado-normal">Normal: 22–26 mEq/L</div>
+          <div class="resultado-estado ${estHco3.cls}">${estHco3.label}</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">${pao2}</div>
+          <div class="resultado-normal">Normal: 80–100 mmHg</div>
+          <div class="resultado-estado ${estPao2.cls}">${estPao2.label}</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">${ag} mEq/L</div>
+          <div class="resultado-normal">AG Normal: 8–12</div>
+          <div class="resultado-estado ${ag > 12 ? 'estado-alto' : 'estado-normal'}">${ag > 12 ? '↑ Elevado' : '✓ Normal'}</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">${fmt(pafio2,0)}</div>
+          <div class="resultado-normal">PaO₂/FiO₂ (Kirby)</div>
+          <div class="resultado-estado ${pafio2 < 200 ? 'estado-alto' : pafio2 < 300 ? 'estado-bajo' : 'estado-normal'}">${pafio2 < 200 ? 'SDRA moderado-severo' : pafio2 < 300 ? 'SDRA leve' : '✓ Sin SDRA'}</div>
+        </div>
+      </div>
+
+      <div class="analisis-box">
+        <div class="analisis-paso">
+          <b>Paso 1 — pH:</b> ${ph} → ${ph < 7.35 ? 'ACIDEMIA' : ph > 7.45 ? 'ALCALEMIA' : 'NORMAL (evaluar trastornos compensados)'}
+        </div>
+        <div class="analisis-paso">
+          <b>Paso 2 — Trastorno primario:</b> ${trastornoPrimario}
+        </div>
+        ${compTexto ? `<div class="analisis-paso"><b>Paso 3 — Compensación:</b> ${compTexto}<br>${trastornoMixto}</div>` : ''}
+        <div class="analisis-paso">
+          <b>Paso 4 — Anión Gap:</b> Na (${na}) − [Cl (${cl}) + HCO₃ (${hco3})] = <b>${ag} mEq/L</b>
+          ${alb !== 4 ? ` | AG corregido (alb=${alb}): <b>${fmt(agCorr,1)} mEq/L</b>` : ''}
+          ${agElevado ? ` → ↑ AG: ${agCorr > 12 ? 'causas: MUDPILES (metanol, uremia, DKA, propofol, INH, lactato, etilenglicol, salicilatos)' : ''}` : ' → AG normal'}
+          ${ddTexto ? `<br>${ddTexto}` : ''}
+        </div>
+        <div class="analisis-paso">
+          <b>Paso 5 — Oxigenación:</b> PaO₂ ${pao2} mmHg → ${hipoxemia}<br>
+          Gradiente A-a = PAO₂ (${fmt(pao2AlvEsp,1)}) − PaO₂ (${pao2}) = <b>${fmt(gradAa,1)} mmHg</b> (normal &lt;15)<br>
+          PaO₂/FiO₂ = ${pao2} ÷ ${fio2} = <b>${fmt(pafio2,0)} mmHg</b><br>
+          ${causaHipox ? causaHipox : ''}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── OXIGENACIÓN ──
+function calcularOxigenacion() {
+  const pao2  = parseFloat(document.getElementById('ox-pao2').value);
+  const fio2  = parseFloat(document.getElementById('ox-fio2').value);
+  const paco2 = parseFloat(document.getElementById('ox-paco2').value);
+  const sao2  = parseFloat(document.getElementById('ox-sao2').value);
+  const hb    = parseFloat(document.getElementById('ox-hb').value);
+  const patm  = parseFloat(document.getElementById('ox-patm').value);
+  const peep  = parseFloat(document.getElementById('ox-peep').value);
+  const pplat = parseFloat(document.getElementById('ox-pplat').value);
+
+  const pao2Alv  = (patm - 47) * fio2 - paco2 / 0.8;
+  const gradAa   = pao2Alv - pao2;
+  const pafio2   = pao2 / fio2;
+  const cao2     = (hb * 1.34 * sao2 / 100) + (0.0031 * pao2); // mL/dL
+  const io        = (fio2 * 100 * pplat) / pao2; // Índice de oxigenación VM
+  const isr       = (fio2 * 100) / (pao2 * peep); // Índice SpO2/FiO2 simplif.
+
+  // Clasificación SDRA Berlin
+  let sdra = '', sdraColor = '#a5d6a7';
+  if      (pafio2 > 300) { sdra = 'Sin SDRA'; sdraColor = '#a5d6a7'; }
+  else if (pafio2 > 200) { sdra = 'SDRA Leve'; sdraColor = '#ffe082'; }
+  else if (pafio2 > 100) { sdra = 'SDRA Moderado'; sdraColor = '#ffcc80'; }
+  else                   { sdra = 'SDRA Severo'; sdraColor = '#ef9a9a'; }
+
+  document.getElementById('resultado-oxigenacion').style.display = 'block';
+  document.getElementById('resultado-oxigenacion').innerHTML = `
+    <div class="resultado-box alcalosis-resp">
+      <div class="resultado-titulo">Índices de Oxigenación</div>
+      <div class="resultado-diagnostico" style="color:${sdraColor};">${sdra}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pafio2,0)}</div><div class="resultado-normal">PaO₂/FiO₂ (Kirby)</div><div class="resultado-estado" style="color:${sdraColor};">${sdra}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(gradAa,1)}</div><div class="resultado-normal">Gradiente A-a (mmHg)</div><div class="resultado-estado ${gradAa>15?'estado-alto':'estado-normal'}">${gradAa>15?'↑ Elevado':'✓ Normal'}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(cao2,2)}</div><div class="resultado-normal">CaO₂ (mL O₂/dL)</div><div class="resultado-estado ${cao2<16?'estado-bajo':'estado-normal'}">${cao2<16?'↓ Bajo':'✓ Normal'}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(io,1)}</div><div class="resultado-normal">IO (Índice Oxig. VM)</div><div class="resultado-estado ${io>10?'estado-alto':'estado-normal'}">${io>25?'Crítico':io>10?'Elevado':'Normal'}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pao2Alv,1)}</div><div class="resultado-normal">PAO₂ alveolar (mmHg)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pao2Alv/fio2,0)}</div><div class="resultado-normal">PAO₂/FiO₂</div></div>
+      </div>
+      <div class="analisis-box">
+        <b>Cálculos:</b><br>
+        PAO₂ = (${patm} − 47) × ${fio2} − ${paco2}/0.8 = <b>${fmt(pao2Alv,1)} mmHg</b><br>
+        Gradiente A-a = ${fmt(pao2Alv,1)} − ${pao2} = <b>${fmt(gradAa,1)} mmHg</b> (normal &lt;15 en aire ambiente)<br>
+        PaO₂/FiO₂ = ${pao2} ÷ ${fio2} = <b>${fmt(pafio2,0)} mmHg → ${sdra}</b><br>
+        CaO₂ = (${hb} × 1.34 × ${sao2}/100) + (0.0031 × ${pao2}) = <b>${fmt(cao2,2)} mL O₂/dL</b><br>
+        Índice de oxigenación (VM) = (FiO₂ × 100 × Pplat) ÷ PaO₂ = <b>${fmt(io,1)}</b> ${io>25?' → Candidato a prono / VNO':''}
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
