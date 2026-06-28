@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora de raciones bovinas Colombia. Calcula requerimientos nutricionales y raciones para ganado de carne y leche: proteína, energía, minerales. Para veterinarios y zootecnistas." />
+  <meta name="keywords" content="calculadora raciones bovinas Colombia, nutrición bovina, requerimientos nutricionales ganado, ración ganado leche carne Colombia, zootecnia bovina NRC" />
+  <title>Calculadora de Raciones Bovinas | HerramientasPro Colombia</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #222; min-height: 100vh; }
+
+    nav { background: #1a3a5c; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    nav a { color: #fff; text-decoration: none; font-size: 14px; opacity: .8; }
+    nav a:hover { opacity: 1; }
+    nav .brand { font-weight: 700; font-size: 17px; opacity: 1; margin-right: 8px; }
+    nav .sep { color: #7aa3c8; }
+
+    .hero { background: linear-gradient(135deg, #4a2c0a 0%, #7d4e1e 60%, #a0622a 100%); color: #fff; text-align: center; padding: 36px 20px 28px; }
+    .hero .badge { background: rgba(255,255,255,.18); display: inline-block; border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+    .hero h1 { font-size: clamp(20px, 4vw, 30px); font-weight: 800; margin-bottom: 8px; }
+    .hero p { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto 16px; }
+    .hero .chips { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .hero .chip { background: rgba(255,255,255,.15); border-radius: 20px; padding: 5px 14px; font-size: 13px; }
+
+    .container { max-width: 940px; margin: 0 auto; padding: 28px 16px 60px; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+    .tab-btn { padding: 9px 18px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; background: #fff; color: #555; box-shadow: 0 1px 4px rgba(0,0,0,.1); transition: all .2s; }
+    .tab-btn.active { background: #7d4e1e; color: #fff; }
+
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 24px; margin-bottom: 20px; }
+    .card h2 { font-size: 16px; font-weight: 700; color: #7d4e1e; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid #f0dcc8; }
+    .card h3 { font-size: 14px; font-weight: 700; color: #a0622a; margin: 16px 0 10px; }
+
+    /* Tipo animal */
+    .tipo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 6px; }
+    .tipo-btn { padding: 12px 8px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; background: #fafafa; text-align: center; font-size: 13px; font-weight: 600; color: #555; transition: all .2s; line-height: 1.3; }
+    .tipo-btn:hover { border-color: #a0622a; background: #fdf3e8; }
+    .tipo-btn.sel { border-color: #7d4e1e; background: #fdf3e8; color: #7d4e1e; }
+    .tipo-btn .emoji { font-size: 26px; display: block; margin-bottom: 5px; }
+
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+    .grid3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 13px; font-weight: 600; color: #444; }
+    label span.req { color: #c0392b; }
+    input, select { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color .2s; background: #fafafa; }
+    input:focus, select:focus { outline: none; border-color: #a0622a; background: #fff; }
+    .hint { font-size: 11px; color: #888; margin-top: 2px; line-height: 1.4; }
+
+    .info-tipo { background: #fdf3e8; border: 1px solid #e8c49a; border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; font-size: 13px; display: none; }
+    .info-tipo .it-title { font-weight: 700; color: #7d4e1e; font-size: 14px; margin-bottom: 8px; }
+    .it-row { display: flex; gap: 16px; flex-wrap: wrap; }
+    .it-item { flex: 1; min-width: 110px; }
+    .it-item span { display: block; font-size: 11px; color: #666; margin-bottom: 2px; }
+    .it-item strong { font-size: 13px; color: #7d4e1e; }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+    .btn-calc { background: #7d4e1e; color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; min-width: 160px; transition: background .2s; }
+    .btn-calc:hover { background: #5c3912; }
+    .btn-reset { background: #ecf0f1; color: #555; border: none; border-radius: 8px; padding: 13px 20px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+    /* RESULTADO */
+    .result-box { display: none; margin-top: 24px; }
+
+    .res-header { background: linear-gradient(135deg, #7d4e1e, #a0622a); color: #fff; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+    .res-header h3 { font-size: 16px; opacity: .9; margin-bottom: 4px; }
+    .res-header .animal-desc { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .res-header .sub { font-size: 13px; opacity: .8; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.07); padding: 14px; text-align: center; border-top: 4px solid #a0622a; }
+    .kpi.verde { border-top-color: #27ae60; }
+    .kpi.azul  { border-top-color: #2980b9; }
+    .kpi.rojo  { border-top-color: #e74c3c; }
+    .kpi .klbl { font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 6px; }
+    .kpi .kval { font-size: 18px; font-weight: 800; color: #7d4e1e; }
+    .kpi.verde .kval { color: #1e8449; }
+    .kpi.azul  .kval { color: #2980b9; }
+    .kpi.rojo  .kval { color: #e74c3c; }
+    .kpi .ksub { font-size: 11px; color: #aaa; margin-top: 3px; }
+
+    .req-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .req-table th { background: #7d4e1e; color: #fff; padding: 10px 14px; text-align: left; }
+    .req-table td { padding: 10px 14px; border-bottom: 1px solid #f0dcc8; }
+    .req-table tr:hover td { background: #fdf3e8; }
+    .req-table .seccion td { background: #fdf3e8; font-weight: 700; color: #7d4e1e; font-size: 13px; letter-spacing: .5px; }
+    .req-table .total-row td { background: #7d4e1e; color: #fff; font-weight: 700; font-size: 15px; }
+    .req-table .ok td:last-child { color: #27ae60; font-weight: 700; }
+    .req-table .warn td:last-child { color: #e67e22; font-weight: 700; }
+    .req-table .mal td:last-child { color: #e74c3c; font-weight: 700; }
+
+    .alimento-bloque { background: #fdf3e8; border: 1px solid #e8c49a; border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+    .alim-title { font-weight: 700; color: #7d4e1e; margin-bottom: 8px; font-size: 14px; }
+    .alim-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .alim-chip { background: #fff; border: 1px solid #e8c49a; border-radius: 20px; padding: 4px 12px; font-size: 12px; color: #555; }
+
+    .forraje-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .forraje-table th { background: #7d4e1e; color: #fff; padding: 9px 12px; text-align: left; }
+    .forraje-table td { padding: 9px 12px; border-bottom: 1px solid #f0dcc8; }
+    .forraje-table tr:nth-child(even) td { background: #fdf3e8; }
+
+    .alert { border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-top: 14px; line-height: 1.5; }
+    .alert-info { background: #eaf4fb; border-left: 4px solid #2980b9; color: #1a5276; }
+    .alert-warn { background: #fef9e7; border-left: 4px solid #f39c12; color: #7d6608; }
+    .alert-success { background: #eafaf1; border-left: 4px solid #27ae60; color: #1e8449; }
+
+    .disclaimer { background: #ecf0f1; border-radius: 10px; padding: 14px 18px; font-size: 12px; color: #636e72; margin-top: 28px; line-height: 1.6; }
+
+    @media (max-width: 600px) {
+      .tipo-grid { grid-template-columns: repeat(3, 1fr); }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .grid2, .grid3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="brand">🛠️ HerramientasPro</a>
+  <span class="sep">›</span>
+  <a href="../../index.html#veterinaria">Veterinaria</a>
+  <span class="sep">›</span>
+  <span style="color:#fff;opacity:.7;">Raciones Bovinas</span>
+</nav>
+
+<div class="hero">
+  <div class="badge">🐄 Zootecnia · Nutrición Bovina</div>
+  <h1>Calculadora de Raciones Bovinas</h1>
+  <p>Calcula los requerimientos nutricionales y diseña raciones balanceadas para ganado bovino de carne y leche. Basado en tablas NRC y ajustado a condiciones tropicales colombianas.</p>
+  <div class="chips">
+    <span class="chip">🐄 Carne y leche</span>
+    <span class="chip">📊 Normas NRC tropicales</span>
+    <span class="chip">🌿 Forrajes colombianos</span>
+    <span class="chip">💊 Minerales y vitaminas</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('calc')">Calculadora de Raciones</button>
+    <button class="tab-btn" onclick="showTab('forrajes')">Composición de Forrajes</button>
+    <button class="tab-btn" onclick="showTab('guia')">Guía Nutricional</button>
+  </div>
+
+  <!-- TAB 1: CALCULADORA -->
+  <div id="tab-calc">
+
+    <div class="card">
+      <h2>🐄 1. Tipo y categoría del animal</h2>
+      <div class="tipo-grid">
+        <div class="tipo-btn" onclick="selTipo('vaca-leche')"><span class="emoji">🥛</span>Vaca en producción</div>
+        <div class="tipo-btn" onclick="selTipo('vaca-seca')"><span class="emoji">🐄</span>Vaca seca</div>
+        <div class="tipo-btn" onclick="selTipo('novilla-leche')"><span class="emoji">🐮</span>Novilla leche</div>
+        <div class="tipo-btn" onclick="selTipo('toro')"><span class="emoji">🐂</span>Toro reproductor</div>
+        <div class="tipo-btn" onclick="selTipo('ceba')"><span class="emoji">🥩</span>Novillo en ceba</div>
+        <div class="tipo-btn" onclick="selTipo('levante')"><span class="emoji">🐾</span>Levante (6–18 m)</div>
+        <div class="tipo-btn" onclick="selTipo('ternero')"><span class="emoji">🍼</span>Ternero (0–6 m)</div>
+        <div class="tipo-btn" onclick="selTipo('vaca-gestante')"><span class="emoji">🤰</span>Vaca gestante</div>
+      </div>
+      <div class="info-tipo" id="info-tipo">
+        <div class="it-title" id="it-title">Vaca en producción</div>
+        <div class="it-row">
+          <div class="it-item"><span>Consumo MS típico</span><strong id="it-cms">—</strong></div>
+          <div class="it-item"><span>PC requerida</span><strong id="it-pc">—</strong></div>
+          <div class="it-item"><span>Energía (Mcal EM/día)</span><strong id="it-em">—</strong></div>
+          <div class="it-item"><span>Referencia</span><strong id="it-ref">NRC</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📏 2. Datos del animal</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Peso vivo (kg) <span class="req">*</span></label>
+          <input type="number" id="peso" placeholder="Ej: 450" min="50" max="900" />
+          <span class="hint">Peso actual del animal en kg.</span>
+        </div>
+        <div class="field">
+          <label>Ganancia de peso esperada (kg/día)</label>
+          <input type="number" id="gpd" placeholder="Ej: 0.8" step="0.1" min="0" max="2" />
+          <span class="hint">Para animales en ceba o levante. 0 para mantenimiento.</span>
+        </div>
+        <div id="campo-leche" style="display:none;" class="field">
+          <label>Producción de leche (L/día)</label>
+          <input type="number" id="litros-leche" placeholder="Ej: 15" min="0" max="60" />
+          <span class="hint">Producción diaria real de leche en litros.</span>
+        </div>
+        <div id="campo-grasa" style="display:none;" class="field">
+          <label>Contenido de grasa de la leche (%)</label>
+          <input type="number" id="grasa-leche" placeholder="Ej: 3.5" step="0.1" min="2" max="6" value="3.5" />
+          <span class="hint">Típico Colombia doble propósito: 3.5–4.0%</span>
+        </div>
+        <div id="campo-mes-gest" style="display:none;" class="field">
+          <label>Mes de gestación</label>
+          <select id="mes-gest">
+            <option value="1">Mes 1–3 (primer trimestre)</option>
+            <option value="2">Mes 4–6 (segundo trimestre)</option>
+            <option value="3" selected>Mes 7–9 (tercer trimestre)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Condición corporal (1–5)</label>
+          <select id="cc">
+            <option value="1.5">1.0–2.0 — Muy delgado (problema)</option>
+            <option value="2.5">2.5 — Delgado</option>
+            <option value="3" selected>3.0 — Óptimo</option>
+            <option value="3.5">3.5 — Buena condición</option>
+            <option value="4">4.0–5.0 — Gordo (riesgo cetosis)</option>
+          </select>
+          <span class="hint">Escala 1–5. Ideal al parto: 3.5. En lactancia: 2.5–3.5.</span>
+        </div>
+        <div class="field">
+          <label>Raza / aptitud predominante</label>
+          <select id="raza">
+            <option value="ceb">Cebú (Brahman, Gyr, Nelore)</option>
+            <option value="dp">Doble propósito (Holstein x Cebú, Simmental x Cebú)</option>
+            <option value="lec">Leche especializada (Holstein, Jersey, Pardo Suizo)</option>
+            <option value="car">Carne especializada (Angus, Hereford, Simmental)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Sistema de producción</label>
+          <select id="sistema">
+            <option value="pastoreo">Pastoreo extensivo / semi-intensivo</option>
+            <option value="silvo">Silvopastoreo</option>
+            <option value="estab">Estabulado / confinamiento</option>
+            <option value="semi">Semi-estabulado</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🌿 3. Forrajes y concentrados disponibles</h2>
+      <div class="alert alert-info" style="margin-bottom:16px;">
+        ℹ️ Indique las cantidades de alimentos disponibles. Si no tiene datos exactos, la calculadora generará una ración recomendada basada en los recursos típicos de su sistema de producción.
+      </div>
+      <div class="grid3">
+        <div class="field">
+          <label>Pasto de corte ofrecido (kg MF/día)</label>
+          <input type="number" id="pasto-corte" placeholder="0" min="0" />
+          <span class="hint">Maralfalfa, king grass, pará, elefante, etc.</span>
+        </div>
+        <div class="field">
+          <label>Pasto de pastoreo (horas/día)</label>
+          <input type="number" id="horas-pastoreo" placeholder="0" min="0" max="24" step="0.5" />
+          <span class="hint">Brachiaria, estrella, kikuyo, pangola.</span>
+        </div>
+        <div class="field">
+          <label>Ensilaje ofrecido (kg MF/día)</label>
+          <input type="number" id="ensilaje" placeholder="0" min="0" />
+          <span class="hint">Maíz, sorgo, pasto.</span>
+        </div>
+        <div class="field">
+          <label>Heno o paja ofrecida (kg/día)</label>
+          <input type="number" id="heno" placeholder="0" min="0" />
+          <span class="hint">Heno de gramíneas o leguminosas.</span>
+        </div>
+        <div class="field">
+          <label>Leguminosas / banco proteico (kg MF/día)</label>
+          <input type="number" id="leguminosas" placeholder="0" min="0" />
+          <span class="hint">Matarratón, leucaena, botón de oro, nacedero.</span>
+        </div>
+        <div class="field">
+          <label>Concentrado comercial (kg/día)</label>
+          <input type="number" id="concentrado" placeholder="0" min="0" step="0.5" />
+          <span class="hint">16–18% PC para vacas lecheras. Especifique nivel proteico.</span>
+        </div>
+        <div class="field">
+          <label>Melaza (kg/día)</label>
+          <input type="number" id="melaza" placeholder="0" min="0" step="0.5" />
+          <span class="hint">Fuente de energía y palatabilidad. Máx. 2 kg/día.</span>
+        </div>
+        <div class="field">
+          <label>Subproductos agroindustriales (kg/día)</label>
+          <input type="number" id="subproductos" placeholder="0" min="0" />
+          <span class="hint">Pulpa cítrica, mogolla, salvado de trigo, vinaza.</span>
+        </div>
+        <div class="field">
+          <label>Sal mineralizada (g/día)</label>
+          <input type="number" id="sal-mineral" placeholder="60" min="0" />
+          <span class="hint">Recomendado: 60–80 g/día en pastoreo tropical.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-calc" onclick="calcularRacion()">🌾 Calcular ración y requerimientos</button>
+      <button class="btn-reset" onclick="resetCalc()">Limpiar</button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="resultado" class="result-box">
+
+      <div class="res-header">
+        <h3>Análisis nutricional de la ración</h3>
+        <div class="animal-desc" id="res-animal-desc">Vaca en producción — 450 kg</div>
+        <div class="sub" id="res-sub">Sistema: pastoreo semi-intensivo</div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi"><div class="klbl">Consumo MS total</div><div class="kval" id="kpi-cms">0 kg</div><div class="ksub" id="kpi-cms-sub">requerido/día</div></div>
+        <div class="kpi azul"><div class="klbl">Proteína cruda</div><div class="kval" id="kpi-pc">0 g</div><div class="ksub">requerida/día</div></div>
+        <div class="kpi verde"><div class="klbl">Energía metabolizable</div><div class="kval" id="kpi-em">0 Mcal</div><div class="ksub">requerida/día</div></div>
+        <div class="kpi rojo"><div class="klbl">Ca requerido</div><div class="kval" id="kpi-ca">0 g</div><div class="ksub">calcio/día</div></div>
+        <div class="kpi"><div class="klbl">P requerido</div><div class="kval" id="kpi-p">0 g</div><div class="ksub">fósforo/día</div></div>
+        <div class="kpi azul"><div class="klbl">MS ración ofrecida</div><div class="kval" id="kpi-ms-ofr">0 kg</div><div class="ksub">aportada/día</div></div>
+        <div class="kpi verde"><div class="klbl">PC aportada</div><div class="kval" id="kpi-pc-aport">0 g</div><div class="ksub">por ración</div></div>
+        <div class="kpi rojo"><div class="klbl">EM aportada</div><div class="kval" id="kpi-em-aport">0 Mcal</div><div class="ksub">por ración</div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h2>📊 Balance nutricional de la ración</h2>
+        <table class="req-table" id="balance-tabla">
+          <thead><tr><th>Nutriente</th><th>Requerido</th><th>Aportado</th><th>Balance</th><th>Estado</th></tr></thead>
+          <tbody id="balance-body"></tbody>
+        </table>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h2>🌿 Ración recomendada</h2>
+        <div id="racion-recomendada"></div>
+      </div>
+
+      <div class="card">
+        <h2>💡 Recomendaciones de manejo</h2>
+        <ul id="recomendaciones" style="list-style:none;"></ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB 2: FORRAJES -->
+  <div id="tab-forrajes" style="display:none">
+    <div class="card">
+      <h2>🌿 Composición nutricional de forrajes tropicales colombianos</h2>
+      <div class="alert alert-info" style="margin-bottom:14px;">
+        ℹ️ Valores promedio en base seca (BS). MS = Materia Seca, PC = Proteína Cruda, FDN = Fibra Detergente Neutro, EM = Energía Metabolizable.
+      </div>
+      <table class="forraje-table">
+        <thead><tr><th>Forraje</th><th>MS (%)</th><th>PC (%BS)</th><th>FDN (%BS)</th><th>EM (Mcal/kg MS)</th><th>Observación</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Brachiaria decumbens</strong></td><td>20–25</td><td>6–10</td><td>65–75</td><td>2.0–2.3</td><td>Más cultivada en Colombia. Buena adaptación tropical.</td></tr>
+          <tr><td><strong>Brachiaria brizantha (Toledo)</strong></td><td>22–28</td><td>8–12</td><td>60–70</td><td>2.1–2.4</td><td>Mayor rendimiento que B. decumbens. Recomendada.</td></tr>
+          <tr><td><strong>Maralfalfa (Pennisetum sp.)</strong></td><td>18–22</td><td>12–18</td><td>55–65</td><td>2.3–2.6</td><td>Alto rendimiento de biomasa. Excelente pasto de corte.</td></tr>
+          <tr><td><strong>King grass (Pennisetum)</strong></td><td>15–20</td><td>8–12</td><td>60–70</td><td>2.0–2.3</td><td>Alto rendimiento de biomasa. Cosechar joven (&lt;60 días).</td></tr>
+          <tr><td><strong>Kikuyo (Pennisetum clandestinum)</strong></td><td>18–25</td><td>14–22</td><td>50–60</td><td>2.3–2.7</td><td>Altiplano frío. Alta proteína. Riesgo de meteorismo.</td></tr>
+          <tr><td><strong>Estrella africana (Cynodon)</strong></td><td>18–22</td><td>8–14</td><td>60–70</td><td>2.0–2.3</td><td>Buena adaptación. Mayor PC que brachiaria.</td></tr>
+          <tr><td><strong>Pará (Brachiaria mutica)</strong></td><td>16–20</td><td>6–10</td><td>65–75</td><td>1.9–2.2</td><td>Zonas inundables. Menor valor nutritivo.</td></tr>
+          <tr><td><strong>Botón de oro (Tithonia)</strong></td><td>12–18</td><td>18–28</td><td>30–40</td><td>2.5–2.9</td><td>Leguminosa arbustiva. Excelente suplemento proteico.</td></tr>
+          <tr><td><strong>Matarratón (Gliricidia)</strong></td><td>20–28</td><td>20–28</td><td>30–40</td><td>2.5–2.8</td><td>Alta PC. Puede reducir metano entérico.</td></tr>
+          <tr><td><strong>Leucaena (Leucaena leucocephala)</strong></td><td>22–30</td><td>22–30</td><td>28–38</td><td>2.6–3.0</td><td>Muy alta PC. Riesgo de intoxicación si &gt;30% dieta.</td></tr>
+          <tr><td><strong>Nacedero (Trichanthera)</strong></td><td>15–20</td><td>16–24</td><td>32–42</td><td>2.3–2.7</td><td>Zona cafetera y tropical. Buena palatabilidad.</td></tr>
+          <tr><td><strong>Ensilaje de maíz</strong></td><td>28–35</td><td>7–9</td><td>40–50</td><td>2.5–2.8</td><td>Alta energía. Complementar con fuente proteica.</td></tr>
+          <tr><td><strong>Ensilaje de sorgo</strong></td><td>28–33</td><td>7–10</td><td>45–55</td><td>2.3–2.6</td><td>Buena opción en zonas secas. Alta tolerancia a sequía.</td></tr>
+          <tr><td><strong>Heno de brachiaria</strong></td><td>85–90</td><td>5–8</td><td>68–78</td><td>1.8–2.1</td><td>Reserva estratégica épocas secas. Baja calidad.</td></tr>
+          <tr><td><strong>Concentrado 16% PC</strong></td><td>88–90</td><td>16</td><td>25–35</td><td>2.8–3.0</td><td>Maíz, soya, mogolla. Para vacas lecheras.</td></tr>
+          <tr><td><strong>Concentrado 18% PC</strong></td><td>88–90</td><td>18</td><td>22–32</td><td>2.8–3.2</td><td>Para vacas de alta producción.</td></tr>
+          <tr><td><strong>Melaza de caña</strong></td><td>75–80</td><td>2–4</td><td>0–5</td><td>2.4–2.8</td><td>Alta energía y palatabilidad. Máx. 2 kg/animal/día.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: GUÍA -->
+  <div id="tab-guia" style="display:none">
+    <div class="card">
+      <h2>📋 Requerimientos nutricionales de referencia — Ganadería tropical colombiana</h2>
+      <div class="alert alert-info" style="margin-bottom:14px;">
+        ℹ️ Valores basados en NRC Beef Cattle 2016, NRC Dairy Cattle 2001, y ajustes para razas cebuínas en trópico colombiano (CORPOICA-AGROSAVIA).
+      </div>
+      <table class="forraje-table" style="margin-bottom:20px;">
+        <thead><tr><th>Categoría</th><th>Peso (kg)</th><th>MS/día (kg)</th><th>PC (g/día)</th><th>EM (Mcal/día)</th><th>Ca (g)</th><th>P (g)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>🥛 Vaca leche 15 L/día</strong></td><td>400–450</td><td>14–16</td><td>2.100–2.400</td><td>32–36</td><td>80–90</td><td>55–65</td></tr>
+          <tr><td><strong>🥛 Vaca leche 20 L/día</strong></td><td>450–500</td><td>16–19</td><td>2.600–3.000</td><td>38–44</td><td>100–115</td><td>65–80</td></tr>
+          <tr><td><strong>🥛 Vaca leche 25 L/día</strong></td><td>500–550</td><td>19–22</td><td>3.100–3.600</td><td>46–52</td><td>120–135</td><td>80–95</td></tr>
+          <tr><td><strong>🐄 Vaca seca</strong></td><td>400–500</td><td>8–10</td><td>900–1.100</td><td>18–22</td><td>30–40</td><td>22–28</td></tr>
+          <tr><td><strong>🤰 Vaca gestante (3er trimestre)</strong></td><td>400–500</td><td>10–12</td><td>1.200–1.500</td><td>22–26</td><td>45–55</td><td>30–38</td></tr>
+          <tr><td><strong>🥩 Novillo ceba GPD 0.8 kg</strong></td><td>300–400</td><td>7–9</td><td>900–1.100</td><td>18–22</td><td>25–30</td><td>18–24</td></tr>
+          <tr><td><strong>🥩 Novillo ceba GPD 1.0 kg</strong></td><td>300–400</td><td>8–10</td><td>1.050–1.250</td><td>21–26</td><td>28–34</td><td>20–26</td></tr>
+          <tr><td><strong>🐾 Levante (GPD 0.5 kg)</strong></td><td>150–250</td><td>4–6</td><td>600–800</td><td>12–16</td><td>18–24</td><td>13–18</td></tr>
+          <tr><td><strong>🐂 Toro reproductor</strong></td><td>600–800</td><td>10–13</td><td>1.000–1.300</td><td>22–28</td><td>35–45</td><td>25–32</td></tr>
+          <tr><td><strong>🍼 Ternero (0–3 meses)</strong></td><td>40–80</td><td>1.5–3</td><td>300–500</td><td>6–10</td><td>10–16</td><td>7–12</td></tr>
+        </tbody>
+      </table>
+
+      <h2 style="margin-bottom:12px;">🧂 Requerimientos de minerales y vitaminas</h2>
+      <table class="forraje-table" style="margin-bottom:20px;">
+        <thead><tr><th>Mineral / Vitamina</th><th>Vaca lactante</th><th>Vaca seca</th><th>Ceba</th><th>Deficiencia — síntomas</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Calcio (Ca)</strong></td><td>80–135 g/día</td><td>30–40 g/día</td><td>25–34 g/día</td><td>Fiebre de leche (hipocalcemia) posparto</td></tr>
+          <tr><td><strong>Fósforo (P)</strong></td><td>55–95 g/día</td><td>22–28 g/día</td><td>18–26 g/día</td><td>Pica (comer tierra, huesos), anestro</td></tr>
+          <tr><td><strong>Magnesio (Mg)</strong></td><td>25–35 g/día</td><td>15–20 g/día</td><td>10–15 g/día</td><td>Tetania hipomagnesémica (pastos jóvenes)</td></tr>
+          <tr><td><strong>Sodio (Na — sal)</strong></td><td>60–80 g/día sal</td><td>40–60 g/día</td><td>30–50 g/día</td><td>Reducción de producción, lamer objetos</td></tr>
+          <tr><td><strong>Zinc (Zn)</strong></td><td>500–700 mg/día</td><td>300 mg/día</td><td>200–300 mg/día</td><td>Dermatitis, problemas reproductivos, casco</td></tr>
+          <tr><td><strong>Cobre (Cu)</strong></td><td>130–180 mg/día</td><td>80 mg/día</td><td>60–100 mg/día</td><td>Anemia, decoloración pelaje, artritis</td></tr>
+          <tr><td><strong>Selenio (Se)</strong></td><td>3–5 mg/día</td><td>2–3 mg/día</td><td>1–3 mg/día</td><td>Enfermedad del músculo blanco en terneros</td></tr>
+          <tr><td><strong>Vitamina A</strong></td><td>75.000 UI/día</td><td>50.000 UI</td><td>22.000 UI</td><td>Ceguera nocturna, abortos, inmunodepresión</td></tr>
+          <tr><td><strong>Vitamina E</strong></td><td>500–1.000 UI/día</td><td>300 UI</td><td>200 UI</td><td>Mastitis, retención de placenta, miopatía</td></tr>
+        </tbody>
+      </table>
+
+      <h2 style="margin-bottom:10px;">📐 Reglas prácticas de campo (Colombia)</h2>
+      <div class="alert alert-success">
+        🌿 <strong>Regla del 3% en MS:</strong> Un bovino consume en promedio 2.5–3% de su peso vivo en materia seca por día. Una vaca de 450 kg consume ~13.5 kg MS/día.<br><br>
+        🥛 <strong>Concentrado para leche:</strong> 0.3–0.4 kg de concentrado por litro de leche producida sobre el umbral de producción (varía según calidad del forraje base).<br><br>
+        🌱 <strong>Carga animal:</strong> Pasturas de brachiaria en el trópico bajo soportan 1.5–2.5 UA/ha. Pasturas mejoradas con leguminosas: 3–4 UA/ha.<br><br>
+        ⚖️ <strong>Relación Ca:P:</strong> Debe mantenerse entre 1.5:1 y 2:1. Relaciones muy altas o bajas causan alteraciones metabólicas.<br><br>
+        🧂 <strong>Suplementación mineral:</strong> En pastoreo exclusivo en el trópico colombiano, siempre suplementar con sal mineralizada que contenga fósforo, cobre, zinc y selenio.
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>⚠️ Herramienta orientativa para profesionales.</strong> Los cálculos se basan en tablas NRC (National Research Council) y referencias de nutrición bovina tropical. Los requerimientos reales varían según la raza, el estado fisiológico exacto, el clima, la altitud y la calidad real de los forrajes del lote, que puede diferir de los valores promedio usados en esta calculadora. Se recomienda realizar análisis bromatológico de los forrajes disponibles para una formulación exacta. Consulte con un zootecnista o médico veterinario especializado en nutrición animal.
+    <br><br>
+    🗓️ <em>Referencias: NRC Beef Cattle 2016 | NRC Dairy Cattle 2001 | AGROSAVIA Colombia | CIPAV — Sistemas silvopastoriles. Actualización: Junio 2026.</em>
+  </div>
+
+</div>
+
+<script>
+  const fmtN = (v, d=1) => new Intl.NumberFormat('es-CO', {minimumFractionDigits:d, maximumFractionDigits:d}).format(v);
+
+  const TIPOS = {
+    'vaca-leche':    { nom:'🥛 Vaca en producción de leche', cms:'2.5–3.0% PV', pc:'2.100–3.600 g/día', em:'32–52 Mcal/día', ref:'NRC Dairy 2001', campos:['leche','grasa'] },
+    'vaca-seca':     { nom:'🐄 Vaca seca (preparto)', cms:'1.8–2.0% PV', pc:'900–1.100 g/día', em:'18–22 Mcal/día', ref:'NRC Dairy 2001', campos:[] },
+    'novilla-leche': { nom:'🐮 Novilla de reemplazo leche', cms:'2.0–2.5% PV', pc:'900–1.200 g/día', em:'18–24 Mcal/día', ref:'NRC Dairy 2001', campos:[] },
+    'toro':          { nom:'🐂 Toro reproductor', cms:'1.8–2.2% PV', pc:'1.000–1.300 g/día', em:'22–28 Mcal/día', ref:'NRC Beef 2016', campos:[] },
+    'ceba':          { nom:'🥩 Novillo en ceba', cms:'2.2–2.8% PV', pc:'900–1.250 g/día', em:'18–26 Mcal/día', ref:'NRC Beef 2016', campos:[] },
+    'levante':       { nom:'🐾 Levante (6–18 meses)', cms:'2.0–2.5% PV', pc:'600–900 g/día', em:'12–18 Mcal/día', ref:'NRC Beef 2016', campos:[] },
+    'ternero':       { nom:'🍼 Ternero (0–6 meses)', cms:'1.5–2.0% PV', pc:'300–600 g/día', em:'6–12 Mcal/día', ref:'NRC Dairy 2001', campos:[] },
+    'vaca-gestante': { nom:'🤰 Vaca gestante', cms:'2.0–2.5% PV', pc:'1.200–1.500 g/día', em:'22–26 Mcal/día', ref:'NRC Beef/Dairy', campos:['mesgest'] },
+  };
+
+  let tipoSel = null;
+
+  function selTipo(key) {
+    tipoSel = key;
+    document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('sel'));
+    event.currentTarget.classList.add('sel');
+    const t = TIPOS[key];
+    document.getElementById('info-tipo').style.display = 'block';
+    document.getElementById('it-title').textContent = t.nom;
+    document.getElementById('it-cms').textContent   = t.cms;
+    document.getElementById('it-pc').textContent    = t.pc;
+    document.getElementById('it-em').textContent    = t.em;
+    document.getElementById('it-ref').textContent   = t.ref;
+    document.getElementById('campo-leche').style.display  = t.campos.includes('leche')   ? 'flex' : 'none';
+    document.getElementById('campo-grasa').style.display  = t.campos.includes('grasa')   ? 'flex' : 'none';
+    document.getElementById('campo-mes-gest').style.display = t.campos.includes('mesgest') ? 'flex' : 'none';
+  }
+
+  function showTab(t) {
+    ['calc','forrajes','guia'].forEach(id => {
+      document.getElementById('tab-'+id).style.display = id===t?'block':'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+      b.classList.toggle('active',['calc','forrajes','guia'][i]===t);
+    });
+  }
+
+  function calcularRacion() {
+    if (!tipoSel) { alert('Seleccione el tipo de animal.'); return; }
+    const peso   = parseFloat(document.getElementById('peso').value);
+    if (!peso || peso < 50) { alert('Ingrese el peso vivo del animal.'); return; }
+
+    const gpd      = parseFloat(document.getElementById('gpd').value) || 0;
+    const litros   = parseFloat(document.getElementById('litros-leche').value) || 0;
+    const grasa    = parseFloat(document.getElementById('grasa-leche').value) || 3.5;
+    const mesGest  = parseInt(document.getElementById('mes-gest').value) || 3;
+    const cc       = parseFloat(document.getElementById('cc').value) || 3;
+    const sistema  = document.getElementById('sistema').value;
+
+    // ── REQUERIMIENTOS ─────────────────────────────────────────────────
+    // Mantenimiento base (NRC tropical ajustado)
+    let reqMS   = peso * 0.025;   // 2.5% PV en MS
+    let reqPC   = peso * 2.2;     // g/día mantenimiento base
+    let reqEM   = peso * 0.042;   // Mcal/día mantenimiento
+    let reqCa   = peso * 0.064;   // g/día
+    let reqP    = peso * 0.044;   // g/día
+
+    // Ajuste por tipo
+    if (tipoSel === 'vaca-leche' && litros > 0) {
+      // Por producción de leche
+      const ecm = litros * (0.4 + 0.15 * grasa);   // kg ECM
+      reqMS  += litros * 0.45;
+      reqPC  += litros * 90;       // ~90 g PC por litro
+      reqEM  += ecm   * 0.74;     // Mcal por kg ECM
+      reqCa  += litros * 4.0;
+      reqP   += litros * 2.5;
+    }
+    if (tipoSel === 'ceba' || tipoSel === 'levante' || tipoSel === 'novilla-leche') {
+      const gpdR = gpd || (tipoSel==='ceba'?0.8:0.5);
+      reqMS  += gpdR * 2.0;
+      reqPC  += gpdR * 320;
+      reqEM  += gpdR * 4.5;
+      reqCa  += gpdR * 12;
+      reqP   += gpdR * 8;
+    }
+    if (tipoSel === 'vaca-gestante') {
+      const factor = mesGest===3 ? 1.25 : mesGest===2 ? 1.1 : 1.0;
+      reqMS  *= factor;
+      reqPC  *= factor;
+      reqEM  *= factor;
+      reqCa  *= factor * 1.3;
+      reqP   *= factor * 1.2;
+    }
+    if (tipoSel === 'toro') {
+      reqMS  = peso * 0.022;
+      reqPC  = peso * 2.0;
+      reqEM  = peso * 0.038;
+    }
+    if (tipoSel === 'ternero') {
+      reqMS  = peso * 0.020;
+      reqPC  = peso * 4.5;
+      reqEM  = peso * 0.08;
+      reqCa  = peso * 0.16;
+      reqP   = peso * 0.10;
+    }
+    // Ajuste por condición corporal
+    if (cc < 2.5) { reqEM *= 1.1; reqPC *= 1.1; }
+    if (cc > 4.0) { reqEM *= 0.95; }
+
+    // ── APORTE DE LA RACIÓN ────────────────────────────────────────────
+    const pastoCorte    = parseFloat(document.getElementById('pasto-corte').value) || 0;
+    const horasPastoreo = parseFloat(document.getElementById('horas-pastoreo').value) || 0;
+    const ensilaje      = parseFloat(document.getElementById('ensilaje').value) || 0;
+    const heno          = parseFloat(document.getElementById('heno').value) || 0;
+    const leguminosas   = parseFloat(document.getElementById('leguminosas').value) || 0;
+    const concentrado   = parseFloat(document.getElementById('concentrado').value) || 0;
+    const melaza        = parseFloat(document.getElementById('melaza').value) || 0;
+    const subproductos  = parseFloat(document.getElementById('subproductos').value) || 0;
+
+    // Conversión MF → MS y valores nutricionales promedio
+    const msPastoCorte    = pastoCorte    * 0.20;  // 20% MS promedio pasto fresco
+    const pcPastoCorte    = msPastoCorte  * 0.10;  // 10% PC en MS
+    const emPastoCorte    = msPastoCorte  * 2.2;
+
+    // Pastoreo: ~10 kg MS/día en 8 h full time → proporcional
+    const msBasePastoreo  = horasPastoreo * 1.25;  // ~1.25 kg MS/h pastoreo
+    const pcPastoreo      = msBasePastoreo * 0.09;
+    const emPastoreo      = msBasePastoreo * 2.15;
+
+    const msEnsilaje      = ensilaje      * 0.30;
+    const pcEnsilaje      = msEnsilaje    * 0.08;
+    const emEnsilaje      = msEnsilaje    * 2.6;
+
+    const msHeno          = heno          * 0.87;
+    const pcHeno          = msHeno        * 0.065;
+    const emHeno          = msHeno        * 1.9;
+
+    const msLeguminosas   = leguminosas   * 0.18;
+    const pcLeguminosas   = msLeguminosas * 0.22;
+    const emLeguminosas   = msLeguminosas * 2.6;
+
+    const msConcentrado   = concentrado   * 0.89;
+    const pcConcentrado   = msConcentrado * 0.17;
+    const emConcentrado   = msConcentrado * 2.9;
+
+    const msMelaza        = melaza        * 0.77;
+    const pcMelaza        = msMelaza      * 0.03;
+    const emMelaza        = msMelaza      * 2.6;
+
+    const msSubproductos  = subproductos  * 0.88;
+    const pcSubproductos  = msSubproductos * 0.12;
+    const emSubproductos  = msSubproductos * 2.5;
+
+    const msTotal  = msPastoCorte + msBasePastoreo + msEnsilaje + msHeno + msLeguminosas + msConcentrado + msMelaza + msSubproductos;
+    const pcTotal  = pcPastoCorte + pcPastoreo + pcEnsilaje + pcHeno + pcLeguminosas + pcConcentrado + pcMelaza + pcSubproductos;
+    const emTotal  = emPastoCorte + emPastoreo + emEnsilaje + emHeno + emLeguminosas + emConcentrado + emMelaza + emSubproductos;
+    // Ca y P estimado
+    const caTotal  = msTotal * 5.5;  // promedio g/kg MS
+    const pTotal   = msTotal * 3.0;
+
+    // ── MOSTRAR KPIs ──────────────────────────────────────────────────
+    const nomTipo = TIPOS[tipoSel].nom;
+    document.getElementById('res-animal-desc').textContent = `${nomTipo} — ${peso} kg`;
+    document.getElementById('res-sub').textContent         = `Sistema: ${document.getElementById('sistema').options[document.getElementById('sistema').selectedIndex].text}${tipoSel==='vaca-leche'?' | Producción: '+litros+' L/día':''}`;
+
+    document.getElementById('kpi-cms').textContent      = fmtN(reqMS) + ' kg';
+    document.getElementById('kpi-pc').textContent       = Math.round(reqPC) + ' g';
+    document.getElementById('kpi-em').textContent       = fmtN(reqEM) + ' Mcal';
+    document.getElementById('kpi-ca').textContent       = Math.round(reqCa) + ' g';
+    document.getElementById('kpi-p').textContent        = Math.round(reqP) + ' g';
+    document.getElementById('kpi-ms-ofr').textContent   = fmtN(msTotal) + ' kg';
+    document.getElementById('kpi-pc-aport').textContent = Math.round(pcTotal) + ' g';
+    document.getElementById('kpi-em-aport').textContent = fmtN(emTotal) + ' Mcal';
+
+    // ── TABLA BALANCE ─────────────────────────────────────────────────
+    const nutrientes = [
+      { nom:'Materia seca (MS)', req: fmtN(reqMS)+' kg',  aport: fmtN(msTotal)+' kg',  bal: msTotal-reqMS,  unidad:'kg' },
+      { nom:'Proteína cruda (PC)', req: Math.round(reqPC)+' g', aport: Math.round(pcTotal)+' g', bal: pcTotal-reqPC, unidad:'g' },
+      { nom:'Energía metabolizable (EM)', req: fmtN(reqEM)+' Mcal', aport: fmtN(emTotal)+' Mcal', bal: emTotal-reqEM, unidad:'Mcal' },
+      { nom:'Calcio (Ca)', req: Math.round(reqCa)+' g', aport: Math.round(caTotal)+' g', bal: caTotal-reqCa, unidad:'g' },
+      { nom:'Fósforo (P)', req: Math.round(reqP)+' g', aport: Math.round(pTotal)+' g', bal: pTotal-reqP, unidad:'g' },
+    ];
+
+    document.getElementById('balance-body').innerHTML = nutrientes.map(n => {
+      const pct = n.req !== '0 kg' ? (n.bal / (parseFloat(n.req) || 1)) * 100 : 0;
+      let estado, clase;
+      if (msTotal === 0) { estado = '— Sin datos'; clase = ''; }
+      else if (n.bal >= 0 && pct <= 30)  { estado = '✅ Cubierto'; clase = 'ok'; }
+      else if (n.bal >= 0 && pct > 30)   { estado = '⚠️ Exceso'; clase = 'warn'; }
+      else if (n.bal < 0 && Math.abs(pct) <= 15) { estado = '⚠️ Déficit leve'; clase = 'warn'; }
+      else { estado = '🚨 Déficit importante'; clase = 'mal'; }
+      const balTexto = (n.bal >= 0 ? '+' : '') + (n.unidad==='kg' ? fmtN(n.bal) : Math.round(n.bal)) + ' ' + n.unidad;
+      return `<tr class="${clase}"><td>${n.nom}</td><td>${n.req}</td><td>${n.aport}</td><td>${balTexto}</td><td>${estado}</td></tr>`;
+    }).join('');
+
+    // ── RACIÓN RECOMENDADA ────────────────────────────────────────────
+    let recHtml = '';
+    if (msTotal === 0) {
+      // Generar ración sugerida según tipo y sistema
+      let sug = [];
+      if (tipoSel === 'vaca-leche') {
+        sug = [
+          { nom:'🌿 Pastoreo (8–10 horas/día)', cant: '10–12 kg MS', nota:'Base de la ración. Rotar potreros cada 30–45 días.' },
+          { nom:'🌱 Botón de oro o matarratón', cant: '5–8 kg MF', nota:'Banco proteico o corte directo. Mejora PC de la ración.' },
+          { nom:'🌾 Concentrado 16–18% PC', cant: litros > 0 ? (litros * 0.35).toFixed(1) + ' kg/día' : '3–5 kg/día', nota:'Suministrar en sala de ordeño dividido en 2 tomas.' },
+          { nom:'🧂 Sal mineralizada con fósforo', cant: '60–80 g/día', nota:'A libre consumo o racionada según producción.' },
+          { nom:'💧 Agua limpia', cant: '60–100 L/día', nota:'A libre acceso. Producción cae 20–30% sin agua fresca.' },
+        ];
+      } else if (tipoSel === 'ceba') {
+        sug = [
+          { nom:'🌿 Pastoreo (8–10 horas en B. brizantha)', cant: '8–10 kg MS', nota:'Pastoreo rotacional, descanso 25–35 días en época lluviosa.' },
+          { nom:'🌽 Ensilaje de maíz o sorgo', cant: '8–12 kg MF', nota:'Complemento energético en época seca.' },
+          { nom:'🌱 Leguminosas (leucaena, matarratón)', cant: '3–5 kg MF', nota:'Hasta 20–30% de la ración MS para aportar proteína.' },
+          { nom:'🧂 Sal mineralizada con fósforo y Cu', cant: '50–70 g/día', nota:'Crítico en zonas deficientes de fósforo (Llanos, Caribe).' },
+        ];
+      } else {
+        sug = [
+          { nom:'🌿 Pastoreo (6–8 horas/día)', cant: '7–10 kg MS', nota:'Forraje de buena calidad. Rotar potreros cada 30–40 días.' },
+          { nom:'🧂 Sal mineralizada', cant: '60 g/día', nota:'Siempre disponible.' },
+          { nom:'💧 Agua', cant: '40–60 L/día', nota:'A libre acceso permanente.' },
+        ];
+      }
+      recHtml = `<div class="alert alert-info" style="margin-bottom:14px;">ℹ️ No ingresó cantidades de alimentos. A continuación se presenta una ración recomendada para este tipo de animal en Colombia.</div>`;
+      recHtml += sug.map(s => `
+        <div class="alimento-bloque">
+          <div class="alim-title">${s.nom} — <strong>${s.cant}</strong></div>
+          <div style="font-size:13px; color:#555;">${s.nota}</div>
+        </div>`).join('');
+    } else {
+      recHtml = `<div class="alert alert-success">✅ Ración analizada con los alimentos ingresados. Revise el balance nutricional y ajuste las cantidades según los déficits o excesos identificados.</div>`;
+      const alimentos = [
+        { nom:'Pasto de corte', cant: pastoCorte, ms: msPastoCorte },
+        { nom:'Pastoreo', cant: horasPastoreo, ms: msBasePastoreo, unidad:'h' },
+        { nom:'Ensilaje', cant: ensilaje, ms: msEnsilaje },
+        { nom:'Heno', cant: heno, ms: msHeno },
+        { nom:'Leguminosas', cant: leguminosas, ms: msLeguminosas },
+        { nom:'Concentrado', cant: concentrado, ms: msConcentrado },
+        { nom:'Melaza', cant: melaza, ms: msMelaza },
+        { nom:'Subproductos', cant: subproductos, ms: msSubproductos },
+      ].filter(a => a.cant > 0);
+      recHtml += alimentos.map(a =>
+        `<div class="alimento-bloque"><div class="alim-title">${a.nom}: <strong>${fmtN(a.cant)} ${a.unidad||'kg MF'}</strong></div>
+        <div class="alim-chips"><span class="alim-chip">MS aportada: ${fmtN(a.ms)} kg</span>
+        <span class="alim-chip">${fmtN(a.ms/msTotal*100,0)}% del total MS</span></div></div>`
+      ).join('');
+    }
+    document.getElementById('racion-recomendada').innerHTML = recHtml;
+
+    // ── RECOMENDACIONES ───────────────────────────────────────────────
+    const recs = [];
+    if (tipoSel === 'vaca-leche') {
+      recs.push({ ico:'🥛', txt:`<strong>Suministrar concentrado dividido en 2–3 tomas</strong> diarias para evitar acidosis ruminal. Nunca dar más de 3 kg por toma.` });
+      recs.push({ ico:'🌱', txt:`<strong>Incluir leguminosas</strong> (botón de oro, matarratón, leucaena) para reducir uso de concentrado y mejorar el perfil proteico de la ración sin aumentar costos.` });
+      if (litros > 20) recs.push({ ico:'⚠️', txt:`<strong>Alta producción (${litros} L/día):</strong> Monitorear balance energético negativo en el periparto. Considerar suplementación con propilenglicol o monensina.` });
+    }
+    if (tipoSel === 'ceba') {
+      recs.push({ ico:'📐', txt:`<strong>Peso de sacrificio:</strong> Novillos cebú en pastoreo alcanzan 450–480 kg en 18–24 meses. Con suplementación en época seca se puede reducir a 15–18 meses.` });
+      recs.push({ ico:'🌿', txt:`<strong>Pastoreo rotacional:</strong> Dividir el potrero en franjas con descanso de 25–40 días según época. Aumenta la carga animal 40–60% vs. pastoreo continuo.` });
+    }
+    recs.push({ ico:'🧂', txt:`<strong>Sal mineralizada:</strong> Suministrar sal con fósforo, cobre y zinc a libre consumo o racionada ${tipoSel==='vaca-leche'?'80':'50–60'} g/animal/día. Los suelos tropicales colombianos son deficientes en estos minerales.` });
+    recs.push({ ico:'💧', txt:`<strong>Agua fresca y limpia:</strong> Garantizar acceso permanente. Una vaca lechera que produce 20 L necesita mínimo 80–100 L de agua/día.` });
+    if (cc < 2.5) recs.push({ ico:'⚠️', txt:`<strong>Condición corporal baja (CC ${cc}):</strong> El animal está en déficit energético. Aumentar aporte de energía (concentrado, ensilaje, melaza) y revisar sanidad.` });
+    recs.push({ ico:'📅', txt:`<strong>Análisis bromatológico:</strong> Para una formulación exacta, envíe muestras de los forrajes al laboratorio de nutrición animal más cercano. El AGROSAVIA tiene laboratorios regionales en Colombia.` });
+
+    document.getElementById('recomendaciones').innerHTML = recs.map(r =>
+      `<li style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f0dcc8;font-size:14px;line-height:1.5;">
+        <span style="font-size:18px;flex-shrink:0;">${r.ico}</span><span>${r.txt}</span></li>`
+    ).join('');
+
+    document.getElementById('resultado').style.display = 'block';
+    document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetCalc() {
+    tipoSel = null;
+    document.querySelectorAll('.tipo-btn').forEach(b=>b.classList.remove('sel'));
+    document.getElementById('info-tipo').style.display = 'none';
+    ['peso','gpd','litros-leche','grasa-leche','pasto-corte','horas-pastoreo','ensilaje',
+     'heno','leguminosas','concentrado','melaza','subproductos','sal-mineral']
+      .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('campo-leche').style.display='none';
+    document.getElementById('campo-grasa').style.display='none';
+    document.getElementById('campo-mes-gest').style.display='none';
+    document.getElementById('resultado').style.display='none';
+  }
+</script>
+</body>
+</html>
