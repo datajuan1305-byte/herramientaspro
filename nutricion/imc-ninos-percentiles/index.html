@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMC Niños Percentiles OMS 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de IMC para niños y adolescentes con percentiles OMS. Evaluación nutricional pediátrica para nutricionistas y pediatras colombianos." />
+  <meta name="keywords" content="IMC niños colombia, percentiles OMS pediatria, calculadora talla peso niños, evaluacion nutricional pediatrica colombia, nutricionista colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --verde: #2e7d32;
+      --verde-claro: #e8f5e9;
+      --verde-oscuro: #1b5e20;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #2e7d32 60%, #66bb6a 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 110px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--verde); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--verde); margin: 1rem 0 0.6rem; border-left: 3px solid var(--verde); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--verde); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--verde); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--verde-oscuro); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--verde-claro); border-left: 4px solid var(--verde); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--verde-oscuro); }
+
+    /* RESULTADO */
+    .resultado-box {
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-box.desnutricion-severa { background: linear-gradient(135deg, #4a148c, #6a1b9a); }
+    .resultado-box.desnutricion        { background: linear-gradient(135deg, #b71c1c, #c62828); }
+    .resultado-box.bajo-peso           { background: linear-gradient(135deg, #e65100, #f57c00); }
+    .resultado-box.normal              { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+    .resultado-box.sobrepeso           { background: linear-gradient(135deg, #f57c00, #ffa726); }
+    .resultado-box.obesidad            { background: linear-gradient(135deg, #b71c1c, #c62828); }
+    .resultado-box.obesidad-severa     { background: linear-gradient(135deg, #4a148c, #880e4f); }
+
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
+    .resultado-imc    { font-size: 3.5rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-clase  { font-size: 1.3rem; font-weight: 800; margin-top: 0.3rem; }
+    .resultado-pct    { font-size: 1rem; opacity: 0.9; margin-top: 0.2rem; }
+    .resultado-grid   { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item   { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor  { font-size: 1.2rem; font-weight: 800; color: #ffe082; }
+    .resultado-label  { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle{ margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* BARRA DE PERCENTILES */
+    .pct-barra-wrap { margin: 1rem 0; }
+    .pct-barra-titulo { font-size: 0.78rem; opacity: 0.75; margin-bottom: 6px; }
+    .pct-barra { position: relative; height: 20px; border-radius: 10px; overflow: hidden;
+      background: linear-gradient(to right, #7b1fa2 0%, #c62828 5%, #e65100 10%, #2e7d32 15%, #2e7d32 85%, #e65100 90%, #c62828 95%, #7b1fa2 100%); }
+    .pct-marker { position: absolute; top: 0; bottom: 0; width: 4px; background: #fff; border-radius: 2px; transform: translateX(-50%); transition: left 0.5s; }
+    .pct-marker::after { content: '▼'; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 12px; color: #fff; }
+    .pct-etiquetas { display: flex; justify-content: space-between; font-size: 0.68rem; opacity: 0.7; margin-top: 4px; }
+
+    /* TABLA REFERENCIA */
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--verde-claro); }
+
+    .alerta { padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+    .alerta-mal  { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🥗 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">IMC Niños OMS</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🥗 Nutricionistas — Pediatría</div>
+  <h1>IMC Niños y Adolescentes — Percentiles OMS 2026</h1>
+  <p>Evaluación nutricional pediátrica con percentiles OMS para niños de 2 a 19 años. IMC/Edad, Talla/Edad y Peso/Edad. Clasificación según Resolución 2465/2016 del MinSalud.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 MinSalud Res. 2465/2016</span>
+    <span class="hero-chip">📊 Percentiles OMS</span>
+    <span class="hero-chip">👶 2–19 años</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('individual', this)">👤 Evaluación Individual</button>
+    <button class="tab-btn" onclick="mostrarTab('grupo', this)">👥 Evaluación de Grupo</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Tablas de Referencia</button>
+  </div>
+
+  <!-- TAB 1: INDIVIDUAL -->
+  <div id="tab-individual" class="tab-panel active">
+    <div class="card">
+      <h2>👤 Evaluación Nutricional Individual</h2>
+      <div class="info-box">
+        <strong>Clasificación OMS / MinSalud (Res. 2465/2016):</strong> En niños y adolescentes el IMC se interpreta según edad y sexo usando percentiles o puntajes Z. No se usan los mismos puntos de corte que en adultos.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre del paciente (opcional)</label>
+          <input type="text" id="n-nombre" placeholder="Ej: Juan García" />
+        </div>
+        <div class="form-group">
+          <label>Sexo biológico</label>
+          <select id="n-sexo">
+            <option value="M" selected>Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fecha de nacimiento</label>
+          <input type="date" id="n-nacimiento" />
+        </div>
+        <div class="form-group">
+          <label>Fecha de evaluación</label>
+          <input type="date" id="n-evaluacion" />
+        </div>
+        <div class="form-group">
+          <label>Peso (kg)</label>
+          <input type="number" id="n-peso" value="35" min="5" max="150" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Talla (cm)</label>
+          <input type="number" id="n-talla" value="130" min="50" max="220" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Perímetro cefálico (cm) — opcional</label>
+          <input type="number" id="n-pc" value="" min="30" max="65" step="0.1" placeholder="Solo < 5 años" />
+        </div>
+        <div class="form-group">
+          <label>Perímetro braquial (cm) — opcional</label>
+          <input type="number" id="n-pb" value="" min="5" max="35" step="0.1" placeholder="Opcional" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularIMC()">📊 Evaluar Estado Nutricional</button>
+    </div>
+    <div id="resultado-individual" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: GRUPO -->
+  <div id="tab-grupo" class="tab-panel">
+    <div class="card">
+      <h2>👥 Evaluación Nutricional de Grupo / Aula</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> Evalúa el estado nutricional de un grupo de niños y genera un resumen de la distribución nutricional del grupo. Útil para tamizajes en colegios, jardines y programas de nutrición.
+      </div>
+      <div id="grupo-container">
+        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1fr; gap:6px; margin-bottom:4px;">
+          <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Nombre</span>
+          <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Sexo</span>
+          <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Edad (meses)</span>
+          <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Peso (kg)</span>
+          <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Talla (cm)</span>
+        </div>
+        <div id="grupo-filas"></div>
+      </div>
+      <div style="display:flex; gap:0.8rem; margin-top:0.8rem; flex-wrap:wrap;">
+        <button class="btn" style="margin-top:0; flex:1;" onclick="agregarNino()">+ Agregar niño</button>
+        <button class="btn" style="margin-top:0; flex:1; background:var(--azul-navbar);" onclick="evaluarGrupo()">📊 Evaluar Grupo</button>
+      </div>
+    </div>
+    <div id="resultado-grupo" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Clasificación Nutricional OMS — MinSalud Colombia</h2>
+      <div class="info-box">
+        <strong>Referencia:</strong> Resolución 2465 de 2016 del Ministerio de Salud y Protección Social de Colombia. Adopta los patrones de crecimiento OMS 2006 (0–5 años) y OMS 2007 (5–19 años).
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Indicador</th><th>Puntaje Z / Percentil</th><th>Clasificación</th><th>Acción recomendada</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="6"><b>IMC / Edad<br>(5–19 años)</b></td>
+              <td>Z &lt; -3 / P &lt; 1</td><td style="color:#7b1fa2; font-weight:700;">Delgadez severa</td><td>Remitir a nutricionista + médico urgente</td></tr>
+            <tr><td>Z -3 a -2 / P 1–3</td><td style="color:#c62828; font-weight:700;">Delgadez</td><td>Intervención nutricional + seguimiento</td></tr>
+            <tr><td>Z -2 a -1 / P 3–15</td><td style="color:#e65100; font-weight:700;">Riesgo de delgadez</td><td>Monitoreo mensual, orientación alimentaria</td></tr>
+            <tr><td>Z -1 a +1 / P 15–85</td><td style="color:#2e7d32; font-weight:700;">Normal</td><td>Mantener hábitos saludables</td></tr>
+            <tr><td>Z +1 a +2 / P 85–97</td><td style="color:#f57c00; font-weight:700;">Sobrepeso</td><td>Educación alimentaria + actividad física</td></tr>
+            <tr><td>Z &gt; +2 / P &gt; 97</td><td style="color:#b71c1c; font-weight:700;">Obesidad</td><td>Intervención multidisciplinar urgente</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 IMC Promedio por Edad y Sexo (OMS 2007 — Mediana P50)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Edad</th><th>IMC Niño (P50)</th><th>IMC Niña (P50)</th><th>P3 (Niño)</th><th>P97 (Niño)</th><th>P3 (Niña)</th><th>P97 (Niña)</th></tr></thead>
+          <tbody>
+            <tr><td><b>2 años</b></td><td>16.0</td><td>15.7</td><td>13.9</td><td>18.3</td><td>13.4</td><td>18.4</td></tr>
+            <tr><td><b>3 años</b></td><td>15.6</td><td>15.3</td><td>13.6</td><td>17.8</td><td>13.2</td><td>17.8</td></tr>
+            <tr><td><b>4 años</b></td><td>15.3</td><td>15.0</td><td>13.4</td><td>17.5</td><td>13.0</td><td>17.5</td></tr>
+            <tr><td><b>5 años</b></td><td>15.1</td><td>14.8</td><td>13.2</td><td>17.4</td><td>12.8</td><td>17.5</td></tr>
+            <tr><td><b>6 años</b></td><td>15.0</td><td>14.8</td><td>13.1</td><td>17.7</td><td>12.8</td><td>18.0</td></tr>
+            <tr><td><b>8 años</b></td><td>15.5</td><td>15.5</td><td>13.4</td><td>19.2</td><td>13.3</td><td>19.8</td></tr>
+            <tr><td><b>10 años</b></td><td>16.2</td><td>16.6</td><td>13.8</td><td>21.2</td><td>13.9</td><td>22.1</td></tr>
+            <tr><td><b>12 años</b></td><td>17.2</td><td>17.9</td><td>14.4</td><td>23.2</td><td>14.7</td><td>24.4</td></tr>
+            <tr><td><b>14 años</b></td><td>18.5</td><td>19.2</td><td>15.4</td><td>25.1</td><td>15.9</td><td>26.4</td></tr>
+            <tr><td><b>16 años</b></td><td>19.9</td><td>20.4</td><td>16.5</td><td>26.8</td><td>17.1</td><td>28.1</td></tr>
+            <tr><td><b>18 años</b></td><td>21.2</td><td>21.3</td><td>17.5</td><td>28.1</td><td>18.0</td><td>29.5</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Interpretación Talla/Edad (T/E)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Puntaje Z</th><th>Clasificación</th><th>Significado</th></tr></thead>
+          <tbody>
+            <tr><td>&lt; -3</td><td style="color:#7b1fa2; font-weight:700;">Retraso severo del crecimiento</td><td>Desnutrición crónica severa (stunting severo)</td></tr>
+            <tr><td>-3 a -2</td><td style="color:#c62828; font-weight:700;">Retraso del crecimiento</td><td>Desnutrición crónica (stunting)</td></tr>
+            <tr><td>-2 a -1</td><td style="color:#e65100; font-weight:700;">Riesgo de retraso</td><td>Monitorear, revisar historia nutricional</td></tr>
+            <tr><td>-1 a +3</td><td style="color:#2e7d32; font-weight:700;">Talla adecuada</td><td>Crecimiento lineal normal para la edad</td></tr>
+            <tr><td>&gt; +3</td><td style="color:#1565c0; font-weight:700;">Talla alta</td><td>Puede indicar patología endocrina (evaluar)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> La evaluación nutricional pediátrica debe ser realizada e interpretada por un <strong>Nutricionista-Dietista o Médico Pediatra</strong>. Los percentiles son aproximaciones basadas en las tablas OMS 2007 y la Resolución 2465/2016 del MinSalud Colombia. Para diagnóstico definitivo, use las tablas originales de la OMS.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n, dec=1) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+// ── TABLAS OMS 2007 IMC/EDAD (Medianas y DE aproximadas) ──
+// [edad_meses, mediana_M, de_M, mediana_F, de_F]
+const tablasOMS = [
+  [24,16.0,1.2,15.7,1.2],[30,15.7,1.1,15.4,1.15],[36,15.6,1.1,15.3,1.1],
+  [42,15.4,1.05,15.1,1.05],[48,15.3,1.0,15.0,1.05],[54,15.2,1.0,14.9,1.0],
+  [60,15.1,1.0,14.8,1.0],[66,15.0,1.05,14.8,1.05],[72,15.0,1.1,14.8,1.1],
+  [84,15.2,1.2,15.1,1.25],[96,15.5,1.4,15.5,1.5],[108,15.9,1.6,16.0,1.7],
+  [120,16.3,1.85,16.6,1.95],[132,16.9,2.1,17.3,2.2],[144,17.5,2.35,18.0,2.45],
+  [156,18.2,2.6,18.9,2.65],[168,18.9,2.8,19.6,2.8],[180,19.7,2.9,20.3,2.85],
+  [192,20.4,3.0,20.9,2.85],[204,21.1,3.0,21.4,2.8],[216,21.7,2.95,21.7,2.75],
+  [228,22.2,2.85,21.9,2.65],
+];
+
+function interpolarOMS(edadMeses, sexo) {
+  let idx = 0;
+  for (let i = 0; i < tablasOMS.length - 1; i++) {
+    if (edadMeses >= tablasOMS[i][0] && edadMeses <= tablasOMS[i+1][0]) { idx = i; break; }
+    if (edadMeses > tablasOMS[tablasOMS.length-1][0]) { idx = tablasOMS.length-2; break; }
+  }
+  const t1 = tablasOMS[idx], t2 = tablasOMS[Math.min(idx+1, tablasOMS.length-1)];
+  const fraccion = t1[0] === t2[0] ? 0 : (edadMeses - t1[0]) / (t2[0] - t1[0]);
+  if (sexo === 'M') {
+    return {
+      mediana: t1[1] + fraccion*(t2[1]-t1[1]),
+      de:      t1[2] + fraccion*(t2[2]-t1[2])
+    };
+  } else {
+    return {
+      mediana: t1[3] + fraccion*(t2[3]-t1[3]),
+      de:      t1[4] + fraccion*(t2[4]-t1[4])
+    };
+  }
+}
+
+function calcZScore(imc, mediana, de) {
+  return (imc - mediana) / de;
+}
+
+// Percentil aproximado desde Z-score (distribución normal)
+function zToPercentil(z) {
+  // Aproximación de Abramowitz y Stegun
+  const a = [0,0.319381530,-0.356563782,1.781477937,-1.821255978,1.330274429];
+  const p = 0.2316419;
+  const absZ = Math.abs(z);
+  const t = 1 / (1 + p * absZ);
+  const poly = t*(a[1]+t*(a[2]+t*(a[3]+t*(a[4]+t*a[5]))));
+  const pdf = Math.exp(-0.5*absZ*absZ) / Math.sqrt(2*Math.PI);
+  const cdf = 1 - pdf * poly;
+  const pct = z >= 0 ? cdf * 100 : (1-cdf) * 100;
+  return Math.min(99.9, Math.max(0.1, pct));
+}
+
+function clasificarZ(z) {
+  if      (z < -3)   return { clase: 'Delgadez severa',      color: 'desnutricion-severa', recom: 'Remitir urgente a nutricionista y pediatra. Riesgo nutricional crítico.' };
+  else if (z < -2)   return { clase: 'Delgadez',             color: 'desnutricion',         recom: 'Intervención nutricional inmediata. Seguimiento mensual.' };
+  else if (z < -1)   return { clase: 'Riesgo de delgadez',   color: 'bajo-peso',            recom: 'Orientación alimentaria. Monitoreo cada 2–3 meses.' };
+  else if (z <= 1)   return { clase: 'Peso adecuado (Normal)',color: 'normal',               recom: 'Mantener hábitos alimentarios saludables y actividad física.' };
+  else if (z <= 2)   return { clase: 'Sobrepeso',             color: 'sobrepeso',            recom: 'Educación nutricional. Aumentar actividad física. Reducir ultraprocesados.' };
+  else if (z <= 3)   return { clase: 'Obesidad',              color: 'obesidad',             recom: 'Intervención multidisciplinar: nutrición, psicología, actividad física.' };
+  else               return { clase: 'Obesidad severa',       color: 'obesidad-severa',      recom: 'Remisión urgente a equipo multidisciplinar. Evaluación de comorbilidades.' };
+}
+
+function clasificarZTalla(z) {
+  if      (z < -3) return { clase: 'Retraso severo del crecimiento', color: '#7b1fa2' };
+  else if (z < -2) return { clase: 'Retraso del crecimiento (stunting)', color: '#c62828' };
+  else if (z < -1) return { clase: 'Riesgo de retraso', color: '#e65100' };
+  else if (z <= 3) return { clase: 'Talla adecuada para la edad', color: '#2e7d32' };
+  else             return { clase: 'Talla alta para la edad', color: '#1565c0' };
+}
+
+function calcularIMC() {
+  const nombre     = document.getElementById('n-nombre').value || 'Paciente';
+  const sexo       = document.getElementById('n-sexo').value;
+  const nacimiento = document.getElementById('n-nacimiento').value;
+  const evaluacion = document.getElementById('n-evaluacion').value;
+  const peso       = parseFloat(document.getElementById('n-peso').value) || 0;
+  const talla      = parseFloat(document.getElementById('n-talla').value) || 0;
+  const pc         = parseFloat(document.getElementById('n-pc').value) || null;
+  const pb         = parseFloat(document.getElementById('n-pb').value) || null;
+
+  if (!nacimiento || !evaluacion) { alert('Ingresa fecha de nacimiento y fecha de evaluación.'); return; }
+  if (!peso || !talla) { alert('Ingresa peso y talla.'); return; }
+
+  const d1 = new Date(nacimiento), d2 = new Date(evaluacion);
+  const edadMeses = Math.round((d2 - d1) / (1000*60*60*24*30.4375));
+  const edadAnios = edadMeses / 12;
+
+  if (edadMeses < 24 || edadMeses > 228) {
+    alert('Esta calculadora es válida para niños de 2 a 19 años (24 a 228 meses).');
+    return;
+  }
+
+  const tallaM   = talla / 100;
+  const imc      = peso / (tallaM * tallaM);
+  const ref      = interpolarOMS(edadMeses, sexo);
+  const zIMC     = calcZScore(imc, ref.mediana, ref.de);
+  const pctIMC   = zToPercentil(zIMC);
+  const clasif   = clasificarZ(zIMC);
+
+  // Talla/Edad (referencia simplificada)
+  // Talla mediana aproximada OMS por edad y sexo
+  const tallasRef = {
+    M: [[24,87.8],[36,96.1],[48,103.3],[60,110.0],[72,116.0],[84,121.7],[96,127.0],
+        [108,132.2],[120,137.5],[132,143.0],[144,149.0],[156,155.5],[168,162.0],
+        [180,167.0],[192,170.0],[204,171.8],[216,172.5],[228,172.8]],
+    F: [[24,86.4],[36,95.1],[48,102.7],[60,109.4],[72,115.3],[84,121.0],[96,126.6],
+        [108,132.2],[120,138.0],[132,144.0],[144,150.5],[156,156.0],[168,159.5],
+        [180,161.5],[192,162.5],[204,162.8],[216,163.0],[228,163.2]]
+  };
+  const desTalla = { M: 3.2, F: 3.0 };
+  const tabTalla = tallasRef[sexo];
+  let tallaRef = tabTalla[0][1];
+  for (let i = 0; i < tabTalla.length-1; i++) {
+    if (edadMeses >= tabTalla[i][0] && edadMeses <= tabTalla[i+1][0]) {
+      const frac = (edadMeses - tabTalla[i][0]) / (tabTalla[i+1][0] - tabTalla[i][0]);
+      tallaRef = tabTalla[i][1] + frac*(tabTalla[i+1][1]-tabTalla[i][1]);
+      break;
+    }
+  }
+  const deT = desTalla[sexo] * (1 + edadAnios * 0.05);
+  const zTalla = (talla - tallaRef) / deT;
+  const clasifTalla = clasificarZTalla(zTalla);
+
+  // Peso ideal (basado en talla y percentil 50)
+  const pesoIdeal = ref.mediana * tallaM * tallaM;
+
+  // Posición en la barra (0–100%)
+  const posicion = Math.min(99, Math.max(1, pctIMC));
+
+  document.getElementById('resultado-individual').style.display = 'block';
+  document.getElementById('resultado-individual').innerHTML = `
+    <div class="resultado-box ${clasif.color}">
+      <div class="resultado-titulo">${nombre} — ${sexo === 'M' ? 'Masculino' : 'Femenino'} — ${Math.floor(edadAnios)} años ${edadMeses % 12} meses</div>
+      <div class="resultado-imc">${fmt(imc)}</div>
+      <div class="resultado-clase">${clasif.clase}</div>
+      <div class="resultado-pct">Percentil ${fmt(pctIMC, 1)} | Puntaje Z: ${fmt(zIMC, 2)}</div>
+
+      <div class="pct-barra-wrap">
+        <div class="pct-barra-titulo">Posición en la curva IMC/Edad</div>
+        <div class="pct-barra">
+          <div class="pct-marker" style="left:${posicion}%"></div>
+        </div>
+        <div class="pct-etiquetas">
+          <span>P1</span><span>P3</span><span>P15</span><span>P50</span><span>P85</span><span>P97</span><span>P99</span>
+        </div>
+      </div>
+
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(imc)}</div><div class="resultado-label">IMC (kg/m²)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">P${fmt(pctIMC,0)}</div><div class="resultado-label">Percentil IMC/Edad</div></div>
+        <div class="resultado-item"><div class="resultado-valor">Z ${fmt(zIMC,2)}</div><div class="resultado-label">Puntaje Z IMC</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(ref.mediana)}</div><div class="resultado-label">IMC P50 (mediana)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pesoIdeal,1)} kg</div><div class="resultado-label">Peso ideal (P50)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(peso-pesoIdeal,1)} kg</div><div class="resultado-label">Diferencia vs ideal</div></div>
+      </div>
+
+      <table style="width:100%; border-collapse:collapse; margin-top:1rem; font-size:0.83rem; color:#fff;">
+        <tr style="background:rgba(255,255,255,0.1);">
+          <td style="padding:8px; font-weight:700;">Indicador</td>
+          <td style="padding:8px; text-align:center; font-weight:700;">Valor</td>
+          <td style="padding:8px; font-weight:700;">Clasificación</td>
+        </tr>
+        <tr><td style="padding:7px 8px;">IMC / Edad</td><td style="text-align:center;">${fmt(imc)} (P${fmt(pctIMC,0)})</td><td><b style="color:#ffe082;">${clasif.clase}</b></td></tr>
+        <tr><td style="padding:7px 8px;">Talla / Edad</td><td style="text-align:center;">${talla} cm (Z=${fmt(zTalla,2)})</td><td style="color:${clasifTalla.color};">${clasifTalla.clase}</td></tr>
+        <tr><td style="padding:7px 8px;">Peso</td><td style="text-align:center;">${peso} kg</td><td>Peso ideal: ${fmt(pesoIdeal,1)} kg</td></tr>
+        ${pc ? `<tr><td style="padding:7px 8px;">Perímetro cefálico</td><td style="text-align:center;">${pc} cm</td><td>${pc < 45 ? 'Microcefalia posible' : pc > 55 ? 'Macrocefalia posible' : 'Normal (referencial)'}</td></tr>` : ''}
+        ${pb ? `<tr><td style="padding:7px 8px;">Perímetro braquial</td><td style="text-align:center;">${pb} cm</td><td>${pb < 11.5 ? 'Desnutrición aguda severa' : pb < 12.5 ? 'Desnutrición aguda moderada' : 'Adecuado'}</td></tr>` : ''}
+      </table>
+
+      <div class="resultado-detalle">
+        <b>Cálculo:</b> IMC = ${peso} kg ÷ (${fmt(tallaM,2)} m)² = <b>${fmt(imc)} kg/m²</b><br>
+        Mediana OMS (P50) para ${Math.floor(edadAnios)} años: <b>${fmt(ref.mediana)} kg/m²</b> (DE=${fmt(ref.de,2)})<br>
+        Z = (${fmt(imc)} − ${fmt(ref.mediana)}) ÷ ${fmt(ref.de,2)} = <b>${fmt(zIMC,2)}</b> → Percentil <b>${fmt(pctIMC,1)}</b><br>
+        <b>Recomendación:</b> ${clasif.recom}
+      </div>
+    </div>
+    <div class="alerta ${zIMC >= -1 && zIMC <= 1 ? 'alerta-ok' : zIMC < -2 || zIMC > 2 ? 'alerta-mal' : 'alerta-warn'}" style="margin-top:0.8rem;">
+      ${zIMC >= -1 && zIMC <= 1
+        ? `✅ <strong>${clasif.clase}:</strong> ${clasif.recom}`
+        : `⚠️ <strong>${clasif.clase}:</strong> ${clasif.recom}`}
+    </div>`;
+}
+
+// ── EVALUACIÓN DE GRUPO ──
+let nNinos = 0;
+
+function agregarNino() {
+  nNinos++;
+  const c = document.getElementById('grupo-filas');
+  const div = document.createElement('div');
+  div.style.cssText = 'display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1fr; gap:6px; margin-bottom:5px; align-items:center;';
+  div.id = `g-${nNinos}`;
+  div.innerHTML = `
+    <input style="padding:7px 10px; border:1.5px solid var(--borde); border-radius:7px; font-size:0.85rem; background:var(--gris-bg); width:100%;" type="text" id="g-nombre-${nNinos}" value="Niño ${nNinos}" />
+    <select style="padding:7px 10px; border:1.5px solid var(--borde); border-radius:7px; font-size:0.85rem; background:var(--gris-bg); width:100%;" id="g-sexo-${nNinos}">
+      <option value="M">M</option><option value="F">F</option>
+    </select>
+    <input style="padding:7px 10px; border:1.5px solid var(--borde); border-radius:7px; font-size:0.85rem; background:var(--gris-bg); width:100%;" type="number" id="g-edad-${nNinos}" value="${72+nNinos*6}" min="24" max="228" />
+    <input style="padding:7px 10px; border:1.5px solid var(--borde); border-radius:7px; font-size:0.85rem; background:var(--gris-bg); width:100%;" type="number" id="g-peso-${nNinos}" value="${15+nNinos*2}" min="5" max="100" step="0.1" />
+    <input style="padding:7px 10px; border:1.5px solid var(--borde); border-radius:7px; font-size:0.85rem; background:var(--gris-bg); width:100%;" type="number" id="g-talla-${nNinos}" value="${105+nNinos*4}" min="50" max="200" step="0.5" />`;
+  c.appendChild(div);
+}
+
+function evaluarGrupo() {
+  const filas = document.querySelectorAll('[id^="g-"]:not([id*="nombre"]):not([id*="sexo"]):not([id*="edad"]):not([id*="peso"]):not([id*="talla"])');
+  const ids = [];
+  for (let i = 1; i <= nNinos; i++) {
+    if (document.getElementById(`g-${i}`)) ids.push(i);
+  }
+
+  if (ids.length === 0) { alert('Agrega al menos un niño.'); return; }
+
+  const resumen = { 'Delgadez severa':0,'Delgadez':0,'Riesgo de delgadez':0,'Peso adecuado (Normal)':0,'Sobrepeso':0,'Obesidad':0,'Obesidad severa':0 };
+  let filasHTML = '';
+
+  ids.forEach(i => {
+    const nombre = document.getElementById(`g-nombre-${i}`)?.value || `Niño ${i}`;
+    const sexo   = document.getElementById(`g-sexo-${i}`)?.value || 'M';
+    const edad   = parseFloat(document.getElementById(`g-edad-${i}`)?.value) || 60;
+    const peso   = parseFloat(document.getElementById(`g-peso-${i}`)?.value) || 15;
+    const talla  = parseFloat(document.getElementById(`g-talla-${i}`)?.value) || 100;
+
+    const tallaM = talla / 100;
+    const imc    = peso / (tallaM * tallaM);
+    const ref    = interpolarOMS(edad, sexo);
+    const z      = calcZScore(imc, ref.mediana, ref.de);
+    const pct    = zToPercentil(z);
+    const cl     = clasificarZ(z);
+
+    resumen[cl.clase] = (resumen[cl.clase] || 0) + 1;
+    const colores = { 'Delgadez severa':'#7b1fa2','Delgadez':'#c62828','Riesgo de delgadez':'#e65100','Peso adecuado (Normal)':'#2e7d32','Sobrepeso':'#f57c00','Obesidad':'#c62828','Obesidad severa':'#4a148c' };
+    filasHTML += `<tr>
+      <td>${nombre}</td><td>${sexo}</td><td>${Math.floor(edad/12)}a${edad%12}m</td>
+      <td>${fmt(imc)}</td><td>${fmt(z,2)}</td><td>P${fmt(pct,0)}</td>
+      <td style="font-weight:700; color:${colores[cl.clase]||'#2e7d32'};">${cl.clase}</td>
+    </tr>`;
+  });
+
+  const total = ids.length;
+  const normal = resumen['Peso adecuado (Normal)'];
+  const riesgo = total - normal;
+
+  document.getElementById('resultado-grupo').style.display = 'block';
+  document.getElementById('resultado-grupo').innerHTML = `
+    <div class="card">
+      <h2>📊 Resumen Evaluación Nutricional del Grupo</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:0.8rem; margin-bottom:1rem;">
+        <div style="background:var(--verde-claro); border-radius:8px; padding:0.8rem; text-align:center;">
+          <div style="font-size:1.8rem; font-weight:900; color:var(--verde);">${normal}</div>
+          <div style="font-size:0.75rem; color:var(--verde-oscuro);">Peso Normal (${fmt(normal/total*100,0)}%)</div>
+        </div>
+        ${Object.entries(resumen).filter(([k,v])=>v>0&&k!=='Peso adecuado (Normal)').map(([k,v])=>`
+          <div style="background:#fff3f3; border-radius:8px; padding:0.8rem; text-align:center;">
+            <div style="font-size:1.8rem; font-weight:900; color:#c62828;">${v}</div>
+            <div style="font-size:0.72rem; color:#7b0000;">${k} (${fmt(v/total*100,0)}%)</div>
+          </div>`).join('')}
+        <div style="background:#e3f2fd; border-radius:8px; padding:0.8rem; text-align:center;">
+          <div style="font-size:1.8rem; font-weight:900; color:#1565c0;">${total}</div>
+          <div style="font-size:0.75rem; color:#0d47a1;">Total evaluados</div>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Nombre</th><th>Sexo</th><th>Edad</th><th>IMC</th><th>Z-score</th><th>Percentil</th><th>Clasificación</th></tr></thead>
+          <tbody>${filasHTML}</tbody>
+        </table>
+      </div>
+      ${riesgo > 0 ? `<div class="alerta alerta-warn" style="margin-top:1rem;">⚠️ <strong>${riesgo} de ${total} niños (${fmt(riesgo/total*100,0)}%)</strong> presentan algún riesgo nutricional. Se recomienda intervención nutricional dirigida.</div>` : `<div class="alerta alerta-ok" style="margin-top:1rem;">✅ Todos los niños del grupo presentan peso adecuado para la edad.</div>`}
+    </div>`;
+}
+
+// Inicializar fechas
+document.addEventListener('DOMContentLoaded', () => {
+  const hoy = new Date().toISOString().split('T')[0];
+  const nac = new Date(new Date().setFullYear(new Date().getFullYear()-8)).toISOString().split('T')[0];
+  document.getElementById('n-nacimiento').value = nac;
+  document.getElementById('n-evaluacion').value = hoy;
+  // Agregar ejemplos al grupo
+  agregarNino(); agregarNino(); agregarNino();
+});
+</script>
+</body>
+</html>
