@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análisis Financiero ROI TIR VPN 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de ROI, TIR y VPN para evaluación de proyectos de inversión en Colombia. Análisis financiero gratuito para empresas y emprendedores colombianos." />
+  <meta name="keywords" content="calculadora TIR VPN Colombia, ROI inversión, valor presente neto, tasa interna retorno, evaluación proyectos colombia, PYME colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --verde: #1a7a4a;
+      --verde-claro: #e8f5ee;
+      --verde-oscuro: #0f5233;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+      --amarillo: #f5a623;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #1a7a4a 60%, #4caf82 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 100px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--verde); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--verde); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--verde); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--verde-oscuro); }
+    .btn:active { transform: scale(0.98); }
+    .btn-secundario { background: var(--azul-navbar); margin-top: 0.5rem; }
+    .btn-secundario:hover { background: #0f2540; }
+    .btn-sm {
+      padding: 7px 16px; font-size: 0.82rem; font-weight: 700;
+      border: none; border-radius: 20px; cursor: pointer;
+      background: var(--verde); color: #fff; transition: background 0.2s;
+    }
+    .btn-sm:hover { background: var(--verde-oscuro); }
+    .btn-sm-rojo { background: #c62828; }
+    .btn-sm-rojo:hover { background: #8b0000; }
+
+    .info-box { background: var(--verde-claro); border-left: 4px solid var(--verde); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--verde-oscuro); }
+
+    .resultado-box {
+      border-radius: var(--radio); padding: 1.2rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-box.positivo { background: linear-gradient(135deg, #1a3a5c, #1a7a4a); }
+    .resultado-box.negativo { background: linear-gradient(135deg, #1a3a5c, #c62828); }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.8rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.4rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 1.9; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .alerta { padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+    .alerta-mal  { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+
+    /* FLUJOS DE CAJA */
+    .flujos-container { margin-top: 0.8rem; }
+    .flujo-row {
+      display: grid; grid-template-columns: 80px 1fr 40px; gap: 8px;
+      align-items: center; margin-bottom: 6px;
+    }
+    .flujo-periodo { font-size: 0.82rem; font-weight: 700; color: var(--texto-suave); text-align: center; }
+    .flujo-input { padding: 8px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.9rem; width: 100%; background: var(--gris-bg); }
+    .flujo-input:focus { outline: none; border-color: var(--verde); background: #fff; }
+    .flujo-delete { background: none; border: none; cursor: pointer; color: #c62828; font-size: 1.1rem; }
+
+    /* TABLA FLUJOS */
+    .tabla-flujos { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .tabla-flujos th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: right; }
+    .tabla-flujos th:first-child { text-align: left; }
+    .tabla-flujos td { padding: 7px 10px; border-bottom: 1px solid var(--borde); text-align: right; }
+    .tabla-flujos td:first-child { text-align: left; font-weight: 600; }
+    .tabla-flujos tr:last-child td { border-bottom: none; font-weight: 700; background: var(--verde-claro); }
+    .positivo-td { color: #155724; font-weight: 700; }
+    .negativo-td { color: #721c24; font-weight: 700; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">📊 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">ROI / TIR / VPN</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">📊 Administradores de Empresas — Finanzas</div>
+  <h1>Análisis Financiero ROI, TIR y VPN 2026</h1>
+  <p>Evalúa la viabilidad financiera de proyectos de inversión. Calcula el Valor Presente Neto, Tasa Interna de Retorno y Retorno sobre Inversión para PYME colombianas.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Para PYME colombianas</span>
+    <span class="hero-chip">📈 VPN + TIR + ROI</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+    <span class="hero-chip">🔁 Uso ilimitado</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('vpn-tir', this)">📈 VPN y TIR</button>
+    <button class="tab-btn" onclick="mostrarTab('roi', this)">💰 ROI Simple</button>
+    <button class="tab-btn" onclick="mostrarTab('comparar', this)">⚖️ Comparar Proyectos</button>
+    <button class="tab-btn" onclick="mostrarTab('conceptos', this)">📚 Conceptos</button>
+  </div>
+
+  <!-- ══════════════ TAB 1: VPN Y TIR ══════════════ -->
+  <div id="tab-vpn-tir" class="tab-panel active">
+    <div class="card">
+      <h2>📈 Valor Presente Neto (VPN) y Tasa Interna de Retorno (TIR)</h2>
+      <div class="info-box">
+        <strong>¿Cómo funciona?</strong> Ingresa la inversión inicial, la tasa de descuento (costo de capital o DTF+spread en Colombia) y los flujos de caja netos por período. El VPN positivo indica que el proyecto crea valor.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Inversión inicial ($ COP)</label>
+          <input type="number" id="v-inversion" value="50000000" min="0" step="1000000" />
+          <span class="form-hint">Valor negativo implícito — ingresa el monto positivo</span>
+        </div>
+        <div class="form-group">
+          <label>Tasa de descuento anual (%)</label>
+          <input type="number" id="v-tasa" value="12" min="0" max="100" step="0.5" />
+          <span class="form-hint">DTF + spread, WACC o costo de oportunidad. En Colombia: 10–20%</span>
+        </div>
+        <div class="form-group">
+          <label>Período</label>
+          <select id="v-periodo">
+            <option value="anual" selected>Anual</option>
+            <option value="mensual">Mensual</option>
+            <option value="trimestral">Trimestral</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Valor residual / salvamento ($ COP)</label>
+          <input type="number" id="v-residual" value="0" min="0" step="1000000" />
+          <span class="form-hint">Valor del proyecto al final del último período (opcional)</span>
+        </div>
+      </div>
+
+      <hr class="sep" />
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem; flex-wrap:wrap; gap:8px;">
+        <p style="font-size:0.85rem; font-weight:700; color:var(--texto-suave);">Flujos de caja netos por período</p>
+        <button class="btn-sm" onclick="agregarFlujo()">+ Agregar período</button>
+      </div>
+      <div class="flujos-container" id="flujos-container"></div>
+      <button class="btn" onclick="calcularVPNTIR()">📈 Calcular VPN y TIR</button>
+    </div>
+
+    <div id="resultado-vpntir" style="display:none;"></div>
+  </div>
+
+  <!-- ══════════════ TAB 2: ROI ══════════════ -->
+  <div id="tab-roi" class="tab-panel">
+    <div class="card">
+      <h2>💰 Retorno sobre la Inversión (ROI)</h2>
+      <div class="info-box">
+        <strong>ROI = (Ganancia neta ÷ Inversión) × 100</strong><br>
+        Métrica simple para comparar la rentabilidad de una inversión. No considera el valor del dinero en el tiempo (para eso usa VPN/TIR).
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Inversión inicial ($ COP)</label>
+          <input type="number" id="r-inversion" value="20000000" min="0" step="500000" />
+        </div>
+        <div class="form-group">
+          <label>Ingresos totales generados ($ COP)</label>
+          <input type="number" id="r-ingresos" value="35000000" min="0" step="500000" />
+        </div>
+        <div class="form-group">
+          <label>Costos operativos totales ($ COP)</label>
+          <input type="number" id="r-costos" value="8000000" min="0" step="500000" />
+        </div>
+        <div class="form-group">
+          <label>Período de análisis (meses)</label>
+          <input type="number" id="r-meses" value="12" min="1" step="1" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularROI()">💰 Calcular ROI</button>
+    </div>
+    <div id="resultado-roi" style="display:none;"></div>
+  </div>
+
+  <!-- ══════════════ TAB 3: COMPARAR ══════════════ -->
+  <div id="tab-comparar" class="tab-panel">
+    <div class="card">
+      <h2>⚖️ Comparador de Proyectos de Inversión</h2>
+      <div class="info-box">
+        <strong>¿Cuándo usarlo?</strong> Cuando tienes dos o más proyectos alternativos y debes decidir en cuál invertir. Se comparan VPN, TIR y período de recuperación (Payback).
+      </div>
+      <div id="proyectos-container">
+        <!-- Proyectos generados por JS -->
+      </div>
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label>Tasa de descuento para comparación (%)</label>
+        <input type="number" id="c-tasa" value="12" min="0" max="100" step="0.5" />
+      </div>
+      <div style="display:flex; gap:0.8rem; flex-wrap:wrap;">
+        <button class="btn-sm" onclick="agregarProyecto()">+ Agregar proyecto</button>
+        <button class="btn" style="flex:1; margin-top:0;" onclick="compararProyectos()">⚖️ Comparar Proyectos</button>
+      </div>
+    </div>
+    <div id="resultado-comparar" style="display:none;"></div>
+  </div>
+
+  <!-- ══════════════ TAB 4: CONCEPTOS ══════════════ -->
+  <div id="tab-conceptos" class="tab-panel">
+    <div class="card">
+      <h2>📚 Conceptos Clave — Evaluación Financiera de Proyectos</h2>
+      <div style="display:flex; flex-direction:column; gap:1rem; font-size:0.88rem;">
+        <div style="background:var(--verde-claro); border-radius:8px; padding:1rem;">
+          <strong style="color:var(--verde-oscuro); font-size:0.95rem;">📈 VPN — Valor Presente Neto</strong><br>
+          Suma de todos los flujos de caja futuros descontados a la tasa de oportunidad, menos la inversión inicial.<br>
+          <b>VPN &gt; 0:</b> El proyecto crea valor — <b>VIABLE</b><br>
+          <b>VPN = 0:</b> El proyecto recupera exactamente el costo de capital<br>
+          <b>VPN &lt; 0:</b> El proyecto destruye valor — <b>NO VIABLE</b>
+        </div>
+        <div style="background:#e3f2fd; border-radius:8px; padding:1rem;">
+          <strong style="color:#0d47a1; font-size:0.95rem;">🎯 TIR — Tasa Interna de Retorno</strong><br>
+          Tasa de descuento que hace que el VPN sea igual a cero. Representa la rentabilidad propia del proyecto.<br>
+          <b>TIR &gt; Tasa de descuento:</b> Proyecto VIABLE<br>
+          <b>TIR &lt; Tasa de descuento:</b> Proyecto NO VIABLE<br>
+          <b>Limitación:</b> No funciona bien con flujos no convencionales (múltiples cambios de signo).
+        </div>
+        <div style="background:#fff8e1; border-radius:8px; padding:1rem;">
+          <strong style="color:#e65100; font-size:0.95rem;">💰 ROI — Retorno sobre la Inversión</strong><br>
+          ROI (%) = (Ganancia neta ÷ Inversión) × 100<br>
+          Métrica simple, ampliamente usada en marketing y PYME. No considera el valor del dinero en el tiempo.
+        </div>
+        <div style="background:#f3e5f5; border-radius:8px; padding:1rem;">
+          <strong style="color:#6a1b9a; font-size:0.95rem;">⏱️ Payback — Período de Recuperación</strong><br>
+          Tiempo necesario para recuperar la inversión inicial con los flujos de caja generados.<br>
+          <b>Payback simple:</b> Sin descontar los flujos<br>
+          <b>Payback descontado:</b> Considera el valor del dinero en el tiempo (más preciso)
+        </div>
+        <div style="background:#fce4ec; border-radius:8px; padding:1rem;">
+          <strong style="color:#880e4f; font-size:0.95rem;">🏦 Tasas de referencia en Colombia (2026)</strong><br>
+          DTF: ~10–11% EA | IBR overnight: ~9.5–10% EA<br>
+          Tasa de usura: ~32% EA (Superfinanciera)<br>
+          WACC empresarial típico PYME Colombia: 15–22% EA<br>
+          Costo de oportunidad mínimo sugerido: DTF + 3–5 puntos
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los resultados deben ser verificados con un <strong>administrador de empresas o contador público matriculado</strong>. Para decisiones de inversión mayores, consulte con un asesor financiero certificado. Los flujos proyectados son estimaciones sujetas a incertidumbre. Parámetros de referencia Colombia 2026.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n, dec=0) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+function fmtPct(n) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+}
+
+// ── FLUJOS DE CAJA ──
+let numFlujos = 0;
+function agregarFlujo() {
+  numFlujos++;
+  const container = document.getElementById('flujos-container');
+  const row = document.createElement('div');
+  row.className = 'flujo-row';
+  row.id = 'flujo-' + numFlujos;
+  row.innerHTML = `
+    <div class="flujo-periodo">Período ${numFlujos}</div>
+    <input class="flujo-input" type="number" id="f-${numFlujos}" placeholder="Flujo neto $ COP (puede ser negativo)" step="1000000" />
+    <button class="flujo-delete" onclick="document.getElementById('flujo-${numFlujos}').remove(); renumerarFlujos()">✕</button>`;
+  container.appendChild(row);
+}
+
+function renumerarFlujos() {
+  document.querySelectorAll('.flujo-row').forEach((row, i) => {
+    row.querySelector('.flujo-periodo').textContent = 'Período ' + (i + 1);
+  });
+}
+
+function getFlujos() {
+  const inputs = document.querySelectorAll('.flujo-input');
+  return Array.from(inputs).map(i => parseFloat(i.value) || 0);
+}
+
+// ── VPN ──
+function calcularVPN(flujos, tasa) {
+  const inv = parseFloat(document.getElementById('v-inversion').value) || 0;
+  const residual = parseFloat(document.getElementById('v-residual').value) || 0;
+  let vpn = -inv;
+  flujos.forEach((f, i) => {
+    vpn += f / Math.pow(1 + tasa, i + 1);
+  });
+  if (residual > 0) vpn += residual / Math.pow(1 + tasa, flujos.length);
+  return vpn;
+}
+
+// ── TIR (bisección) ──
+function calcularTIR(flujos, inv) {
+  const residual = parseFloat(document.getElementById('v-residual').value) || 0;
+  const calcVPN = (r) => {
+    let v = -inv;
+    flujos.forEach((f, i) => { v += f / Math.pow(1 + r, i + 1); });
+    if (residual > 0) v += residual / Math.pow(1 + r, flujos.length);
+    return v;
+  };
+  let lo = -0.999, hi = 10, mid;
+  if (calcVPN(lo) * calcVPN(hi) > 0) return null;
+  for (let i = 0; i < 200; i++) {
+    mid = (lo + hi) / 2;
+    if (Math.abs(calcVPN(mid)) < 0.01) break;
+    if (calcVPN(lo) * calcVPN(mid) < 0) hi = mid; else lo = mid;
+  }
+  return mid;
+}
+
+// ── PAYBACK ──
+function calcularPayback(flujos, inv) {
+  let acum = -inv;
+  for (let i = 0; i < flujos.length; i++) {
+    acum += flujos[i];
+    if (acum >= 0) {
+      const fraccion = (acum - flujos[i]) < 0
+        ? Math.abs(acum - flujos[i]) / flujos[i]
+        : 0;
+      return i + 1 - fraccion;
+    }
+  }
+  return null;
+}
+
+function calcularVPNTIR() {
+  const inv    = parseFloat(document.getElementById('v-inversion').value) || 0;
+  const tasaPct= parseFloat(document.getElementById('v-tasa').value) || 0;
+  const periodo= document.getElementById('v-periodo').value;
+  const flujos = getFlujos();
+
+  if (flujos.length === 0) { alert('Agrega al menos un período de flujo de caja.'); return; }
+  if (inv <= 0) { alert('Ingresa la inversión inicial.'); return; }
+
+  // Convertir tasa según período
+  const factores = { anual: 1, trimestral: 4, mensual: 12 };
+  const n = factores[periodo];
+  const tasaPeriodo = Math.pow(1 + tasaPct / 100, 1 / n) - 1;
+
+  const vpn = calcularVPN(flujos, tasaPeriodo);
+  const tirDecimal = calcularTIR(flujos, inv);
+  const tirPct = tirDecimal !== null ? tirDecimal * n * 100 : null; // anualizar
+  const payback = calcularPayback(flujos, inv);
+  const sumFlujos = flujos.reduce((a, b) => a + b, 0);
+  const residual = parseFloat(document.getElementById('v-residual').value) || 0;
+
+  const esViable = vpn > 0;
+  const clase = esViable ? 'positivo' : 'negativo';
+
+  // Tabla de flujos descontados
+  let tablaHTML = `<thead><tr>
+    <th>Período</th><th style="text-align:right">Flujo neto ($)</th>
+    <th style="text-align:right">Factor desc.</th>
+    <th style="text-align:right">Flujo descontado ($)</th>
+    <th style="text-align:right">Flujo acumulado ($)</th>
+  </tr></thead><tbody>
+  <tr><td>0 — Inversión</td><td class="negativo-td" style="text-align:right">-$ ${fmt(inv)}</td><td style="text-align:right">1.000</td><td class="negativo-td" style="text-align:right">-$ ${fmt(inv)}</td><td class="negativo-td" style="text-align:right">-$ ${fmt(inv)}</td></tr>`;
+
+  let acum = -inv;
+  flujos.forEach((f, i) => {
+    const factor = Math.pow(1 + tasaPeriodo, i + 1);
+    const fDesc  = f / factor;
+    acum += f;
+    const cls = f >= 0 ? 'positivo-td' : 'negativo-td';
+    tablaHTML += `<tr>
+      <td>${i + 1}</td>
+      <td class="${cls}" style="text-align:right">$ ${fmt(f)}</td>
+      <td style="text-align:right">${(1/factor).toFixed(4)}</td>
+      <td class="${cls}" style="text-align:right">$ ${fmt(fDesc)}</td>
+      <td class="${acum>=0?'positivo-td':'negativo-td'}" style="text-align:right">$ ${fmt(acum)}</td>
+    </tr>`;
+  });
+  if (residual > 0) {
+    const factor = Math.pow(1 + tasaPeriodo, flujos.length);
+    tablaHTML += `<tr><td>Residual</td><td class="positivo-td" style="text-align:right">$ ${fmt(residual)}</td><td style="text-align:right">${(1/factor).toFixed(4)}</td><td class="positivo-td" style="text-align:right">$ ${fmt(residual/factor)}</td><td style="text-align:right">—</td></tr>`;
+  }
+  tablaHTML += `<tr><td>TOTAL</td><td style="text-align:right">$ ${fmt(sumFlujos + residual)}</td><td></td><td class="${vpn>=0?'positivo-td':'negativo-td'}" style="text-align:right">$ ${fmt(vpn + inv)} → <b>VPN: $ ${fmt(vpn)}</b></td><td></td></tr></tbody>`;
+
+  document.getElementById('resultado-vpntir').style.display = 'block';
+  document.getElementById('resultado-vpntir').innerHTML = `
+    <div class="resultado-box ${clase}">
+      <div class="resultado-titulo">Resultados — Evaluación Financiera del Proyecto</div>
+      <div class="resultado-grid">
+        <div class="resultado-item">
+          <div class="resultado-valor">$ ${fmt(vpn)}</div>
+          <div class="resultado-label">VPN ($ COP)</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">${tirPct !== null ? fmtPct(tirPct) : 'N/A'}</div>
+          <div class="resultado-label">TIR ${periodo}</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">${payback !== null ? payback.toFixed(1) + ' per.' : 'No recupera'}</div>
+          <div class="resultado-label">Payback (períodos)</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">${tirPct !== null && tirPct > tasaPct ? '✅ VIABLE' : '❌ NO VIABLE'}</div>
+          <div class="resultado-label">Decisión financiera</div>
+        </div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Inversión inicial:</b> $ ${fmt(inv)} | <b>Tasa de descuento:</b> ${fmtPct(tasaPct)} ${periodo}<br>
+        <b>VPN = $ ${fmt(vpn)}</b> ${vpn > 0 ? '→ El proyecto CREA VALOR por encima de la tasa de descuento.' : '→ El proyecto NO cubre el costo de capital.'}<br>
+        ${tirPct !== null ? `<b>TIR = ${fmtPct(tirPct)}</b> ${tirPct > tasaPct ? `→ TIR > tasa (${fmtPct(tasaPct)}) — VIABLE.` : `→ TIR < tasa (${fmtPct(tasaPct)}) — NO VIABLE.`}` : '<b>TIR:</b> No calculable (flujos sin cambio de signo).'}<br>
+        ${payback !== null ? `<b>Payback:</b> Se recupera la inversión en ${payback.toFixed(1)} período(s).` : '<b>Payback:</b> La inversión no se recupera en el horizonte analizado.'}
+      </div>
+    </div>
+    <div class="card" style="margin-top:1rem;">
+      <h2>📋 Tabla de Flujos Descontados</h2>
+      <div style="overflow-x:auto;"><table class="tabla-flujos">${tablaHTML}</table></div>
+    </div>
+    <div class="alerta ${esViable ? 'alerta-ok' : 'alerta-mal'}">
+      ${esViable
+        ? `✅ <strong>Proyecto VIABLE:</strong> VPN positivo de $ ${fmt(vpn)} COP. La TIR de ${tirPct !== null ? fmtPct(tirPct) : 'N/A'} supera la tasa de descuento del ${fmtPct(tasaPct)}.`
+        : `❌ <strong>Proyecto NO VIABLE:</strong> VPN negativo de $ ${fmt(vpn)} COP. El proyecto no alcanza a cubrir el costo de capital del ${fmtPct(tasaPct)}.`}
+    </div>`;
+}
+
+// ── ROI ──
+function calcularROI() {
+  const inv      = parseFloat(document.getElementById('r-inversion').value) || 0;
+  const ingresos = parseFloat(document.getElementById('r-ingresos').value) || 0;
+  const costos   = parseFloat(document.getElementById('r-costos').value) || 0;
+  const meses    = parseFloat(document.getElementById('r-meses').value) || 12;
+
+  const ganancia = ingresos - costos - inv;
+  const roi      = (ganancia / inv) * 100;
+  const roiAnual = (roi / meses) * 12;
+  const payback  = inv / ((ingresos - costos) / meses);
+
+  const esPositivo = roi > 0;
+  document.getElementById('resultado-roi').style.display = 'block';
+  document.getElementById('resultado-roi').innerHTML = `
+    <div class="resultado-box ${esPositivo ? 'positivo' : 'negativo'}">
+      <div class="resultado-titulo">Resultados — ROI</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmtPct(roi)}</div><div class="resultado-label">ROI total (${meses} meses)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtPct(roiAnual)}</div><div class="resultado-label">ROI anualizado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(ganancia)}</div><div class="resultado-label">Ganancia neta ($ COP)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${payback.toFixed(1)} meses</div><div class="resultado-label">Payback estimado</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Fórmula:</b> ROI = (Ganancia neta ÷ Inversión) × 100<br>
+        Ganancia neta = Ingresos ($ ${fmt(ingresos)}) − Costos ($ ${fmt(costos)}) − Inversión ($ ${fmt(inv)}) = <b>$ ${fmt(ganancia)}</b><br>
+        ROI = $ ${fmt(ganancia)} ÷ $ ${fmt(inv)} × 100 = <b>${fmtPct(roi)}</b> en ${meses} meses<br>
+        ROI anualizado = ${fmtPct(roi)} ÷ ${meses} × 12 = <b>${fmtPct(roiAnual)}</b><br>
+        Payback = $ ${fmt(inv)} ÷ ($ ${fmt(ingresos - costos)} ÷ ${meses}) = <b>${payback.toFixed(1)} meses</b>
+      </div>
+    </div>`;
+}
+
+// ── COMPARADOR ──
+let numProyectos = 0;
+function agregarProyecto() {
+  numProyectos++;
+  const container = document.getElementById('proyectos-container');
+  const div = document.createElement('div');
+  div.id = 'proy-' + numProyectos;
+  div.style.cssText = 'background:var(--gris-bg); border-radius:8px; padding:1rem; margin-bottom:0.8rem;';
+  div.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+      <strong style="font-size:0.88rem; color:var(--azul-navbar);">Proyecto ${numProyectos}</strong>
+      <button onclick="document.getElementById('proy-${numProyectos}').remove()" style="background:none;border:none;cursor:pointer;color:#c62828;font-size:1rem;">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nombre del proyecto</label>
+        <input type="text" id="cp-nom-${numProyectos}" placeholder="Ej: Proyecto A" />
+      </div>
+      <div class="form-group">
+        <label>Inversión inicial ($ COP)</label>
+        <input type="number" id="cp-inv-${numProyectos}" value="30000000" step="1000000" />
+      </div>
+      <div class="form-group">
+        <label>Flujos anuales (separados por coma)</label>
+        <input type="text" id="cp-flujos-${numProyectos}" placeholder="Ej: 10000000,15000000,20000000" />
+        <span class="form-hint">Un valor por año, separados por coma</span>
+      </div>
+    </div>`;
+  container.appendChild(div);
+}
+
+function compararProyectos() {
+  const tasa = (parseFloat(document.getElementById('c-tasa').value) || 12) / 100;
+  const proyectos = document.querySelectorAll('[id^="proy-"]');
+  if (proyectos.length < 2) { alert('Agrega al menos 2 proyectos para comparar.'); return; }
+
+  const resultados = [];
+  proyectos.forEach(p => {
+    const id  = p.id.split('-')[1];
+    const nom = document.getElementById('cp-nom-' + id)?.value || 'Proyecto ' + id;
+    const inv = parseFloat(document.getElementById('cp-inv-' + id)?.value) || 0;
+    const flujosStr = document.getElementById('cp-flujos-' + id)?.value || '';
+    const flujos = flujosStr.split(',').map(f => parseFloat(f.trim()) || 0).filter(f => f !== 0);
+
+    let vpn = -inv;
+    flujos.forEach((f, i) => { vpn += f / Math.pow(1 + tasa, i + 1); });
+
+    // TIR bisección
+    const calcV = (r) => { let v=-inv; flujos.forEach((f,i)=>{v+=f/Math.pow(1+r,i+1);}); return v; };
+    let lo=-0.999, hi=10, tir=null;
+    if (calcV(lo)*calcV(hi) < 0) {
+      for(let k=0;k<200;k++){ const m=(lo+hi)/2; if(Math.abs(calcV(m))<0.01){tir=m;break;} calcV(lo)*calcV(m)<0?hi=m:lo=m; tir=m; }
+    }
+
+    let pb = null, acum = -inv;
+    for (let i = 0; i < flujos.length; i++) {
+      acum += flujos[i];
+      if (acum >= 0) { pb = i + 1 - Math.abs(acum-flujos[i])/flujos[i]; break; }
+    }
+
+    resultados.push({ nom, inv, vpn, tir: tir !== null ? tir * 100 : null, pb, flujos });
+  });
+
+  // Ordenar por VPN
+  resultados.sort((a, b) => b.vpn - a.vpn);
+
+  let tabla = `<thead><tr>
+    <th>Proyecto</th><th style="text-align:right">Inversión</th>
+    <th style="text-align:right">VPN ($ COP)</th><th style="text-align:right">TIR</th>
+    <th style="text-align:right">Payback</th><th style="text-align:right">Decisión</th>
+  </tr></thead><tbody>`;
+
+  resultados.forEach((r, i) => {
+    const mejor = i === 0 ? '⭐ Mejor' : '';
+    tabla += `<tr>
+      <td><b>${r.nom}</b> ${mejor}</td>
+      <td style="text-align:right">$ ${fmt(r.inv)}</td>
+      <td class="${r.vpn>=0?'positivo-td':'negativo-td'}" style="text-align:right">$ ${fmt(r.vpn)}</td>
+      <td style="text-align:right">${r.tir !== null ? fmtPct(r.tir) : 'N/A'}</td>
+      <td style="text-align:right">${r.pb !== null ? r.pb.toFixed(1)+' años' : 'No recupera'}</td>
+      <td style="text-align:right">${r.vpn > 0 ? '✅ Viable' : '❌ No viable'}</td>
+    </tr>`;
+  });
+  tabla += '</tbody>';
+
+  document.getElementById('resultado-comparar').style.display = 'block';
+  document.getElementById('resultado-comparar').innerHTML = `
+    <div class="card">
+      <h2>⚖️ Resultado — Comparación de Proyectos</h2>
+      <div style="overflow-x:auto;"><table class="tabla-flujos">${tabla}</table></div>
+      <div class="alerta alerta-ok" style="margin-top:1rem;">
+        ⭐ <strong>Proyecto recomendado: ${resultados[0].nom}</strong> — Mayor VPN de $ ${fmt(resultados[0].vpn)} COP con tasa de descuento del ${fmtPct(tasa*100)}.
+      </div>
+    </div>`;
+}
+
+// Inicializar flujos y proyectos
+agregarFlujo(); agregarFlujo(); agregarFlujo(); agregarFlujo(); agregarFlujo();
+document.getElementById('f-1').value = 12000000;
+document.getElementById('f-2').value = 15000000;
+document.getElementById('f-3').value = 18000000;
+document.getElementById('f-4').value = 20000000;
+document.getElementById('f-5').value = 22000000;
+
+agregarProyecto(); agregarProyecto();
+document.getElementById('cp-flujos-1').value = '10000000,15000000,20000000';
+document.getElementById('cp-flujos-2').value = '18000000,18000000,18000000';
+document.getElementById('cp-nom-1').value = 'Proyecto A';
+document.getElementById('cp-nom-2').value = 'Proyecto B';
+</script>
+</body>
+</html>
