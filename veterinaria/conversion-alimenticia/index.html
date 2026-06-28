@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Índice de Conversión Alimenticia ICA 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de Índice de Conversión Alimenticia ICA para bovinos, porcinos, aves y peces. Herramienta gratuita para veterinarios y zootecnistas colombianos." />
+  <meta name="keywords" content="indice conversion alimenticia colombia, ICA bovinos, eficiencia alimentaria zootecnia, conversion porcinos aves peces colombia, zootecnista colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --naranja: #e65100;
+      --naranja-claro: #fff3e0;
+      --naranja-oscuro: #bf360c;
+      --verde: #2e7d32;
+      --verde-claro: #e8f5e9;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #e65100 60%, #ff8a50 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 100px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--naranja); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--naranja); margin: 1rem 0 0.6rem; border-left: 3px solid var(--naranja); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--naranja); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--naranja); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--naranja-oscuro); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--naranja-claro); border-left: 4px solid var(--naranja); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--naranja-oscuro); }
+
+    .resultado-box {
+      border-radius: var(--radio); padding: 1.2rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-box.excelente { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+    .resultado-box.bueno     { background: linear-gradient(135deg, #33691e, #558b2f); }
+    .resultado-box.regular   { background: linear-gradient(135deg, #e65100, #f57c00); }
+    .resultado-box.malo      { background: linear-gradient(135deg, #b71c1c, #c62828); }
+
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-ica { font-size: 3.5rem; font-weight: 900; line-height: 1; }
+    .resultado-clasificacion { font-size: 1.1rem; font-weight: 800; margin-top: 0.3rem; }
+    .resultado-desc { font-size: 0.88rem; opacity: 0.9; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.3rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 1.9; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--naranja-claro); }
+    .ref-table tr:last-child td { border-bottom: none; }
+
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.73rem; font-weight: 700; }
+    .badge-excelente { background: #c8e6c9; color: #1b5e20; }
+    .badge-bueno     { background: #dcedc8; color: #33691e; }
+    .badge-regular   { background: #fff3e0; color: #e65100; }
+    .badge-malo      { background: #ffcdd2; color: #b71c1c; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🐄 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Conversión Alimenticia</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🐄 Veterinarios y Zootecnistas</div>
+  <h1>Índice de Conversión Alimenticia (ICA) 2026</h1>
+  <p>Calcula la eficiencia alimentaria por especie: bovinos, porcinos, aves de engorde y peces. Evaluación de rentabilidad productiva para el sector pecuario colombiano.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Sector pecuario colombiano</span>
+    <span class="hero-chip">🐄 🐷 🐔 🐟 4 especies</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+    <span class="hero-chip">📊 Análisis de rentabilidad</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('ica', this)">📊 Calcular ICA</button>
+    <button class="tab-btn" onclick="mostrarTab('lote', this)">🐄 Análisis de Lote</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Valores de Referencia</button>
+  </div>
+
+  <!-- ══════════════ TAB 1: ICA BÁSICO ══════════════ -->
+  <div id="tab-ica" class="tab-panel active">
+    <div class="card">
+      <h2>📊 Cálculo del Índice de Conversión Alimenticia</h2>
+      <div class="info-box">
+        <strong>ICA = Alimento consumido (kg) ÷ Ganancia de peso (kg)</strong><br>
+        Indica cuántos kg de alimento se necesitan para producir 1 kg de carne (o biomasa en peces). A menor ICA, mayor eficiencia alimentaria.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Especie</label>
+          <select id="i-especie" onchange="actualizarReferencia()">
+            <option value="bovino">🐄 Bovino (carne)</option>
+            <option value="porcino">🐷 Porcino</option>
+            <option value="pollo">🐔 Pollo de engorde (broiler)</option>
+            <option value="ponedora">🥚 Gallina ponedora</option>
+            <option value="tilapia">🐟 Tilapia</option>
+            <option value="trucha">🐟 Trucha</option>
+            <option value="camarón">🦐 Camarón</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Sistema de producción</label>
+          <select id="i-sistema">
+            <option value="intensivo">Intensivo (confinamiento)</option>
+            <option value="semintensivo" selected>Semiintensivo</option>
+            <option value="extensivo">Extensivo (pastoreo)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Alimento total consumido (kg)</label>
+          <input type="number" id="i-alimento" value="1500" min="0" step="10" />
+          <span class="form-hint">Total del período o por animal</span>
+        </div>
+        <div class="form-group">
+          <label>Ganancia de peso total (kg)</label>
+          <input type="number" id="i-ganancia" value="300" min="0.1" step="1" />
+          <span class="form-hint">Peso final − Peso inicial</span>
+        </div>
+        <div class="form-group">
+          <label>Número de animales</label>
+          <input type="number" id="i-animales" value="10" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Días del período</label>
+          <input type="number" id="i-dias" value="90" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Costo del alimento ($ COP/kg)</label>
+          <input type="number" id="i-costo-alimento" value="1800" min="0" step="50" />
+          <span class="form-hint">Para cálculo del costo alimentario por kg producido</span>
+        </div>
+        <div class="form-group">
+          <label>Precio de venta del animal ($ COP/kg)</label>
+          <input type="number" id="i-precio-venta" value="9000" min="0" step="100" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularICA()">📊 Calcular ICA y Eficiencia</button>
+    </div>
+    <div id="resultado-ica" style="display:none;"></div>
+  </div>
+
+  <!-- ══════════════ TAB 2: ANÁLISIS DE LOTE ══════════════ -->
+  <div id="tab-lote" class="tab-panel">
+    <div class="card">
+      <h2>🐄 Análisis Completo de Lote</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> Permite evaluar el desempeño productivo y económico de un lote completo, calculando ICA, GDP, mortalidad y rentabilidad por animal.
+      </div>
+      <h3>Datos del lote</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Especie</label>
+          <select id="l-especie">
+            <option value="bovino">🐄 Bovino</option>
+            <option value="porcino">🐷 Porcino</option>
+            <option value="pollo" selected>🐔 Pollo de engorde</option>
+            <option value="tilapia">🐟 Tilapia</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Animales al inicio</label>
+          <input type="number" id="l-inicio" value="1000" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Animales al final (vendidos)</label>
+          <input type="number" id="l-final" value="960" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Peso promedio inicial (kg/animal)</label>
+          <input type="number" id="l-peso-ini" value="0.042" min="0" step="0.001" />
+        </div>
+        <div class="form-group">
+          <label>Peso promedio final (kg/animal)</label>
+          <input type="number" id="l-peso-fin" value="2.8" min="0" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Alimento total consumido (kg)</label>
+          <input type="number" id="l-alimento" value="5200" min="0" step="10" />
+        </div>
+        <div class="form-group">
+          <label>Días del ciclo</label>
+          <input type="number" id="l-dias" value="42" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Costo del alimento ($ COP/kg)</label>
+          <input type="number" id="l-costo-alim" value="2200" min="0" step="50" />
+        </div>
+        <div class="form-group">
+          <label>Costo del pollito/animal ($ COP)</label>
+          <input type="number" id="l-costo-animal" value="3500" min="0" step="100" />
+        </div>
+        <div class="form-group">
+          <label>Otros costos del lote ($ COP)</label>
+          <input type="number" id="l-otros" value="800000" min="0" step="50000" />
+          <span class="form-hint">Medicamentos, mano de obra, servicios</span>
+        </div>
+        <div class="form-group">
+          <label>Precio de venta ($ COP/kg en pie)</label>
+          <input type="number" id="l-precio" value="6500" min="0" step="100" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularLote()">🐄 Analizar Lote Completo</button>
+    </div>
+    <div id="resultado-lote" style="display:none;"></div>
+  </div>
+
+  <!-- ══════════════ TAB 3: REFERENCIA ══════════════ -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Valores de Referencia ICA por Especie — Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead>
+            <tr>
+              <th>Especie</th>
+              <th>ICA Excelente</th>
+              <th>ICA Bueno</th>
+              <th>ICA Regular</th>
+              <th>ICA Deficiente</th>
+              <th>GDP típico</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>🐄 Bovino carne (intensivo)</b></td>
+              <td><span class="badge badge-excelente">5.0 – 6.0</span></td>
+              <td><span class="badge badge-bueno">6.1 – 7.5</span></td>
+              <td><span class="badge badge-regular">7.6 – 9.0</span></td>
+              <td><span class="badge badge-malo">&gt; 9.0</span></td>
+              <td>700–900 g/día</td>
+            </tr>
+            <tr>
+              <td><b>🐄 Bovino carne (extensivo)</b></td>
+              <td><span class="badge badge-excelente">8.0 – 10.0</span></td>
+              <td><span class="badge badge-bueno">10.1 – 12.0</span></td>
+              <td><span class="badge badge-regular">12.1 – 15.0</span></td>
+              <td><span class="badge badge-malo">&gt; 15.0</span></td>
+              <td>400–600 g/día</td>
+            </tr>
+            <tr>
+              <td><b>🐷 Porcino (engorde)</b></td>
+              <td><span class="badge badge-excelente">2.2 – 2.5</span></td>
+              <td><span class="badge badge-bueno">2.6 – 3.0</span></td>
+              <td><span class="badge badge-regular">3.1 – 3.5</span></td>
+              <td><span class="badge badge-malo">&gt; 3.5</span></td>
+              <td>700–900 g/día</td>
+            </tr>
+            <tr>
+              <td><b>🐔 Pollo de engorde (broiler)</b></td>
+              <td><span class="badge badge-excelente">1.6 – 1.8</span></td>
+              <td><span class="badge badge-bueno">1.9 – 2.1</span></td>
+              <td><span class="badge badge-regular">2.2 – 2.5</span></td>
+              <td><span class="badge badge-malo">&gt; 2.5</span></td>
+              <td>55–65 g/día</td>
+            </tr>
+            <tr>
+              <td><b>🐟 Tilapia (jaulas)</b></td>
+              <td><span class="badge badge-excelente">1.2 – 1.5</span></td>
+              <td><span class="badge badge-bueno">1.6 – 1.8</span></td>
+              <td><span class="badge badge-regular">1.9 – 2.2</span></td>
+              <td><span class="badge badge-malo">&gt; 2.2</span></td>
+              <td>3–5 g/día</td>
+            </tr>
+            <tr>
+              <td><b>🐟 Trucha</b></td>
+              <td><span class="badge badge-excelente">1.0 – 1.3</span></td>
+              <td><span class="badge badge-bueno">1.4 – 1.6</span></td>
+              <td><span class="badge badge-regular">1.7 – 2.0</span></td>
+              <td><span class="badge badge-malo">&gt; 2.0</span></td>
+              <td>4–6 g/día</td>
+            </tr>
+            <tr>
+              <td><b>🦐 Camarón</b></td>
+              <td><span class="badge badge-excelente">1.3 – 1.6</span></td>
+              <td><span class="badge badge-bueno">1.7 – 2.0</span></td>
+              <td><span class="badge badge-regular">2.1 – 2.5</span></td>
+              <td><span class="badge badge-malo">&gt; 2.5</span></td>
+              <td>0.1–0.2 g/día</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Factores que Afectan el ICA en Colombia</h2>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; font-size:0.85rem;">
+        <div style="background:var(--verde-claro); border-radius:8px; padding:0.9rem;">
+          <strong style="color:var(--verde);">✅ Mejoran el ICA</strong><br>
+          • Genética mejorada (razas especializadas)<br>
+          • Alimento balanceado de calidad<br>
+          • Manejo sanitario preventivo<br>
+          • Temperatura y ventilación óptimas<br>
+          • Agua de bebida ad libitum<br>
+          • Densidad de siembra adecuada
+        </div>
+        <div style="background:#ffebee; border-radius:8px; padding:0.9rem;">
+          <strong style="color:#c62828;">❌ Empeoran el ICA</strong><br>
+          • Enfermedades respiratorias o digestivas<br>
+          • Alimento con baja digestibilidad<br>
+          • Estrés térmico (calor extremo)<br>
+          • Parásitos internos y externos<br>
+          • Agua contaminada<br>
+          • Superpoblación en instalaciones
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los valores de referencia son promedios de la literatura zootécnica colombiana. El ICA varía según la genética, el alimento, el manejo y las condiciones climáticas de cada región. Consulte con un <strong>Médico Veterinario Zootecnista matriculado ante el COMVEZCOL</strong>. Parámetros productivos Colombia 2026.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n, dec=2) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+function fmtInt(n) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+
+// Rangos de referencia por especie y sistema
+const rangos = {
+  bovino:    { intensivo:{ex:[5,6],  bu:[6.1,7.5],  re:[7.6,9]},   extensivo:{ex:[8,10], bu:[10.1,12], re:[12.1,15]}, semintensivo:{ex:[6,8],bu:[8.1,10],re:[10.1,13]} },
+  porcino:   { intensivo:{ex:[2.2,2.5],bu:[2.6,3],re:[3.1,3.5]},   semintensivo:{ex:[2.4,2.8],bu:[2.9,3.2],re:[3.3,3.8]}, extensivo:{ex:[3,3.5],bu:[3.6,4],re:[4.1,5]} },
+  pollo:     { intensivo:{ex:[1.6,1.8],bu:[1.9,2.1],re:[2.2,2.5]}, semintensivo:{ex:[1.7,2],  bu:[2.1,2.3],re:[2.4,2.8]}, extensivo:{ex:[2,2.5],bu:[2.6,3],re:[3.1,3.8]} },
+  ponedora:  { intensivo:{ex:[2,2.2],  bu:[2.3,2.5],re:[2.6,3]},   semintensivo:{ex:[2.2,2.5],bu:[2.6,3],  re:[3.1,3.5]}, extensivo:{ex:[2.5,3],bu:[3.1,3.5],re:[3.6,4]} },
+  tilapia:   { intensivo:{ex:[1.2,1.5],bu:[1.6,1.8],re:[1.9,2.2]}, semintensivo:{ex:[1.4,1.7],bu:[1.8,2.0],re:[2.1,2.5]}, extensivo:{ex:[1.8,2.2],bu:[2.3,2.6],re:[2.7,3]} },
+  trucha:    { intensivo:{ex:[1.0,1.3],bu:[1.4,1.6],re:[1.7,2.0]}, semintensivo:{ex:[1.2,1.5],bu:[1.6,1.9],re:[2.0,2.3]}, extensivo:{ex:[1.5,1.8],bu:[1.9,2.2],re:[2.3,2.7]} },
+  'camarón': { intensivo:{ex:[1.3,1.6],bu:[1.7,2.0],re:[2.1,2.5]}, semintensivo:{ex:[1.5,1.8],bu:[1.9,2.2],re:[2.3,2.8]}, extensivo:{ex:[1.8,2.2],bu:[2.3,2.6],re:[2.7,3.2]} },
+};
+
+function clasificarICA(ica, especie, sistema) {
+  const r = rangos[especie]?.[sistema] || rangos[especie]?.intensivo;
+  if (!r) return { clase: 'regular', texto: 'Regular', colorClass: 'regular' };
+  if (ica >= r.ex[0] && ica <= r.ex[1]) return { clase: 'excelente', texto: '⭐ Excelente', colorClass: 'excelente' };
+  if (ica <= r.bu[1])                   return { clase: 'bueno',     texto: '✅ Bueno',    colorClass: 'bueno' };
+  if (ica <= r.re[1])                   return { clase: 'regular',   texto: '⚠️ Regular',  colorClass: 'regular' };
+  return                                       { clase: 'malo',      texto: '❌ Deficiente',colorClass: 'malo' };
+}
+
+function calcularICA() {
+  const especie   = document.getElementById('i-especie').value;
+  const sistema   = document.getElementById('i-sistema').value;
+  const alimento  = parseFloat(document.getElementById('i-alimento').value) || 0;
+  const ganancia  = parseFloat(document.getElementById('i-ganancia').value) || 0;
+  const animales  = parseFloat(document.getElementById('i-animales').value) || 1;
+  const dias      = parseFloat(document.getElementById('i-dias').value) || 1;
+  const costoAlim = parseFloat(document.getElementById('i-costo-alimento').value) || 0;
+  const precioVta = parseFloat(document.getElementById('i-precio-venta').value) || 0;
+
+  if (!alimento || !ganancia) { alert('Ingresa el alimento consumido y la ganancia de peso.'); return; }
+
+  const ica = alimento / ganancia;
+  const gdp = (ganancia / animales) / dias * 1000; // g/animal/día
+  const costoAlimKg = ica * costoAlim;
+  const margenBruto = precioVta - costoAlimKg;
+  const alimAnimalDia = alimento / animales / dias;
+
+  const clas = clasificarICA(ica, especie, sistema);
+
+  document.getElementById('resultado-ica').style.display = 'block';
+  document.getElementById('resultado-ica').innerHTML = `
+    <div class="resultado-box ${clas.colorClass}">
+      <div class="resultado-titulo">Resultado — Índice de Conversión Alimenticia</div>
+      <div class="resultado-ica">${fmt(ica)}</div>
+      <div class="resultado-clasificacion">${clas.texto}</div>
+      <div class="resultado-desc">kg de alimento por kg de ganancia de peso</div>
+      <div class="resultado-grid">
+        <div class="resultado-item">
+          <div class="resultado-valor">${fmt(ica)}</div>
+          <div class="resultado-label">ICA (kg alim/kg peso)</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">${fmt(gdp, 1)} g</div>
+          <div class="resultado-label">GDP (g/animal/día)</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">$ ${fmtInt(costoAlimKg)}</div>
+          <div class="resultado-label">Costo alim/kg producido</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-valor">$ ${fmtInt(margenBruto)}</div>
+          <div class="resultado-label">Margen bruto/kg</div>
+        </div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Fórmula:</b> ICA = Alimento consumido ÷ Ganancia de peso<br>
+        ICA = ${fmt(alimento)} kg ÷ ${fmt(ganancia)} kg = <b>${fmt(ica)}</b><br>
+        GDP = (${fmt(ganancia)} kg ÷ ${animales} animales) ÷ ${dias} días × 1000 = <b>${fmt(gdp, 1)} g/animal/día</b><br>
+        Consumo promedio: <b>${fmt(alimAnimalDia, 2)} kg/animal/día</b><br>
+        Costo alimentario por kg producido: ${fmt(ica)} × $ ${fmtInt(costoAlim)} = <b>$ ${fmtInt(costoAlimKg)}</b><br>
+        ${precioVta > 0 ? `Margen bruto por kg: $ ${fmtInt(precioVta)} − $ ${fmtInt(costoAlimKg)} = <b>$ ${fmtInt(margenBruto)}</b>` : ''}
+      </div>
+    </div>`;
+}
+
+function calcularLote() {
+  const especie    = document.getElementById('l-especie').value;
+  const nIni       = parseFloat(document.getElementById('l-inicio').value) || 0;
+  const nFin       = parseFloat(document.getElementById('l-final').value) || 0;
+  const pesoIni    = parseFloat(document.getElementById('l-peso-ini').value) || 0;
+  const pesoFin    = parseFloat(document.getElementById('l-peso-fin').value) || 0;
+  const alimento   = parseFloat(document.getElementById('l-alimento').value) || 0;
+  const dias       = parseFloat(document.getElementById('l-dias').value) || 1;
+  const costoAlim  = parseFloat(document.getElementById('l-costo-alim').value) || 0;
+  const costoAnim  = parseFloat(document.getElementById('l-costo-animal').value) || 0;
+  const otros      = parseFloat(document.getElementById('l-otros').value) || 0;
+  const precio     = parseFloat(document.getElementById('l-precio').value) || 0;
+
+  const mortalidad    = ((nIni - nFin) / nIni) * 100;
+  const gananciaTotal = nFin * (pesoFin - pesoIni);
+  const ica           = alimento / gananciaTotal;
+  const gdp           = ((pesoFin - pesoIni) / dias) * 1000;
+  const costoAlimTotal= alimento * costoAlim;
+  const costoAnimTotal= nIni * costoAnim;
+  const costoTotal    = costoAlimTotal + costoAnimTotal + otros;
+  const ingresoBruto  = nFin * pesoFin * precio;
+  const utilidad      = ingresoBruto - costoTotal;
+  const roi           = (utilidad / costoTotal) * 100;
+  const clas          = clasificarICA(ica, especie, 'intensivo');
+
+  document.getElementById('resultado-lote').style.display = 'block';
+  document.getElementById('resultado-lote').innerHTML = `
+    <div class="resultado-box ${clas.colorClass}">
+      <div class="resultado-titulo">Análisis de Lote — Resultado Completo</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(ica)}</div><div class="resultado-label">ICA (${clas.texto})</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(gdp,1)} g</div><div class="resultado-label">GDP (g/animal/día)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(mortalidad,1)}%</div><div class="resultado-label">Mortalidad del lote</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(roi,1)}%</div><div class="resultado-label">ROI del lote</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(ingresoBruto)}</div><div class="resultado-label">Ingreso bruto (COP)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(costoTotal)}</div><div class="resultado-label">Costo total (COP)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(utilidad)}</div><div class="resultado-label">Utilidad neta (COP)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(utilidad/nFin)}</div><div class="resultado-label">Utilidad/animal</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Parámetros del lote:</b><br>
+        Animales: ${fmtInt(nIni)} → ${fmtInt(nFin)} (mortalidad: ${fmt(mortalidad,1)}%)<br>
+        Peso: ${pesoIni} kg → ${pesoFin} kg | GDP: <b>${fmt(gdp,1)} g/animal/día</b> en ${dias} días<br>
+        Biomasa producida: ${fmt(gananciaTotal,1)} kg | Alimento total: ${fmtInt(alimento)} kg<br>
+        <b>ICA = ${fmtInt(alimento)} ÷ ${fmt(gananciaTotal,1)} = ${fmt(ica)}</b><br><br>
+        <b>Costos:</b> Alimento $ ${fmtInt(costoAlimTotal)} + Animales $ ${fmtInt(costoAnimTotal)} + Otros $ ${fmtInt(otros)} = <b>$ ${fmtInt(costoTotal)}</b><br>
+        Ingreso bruto: ${fmtInt(nFin)} × ${pesoFin} kg × $ ${fmtInt(precio)} = <b>$ ${fmtInt(ingresoBruto)}</b><br>
+        <b>Utilidad neta: $ ${fmtInt(utilidad)} | ROI: ${fmt(roi,1)}%</b>
+      </div>
+    </div>`;
+}
+
+function actualizarReferencia() {
+  // Actualiza el hint de referencia según especie seleccionada
+}
+</script>
+</body>
+</html>
