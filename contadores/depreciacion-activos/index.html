@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora de depreciación de activos Colombia 2026. Línea recta, reducción de saldos, suma de dígitos y unidades producidas. Tabla de depreciación anual y mensual." />
+  <meta name="keywords" content="calculadora depreciacion activos colombia, depreciacion linea recta colombia, depreciacion reduccion saldos, vida util activos colombia, NIIF depreciacion colombia" />
+  <title>Calculadora de Depreciación de Activos — HerramientasPro Colombia</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #1D9E75; --verde-dark: #0F6E56; --verde-light: #E1F5EE;
+      --azul: #185FA5; --azul-light: #E6F1FB;
+      --rojo: #A32D2D; --rojo-light: #FCEBEB;
+      --naranja: #854F0B; --naranja-light: #FAEEDA;
+      --morado: #534AB7; --morado-light: #EEEDFE;
+      --text: #1a1a1a; --text-sec: #555; --text-muted: #888;
+      --bg: #f7f7f5; --card: #ffffff; --border: #e0e0dc; --radius: 12px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+    nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; height: 54px; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-icon { width: 30px; height: 30px; background: var(--verde); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .nav-sep { color: var(--border); font-size: 18px; }
+    .nav-current { font-size: 13px; color: var(--text-sec); }
+
+    .hero { background: linear-gradient(135deg, #3C3489 0%, #534AB7 100%); padding: 2rem 1.5rem; text-align: center; }
+    .hero-icon { font-size: 42px; margin-bottom: 10px; }
+    .hero h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .hero p { font-size: 14px; color: rgba(255,255,255,0.85); max-width: 580px; margin: 0 auto; }
+    .hero-params { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .hero-param { font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; padding: 4px 10px; border-radius: 20px; }
+
+    .modulos { max-width: 960px; margin: 0 auto; padding: 1.2rem 1.5rem 0; }
+    .modulos-tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+    .mod-tab { padding: 10px 16px; font-size: 13px; font-weight: 500; border: none; background: transparent; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; border-radius: 6px 6px 0 0; white-space: nowrap; }
+    .mod-tab:hover { color: var(--morado); background: var(--morado-light); }
+    .mod-tab.active { color: var(--morado); border-bottom-color: var(--morado); font-weight: 600; }
+    .modulo { display: none; }
+    .modulo.active { display: block; }
+
+    .main { max-width: 960px; margin: 0 auto; padding: 1.2rem 1.5rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: flex; align-items: center; gap: 7px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 500; color: var(--text-sec); }
+    select, input[type="number"], input[type="text"] {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 14px; color: var(--text); background: #fff; transition: border-color 0.15s;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--morado); }
+    .hint { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    /* METODO TABS */
+    .metodo-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 1rem; }
+    .metodo-btn { padding: 10px 8px; background: #f5f5f2; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; color: var(--text-sec); cursor: pointer; text-align: center; transition: all 0.15s; }
+    .metodo-btn.active { background: var(--morado-light); border-color: var(--morado); color: var(--morado); font-weight: 700; }
+    .metodo-emoji { font-size: 20px; display: block; margin-bottom: 4px; }
+
+    .btn { width: 100%; padding: 13px; background: var(--morado); color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .btn:hover { background: #3C3489; }
+    .btn-reset { width: 100%; padding: 10px; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 9px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+
+    #resultados { display: none; }
+
+    /* RESUMEN */
+    .resumen-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 1rem; }
+    .rc { border-radius: 10px; padding: 1rem; text-align: center; border: 1px solid; }
+    .rc.morado { background: var(--morado-light); border-color: #CECBF6; }
+    .rc.azul { background: var(--azul-light); border-color: #B5D4F4; }
+    .rc.verde { background: var(--verde-light); border-color: #9FE1CB; }
+    .rc.naranja { background: var(--naranja-light); border-color: #FAC775; }
+    .rc-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 5px; }
+    .rc-valor { font-size: 17px; font-weight: 800; }
+    .rc.morado .rc-valor { color: var(--morado); }
+    .rc.azul .rc-valor { color: var(--azul); }
+    .rc.verde .rc-valor { color: var(--verde-dark); }
+    .rc.naranja .rc-valor { color: var(--naranja); }
+    .rc-sub { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+
+    /* BARRA PROGRESO */
+    .barra-anio { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+    .barra-anio-label { font-size: 11px; color: var(--text-sec); width: 50px; flex-shrink: 0; }
+    .barra-bg { flex: 1; background: #f0f0ec; border-radius: 3px; height: 18px; overflow: hidden; }
+    .barra-fill-dep { height: 100%; background: var(--morado); border-radius: 3px; transition: width 0.4s; display: flex; align-items: center; padding-left: 6px; }
+    .barra-fill-val { font-size: 10px; font-weight: 700; color: #fff; }
+    .barra-anio-val { font-size: 11px; color: var(--text-sec); width: 120px; text-align: right; flex-shrink: 0; }
+
+    /* TABLA */
+    .tabla-wrap { max-height: 380px; overflow-y: auto; overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { background: #f5f5f2; color: var(--text-sec); font-weight: 600; padding: 8px 10px; text-align: right; border-bottom: 1px solid var(--border); position: sticky; top: 0; font-size: 11px; }
+    th:first-child { text-align: left; }
+    td { padding: 7px 10px; border-bottom: 1px solid #f5f5f2; text-align: right; }
+    td:first-child { text-align: left; color: var(--text-sec); }
+    tr:last-child td { font-weight: 700; background: var(--morado-light); border-top: 1px solid #CECBF6; }
+    .td-dep { color: var(--morado); font-weight: 700; }
+    .td-acum { color: var(--rojo); }
+    .td-libro { color: var(--verde-dark); }
+
+    /* TABLA VIDAS UTILES */
+    .tabla-vu { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .tabla-vu th { background: var(--morado-light); color: var(--morado); font-weight: 600; padding: 8px 12px; text-align: left; border-bottom: 1px solid #CECBF6; }
+    .tabla-vu td { padding: 8px 12px; border-bottom: 1px solid #f0f0ec; }
+    .tabla-vu tr:last-child td { border-bottom: none; }
+    .tabla-vu tr:nth-child(even) td { background: #fafaf8; }
+
+    .formula-box { background: var(--morado-light); border: 1px solid #CECBF6; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--morado); margin-bottom: 1rem; font-family: 'Courier New', monospace; }
+
+    .disclaimer { background: #fffbf0; border: 1px solid #FAC775; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #854F0B; line-height: 1.5; margin-top: 1rem; }
+    .btn-print { width: 100%; padding: 10px; background: transparent; color: var(--morado); border: 1px solid var(--morado); border-radius: 9px; font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 8px; }
+
+    @media print {
+      nav, .btn, .btn-reset, .btn-print, .hero, .modulos { display: none !important; }
+      .card { border: 1px solid #ccc; break-inside: avoid; }
+      body { background: #fff; }
+      #resultados { display: block !important; }
+      .tabla-wrap { max-height: none; overflow: visible; }
+    }
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .resumen-grid { grid-template-columns: 1fr 1fr; }
+      .metodo-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">
+      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-text">HerramientasPro</div>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">📉 Depreciación de Activos</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">📉</div>
+  <h1>Calculadora de Depreciación de Activos</h1>
+  <p>Calcula la depreciación por línea recta, reducción de saldos, suma de dígitos y unidades producidas. Genera tabla anual y mensual para contabilidad colombiana bajo NIIF y PCGA.</p>
+  <div class="hero-params">
+    <span class="hero-param">📐 Línea recta</span>
+    <span class="hero-param">📉 Reducción de saldos</span>
+    <span class="hero-param">🔢 Suma de dígitos</span>
+    <span class="hero-param">⚙️ Unidades producidas</span>
+  </div>
+</div>
+
+<div class="modulos">
+  <div class="modulos-tabs">
+    <button class="mod-tab active" onclick="switchMod('calc',this)">🧮 Calculadora</button>
+    <button class="mod-tab" onclick="switchMod('vidas',this)">📋 Vidas útiles</button>
+    <button class="mod-tab" onclick="switchMod('comparar',this)">⚖️ Comparar métodos</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- MÓDULO CALCULADORA -->
+  <div class="modulo active" id="mod-calc">
+    <div class="card">
+      <div class="card-title">⚙️ Método de depreciación</div>
+      <div class="metodo-grid">
+        <button class="metodo-btn active" onclick="setMetodo('linea',this)"><span class="metodo-emoji">📐</span>Línea recta<br><small>Cuota fija anual</small></button>
+        <button class="metodo-btn" onclick="setMetodo('saldos',this)"><span class="metodo-emoji">📉</span>Reducción de saldos<br><small>Mayor al inicio</small></button>
+        <button class="metodo-btn" onclick="setMetodo('digitos',this)"><span class="metodo-emoji">🔢</span>Suma de dígitos<br><small>Acelerada</small></button>
+        <button class="metodo-btn" onclick="setMetodo('unidades',this)"><span class="metodo-emoji">⚙️</span>Unidades producidas<br><small>Por uso</small></button>
+      </div>
+      <div class="formula-box" id="formula-box">
+        Depreciación anual = (Costo − Valor residual) ÷ Vida útil
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏢 Datos del activo</div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label for="nombre-activo">Nombre del activo</label>
+          <input type="text" id="nombre-activo" placeholder="Ej: Camión de carga, Computador, Maquinaria industrial" />
+        </div>
+        <div class="form-group">
+          <label for="tipo-activo">Tipo de activo</label>
+          <select id="tipo-activo" onchange="autoVidaUtil()">
+            <option value="">— Seleccione tipo —</option>
+            <option value="edificio">Edificios y construcciones</option>
+            <option value="maquinaria">Maquinaria y equipo industrial</option>
+            <option value="vehiculo">Vehículos</option>
+            <option value="muebles">Muebles y enseres</option>
+            <option value="computador">Equipos de cómputo</option>
+            <option value="agricola">Equipo agrícola</option>
+            <option value="medico">Equipo médico</option>
+            <option value="otro">Otro activo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="costo">Costo de adquisición (COP)</label>
+          <input type="number" id="costo" placeholder="Ej: 50000000" min="0" step="100000" />
+        </div>
+        <div class="form-group">
+          <label for="valor-residual">Valor residual / salvamento (COP)</label>
+          <input type="number" id="valor-residual" placeholder="Ej: 5000000" min="0" step="100000" value="0" />
+          <span class="hint">Valor estimado al final de la vida útil. Puede ser 0.</span>
+        </div>
+        <div class="form-group">
+          <label for="vida-util">Vida útil (años)</label>
+          <input type="number" id="vida-util" placeholder="Ej: 5" min="1" max="100" step="1" />
+          <span class="hint" id="vida-util-hint">Según tipo de activo y política contable NIIF/PCGA.</span>
+        </div>
+        <div class="form-group">
+          <label for="fecha-compra">Fecha de compra / inicio</label>
+          <input type="text" id="fecha-compra" placeholder="Ej: 2024" />
+          <span class="hint">Año de inicio de la depreciación.</span>
+        </div>
+        <div class="form-group" id="tasa-saldos-wrap" style="display:none;">
+          <label for="tasa-saldos">Tasa de depreciación (%)</label>
+          <input type="number" id="tasa-saldos" placeholder="Ej: 40" min="1" max="100" step="1" value="40" />
+          <span class="hint">Tasa fija sobre el saldo en libros. Común: 2× tasa línea recta.</span>
+        </div>
+        <div class="form-group" id="unidades-wrap" style="display:none;">
+          <label for="unidades-total">Unidades totales de vida útil</label>
+          <input type="number" id="unidades-total" placeholder="Ej: 100000" min="1" step="100" />
+          <span class="hint">Total de horas, km, unidades o ciclos estimados de uso.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="unidades-por-anio-card" style="display:none;">
+      <div class="card-title">📅 Uso estimado por año</div>
+      <p style="font-size:13px;color:var(--text-sec);margin-bottom:1rem;">Ingrese las unidades producidas/usadas por año para calcular la depreciación variable.</p>
+      <div id="unidades-anios-lista"></div>
+    </div>
+
+    <button class="btn" onclick="calcularDepreciacion()">🧮 Calcular depreciación</button>
+    <button class="btn-reset" onclick="resetear()">↺ Limpiar</button>
+
+    <div id="resultados">
+      <div class="card" style="margin-top:1.2rem;">
+        <div class="card-title" id="res-titulo">📊 Resultados</div>
+        <div class="resumen-grid">
+          <div class="rc morado"><div class="rc-label">Costo depreciable</div><div class="rc-valor" id="rc-dep">—</div><div class="rc-sub">base de cálculo</div></div>
+          <div class="rc azul"><div class="rc-label">Dep. año 1</div><div class="rc-valor" id="rc-anio1">—</div><div class="rc-sub">primer año</div></div>
+          <div class="rc naranja"><div class="rc-label">Dep. mensual</div><div class="rc-valor" id="rc-mensual">—</div><div class="rc-sub">promedio mes 1</div></div>
+          <div class="rc verde"><div class="rc-label">Valor residual</div><div class="rc-valor" id="rc-residual">—</div><div class="rc-sub">al final</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📊 Depreciación por año</div>
+        <div id="barras-anios"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📅 Tabla de depreciación</div>
+        <div class="tabla-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Año</th>
+                <th>Dep. del año</th>
+                <th>Dep. acumulada</th>
+                <th>Valor en libros</th>
+                <th>Dep. mensual</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-dep"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="disclaimer">⚠️ <strong>Herramienta orientativa.</strong> Los métodos de depreciación y vidas útiles presentados son de uso general. Bajo NIIF (NIC 16), la vida útil y el método deben reflejar el patrón real de consumo del activo. Verifique con su contador o revisor fiscal el método y parámetros permitidos para cada tipo de activo en su empresa.</div>
+      <button class="btn-print" onclick="window.print()">🖨️ Imprimir tabla</button>
+    </div>
+  </div>
+
+  <!-- MÓDULO VIDAS ÚTILES -->
+  <div class="modulo" id="mod-vidas">
+    <div class="card">
+      <div class="card-title">📋 Vidas útiles recomendadas — Colombia</div>
+      <p style="font-size:13px;color:var(--text-sec);margin-bottom:1rem;">Referencia bajo NIIF (NIC 16) y Estatuto Tributario colombiano (Art. 137 ET). La vida útil fiscal puede diferir de la contable.</p>
+      <table class="tabla-vu">
+        <thead><tr><th>Tipo de activo</th><th>Vida útil NIIF</th><th>Vida útil fiscal ET</th><th>Tasa línea recta</th><th>Observación</th></tr></thead>
+        <tbody>
+          <tr><td>🏢 Edificios y construcciones</td><td>20–50 años</td><td>20 años</td><td>2–5%</td><td>Según materiales y uso. Sin terreno.</td></tr>
+          <tr><td>🏭 Maquinaria y equipo industrial</td><td>5–15 años</td><td>10 años</td><td>7–20%</td><td>Depende de intensidad de uso y mantenimiento.</td></tr>
+          <tr><td>🚗 Vehículos automotores</td><td>5–10 años</td><td>5 años</td><td>10–20%</td><td>Vehículos de carga pueden tener menor vida útil.</td></tr>
+          <tr><td>🖥️ Equipos de cómputo</td><td>3–5 años</td><td>5 años</td><td>20–33%</td><td>La obsolescencia tecnológica puede reducir la vida útil.</td></tr>
+          <tr><td>🪑 Muebles y enseres</td><td>5–10 años</td><td>10 años</td><td>10–20%</td><td>Depende del uso y mantenimiento.</td></tr>
+          <tr><td>🌾 Equipo agrícola</td><td>5–10 años</td><td>10 años</td><td>10–20%</td><td>Tractores, cosechadoras, aspersoras.</td></tr>
+          <tr><td>🏥 Equipo médico</td><td>5–10 años</td><td>10 años</td><td>10–20%</td><td>Alta obsolescencia tecnológica.</td></tr>
+          <tr><td>💡 Instalaciones eléctricas</td><td>10–20 años</td><td>20 años</td><td>5–10%</td><td>Parte de la construcción o separado.</td></tr>
+          <tr><td>📡 Equipos de comunicación</td><td>3–5 años</td><td>5 años</td><td>20–33%</td><td>Celulares, radios, antenas.</td></tr>
+          <tr><td>🌳 Cultivos permanentes</td><td>10–25 años</td><td>Variable</td><td>4–10%</td><td>Café 10 años, palma 20 años, cacao 20 años.</td></tr>
+          <tr><td>🔧 Herramientas y accesorios</td><td>2–5 años</td><td>5 años</td><td>20–50%</td><td>Depreciación acelerada por desgaste.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">📖 Diferencia NIIF vs Estatuto Tributario</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;font-size:13px;">
+        <div style="background:var(--azul-light);border:1px solid #B5D4F4;border-radius:8px;padding:1rem;">
+          <strong style="color:var(--azul);display:block;margin-bottom:8px;">📊 Depreciación NIIF (contable)</strong>
+          La vida útil debe reflejar el patrón real de consumo del activo. La empresa define la vida útil y el método según la NIC 16. Se puede cambiar si cambia el patrón de consumo. El método más común bajo NIIF es línea recta o unidades de producción.
+        </div>
+        <div style="background:var(--morado-light);border:1px solid #CECBF6;border-radius:8px;padding:1rem;">
+          <strong style="color:var(--morado);display:block;margin-bottom:8px;">🏛️ Depreciación fiscal (ET Art. 137)</strong>
+          El Estatuto Tributario fija vidas útiles mínimas para efectos fiscales. Si la depreciación contable es mayor a la fiscal, la diferencia no es deducible. Se puede solicitar a la DIAN una vida útil diferente. Aplica para el cálculo del impuesto de renta.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÓDULO COMPARAR -->
+  <div class="modulo" id="mod-comparar">
+    <div class="card">
+      <div class="card-title">⚖️ Compara los 3 métodos para el mismo activo</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="cmp-costo">Costo del activo (COP)</label>
+          <input type="number" id="cmp-costo" placeholder="50000000" min="0" step="100000" value="50000000" />
+        </div>
+        <div class="form-group">
+          <label for="cmp-residual">Valor residual (COP)</label>
+          <input type="number" id="cmp-residual" placeholder="0" min="0" step="100000" value="0" />
+        </div>
+        <div class="form-group">
+          <label for="cmp-vida">Vida útil (años)</label>
+          <input type="number" id="cmp-vida" placeholder="5" min="1" max="50" value="5" />
+        </div>
+        <div class="form-group">
+          <label for="cmp-tasa">Tasa reducción de saldos (%)</label>
+          <input type="number" id="cmp-tasa" placeholder="40" min="1" max="100" value="40" />
+        </div>
+      </div>
+      <button class="btn" onclick="compararMetodos()">⚖️ Comparar métodos</button>
+    </div>
+    <div id="res-comparar" style="display:none;">
+      <div class="card">
+        <div class="card-title">📊 Comparación de métodos</div>
+        <div style="overflow-x:auto;">
+          <table id="tabla-comparar">
+            <thead>
+              <tr>
+                <th>Año</th>
+                <th>Línea recta</th>
+                <th>Reducción saldos</th>
+                <th>Suma de dígitos</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-comparar"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">💡 ¿Cuál método conviene más?</div>
+        <div id="recomendacion-metodo" style="font-size:13px;color:var(--text-sec);line-height:1.8;"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+  let metodoActual = 'linea';
+
+  const vidasUtiles = {
+    edificio: { vida: 20, hint: 'Edificios: 20 años fiscal (Art. 137 ET). NIIF: 20–50 años.' },
+    maquinaria: { vida: 10, hint: 'Maquinaria industrial: 10 años fiscal. NIIF: 5–15 años.' },
+    vehiculo: { vida: 5, hint: 'Vehículos: 5 años fiscal. NIIF: 5–10 años.' },
+    muebles: { vida: 10, hint: 'Muebles y enseres: 10 años fiscal. NIIF: 5–10 años.' },
+    computador: { vida: 5, hint: 'Equipos de cómputo: 5 años fiscal. NIIF: 3–5 años.' },
+    agricola: { vida: 10, hint: 'Equipo agrícola: 10 años fiscal. Ajustar por uso real.' },
+    medico: { vida: 10, hint: 'Equipo médico: 10 años fiscal. Alta obsolescencia tecnológica.' },
+    otro: { vida: 5, hint: 'Ingrese la vida útil según política contable y tipo de activo.' },
+  };
+
+  const formulas = {
+    linea: 'Dep. anual = (Costo − Valor residual) ÷ Vida útil en años',
+    saldos: 'Dep. año n = Valor en libros (inicio año) × Tasa%  |  Tasa sugerida = 2 × (100% ÷ Vida útil)',
+    digitos: 'Dep. año n = (Costo − VR) × [Dígito año / Suma de dígitos]  |  Suma = n(n+1)/2',
+    unidades: 'Dep. por unidad = (Costo − VR) ÷ Unidades totales vida útil  |  Dep. año = Dep/unidad × Unidades del año',
+  };
+
+  function switchMod(id, el) {
+    document.querySelectorAll('.modulo').forEach(m => m.classList.remove('active'));
+    document.querySelectorAll('.mod-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('mod-' + id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function setMetodo(m, btn) {
+    metodoActual = m;
+    document.querySelectorAll('.metodo-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('formula-box').textContent = formulas[m];
+    document.getElementById('tasa-saldos-wrap').style.display = m === 'saldos' ? 'flex' : 'none';
+    document.getElementById('unidades-wrap').style.display = m === 'unidades' ? 'flex' : 'none';
+    document.getElementById('unidades-por-anio-card').style.display = 'none';
+  }
+
+  function autoVidaUtil() {
+    const tipo = document.getElementById('tipo-activo').value;
+    if (tipo && vidasUtiles[tipo]) {
+      document.getElementById('vida-util').value = vidasUtiles[tipo].vida;
+      document.getElementById('vida-util-hint').textContent = vidasUtiles[tipo].hint;
+    }
+  }
+
+  document.getElementById('vida-util').addEventListener('input', function() {
+    if (metodoActual === 'unidades') generarCamposUnidades();
+  });
+
+  function generarCamposUnidades() {
+    const vida = parseInt(document.getElementById('vida-util').value) || 0;
+    const anioInicio = parseInt(document.getElementById('fecha-compra').value) || 2024;
+    if (vida <= 0) return;
+    let html = '';
+    for (let i = 1; i <= vida; i++) {
+      html += `<div style="display:grid;grid-template-columns:120px 1fr;gap:8px;align-items:center;margin-bottom:8px;">
+        <label style="font-size:13px;color:var(--text-sec);">Año ${i} (${anioInicio + i - 1})</label>
+        <input type="number" class="unidad-anio" placeholder="Unidades" min="0" step="100" style="padding:7px 10px;font-size:13px;border:1px solid var(--border);border-radius:8px;" />
+      </div>`;
+    }
+    document.getElementById('unidades-anios-lista').innerHTML = html;
+    document.getElementById('unidades-por-anio-card').style.display = 'block';
+  }
+
+  function fmt(n) { return '$' + Math.round(n).toLocaleString('es-CO'); }
+
+  function calcularDepreciacion() {
+    const nombre = document.getElementById('nombre-activo').value || 'Activo';
+    const costo = parseFloat(document.getElementById('costo').value) || 0;
+    const vr = parseFloat(document.getElementById('valor-residual').value) || 0;
+    const vida = parseInt(document.getElementById('vida-util').value) || 0;
+    const anioInicio = parseInt(document.getElementById('fecha-compra').value) || 2024;
+
+    if (costo <= 0 || vida <= 0) { alert('Ingrese el costo del activo y la vida útil.'); return; }
+    if (vr >= costo) { alert('El valor residual no puede ser mayor o igual al costo.'); return; }
+
+    const depreciable = costo - vr;
+    let filas = [];
+
+    if (metodoActual === 'linea') {
+      const depAnual = depreciable / vida;
+      let acum = 0;
+      for (let i = 1; i <= vida; i++) {
+        acum += depAnual;
+        filas.push({ anio: anioInicio + i - 1, dep: depAnual, acum, libro: costo - acum });
+      }
+    } else if (metodoActual === 'saldos') {
+      const tasa = parseFloat(document.getElementById('tasa-saldos').value) / 100 || 0.40;
+      let libro = costo;
+      let acum = 0;
+      for (let i = 1; i <= vida; i++) {
+        let dep = libro * tasa;
+        if (i === vida) dep = libro - vr; // último año lleva al valor residual
+        acum += dep;
+        libro -= dep;
+        filas.push({ anio: anioInicio + i - 1, dep, acum, libro: Math.max(vr, libro) });
+      }
+    } else if (metodoActual === 'digitos') {
+      const suma = vida * (vida + 1) / 2;
+      let acum = 0;
+      for (let i = vida; i >= 1; i--) {
+        const dep = depreciable * (i / suma);
+        acum += dep;
+        filas.push({ anio: anioInicio + (vida - i), dep, acum, libro: costo - acum });
+      }
+    } else if (metodoActual === 'unidades') {
+      const totalUnidades = parseFloat(document.getElementById('unidades-total').value) || 1;
+      const depXunidad = depreciable / totalUnidades;
+      const inputs = document.querySelectorAll('.unidad-anio');
+      let acum = 0;
+      inputs.forEach((inp, i) => {
+        const u = parseFloat(inp.value) || 0;
+        const dep = depXunidad * u;
+        acum += dep;
+        filas.push({ anio: anioInicio + i, dep, acum, libro: costo - acum, unidades: u });
+      });
+    }
+
+    // Resumen
+    document.getElementById('res-titulo').textContent = `📊 ${nombre} — ${metodoActual === 'linea' ? 'Línea recta' : metodoActual === 'saldos' ? 'Reducción de saldos' : metodoActual === 'digitos' ? 'Suma de dígitos' : 'Unidades producidas'}`;
+    document.getElementById('rc-dep').textContent = fmt(depreciable);
+    document.getElementById('rc-anio1').textContent = fmt(filas[0]?.dep || 0);
+    document.getElementById('rc-mensual').textContent = fmt((filas[0]?.dep || 0) / 12);
+    document.getElementById('rc-residual').textContent = fmt(vr);
+
+    // Barras
+    const maxDep = Math.max(...filas.map(f => f.dep));
+    document.getElementById('barras-anios').innerHTML = filas.map(f => `
+      <div class="barra-anio">
+        <div class="barra-anio-label">${f.anio}</div>
+        <div class="barra-bg"><div class="barra-fill-dep" style="width:${(f.dep/maxDep*100).toFixed(0)}%"><span class="barra-fill-val">${(f.dep/maxDep*100).toFixed(0)}%</span></div></div>
+        <div class="barra-anio-val">${fmt(f.dep)}/año</div>
+      </div>`).join('');
+
+    // Tabla
+    document.getElementById('tbody-dep').innerHTML = filas.map(f => `
+      <tr>
+        <td>${f.anio}${f.unidades !== undefined ? ` (${f.unidades.toLocaleString()} uds)` : ''}</td>
+        <td class="td-dep">${fmt(f.dep)}</td>
+        <td class="td-acum">${fmt(f.acum)}</td>
+        <td class="td-libro">${fmt(Math.max(0, f.libro))}</td>
+        <td>${fmt((f.dep) / 12)}</td>
+      </tr>`).join('') +
+      `<tr><td>TOTAL</td><td class="td-dep">${fmt(depreciable)}</td><td class="td-acum">${fmt(depreciable)}</td><td class="td-libro">${fmt(vr)}</td><td>—</td></tr>`;
+
+    document.getElementById('resultados').style.display = 'block';
+    document.getElementById('resultados').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function compararMetodos() {
+    const costo = parseFloat(document.getElementById('cmp-costo').value) || 50000000;
+    const vr = parseFloat(document.getElementById('cmp-residual').value) || 0;
+    const vida = parseInt(document.getElementById('cmp-vida').value) || 5;
+    const tasa = parseFloat(document.getElementById('cmp-tasa').value) / 100 || 0.40;
+    const dep = costo - vr;
+    const suma = vida * (vida + 1) / 2;
+
+    let tbody = '';
+    let totalLR = 0, totalRS = 0, totalSD = 0;
+    let libroRS = costo;
+
+    for (let i = 1; i <= vida; i++) {
+      // Línea recta
+      const lr = dep / vida;
+      // Reducción saldos
+      let rs = libroRS * tasa;
+      if (i === vida) rs = libroRS - vr;
+      libroRS -= rs;
+      // Suma dígitos
+      const sd = dep * ((vida - i + 1) / suma);
+
+      totalLR += lr; totalRS += rs; totalSD += sd;
+
+      const max = Math.max(lr, rs, sd);
+      tbody += `<tr>
+        <td>Año ${i}</td>
+        <td style="color:var(--azul);font-weight:${lr===max?'800':'400'}">${fmt(lr)}</td>
+        <td style="color:var(--rojo);font-weight:${rs===max?'800':'400'}">${fmt(rs)}</td>
+        <td style="color:var(--morado);font-weight:${sd===max?'800':'400'}">${fmt(sd)}</td>
+      </tr>`;
+    }
+    tbody += `<tr><td>TOTAL</td><td>${fmt(totalLR)}</td><td>${fmt(totalRS)}</td><td>${fmt(totalSD)}</td></tr>`;
+    document.getElementById('tbody-comparar').innerHTML = tbody;
+
+    document.getElementById('recomendacion-metodo').innerHTML = `
+      <strong>📐 Línea recta:</strong> Ideal para activos que se consumen uniformemente (edificios, muebles). Simple de calcular y aceptada fiscalmente. La más usada en Colombia.<br>
+      <strong>📉 Reducción de saldos:</strong> Genera mayor depreciación al inicio. Útil para activos que pierden valor rápidamente (vehículos, tecnología). Mayor beneficio fiscal en primeros años.<br>
+      <strong>🔢 Suma de dígitos:</strong> También acelerada. Distribución más suave que reducción de saldos. Usada en activos con alto uso inicial.<br>
+      <strong>⚙️ Unidades producidas:</strong> La más precisa. Depreciación directamente relacionada con el uso real. Ideal para maquinaria, vehículos de carga y equipo agrícola.<br><br>
+      <em>Bajo NIIF (NIC 16), el método debe reflejar el patrón real de consumo de los beneficios económicos del activo.</em>`;
+
+    document.getElementById('res-comparar').style.display = 'block';
+    document.getElementById('res-comparar').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetear() {
+    ['nombre-activo','costo','valor-residual','vida-util','fecha-compra','tasa-saldos','unidades-total'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = id === 'tasa-saldos' ? 40 : id === 'valor-residual' ? 0 : '';
+    });
+    document.getElementById('tipo-activo').value = '';
+    document.getElementById('resultados').style.display = 'none';
+    document.getElementById('unidades-por-anio-card').style.display = 'none';
+  }
+</script>
+</body>
+</html>
