@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presupuesto Construcción por m² Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de presupuesto de construcción por m² para Colombia 2026. Costos directos, indirectos, APU y estimación por tipo de obra." />
+  <meta name="keywords" content="presupuesto construccion colombia 2026, costo m2 construccion colombia, APU construccion, ingeniero civil colombia, costos obra colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --gris-ing: #37474f;
+      --gris-medio: #546e7a;
+      --gris-claro: #eceff1;
+      --amarillo: #f5a623;
+      --verde: #2e7d32;
+      --rojo: #c62828;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #37474f 60%, #78909c 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 120px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--gris-ing); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--gris-ing); margin: 1rem 0 0.6rem; border-left: 3px solid var(--gris-ing); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--gris-ing); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--gris-ing); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: #263238; }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--gris-claro); border-left: 4px solid var(--gris-ing); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--gris-ing); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #37474f 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-total { font-size: 2.8rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.15rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* TABLA PRESUPUESTO */
+    .tabla-presupuesto { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .tabla-presupuesto th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: left; }
+    .tabla-presupuesto th:not(:first-child) { text-align: right; }
+    .tabla-presupuesto td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .tabla-presupuesto td:not(:first-child) { text-align: right; }
+    .tabla-presupuesto tr.subtotal td { background: rgba(255,255,255,0.08); font-weight: 700; }
+    .tabla-presupuesto tr.total-final td { background: rgba(255,215,0,0.2); font-weight: 900; color: #ffe082; font-size: 0.95rem; }
+    .tabla-presupuesto tr.capitulo td:first-child { font-weight: 700; color: #ffe082; }
+
+    /* APU */
+    .apu-row {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 6px;
+      align-items: center; margin-bottom: 5px;
+    }
+    .apu-input { padding: 7px 10px; border: 1.5px solid var(--borde); border-radius: 7px; font-size: 0.85rem; background: var(--gris-bg); width: 100%; }
+    .apu-input:focus { outline: none; border-color: var(--gris-ing); background: #fff; }
+    .apu-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 6px; margin-bottom: 4px; }
+    .apu-header span { font-size: 0.75rem; font-weight: 700; color: var(--texto-suave); }
+
+    .btn-sm { padding: 7px 14px; font-size: 0.82rem; font-weight: 700; border: none; border-radius: 20px; cursor: pointer; background: var(--gris-ing); color: #fff; }
+    .btn-sm:hover { background: #263238; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--gris-claro); }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🏗️ <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Presupuesto Construcción</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🏗️ Ingenieros Civiles y Constructores</div>
+  <h1>Presupuesto de Construcción por m² 2026</h1>
+  <p>Estimación de costos directos e indirectos por tipo de obra, análisis de precios unitarios (APU) y presupuesto detallado por capítulos. Precios de referencia Colombia 2026.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Precios Colombia 2026</span>
+    <span class="hero-chip">📐 APU detallado</span>
+    <span class="hero-chip">🏘️ 8 tipos de obra</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('estimacion', this)">🏗️ Estimación Rápida</button>
+    <button class="tab-btn" onclick="mostrarTab('apu', this)">📐 APU Detallado</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Costos de Referencia</button>
+  </div>
+
+  <!-- TAB 1: ESTIMACIÓN RÁPIDA -->
+  <div id="tab-estimacion" class="tab-panel active">
+    <div class="card">
+      <h2>🏗️ Estimación de Presupuesto por m²</h2>
+      <div class="info-box">
+        <strong>¿Cómo funciona?</strong> Selecciona el tipo de obra y las condiciones del proyecto. La calculadora estima el costo total por m² y el presupuesto global desglosado en capítulos según precios de referencia Colombia 2026.
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de obra</label>
+          <select id="e-tipo" onchange="autoCosto()">
+            <option value="vivienda-economica">Vivienda VIS / económica</option>
+            <option value="vivienda-media" selected>Vivienda estrato medio (3-4)</option>
+            <option value="vivienda-alta">Vivienda estrato alto (5-6)</option>
+            <option value="comercial">Local comercial / oficina</option>
+            <option value="bodega">Bodega / nave industrial</option>
+            <option value="institucional">Institución educativa / hospital</option>
+            <option value="cerramiento">Cerramiento / muro</option>
+            <option value="adecuacion">Adecuación / remodelación</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Área total a construir (m²)</label>
+          <input type="number" id="e-area" value="120" min="10" step="5" />
+        </div>
+        <div class="form-group">
+          <label>Número de pisos</label>
+          <input type="number" id="e-pisos" value="2" min="1" max="30" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Ciudad / Región</label>
+          <select id="e-ciudad" onchange="autoCosto()">
+            <option value="1.0">Bogotá D.C.</option>
+            <option value="0.95">Medellín</option>
+            <option value="0.92">Cali</option>
+            <option value="1.05">Cartagena / Costa</option>
+            <option value="0.90">Ciudades intermedias</option>
+            <option value="1.15">Zonas de difícil acceso</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Costo base por m² ($ COP) — referencia 2026</label>
+          <input type="number" id="e-costo-m2" value="1800000" min="100000" step="50000" />
+          <span class="form-hint">Se actualiza automáticamente según tipo de obra</span>
+        </div>
+        <div class="form-group">
+          <label>Costos indirectos (%)</label>
+          <input type="number" id="e-indirectos" value="25" min="10" max="40" step="1" />
+          <span class="form-hint">Administración, imprevistos, utilidad (AIU) — típico: 20–30%</span>
+        </div>
+        <div class="form-group">
+          <label>IVA sobre utilidad (%)</label>
+          <input type="number" id="e-iva" value="19" min="0" max="19" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Factor de complejidad</label>
+          <select id="e-complejidad">
+            <option value="0.9">Simple — forma regular, sin sótano</option>
+            <option value="1.0" selected>Normal — forma regular</option>
+            <option value="1.1">Compleja — forma irregular, sótano</option>
+            <option value="1.25">Muy compleja — diseño especial</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularEstimacion()">🏗️ Calcular Presupuesto</button>
+    </div>
+    <div id="resultado-estimacion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: APU -->
+  <div id="tab-apu" class="tab-panel">
+    <div class="card">
+      <h2>📐 Análisis de Precios Unitarios (APU)</h2>
+      <div class="info-box">
+        <strong>¿Qué es el APU?</strong> Descomposición del costo de una unidad de obra en materiales, mano de obra, equipos y AIU. Es la herramienta estándar para presupuestar en Colombia según el INVIAS y las Gobernaciones.
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre de la actividad</label>
+          <input type="text" id="apu-nombre" value="Concreto 3000 PSI vaciado en vigas" />
+        </div>
+        <div class="form-group">
+          <label>Unidad de medida</label>
+          <select id="apu-unidad">
+            <option value="m³" selected>m³ (metros cúbicos)</option>
+            <option value="m²">m² (metros cuadrados)</option>
+            <option value="ml">ml (metros lineales)</option>
+            <option value="kg">kg (kilogramos)</option>
+            <option value="und">und (unidad)</option>
+            <option value="gl">gl (global)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>AIU — Administración (%)</label>
+          <input type="number" id="apu-admin" value="10" min="0" max="30" step="1" />
+        </div>
+        <div class="form-group">
+          <label>AIU — Imprevistos (%)</label>
+          <input type="number" id="apu-imprevistos" value="5" min="0" max="15" step="1" />
+        </div>
+        <div class="form-group">
+          <label>AIU — Utilidad (%)</label>
+          <input type="number" id="apu-utilidad" value="10" min="0" max="20" step="1" />
+        </div>
+        <div class="form-group">
+          <label>IVA sobre utilidad (%)</label>
+          <input type="number" id="apu-iva" value="19" min="0" max="19" step="1" />
+        </div>
+      </div>
+
+      <hr class="sep" />
+      <h3>Insumos del APU</h3>
+      <div class="apu-header">
+        <span>Descripción del insumo</span>
+        <span>Unidad</span>
+        <span>Cantidad</span>
+        <span>Precio unit. ($)</span>
+        <span>Subtotal ($)</span>
+      </div>
+      <div id="apu-mat-container"></div>
+      <button class="btn-sm" onclick="agregarInsumo('mat')" style="margin-top:0.5rem;">+ Agregar material</button>
+
+      <h3 style="margin-top:1rem;">Mano de Obra</h3>
+      <div class="apu-header">
+        <span>Cargo</span>
+        <span>Unidad</span>
+        <span>Cantidad</span>
+        <span>Precio unit. ($)</span>
+        <span>Subtotal ($)</span>
+      </div>
+      <div id="apu-mo-container"></div>
+      <button class="btn-sm" onclick="agregarInsumo('mo')" style="margin-top:0.5rem;">+ Agregar mano de obra</button>
+
+      <h3 style="margin-top:1rem;">Equipos y Herramientas</h3>
+      <div class="apu-header">
+        <span>Equipo</span>
+        <span>Unidad</span>
+        <span>Cantidad</span>
+        <span>Precio unit. ($)</span>
+        <span>Subtotal ($)</span>
+      </div>
+      <div id="apu-eq-container"></div>
+      <button class="btn-sm" onclick="agregarInsumo('eq')" style="margin-top:0.5rem;">+ Agregar equipo</button>
+
+      <button class="btn" onclick="calcularAPU()" style="margin-top:1.2rem;">📐 Calcular APU</button>
+    </div>
+    <div id="resultado-apu" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Costos de Construcción por m² — Colombia 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Tipo de obra</th><th>Costo directo ($/m²)</th><th>Con AIU 25%</th><th>Referencia</th></tr></thead>
+          <tbody>
+            <tr><td><b>Vivienda VIS (estrato 1-2)</b></td><td>$900.000 – $1.200.000</td><td>$1.125.000 – $1.500.000</td><td>CAMACOL 2026</td></tr>
+            <tr><td><b>Vivienda media (estrato 3-4)</b></td><td>$1.500.000 – $2.200.000</td><td>$1.875.000 – $2.750.000</td><td>CAMACOL 2026</td></tr>
+            <tr><td><b>Vivienda alta (estrato 5-6)</b></td><td>$2.500.000 – $4.500.000</td><td>$3.125.000 – $5.625.000</td><td>CAMACOL 2026</td></tr>
+            <tr><td><b>Local comercial / oficina</b></td><td>$1.800.000 – $2.800.000</td><td>$2.250.000 – $3.500.000</td><td>Referencia mercado</td></tr>
+            <tr><td><b>Bodega / nave industrial</b></td><td>$800.000 – $1.400.000</td><td>$1.000.000 – $1.750.000</td><td>Referencia mercado</td></tr>
+            <tr><td><b>Institución educativa</b></td><td>$2.000.000 – $3.200.000</td><td>$2.500.000 – $4.000.000</td><td>MEN / gobernaciones</td></tr>
+            <tr><td><b>Hospital / clínica</b></td><td>$3.500.000 – $6.000.000</td><td>$4.375.000 – $7.500.000</td><td>MinSalud</td></tr>
+            <tr><td><b>Adecuación / remodelación</b></td><td>$400.000 – $900.000</td><td>$500.000 – $1.125.000</td><td>Referencia mercado</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">⚠️ Costos orientativos para Bogotá. Aplicar factor regional: Medellín ×0.95 | Cali ×0.92 | Costa ×1.05 | Zonas alejadas ×1.15</p>
+    </div>
+
+    <div class="card">
+      <h2>📋 Distribución Típica del Presupuesto por Capítulos</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Capítulo</th><th>% del costo directo</th><th>Incluye</th></tr></thead>
+          <tbody>
+            <tr><td><b>01 — Preliminares</b></td><td>2 – 4%</td><td>Cerramiento, descapote, replanteo, campamento</td></tr>
+            <tr><td><b>02 — Cimentación</b></td><td>8 – 15%</td><td>Excavación, zapatas, vigas de amarre, rellenos</td></tr>
+            <tr><td><b>03 — Estructura</b></td><td>20 – 30%</td><td>Columnas, vigas, losas, escaleras</td></tr>
+            <tr><td><b>04 — Mampostería</b></td><td>5 – 10%</td><td>Muros en bloque o ladrillo, pañetes</td></tr>
+            <tr><td><b>05 — Cubierta</b></td><td>5 – 10%</td><td>Estructura metálica, teja, impermeabilización</td></tr>
+            <tr><td><b>06 — Instalaciones hidráulicas</b></td><td>4 – 8%</td><td>Tuberías, accesorios, aparatos sanitarios</td></tr>
+            <tr><td><b>07 — Instalaciones eléctricas</b></td><td>4 – 8%</td><td>Cableado, tableros, tomacorrientes, luminarias</td></tr>
+            <tr><td><b>08 — Acabados</b></td><td>20 – 35%</td><td>Pisos, enchapes, pintura, carpintería, vidrios</td></tr>
+            <tr><td><b>09 — Urbanismo</b></td><td>3 – 8%</td><td>Andenes, zonas verdes, parqueaderos</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Precios Mano de Obra — Colombia 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Cargo</th><th>Jornal diario ($ COP)</th><th>Incluye prestaciones</th></tr></thead>
+          <tbody>
+            <tr><td>Maestro de obra</td><td>$95.000 – $130.000</td><td>$120.000 – $165.000</td></tr>
+            <tr><td>Oficial de construcción</td><td>$75.000 – $100.000</td><td>$95.000 – $127.000</td></tr>
+            <tr><td>Ayudante / Peón</td><td>$55.000 – $70.000</td><td>$70.000 – $89.000</td></tr>
+            <tr><td>Plomero</td><td>$80.000 – $110.000</td><td>$102.000 – $140.000</td></tr>
+            <tr><td>Electricista</td><td>$80.000 – $120.000</td><td>$102.000 – $152.000</td></tr>
+            <tr><td>Soldador</td><td>$90.000 – $140.000</td><td>$114.000 – $178.000</td></tr>
+            <tr><td>Pintor</td><td>$65.000 – $90.000</td><td>$83.000 – $114.000</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">Factor prestaciones sociales: ×1.27 aprox. (vacaciones, prima, cesantías, EPS, ARL, pensión).</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los costos presentados son referencias del mercado colombiano 2026. El presupuesto oficial de una obra debe ser elaborado por un <strong>Ingeniero Civil o Arquitecto matriculado ante el COPNIA o SCA</strong>, con base en cantidades de obra reales, especificaciones técnicas y precios del mercado local al momento de la licitación o contratación.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n, dec=0) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+// Costos base por tipo de obra ($ COP/m² — costo directo base Bogotá 2026)
+const costosBase = {
+  'vivienda-economica': 1050000,
+  'vivienda-media':     1800000,
+  'vivienda-alta':      3200000,
+  'comercial':          2200000,
+  'bodega':             1050000,
+  'institucional':      2600000,
+  'cerramiento':         450000,
+  'adecuacion':          650000,
+};
+
+// Distribución típica por capítulos (% del costo directo)
+const capitulosPct = {
+  'vivienda-media': [
+    { cap:'01 — Preliminares', pct:3 },
+    { cap:'02 — Cimentación', pct:12 },
+    { cap:'03 — Estructura (columnas, vigas, losas)', pct:25 },
+    { cap:'04 — Mampostería y pañetes', pct:8 },
+    { cap:'05 — Cubierta', pct:7 },
+    { cap:'06 — Instalaciones hidráulicas y sanitarias', pct:6 },
+    { cap:'07 — Instalaciones eléctricas y redes', pct:6 },
+    { cap:'08 — Acabados (pisos, pintura, carpintería)', pct:28 },
+    { cap:'09 — Urbanismo y exteriores', pct:5 },
+  ],
+  'vivienda-economica': [
+    { cap:'01 — Preliminares', pct:3 },
+    { cap:'02 — Cimentación', pct:14 },
+    { cap:'03 — Estructura', pct:28 },
+    { cap:'04 — Mampostería y pañetes', pct:10 },
+    { cap:'05 — Cubierta', pct:8 },
+    { cap:'06 — Instalaciones hidráulicas', pct:7 },
+    { cap:'07 — Instalaciones eléctricas', pct:7 },
+    { cap:'08 — Acabados básicos', pct:18 },
+    { cap:'09 — Urbanismo', pct:5 },
+  ],
+  'comercial': [
+    { cap:'01 — Preliminares', pct:3 },
+    { cap:'02 — Cimentación', pct:12 },
+    { cap:'03 — Estructura metálica / concreto', pct:28 },
+    { cap:'04 — Mampostería y divisiones', pct:6 },
+    { cap:'05 — Cubierta e impermeabilización', pct:7 },
+    { cap:'06 — Instalaciones hidráulicas', pct:5 },
+    { cap:'07 — Instalaciones eléctricas y voz/datos', pct:10 },
+    { cap:'08 — Acabados y fachada', pct:24 },
+    { cap:'09 — Urbanismo y parqueaderos', pct:5 },
+  ],
+};
+
+function getCapitulos(tipo) {
+  return capitulosPct[tipo] || capitulosPct['vivienda-media'];
+}
+
+function autoCosto() {
+  const tipo   = document.getElementById('e-tipo').value;
+  const factor = parseFloat(document.getElementById('e-ciudad').value) || 1.0;
+  const base   = costosBase[tipo] || 1800000;
+  document.getElementById('e-costo-m2').value = Math.round(base * factor / 50000) * 50000;
+}
+
+function calcularEstimacion() {
+  const tipo        = document.getElementById('e-tipo').value;
+  const area        = parseFloat(document.getElementById('e-area').value) || 0;
+  const pisos       = parseInt(document.getElementById('e-pisos').value) || 1;
+  const costoM2     = parseFloat(document.getElementById('e-costo-m2').value) || 0;
+  const indirectos  = parseFloat(document.getElementById('e-indirectos').value) / 100;
+  const iva         = parseFloat(document.getElementById('e-iva').value) / 100;
+  const complejidad = parseFloat(document.getElementById('e-complejidad').value);
+
+  const costoM2Adj  = costoM2 * complejidad;
+  const costoDirecto = costoM2Adj * area;
+  const costoAIU     = costoDirecto * indirectos;
+  const subtotal     = costoDirecto + costoAIU;
+  const ivaValor     = subtotal * iva * 0.1; // IVA solo sobre utilidad (~10% del total)
+  const costoTotal   = subtotal + ivaValor;
+  const costoM2Total = costoTotal / area;
+
+  const caps = getCapitulos(tipo);
+
+  let filasCapitulos = caps.map(c => {
+    const val = costoDirecto * c.pct / 100;
+    return `<tr class="capitulo">
+      <td>${c.cap}</td>
+      <td>${c.pct}%</td>
+      <td>$ ${fmt(val)}</td>
+      <td>$ ${fmt(val/area)}/m²</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('resultado-estimacion').style.display = 'block';
+  document.getElementById('resultado-estimacion').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Presupuesto Estimado — ${area} m² — ${pisos} piso(s)</div>
+      <div class="resultado-total">$ ${fmt(costoTotal)}</div>
+      <div class="resultado-sub">Presupuesto total incluido AIU e IVA</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(costoM2Total)}</div><div class="resultado-label">Costo total / m²</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(costoDirecto)}</div><div class="resultado-label">Costos directos</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(costoAIU)}</div><div class="resultado-label">AIU (${(indirectos*100).toFixed(0)}%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(costoTotal)}</div><div class="resultado-label">Total con IVA</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${area} m²</div><div class="resultado-label">Área construida</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(costoM2Adj)}/m²</div><div class="resultado-label">Costo directo/m²</div></div>
+      </div>
+
+      <table class="tabla-presupuesto" style="margin-top:1rem;">
+        <thead><tr><th>Capítulo</th><th>%</th><th>Valor ($)</th><th>$/m²</th></tr></thead>
+        <tbody>
+          ${filasCapitulos}
+          <tr class="subtotal"><td>SUBTOTAL COSTOS DIRECTOS</td><td>100%</td><td>$ ${fmt(costoDirecto)}</td><td>$ ${fmt(costoM2Adj)}</td></tr>
+          <tr><td>AIU — Administración, Imprevistos, Utilidad (${(indirectos*100).toFixed(0)}%)</td><td></td><td>$ ${fmt(costoAIU)}</td><td>$ ${fmt(costoAIU/area)}</td></tr>
+          <tr><td>IVA sobre utilidad (aprox.)</td><td></td><td>$ ${fmt(ivaValor)}</td><td>$ ${fmt(ivaValor/area)}</td></tr>
+          <tr class="total-final"><td>PRESUPUESTO TOTAL</td><td></td><td>$ ${fmt(costoTotal)}</td><td>$ ${fmt(costoM2Total)}</td></tr>
+        </tbody>
+      </table>
+
+      <div class="resultado-detalle">
+        <b>Parámetros:</b> Tipo: ${tipo.replace(/-/g,' ')} | Área: ${area} m² | Pisos: ${pisos} | Factor complejidad: ${complejidad}<br>
+        Costo directo: ${area} m² × $ ${fmt(costoM2Adj)}/m² = <b>$ ${fmt(costoDirecto)}</b><br>
+        AIU (${(indirectos*100).toFixed(0)}%): $ ${fmt(costoDirecto)} × ${indirectos} = <b>$ ${fmt(costoAIU)}</b><br>
+        <b>Total: $ ${fmt(costoTotal)} — Equivalente a $ ${fmt(costoM2Total)}/m²</b>
+      </div>
+    </div>`;
+}
+
+// ── APU ──
+let nMat=0, nMo=0, nEq=0;
+
+function agregarInsumo(tipo) {
+  const ids = { mat:'apu-mat-container', mo:'apu-mo-container', eq:'apu-eq-container' };
+  const defaults = {
+    mat: { desc:'Cemento Portland 50kg', und:'und', cant:7, precio:35000 },
+    mo:  { desc:'Oficial de construcción', und:'jornal', cant:0.5, precio:95000 },
+    eq:  { desc:'Mezcladora 1 saco', und:'hora', cant:2, precio:25000 },
+  };
+  const n = tipo === 'mat' ? ++nMat : tipo === 'mo' ? ++nMo : ++nEq;
+  const id = `${tipo}-${n}`;
+  const d  = defaults[tipo];
+  const c  = document.getElementById(ids[tipo]);
+  const div = document.createElement('div');
+  div.className = 'apu-row';
+  div.id = id;
+  div.innerHTML = `
+    <input class="apu-input" type="text"   id="${id}-desc"    value="${d.desc}" />
+    <input class="apu-input" type="text"   id="${id}-und"     value="${d.und}" style="max-width:80px;" />
+    <input class="apu-input" type="number" id="${id}-cant"    value="${d.cant}" min="0" step="0.01" oninput="actualizarSubtotal('${id}')" />
+    <input class="apu-input" type="number" id="${id}-precio"  value="${d.precio}" min="0" step="1000" oninput="actualizarSubtotal('${id}')" />
+    <input class="apu-input" type="number" id="${id}-subtotal" value="${d.cant*d.precio}" readonly style="background:#e8f5e9; font-weight:700;" />`;
+  c.appendChild(div);
+}
+
+function actualizarSubtotal(id) {
+  const cant   = parseFloat(document.getElementById(id+'-cant')?.value) || 0;
+  const precio = parseFloat(document.getElementById(id+'-precio')?.value) || 0;
+  const el = document.getElementById(id+'-subtotal');
+  if (el) el.value = cant * precio;
+}
+
+function sumarContenedor(containerId, prefix) {
+  const rows = document.querySelectorAll(`#${containerId} .apu-row`);
+  let total = 0;
+  rows.forEach(row => {
+    const id = row.id;
+    total += parseFloat(document.getElementById(id+'-subtotal')?.value || 0);
+  });
+  return total;
+}
+
+function calcularAPU() {
+  const nombre    = document.getElementById('apu-nombre').value || 'Actividad';
+  const unidad    = document.getElementById('apu-unidad').value;
+  const admin     = parseFloat(document.getElementById('apu-admin').value) / 100;
+  const imprevis  = parseFloat(document.getElementById('apu-imprevistos').value) / 100;
+  const utilidad  = parseFloat(document.getElementById('apu-utilidad').value) / 100;
+  const iva       = parseFloat(document.getElementById('apu-iva').value) / 100;
+
+  const totalMat = sumarContenedor('apu-mat-container','mat');
+  const totalMo  = sumarContenedor('apu-mo-container','mo');
+  const totalEq  = sumarContenedor('apu-eq-container','eq');
+  const costoDir = totalMat + totalMo + totalEq;
+
+  const valAdmin  = costoDir * admin;
+  const valImprev = costoDir * imprevis;
+  const valUtil   = costoDir * utilidad;
+  const valIVA    = valUtil * iva;
+  const costoTotal= costoDir + valAdmin + valImprev + valUtil + valIVA;
+
+  document.getElementById('resultado-apu').style.display = 'block';
+  document.getElementById('resultado-apu').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">APU — ${nombre}</div>
+      <div class="resultado-total">$ ${fmt(costoTotal)}</div>
+      <div class="resultado-sub">Precio unitario por ${unidad}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(totalMat)}</div><div class="resultado-label">Materiales</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(totalMo)}</div><div class="resultado-label">Mano de obra</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(totalEq)}</div><div class="resultado-label">Equipos</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(costoDir)}</div><div class="resultado-label">Costo directo</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(valAdmin+valImprev+valUtil)}</div><div class="resultado-label">AIU total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(costoTotal)}</div><div class="resultado-label">Precio unitario</div></div>
+      </div>
+      <table class="tabla-presupuesto" style="margin-top:1rem;">
+        <thead><tr><th>Componente</th><th>%</th><th>Valor ($/${unidad})</th></tr></thead>
+        <tbody>
+          <tr class="capitulo"><td>Materiales</td><td>${fmt(totalMat/costoDir*100,1)}%</td><td>$ ${fmt(totalMat)}</td></tr>
+          <tr class="capitulo"><td>Mano de obra</td><td>${fmt(totalMo/costoDir*100,1)}%</td><td>$ ${fmt(totalMo)}</td></tr>
+          <tr class="capitulo"><td>Equipos y herramientas</td><td>${fmt(totalEq/costoDir*100,1)}%</td><td>$ ${fmt(totalEq)}</td></tr>
+          <tr class="subtotal"><td>COSTO DIRECTO</td><td>100%</td><td>$ ${fmt(costoDir)}</td></tr>
+          <tr><td>Administración (${(admin*100).toFixed(0)}%)</td><td></td><td>$ ${fmt(valAdmin)}</td></tr>
+          <tr><td>Imprevistos (${(imprevis*100).toFixed(0)}%)</td><td></td><td>$ ${fmt(valImprev)}</td></tr>
+          <tr><td>Utilidad (${(utilidad*100).toFixed(0)}%)</td><td></td><td>$ ${fmt(valUtil)}</td></tr>
+          <tr><td>IVA sobre utilidad (${(iva*100).toFixed(0)}%)</td><td></td><td>$ ${fmt(valIVA)}</td></tr>
+          <tr class="total-final"><td>PRECIO UNITARIO TOTAL</td><td></td><td>$ ${fmt(costoTotal)} / ${unidad}</td></tr>
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// Inicializar APU con ejemplos
+agregarInsumo('mat');
+document.getElementById('mat-1-desc').value  = 'Cemento Portland 50 kg';
+document.getElementById('mat-1-und').value   = 'und';
+document.getElementById('mat-1-cant').value  = 7;
+document.getElementById('mat-1-precio').value= 35000;
+document.getElementById('mat-1-subtotal').value = 245000;
+
+agregarInsumo('mat');
+document.getElementById('mat-2-desc').value  = 'Arena de río (lavada)';
+document.getElementById('mat-2-und').value   = 'm³';
+document.getElementById('mat-2-cant').value  = 0.65;
+document.getElementById('mat-2-precio').value= 85000;
+document.getElementById('mat-2-subtotal').value = 55250;
+
+agregarInsumo('mat');
+document.getElementById('mat-3-desc').value  = 'Grava / triturado 3/4"';
+document.getElementById('mat-3-und').value   = 'm³';
+document.getElementById('mat-3-cant').value  = 0.90;
+document.getElementById('mat-3-precio').value= 95000;
+document.getElementById('mat-3-subtotal').value = 85500;
+
+agregarInsumo('mo');
+document.getElementById('mo-1-desc').value   = 'Oficial de construcción';
+document.getElementById('mo-1-und').value    = 'jornal';
+document.getElementById('mo-1-cant').value   = 0.8;
+document.getElementById('mo-1-precio').value = 95000;
+document.getElementById('mo-1-subtotal').value = 76000;
+
+agregarInsumo('mo');
+document.getElementById('mo-2-desc').value   = 'Ayudante / peón';
+document.getElementById('mo-2-und').value    = 'jornal';
+document.getElementById('mo-2-cant').value   = 1.6;
+document.getElementById('mo-2-precio').value = 60000;
+document.getElementById('mo-2-subtotal').value = 96000;
+
+agregarInsumo('eq');
+document.getElementById('eq-1-desc').value   = 'Mezcladora de 1 saco';
+document.getElementById('eq-1-und').value    = 'hora';
+document.getElementById('eq-1-cant').value   = 3;
+document.getElementById('eq-1-precio').value = 22000;
+document.getElementById('eq-1-subtotal').value = 66000;
+</script>
+</body>
+</html>
