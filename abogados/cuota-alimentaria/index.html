@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Cuota Alimentaria Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de cuota alimentaria Colombia 2026. Simula alimentos para menores, mayores de edad y adultos mayores según el Código Civil colombiano y jurisprudencia vigente." />
+  <meta name="keywords" content="cuota alimentaria colombia 2026, calculo alimentos menores colombia, simulador alimentos colombia, derecho de alimentos colombia, abogado familia colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --morado: #6a1b9a;
+      --morado-claro: #f3e5f5;
+      --morado-oscuro: #4a148c;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #6a1b9a 60%, #ab47bc 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 120px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--morado); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--morado); margin: 1rem 0 0.6rem; border-left: 3px solid var(--morado); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--morado); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--morado); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--morado-oscuro); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--morado-claro); border-left: 4px solid var(--morado); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--morado-oscuro); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #6a1b9a 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-cuota { font-size: 2.8rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 1rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.2rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .rango-bar { display: flex; align-items: center; gap: 10px; margin: 0.8rem 0; }
+    .rango-linea { flex: 1; height: 8px; background: rgba(255,255,255,0.2); border-radius: 4px; position: relative; }
+    .rango-fill { height: 100%; background: #ffe082; border-radius: 4px; transition: width 0.4s; }
+    .rango-label { font-size: 0.75rem; opacity: 0.8; white-space: nowrap; }
+
+    .alerta { padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+    .alerta-info { background: #e3f2fd; color: #0d47a1; border-left: 4px solid #1565c0; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+    .ref-table tr:hover td { background: var(--morado-claro); }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">⚖️ <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Cuota Alimentaria</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">⚖️ Abogados — Derecho de Familia</div>
+  <h1>Calculadora de Cuota Alimentaria Colombia 2026</h1>
+  <p>Simula la cuota de alimentos para menores, mayores de edad estudiantes y adultos mayores según el Código Civil colombiano, jurisprudencia de la Corte Suprema y parámetros 2026.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Código Civil colombiano</span>
+    <span class="hero-chip">👨‍👧 Menores y adultos</span>
+    <span class="hero-chip">📊 SMMLV 2026</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('simulador', this)">⚖️ Simulador de Cuota</button>
+    <button class="tab-btn" onclick="mostrarTab('indexacion', this)">📈 Indexación de Cuotas</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Marco Legal</button>
+  </div>
+
+  <!-- TAB 1: SIMULADOR -->
+  <div id="tab-simulador" class="tab-panel active">
+    <div class="card">
+      <h2>⚖️ Simulador de Cuota Alimentaria</h2>
+      <div class="info-box">
+        <strong>Principios legales:</strong> El derecho de alimentos en Colombia se rige por los Arts. 411–427 del Código Civil. La cuota se fija según la <strong>capacidad económica del alimentante</strong> y las <strong>necesidades del alimentario</strong>. No existe fórmula legal fija — este simulador es orientativo.
+      </div>
+
+      <h3>1. Datos del alimentario (quien recibe)</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de alimentario</label>
+          <select id="a-tipo" onchange="actualizarTipo()">
+            <option value="menor" selected>Hijo/a menor de edad (0–17 años)</option>
+            <option value="mayor-estudio">Hijo/a mayor estudiando (18–25 años)</option>
+            <option value="adulto-mayor">Adulto mayor (padre/madre)</option>
+            <option value="conyuge">Cónyuge o compañero/a permanente</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Edad del alimentario</label>
+          <input type="number" id="a-edad" value="8" min="0" max="80" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Número de hijos a cargo del alimentante</label>
+          <input type="number" id="a-num-hijos" value="1" min="1" max="10" step="1" />
+          <span class="form-hint">Total de hijos que debe mantener el alimentante</span>
+        </div>
+        <div class="form-group">
+          <label>¿El alimentario tiene necesidades especiales?</label>
+          <select id="a-especial">
+            <option value="no" selected>No</option>
+            <option value="discapacidad">Sí — discapacidad física o cognitiva</option>
+            <option value="enfermedad">Sí — enfermedad crónica o tratamiento médico</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>2. Capacidad económica del alimentante</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Ingreso mensual neto del alimentante ($ COP)</label>
+          <input type="number" id="a-ingreso" value="3000000" min="0" step="100000" />
+          <span class="form-hint">Salario + otras entradas − deducciones legales</span>
+        </div>
+        <div class="form-group">
+          <label>Tipo de ingreso</label>
+          <select id="a-tipo-ingreso">
+            <option value="dependiente" selected>Empleado dependiente</option>
+            <option value="independiente">Independiente / informal</option>
+            <option value="pension">Pensionado</option>
+            <option value="desempleado">Desempleado (solo patrimonio)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Gastos fijos mensuales del alimentante ($ COP)</label>
+          <input type="number" id="a-gastos" value="1500000" min="0" step="100000" />
+          <span class="form-hint">Arriendo, servicios, transporte, alimentación propia</span>
+        </div>
+        <div class="form-group">
+          <label>¿Tiene otros obligados de alimentos?</label>
+          <select id="a-otros-obligados">
+            <option value="no" selected>No — es el único obligado</option>
+            <option value="si">Sí — hay otro progenitor / familiar obligado</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>3. Necesidades del alimentario</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Vivienda (arriendo/cuota proporcional) ($ COP)</label>
+          <input type="number" id="n-vivienda" value="400000" min="0" step="50000" />
+        </div>
+        <div class="form-group">
+          <label>Alimentación mensual ($ COP)</label>
+          <input type="number" id="n-alimentacion" value="300000" min="0" step="50000" />
+        </div>
+        <div class="form-group">
+          <label>Educación (matrícula + útiles prorrateado) ($ COP)</label>
+          <input type="number" id="n-educacion" value="200000" min="0" step="50000" />
+        </div>
+        <div class="form-group">
+          <label>Salud (EPS + medicamentos + copagos) ($ COP)</label>
+          <input type="number" id="n-salud" value="100000" min="0" step="50000" />
+        </div>
+        <div class="form-group">
+          <label>Vestuario y calzado (mensual prorrateado) ($ COP)</label>
+          <input type="number" id="n-vestuario" value="80000" min="0" step="20000" />
+        </div>
+        <div class="form-group">
+          <label>Recreación y otros ($ COP)</label>
+          <input type="number" id="n-otros" value="50000" min="0" step="20000" />
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularCuota()">⚖️ Simular Cuota Alimentaria</button>
+    </div>
+
+    <div id="resultado-cuota" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: INDEXACIÓN -->
+  <div id="tab-indexacion" class="tab-panel">
+    <div class="card">
+      <h2>📈 Indexación y Actualización de Cuotas Alimentarias</h2>
+      <div class="info-box">
+        <strong>¿Cuándo se actualiza?</strong> Las cuotas fijadas en SMMLV se actualizan automáticamente cada enero con el nuevo salario mínimo. Las fijadas en pesos deben indexarse anualmente por IPC o por solicitud al juzgado.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de cuota original</label>
+          <select id="idx-tipo">
+            <option value="pesos" selected>Fijada en pesos colombianos</option>
+            <option value="smmlv">Fijada en porcentaje del SMMLV</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Año en que se fijó la cuota</label>
+          <input type="number" id="idx-anio" value="2022" min="2010" max="2025" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Cuota original ($ COP o % del SMMLV)</label>
+          <input type="number" id="idx-cuota" value="500000" min="0" step="10000" />
+          <span class="form-hint">Si es en SMMLV, escriba el porcentaje (ej: 30 para 30%)</span>
+        </div>
+        <div class="form-group">
+          <label>IPC acumulado desde el año de fijación (%)</label>
+          <input type="number" id="idx-ipc" value="45" min="0" max="200" step="1" />
+          <span class="form-hint">IPC acumulado aprox.: 2022→2026 ≈ 45% | 2020→2026 ≈ 65%</span>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularIndexacion()">📈 Calcular Cuota Actualizada</button>
+    </div>
+    <div id="resultado-indexacion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: MARCO LEGAL -->
+  <div id="tab-referencia" class="tab-panel active-ref">
+    <div class="card">
+      <h2>📋 Marco Legal — Alimentos en Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Norma</th><th>Contenido relevante</th></tr></thead>
+          <tbody>
+            <tr><td><b>Art. 411 C.C.</b></td><td>Personas con derecho a alimentos: descendientes, ascendientes, cónyuge, hermanos, etc.</td></tr>
+            <tr><td><b>Art. 413 C.C.</b></td><td>La cuota se fija según necesidades del alimentario y capacidad del alimentante. No existe tarifa fija.</td></tr>
+            <tr><td><b>Art. 422 C.C.</b></td><td>Los alimentos a hijos menores no pueden ser inferiores al mínimo de subsistencia.</td></tr>
+            <tr><td><b>Art. 424 C.C.</b></td><td>Cesación del derecho: cuando el alimentario alcanza la mayoría de edad y no estudia.</td></tr>
+            <tr><td><b>Ley 1098/06 (CIAA)</b></td><td>Código de Infancia y Adolescencia. Interés superior del menor en materia de alimentos.</td></tr>
+            <tr><td><b>Art. 129 Ley 1098</b></td><td>Inasistencia alimentaria: delito penado con prisión de 16–54 meses.</td></tr>
+            <tr><td><b>CSJ STC 2019</b></td><td>Criterios jurisprudenciales: proporcionalidad, necesidad real, capacidad probada del alimentante.</td></tr>
+            <tr><td><b>Decreto 49/2025</b></td><td>SMMLV 2025: $1.423.500. Aux. transporte: $162.000. Base para cuotas indexadas.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Rangos Orientativos Cuota Alimentaria Colombia 2026</h2>
+      <div class="info-box">
+        <strong>Importante:</strong> Estos rangos son orientativos basados en jurisprudencia colombiana. El juez tiene plena discrecionalidad para fijar la cuota según las pruebas aportadas.
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Ingreso del alimentante</th><th>1 hijo menor</th><th>2 hijos menores</th><th>3+ hijos</th></tr></thead>
+          <tbody>
+            <tr><td>1 SMMLV ($1.423.500)</td><td>$280.000–$380.000 (20–27%)</td><td>$420.000–$560.000 (30–39%)</td><td>$500.000–$650.000 (35–46%)</td></tr>
+            <tr><td>2 SMMLV ($2.847.000)</td><td>$500.000–$700.000 (18–25%)</td><td>$800.000–$1.100.000 (28–39%)</td><td>$1.000.000–$1.400.000 (35–49%)</td></tr>
+            <tr><td>3 SMMLV ($4.270.500)</td><td>$700.000–$1.000.000</td><td>$1.100.000–$1.500.000</td><td>$1.500.000–$2.000.000</td></tr>
+            <tr><td>5+ SMMLV ($7.117.500+)</td><td>$1.200.000–$2.000.000+</td><td>$2.000.000–$3.000.000+</td><td>Según necesidades reales</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.8rem;">SMMLV 2026: $1.423.500 | Aux. transporte: $162.000. Los porcentajes son del ingreso neto del alimentante.</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Este simulador NO constituye concepto jurídico ni reemplaza la asesoría de un <strong>abogado de familia</strong>. La cuota alimentaria en Colombia es fijada exclusivamente por un juez o mediante conciliación ante comisaría de familia o centro de conciliación. Los valores son estimaciones basadas en jurisprudencia y doctrina vigente. SMMLV 2026: $1.423.500.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+const SMMLV = 1423500;
+
+function fmt(n) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+function fmtPct(n, dec=1) {
+  return Number(n).toFixed(dec) + '%';
+}
+
+function actualizarTipo() { }
+
+function calcularCuota() {
+  const tipo         = document.getElementById('a-tipo').value;
+  const numHijos     = parseInt(document.getElementById('a-num-hijos').value) || 1;
+  const especial     = document.getElementById('a-especial').value;
+  const ingreso      = parseFloat(document.getElementById('a-ingreso').value) || 0;
+  const gastos       = parseFloat(document.getElementById('a-gastos').value) || 0;
+  const otrosOblig   = document.getElementById('a-otros-obligados').value;
+  const vivienda     = parseFloat(document.getElementById('n-vivienda').value) || 0;
+  const alimentacion = parseFloat(document.getElementById('n-alimentacion').value) || 0;
+  const educacion    = parseFloat(document.getElementById('n-educacion').value) || 0;
+  const salud        = parseFloat(document.getElementById('n-salud').value) || 0;
+  const vestuario    = parseFloat(document.getElementById('n-vestuario').value) || 0;
+  const otros        = parseFloat(document.getElementById('n-otros').value) || 0;
+
+  // Capacidad del alimentante
+  const capacidadBruta = ingreso - gastos;
+  const capacidadNeta  = Math.max(0, capacidadBruta);
+
+  // Necesidades totales del alimentario
+  const necesidadTotal = vivienda + alimentacion + educacion + salud + vestuario + otros;
+
+  // Factor de distribución entre obligados
+  const factorObligados = otrosOblig === 'si' ? 0.5 : 1.0;
+
+  // Porcentaje orientativo según jurisprudencia colombiana
+  // Varía entre 20% y 50% del ingreso neto según número de hijos
+  const porcentajesBase = { 1: 0.25, 2: 0.35, 3: 0.42, 4: 0.48 };
+  const pctBase = porcentajesBase[Math.min(numHijos, 4)] || 0.48;
+
+  // Cuota por capacidad
+  let cuotaCapacidad = (capacidadNeta * pctBase) / numHijos;
+
+  // Ajuste por tipo de alimentario
+  if (tipo === 'mayor-estudio') cuotaCapacidad *= 0.85;
+  if (tipo === 'adulto-mayor')  cuotaCapacidad *= 0.75;
+  if (tipo === 'conyuge')       cuotaCapacidad *= 0.70;
+
+  // Ajuste por necesidades especiales
+  if (especial === 'discapacidad') cuotaCapacidad *= 1.25;
+  if (especial === 'enfermedad')   cuotaCapacidad *= 1.15;
+
+  // Cuota por necesidades (lo que necesita el alimentario dividido entre obligados)
+  const cuotaNecesidad = (necesidadTotal * factorObligados);
+
+  // Cuota orientativa: promedio ponderado entre capacidad y necesidad
+  const cuotaOrientativa = Math.min(cuotaCapacidad, cuotaNecesidad > 0 ? (cuotaCapacidad * 0.6 + cuotaNecesidad * 0.4) : cuotaCapacidad);
+
+  // Cuota mínima: nunca menor al 20% del SMMLV por hijo
+  const cuotaMinima = SMMLV * 0.20;
+  const cuotaFinal  = Math.max(cuotaMinima, cuotaOrientativa);
+
+  // Rangos mínimo y máximo orientativos
+  const cuotaMin = cuotaFinal * 0.80;
+  const cuotaMax = cuotaFinal * 1.25;
+
+  // En SMMLV
+  const enSMMLV = (cuotaFinal / SMMLV * 100).toFixed(1);
+  const pctIngreso = ingreso > 0 ? (cuotaFinal / ingreso * 100).toFixed(1) : 0;
+
+  document.getElementById('resultado-cuota').style.display = 'block';
+  document.getElementById('resultado-cuota').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Simulación Orientativa — Cuota Alimentaria Colombia 2026</div>
+      <div class="resultado-cuota">$ ${fmt(Math.round(cuotaFinal / 1000) * 1000)}</div>
+      <div class="resultado-sub">Cuota mensual estimada — ${enSMMLV}% del SMMLV 2026</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(cuotaMin/1000)*1000)}</div><div class="resultado-label">Rango mínimo</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(cuotaMax/1000)*1000)}</div><div class="resultado-label">Rango máximo</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${pctIngreso}%</div><div class="resultado-label">% del ingreso neto</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(necesidadTotal)}</div><div class="resultado-label">Necesidades totales</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(capacidadNeta)}</div><div class="resultado-label">Capacidad disponible</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${enSMMLV}%</div><div class="resultado-label">En % del SMMLV</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Análisis de capacidad del alimentante:</b><br>
+        Ingreso neto: $ ${fmt(ingreso)} − Gastos fijos: $ ${fmt(gastos)} = <b>Capacidad disponible: $ ${fmt(capacidadNeta)}</b><br>
+        Porcentaje orientativo (${numHijos} hijo/s): ${(pctBase*100).toFixed(0)}% ÷ ${numHijos} = cuota base por hijo<br>
+        ${otrosOblig === 'si' ? '✅ Se aplica factor 50% por coobligado (otro progenitor)<br>' : ''}
+        ${especial !== 'no' ? `⚠️ Ajuste por necesidad especial (${especial === 'discapacidad' ? '+25%' : '+15%'})<br>` : ''}
+        <b>Necesidades del alimentario: $ ${fmt(necesidadTotal)}/mes</b><br>
+        Vivienda: $ ${fmt(vivienda)} | Alimentación: $ ${fmt(alimentacion)} | Educación: $ ${fmt(educacion)}<br>
+        Salud: $ ${fmt(salud)} | Vestuario: $ ${fmt(vestuario)} | Otros: $ ${fmt(otros)}<br>
+        <b>Cuota orientativa: $ ${fmt(Math.round(cuotaFinal/1000)*1000)} — Rango: $ ${fmt(Math.round(cuotaMin/1000)*1000)} a $ ${fmt(Math.round(cuotaMax/1000)*1000)}</b>
+      </div>
+    </div>
+    <div class="alerta alerta-warn" style="margin-top:0.8rem;">
+      ⚠️ <strong>Esta es una estimación orientativa.</strong> La cuota real es fijada por el juez o conciliador según las pruebas aportadas. Se recomienda acudir a la Comisaría de Familia o a un abogado de familia para la fijación definitiva.
+    </div>
+    <div class="alerta alerta-info" style="margin-top:0.6rem;">
+      📌 <strong>Cuota mínima aplicada:</strong> En Colombia la cuota no puede ser inferior al 20% del SMMLV ($ ${fmt(cuotaMinima)}/mes) por jurisprudencia de la Corte Suprema.
+    </div>`;
+}
+
+function calcularIndexacion() {
+  const tipo    = document.getElementById('idx-tipo').value;
+  const anio    = parseInt(document.getElementById('idx-anio').value) || 2022;
+  const cuota   = parseFloat(document.getElementById('idx-cuota').value) || 0;
+  const ipc     = parseFloat(document.getElementById('idx-ipc').value) || 0;
+
+  let cuotaActual, cuotaOriginalPesos, explicacion;
+
+  if (tipo === 'pesos') {
+    cuotaOriginalPesos = cuota;
+    cuotaActual = cuota * (1 + ipc / 100);
+    explicacion = `Cuota original: $ ${fmt(cuota)} (año ${anio})<br>IPC acumulado: ${ipc}%<br>Cuota actualizada: $ ${fmt(cuota)} × (1 + ${ipc}%) = <b>$ ${fmt(cuotaActual)}</b>`;
+  } else {
+    // En porcentaje de SMMLV
+    const smmlvAnios = { 2020:877803, 2021:908526, 2022:1000000, 2023:1160000, 2024:1300000, 2025:1423500, 2026:1423500 };
+    const smmlvOrigen = smmlvAnios[anio] || 1000000;
+    cuotaOriginalPesos = smmlvOrigen * (cuota / 100);
+    cuotaActual = SMMLV * (cuota / 100);
+    explicacion = `Porcentaje pactado: ${cuota}% del SMMLV<br>SMMLV ${anio}: $ ${fmt(smmlvOrigen)} → Cuota original: $ ${fmt(cuotaOriginalPesos)}<br>SMMLV 2026: $ ${fmt(SMMLV)} → <b>Cuota actualizada: $ ${fmt(cuotaActual)}</b>`;
+  }
+
+  const incremento = cuotaActual - cuotaOriginalPesos;
+  const pctIncremento = (incremento / cuotaOriginalPesos * 100).toFixed(1);
+
+  document.getElementById('resultado-indexacion').style.display = 'block';
+  document.getElementById('resultado-indexacion').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Cuota Alimentaria Actualizada a 2026</div>
+      <div class="resultado-cuota">$ ${fmt(Math.round(cuotaActual / 1000) * 1000)}</div>
+      <div class="resultado-sub">Incremento: $ ${fmt(Math.round(incremento/1000)*1000)} (+${pctIncremento}% desde ${anio})</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(cuotaOriginalPesos)}</div><div class="resultado-label">Cuota original (${anio})</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(cuotaActual/1000)*1000)}</div><div class="resultado-label">Cuota actualizada (2026)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">+${pctIncremento}%</div><div class="resultado-label">Incremento total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(incremento/1000)*1000)}</div><div class="resultado-label">Diferencia mensual</div></div>
+      </div>
+      <div class="resultado-detalle"><b>Cálculo:</b><br>${explicacion}</div>
+    </div>
+    <div class="alerta alerta-info" style="margin-top:0.8rem;">
+      📌 Para hacer efectiva la actualización, debe solicitar al juzgado de familia o comisaría de familia la <strong>reliquidación o indexación de la cuota</strong>. Las cuotas en SMMLV se actualizan automáticamente; las cuotas en pesos requieren solicitud expresa.
+    </div>`;
+}
+</script>
+</body>
+</html>
