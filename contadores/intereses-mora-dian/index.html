@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora de intereses de mora DIAN Colombia 2026. Calcula intereses moratorios sobre impuestos vencidos: IVA, renta, retención en la fuente. Tasas actualizadas Superintendencia Financiera." />
+  <meta name="keywords" content="intereses mora DIAN Colombia 2026, calcular intereses moratorios impuestos, tasa usura mora DIAN, IVA vencido mora, sanción DIAN" />
+  <title>Calculadora Intereses de Mora DIAN 2026 | HerramientasPro Colombia</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #222; min-height: 100vh; }
+
+    /* NAV */
+    nav { background: #1a3a5c; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    nav a { color: #fff; text-decoration: none; font-size: 14px; opacity: .8; transition: opacity .2s; }
+    nav a:hover { opacity: 1; }
+    nav .brand { font-weight: 700; font-size: 17px; opacity: 1; margin-right: 8px; }
+    nav .sep { color: #7aa3c8; }
+
+    /* HERO */
+    .hero { background: linear-gradient(135deg, #c0392b 0%, #96281b 100%); color: #fff; text-align: center; padding: 36px 20px 28px; }
+    .hero .badge { background: rgba(255,255,255,.18); display: inline-block; border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+    .hero h1 { font-size: clamp(20px, 4vw, 30px); font-weight: 800; margin-bottom: 8px; }
+    .hero p { font-size: 15px; opacity: .9; max-width: 600px; margin: 0 auto 16px; }
+    .hero .chips { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .hero .chip { background: rgba(255,255,255,.15); border-radius: 20px; padding: 5px 14px; font-size: 13px; }
+
+    /* LAYOUT */
+    .container { max-width: 900px; margin: 0 auto; padding: 28px 16px 60px; }
+
+    /* TABS */
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+    .tab-btn { padding: 9px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; background: #fff; color: #555; box-shadow: 0 1px 4px rgba(0,0,0,.1); transition: all .2s; }
+    .tab-btn.active { background: #c0392b; color: #fff; }
+
+    /* CARD */
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 24px; margin-bottom: 20px; }
+    .card h2 { font-size: 17px; font-weight: 700; color: #c0392b; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid #fde8e8; }
+
+    /* FORM */
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 13px; font-weight: 600; color: #444; }
+    label span.req { color: #c0392b; }
+    input, select { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; transition: border-color .2s; background: #fafafa; }
+    input:focus, select:focus { outline: none; border-color: #c0392b; background: #fff; }
+    .hint { font-size: 11px; color: #888; margin-top: 2px; }
+
+    /* BUTTONS */
+    .btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+    .btn-calc { background: #c0392b; color: #fff; border: none; border-radius: 8px; padding: 12px 28px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; min-width: 140px; transition: background .2s; }
+    .btn-calc:hover { background: #a93226; }
+    .btn-reset { background: #ecf0f1; color: #555; border: none; border-radius: 8px; padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background .2s; }
+    .btn-reset:hover { background: #dfe6e9; }
+
+    /* RESULT */
+    .result-box { display: none; margin-top: 20px; }
+    .result-header { background: linear-gradient(135deg, #c0392b, #96281b); color: #fff; border-radius: 10px 10px 0 0; padding: 16px 20px; }
+    .result-header h3 { font-size: 16px; font-weight: 700; }
+    .result-header .monto { font-size: 28px; font-weight: 800; margin-top: 4px; }
+    .result-header .sub { font-size: 13px; opacity: .85; margin-top: 2px; }
+    .result-body { border: 2px solid #f5c6c6; border-top: none; border-radius: 0 0 10px 10px; background: #fff; }
+    .res-fila { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; border-bottom: 1px solid #fde8e8; font-size: 14px; }
+    .res-fila:last-child { border-bottom: none; }
+    .res-fila .lbl { color: #555; }
+    .res-fila .val { font-weight: 700; color: #222; }
+    .res-fila.total { background: #fff5f5; }
+    .res-fila.total .lbl { font-weight: 700; color: #c0392b; font-size: 15px; }
+    .res-fila.total .val { font-size: 17px; color: #c0392b; }
+
+    /* ALERT */
+    .alert { border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-top: 16px; line-height: 1.5; }
+    .alert-warn { background: #fef9e7; border-left: 4px solid #f39c12; color: #7d6608; }
+    .alert-info { background: #eaf4fb; border-left: 4px solid #2980b9; color: #1a5276; }
+    .alert-danger { background: #fdedec; border-left: 4px solid #c0392b; color: #7b241c; }
+
+    /* TABLA TASAS */
+    .tasas-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+    .tasas-table th { background: #c0392b; color: #fff; padding: 9px 12px; text-align: left; }
+    .tasas-table td { padding: 9px 12px; border-bottom: 1px solid #fde8e8; }
+    .tasas-table tr:nth-child(even) td { background: #fff5f5; }
+    .tasas-table tr:hover td { background: #fde8e8; }
+
+    /* DISCLAIMER */
+    .disclaimer { background: #ecf0f1; border-radius: 10px; padding: 14px 18px; font-size: 12px; color: #636e72; margin-top: 28px; line-height: 1.6; }
+    .disclaimer strong { color: #444; }
+
+    /* TIMELINE */
+    .timeline { margin-top: 12px; }
+    .t-row { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid #fde8e8; font-size: 13px; }
+    .t-row:last-child { border-bottom: none; }
+    .t-num { background: #c0392b; color: #fff; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .t-info { flex: 1; }
+    .t-info strong { display: block; color: #333; margin-bottom: 2px; }
+    .t-info span { color: #666; }
+    .t-monto { font-weight: 700; color: #c0392b; white-space: nowrap; }
+
+    @media (max-width: 600px) {
+      .grid2 { grid-template-columns: 1fr; }
+      .result-header .monto { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="brand">🛠️ HerramientasPro</a>
+  <span class="sep">›</span>
+  <a href="../../index.html#contadores">Contadores</a>
+  <span class="sep">›</span>
+  <span style="color:#fff; opacity:.7;">Intereses de Mora DIAN</span>
+</nav>
+
+<div class="hero">
+  <div class="badge">⚖️ Tributario · DIAN 2026</div>
+  <h1>Calculadora de Intereses de Mora DIAN</h1>
+  <p>Calcula intereses moratorios sobre obligaciones tributarias vencidas: IVA, renta, retención en la fuente, ICA y demás impuestos administrados por la DIAN.</p>
+  <div class="chips">
+    <span class="chip">📅 Tasas actualizadas 2026</span>
+    <span class="chip">📊 Tabla mes a mes</span>
+    <span class="chip">✅ Código de Procedimiento Tributario</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('calc')">Calculadora de Mora</button>
+    <button class="tab-btn" onclick="showTab('tasas')">Tasas Vigentes 2025–2026</button>
+    <button class="tab-btn" onclick="showTab('guia')">Guía de Sanciones</button>
+  </div>
+
+  <!-- TAB 1: CALCULADORA -->
+  <div id="tab-calc">
+    <div class="card">
+      <h2>📋 Datos de la obligación tributaria</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Tipo de impuesto <span class="req">*</span></label>
+          <select id="tipo-imp">
+            <option value="">-- Seleccione --</option>
+            <option value="IVA">IVA (Impuesto sobre las Ventas)</option>
+            <option value="Renta">Renta (Personas naturales / jurídicas)</option>
+            <option value="Retencion">Retención en la Fuente</option>
+            <option value="ICA">ICA (Impuesto de Industria y Comercio)</option>
+            <option value="GMF">GMF (4×1000)</option>
+            <option value="Patrimonio">Impuesto al Patrimonio</option>
+            <option value="CREE">CREE / Autorretención Renta</option>
+            <option value="Otro">Otro impuesto</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Valor del impuesto en mora (COP) <span class="req">*</span></label>
+          <input type="number" id="valor-imp" placeholder="Ej: 5000000" min="0" />
+          <span class="hint">Valor del impuesto sin incluir sanciones previas</span>
+        </div>
+        <div class="field">
+          <label>Fecha de vencimiento <span class="req">*</span></label>
+          <input type="date" id="fecha-venc" />
+          <span class="hint">Fecha en que debió pagarse el impuesto</span>
+        </div>
+        <div class="field">
+          <label>Fecha de pago (o fecha de consulta)</label>
+          <input type="date" id="fecha-pago" />
+          <span class="hint">Dejar vacío para usar hoy (27/06/2026)</span>
+        </div>
+        <div class="field">
+          <label>Tasa de interés moratorio anual (%)</label>
+          <input type="number" id="tasa-mora" value="31.17" step="0.01" />
+          <span class="hint">Tasa vigente 2026: 31.17% EA (SuperFinanciera). Se actualiza cada trimestre.</span>
+        </div>
+        <div class="field">
+          <label>¿Incluir sanción por extemporaneidad?</label>
+          <select id="incluir-sancion">
+            <option value="no">No, solo intereses</option>
+            <option value="si">Sí, calcular sanción también</option>
+          </select>
+          <span class="hint">Art. 641 E.T.: 5% por mes o fracción de mes, máx. 100%</span>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-calc" onclick="calcularMora()">Calcular intereses de mora</button>
+        <button class="btn-reset" onclick="resetCalc()">Limpiar</button>
+      </div>
+    </div>
+
+    <div id="resultado" class="result-box">
+      <div class="result-header">
+        <h3 id="res-tipo">Intereses de mora — IVA</h3>
+        <div class="monto" id="res-total-mora">$0</div>
+        <div class="sub" id="res-periodo">Período calculado: 0 días</div>
+      </div>
+      <div class="result-body">
+        <div class="res-fila">
+          <span class="lbl">💰 Impuesto en mora</span>
+          <span class="val" id="res-impuesto">$0</span>
+        </div>
+        <div class="res-fila">
+          <span class="lbl">📅 Días en mora</span>
+          <span class="val" id="res-dias">0 días</span>
+        </div>
+        <div class="res-fila">
+          <span class="lbl">📈 Tasa de mora aplicada (anual)</span>
+          <span class="val" id="res-tasa">31.17% EA</span>
+        </div>
+        <div class="res-fila">
+          <span class="lbl">📊 Tasa diaria equivalente</span>
+          <span class="val" id="res-tasa-diaria">0.0754%</span>
+        </div>
+        <div class="res-fila">
+          <span class="lbl">⚖️ Intereses de mora</span>
+          <span class="val" id="res-intereses">$0</span>
+        </div>
+        <div class="res-fila" id="fila-sancion" style="display:none">
+          <span class="lbl">🚨 Sanción por extemporaneidad (Art. 641 E.T.)</span>
+          <span class="val" id="res-sancion">$0</span>
+        </div>
+        <div class="res-fila total">
+          <span class="lbl">TOTAL A PAGAR A LA DIAN</span>
+          <span class="val" id="res-total">$0</span>
+        </div>
+      </div>
+      <div class="alert alert-warn" style="margin: 16px 20px 0;">
+        ⚠️ <strong>Nota:</strong> Esta calculadora estima los intereses moratorios según el Art. 635 del Estatuto Tributario. La tasa se actualiza cada trimestre por la Superintendencia Financiera. Verifique siempre la tasa vigente en la resolución más reciente de la DIAN.
+      </div>
+
+      <div style="padding: 16px 20px 20px;">
+        <h3 style="font-size:14px; font-weight:700; color:#c0392b; margin-bottom:10px;">📅 Desglose mensual de la mora</h3>
+        <div id="timeline-mora" class="timeline"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: TASAS -->
+  <div id="tab-tasas" style="display:none">
+    <div class="card">
+      <h2>📊 Tasas de interés moratorio DIAN — Histórico reciente</h2>
+      <div class="alert alert-info" style="margin-bottom:16px;">
+        ℹ️ La tasa de interés moratorio equivale a la tasa de usura certificada por la Superintendencia Financiera para operaciones de crédito de consumo, vigente para cada período (Art. 635 E.T.). Se actualiza cada trimestre.
+      </div>
+      <table class="tasas-table">
+        <thead>
+          <tr>
+            <th>Período</th>
+            <th>Tasa Anual (E.A.)</th>
+            <th>Tasa Mensual</th>
+            <th>Tasa Diaria (aprox.)</th>
+            <th>Fuente</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Ene – Mar 2026</strong></td><td><strong>31.17%</strong></td><td>2.30%</td><td>0.0754%</td><td>Res. SuperFinanciera</td></tr>
+          <tr><td>Oct – Dic 2025</td><td>30.54%</td><td>2.26%</td><td>0.0740%</td><td>Res. SuperFinanciera</td></tr>
+          <tr><td>Jul – Sep 2025</td><td>29.83%</td><td>2.21%</td><td>0.0722%</td><td>Res. SuperFinanciera</td></tr>
+          <tr><td>Abr – Jun 2025</td><td>29.24%</td><td>2.17%</td><td>0.0708%</td><td>Res. SuperFinanciera</td></tr>
+          <tr><td>Ene – Mar 2025</td><td>29.51%</td><td>2.19%</td><td>0.0715%</td><td>Res. SuperFinanciera</td></tr>
+          <tr><td>Oct – Dic 2024</td><td>31.42%</td><td>2.32%</td><td>0.0761%</td><td>Res. SuperFinanciera</td></tr>
+          <tr><td>Jul – Sep 2024</td><td>33.05%</td><td>2.43%</td><td>0.0800%</td><td>Res. SuperFinanciera</td></tr>
+          <tr><td>Abr – Jun 2024</td><td>35.76%</td><td>2.60%</td><td>0.0861%</td><td>Res. SuperFinanciera</td></tr>
+          <tr><td>Ene – Mar 2024</td><td>37.32%</td><td>2.70%</td><td>0.0902%</td><td>Res. SuperFinanciera</td></tr>
+          <tr><td>Oct – Dic 2023</td><td>38.29%</td><td>2.76%</td><td>0.0925%</td><td>Res. SuperFinanciera</td></tr>
+        </tbody>
+      </table>
+      <div class="alert alert-warn" style="margin-top:16px;">
+        ⚠️ <strong>Importante:</strong> Para períodos de mora que cruzan varios trimestres, la tasa aplicable puede variar. En cálculos exactos, se debe aplicar la tasa vigente en cada trimestre. Esta calculadora aplica la tasa ingresada de forma uniforme al período completo.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: GUÍA -->
+  <div id="tab-guia" style="display:none">
+    <div class="card">
+      <h2>📖 Guía de sanciones tributarias DIAN</h2>
+
+      <div class="alert alert-danger" style="margin-bottom:18px;">
+        🚨 <strong>Obligaciones tributarias vencidas generan mora automática</strong> desde el día siguiente al vencimiento. A mayor tiempo, mayor acumulación de intereses y sanciones.
+      </div>
+
+      <h3 style="font-size:15px; color:#c0392b; margin-bottom:10px;">📌 Tipos de sanción más comunes</h3>
+      <table class="tasas-table" style="margin-bottom:20px;">
+        <thead>
+          <tr>
+            <th>Sanción</th>
+            <th>Base legal</th>
+            <th>Monto</th>
+            <th>Tope máximo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Extemporaneidad (declaración tardía)</strong></td>
+            <td>Art. 641 E.T.</td>
+            <td>5% del impuesto por mes o fracción</td>
+            <td>100% del impuesto</td>
+          </tr>
+          <tr>
+            <td><strong>Extemporaneidad por requerimiento</strong></td>
+            <td>Art. 642 E.T.</td>
+            <td>10% del impuesto por mes o fracción</td>
+            <td>200% del impuesto</td>
+          </tr>
+          <tr>
+            <td><strong>No declarar</strong></td>
+            <td>Art. 643 E.T.</td>
+            <td>20% de consignaciones / ingresos brutos</td>
+            <td>Según determinación oficial</td>
+          </tr>
+          <tr>
+            <td><strong>Corrección de declaración</strong></td>
+            <td>Art. 644 E.T.</td>
+            <td>10% del mayor impuesto</td>
+            <td>20% si es por requerimiento</td>
+          </tr>
+          <tr>
+            <td><strong>Inexactitud</strong></td>
+            <td>Art. 647 E.T.</td>
+            <td>200% de la diferencia del impuesto</td>
+            <td>Reducible con acuerdo</td>
+          </tr>
+          <tr>
+            <td><strong>Sanción mínima DIAN</strong></td>
+            <td>Art. 639 E.T.</td>
+            <td>10 UVT ($471.710 para 2026)</td>
+            <td>Aplica cuando la sanción calculada es inferior</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size:15px; color:#c0392b; margin-bottom:10px;">💡 Reducción de sanciones</h3>
+      <table class="tasas-table" style="margin-bottom:20px;">
+        <thead>
+          <tr>
+            <th>Momento de corrección</th>
+            <th>Reducción aplicable</th>
+            <th>Artículo E.T.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Antes de notificación de pliego de cargos</td><td>Reducción al 50% de la sanción</td><td>Art. 640</td></tr>
+          <tr><td>Dentro del año siguiente al plazo</td><td>Reducción al 75% de la sanción</td><td>Art. 640</td></tr>
+          <tr><td>Dos años después y antes de requerimiento</td><td>Reducción al 50%</td><td>Art. 640</td></tr>
+          <tr><td>Después de pliego de cargos</td><td>Reducción al 25%</td><td>Art. 640</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size:15px; color:#c0392b; margin-bottom:8px;">📅 Valores de referencia 2026</h3>
+      <table class="tasas-table">
+        <thead>
+          <tr><th>Concepto</th><th>Valor 2026</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>UVT (Unidad de Valor Tributario)</td><td>$47.065 COP</td></tr>
+          <tr><td>Sanción mínima (10 UVT)</td><td>$470.650 COP</td></tr>
+          <tr><td>Tasa de usura / mora (Q1 2026)</td><td>31.17% EA</td></tr>
+          <tr><td>SMMLV 2026</td><td>$1.423.500 COP</td></tr>
+          <tr><td>Auxilio de transporte 2026</td><td>$162.000 COP</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>⚠️ Herramienta orientativa.</strong> Los cálculos de esta aplicación se basan en el Estatuto Tributario colombiano (Art. 635 y ss.) y las tasas certificadas por la Superintendencia Financiera para los períodos indicados. La tasa de mora se actualiza trimestralmente. Para cálculos definitivos, liquide su obligación directamente en el portal MUISCA de la DIAN o consulte con un contador público idóneo. <strong>HerramientasPro no asume responsabilidad sobre decisiones tomadas con base en esta herramienta.</strong>
+    <br><br>
+    🗓️ <em>Última actualización normativa: Enero 2026 — Parámetros: UVT 2026 $47.065 | Tasa mora Q1 2026: 31.17% EA | SMMLV 2026: $1.423.500</em>
+  </div>
+
+</div>
+
+<script>
+  // ─── UTILIDADES ───────────────────────────────────────────────
+  const fmt = v => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(v);
+  const fmtPct = v => v.toFixed(4) + '%';
+
+  function showTab(t) {
+    ['calc','tasas','guia'].forEach(id => {
+      document.getElementById('tab-' + id).style.display = id === t ? 'block' : 'none';
+      document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', ['calc','tasas','guia'][i] === t);
+      });
+    });
+  }
+
+  // ─── CALCULADORA ──────────────────────────────────────────────
+  function calcularMora() {
+    const tipoImp = document.getElementById('tipo-imp').value;
+    const valorImp = parseFloat(document.getElementById('valor-imp').value);
+    const fechaVencStr = document.getElementById('fecha-venc').value;
+    const fechaPagoStr = document.getElementById('fecha-pago').value;
+    const tasaAnual = parseFloat(document.getElementById('tasa-mora').value) / 100;
+    const incluirSancion = document.getElementById('incluir-sancion').value === 'si';
+
+    if (!tipoImp) { alert('Por favor seleccione el tipo de impuesto.'); return; }
+    if (!valorImp || valorImp <= 0) { alert('Ingrese un valor de impuesto válido mayor a cero.'); return; }
+    if (!fechaVencStr) { alert('Ingrese la fecha de vencimiento.'); return; }
+
+    const fechaVenc = new Date(fechaVencStr + 'T00:00:00');
+    const fechaPago = fechaPagoStr ? new Date(fechaPagoStr + 'T00:00:00') : new Date('2026-06-27T00:00:00');
+
+    if (fechaPago <= fechaVenc) {
+      alert('La fecha de pago debe ser posterior a la fecha de vencimiento.');
+      return;
+    }
+
+    const dias = Math.ceil((fechaPago - fechaVenc) / (1000 * 60 * 60 * 24));
+    // Tasa diaria equivalente: (1 + tasa_anual)^(1/365) - 1
+    const tasaDiaria = Math.pow(1 + tasaAnual, 1 / 365) - 1;
+    // Interés compuesto diario
+    const intereses = valorImp * (Math.pow(1 + tasaDiaria, dias) - 1);
+
+    // Sanción por extemporaneidad Art. 641 E.T.: 5% por mes o fracción, máx 100%
+    let sancion = 0;
+    if (incluirSancion) {
+      const meses = Math.ceil(dias / 30);
+      const pctSancion = Math.min(meses * 0.05, 1.0); // máx 100%
+      sancion = valorImp * pctSancion;
+      // Aplicar sanción mínima DIAN: 10 UVT = $470.650
+      if (sancion > 0 && sancion < 470650) sancion = 470650;
+    }
+
+    const totalMora = intereses + sancion;
+    const totalPagar = valorImp + totalMora;
+
+    // Mostrar resultados
+    document.getElementById('res-tipo').textContent = `Intereses de mora — ${tipoImp}`;
+    document.getElementById('res-total-mora').textContent = fmt(totalMora);
+    document.getElementById('res-periodo').textContent =
+      `Desde ${fechaVenc.toLocaleDateString('es-CO')} hasta ${fechaPago.toLocaleDateString('es-CO')}`;
+    document.getElementById('res-impuesto').textContent = fmt(valorImp);
+    document.getElementById('res-dias').textContent = `${dias} días`;
+    document.getElementById('res-tasa').textContent = `${(tasaAnual * 100).toFixed(2)}% EA`;
+    document.getElementById('res-tasa-diaria').textContent = fmtPct(tasaDiaria * 100);
+    document.getElementById('res-intereses').textContent = fmt(intereses);
+
+    const filaSancion = document.getElementById('fila-sancion');
+    if (incluirSancion) {
+      filaSancion.style.display = 'flex';
+      document.getElementById('res-sancion').textContent = fmt(sancion);
+    } else {
+      filaSancion.style.display = 'none';
+    }
+
+    document.getElementById('res-total').textContent = fmt(totalPagar);
+
+    // Timeline mensual
+    buildTimeline(valorImp, tasaDiaria, fechaVenc, fechaPago, dias);
+
+    document.getElementById('resultado').style.display = 'block';
+    document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function buildTimeline(capital, tasaDiaria, fechaVenc, fechaPago, totalDias) {
+    const container = document.getElementById('timeline-mora');
+    container.innerHTML = '';
+
+    const meses = Math.ceil(totalDias / 30);
+    const mostrar = Math.min(meses, 12);
+
+    for (let m = 1; m <= mostrar; m++) {
+      const diasMes = Math.min(m * 30, totalDias);
+      const intAcumulado = capital * (Math.pow(1 + tasaDiaria, diasMes) - 1);
+      const totalAcum = capital + intAcumulado;
+
+      const fecha = new Date(fechaVenc.getTime() + diasMes * 24 * 60 * 60 * 1000);
+
+      const row = document.createElement('div');
+      row.className = 't-row';
+      row.innerHTML = `
+        <div class="t-num">${m}</div>
+        <div class="t-info">
+          <strong>Mes ${m} — ${fecha.toLocaleDateString('es-CO', { month: 'long', year: 'numeric' })}</strong>
+          <span>${diasMes} días en mora · Interés acumulado: ${fmt(intAcumulado)}</span>
+        </div>
+        <div class="t-monto">${fmt(totalAcum)}</div>
+      `;
+      container.appendChild(row);
+    }
+
+    if (meses > 12) {
+      const note = document.createElement('div');
+      note.style.cssText = 'font-size:12px; color:#888; padding:8px 0; text-align:center;';
+      note.textContent = `Se muestran los primeros 12 meses. Total de ${meses} meses calculados.`;
+      container.appendChild(note);
+    }
+  }
+
+  function resetCalc() {
+    document.getElementById('tipo-imp').value = '';
+    document.getElementById('valor-imp').value = '';
+    document.getElementById('fecha-venc').value = '';
+    document.getElementById('fecha-pago').value = '';
+    document.getElementById('tasa-mora').value = '31.17';
+    document.getElementById('incluir-sancion').value = 'no';
+    document.getElementById('resultado').style.display = 'none';
+  }
+</script>
+</body>
+</html>
