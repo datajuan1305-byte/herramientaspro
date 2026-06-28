@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora de punto de equilibrio PYME Colombia 2026. Calcula unidades mínimas a vender, margen de contribución, análisis costo-volumen-utilidad, múltiples productos y proyección de utilidades." />
+  <meta name="keywords" content="punto de equilibrio PYME Colombia, calculadora CVU, margen contribucion, análisis costo volumen utilidad, rentabilidad PYME Colombia" />
+  <title>Punto de Equilibrio PYME Colombia 2026 | HerramientasPro Colombia</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #222; min-height: 100vh; }
+
+    nav { background: #1a3a5c; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    nav a { color: #fff; text-decoration: none; font-size: 14px; opacity: .8; }
+    nav a:hover { opacity: 1; }
+    nav .brand { font-weight: 700; font-size: 17px; opacity: 1; margin-right: 8px; }
+    nav .sep { color: #7aa3c8; }
+
+    .hero { background: linear-gradient(135deg, #145a32 0%, #1e8449 60%, #27ae60 100%); color: #fff; text-align: center; padding: 36px 20px 28px; }
+    .hero .badge { background: rgba(255,255,255,.18); display: inline-block; border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+    .hero h1 { font-size: clamp(20px, 4vw, 30px); font-weight: 800; margin-bottom: 8px; }
+    .hero p { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto 16px; }
+    .hero .chips { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .hero .chip { background: rgba(255,255,255,.15); border-radius: 20px; padding: 5px 14px; font-size: 13px; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 28px 16px 60px; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+    .tab-btn { padding: 9px 18px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; background: #fff; color: #555; box-shadow: 0 1px 4px rgba(0,0,0,.1); transition: all .2s; }
+    .tab-btn.active { background: #145a32; color: #fff; }
+
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 24px; margin-bottom: 20px; }
+    .card h2 { font-size: 16px; font-weight: 700; color: #145a32; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid #d5f5e3; }
+
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+    .grid3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 12px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 13px; font-weight: 600; color: #444; }
+    label span.req { color: #c0392b; }
+    input, select { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color .2s; background: #fafafa; }
+    input:focus, select:focus { outline: none; border-color: #1e8449; background: #fff; }
+    .hint { font-size: 11px; color: #888; margin-top: 2px; line-height: 1.4; }
+
+    /* Productos múltiples */
+    .producto-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 36px; gap: 8px; align-items: end; margin-bottom: 8px; }
+    .producto-row.header { font-size: 12px; font-weight: 700; color: #555; padding-bottom: 4px; border-bottom: 1px solid #d5f5e3; }
+    .btn-del { background: #e74c3c; color: #fff; border: none; border-radius: 6px; width: 32px; height: 36px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+    .btn-add { background: #1e8449; color: #fff; border: none; border-radius: 8px; padding: 9px 18px; font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+    .btn-calc { background: #145a32; color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; min-width: 160px; transition: background .2s; }
+    .btn-calc:hover { background: #0e3d22; }
+    .btn-reset { background: #ecf0f1; color: #555; border: none; border-radius: 8px; padding: 13px 20px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+    /* RESULTADO */
+    .result-box { display: none; margin-top: 24px; }
+
+    .pe-banner { background: linear-gradient(135deg, #145a32, #1e8449); color: #fff; border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+    .pe-banner h3 { font-size: 15px; opacity: .85; margin-bottom: 6px; }
+    .pe-banner .pe-val { font-size: 48px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+    .pe-banner .pe-sub { font-size: 14px; opacity: .8; }
+    .pe-chips { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+    .pe-chip { background: rgba(255,255,255,.18); border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 600; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.07); padding: 14px; text-align: center; border-top: 4px solid #27ae60; }
+    .kpi.azul   { border-top-color: #2980b9; }
+    .kpi.rojo   { border-top-color: #e74c3c; }
+    .kpi.naranja{ border-top-color: #e67e22; }
+    .kpi.morado { border-top-color: #8e44ad; }
+    .kpi .klbl  { font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 6px; }
+    .kpi .kval  { font-size: 17px; font-weight: 800; color: #145a32; line-height: 1.2; }
+    .kpi.azul .kval   { color: #1a5276; }
+    .kpi.rojo .kval   { color: #922b21; }
+    .kpi.naranja .kval{ color: #ca6f1e; }
+    .kpi.morado .kval { color: #6c3483; }
+    .kpi .ksub  { font-size: 11px; color: #aaa; margin-top: 3px; }
+
+    /* Gráfico SVG */
+    .chart-wrap { overflow-x: auto; margin-top: 6px; }
+
+    .cvu-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .cvu-table th { background: #145a32; color: #fff; padding: 10px 14px; text-align: right; }
+    .cvu-table th:first-child { text-align: left; }
+    .cvu-table td { padding: 10px 14px; border-bottom: 1px solid #d5f5e3; text-align: right; }
+    .cvu-table td:first-child { text-align: left; color: #555; }
+    .cvu-table tr:hover td { background: #eafaf1; }
+    .cvu-table .pe-row td { background: #d5f5e3; font-weight: 700; color: #145a32; }
+    .cvu-table .util-pos td:last-child { color: #1e8449; font-weight: 700; }
+    .cvu-table .util-neg td:last-child { color: #e74c3c; font-weight: 700; }
+
+    .prod-result { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .prod-result th { background: #145a32; color: #fff; padding: 9px 12px; text-align: right; }
+    .prod-result th:first-child { text-align: left; }
+    .prod-result td { padding: 9px 12px; border-bottom: 1px solid #d5f5e3; text-align: right; }
+    .prod-result td:first-child { text-align: left; font-weight: 600; }
+    .prod-result tr:nth-child(even) td { background: #eafaf1; }
+    .prod-result .total-row td { background: #145a32; color: #fff; font-weight: 700; }
+
+    .alert { border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-top: 14px; line-height: 1.5; }
+    .alert-info    { background: #eaf4fb; border-left: 4px solid #2980b9; color: #1a5276; }
+    .alert-warn    { background: #fef9e7; border-left: 4px solid #f39c12; color: #7d6608; }
+    .alert-success { background: #eafaf1; border-left: 4px solid #27ae60; color: #1e8449; }
+    .alert-danger  { background: #fdedec; border-left: 4px solid #e74c3c; color: #7b241c; }
+
+    .semaforo { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 10px; margin-top: 16px; font-size: 14px; font-weight: 600; }
+    .semaforo.verde   { background: #eafaf1; border-left: 5px solid #27ae60; color: #145a32; }
+    .semaforo.amarillo{ background: #fef9e7; border-left: 5px solid #f39c12; color: #7d6608; }
+    .semaforo.rojo    { background: #fdedec; border-left: 5px solid #e74c3c; color: #922b21; }
+
+    .concepto-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+    .concepto-table th { background: #145a32; color: #fff; padding: 8px 12px; text-align: left; }
+    .concepto-table td { padding: 8px 12px; border-bottom: 1px solid #d5f5e3; }
+    .concepto-table tr:nth-child(even) td { background: #eafaf1; }
+
+    .disclaimer { background: #ecf0f1; border-radius: 10px; padding: 14px 18px; font-size: 12px; color: #636e72; margin-top: 28px; line-height: 1.6; }
+
+    @media (max-width: 640px) {
+      .producto-row { grid-template-columns: 1fr 1fr; }
+      .producto-row .btn-del { grid-column: span 2; width: 100%; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="brand">🛠️ HerramientasPro</a>
+  <span class="sep">›</span>
+  <a href="../../index.html#admin">Administración</a>
+  <span class="sep">›</span>
+  <span style="color:#fff;opacity:.7;">Punto de Equilibrio PYME</span>
+</nav>
+
+<div class="hero">
+  <div class="badge">📊 Finanzas · PYME Colombia 2026</div>
+  <h1>Punto de Equilibrio PYME</h1>
+  <p>Calcula las unidades mínimas a vender, el margen de contribución, el análisis Costo-Volumen-Utilidad y la proyección de rentabilidad para tu negocio o PYME colombiana.</p>
+  <div class="chips">
+    <span class="chip">🛍️ Múltiples productos</span>
+    <span class="chip">📈 Gráfico CVU</span>
+    <span class="chip">💰 Utilidad objetivo</span>
+    <span class="chip">📋 Análisis de sensibilidad</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('simple')">Un producto / servicio</button>
+    <button class="tab-btn" onclick="showTab('multi')">Múltiples productos</button>
+    <button class="tab-btn" onclick="showTab('conceptos')">Conceptos clave</button>
+  </div>
+
+  <!-- TAB 1: UN PRODUCTO -->
+  <div id="tab-simple">
+
+    <div class="card">
+      <h2>🏷️ 1. Precio y costos variables unitarios</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Precio de venta unitario (COP) <span class="req">*</span></label>
+          <input type="number" id="s-precio" placeholder="Ej: 25000" min="0" />
+          <span class="hint">Precio de venta al cliente final por unidad o servicio.</span>
+        </div>
+        <div class="field">
+          <label>Costo variable unitario (COP) <span class="req">*</span></label>
+          <input type="number" id="s-cvu" placeholder="Ej: 14000" min="0" />
+          <span class="hint">Costo que cambia con cada unidad: materia prima, comisión, empaque, mano de obra directa.</span>
+        </div>
+        <div class="field">
+          <label>Unidad de medida</label>
+          <input type="text" id="s-unidad" placeholder="Ej: unidad, kg, servicio, hora..." />
+        </div>
+        <div class="field">
+          <label>Nombre del producto / servicio</label>
+          <input type="text" id="s-nombre" placeholder="Ej: Empanadas, Consultoría, Camisa..." />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🏢 2. Costos fijos mensuales</h2>
+      <div class="grid3">
+        <div class="field">
+          <label>Arriendo local / bodega (COP/mes)</label>
+          <input type="number" id="s-arriendo" placeholder="0" min="0" />
+        </div>
+        <div class="field">
+          <label>Nómina fija (COP/mes)</label>
+          <input type="number" id="s-nomina" placeholder="0" min="0" />
+          <span class="hint">Salarios fijos incluyendo prestaciones.</span>
+        </div>
+        <div class="field">
+          <label>Servicios públicos (COP/mes)</label>
+          <input type="number" id="s-servicios" placeholder="0" min="0" />
+        </div>
+        <div class="field">
+          <label>Cuota crédito / leasing (COP/mes)</label>
+          <input type="number" id="s-credito" placeholder="0" min="0" />
+        </div>
+        <div class="field">
+          <label>Seguros y otros fijos (COP/mes)</label>
+          <input type="number" id="s-seguros" placeholder="0" min="0" />
+        </div>
+        <div class="field">
+          <label>Otros costos fijos (COP/mes)</label>
+          <input type="number" id="s-otros-fijos" placeholder="0" min="0" />
+          <span class="hint">Contabilidad, marketing fijo, depreciación.</span>
+        </div>
+        <div class="field">
+          <label>O ingrese directamente total costos fijos</label>
+          <input type="number" id="s-cf-total" placeholder="0" min="0" />
+          <span class="hint">Si ya conoce el total mensual, ingréselo aquí (reemplaza los campos anteriores).</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🎯 3. Metas y análisis adicional</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Utilidad neta deseada (COP/mes)</label>
+          <input type="number" id="s-utilidad-obj" placeholder="Ej: 3000000" min="0" />
+          <span class="hint">¿Cuánto quiere ganar al mes? Calcula cuánto debe vender para lograrlo.</span>
+        </div>
+        <div class="field">
+          <label>Ventas actuales (unidades/mes)</label>
+          <input type="number" id="s-ventas-act" placeholder="Ej: 200" min="0" />
+          <span class="hint">Ventas reales actuales para calcular el margen de seguridad.</span>
+        </div>
+        <div class="field">
+          <label>Impuesto de renta estimado (%)</label>
+          <input type="number" id="s-tasa-imp" placeholder="15" min="0" max="35" value="15" />
+          <span class="hint">PYME Colombia: 15–35% según ingresos. Pequeños contribuyentes: tasa reducida.</span>
+        </div>
+        <div class="field">
+          <label>Período de análisis</label>
+          <select id="s-periodo">
+            <option value="mes">Mensual</option>
+            <option value="año">Anual</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-calc" onclick="calcSimple()">📊 Calcular punto de equilibrio</button>
+      <button class="btn-reset" onclick="resetSimple()">Limpiar</button>
+    </div>
+
+    <div id="resultado-simple" class="result-box">
+
+      <div class="pe-banner">
+        <h3 id="s-res-titulo">Punto de equilibrio mensual</h3>
+        <div class="pe-val" id="s-res-pe">0 und.</div>
+        <div class="pe-sub" id="s-res-sub">Unidades mínimas a vender para no perder</div>
+        <div class="pe-chips">
+          <span class="pe-chip" id="s-chip-ing">Ingresos PE: $0</span>
+          <span class="pe-chip" id="s-chip-mc">Margen contribución: 0%</span>
+          <span class="pe-chip" id="s-chip-obj">Para meta: 0 und.</span>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi"><div class="klbl">Punto de equilibrio</div><div class="kval" id="kpi-pe-und">0 und</div><div class="ksub">unidades/mes</div></div>
+        <div class="kpi azul"><div class="klbl">Ingresos en PE</div><div class="kval" id="kpi-pe-ing">$0</div><div class="ksub">ventas mínimas</div></div>
+        <div class="kpi naranja"><div class="klbl">Margen contribución</div><div class="kval" id="kpi-mc">$0</div><div class="ksub">por unidad</div></div>
+        <div class="kpi morado"><div class="klbl">Ratio MC</div><div class="kval" id="kpi-rmc">0%</div><div class="ksub">% sobre precio</div></div>
+        <div class="kpi verde"><div class="klbl">Para utilidad objetivo</div><div class="kval" id="kpi-obj">0 und</div><div class="ksub" id="kpi-obj-sub">unidades necesarias</div></div>
+        <div class="kpi rojo"><div class="klbl">Costos fijos totales</div><div class="kval" id="kpi-cf">$0</div><div class="ksub">por mes</div></div>
+        <div class="kpi"><div class="klbl">Margen de seguridad</div><div class="kval" id="kpi-ms">—</div><div class="ksub">sobre ventas actuales</div></div>
+        <div class="kpi azul"><div class="klbl">Utilidad actual estimada</div><div class="kval" id="kpi-util-act">—</div><div class="ksub">con ventas actuales</div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h2>📈 Análisis Costo-Volumen-Utilidad (CVU)</h2>
+        <div class="chart-wrap">
+          <svg id="grafico-cvu" viewBox="0 0 700 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:0 auto 16px;"></svg>
+        </div>
+        <table class="cvu-table" id="tabla-cvu">
+          <thead><tr><th>Unidades vendidas</th><th>Ingresos</th><th>Costos totales</th><th>Utilidad / Pérdida</th></tr></thead>
+          <tbody id="cvu-body"></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>📋 Resumen de costos</h2>
+        <table class="cvu-table">
+          <thead><tr><th>Concepto</th><th>Monto mensual</th><th>% sobre costos fijos</th></tr></thead>
+          <tbody id="costos-body"></tbody>
+        </table>
+      </div>
+
+      <div id="semaforo-simple" class="semaforo verde">
+        <span style="font-size:26px;" id="sem-ico">🟢</span>
+        <div id="sem-txt">El negocio es viable.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB 2: MÚLTIPLES PRODUCTOS -->
+  <div id="tab-multi" style="display:none">
+    <div class="card">
+      <h2>🛍️ Productos / servicios del negocio</h2>
+      <div class="alert alert-info" style="margin-bottom:16px;">
+        ℹ️ Ingrese cada producto o línea de negocio con su precio, costo variable y la participación estimada en las ventas totales (el mix de ventas debe sumar 100%).
+      </div>
+      <div class="producto-row header">
+        <span>Producto / Servicio</span>
+        <span>Precio (COP)</span>
+        <span>Costo var. (COP)</span>
+        <span>Mix ventas (%)</span>
+        <span></span>
+      </div>
+      <div id="productos-container"></div>
+      <button class="btn-add" onclick="addProducto()">+ Agregar producto</button>
+    </div>
+
+    <div class="card">
+      <h2>🏢 Costos fijos totales mensuales</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Total costos fijos mensuales (COP) <span class="req">*</span></label>
+          <input type="number" id="m-cf" placeholder="Ej: 8000000" min="0" />
+          <span class="hint">Suma de todos los costos fijos del negocio por mes.</span>
+        </div>
+        <div class="field">
+          <label>Utilidad neta objetivo (COP/mes)</label>
+          <input type="number" id="m-util-obj" placeholder="Ej: 5000000" min="0" />
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-calc" onclick="calcMulti()">📊 Calcular punto de equilibrio</button>
+      <button class="btn-reset" onclick="resetMulti()">Limpiar</button>
+    </div>
+
+    <div id="resultado-multi" class="result-box">
+      <div class="pe-banner">
+        <h3>Punto de equilibrio — Mix de productos</h3>
+        <div class="pe-val" id="m-res-ing">$0</div>
+        <div class="pe-sub">Ingresos mínimos totales para cubrir costos fijos</div>
+        <div class="pe-chips">
+          <span class="pe-chip" id="m-chip-mc">MC ponderado: 0%</span>
+          <span class="pe-chip" id="m-chip-obj">Para meta: $0</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>📊 Punto de equilibrio por producto</h2>
+        <table class="prod-result" id="tabla-multi">
+          <thead><tr><th>Producto</th><th>Precio</th><th>CV Unit.</th><th>MC Unit.</th><th>MC %</th><th>Mix</th><th>Und. PE</th><th>Ing. PE</th></tr></thead>
+          <tbody id="multi-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: CONCEPTOS -->
+  <div id="tab-conceptos" style="display:none">
+    <div class="card">
+      <h2>📖 Conceptos clave de análisis financiero PYME</h2>
+      <table class="concepto-table">
+        <thead><tr><th>Concepto</th><th>Definición</th><th>Fórmula</th><th>Ejemplo práctico</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Punto de equilibrio (PE)</strong></td>
+            <td>Nivel de ventas donde ingresos = costos totales. Ni gana ni pierde.</td>
+            <td>PE = Costos Fijos / (Precio - CV unitario)</td>
+            <td>CF=$5M, Precio=$25K, CV=$14K → PE = 5.000.000/11.000 = 455 und.</td>
+          </tr>
+          <tr>
+            <td><strong>Margen de contribución (MC)</strong></td>
+            <td>Lo que aporta cada unidad vendida para cubrir costos fijos y generar utilidad.</td>
+            <td>MC = Precio de venta - Costo Variable Unitario</td>
+            <td>Precio=$25.000, CV=$14.000 → MC=$11.000 por unidad</td>
+          </tr>
+          <tr>
+            <td><strong>Ratio de margen de contribución (RMC)</strong></td>
+            <td>Porcentaje del precio que queda disponible para cubrir CF y utilidad.</td>
+            <td>RMC = MC / Precio × 100</td>
+            <td>MC=$11.000, Precio=$25.000 → RMC = 44%</td>
+          </tr>
+          <tr>
+            <td><strong>Margen de seguridad</strong></td>
+            <td>Cuánto pueden caer las ventas antes de entrar en pérdida.</td>
+            <td>MS = Ventas actuales - PE (en unidades o $)</td>
+            <td>Si vendo 600 und. y PE=455 → MS = 145 und. (24% de holgura)</td>
+          </tr>
+          <tr>
+            <td><strong>Costos fijos (CF)</strong></td>
+            <td>No cambian con el nivel de producción o ventas.</td>
+            <td>Arriendo + nómina + servicios + depreciación…</td>
+            <td>Aunque venda 0 unidades, el arriendo se paga igual.</td>
+          </tr>
+          <tr>
+            <td><strong>Costos variables (CV)</strong></td>
+            <td>Cambian proporcionalmente con las unidades vendidas.</td>
+            <td>Materia prima + comisiones + empaque + MOD</td>
+            <td>Si vende el doble, gasta el doble en materia prima.</td>
+          </tr>
+          <tr>
+            <td><strong>Apalancamiento operativo</strong></td>
+            <td>Sensibilidad de la utilidad ante cambios en ventas. Alto cuando los CF son altos.</td>
+            <td>AO = MC total / Utilidad operacional</td>
+            <td>AO=3 → Un aumento del 10% en ventas → 30% más utilidad.</td>
+          </tr>
+          <tr>
+            <td><strong>Unidades para utilidad objetivo</strong></td>
+            <td>Ventas necesarias para alcanzar una meta de ganancia específica.</td>
+            <td>(CF + Utilidad deseada) / MC unitario</td>
+            <td>CF=$5M, Meta=$2M, MC=$11K → (7.000.000/11.000)=636 und.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="alert alert-info" style="margin-top:16px;">
+        💡 <strong>Tip PYME Colombia:</strong> El error más común de los pequeños empresarios es no separar los costos fijos de los variables, y no incluir su propio salario como costo fijo. Si el dueño trabaja en el negocio, su remuneración debe incluirse en los costos fijos para que el análisis sea realista.
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>⚠️ Herramienta orientativa.</strong> El análisis de punto de equilibrio es una simplificación útil pero asume precios constantes, costos perfectamente clasificables en fijos y variables, y que toda la producción se vende. En la práctica, los costos tienen componentes mixtos y los precios varían. Para decisiones de inversión o financiamiento, consulte con un contador público o asesor financiero certificado.
+    <br><br>
+    🗓️ <em>Actualización: Junio 2026 | SMMLV 2026: $1.423.500 | Tasa imporrenta PYME 2026: 15–35%</em>
+  </div>
+
+</div>
+
+<script>
+  const fmt  = v => new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',minimumFractionDigits:0,maximumFractionDigits:0}).format(v);
+  const fmtN = (v,d=1) => new Intl.NumberFormat('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}).format(v);
+  const v    = id => parseFloat(document.getElementById(id).value) || 0;
+
+  // ── TAB SWITCH ────────────────────────────────────────────────────
+  function showTab(t) {
+    ['simple','multi','conceptos'].forEach(id=>{
+      document.getElementById('tab-'+id).style.display = id===t?'block':'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+      b.classList.toggle('active',['simple','multi','conceptos'][i]===t);
+    });
+  }
+
+  // ── SIMPLE ────────────────────────────────────────────────────────
+  function calcSimple() {
+    const precio   = v('s-precio');
+    const cvu      = v('s-cvu');
+    const unidad   = document.getElementById('s-unidad').value || 'unidad';
+    const nombre   = document.getElementById('s-nombre').value || 'Producto';
+    const periodo  = document.getElementById('s-periodo').value;
+    const tasaImp  = v('s-tasa-imp') / 100;
+    const utilObj  = v('s-utilidad-obj');
+    const ventasAct= v('s-ventas-act');
+
+    if (!precio || !cvu) { alert('Ingrese el precio de venta y el costo variable unitario.'); return; }
+    if (cvu >= precio)   { alert('El costo variable no puede ser igual o mayor al precio de venta. No hay margen de contribución.'); return; }
+
+    // Costos fijos
+    const cfTotal = v('s-cf-total') ||
+      (v('s-arriendo') + v('s-nomina') + v('s-servicios') + v('s-credito') + v('s-seguros') + v('s-otros-fijos'));
+    if (!cfTotal) { alert('Ingrese los costos fijos mensuales.'); return; }
+
+    const multiplier = periodo === 'año' ? 12 : 1;
+    const cf = cfTotal * multiplier;
+
+    const mc    = precio - cvu;
+    const rmc   = mc / precio;
+    const pe    = cf / mc;                          // unidades
+    const peIng = cf / rmc;                         // ingresos en PE
+    const peObj = (cf + utilObj * multiplier) / mc; // para utilidad objetivo
+    const peObjNet = (cf + (utilObj * multiplier / (1 - tasaImp))) / mc;
+
+    // Margen de seguridad
+    const msUnd = ventasAct > 0 ? ventasAct * multiplier - pe : null;
+    const msPct = msUnd !== null ? (msUnd / (ventasAct * multiplier)) * 100 : null;
+
+    // Utilidad actual
+    const utilActBruta = ventasAct > 0 ? ventasAct * multiplier * mc - cf : null;
+    const utilActNeta  = utilActBruta !== null ? utilActBruta * (1 - tasaImp) : null;
+
+    // Apalancamiento operativo
+    const mcTotalAct   = ventasAct > 0 ? ventasAct * multiplier * mc : null;
+    const ao = mcTotalAct && utilActBruta > 0 ? mcTotalAct / utilActBruta : null;
+
+    // Banner
+    const lbl = periodo === 'año' ? 'anual' : 'mensual';
+    document.getElementById('s-res-titulo').textContent = `Punto de equilibrio ${lbl} — ${nombre}`;
+    document.getElementById('s-res-pe').textContent     = fmtN(pe, 0) + ' ' + unidad + (pe !== 1 ? 's' : '');
+    document.getElementById('s-res-sub').textContent    = `Necesitas vender mínimo ${fmtN(pe,0)} ${unidad}s/${lbl} para no tener pérdidas`;
+    document.getElementById('s-chip-ing').textContent   = `Ingresos PE: ${fmt(peIng)}`;
+    document.getElementById('s-chip-mc').textContent    = `Margen contribución: ${fmtN(rmc*100,1)}%`;
+    document.getElementById('s-chip-obj').textContent   = utilObj ? `Para meta: ${fmtN(peObj,0)} ${unidad}s` : 'Sin meta definida';
+
+    // KPIs
+    document.getElementById('kpi-pe-und').textContent  = fmtN(pe, 0) + ' ' + unidad + 's';
+    document.getElementById('kpi-pe-ing').textContent  = fmt(peIng);
+    document.getElementById('kpi-mc').textContent      = fmt(mc);
+    document.getElementById('kpi-rmc').textContent     = fmtN(rmc * 100, 1) + '%';
+    document.getElementById('kpi-obj').textContent     = utilObj ? fmtN(peObj, 0) + ' und.' : '—';
+    document.getElementById('kpi-obj-sub').textContent = utilObj ? `Para ganar ${fmt(utilObj)}/${lbl}` : 'Ingrese utilidad objetivo';
+    document.getElementById('kpi-cf').textContent      = fmt(cf);
+    document.getElementById('kpi-ms').textContent      = msPct !== null ? fmtN(msPct, 1) + '%' : '—';
+    document.getElementById('kpi-util-act').textContent= utilActNeta !== null ? fmt(utilActNeta) : '—';
+
+    // Tabla CVU — 7 puntos incluyendo PE
+    const puntos = [0, pe * 0.25, pe * 0.5, pe, pe * 1.25, pe * 1.5, pe * 2].map(Math.round);
+    const filas = puntos.map(u => {
+      const ing  = u * precio;
+      const ct   = cf + u * cvu;
+      const util = ing - ct;
+      const esPE = u === Math.round(pe);
+      return { u, ing, ct, util, esPE };
+    });
+    document.getElementById('cvu-body').innerHTML = filas.map(f => `
+      <tr class="${f.esPE ? 'pe-row' : f.util >= 0 ? 'util-pos' : 'util-neg'}">
+        <td>${fmtN(f.u, 0)} ${unidad}s ${f.esPE ? '← Equilibrio' : ''}</td>
+        <td>${fmt(f.ing)}</td>
+        <td>${fmt(f.ct)}</td>
+        <td>${f.util >= 0 ? '+' : ''}${fmt(f.util)}</td>
+      </tr>`).join('');
+
+    // Gráfico SVG
+    dibujarGrafico(pe, precio, cvu, cf, unidad);
+
+    // Tabla costos
+    const costosDetalle = [
+      { nom: 'Arriendo local / bodega', val: v('s-arriendo') },
+      { nom: 'Nómina fija', val: v('s-nomina') },
+      { nom: 'Servicios públicos', val: v('s-servicios') },
+      { nom: 'Cuota crédito / leasing', val: v('s-credito') },
+      { nom: 'Seguros y otros fijos', val: v('s-seguros') },
+      { nom: 'Otros costos fijos', val: v('s-otros-fijos') },
+    ].filter(c => c.val > 0);
+    const totalMostrar = v('s-cf-total') || cfTotal;
+    document.getElementById('costos-body').innerHTML = (costosDetalle.length > 0
+      ? costosDetalle.map(c => `<tr><td>${c.nom}</td><td>${fmt(c.val * multiplier)}</td><td>${fmtN(c.val/totalMostrar*100,1)}%</td></tr>`)
+      : [`<tr><td>Total costos fijos ingresados</td><td>${fmt(cf)}</td><td>100%</td></tr>`]
+    ).join('') + `<tr style="font-weight:700;background:#d5f5e3"><td>TOTAL COSTOS FIJOS</td><td>${fmt(cf)}</td><td>100%</td></tr>`;
+
+    // Semáforo
+    const sem = document.getElementById('semaforo-simple');
+    const semIco = document.getElementById('sem-ico');
+    const semTxt = document.getElementById('sem-txt');
+    if (msPct !== null) {
+      if (msPct >= 30) {
+        sem.className = 'semaforo verde'; semIco.textContent = '🟢';
+        semTxt.innerHTML = `<strong>Negocio sólido.</strong> Vendiendo ${fmtN(ventasAct,0)} ${unidad}s, tienes un margen de seguridad del ${fmtN(msPct,1)}%. Puedes soportar una caída de ventas del ${fmtN(msPct,1)}% antes de entrar en pérdida. Apalancamiento operativo: ${ao ? fmtN(ao,2)+'x' : '—'}.`;
+      } else if (msPct >= 10) {
+        sem.className = 'semaforo amarillo'; semIco.textContent = '🟡';
+        semTxt.innerHTML = `<strong>Margen de seguridad ajustado (${fmtN(msPct,1)}%).</strong> El negocio es rentable, pero una caída moderada de ventas puede generar pérdidas. Busca reducir costos fijos o aumentar el margen de contribución.`;
+      } else if (msPct >= 0) {
+        sem.className = 'semaforo amarillo'; semIco.textContent = '🟠';
+        semTxt.innerHTML = `<strong>Muy cerca del punto de equilibrio (${fmtN(msPct,1)}% de margen).</strong> Con las ventas actuales apenas cubres costos. Cualquier baja en ventas genera pérdida. Acción urgente requerida.`;
+      } else {
+        sem.className = 'semaforo rojo'; semIco.textContent = '🔴';
+        semTxt.innerHTML = `<strong>⚠️ El negocio opera con pérdidas.</strong> Las ventas actuales (${fmtN(ventasAct,0)} und.) están ${fmtN(-msUnd,0)} unidades por debajo del punto de equilibrio. Se necesita aumentar ventas, reducir costos fijos, o aumentar el precio / margen de contribución.`;
+      }
+    } else {
+      sem.className = 'semaforo verde'; semIco.textContent = '💡';
+      semTxt.innerHTML = `Necesitas vender <strong>${fmtN(pe,0)} ${unidad}s/${lbl}</strong> para cubrir todos tus costos. Ingresa tus ventas actuales para evaluar tu situación real.`;
+    }
+
+    document.getElementById('resultado-simple').style.display = 'block';
+    document.getElementById('resultado-simple').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function dibujarGrafico(pe, precio, cvu, cf, unidad) {
+    const svg   = document.getElementById('grafico-cvu');
+    const W=700, H=340, PAD={t:30,r:20,b:50,l:80};
+    const maxU  = Math.ceil(pe * 2);
+    const maxY  = Math.ceil(maxU * precio / 1000000) * 1000000;
+    const toX   = u => PAD.l + (u / maxU) * (W - PAD.l - PAD.r);
+    const toY   = y => H - PAD.b - (y / maxY) * (H - PAD.t - PAD.b);
+    const fmt2  = v => v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? (v/1e3).toFixed(0)+'K' : v;
+
+    let html = '';
+    // Fondo y ejes
+    html += `<rect x="${PAD.l}" y="${PAD.t}" width="${W-PAD.l-PAD.r}" height="${H-PAD.t-PAD.b}" fill="#f8fffe" rx="4"/>`;
+
+    // Líneas de cuadrícula
+    for (let i = 1; i <= 4; i++) {
+      const y = toY(maxY * i / 4);
+      html += `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="#e0f0e8" stroke-width="1"/>`;
+      html += `<text x="${PAD.l-8}" y="${y+4}" text-anchor="end" font-size="11" fill="#888">${fmt2(maxY*i/4)}</text>`;
+    }
+    for (let i = 1; i <= 4; i++) {
+      const x = toX(maxU * i / 4);
+      html += `<line x1="${x}" y1="${PAD.t}" x2="${x}" y2="${H-PAD.b}" stroke="#e0f0e8" stroke-width="1"/>`;
+      html += `<text x="${x}" y="${H-PAD.b+18}" text-anchor="middle" font-size="11" fill="#888">${fmtN(maxU*i/4,0)}</text>`;
+    }
+
+    // Línea CF (horizontal)
+    const yCF = toY(cf);
+    html += `<line x1="${PAD.l}" y1="${yCF}" x2="${W-PAD.r}" y2="${yCF}" stroke="#e67e22" stroke-width="2" stroke-dasharray="6,4"/>`;
+    html += `<text x="${PAD.l+6}" y="${yCF-6}" font-size="11" fill="#e67e22" font-weight="600">CF = ${fmt(cf)}</text>`;
+
+    // Línea costos totales
+    const p1x = toX(0), p1y = toY(cf);
+    const p2x = toX(maxU), p2y = toY(cf + maxU * cvu);
+    html += `<line x1="${p1x}" y1="${p1y}" x2="${p2x}" y2="${p2y}" stroke="#e74c3c" stroke-width="2.5"/>`;
+
+    // Línea ingresos
+    const i1x = toX(0), i1y = toY(0);
+    const i2x = toX(maxU), i2y = toY(maxU * precio);
+    html += `<line x1="${i1x}" y1="${i1y}" x2="${i2x}" y2="${i2y}" stroke="#27ae60" stroke-width="2.5"/>`;
+
+    // Punto de equilibrio
+    const peX = toX(pe), peY = toY(pe * precio);
+    html += `<circle cx="${peX}" cy="${peY}" r="7" fill="#1a3a5c" stroke="#fff" stroke-width="2"/>`;
+    html += `<line x1="${peX}" y1="${peY}" x2="${peX}" y2="${H-PAD.b}" stroke="#1a3a5c" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+    html += `<text x="${peX}" y="${H-PAD.b+32}" text-anchor="middle" font-size="11" fill="#1a3a5c" font-weight="700">PE=${fmtN(pe,0)} ${unidad}s</text>`;
+
+    // Zona pérdida / ganancia
+    html += `<text x="${PAD.l+10}" y="${H-PAD.b-14}" font-size="12" fill="#e74c3c" font-weight="600">Pérdida</text>`;
+    html += `<text x="${W-PAD.r-10}" y="${PAD.t+18}" font-size="12" fill="#27ae60" font-weight="600" text-anchor="end">Ganancia</text>`;
+
+    // Leyenda
+    html += `<line x1="${PAD.l+20}" y1="${PAD.t+12}" x2="${PAD.l+44}" y2="${PAD.t+12}" stroke="#27ae60" stroke-width="2.5"/>
+             <text x="${PAD.l+48}" y="${PAD.t+16}" font-size="11" fill="#555">Ingresos</text>
+             <line x1="${PAD.l+110}" y1="${PAD.t+12}" x2="${PAD.l+134}" y2="${PAD.t+12}" stroke="#e74c3c" stroke-width="2.5"/>
+             <text x="${PAD.l+138}" y="${PAD.t+16}" font-size="11" fill="#555">Costos totales</text>
+             <line x1="${PAD.l+230}" y1="${PAD.t+12}" x2="${PAD.l+254}" y2="${PAD.t+12}" stroke="#e67e22" stroke-width="2" stroke-dasharray="5,3"/>
+             <text x="${PAD.l+258}" y="${PAD.t+16}" font-size="11" fill="#555">Costos fijos</text>`;
+
+    // Ejes
+    html += `<line x1="${PAD.l}" y1="${PAD.t}" x2="${PAD.l}" y2="${H-PAD.b}" stroke="#888" stroke-width="1.5"/>`;
+    html += `<line x1="${PAD.l}" y1="${H-PAD.b}" x2="${W-PAD.r}" y2="${H-PAD.b}" stroke="#888" stroke-width="1.5"/>`;
+    html += `<text x="${PAD.l-50}" y="${H/2}" text-anchor="middle" font-size="12" fill="#555" transform="rotate(-90,${PAD.l-50},${H/2})">COP ($)</text>`;
+    html += `<text x="${(W+PAD.l)/2}" y="${H-4}" text-anchor="middle" font-size="12" fill="#555">Unidades vendidas</text>`;
+
+    svg.innerHTML = html;
+  }
+
+  function resetSimple() {
+    ['s-precio','s-cvu','s-unidad','s-nombre','s-arriendo','s-nomina','s-servicios',
+     's-credito','s-seguros','s-otros-fijos','s-cf-total','s-utilidad-obj','s-ventas-act']
+      .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('s-tasa-imp').value = '15';
+    document.getElementById('resultado-simple').style.display='none';
+  }
+
+  // ── MÚLTIPLES PRODUCTOS ───────────────────────────────────────────
+  let prodCount = 0;
+  function addProducto(nom='', precio=0, cv=0, mix=0) {
+    prodCount++;
+    const id = prodCount;
+    const row = document.createElement('div');
+    row.className = 'producto-row';
+    row.id = 'prod-row-' + id;
+    row.innerHTML = `
+      <input type="text"   class="p-nom"   placeholder="Producto ${id}" value="${nom}" />
+      <input type="number" class="p-precio" placeholder="Precio" min="0" value="${precio||''}" />
+      <input type="number" class="p-cv"     placeholder="Costo var." min="0" value="${cv||''}" />
+      <input type="number" class="p-mix"    placeholder="%" min="0" max="100" step="1" value="${mix||''}" />
+      <button class="btn-del" onclick="document.getElementById('prod-row-${id}').remove()">×</button>`;
+    document.getElementById('productos-container').appendChild(row);
+  }
+
+  function calcMulti() {
+    const cf     = v('m-cf');
+    const utilObj= v('m-util-obj');
+    if (!cf) { alert('Ingrese los costos fijos mensuales.'); return; }
+
+    const rows = document.querySelectorAll('#productos-container .producto-row');
+    if (rows.length === 0) { alert('Agregue al menos un producto.'); return; }
+
+    const productos = [];
+    let totalMix = 0;
+    rows.forEach(r => {
+      const nom    = r.querySelector('.p-nom').value || 'Producto';
+      const precio = parseFloat(r.querySelector('.p-precio').value) || 0;
+      const cv     = parseFloat(r.querySelector('.p-cv').value) || 0;
+      const mix    = parseFloat(r.querySelector('.p-mix').value) || 0;
+      if (precio > 0 && cv >= 0 && mix > 0) {
+        productos.push({ nom, precio, cv, mix });
+        totalMix += mix;
+      }
+    });
+
+    if (productos.length === 0) { alert('Complete al menos un producto con precio, costo variable y mix de ventas.'); return; }
+    if (Math.abs(totalMix - 100) > 1) { alert(`El mix de ventas suma ${totalMix}%. Debe sumar 100%.`); return; }
+
+    // MC ponderado
+    const mcPond = productos.reduce((acc, p) => acc + (p.precio - p.cv) / p.precio * (p.mix / 100), 0);
+    const peIng  = cf / mcPond;
+    const peObjIng = (cf + utilObj) / mcPond;
+
+    document.getElementById('m-res-ing').textContent    = fmt(peIng);
+    document.getElementById('m-chip-mc').textContent    = `MC ponderado: ${fmtN(mcPond*100,1)}%`;
+    document.getElementById('m-chip-obj').textContent   = utilObj ? `Para meta: ${fmt(peObjIng)}` : 'Sin meta';
+
+    document.getElementById('multi-body').innerHTML = productos.map(p => {
+      const mc  = p.precio - p.cv;
+      const rmc = mc / p.precio * 100;
+      const cfAsig = cf * (p.mix / 100);
+      const peUnd  = mc > 0 ? Math.ceil(cfAsig / mc) : '—';
+      const peIngP = mc > 0 ? cfAsig / (mc / p.precio) : 0;
+      return `<tr>
+        <td>${p.nom}</td>
+        <td>${fmt(p.precio)}</td>
+        <td>${fmt(p.cv)}</td>
+        <td>${fmt(mc)}</td>
+        <td>${fmtN(rmc,1)}%</td>
+        <td>${p.mix}%</td>
+        <td>${typeof peUnd==='number' ? fmtN(peUnd,0)+' und.' : peUnd}</td>
+        <td>${fmt(peIngP)}</td>
+      </tr>`;
+    }).join('') + `<tr class="total-row">
+      <td>TOTALES / PONDERADO</td><td>—</td><td>—</td><td>—</td>
+      <td>${fmtN(mcPond*100,1)}%</td><td>100%</td>
+      <td>—</td><td>${fmt(peIng)}</td></tr>`;
+
+    document.getElementById('resultado-multi').style.display='block';
+    document.getElementById('resultado-multi').scrollIntoView({ behavior:'smooth' });
+  }
+
+  function resetMulti() {
+    document.getElementById('productos-container').innerHTML='';
+    document.getElementById('m-cf').value='';
+    document.getElementById('m-util-obj').value='';
+    document.getElementById('resultado-multi').style.display='none';
+    prodCount=0;
+  }
+
+  // Inicializar con 3 productos de ejemplo
+  addProducto('Producto A', 25000, 14000, 60);
+  addProducto('Producto B', 40000, 20000, 30);
+  addProducto('Producto C', 15000, 8000,  10);
+</script>
+</body>
+</html>
