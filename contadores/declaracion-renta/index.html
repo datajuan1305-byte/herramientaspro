@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Simulador declaración de renta personas naturales Colombia 2026. Calcula si debes declarar renta, impuesto a pagar, deducciones, rentas exentas y saldo a favor. Actualizado UVT 2026." />
+  <meta name="keywords" content="declaracion de renta personas naturales Colombia 2026, simulador renta Colombia, calcular impuesto renta natural, UVT 2026, DIAN renta" />
+  <title>Simulador Declaración de Renta Personas Naturales 2026 | HerramientasPro Colombia</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #222; min-height: 100vh; }
+
+    nav { background: #1a3a5c; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    nav a { color: #fff; text-decoration: none; font-size: 14px; opacity: .8; }
+    nav a:hover { opacity: 1; }
+    nav .brand { font-weight: 700; font-size: 17px; opacity: 1; margin-right: 8px; }
+    nav .sep { color: #7aa3c8; }
+
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #2980b9 100%); color: #fff; text-align: center; padding: 36px 20px 28px; }
+    .hero .badge { background: rgba(255,255,255,.18); display: inline-block; border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+    .hero h1 { font-size: clamp(20px, 4vw, 30px); font-weight: 800; margin-bottom: 8px; }
+    .hero p { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto 16px; }
+    .hero .chips { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .hero .chip { background: rgba(255,255,255,.15); border-radius: 20px; padding: 5px 14px; font-size: 13px; }
+
+    .container { max-width: 920px; margin: 0 auto; padding: 28px 16px 60px; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+    .tab-btn { padding: 9px 18px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; background: #fff; color: #555; box-shadow: 0 1px 4px rgba(0,0,0,.1); transition: all .2s; }
+    .tab-btn.active { background: #1a3a5c; color: #fff; }
+
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 24px; margin-bottom: 20px; }
+    .card h2 { font-size: 16px; font-weight: 700; color: #1a3a5c; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid #dbeafe; }
+    .card h3 { font-size: 14px; font-weight: 700; color: #2980b9; margin: 18px 0 10px; }
+
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 13px; font-weight: 600; color: #444; }
+    label span.req { color: #c0392b; }
+    input, select { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color .2s; background: #fafafa; }
+    input:focus, select:focus { outline: none; border-color: #2980b9; background: #fff; }
+    .hint { font-size: 11px; color: #888; margin-top: 2px; line-height: 1.4; }
+
+    .section-divider { border: none; border-top: 2px dashed #dbeafe; margin: 20px 0; }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+    .btn-calc { background: #1a3a5c; color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; min-width: 160px; transition: background .2s; }
+    .btn-calc:hover { background: #0f2540; }
+    .btn-reset { background: #ecf0f1; color: #555; border: none; border-radius: 8px; padding: 13px 20px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .btn-reset:hover { background: #dfe6e9; }
+
+    /* RESULT */
+    .result-box { display: none; margin-top: 24px; }
+
+    .veredicto { border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; }
+    .veredicto.declara { background: linear-gradient(135deg, #1a3a5c, #2980b9); color: #fff; }
+    .veredicto.no-declara { background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; }
+    .veredicto.a-favor { background: linear-gradient(135deg, #8e44ad, #9b59b6); color: #fff; }
+    .veredicto h3 { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+    .veredicto .monto { font-size: 32px; font-weight: 900; margin: 8px 0 4px; }
+    .veredicto .sub { font-size: 13px; opacity: .85; }
+
+    .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .res-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; }
+    .res-card .rlbl { font-size: 12px; color: #64748b; margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+    .res-card .rval { font-size: 18px; font-weight: 800; color: #1a3a5c; }
+    .res-card .rsub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+
+    .waterfall { background: #fff; border: 2px solid #dbeafe; border-radius: 10px; overflow: hidden; }
+    .wf-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 18px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+    .wf-row:last-child { border-bottom: none; }
+    .wf-row .wlbl { color: #555; }
+    .wf-row .wval { font-weight: 700; }
+    .wf-row.positivo .wval { color: #27ae60; }
+    .wf-row.negativo .wval { color: #c0392b; }
+    .wf-row.neutro .wval { color: #2980b9; }
+    .wf-row.subtotal { background: #f0f7ff; font-weight: 700; }
+    .wf-row.subtotal .wlbl { color: #1a3a5c; font-weight: 800; }
+    .wf-row.subtotal .wval { color: #1a3a5c; font-size: 15px; }
+    .wf-row.total-final { background: #1a3a5c; }
+    .wf-row.total-final .wlbl, .wf-row.total-final .wval { color: #fff; font-size: 15px; font-weight: 800; }
+
+    .alert { border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-top: 14px; line-height: 1.5; }
+    .alert-info { background: #eaf4fb; border-left: 4px solid #2980b9; color: #1a5276; }
+    .alert-warn { background: #fef9e7; border-left: 4px solid #f39c12; color: #7d6608; }
+    .alert-success { background: #eafaf1; border-left: 4px solid #27ae60; color: #1e8449; }
+    .alert-danger { background: #fdedec; border-left: 4px solid #c0392b; color: #7b241c; }
+
+    .uvt-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .uvt-table th { background: #1a3a5c; color: #fff; padding: 9px 12px; text-align: left; }
+    .uvt-table td { padding: 9px 12px; border-bottom: 1px solid #dbeafe; }
+    .uvt-table tr:nth-child(even) td { background: #f0f7ff; }
+    .uvt-table tr.resalta td { background: #fef9e7; font-weight: 700; }
+
+    .tarifa-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+    .tarifa-table th { background: #2980b9; color: #fff; padding: 9px 12px; text-align: left; }
+    .tarifa-table td { padding: 9px 12px; border-bottom: 1px solid #dbeafe; }
+    .tarifa-table tr:last-child td { background: #1a3a5c; color: #fff; font-weight: 700; }
+
+    .disclaimer { background: #ecf0f1; border-radius: 10px; padding: 14px 18px; font-size: 12px; color: #636e72; margin-top: 28px; line-height: 1.6; }
+
+    @media (max-width: 600px) {
+      .grid2 { grid-template-columns: 1fr; }
+      .res-grid { grid-template-columns: 1fr; }
+      .veredicto .monto { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="brand">🛠️ HerramientasPro</a>
+  <span class="sep">›</span>
+  <a href="../../index.html#contadores">Contadores</a>
+  <span class="sep">›</span>
+  <span style="color:#fff; opacity:.7;">Declaración de Renta PN</span>
+</nav>
+
+<div class="hero">
+  <div class="badge">💼 Tributario · DIAN 2026</div>
+  <h1>Simulador Declaración de Renta<br>Personas Naturales 2026</h1>
+  <p>Determina si debes declarar renta por el año gravable 2025, calcula tu impuesto estimado, aplica deducciones y rentas exentas según el Estatuto Tributario colombiano.</p>
+  <div class="chips">
+    <span class="chip">📅 Año gravable 2025</span>
+    <span class="chip">💰 UVT 2026: $47.065</span>
+    <span class="chip">✅ E.T. actualizado</span>
+    <span class="chip">📊 Tabla de tarifas incluida</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('sim')">Simulador de Renta</button>
+    <button class="tab-btn" onclick="showTab('tarifas')">Tabla de Tarifas 2025</button>
+    <button class="tab-btn" onclick="showTab('obligados')">¿Quién debe declarar?</button>
+  </div>
+
+  <!-- TAB 1: SIMULADOR -->
+  <div id="tab-sim">
+
+    <!-- INGRESOS -->
+    <div class="card">
+      <h2>💰 1. Ingresos del año gravable 2025</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Salarios / ingresos laborales brutos (COP) <span class="req">*</span></label>
+          <input type="number" id="ing-salario" placeholder="0" min="0" />
+          <span class="hint">Total devengado en el año antes de deducciones. Incluye sueldo, bonificaciones, comisiones.</span>
+        </div>
+        <div class="field">
+          <label>Honorarios / servicios independientes (COP)</label>
+          <input type="number" id="ing-honorarios" placeholder="0" min="0" />
+          <span class="hint">Pagos recibidos como independiente, profesional o consultor.</span>
+        </div>
+        <div class="field">
+          <label>Arrendamientos recibidos (COP)</label>
+          <input type="number" id="ing-arrend" placeholder="0" min="0" />
+          <span class="hint">Ingresos por alquiler de inmuebles o bienes muebles.</span>
+        </div>
+        <div class="field">
+          <label>Dividendos / participaciones (COP)</label>
+          <input type="number" id="ing-dividendos" placeholder="0" min="0" />
+          <span class="hint">Dividendos gravados de sociedades colombianas o extranjeras.</span>
+        </div>
+        <div class="field">
+          <label>Otros ingresos gravables (COP)</label>
+          <input type="number" id="ing-otros" placeholder="0" min="0" />
+          <span class="hint">Intereses, rendimientos financieros, loterías (si aplica), otros.</span>
+        </div>
+        <div class="field">
+          <label>Ingresos no constitutivos de renta (COP)</label>
+          <input type="number" id="ing-ncrni" placeholder="0" min="0" />
+          <span class="hint">Ej: indemnizaciones por accidente, aportes obligatorios a pensión del empleado, devolución de IVA.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEDUCCIONES -->
+    <div class="card">
+      <h2>📉 2. Deducciones y costos</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Aportes obligatorios pensión — empleado (COP)</label>
+          <input type="number" id="ded-pension" placeholder="0" min="0" />
+          <span class="hint">4% del salario mensual. Deducible del ingreso laboral.</span>
+        </div>
+        <div class="field">
+          <label>Aportes obligatorios salud — empleado (COP)</label>
+          <input type="number" id="ded-salud" placeholder="0" min="0" />
+          <span class="hint">4% del salario mensual. Deducible del ingreso laboral.</span>
+        </div>
+        <div class="field">
+          <label>Intereses crédito de vivienda / leasing habitacional (COP)</label>
+          <input type="number" id="ded-vivienda" placeholder="0" min="0" />
+          <span class="hint">Máximo 1.200 UVT/año ($56.478.000 para 2026). Art. 119 E.T.</span>
+        </div>
+        <div class="field">
+          <label>Medicina prepagada / seguros de salud (COP)</label>
+          <input type="number" id="ded-medicina" placeholder="0" min="0" />
+          <span class="hint">Máximo 192 UVT/año ($9.036.480). Art. 387 E.T.</span>
+        </div>
+        <div class="field">
+          <label>Dependientes económicos (COP equivalente)</label>
+          <input type="number" id="ded-dependientes" placeholder="0" min="0" />
+          <span class="hint">Hasta 10% del ingreso bruto laboral, máximo 32 UVT/mes (384 UVT/año = $18.072.960). Art. 387 E.T.</span>
+        </div>
+        <div class="field">
+          <label>Costos y gastos independiente (COP)</label>
+          <input type="number" id="ded-costos-ind" placeholder="0" min="0" />
+          <span class="hint">Para honorarios: gastos necesarios para producir el ingreso, debidamente soportados.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RENTAS EXENTAS -->
+    <div class="card">
+      <h2>🔓 3. Rentas exentas</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Cesantías e intereses sobre cesantías (COP)</label>
+          <input type="number" id="rex-cesantias" placeholder="0" min="0" />
+          <span class="hint">Exentas hasta 350 UVT/año ($16.472.750). Art. 206 num. 4 E.T.</span>
+        </div>
+        <div class="field">
+          <label>Prima de servicios (COP)</label>
+          <input type="number" id="rex-prima" placeholder="0" min="0" />
+          <span class="hint">Exenta hasta 350 UVT/año. Art. 206 E.T.</span>
+        </div>
+        <div class="field">
+          <label>Indemnizaciones laborales (COP)</label>
+          <input type="number" id="rex-indemn" placeholder="0" min="0" />
+          <span class="hint">Exentas hasta 250 días de salario para trabajadores con más de 10 años.</span>
+        </div>
+        <div class="field">
+          <label>Aportes voluntarios AFC / pensión voluntaria (COP)</label>
+          <input type="number" id="rex-afc" placeholder="0" min="0" />
+          <span class="hint">Exentos hasta el 30% del ingreso anual, máx. 3.800 UVT ($178.847.000). Art. 126-1 y 126-4 E.T.</span>
+        </div>
+        <div class="field">
+          <label>Exención del 25% renta laboral (COP — calcular abajo)</label>
+          <input type="number" id="rex-25pct" placeholder="0" min="0" />
+          <span class="hint">25% sobre el ingreso laboral depurado, máx. 240 UVT/mes (2.880 UVT/año = $135.547.200). Art. 206 num. 10 E.T.</span>
+        </div>
+        <div class="field">
+          <label>Otras rentas exentas (COP)</label>
+          <input type="number" id="rex-otras" placeholder="0" min="0" />
+          <span class="hint">Pensiones de jubilación, invalidez, vejez, muerte (exentas si no superan 1.000 UVT/mes).</span>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin-top:14px;">
+        💡 <strong>Límite combinado de deducciones y rentas exentas:</strong> No puede superar el 40% del ingreso neto ni 5.040 UVT/año ($237.207.600) — Art. 336 E.T.
+      </div>
+    </div>
+
+    <!-- PATRIMONIO Y RETENCIONES -->
+    <div class="card">
+      <h2>🏦 4. Patrimonio y retenciones practicadas</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Patrimonio bruto al 31 dic 2025 (COP)</label>
+          <input type="number" id="patrimonio-bruto" placeholder="0" min="0" />
+          <span class="hint">Valor de todos sus bienes: inmuebles, vehículos, cuentas, inversiones, etc. Declarar si supera 4.500 UVT ($211.792.500).</span>
+        </div>
+        <div class="field">
+          <label>Deudas / pasivos al 31 dic 2025 (COP)</label>
+          <input type="number" id="pasivos" placeholder="0" min="0" />
+          <span class="hint">Créditos hipotecarios, deudas bancarias, obligaciones financieras.</span>
+        </div>
+        <div class="field">
+          <label>Retenciones en la fuente practicadas (COP)</label>
+          <input type="number" id="retenciones" placeholder="0" min="0" />
+          <span class="hint">Total de retenciones que le practicaron durante el año 2025. Certificados de retención del empleador o clientes.</span>
+        </div>
+        <div class="field">
+          <label>Anticipo renta año anterior (COP)</label>
+          <input type="number" id="anticipo-ant" placeholder="0" min="0" />
+          <span class="hint">Anticipo liquidado en la declaración de renta del año gravable 2024 (si declaró).</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-calc" onclick="calcularRenta()">📊 Simular declaración de renta</button>
+      <button class="btn-reset" onclick="resetSim()">Limpiar formulario</button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="resultado" class="result-box">
+
+      <div id="veredicto-box" class="veredicto declara">
+        <h3 id="v-titulo">Resultado de la simulación</h3>
+        <div class="monto" id="v-monto">$0</div>
+        <div class="sub" id="v-sub">Impuesto estimado a pagar</div>
+      </div>
+
+      <div class="res-grid">
+        <div class="res-card">
+          <div class="rlbl">Ingresos brutos totales</div>
+          <div class="rval" id="r-ingresos-brutos">$0</div>
+          <div class="rsub">Antes de depuración</div>
+        </div>
+        <div class="res-card">
+          <div class="rlbl">Renta líquida gravable</div>
+          <div class="rval" id="r-renta-gravable">$0</div>
+          <div class="rsub">Base del impuesto</div>
+        </div>
+        <div class="res-card">
+          <div class="rlbl">Renta gravable en UVT</div>
+          <div class="rval" id="r-renta-uvt">0 UVT</div>
+          <div class="rsub">UVT 2026: $47.065</div>
+        </div>
+        <div class="res-card">
+          <div class="rlbl">Patrimonio líquido</div>
+          <div class="rval" id="r-patrimonio">$0</div>
+          <div class="rsub">Bruto menos pasivos</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h2>📋 Liquidación de la renta — Cédula general</h2>
+        <div class="waterfall">
+          <div class="wf-row">
+            <span class="wlbl">Ingresos brutos totales</span>
+            <span class="wval positivo" id="wf-ingresos">$0</span>
+          </div>
+          <div class="wf-row">
+            <span class="wlbl">(-) Ingresos no constitutivos de renta (INCR)</span>
+            <span class="wval negativo" id="wf-incr">$0</span>
+          </div>
+          <div class="wf-row subtotal">
+            <span class="wlbl">= Ingresos netos</span>
+            <span class="wval" id="wf-netos">$0</span>
+          </div>
+          <div class="wf-row">
+            <span class="wlbl">(-) Costos y deducciones</span>
+            <span class="wval negativo" id="wf-deducciones">$0</span>
+          </div>
+          <div class="wf-row subtotal">
+            <span class="wlbl">= Renta bruta</span>
+            <span class="wval" id="wf-renta-bruta">$0</span>
+          </div>
+          <div class="wf-row">
+            <span class="wlbl">(-) Rentas exentas (con límite 40% / 5.040 UVT)</span>
+            <span class="wval negativo" id="wf-exentas">$0</span>
+          </div>
+          <div class="wf-row subtotal">
+            <span class="wlbl">= Renta líquida gravable</span>
+            <span class="wval" id="wf-gravable">$0</span>
+          </div>
+          <div class="wf-row">
+            <span class="wlbl">Impuesto de renta (tarifa progresiva)</span>
+            <span class="wval neutro" id="wf-impuesto">$0</span>
+          </div>
+          <div class="wf-row">
+            <span class="wlbl">(-) Retenciones en la fuente</span>
+            <span class="wval negativo" id="wf-retenciones">$0</span>
+          </div>
+          <div class="wf-row">
+            <span class="wlbl">(-) Anticipo año anterior</span>
+            <span class="wval negativo" id="wf-anticipo">$0</span>
+          </div>
+          <div class="wf-row">
+            <span class="wlbl">Anticipo próximo año (25% del impuesto)</span>
+            <span class="wval neutro" id="wf-anticipo-sig">$0</span>
+          </div>
+          <div class="wf-row total-final">
+            <span class="wlbl" id="wf-lbl-total">SALDO A PAGAR</span>
+            <span class="wval" id="wf-total">$0</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="obligacion-msg" class="alert alert-info"></div>
+      <div id="consejo-msg" class="alert alert-warn" style="margin-top:10px;"></div>
+
+    </div>
+  </div>
+
+  <!-- TAB 2: TARIFAS -->
+  <div id="tab-tarifas" style="display:none">
+    <div class="card">
+      <h2>📊 Tabla de tarifas de renta — Personas Naturales año gravable 2025</h2>
+      <div class="alert alert-info" style="margin-bottom:16px;">
+        ℹ️ Las tarifas son progresivas: cada tramo se aplica solo sobre el exceso de la base anterior, no sobre el total del ingreso. UVT 2026 para declaración AG 2025: <strong>$47.065 COP</strong>.
+      </div>
+      <table class="tarifa-table">
+        <thead>
+          <tr>
+            <th>Renta líquida gravable</th>
+            <th>Desde (UVT)</th>
+            <th>Hasta (UVT)</th>
+            <th>Desde (COP)</th>
+            <th>Tarifa marginal</th>
+            <th>Impuesto base (UVT)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Tramo 1</td><td>0</td><td>1.090</td><td>$0</td><td>0%</td><td>0</td></tr>
+          <tr><td>Tramo 2</td><td>1.090</td><td>1.700</td><td>$51.300.850</td><td>19%</td><td>(RLG en UVT - 1.090) × 19%</td></tr>
+          <tr><td>Tramo 3</td><td>1.700</td><td>4.100</td><td>$80.010.500</td><td>28%</td><td>116 UVT + (RLG - 1.700) × 28%</td></tr>
+          <tr><td>Tramo 4</td><td>4.100</td><td>8.670</td><td>$192.966.500</td><td>33%</td><td>788 UVT + (RLG - 4.100) × 33%</td></tr>
+          <tr><td>Tramo 5</td><td>8.670</td><td>18.970</td><td>$408.014.550</td><td>35%</td><td>2.296 UVT + (RLG - 8.670) × 35%</td></tr>
+          <tr><td>Tramo 6</td><td>18.970</td><td>31.000</td><td>$893.112.550</td><td>37%</td><td>5.901 UVT + (RLG - 18.970) × 37%</td></tr>
+          <tr><td>Tramo 7 (más alto)</td><td>31.000</td><td>En adelante</td><td>$1.459.015.000</td><td>39%</td><td>10.352 UVT + (RLG - 31.000) × 39%</td></tr>
+        </tbody>
+      </table>
+      <div class="alert alert-warn" style="margin-top:14px;">
+        ⚠️ <strong>Dividendos:</strong> tienen tarifas especiales (0%, 15%, 35%) según su origen y monto. <strong>Ganancias ocasionales</strong> (herencias, ventas de activos de más de 2 años): tarifa fija del 15%. Esta tabla aplica a la cédula general.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📌 Límites de deducciones y exenciones clave 2026</h2>
+      <table class="uvt-table">
+        <thead>
+          <tr><th>Concepto</th><th>Límite en UVT</th><th>Límite en COP (2026)</th><th>Artículo E.T.</th></tr>
+        </thead>
+        <tbody>
+          <tr class="resalta"><td>Exención 25% renta laboral</td><td>2.880 UVT/año</td><td>$135.547.200</td><td>Art. 206 num. 10</td></tr>
+          <tr><td>Intereses crédito hipotecario</td><td>1.200 UVT/año</td><td>$56.478.000</td><td>Art. 119</td></tr>
+          <tr><td>Medicina prepagada / seguros</td><td>192 UVT/año</td><td>$9.036.480</td><td>Art. 387</td></tr>
+          <tr><td>Dependientes económicos</td><td>384 UVT/año</td><td>$18.072.960</td><td>Art. 387</td></tr>
+          <tr class="resalta"><td>Aportes voluntarios AFC + pensión voluntaria</td><td>3.800 UVT/año</td><td>$178.847.000</td><td>Art. 126-1 y 126-4</td></tr>
+          <tr><td>Cesantías exentas</td><td>350 UVT/año</td><td>$16.472.750</td><td>Art. 206 num. 4</td></tr>
+          <tr><td>Prima de servicios exenta</td><td>350 UVT/año</td><td>$16.472.750</td><td>Art. 206</td></tr>
+          <tr class="resalta"><td><strong>Límite combinado ded. + exenciones</strong></td><td><strong>5.040 UVT/año</strong></td><td><strong>$237.207.600</strong></td><td>Art. 336</td></tr>
+          <tr><td>Umbral patrimonio bruto para declarar</td><td>4.500 UVT</td><td>$211.792.500</td><td>Art. 592</td></tr>
+          <tr><td>Umbral ingresos brutos para declarar</td><td>1.400 UVT</td><td>$65.891.000</td><td>Art. 592</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: QUIÉN DECLARA -->
+  <div id="tab-obligados" style="display:none">
+    <div class="card">
+      <h2>❓ ¿Quién está obligado a declarar renta por el año gravable 2025?</h2>
+      <div class="alert alert-danger" style="margin-bottom:18px;">
+        🚨 <strong>No presentar la declaración estando obligado genera sanción por no declarar del 20% de los ingresos o consignaciones bancarias</strong> (Art. 643 E.T.), más intereses de mora.
+      </div>
+
+      <h3 style="color:#c0392b; margin-bottom:10px;">🔴 Debes declarar renta si cumples ALGUNA de estas condiciones:</h3>
+      <table class="uvt-table" style="margin-bottom:20px;">
+        <thead>
+          <tr><th>Condición</th><th>Umbral en UVT (AG 2025)</th><th>Umbral en COP</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Ingresos brutos totales superiores a</td><td>1.400 UVT</td><td>$65.891.000</td></tr>
+          <tr><td>Patrimonio bruto superior a</td><td>4.500 UVT</td><td>$211.792.500</td></tr>
+          <tr><td>Consumos con tarjetas de crédito superiores a</td><td>1.400 UVT</td><td>$65.891.000</td></tr>
+          <tr><td>Compras y consumos totales superiores a</td><td>1.400 UVT</td><td>$65.891.000</td></tr>
+          <tr><td>Consignaciones bancarias superiores a</td><td>1.400 UVT</td><td>$65.891.000</td></tr>
+          <tr><td>Ser responsable del IVA (régimen común)</td><td colspan="2">Obligatorio independiente de ingresos</td></tr>
+          <tr><td>Tener saldo a favor y querer devolución</td><td colspan="2">Obligatorio para solicitar devolución o compensación</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="color:#27ae60; margin-bottom:10px;">🟢 No están obligados a declarar (Art. 592 E.T.):</h3>
+      <div class="alert alert-success" style="margin-bottom:14px;">
+        ✅ Asalariados con ingresos únicamente laborales inferiores a 1.400 UVT, a quienes el empleador les practicó retención en la fuente y que no tengan otros ingresos, patrimonio, compras o consignaciones que superen los umbrales anteriores. Tampoco están obligados los trabajadores independientes que no superen estos topes y no sean responsables de IVA.
+      </div>
+
+      <h3 style="color:#2980b9; margin-bottom:10px;">📅 Calendario de vencimientos declaración de renta AG 2025:</h3>
+      <table class="uvt-table">
+        <thead>
+          <tr><th>Tipo de declarante</th><th>Período de presentación</th><th>Nota</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Personas naturales grandes contribuyentes</td><td>Ago – Sep 2026</td><td>Según últimos dígitos del NIT</td></tr>
+          <tr><td>Personas naturales obligadas (demás)</td><td>Ago – Oct 2026</td><td>Según últimos dígitos de cédula</td></tr>
+          <tr><td>Personas naturales no obligadas que quieran saldo a favor</td><td>En cualquier momento</td><td>Antes de prescripción (3 años)</td></tr>
+        </tbody>
+      </table>
+      <div class="alert alert-warn" style="margin-top:14px;">
+        ⚠️ Las fechas exactas se publican en el Decreto de plazos de la DIAN cada año. Consulte el Decreto vigente en <strong>dian.gov.co</strong> para los vencimientos exactos del AG 2025.
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>⚠️ Herramienta orientativa.</strong> Este simulador aplica las reglas generales del Estatuto Tributario colombiano para la cédula general de personas naturales (asalariados e independientes). No contempla todas las situaciones especiales: dividendos con tarifas diferenciadas, ganancias ocasionales, rentas de pensiones, regímenes especiales, ni situaciones de residente fiscal en el exterior. <strong>Consulte siempre con un contador público certificado para su declaración oficial en el portal MUISCA de la DIAN.</strong>
+    <br><br>
+    🗓️ <em>Última actualización: Enero 2026 — UVT 2026: $47.065 | SMMLV 2026: $1.423.500 | Parámetros E.T. Ley 2277 de 2022</em>
+  </div>
+
+</div>
+
+<script>
+  const UVT = 47065;
+  const fmt = v => new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',minimumFractionDigits:0,maximumFractionDigits:0}).format(v);
+  const v = id => parseFloat(document.getElementById(id).value) || 0;
+
+  function showTab(t) {
+    ['sim','tarifas','obligados'].forEach(id => {
+      document.getElementById('tab-'+id).style.display = id===t?'block':'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach((b,i) => {
+      b.classList.toggle('active', ['sim','tarifas','obligados'][i]===t);
+    });
+  }
+
+  function calcularImpuesto(rlgCOP) {
+    const rlgUVT = rlgCOP / UVT;
+    let imp = 0;
+    // Tramos Art. 241 E.T. (UVT)
+    const tramos = [
+      { desde: 0,     hasta: 1090,  base: 0,     tasa: 0.00 },
+      { desde: 1090,  hasta: 1700,  base: 0,      tasa: 0.19 },
+      { desde: 1700,  hasta: 4100,  base: 116,    tasa: 0.28 },
+      { desde: 4100,  hasta: 8670,  base: 788,    tasa: 0.33 },
+      { desde: 8670,  hasta: 18970, base: 2296,   tasa: 0.35 },
+      { desde: 18970, hasta: 31000, base: 5901,   tasa: 0.37 },
+      { desde: 31000, hasta: Infinity, base: 10352, tasa: 0.39 }
+    ];
+    for (const t of tramos) {
+      if (rlgUVT > t.desde) {
+        const exceso = Math.min(rlgUVT, t.hasta) - t.desde;
+        if (t.desde === 0) continue;
+        imp = t.base + (rlgUVT - t.desde) * t.tasa;
+        // Si no llega al siguiente tramo, calculamos y salimos
+        if (rlgUVT <= t.hasta) break;
+      }
+    }
+    // Recalcular correctamente
+    imp = 0;
+    if (rlgUVT > 1090) {
+      if (rlgUVT <= 1700) {
+        imp = (rlgUVT - 1090) * 0.19;
+      } else if (rlgUVT <= 4100) {
+        imp = 116 + (rlgUVT - 1700) * 0.28;
+      } else if (rlgUVT <= 8670) {
+        imp = 788 + (rlgUVT - 4100) * 0.33;
+      } else if (rlgUVT <= 18970) {
+        imp = 2296 + (rlgUVT - 8670) * 0.35;
+      } else if (rlgUVT <= 31000) {
+        imp = 5901 + (rlgUVT - 18970) * 0.37;
+      } else {
+        imp = 10352 + (rlgUVT - 31000) * 0.39;
+      }
+    }
+    return { impuestoUVT: imp, impuestoCOP: imp * UVT, rlgUVT };
+  }
+
+  function calcularRenta() {
+    // 1. Ingresos
+    const ingSalario    = v('ing-salario');
+    const ingHonorarios = v('ing-honorarios');
+    const ingArrend     = v('ing-arrend');
+    const ingDividendos = v('ing-dividendos');
+    const ingOtros      = v('ing-otros');
+    const incr          = v('ing-ncrni');
+
+    const ingresosBrutos = ingSalario + ingHonorarios + ingArrend + ingDividendos + ingOtros;
+
+    if (ingresosBrutos === 0) { alert('Ingrese al menos un ingreso para simular.'); return; }
+
+    // 2. Deducciones
+    const dedPension    = Math.min(v('ded-pension'), ingSalario * 0.04 * 1.1);
+    const dedSalud      = Math.min(v('ded-salud'), ingSalario * 0.04 * 1.1);
+    const dedVivienda   = Math.min(v('ded-vivienda'), 1200 * UVT);
+    const dedMedicina   = Math.min(v('ded-medicina'), 192 * UVT);
+    const dedDependientes = Math.min(v('ded-dependientes'), 384 * UVT);
+    const dedCostosInd  = v('ded-costos-ind');
+    const totalDeducciones = dedPension + dedSalud + dedVivienda + dedMedicina + dedDependientes + dedCostosInd;
+
+    // 3. Rentas exentas
+    const rexCesantias = Math.min(v('rex-cesantias'), 350 * UVT);
+    const rexPrima     = Math.min(v('rex-prima'), 350 * UVT);
+    const rexIndemn    = v('rex-indemn');
+    const rexAfc       = Math.min(v('rex-afc'), 3800 * UVT);
+    const rex25        = Math.min(v('rex-25pct'), 2880 * UVT);
+    const rexOtras     = v('rex-otras');
+    let totalExentas   = rexCesantias + rexPrima + rexIndemn + rexAfc + rex25 + rexOtras;
+
+    // 4. Calcular renta bruta
+    const ingresosNetos = Math.max(0, ingresosBrutos - incr);
+    const rentaBruta    = Math.max(0, ingresosNetos - totalDeducciones);
+
+    // Aplicar límite 40% / 5.040 UVT
+    const limiteExentas = Math.min(rentaBruta * 0.40, 5040 * UVT);
+    totalExentas = Math.min(totalExentas, limiteExentas);
+
+    const rentaGravable = Math.max(0, rentaBruta - totalExentas);
+
+    // 5. Impuesto
+    const { impuestoCOP, rlgUVT } = calcularImpuesto(rentaGravable);
+
+    // 6. Retenciones y anticipo
+    const retenciones  = v('retenciones');
+    const anticipoAnt  = v('anticipo-ant');
+    const anticipoSig  = impuestoCOP * 0.25; // 25% del impuesto para el año siguiente
+    const saldo        = impuestoCOP - retenciones - anticipoAnt + anticipoSig;
+
+    // 7. Patrimonio
+    const patrimonioBruto = v('patrimonio-bruto');
+    const pasivos         = v('pasivos');
+    const patrimonioLiq   = Math.max(0, patrimonioBruto - pasivos);
+
+    // ─── MOSTRAR ──────────────────────────────────────────────
+    // Veredicto
+    const vbox = document.getElementById('veredicto-box');
+    vbox.className = 'veredicto ' + (saldo >= 0 ? 'declara' : 'a-favor');
+    document.getElementById('v-titulo').textContent = saldo >= 0
+      ? '💰 Impuesto a pagar estimado'
+      : '🎉 Saldo a favor estimado';
+    document.getElementById('v-monto').textContent = fmt(Math.abs(saldo));
+    document.getElementById('v-sub').textContent = saldo >= 0
+      ? `Renta líquida gravable: ${fmt(rentaGravable)} (${rlgUVT.toFixed(0)} UVT)`
+      : `Puedes solicitar devolución o compensación a la DIAN`;
+
+    // Cards resumen
+    document.getElementById('r-ingresos-brutos').textContent = fmt(ingresosBrutos);
+    document.getElementById('r-renta-gravable').textContent  = fmt(rentaGravable);
+    document.getElementById('r-renta-uvt').textContent       = `${rlgUVT.toFixed(1)} UVT`;
+    document.getElementById('r-patrimonio').textContent      = fmt(patrimonioLiq);
+
+    // Waterfall
+    document.getElementById('wf-ingresos').textContent    = fmt(ingresosBrutos);
+    document.getElementById('wf-incr').textContent        = '- ' + fmt(incr);
+    document.getElementById('wf-netos').textContent       = fmt(ingresosNetos);
+    document.getElementById('wf-deducciones').textContent = '- ' + fmt(totalDeducciones);
+    document.getElementById('wf-renta-bruta').textContent = fmt(rentaBruta);
+    document.getElementById('wf-exentas').textContent     = '- ' + fmt(totalExentas);
+    document.getElementById('wf-gravable').textContent    = fmt(rentaGravable);
+    document.getElementById('wf-impuesto').textContent    = fmt(impuestoCOP);
+    document.getElementById('wf-retenciones').textContent = '- ' + fmt(retenciones);
+    document.getElementById('wf-anticipo').textContent    = '- ' + fmt(anticipoAnt);
+    document.getElementById('wf-anticipo-sig').textContent = '+ ' + fmt(anticipoSig);
+
+    const lbl = saldo >= 0 ? 'SALDO A PAGAR' : 'SALDO A FAVOR';
+    document.getElementById('wf-lbl-total').textContent = lbl;
+    document.getElementById('wf-total').textContent = fmt(Math.abs(saldo));
+
+    // Obligación
+    const obligUmbrales = ingresosBrutos >= 1400*UVT || patrimonioBruto >= 4500*UVT;
+    document.getElementById('obligacion-msg').innerHTML = obligUmbrales
+      ? `🚨 <strong>Estás OBLIGADO a declarar renta</strong> porque tus ingresos brutos o patrimonio superan los umbrales legales. No presentar genera sanción del 20% de ingresos brutos (Art. 643 E.T.).`
+      : `✅ <strong>Aparentemente no estás obligado a declarar</strong> según los datos ingresados (ingresos inferiores a 1.400 UVT y patrimonio inferior a 4.500 UVT). Sin embargo, si tienes saldo a favor, sí puedes presentar voluntariamente para solicitar devolución.`;
+    document.getElementById('obligacion-msg').className = 'alert ' + (obligUmbrales ? 'alert-danger' : 'alert-success');
+
+    // Consejo
+    let consejo = '';
+    if (totalExentas >= limiteExentas * 0.95) consejo = `⚠️ <strong>Límite de deducciones y exenciones alcanzado:</strong> Se aplicó el tope del 40% sobre renta bruta (${fmt(limiteExentas)}). Considera espaciar los aportes voluntarios AFC para optimizar tu carga tributaria.`;
+    else if (rex25 === 0 && ingSalario > 0) consejo = `💡 <strong>Tip:</strong> No ingresaste la exención del 25% de renta laboral (Art. 206 num. 10). Si eres asalariado, puedes deducir el 25% de tu ingreso laboral depurado hasta 2.880 UVT/año. ¡Esto puede reducir significativamente tu impuesto!`;
+    else if (rexAfc === 0) consejo = `💡 <strong>Tip de planeación tributaria:</strong> Los aportes voluntarios a AFC y fondo de pensiones voluntario son exentos de renta hasta 3.800 UVT/año. Si aún no los usas, puedes reducir tu base gravable significativamente.`;
+    else consejo = `💡 <strong>Recomendación:</strong> Guarda todos los soportes de deducciones (recibos de salud, certificado bancario de intereses hipotecarios, certificados de AFC) para adjuntarlos si la DIAN requiere verificación.`;
+    document.getElementById('consejo-msg').innerHTML = consejo;
+
+    document.getElementById('resultado').style.display = 'block';
+    document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetSim() {
+    ['ing-salario','ing-honorarios','ing-arrend','ing-dividendos','ing-otros','ing-ncrni',
+     'ded-pension','ded-salud','ded-vivienda','ded-medicina','ded-dependientes','ded-costos-ind',
+     'rex-cesantias','rex-prima','rex-indemn','rex-afc','rex-25pct','rex-otras',
+     'patrimonio-bruto','pasivos','retenciones','anticipo-ant']
+      .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    document.getElementById('resultado').style.display = 'none';
+  }
+</script>
+</body>
+</html>
