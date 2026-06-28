@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Mezclas de Concreto 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de diseño de mezclas de concreto para ingenieros civiles colombianos. Método ACI 211, proporciones por m³, materiales y relación agua/cemento. Gratis." />
+  <meta name="keywords" content="diseño mezclas concreto colombia, ACI 211, proporciones concreto, relacion agua cemento, resistencia concreto fc colombia, ingeniero civil colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --gris-ing: #455a64;
+      --gris-claro: #eceff1;
+      --azul-civil: #1565c0;
+      --azul-civil-claro: #e3f2fd;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #455a64 60%, #78909c 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 120px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--gris-ing); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--gris-ing); margin: 1rem 0 0.6rem; border-left: 3px solid var(--gris-ing); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--gris-ing); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--gris-ing); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: #263238; }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--azul-civil-claro); border-left: 4px solid var(--azul-civil); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--azul-civil); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #455a64 100%);
+      border-radius: var(--radio); padding: 1.2rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.3rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 1.9; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* TABLA MATERIALES */
+    .tabla-mat { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.8rem; }
+    .tabla-mat th { background: var(--azul-navbar); color: #fff; padding: 8px 12px; text-align: left; }
+    .tabla-mat th:not(:first-child) { text-align: right; }
+    .tabla-mat td { padding: 8px 12px; border-bottom: 1px solid var(--borde); }
+    .tabla-mat td:not(:first-child) { text-align: right; font-weight: 600; }
+    .tabla-mat tr:last-child td { background: var(--azul-civil-claro); font-weight: 700; border-bottom: none; }
+    .tabla-mat tr:hover td { background: #f0f4f8; }
+
+    /* BARRA PROPORCIÓN */
+    .prop-bar { display: flex; height: 28px; border-radius: 6px; overflow: hidden; margin: 0.8rem 0; }
+    .prop-segmento { display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: #fff; transition: width 0.4s; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--azul-civil-claro); }
+
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.73rem; font-weight: 700; }
+    .badge-azul { background: #e3f2fd; color: #1565c0; }
+    .badge-verde { background: #e8f5e9; color: #2e7d32; }
+    .badge-naranja { background: #fff3e0; color: #e65100; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🏗️ <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Mezclas de Concreto</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🏗️ Ingenieros Civiles y Constructores</div>
+  <h1>Calculadora de Mezclas de Concreto 2026</h1>
+  <p>Diseño de mezclas por el Método ACI 211. Proporciones de cemento, arena, grava y agua por m³. Adaptado a materiales y normas colombianas NSR-10.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 NSR-10 Colombia</span>
+    <span class="hero-chip">📐 Método ACI 211</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+    <span class="hero-chip">🔁 Cantidades por m³ y obra</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('mezcla', this)">🧱 Diseño de Mezcla</button>
+    <button class="tab-btn" onclick="mostrarTab('cantidades', this)">📦 Cantidades por Obra</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Resistencias NSR-10</button>
+  </div>
+
+  <!-- TAB 1: DISEÑO DE MEZCLA -->
+  <div id="tab-mezcla" class="tab-panel active">
+    <div class="card">
+      <h2>🧱 Diseño de Mezcla — Método ACI 211</h2>
+      <div class="info-box">
+        <strong>Método ACI 211.1:</strong> Procedimiento de proporciones absolutas. Se determina la relación agua/cemento según la resistencia requerida, luego se calculan los materiales por m³ de concreto fresco. Norma de referencia: NSR-10 Título C.
+      </div>
+
+      <h3>1. Resistencia y consistencia</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Resistencia requerida f'c (MPa)</label>
+          <select id="m-fc" onchange="autoRelacionAC()">
+            <option value="14">14 MPa — 140 kg/cm² (C14 — pisos, rellenos)</option>
+            <option value="17.5">17.5 MPa — 175 kg/cm² (C17.5 — cimentaciones)</option>
+            <option value="21" selected>21 MPa — 210 kg/cm² (C21 — estructural estándar)</option>
+            <option value="24">24 MPa — 240 kg/cm² (C24 — estructural)</option>
+            <option value="28">28 MPa — 280 kg/cm² (C28 — estructural reforzada)</option>
+            <option value="32">32 MPa — 320 kg/cm² (C32 — alta resistencia)</option>
+            <option value="35">35 MPa — 350 kg/cm² (C35 — alta resistencia)</option>
+            <option value="42">42 MPa — 420 kg/cm² (C42 — muy alta resistencia)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Asentamiento (Slump) requerido</label>
+          <select id="m-slump" onchange="autoAgua()">
+            <option value="5">1–2" (25–50 mm) — Concreto seco, pavimentos</option>
+            <option value="3" selected>3–4" (75–100 mm) — Vigas, columnas (normal)</option>
+            <option value="2">5–6" (125–150 mm) — Muros, losas con refuerzo denso</option>
+            <option value="1.5">7–8" (175–200 mm) — Bombeable, prefabricados</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Relación agua/cemento (a/c)</label>
+          <input type="number" id="m-ac" value="0.50" min="0.3" max="0.8" step="0.01" />
+          <span class="form-hint">Se actualiza automáticamente según f'c. Rango: 0.35–0.65</span>
+        </div>
+        <div class="form-group">
+          <label>Exposición ambiental</label>
+          <select id="m-exposicion" onchange="ajustarExposicion()">
+            <option value="normal" selected>Normal (interior o exterior protegido)</option>
+            <option value="moderada">Moderada (suelos con sulfatos, humedad)</option>
+            <option value="severa">Severa (exposición a sulfatos, cloruros)</option>
+            <option value="marina">Marina / Costa</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>2. Materiales</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tamaño máximo del agregado (mm)</label>
+          <select id="m-tma" onchange="autoAgua()">
+            <option value="9.5">9.5 mm (3/8")</option>
+            <option value="12.5">12.5 mm (1/2")</option>
+            <option value="19" selected>19 mm (3/4") — más común en Colombia</option>
+            <option value="25">25 mm (1")</option>
+            <option value="38">38 mm (1½")</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Módulo de finura de la arena</label>
+          <input type="number" id="m-mf" value="2.75" min="2.3" max="3.1" step="0.05" />
+          <span class="form-hint">Arena fina: 2.3–2.6 | Arena media: 2.6–2.9 | Arena gruesa: 2.9–3.1</span>
+        </div>
+        <div class="form-group">
+          <label>Peso unitario seco del agregado grueso (kg/m³)</label>
+          <input type="number" id="m-pug" value="1600" min="1300" max="1900" step="10" />
+          <span class="form-hint">Grava triturada típica en Colombia: 1500–1650 kg/m³</span>
+        </div>
+        <div class="form-group">
+          <label>Peso específico cemento (g/cm³)</label>
+          <input type="number" id="m-pe-cem" value="3.15" min="2.9" max="3.3" step="0.01" />
+          <span class="form-hint">Cemento Portland tipo I/II: 3.10–3.15</span>
+        </div>
+        <div class="form-group">
+          <label>Peso específico arena (g/cm³)</label>
+          <input type="number" id="m-pe-are" value="2.65" min="2.4" max="2.9" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label>Peso específico grava (g/cm³)</label>
+          <input type="number" id="m-pe-gra" value="2.65" min="2.4" max="2.9" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label>¿Usa aditivo plastificante?</label>
+          <select id="m-aditivo">
+            <option value="no" selected>No</option>
+            <option value="si">Sí (reduce agua 10%)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tipo de cemento</label>
+          <select id="m-tipo-cem">
+            <option value="I" selected>Tipo I — Uso general</option>
+            <option value="II">Tipo II — Moderada resistencia a sulfatos</option>
+            <option value="III">Tipo III — Alta resistencia temprana</option>
+            <option value="IV">Tipo IV — Bajo calor de hidratación</option>
+            <option value="V">Tipo V — Alta resistencia a sulfatos</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularMezcla()">🧱 Calcular Diseño de Mezcla</button>
+    </div>
+
+    <div id="resultado-mezcla" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: CANTIDADES POR OBRA -->
+  <div id="tab-cantidades" class="tab-panel">
+    <div class="card">
+      <h2>📦 Cantidades de Materiales por Volumen de Obra</h2>
+      <div class="info-box">
+        <strong>¿Cómo funciona?</strong> Ingresa el volumen total de concreto a fundir y la proporción de mezcla (en bolsas de cemento). Calcula cuánto material necesitas y el costo estimado.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Volumen de concreto a fundir (m³)</label>
+          <input type="number" id="c-volumen" value="5" min="0.1" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Resistencia f'c</label>
+          <select id="c-fc">
+            <option value="14">14 MPa — 140 kg/cm²</option>
+            <option value="17.5">17.5 MPa — 175 kg/cm²</option>
+            <option value="21" selected>21 MPa — 210 kg/cm²</option>
+            <option value="24">24 MPa — 240 kg/cm²</option>
+            <option value="28">28 MPa — 280 kg/cm²</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Precio cemento ($ COP/bolsa 50kg)</label>
+          <input type="number" id="c-prec-cem" value="35000" min="0" step="1000" />
+        </div>
+        <div class="form-group">
+          <label>Precio arena ($ COP/m³)</label>
+          <input type="number" id="c-prec-are" value="80000" min="0" step="5000" />
+        </div>
+        <div class="form-group">
+          <label>Precio grava ($ COP/m³)</label>
+          <input type="number" id="c-prec-gra" value="95000" min="0" step="5000" />
+        </div>
+        <div class="form-group">
+          <label>Factor de desperdicio (%)</label>
+          <input type="number" id="c-desperdicio" value="5" min="0" max="20" step="1" />
+          <span class="form-hint">Recomendado: 5% en obra, 3% en prefabricados</span>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularCantidades()">📦 Calcular Materiales y Costos</button>
+    </div>
+    <div id="resultado-cantidades" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA NSR-10 -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Resistencias de Concreto — NSR-10 Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead>
+            <tr>
+              <th>Designación</th>
+              <th>f'c (MPa)</th>
+              <th>f'c (kg/cm²)</th>
+              <th>Uso típico en Colombia</th>
+              <th>a/c máx.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><b>C14</b></td><td>14</td><td>140</td><td>Pisos, rellenos, mampostería</td><td>0.65</td></tr>
+            <tr><td><b>C17.5</b></td><td>17.5</td><td>175</td><td>Cimentaciones simples, andenes</td><td>0.60</td></tr>
+            <tr><td><b>C21</b></td><td>21</td><td>210</td><td>Vigas, columnas, losas — estructural estándar</td><td>0.50</td></tr>
+            <tr><td><b>C24</b></td><td>24</td><td>240</td><td>Estructuras expuestas, puentes menores</td><td>0.45</td></tr>
+            <tr><td><b>C28</b></td><td>28</td><td>280</td><td>Estructuras en zona sísmica alta, edificios</td><td>0.40</td></tr>
+            <tr><td><b>C32</b></td><td>32</td><td>320</td><td>Puentes, estructuras especiales</td><td>0.38</td></tr>
+            <tr><td><b>C35</b></td><td>35</td><td>350</td><td>Alta resistencia, prefabricados</td><td>0.35</td></tr>
+            <tr><td><b>C42</b></td><td>42</td><td>420</td><td>Concreto de muy alta resistencia</td><td>0.32</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Proporciones de Mezcla Típicas en Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead>
+            <tr>
+              <th>f'c</th>
+              <th>Cemento (kg/m³)</th>
+              <th>Arena (kg/m³)</th>
+              <th>Grava (kg/m³)</th>
+              <th>Agua (L/m³)</th>
+              <th>Bolsas/m³</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><b>140 kg/cm²</b></td><td>255</td><td>900</td><td>980</td><td>165</td><td><span class="badge badge-azul">5.1</span></td></tr>
+            <tr><td><b>175 kg/cm²</b></td><td>300</td><td>860</td><td>970</td><td>175</td><td><span class="badge badge-azul">6.0</span></td></tr>
+            <tr><td><b>210 kg/cm²</b></td><td>350</td><td>820</td><td>950</td><td>180</td><td><span class="badge badge-verde">7.0</span></td></tr>
+            <tr><td><b>240 kg/cm²</b></td><td>390</td><td>780</td><td>940</td><td>175</td><td><span class="badge badge-verde">7.8</span></td></tr>
+            <tr><td><b>280 kg/cm²</b></td><td>430</td><td>740</td><td>920</td><td>172</td><td><span class="badge badge-naranja">8.6</span></td></tr>
+            <tr><td><b>320 kg/cm²</b></td><td>480</td><td>700</td><td>890</td><td>168</td><td><span class="badge badge-naranja">9.6</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.8rem;">Valores orientativos para agregado TMA 19mm, arena de río módulo de finura 2.7. Ajustar según ensayos de laboratorio.</p>
+    </div>
+
+    <div class="card">
+      <h2>📋 Requisitos NSR-10 por Exposición Ambiental</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Clase de exposición</th><th>f'c mínimo</th><th>a/c máximo</th><th>Cemento mínimo (kg/m³)</th></tr></thead>
+          <tbody>
+            <tr><td>Normal (interior)</td><td>17.5 MPa</td><td>0.65</td><td>280</td></tr>
+            <tr><td>Moderada (suelos con sulfatos)</td><td>21 MPa</td><td>0.50</td><td>320</td></tr>
+            <tr><td>Severa (sulfatos altos, cloruros)</td><td>28 MPa</td><td>0.45</td><td>355</td></tr>
+            <tr><td>Marina / Costa colombiana</td><td>28 MPa</td><td>0.40</td><td>385</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> El diseño de mezclas presentado es una estimación basada en el Método ACI 211.1 y los requisitos de la NSR-10. Todo diseño de mezcla para obra debe ser validado mediante <strong>ensayos de laboratorio (cilindros a 28 días)</strong> y aprobado por un <strong>Ingeniero Civil matriculado ante el COPNIA</strong>. Los materiales locales pueden variar significativamente.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n, dec=1) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+function fmtInt(n) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+
+// Relación a/c según f'c (ACI 211 Tabla 6.3.4)
+const tablaAC = { 14:0.65, 17.5:0.60, 21:0.50, 24:0.45, 28:0.40, 32:0.38, 35:0.35, 42:0.32 };
+
+// Agua de mezcla según TMA y slump (ACI 211, Tabla 6.3.3, L/m³)
+const tablaAgua = {
+  9.5:  { 5:207, 3:228, 2:243, 1.5:255 },
+  12.5: { 5:199, 3:216, 2:228, 1.5:240 },
+  19:   { 5:190, 3:205, 2:216, 1.5:226 },
+  25:   { 5:179, 3:193, 2:202, 1.5:211 },
+  38:   { 5:166, 3:178, 2:187, 1.5:197 },
+};
+
+// Volumen de agregado grueso por unidad de volumen de concreto (ACI 211, Tabla 6.3.6)
+const tablaB = {
+  9.5:  { 2.3:0.50, 2.6:0.48, 2.75:0.46, 2.9:0.44, 3.1:0.42 },
+  12.5: { 2.3:0.59, 2.6:0.57, 2.75:0.55, 2.9:0.53, 3.1:0.51 },
+  19:   { 2.3:0.66, 2.6:0.64, 2.75:0.62, 2.9:0.60, 3.1:0.58 },
+  25:   { 2.3:0.71, 2.6:0.69, 2.75:0.67, 2.9:0.65, 3.1:0.63 },
+  38:   { 2.3:0.75, 2.6:0.73, 2.75:0.71, 2.9:0.69, 3.1:0.67 },
+};
+
+function getMF(mf) {
+  const keys = [2.3, 2.6, 2.75, 2.9, 3.1];
+  return keys.reduce((prev, curr) => Math.abs(curr - mf) < Math.abs(prev - mf) ? curr : prev);
+}
+
+function autoRelacionAC() {
+  const fc = parseFloat(document.getElementById('m-fc').value);
+  document.getElementById('m-ac').value = tablaAC[fc] || 0.50;
+}
+
+function autoAgua() { /* auto-actualización visual */ }
+
+function ajustarExposicion() {
+  const exp = document.getElementById('m-exposicion').value;
+  const ajustes = { normal:0, moderada:-0.05, severa:-0.10, marina:-0.15 };
+  const fc = parseFloat(document.getElementById('m-fc').value);
+  const base = tablaAC[fc] || 0.50;
+  document.getElementById('m-ac').value = Math.max(0.32, base + ajustes[exp]).toFixed(2);
+}
+
+function calcularMezcla() {
+  const fc       = parseFloat(document.getElementById('m-fc').value);
+  const slumpKey = parseFloat(document.getElementById('m-slump').value);
+  const ac       = parseFloat(document.getElementById('m-ac').value);
+  const tma      = parseFloat(document.getElementById('m-tma').value);
+  const mf       = parseFloat(document.getElementById('m-mf').value);
+  const pug      = parseFloat(document.getElementById('m-pug').value);
+  const peCem    = parseFloat(document.getElementById('m-pe-cem').value);
+  const peAre    = parseFloat(document.getElementById('m-pe-are').value);
+  const peGra    = parseFloat(document.getElementById('m-pe-gra').value);
+  const aditivo  = document.getElementById('m-aditivo').value;
+  const tipoCem  = document.getElementById('m-tipo-cem').value;
+
+  // 1. Agua de mezcla
+  let agua = (tablaAgua[tma] || tablaAgua[19])[slumpKey] || 205;
+  if (aditivo === 'si') agua *= 0.90;
+
+  // 2. Cemento
+  const cemento = agua / ac;
+
+  // 3. Aire atrapado (%)
+  const airePorc = tma <= 9.5 ? 3 : tma <= 12.5 ? 2.5 : tma <= 19 ? 2 : tma <= 25 ? 1.5 : 1;
+  const volAire = airePorc / 100;
+
+  // 4. Volumen de cemento
+  const volCem = cemento / (peCem * 1000);
+
+  // 5. Volumen de agua
+  const volAgua = agua / 1000;
+
+  // 6. Volumen de agregado grueso
+  const mfKey = getMF(mf);
+  const b = (tablaB[tma] || tablaB[19])[mfKey] || 0.62;
+  const volGrava = b * pug / (peGra * 1000) * peGra * 1000 / (peGra * 1000);
+  const pesoGrava = b * pug;
+  const volGravaAbs = pesoGrava / (peGra * 1000);
+
+  // 7. Volumen de arena (por diferencia)
+  const volArena = 1 - volCem - volAgua - volGravaAbs - volAire;
+  const pesoArena = volArena * peAre * 1000;
+
+  // 8. Peso unitario teórico
+  const pesoUnitario = cemento + agua + pesoArena + pesoGrava;
+
+  // 9. Bolsas de cemento por m³
+  const bolsas = cemento / 50;
+
+  // Proporción en masa (C:A:G:W)
+  const propCem = 1;
+  const propAre = pesoArena / cemento;
+  const propGra = pesoGrava / cemento;
+  const propW   = agua / cemento;
+
+  // Barras de proporción
+  const totalPeso = cemento + pesoArena + pesoGrava + agua;
+  const pctCem = (cemento / totalPeso * 100).toFixed(1);
+  const pctAre = (pesoArena / totalPeso * 100).toFixed(1);
+  const pctGra = (pesoGrava / totalPeso * 100).toFixed(1);
+  const pctW   = (agua / totalPeso * 100).toFixed(1);
+
+  document.getElementById('resultado-mezcla').style.display = 'block';
+  document.getElementById('resultado-mezcla').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Diseño de Mezcla ACI 211 — f'c ${fc} MPa (${Math.round(fc*10.197)} kg/cm²) — Cemento Tipo ${tipoCem}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(cemento)} kg</div><div class="resultado-label">Cemento / m³</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pesoArena)} kg</div><div class="resultado-label">Arena / m³</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pesoGrava)} kg</div><div class="resultado-label">Grava / m³</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(agua)} L</div><div class="resultado-label">Agua / m³</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(bolsas, 1)}</div><div class="resultado-label">Bolsas 50kg / m³</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(ac, 2)}</div><div class="resultado-label">Relación a/c</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(pesoUnitario)} kg</div><div class="resultado-label">Peso unitario (kg/m³)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${airePorc}%</div><div class="resultado-label">Aire atrapado</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Proporción en masa:</b> 1 : ${fmt(propAre,2)} : ${fmt(propGra,2)} : ${fmt(propW,2)} (Cemento : Arena : Grava : Agua)<br>
+        <b>TMA:</b> ${tma} mm | <b>Módulo de finura:</b> ${mf} | <b>Slump:</b> ${slumpKey === 5 ? '25–50' : slumpKey === 3 ? '75–100' : slumpKey === 2 ? '125–150' : '175–200'} mm<br>
+        ${aditivo === 'si' ? '✅ Con plastificante: agua reducida 10%<br>' : ''}
+        <b>Volúmenes absolutos por m³:</b> Cemento ${fmt(volCem*1000,1)} L | Agua ${fmt(agua,0)} L | Grava ${fmt(volGravaAbs*1000,1)} L | Arena ${fmt(volArena*1000,1)} L | Aire ${fmt(airePorc*10,0)} L
+      </div>
+    </div>
+    <div class="card" style="margin-top:1rem;">
+      <h2>📊 Distribución de Materiales en la Mezcla</h2>
+      <div class="prop-bar">
+        <div class="prop-segmento" style="width:${pctCem}%; background:#1a3a5c;">C ${pctCem}%</div>
+        <div class="prop-segmento" style="width:${pctAre}%; background:#795548;">A ${pctAre}%</div>
+        <div class="prop-segmento" style="width:${pctGra}%; background:#455a64;">G ${pctGra}%</div>
+        <div class="prop-segmento" style="width:${pctW}%;  background:#1565c0;">W ${pctW}%</div>
+      </div>
+      <div style="display:flex; gap:1rem; flex-wrap:wrap; font-size:0.8rem; margin-top:0.4rem;">
+        <span>🟦 Cemento ${pctCem}%</span>
+        <span style="color:#795548;">🟫 Arena ${pctAre}%</span>
+        <span style="color:#455a64;">⬛ Grava ${pctGra}%</span>
+        <span style="color:#1565c0;">🟦 Agua ${pctW}%</span>
+      </div>
+      <div style="overflow-x:auto; margin-top:1rem;">
+        <table class="tabla-mat">
+          <thead><tr><th>Material</th><th>kg / m³</th><th>Volumen (L/m³)</th><th>% en masa</th></tr></thead>
+          <tbody>
+            <tr><td>🏗️ Cemento Portland Tipo ${tipoCem}</td><td>${fmt(cemento)}</td><td>${fmt(volCem*1000,1)}</td><td>${pctCem}%</td></tr>
+            <tr><td>🟫 Arena (MF = ${mf})</td><td>${fmt(pesoArena)}</td><td>${fmt(volArena*1000,1)}</td><td>${pctAre}%</td></tr>
+            <tr><td>⬛ Grava (TMA = ${tma} mm)</td><td>${fmt(pesoGrava)}</td><td>${fmt(volGravaAbs*1000,1)}</td><td>${pctGra}%</td></tr>
+            <tr><td>💧 Agua</td><td>${fmt(agua)}</td><td>${fmt(agua,0)}</td><td>${pctW}%</td></tr>
+            <tr><td>TOTAL por m³</td><td>${fmt(pesoUnitario)}</td><td>1.000 L</td><td>100%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+// Proporciones típicas por f'c para cantidades rápidas
+const propTipicas = {
+  14:   { cem:255, are:900, gra:980, agua:165 },
+  17.5: { cem:300, are:860, gra:970, agua:175 },
+  21:   { cem:350, are:820, gra:950, agua:180 },
+  24:   { cem:390, are:780, gra:940, agua:175 },
+  28:   { cem:430, are:740, gra:920, agua:172 },
+  32:   { cem:480, are:700, gra:890, agua:168 },
+};
+
+function calcularCantidades() {
+  const vol   = parseFloat(document.getElementById('c-volumen').value) || 0;
+  const fc    = parseFloat(document.getElementById('c-fc').value);
+  const pCem  = parseFloat(document.getElementById('c-prec-cem').value) || 0;
+  const pAre  = parseFloat(document.getElementById('c-prec-are').value) || 0;
+  const pGra  = parseFloat(document.getElementById('c-prec-gra').value) || 0;
+  const desp  = (parseFloat(document.getElementById('c-desperdicio').value) || 5) / 100;
+
+  const prop  = propTipicas[fc] || propTipicas[21];
+  const volT  = vol * (1 + desp);
+
+  const cemKg  = prop.cem * volT;
+  const bolsas = Math.ceil(cemKg / 50);
+  const areKg  = prop.are * volT;
+  const areM3  = areKg / 1650; // densidad típica arena 1650 kg/m³
+  const graKg  = prop.gra * volT;
+  const graM3  = graKg / 1600;
+  const aguaL  = prop.agua * volT;
+
+  const costoCem = bolsas * pCem;
+  const costoAre = areM3 * pAre;
+  const costoGra = graM3 * pGra;
+  const costoTotal = costoCem + costoAre + costoGra;
+  const costom3    = costoTotal / vol;
+
+  document.getElementById('resultado-cantidades').style.display = 'block';
+  document.getElementById('resultado-cantidades').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Materiales para ${fmt(vol,1)} m³ de Concreto f'c ${fc} MPa — Con ${(desp*100).toFixed(0)}% desperdicio</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmtInt(bolsas)}</div><div class="resultado-label">Bolsas cemento 50kg</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(areM3,2)} m³</div><div class="resultado-label">Arena</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(graM3,2)} m³</div><div class="resultado-label">Grava / triturado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtInt(aguaL)} L</div><div class="resultado-label">Agua</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(costoTotal)}</div><div class="resultado-label">Costo total materiales</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(costom3)}</div><div class="resultado-label">Costo/m³ materiales</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Volumen con desperdicio:</b> ${fmt(vol,1)} m³ × (1 + ${(desp*100).toFixed(0)}%) = ${fmt(volT,2)} m³<br>
+        <b>Cemento:</b> ${fmt(prop.cem)} kg/m³ × ${fmt(volT,2)} m³ = ${fmt(cemKg,0)} kg → <b>${fmtInt(bolsas)} bolsas de 50 kg</b><br>
+        <b>Arena:</b> ${fmt(prop.are)} kg/m³ × ${fmt(volT,2)} m³ = ${fmt(areKg,0)} kg → <b>${fmt(areM3,2)} m³</b><br>
+        <b>Grava:</b> ${fmt(prop.gra)} kg/m³ × ${fmt(volT,2)} m³ = ${fmt(graKg,0)} kg → <b>${fmt(graM3,2)} m³</b><br>
+        <b>Agua:</b> ${fmt(prop.agua)} L/m³ × ${fmt(volT,2)} m³ = <b>${fmtInt(aguaL)} litros</b><br>
+        ${pCem>0 ? `<b>Costos:</b> Cemento $ ${fmtInt(costoCem)} + Arena $ ${fmtInt(costoAre)} + Grava $ ${fmtInt(costoGra)} = <b>$ ${fmtInt(costoTotal)}</b>` : ''}
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
