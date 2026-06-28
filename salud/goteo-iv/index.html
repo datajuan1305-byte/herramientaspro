@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Goteo IV Soluciones 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de goteo intravenoso y soluciones para médicos y enfermeras colombianos. Microgotas, macrogotas, velocidad de infusión y diluciones." />
+  <meta name="keywords" content="calculadora goteo IV colombia, velocidad infusion intravenosa, microgotas macrogotas, diluciones medicamentos IV, enfermeria colombia UCI" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --rojo: #c62828;
+      --rojo-medio: #e53935;
+      --rojo-claro: #ffebee;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #c62828 60%, #ef5350 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 110px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--rojo-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--rojo-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--rojo-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--rojo-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--rojo-medio); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--rojo); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--rojo-claro); border-left: 4px solid var(--rojo-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--rojo); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #c62828 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grande { font-size: 3.5rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 1rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.3rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--rojo-claro); }
+
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-error{ background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🩺 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Goteo IV</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🩺 Médicos y Enfermería — UCI</div>
+  <h1>Calculadora de Goteo IV y Soluciones 2026</h1>
+  <p>Calcula velocidad de infusión, microgotas, macrogotas, diluciones y dosis de medicamentos en perfusión continua para UCI, urgencias y hospitalización.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">💉 Goteo y microgotas</span>
+    <span class="hero-chip">🏥 UCI y urgencias</span>
+    <span class="hero-chip">🔬 Diluciones</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('goteo', this)">💧 Goteo IV</button>
+    <button class="tab-btn" onclick="mostrarTab('perfusion', this)">⚗️ Perfusión continua</button>
+    <button class="tab-btn" onclick="mostrarTab('dilucion', this)">🔬 Diluciones</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Referencia</button>
+  </div>
+
+  <!-- TAB 1: GOTEO -->
+  <div id="tab-goteo" class="tab-panel active">
+    <div class="card">
+      <h2>💧 Calculadora de Velocidad de Goteo</h2>
+      <div class="info-box">
+        <strong>Fórmula:</strong> Gotas/min = (Volumen mL × Factor de goteo) ÷ Tiempo en minutos<br>
+        Macrogotero: 20 gotas/mL | Microgotero: 60 microgotas/mL | Bomba: mL/h
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Volumen total a infundir (mL)</label>
+          <input type="number" id="g-volumen" value="500" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Tiempo de infusión</label>
+          <div style="display:flex; gap:6px;">
+            <input type="number" id="g-tiempo" value="8" min="1" step="1" style="flex:1;" />
+            <select id="g-tiempo-unidad" style="width:90px;">
+              <option value="horas" selected>horas</option>
+              <option value="minutos">minutos</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tipo de equipo</label>
+          <select id="g-equipo">
+            <option value="macro">Macrogotero (20 gotas/mL)</option>
+            <option value="micro">Microgotero (60 microgotas/mL)</option>
+            <option value="bomba">Bomba de infusión (mL/h)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Solución a infundir</label>
+          <select id="g-solucion">
+            <option value="SSN 0.9%">SSN 0.9% (Solución salina normal)</option>
+            <option value="DAD 5%">DAD 5% (Dextrosa en agua destilada)</option>
+            <option value="Lactato de Ringer">Lactato de Ringer</option>
+            <option value="SSN 0.45%">SSN 0.45% (Salina hipotónica)</option>
+            <option value="Hartmann">Hartmann</option>
+            <option value="Otra">Otra solución</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Peso del paciente (kg) — opcional</label>
+          <input type="number" id="g-peso" value="70" min="1" step="1" />
+          <span class="form-hint">Para calcular mL/kg/h</span>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularGoteo()">💧 Calcular Velocidad de Goteo</button>
+    </div>
+    <div id="resultado-goteo" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: PERFUSIÓN CONTINUA -->
+  <div id="tab-perfusion" class="tab-panel">
+    <div class="card">
+      <h2>⚗️ Medicamentos en Perfusión Continua</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> Calcula la velocidad de bomba (mL/h) para administrar una dosis específica de medicamentos vasoactivos, analgésicos u otros fármacos en perfusión continua.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Medicamento</label>
+          <select id="p-medicamento" onchange="autoPerfusion()">
+            <option value="dopamina">Dopamina</option>
+            <option value="dobutamina">Dobutamina</option>
+            <option value="norepinefrina">Norepinefrina (Noradrenalina)</option>
+            <option value="epinefrina">Epinefrina (Adrenalina)</option>
+            <option value="morfina">Morfina</option>
+            <option value="midazolam">Midazolam</option>
+            <option value="propofol">Propofol</option>
+            <option value="heparina">Heparina</option>
+            <option value="insulina">Insulina regular</option>
+            <option value="amiodarona">Amiodarona</option>
+            <option value="nitroglicerina">Nitroglicerina</option>
+            <option value="custom">Otro medicamento</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Peso del paciente (kg)</label>
+          <input type="number" id="p-peso" value="70" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Dosis deseada</label>
+          <input type="number" id="p-dosis" value="5" min="0.001" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Unidad de dosis</label>
+          <select id="p-unidad-dosis">
+            <option value="mcg/kg/min">mcg/kg/min (vasoactivos)</option>
+            <option value="mg/kg/h">mg/kg/h</option>
+            <option value="mcg/kg/h">mcg/kg/h</option>
+            <option value="UI/kg/h">UI/kg/h (heparina/insulina)</option>
+            <option value="mg/h">mg/h (independiente de peso)</option>
+            <option value="UI/h">UI/h</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Concentración del medicamento (mg/mL)</label>
+          <input type="number" id="p-conc" value="1.6" min="0.001" step="0.001" />
+          <span class="form-hint">Concentración en la solución ya preparada</span>
+        </div>
+        <div class="form-group">
+          <label>Volumen de la solución preparada (mL)</label>
+          <input type="number" id="p-vol-sol" value="250" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Ampolla/Frasco: Concentración original (mg/mL)</label>
+          <input type="number" id="p-conc-orig" value="40" min="0.001" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Volumen de diluyente a usar (mL)</label>
+          <input type="number" id="p-vol-dil" value="230" min="1" step="1" />
+          <span class="form-hint">Para calcular cuántas ampollas agregar</span>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularPerfusion()">⚗️ Calcular Velocidad de Bomba</button>
+    </div>
+    <div id="resultado-perfusion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: DILUCIONES -->
+  <div id="tab-dilucion" class="tab-panel">
+    <div class="card">
+      <h2>🔬 Calculadora de Diluciones</h2>
+      <div class="info-box">
+        <strong>Ley de dilución C₁V₁ = C₂V₂</strong><br>
+        Calcula el volumen de solución concentrada necesario para preparar una dilución a la concentración deseada.
+      </div>
+      <h3>Dilución simple (C₁V₁ = C₂V₂)</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Concentración inicial C₁ (mg/mL o %)</label>
+          <input type="number" id="dl-c1" value="40" min="0.001" step="0.1" />
+          <span class="form-hint">Concentración del producto original (ampolla/frasco)</span>
+        </div>
+        <div class="form-group">
+          <label>Concentración final deseada C₂ (mg/mL o %)</label>
+          <input type="number" id="dl-c2" value="1.6" min="0.001" step="0.001" />
+        </div>
+        <div class="form-group">
+          <label>Volumen final deseado V₂ (mL)</label>
+          <input type="number" id="dl-v2" value="250" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Nombre del medicamento</label>
+          <input type="text" id="dl-nombre" value="Dopamina" placeholder="Ej: Dopamina, Midazolam" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularDilucion()">🔬 Calcular Dilución</button>
+    </div>
+    <div id="resultado-dilucion" style="display:none;"></div>
+
+    <div class="card" style="margin-top:1rem;">
+      <h2>🔬 Regla de los 3 — Dopamina y Dobutamina</h2>
+      <div class="info-box">
+        <strong>Regla práctica:</strong> Para vasoactivos, existe la "regla de los 3" que facilita el cálculo en urgencias sin calculadora.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Peso del paciente (kg)</label>
+          <input type="number" id="r3-peso" value="70" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Medicamento</label>
+          <select id="r3-med">
+            <option value="dopamina">Dopamina 40 mg/mL</option>
+            <option value="dobutamina">Dobutamina 12.5 mg/mL</option>
+            <option value="norepinefrina">Norepinefrina 1 mg/mL</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularRegla3()">📐 Aplicar Regla de los 3</button>
+      <div id="resultado-regla3" style="display:none; margin-top:1rem;"></div>
+    </div>
+  </div>
+
+  <!-- TAB 4: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Velocidades de Infusión — Soluciones de Mantenimiento</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Peso paciente</th><th>Regla de Holiday-Segar</th><th>mL/h</th><th>Observación</th></tr></thead>
+          <tbody>
+            <tr><td>0–10 kg</td><td>100 mL/kg/día</td><td>4 mL/kg/h</td><td>Pediátrico neonato</td></tr>
+            <tr><td>10–20 kg</td><td>1.000 mL + 50 mL/kg sobre 10</td><td>40+2/kg extra</td><td>Pediátrico</td></tr>
+            <tr><td>>20 kg</td><td>1.500 mL + 20 mL/kg sobre 20</td><td>60+1/kg extra</td><td>Adulto / pediátrico mayor</td></tr>
+            <tr><td>Adulto 70 kg</td><td>~2.000–2.500 mL/día</td><td>83–104 mL/h</td><td>Mantenimiento estándar</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Dosis de Vasoactivos — Rangos de Referencia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Medicamento</th><th>Dosis</th><th>Efecto</th><th>Concentración usual</th></tr></thead>
+          <tbody>
+            <tr><td><b>Dopamina</b></td><td>1–3 mcg/kg/min</td><td>Dopaminérgico (renal)</td><td>1.6 mg/mL en 250 mL</td></tr>
+            <tr><td><b>Dopamina</b></td><td>3–10 mcg/kg/min</td><td>Beta-1 (inotrópico)</td><td>Dopamina 40mg/mL × 10 mL en 240 mL</td></tr>
+            <tr><td><b>Dopamina</b></td><td>>10 mcg/kg/min</td><td>Alfa (vasopresor)</td><td>Máx usual: 20 mcg/kg/min</td></tr>
+            <tr><td><b>Dobutamina</b></td><td>2–20 mcg/kg/min</td><td>Beta-1 inotrópico</td><td>1 mg/mL en 250 mL</td></tr>
+            <tr><td><b>Norepinefrina</b></td><td>0.01–3 mcg/kg/min</td><td>Alfa vasopresor</td><td>0.1–0.4 mg/mL</td></tr>
+            <tr><td><b>Epinefrina</b></td><td>0.01–1 mcg/kg/min</td><td>Alfa + Beta</td><td>0.1 mg/mL</td></tr>
+            <tr><td><b>Morfina</b></td><td>1–5 mg/h</td><td>Analgesia</td><td>1 mg/mL</td></tr>
+            <tr><td><b>Midazolam</b></td><td>0.02–0.1 mg/kg/h</td><td>Sedación</td><td>1 mg/mL</td></tr>
+            <tr><td><b>Propofol</b></td><td>0.3–4 mg/kg/h</td><td>Sedación</td><td>10 mg/mL (emulsión)</td></tr>
+            <tr><td><b>Heparina</b></td><td>18 UI/kg/h</td><td>Anticoagulación</td><td>100 UI/mL (25.000 UI en 250 mL)</td></tr>
+            <tr><td><b>Insulina regular</b></td><td>0.1 UI/kg/h</td><td>Control glucémico</td><td>1 UI/mL (100 UI en 100 mL)</td></tr>
+            <tr><td><b>Amiodarona</b></td><td>150 mg/10 min luego 1 mg/min</td><td>Antiarrítmico</td><td>1.8 mg/mL en 250 mL</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Factor de Goteo por Equipo</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Equipo</th><th>Factor</th><th>Unidad</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td><b>Macrogotero</b></td><td>20</td><td>gotas/mL</td><td>Adultos, soluciones en volúmenes grandes</td></tr>
+            <tr><td><b>Microgotero</b></td><td>60</td><td>microgotas/mL</td><td>Pediatría, medicamentos con dosis exactas</td></tr>
+            <tr><td><b>Bomba de infusión</b></td><td>—</td><td>mL/h</td><td>UCI, vasoactivos, analgésicos, neonatos</td></tr>
+            <tr><td><b>Infusor elastomérico</b></td><td>Según modelo</td><td>mL/h</td><td>Quimioterapia ambulatoria, antibióticos</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Todos los cálculos deben ser verificados por el <strong>médico tratante o profesional de enfermería responsable</strong> antes de administrar cualquier medicamento. Los rangos de dosis son orientativos y deben ajustarse a la condición clínica individual del paciente. Esta herramienta no reemplaza el juicio clínico ni los protocolos institucionales.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n, dec=2) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+// ── GOTEO ──
+function calcularGoteo() {
+  const vol      = parseFloat(document.getElementById('g-volumen').value) || 0;
+  const tiempo   = parseFloat(document.getElementById('g-tiempo').value) || 0;
+  const tUnidad  = document.getElementById('g-tiempo-unidad').value;
+  const equipo   = document.getElementById('g-equipo').value;
+  const solucion = document.getElementById('g-solucion').value;
+  const peso     = parseFloat(document.getElementById('g-peso').value) || 70;
+
+  const tiempoMin = tUnidad === 'horas' ? tiempo * 60 : tiempo;
+  const tiempoH   = tiempoMin / 60;
+
+  const factores = { macro: 20, micro: 60, bomba: 1 };
+  const factor   = factores[equipo];
+
+  const mlH       = vol / tiempoH;
+  const gotasMin  = (vol * factor) / tiempoMin;
+  const mlKgH     = mlH / peso;
+
+  const etiqueta  = equipo === 'bomba' ? 'mL/h' : equipo === 'macro' ? 'gotas/min' : 'microgotas/min';
+  const valorPpal = equipo === 'bomba' ? mlH : gotasMin;
+
+  document.getElementById('resultado-goteo').style.display = 'block';
+  document.getElementById('resultado-goteo').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Resultado — Velocidad de Infusión</div>
+      <div class="resultado-grande">${fmt(valorPpal, 1)}</div>
+      <div class="resultado-sub">${etiqueta} — ${solucion} ${vol} mL en ${tiempo} ${tUnidad}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(mlH, 1)} mL/h</div><div class="resultado-label">Velocidad mL/hora</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(gotasMin, 1)}</div><div class="resultado-label">Gotas/min (macro×20)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(gotasMin*3, 1)}</div><div class="resultado-label">Microgotas/min (×60)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(mlKgH, 2)} mL/kg/h</div><div class="resultado-label">mL/kg/hora</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(tiempoH, 1)} h</div><div class="resultado-label">Duración total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(mlH/60, 2)} mL/min</div><div class="resultado-label">mL/minuto</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Cálculo:</b><br>
+        Velocidad = ${vol} mL ÷ ${fmt(tiempoH,2)} h = <b>${fmt(mlH,2)} mL/h</b><br>
+        Macrogotero (×20): ${vol} mL × 20 ÷ ${fmt(tiempoMin,0)} min = <b>${fmt(gotasMin,1)} gotas/min</b><br>
+        Microgotero (×60): ${vol} mL × 60 ÷ ${fmt(tiempoMin,0)} min = <b>${fmt(gotasMin*3,1)} microgotas/min</b><br>
+        Por peso: ${fmt(mlH,1)} mL/h ÷ ${peso} kg = <b>${fmt(mlKgH,2)} mL/kg/h</b><br>
+        <b>Programar bomba de infusión a: ${fmt(mlH,1)} mL/h</b>
+      </div>
+    </div>`;
+}
+
+// ── PERFUSIÓN CONTINUA ──
+const perfusionesPre = {
+  dopamina:      { dosis: 5, unidad: 'mcg/kg/min', conc: 1.6,  concOrig: 40,   volDil: 230 },
+  dobutamina:    { dosis: 5, unidad: 'mcg/kg/min', conc: 1.0,  concOrig: 12.5, volDil: 240 },
+  norepinefrina: { dosis: 0.1, unidad: 'mcg/kg/min', conc: 0.1, concOrig: 1,   volDil: 240 },
+  epinefrina:    { dosis: 0.1, unidad: 'mcg/kg/min', conc: 0.1, concOrig: 1,   volDil: 240 },
+  morfina:       { dosis: 2,   unidad: 'mg/h',        conc: 1.0, concOrig: 10,  volDil: 240 },
+  midazolam:     { dosis: 0.05,unidad: 'mg/kg/h',     conc: 1.0, concOrig: 5,   volDil: 240 },
+  propofol:      { dosis: 1,   unidad: 'mg/kg/h',     conc: 10,  concOrig: 10,  volDil: 0   },
+  heparina:      { dosis: 18,  unidad: 'UI/kg/h',     conc: 100, concOrig: 5000,volDil: 245 },
+  insulina:      { dosis: 0.1, unidad: 'UI/kg/h',     conc: 1,   concOrig: 100, volDil: 99  },
+  amiodarona:    { dosis: 1,   unidad: 'mg/h',        conc: 1.8, concOrig: 50,  volDil: 230 },
+  nitroglicerina:{ dosis: 10,  unidad: 'mcg/kg/min',  conc: 0.2, concOrig: 5,   volDil: 240 },
+  custom:        { dosis: 1,   unidad: 'mg/h',        conc: 1,   concOrig: 10,  volDil: 240 },
+};
+
+function autoPerfusion() {
+  const med = document.getElementById('p-medicamento').value;
+  const pre = perfusionesPre[med] || perfusionesPre.custom;
+  document.getElementById('p-dosis').value    = pre.dosis;
+  document.getElementById('p-conc').value     = pre.conc;
+  document.getElementById('p-conc-orig').value= pre.concOrig;
+  document.getElementById('p-vol-dil').value  = pre.volDil;
+  // Setear unidad
+  const sel = document.getElementById('p-unidad-dosis');
+  for (let i = 0; i < sel.options.length; i++) {
+    if (sel.options[i].value === pre.unidad) { sel.selectedIndex = i; break; }
+  }
+}
+
+function calcularPerfusion() {
+  const med      = document.getElementById('p-medicamento').value;
+  const peso     = parseFloat(document.getElementById('p-peso').value) || 70;
+  const dosis    = parseFloat(document.getElementById('p-dosis').value) || 0;
+  const unidad   = document.getElementById('p-unidad-dosis').value;
+  const conc     = parseFloat(document.getElementById('p-conc').value) || 1;
+  const volSol   = parseFloat(document.getElementById('p-vol-sol').value) || 250;
+  const concOrig = parseFloat(document.getElementById('p-conc-orig').value) || 10;
+  const volDil   = parseFloat(document.getElementById('p-vol-dil').value) || 240;
+
+  // Convertir dosis a mg/h para calcular mL/h
+  let mgH;
+  if      (unidad === 'mcg/kg/min') mgH = dosis * peso * 60 / 1000;
+  else if (unidad === 'mg/kg/h')    mgH = dosis * peso;
+  else if (unidad === 'mcg/kg/h')   mgH = dosis * peso / 1000;
+  else if (unidad === 'UI/kg/h')    mgH = dosis * peso; // UI/h
+  else if (unidad === 'mg/h')       mgH = dosis;
+  else if (unidad === 'UI/h')       mgH = dosis;
+
+  const mlH = mgH / conc;
+
+  // Ampollas necesarias para preparar la solución
+  const mgTotal  = conc * volSol;
+  const volAmp   = mgTotal / concOrig;
+  const ampNeeded= volAmp;
+
+  document.getElementById('resultado-perfusion').style.display = 'block';
+  document.getElementById('resultado-perfusion').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Perfusión Continua — ${med.charAt(0).toUpperCase()+med.slice(1)}</div>
+      <div class="resultado-grande">${fmt(mlH, 2)} mL/h</div>
+      <div class="resultado-sub">Velocidad de bomba para ${dosis} ${unidad} en paciente de ${peso} kg</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(mlH,2)} mL/h</div><div class="resultado-label">Velocidad bomba</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(mgH,2)}</div><div class="resultado-label">Dosis ${unidad.includes('UI') ? 'UI' : 'mg'}/h</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(ampNeeded,1)} mL</div><div class="resultado-label">Volumen a agregar</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(conc,3)} mg/mL</div><div class="resultado-label">Concentración final</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(volSol/mlH,1)} h</div><div class="resultado-label">Duración bolsa</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(mlH/60,3)} mL/min</div><div class="resultado-label">mL/minuto</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Preparación de la solución (${volSol} mL a ${conc} mg/mL):</b><br>
+        Cantidad de medicamento: ${conc} mg/mL × ${volSol} mL = <b>${fmt(mgTotal,1)} mg</b><br>
+        Volumen del concentrado (${concOrig} mg/mL): ${fmt(mgTotal,1)} ÷ ${concOrig} = <b>${fmt(ampNeeded,1)} mL</b><br>
+        Diluyente (SSN/DAD): ${volSol} − ${fmt(ampNeeded,1)} = <b>${fmt(volSol-ampNeeded,1)} mL</b><br><br>
+        <b>Cálculo de velocidad:</b><br>
+        Dosis: ${dosis} ${unidad} → ${fmt(mgH,3)} ${unidad.includes('UI') ? 'UI' : 'mg'}/h<br>
+        Velocidad: ${fmt(mgH,3)} ÷ ${conc} mg/mL = <b>${fmt(mlH,2)} mL/h → Programar bomba a ${fmt(mlH,2)} mL/h</b>
+      </div>
+    </div>`;
+}
+
+// ── DILUCIÓN ──
+function calcularDilucion() {
+  const c1   = parseFloat(document.getElementById('dl-c1').value) || 0;
+  const c2   = parseFloat(document.getElementById('dl-c2').value) || 0;
+  const v2   = parseFloat(document.getElementById('dl-v2').value) || 0;
+  const nom  = document.getElementById('dl-nombre').value || 'Medicamento';
+
+  if (c2 >= c1) { alert('La concentración final debe ser menor que la inicial.'); return; }
+
+  const v1   = (c2 * v2) / c1;
+  const vDil = v2 - v1;
+  const fc   = c1 / c2;
+
+  document.getElementById('resultado-dilucion').style.display = 'block';
+  document.getElementById('resultado-dilucion').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Resultado — Dilución ${nom}</div>
+      <div class="resultado-grande">${fmt(v1, 2)} mL</div>
+      <div class="resultado-sub">Volumen de concentrado a tomar de ${c1} mg/mL</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(v1,2)} mL</div><div class="resultado-label">Concentrado (${c1} mg/mL)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(vDil,2)} mL</div><div class="resultado-label">Diluyente a agregar</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(v2,0)} mL</div><div class="resultado-label">Volumen final</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(fc,1)}×</div><div class="resultado-label">Factor de dilución</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Ley de dilución C₁V₁ = C₂V₂:</b><br>
+        V₁ = C₂ × V₂ ÷ C₁ = ${c2} × ${v2} ÷ ${c1} = <b>${fmt(v1,3)} mL</b><br>
+        Tomar <b>${fmt(v1,2)} mL</b> de ${nom} (${c1} mg/mL)<br>
+        Agregar <b>${fmt(vDil,2)} mL</b> de diluyente (SSN o DAD)<br>
+        Concentración final: <b>${c2} mg/mL en ${v2} mL</b><br>
+        Factor de dilución: 1:${fmt(fc,1)}
+      </div>
+    </div>`;
+}
+
+// ── REGLA DE LOS 3 ──
+function calcularRegla3() {
+  const peso = parseFloat(document.getElementById('r3-peso').value) || 70;
+  const med  = document.getElementById('r3-med').value;
+
+  let html, concFinal, volConc, instruccion;
+
+  if (med === 'dopamina') {
+    // Regla de los 3 para dopamina: 3 × peso (kg) mg en 50 mL → 1 mL/h = 1 mcg/kg/min
+    volConc = (3 * peso) / 40; // mL de ampolla 40 mg/mL
+    concFinal = (3 * peso) / 50;
+    instruccion = `Tomar <b>${fmt(volConc,2)} mL</b> de Dopamina 40 mg/mL y completar a 50 mL con SSN → <b>1 mL/h = 1 mcg/kg/min</b>`;
+  } else if (med === 'dobutamina') {
+    volConc = (3 * peso) / 12.5;
+    concFinal = (3 * peso) / 50;
+    instruccion = `Tomar <b>${fmt(volConc,2)} mL</b> de Dobutamina 12.5 mg/mL y completar a 50 mL con SSN → <b>1 mL/h = 1 mcg/kg/min</b>`;
+  } else {
+    // Norepinefrina: 0.3 × peso en 50 mL
+    volConc = (0.3 * peso) / 1;
+    concFinal = (0.3 * peso) / 50;
+    instruccion = `Tomar <b>${fmt(volConc,2)} mL</b> de Norepinefrina 1 mg/mL y completar a 50 mL con SSN → <b>1 mL/h = 0.1 mcg/kg/min</b>`;
+  }
+
+  document.getElementById('resultado-regla3').style.display = 'block';
+  document.getElementById('resultado-regla3').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Regla de los 3 — Paciente ${peso} kg</div>
+      <div class="resultado-grande">${fmt(volConc,2)} mL</div>
+      <div class="resultado-sub">Volumen de concentrado para preparar la solución en 50 mL</div>
+      <div class="resultado-detalle">${instruccion}<br>
+      Concentración final: <b>${fmt(concFinal,3)} mg/mL</b><br>
+      <b>Tabla de velocidades:</b><br>
+      ${[1,3,5,7,10,15,20].map(d => `${d} mcg/kg/min → <b>${med==='norepinefrina'?d*10:d} mL/h</b>`).join(' | ')}
+      </div>
+    </div>`;
+}
+
+// Inicializar
+autoPerfusion();
+</script>
+</body>
+</html>
