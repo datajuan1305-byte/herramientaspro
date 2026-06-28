@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Requerimiento Calórico VCT 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de requerimiento calórico total VCT para nutricionistas colombianos. Fórmulas Harris-Benedict, Mifflin-St Jeor y OMS. Macronutrientes y plan nutricional." />
+  <meta name="keywords" content="calculadora calorica colombia, requerimiento calorico VCT, harris benedict, mifflin st jeor, macronutrientes, nutricionista colombia, plan nutricional" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --verde: #2e7d32;
+      --verde-claro: #e8f5e9;
+      --verde-oscuro: #1b5e20;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #2e7d32 60%, #66bb6a 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 110px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--verde); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--verde); margin: 1rem 0 0.6rem; border-left: 3px solid var(--verde); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--verde); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--verde); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--verde-oscuro); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--verde-claro); border-left: 4px solid var(--verde); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--verde-oscuro); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #2e7d32 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-calorias { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.3rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 1.9; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* BARRAS MACRONUTRIENTES */
+    .macro-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem; margin-top: 1rem; }
+    .macro-card { background: rgba(255,255,255,0.12); border-radius: 10px; padding: 0.9rem; text-align: center; }
+    .macro-nombre { font-size: 0.75rem; opacity: 0.8; margin-bottom: 0.3rem; }
+    .macro-gramos { font-size: 1.6rem; font-weight: 900; color: #ffe082; }
+    .macro-kcal { font-size: 0.78rem; opacity: 0.8; }
+    .macro-pct { font-size: 0.85rem; font-weight: 700; margin-top: 2px; }
+
+    .barra-macro { height: 10px; border-radius: 5px; margin-top: 0.6rem; overflow: hidden; display: flex; }
+    .barra-prot { background: #ef5350; }
+    .barra-carb { background: #ffa726; }
+    .barra-gras { background: #66bb6a; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--verde-claro); }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🥗 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Requerimiento Calórico</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🥗 Nutricionistas y Dietistas</div>
+  <h1>Calculadora de Requerimiento Calórico VCT 2026</h1>
+  <p>Calcula el Valor Calórico Total (VCT) con fórmulas Harris-Benedict, Mifflin-St Jeor y OMS. Distribución de macronutrientes y ajuste por objetivo nutricional.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Para nutricionistas colombianos</span>
+    <span class="hero-chip">3 fórmulas validadas</span>
+    <span class="hero-chip">🍗 Macronutrientes</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('vct', this)">🔥 VCT y Macros</button>
+    <button class="tab-btn" onclick="mostrarTab('patologia', this)">🏥 Ajuste por Patología</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Tablas de Referencia</button>
+  </div>
+
+  <!-- TAB 1: VCT -->
+  <div id="tab-vct" class="tab-panel active">
+    <div class="card">
+      <h2>🔥 Cálculo del Valor Calórico Total (VCT)</h2>
+      <div class="info-box">
+        <strong>VCT = TMB × Factor de Actividad × Factor de Objetivo.</strong> La Tasa Metabólica Basal (TMB) se calcula con la fórmula seleccionada y luego se multiplica por el factor de actividad física (FAO/OMS) para obtener el requerimiento total.
+      </div>
+
+      <h3>1. Datos antropométricos</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Sexo biológico</label>
+          <select id="v-sexo">
+            <option value="M" selected>Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Edad (años)</label>
+          <input type="number" id="v-edad" value="35" min="18" max="99" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Peso actual (kg)</label>
+          <input type="number" id="v-peso" value="70" min="30" max="250" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Talla (cm)</label>
+          <input type="number" id="v-talla" value="170" min="120" max="220" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Peso ideal / objetivo (kg)</label>
+          <input type="number" id="v-peso-ideal" value="68" min="30" max="200" step="0.5" />
+          <span class="form-hint">Para ajuste de macros por objetivo</span>
+        </div>
+        <div class="form-group">
+          <label>Fórmula TMB</label>
+          <select id="v-formula">
+            <option value="mifflin" selected>Mifflin-St Jeor (recomendada)</option>
+            <option value="harris">Harris-Benedict revisada</option>
+            <option value="oms">OMS/FAO/UNU (por edad)</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>2. Actividad física</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nivel de actividad física</label>
+          <select id="v-actividad">
+            <option value="1.2">Sedentario — Sin ejercicio, trabajo de escritorio</option>
+            <option value="1.375" selected>Levemente activo — Ejercicio 1–3 días/semana</option>
+            <option value="1.55">Moderadamente activo — Ejercicio 3–5 días/semana</option>
+            <option value="1.725">Muy activo — Ejercicio 6–7 días/semana</option>
+            <option value="1.9">Extremadamente activo — Atleta, trabajo físico intenso</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Objetivo nutricional</label>
+          <select id="v-objetivo">
+            <option value="mantenimiento" selected>Mantenimiento de peso</option>
+            <option value="perdida-leve">Pérdida de peso leve (déficit 10%)</option>
+            <option value="perdida">Pérdida de peso moderada (déficit 20%)</option>
+            <option value="perdida-agresiva">Pérdida agresiva (déficit 30%)</option>
+            <option value="ganancia">Ganancia de masa muscular (superávit 10%)</option>
+            <option value="ganancia-rapida">Ganancia rápida (superávit 20%)</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>3. Distribución de macronutrientes</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>% Proteína</label>
+          <input type="number" id="v-prot-pct" value="25" min="10" max="40" step="1" />
+          <span class="form-hint">General: 15–30% | Deportistas: 25–35%</span>
+        </div>
+        <div class="form-group">
+          <label>% Carbohidratos</label>
+          <input type="number" id="v-carb-pct" value="50" min="20" max="70" step="1" />
+          <span class="form-hint">General: 45–60% | Bajo carb: 20–30%</span>
+        </div>
+        <div class="form-group">
+          <label>% Grasas</label>
+          <input type="number" id="v-gras-pct" value="25" min="15" max="50" step="1" />
+          <span class="form-hint">General: 25–35%. Los tres % deben sumar 100%</span>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularVCT()">🔥 Calcular VCT y Macronutrientes</button>
+    </div>
+
+    <div id="resultado-vct" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: PATOLOGÍA -->
+  <div id="tab-patologia" class="tab-panel">
+    <div class="card">
+      <h2>🏥 Ajuste Calórico por Patología</h2>
+      <div class="info-box">
+        <strong>¿Cuándo usar?</strong> Pacientes hospitalizados o con condiciones que modifican el requerimiento calórico-proteico: cirugía, quemaduras, sepsis, diabetes, insuficiencia renal, etc.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>TMB calculada (kcal/día)</label>
+          <input type="number" id="p-tmb" value="1600" min="800" max="4000" step="50" />
+          <span class="form-hint">Obtenida en la pestaña VCT o por cálculo manual</span>
+        </div>
+        <div class="form-group">
+          <label>Patología / condición clínica</label>
+          <select id="p-patologia">
+            <option value="1.0">Sin estrés metabólico (normal)</option>
+            <option value="1.1">Cirugía electiva menor (×1.1)</option>
+            <option value="1.2">Infección leve / trauma leve (×1.2)</option>
+            <option value="1.35">Cirugía mayor / fractura (×1.35)</option>
+            <option value="1.5">Sepsis / peritonitis (×1.5)</option>
+            <option value="1.6">Trauma severo / politraumatismo (×1.6)</option>
+            <option value="1.8">Quemaduras 30–50% SCQ (×1.8)</option>
+            <option value="2.0">Quemaduras &gt;50% SCQ (×2.0)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Peso corporal (kg)</label>
+          <input type="number" id="p-peso" value="70" min="30" max="250" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Condición especial adicional</label>
+          <select id="p-condicion">
+            <option value="ninguna" selected>Ninguna</option>
+            <option value="diabetes">Diabetes mellitus</option>
+            <option value="renal">Insuficiencia renal (sin diálisis)</option>
+            <option value="dialisis">Insuficiencia renal en diálisis</option>
+            <option value="hepatica">Insuficiencia hepática</option>
+            <option value="oncologia">Oncología / caquexia tumoral</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularPatologia()">🏥 Calcular Requerimiento Clínico</button>
+    </div>
+    <div id="resultado-patologia" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Factores de Actividad Física (FAO/OMS)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Nivel</th><th>Factor</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><b>Sedentario</b></td><td>1.2</td><td>Sin ejercicio. Trabajo de escritorio. Televisión.</td></tr>
+            <tr><td><b>Levemente activo</b></td><td>1.375</td><td>Ejercicio ligero 1–3 días/semana. Caminata suave.</td></tr>
+            <tr><td><b>Moderado</b></td><td>1.55</td><td>Ejercicio moderado 3–5 días/semana. Cardio o pesas.</td></tr>
+            <tr><td><b>Muy activo</b></td><td>1.725</td><td>Ejercicio intenso 6–7 días/semana. Atleta aficionado.</td></tr>
+            <tr><td><b>Extremo</b></td><td>1.9</td><td>Atleta de alto rendimiento. Trabajo físico muy exigente.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Requerimiento Proteico por Condición</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Condición</th><th>Proteína (g/kg/día)</th><th>Observaciones</th></tr></thead>
+          <tbody>
+            <tr><td>Adulto sano sedentario</td><td>0.8 – 1.0</td><td>Mínimo recomendado OMS</td></tr>
+            <tr><td>Adulto activo / fitness</td><td>1.2 – 1.6</td><td>Mantenimiento masa muscular</td></tr>
+            <tr><td>Deportista de fuerza</td><td>1.6 – 2.2</td><td>Ganancia muscular activa</td></tr>
+            <tr><td>Adulto mayor (&gt;65 años)</td><td>1.0 – 1.2</td><td>Prevención sarcopenia</td></tr>
+            <tr><td>Embarazo</td><td>1.1 – 1.3</td><td>+25g/día sobre requerimiento basal</td></tr>
+            <tr><td>Lactancia</td><td>1.1 – 1.3</td><td>+20g/día adicionales</td></tr>
+            <tr><td>Cirugía / trauma</td><td>1.5 – 2.0</td><td>Cicatrización y recuperación</td></tr>
+            <tr><td>Quemaduras severas</td><td>2.0 – 2.5</td><td>Pérdida proteica masiva</td></tr>
+            <tr><td>ERC sin diálisis</td><td>0.6 – 0.8</td><td>Restricción para proteger función renal</td></tr>
+            <tr><td>ERC en hemodiálisis</td><td>1.2 – 1.4</td><td>Pérdida de AA en la sesión</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Clasificación IMC — OMS</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>IMC (kg/m²)</th><th>Clasificación</th><th>Estrategia nutricional</th></tr></thead>
+          <tbody>
+            <tr><td>&lt; 16.0</td><td style="color:#b71c1c; font-weight:700;">Desnutrición severa</td><td>Recuperación nutricional supervisada</td></tr>
+            <tr><td>16.0 – 16.9</td><td style="color:#c62828; font-weight:700;">Desnutrición moderada</td><td>Superávit calórico + suplementación</td></tr>
+            <tr><td>17.0 – 18.4</td><td style="color:#e65100; font-weight:700;">Desnutrición leve</td><td>Superávit calórico 20–30%</td></tr>
+            <tr><td>18.5 – 24.9</td><td style="color:#2e7d32; font-weight:700;">Normal</td><td>Mantenimiento — VCT según actividad</td></tr>
+            <tr><td>25.0 – 29.9</td><td style="color:#f57c00; font-weight:700;">Sobrepeso</td><td>Déficit 10–15% + actividad física</td></tr>
+            <tr><td>30.0 – 34.9</td><td style="color:#c62828; font-weight:700;">Obesidad grado I</td><td>Déficit 20–25% + plan estructurado</td></tr>
+            <tr><td>35.0 – 39.9</td><td style="color:#b71c1c; font-weight:700;">Obesidad grado II</td><td>Déficit 25–30% + equipo multidisciplinar</td></tr>
+            <tr><td>≥ 40.0</td><td style="color:#7b0000; font-weight:700;">Obesidad mórbida</td><td>Manejo especializado / cirugía bariátrica</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los resultados son estimaciones basadas en ecuaciones predictivas. El plan nutricional definitivo debe ser elaborado por un <strong>Nutricionista-Dietista graduado y registrado</strong>. Los requerimientos reales varían según composición corporal, estado metabólico y condición clínica individual. Referencia: FAO/OMS/UNU 2004, Mifflin-St Jeor 1990, Harris-Benedict 1984.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n, dec=0) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+function calcularVCT() {
+  const sexo      = document.getElementById('v-sexo').value;
+  const edad      = parseFloat(document.getElementById('v-edad').value) || 0;
+  const peso      = parseFloat(document.getElementById('v-peso').value) || 0;
+  const talla     = parseFloat(document.getElementById('v-talla').value) || 0;
+  const pesoIdeal = parseFloat(document.getElementById('v-peso-ideal').value) || peso;
+  const formula   = document.getElementById('v-formula').value;
+  const actividad = parseFloat(document.getElementById('v-actividad').value);
+  const objetivo  = document.getElementById('v-objetivo').value;
+  const protPct   = parseFloat(document.getElementById('v-prot-pct').value) || 25;
+  const carbPct   = parseFloat(document.getElementById('v-carb-pct').value) || 50;
+  const grasPct   = parseFloat(document.getElementById('v-gras-pct').value) || 25;
+
+  if (Math.abs(protPct + carbPct + grasPct - 100) > 1) {
+    alert(`Los porcentajes de macronutrientes suman ${protPct + carbPct + grasPct}%. Deben sumar exactamente 100%.`);
+    return;
+  }
+
+  // TMB según fórmula
+  let tmb, tmbMifflin, tmbHarris, tmbOMS;
+
+  // Mifflin-St Jeor (1990)
+  if (sexo === 'M') {
+    tmbMifflin = (10 * peso) + (6.25 * talla) - (5 * edad) + 5;
+  } else {
+    tmbMifflin = (10 * peso) + (6.25 * talla) - (5 * edad) - 161;
+  }
+
+  // Harris-Benedict revisada (Roza & Shizgal, 1984)
+  if (sexo === 'M') {
+    tmbHarris = 88.362 + (13.397 * peso) + (4.799 * talla) - (5.677 * edad);
+  } else {
+    tmbHarris = 447.593 + (9.247 * peso) + (3.098 * talla) - (4.330 * edad);
+  }
+
+  // OMS/FAO/UNU por grupos etarios
+  if (sexo === 'M') {
+    if      (edad < 30) tmbOMS = (15.3 * peso) + 679;
+    else if (edad < 60) tmbOMS = (11.6 * peso) + 879;
+    else                tmbOMS = (13.5 * peso) + 487;
+  } else {
+    if      (edad < 30) tmbOMS = (14.7 * peso) + 496;
+    else if (edad < 60) tmbOMS = (8.7  * peso) + 829;
+    else                tmbOMS = (10.5 * peso) + 596;
+  }
+
+  tmb = formula === 'mifflin' ? tmbMifflin : formula === 'harris' ? tmbHarris : tmbOMS;
+
+  // VCT base
+  let vct = tmb * actividad;
+
+  // Ajuste por objetivo
+  const factoresObj = {
+    mantenimiento: 1.0, 'perdida-leve': 0.90, perdida: 0.80,
+    'perdida-agresiva': 0.70, ganancia: 1.10, 'ganancia-rapida': 1.20
+  };
+  vct *= factoresObj[objetivo] || 1.0;
+
+  // Macronutrientes
+  const kcalProt = vct * (protPct / 100);
+  const kcalCarb = vct * (carbPct / 100);
+  const kcalGras = vct * (grasPct / 100);
+  const gProt = kcalProt / 4;
+  const gCarb = kcalCarb / 4;
+  const gGras = kcalGras / 9;
+
+  // Proteína por kg peso ideal
+  const protKg = gProt / pesoIdeal;
+
+  // IMC
+  const imc = peso / Math.pow(talla / 100, 2);
+  let clasImc;
+  if      (imc < 18.5) clasImc = 'Bajo peso';
+  else if (imc < 25)   clasImc = 'Normal';
+  else if (imc < 30)   clasImc = 'Sobrepeso';
+  else if (imc < 35)   clasImc = 'Obesidad I';
+  else if (imc < 40)   clasImc = 'Obesidad II';
+  else                 clasImc = 'Obesidad mórbida';
+
+  // Guardar TMB para pestaña patología
+  document.getElementById('p-tmb').value = Math.round(tmb);
+
+  document.getElementById('resultado-vct').style.display = 'block';
+  document.getElementById('resultado-vct').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Resultado — Valor Calórico Total (VCT)</div>
+      <div class="resultado-calorias">${fmt(vct)} kcal</div>
+      <div class="resultado-sub">Requerimiento diario — Objetivo: ${objetivo.replace(/-/g,' ')} | TMB: ${fmt(tmb)} kcal</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(tmb)}</div><div class="resultado-label">TMB (kcal/día)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(vct)}</div><div class="resultado-label">VCT total (kcal/día)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(imc,1)}</div><div class="resultado-label">IMC — ${clasImc}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(protKg,2)} g/kg</div><div class="resultado-label">Proteína/kg peso ideal</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(tmbMifflin)}</div><div class="resultado-label">TMB Mifflin</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(tmbHarris)}</div><div class="resultado-label">TMB Harris-Benedict</div></div>
+      </div>
+
+      <div class="macro-grid">
+        <div class="macro-card">
+          <div class="macro-nombre">🍗 PROTEÍNA</div>
+          <div class="macro-gramos">${fmt(gProt, 1)} g</div>
+          <div class="macro-kcal">${fmt(kcalProt)} kcal</div>
+          <div class="macro-pct">${protPct}% del VCT</div>
+          <div class="barra-macro"><div class="barra-prot" style="width:100%; height:8px; border-radius:4px;"></div></div>
+        </div>
+        <div class="macro-card">
+          <div class="macro-nombre">🍚 CARBOHIDRATOS</div>
+          <div class="macro-gramos">${fmt(gCarb, 1)} g</div>
+          <div class="macro-kcal">${fmt(kcalCarb)} kcal</div>
+          <div class="macro-pct">${carbPct}% del VCT</div>
+          <div class="barra-macro"><div class="barra-carb" style="width:100%; height:8px; border-radius:4px;"></div></div>
+        </div>
+        <div class="macro-card">
+          <div class="macro-nombre">🥑 GRASAS</div>
+          <div class="macro-gramos">${fmt(gGras, 1)} g</div>
+          <div class="macro-kcal">${fmt(kcalGras)} kcal</div>
+          <div class="macro-pct">${grasPct}% del VCT</div>
+          <div class="barra-macro"><div class="barra-gras" style="width:100%; height:8px; border-radius:4px;"></div></div>
+        </div>
+      </div>
+
+      <div class="resultado-detalle">
+        <b>Datos del paciente:</b> ${sexo === 'M' ? 'Masculino' : 'Femenino'} | ${edad} años | ${peso} kg | ${talla} cm | IMC: ${fmt(imc,1)} (${clasImc})<br>
+        <b>Fórmula usada:</b> ${formula === 'mifflin' ? 'Mifflin-St Jeor' : formula === 'harris' ? 'Harris-Benedict revisada' : 'OMS/FAO/UNU'}<br>
+        <b>TMB = ${fmt(tmb)} kcal</b> × factor actividad ${actividad} = ${fmt(tmb * actividad)} kcal × factor objetivo = <b>${fmt(vct)} kcal/día</b><br>
+        <b>Distribución:</b> Proteína ${fmt(gProt,1)}g (${fmt(kcalProt)} kcal) | Carb ${fmt(gCarb,1)}g (${fmt(kcalCarb)} kcal) | Grasa ${fmt(gGras,1)}g (${fmt(kcalGras)} kcal)<br>
+        <b>Proteína por kg peso ideal:</b> ${fmt(gProt,1)}g ÷ ${pesoIdeal}kg = <b>${fmt(protKg,2)} g/kg/día</b>
+      </div>
+    </div>`;
+}
+
+function calcularPatologia() {
+  const tmb       = parseFloat(document.getElementById('p-tmb').value) || 0;
+  const factorEst = parseFloat(document.getElementById('p-patologia').value) || 1.0;
+  const peso      = parseFloat(document.getElementById('p-peso').value) || 70;
+  const condicion = document.getElementById('p-condicion').value;
+
+  const vctClin = tmb * factorEst;
+
+  // Requerimiento proteico por condición
+  const protReq = {
+    ninguna:   { min: 1.0, max: 1.2, nota: 'Adulto en estrés metabólico leve' },
+    diabetes:  { min: 1.0, max: 1.2, nota: 'Evitar exceso proteico; ajustar CHO al 45–50%' },
+    renal:     { min: 0.6, max: 0.8, nota: 'Restricción proteica para proteger función renal' },
+    dialisis:  { min: 1.2, max: 1.4, nota: 'Mayor requerimiento por pérdida en sesión' },
+    hepatica:  { min: 0.8, max: 1.2, nota: 'Evitar restricción severa; usar AA ramificados' },
+    oncologia: { min: 1.2, max: 1.5, nota: 'Prevención caquexia; soporte nutricional activo' },
+  };
+  const prot = protReq[condicion] || protReq.ninguna;
+  const gProtMin = prot.min * peso;
+  const gProtMax = prot.max * peso;
+
+  document.getElementById('resultado-patologia').style.display = 'block';
+  document.getElementById('resultado-patologia').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Requerimiento Calórico Clínico</div>
+      <div class="resultado-calorias">${fmt(vctClin)} kcal</div>
+      <div class="resultado-sub">TMB ${fmt(tmb)} kcal × Factor estrés ${factorEst}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(tmb)}</div><div class="resultado-label">TMB (kcal/día)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">×${factorEst}</div><div class="resultado-label">Factor de estrés</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(vctClin)}</div><div class="resultado-label">VCT clínico (kcal/día)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(vctClin/peso,0)} kcal/kg</div><div class="resultado-label">kcal por kg peso</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(gProtMin,0)}–${fmt(gProtMax,0)} g</div><div class="resultado-label">Proteína/día</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${prot.min}–${prot.max} g/kg</div><div class="resultado-label">Proteína/kg/día</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>VCT clínico:</b> TMB ${fmt(tmb)} kcal × ${factorEst} = <b>${fmt(vctClin)} kcal/día</b><br>
+        <b>Por kg de peso:</b> ${fmt(vctClin)} ÷ ${peso} kg = <b>${fmt(vctClin/peso,1)} kcal/kg/día</b><br>
+        <b>Requerimiento proteico (${condicion}):</b> ${prot.min}–${prot.max} g/kg/día → <b>${fmt(gProtMin,0)}–${fmt(gProtMax,0)} g/día</b><br>
+        <b>Nota clínica:</b> ${prot.nota}
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
