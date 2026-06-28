@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora Score de Riesgo Cardiovascular Framingham Colombia. Calcula riesgo de evento cardiovascular a 10 años: infarto, ACV, angina. Para médicos, residentes y enfermeras." />
+  <meta name="keywords" content="score Framingham Colombia, riesgo cardiovascular 10 años, calculadora infarto Colombia, riesgo coronario Framingham médicos, prevención cardiovascular" />
+  <title>Score de Riesgo Cardiovascular Framingham | HerramientasPro Colombia</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #222; min-height: 100vh; }
+
+    nav { background: #1a3a5c; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    nav a { color: #fff; text-decoration: none; font-size: 14px; opacity: .8; }
+    nav a:hover { opacity: 1; }
+    nav .brand { font-weight: 700; font-size: 17px; opacity: 1; margin-right: 8px; }
+    nav .sep { color: #7aa3c8; }
+
+    .hero { background: linear-gradient(135deg, #8e0000 0%, #c0392b 60%, #e74c3c 100%); color: #fff; text-align: center; padding: 36px 20px 28px; }
+    .hero .badge { background: rgba(255,255,255,.18); display: inline-block; border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+    .hero h1 { font-size: clamp(20px, 4vw, 30px); font-weight: 800; margin-bottom: 8px; }
+    .hero p { font-size: 15px; opacity: .9; max-width: 640px; margin: 0 auto 16px; }
+    .hero .chips { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .hero .chip { background: rgba(255,255,255,.15); border-radius: 20px; padding: 5px 14px; font-size: 13px; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 28px 16px 60px; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+    .tab-btn { padding: 9px 18px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; background: #fff; color: #555; box-shadow: 0 1px 4px rgba(0,0,0,.1); transition: all .2s; }
+    .tab-btn.active { background: #8e0000; color: #fff; }
+
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 24px; margin-bottom: 20px; }
+    .card h2 { font-size: 16px; font-weight: 700; color: #8e0000; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid #fde8e8; }
+
+    /* Sexo selector */
+    .sexo-row { display: flex; gap: 12px; margin-bottom: 4px; }
+    .sexo-btn { flex: 1; padding: 14px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; background: #fafafa; text-align: center; font-size: 15px; font-weight: 700; color: #555; transition: all .2s; }
+    .sexo-btn:hover { border-color: #c0392b; }
+    .sexo-btn.sel { border-color: #8e0000; background: #fff0f0; color: #8e0000; }
+    .sexo-btn .ico { font-size: 28px; display: block; margin-bottom: 4px; }
+
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 13px; font-weight: 600; color: #444; }
+    label span.req { color: #c0392b; }
+    input, select { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color .2s; background: #fafafa; }
+    input:focus, select:focus { outline: none; border-color: #c0392b; background: #fff; }
+    .hint { font-size: 11px; color: #888; margin-top: 2px; line-height: 1.4; }
+
+    /* Toggle switches */
+    .toggle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-top: 4px; }
+    .toggle-item { display: flex; align-items: center; gap: 10px; background: #fafafa; border: 2px solid #e0e0e0; border-radius: 10px; padding: 12px 14px; cursor: pointer; transition: all .2s; }
+    .toggle-item:hover { border-color: #c0392b; }
+    .toggle-item.activo { border-color: #c0392b; background: #fff0f0; }
+    .toggle-item input[type=checkbox] { width: 18px; height: 18px; accent-color: #8e0000; cursor: pointer; flex-shrink: 0; }
+    .toggle-item .tlbl { font-size: 13px; font-weight: 600; color: #444; }
+    .toggle-item.activo .tlbl { color: #8e0000; }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+    .btn-calc { background: #8e0000; color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; min-width: 160px; transition: background .2s; }
+    .btn-calc:hover { background: #6b0000; }
+    .btn-reset { background: #ecf0f1; color: #555; border: none; border-radius: 8px; padding: 13px 20px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+    /* RESULTADO */
+    .result-box { display: none; margin-top: 24px; }
+
+    .riesgo-banner { border-radius: 14px; padding: 24px; text-align: center; color: #fff; margin-bottom: 20px; }
+    .riesgo-banner h3 { font-size: 16px; font-weight: 700; opacity: .9; margin-bottom: 8px; }
+    .riesgo-banner .pct { font-size: 60px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+    .riesgo-banner .categoria { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .riesgo-banner .sub { font-size: 14px; opacity: .85; }
+    .bajo    { background: linear-gradient(135deg, #1e8449, #27ae60); }
+    .moderado{ background: linear-gradient(135deg, #b7770d, #f39c12); }
+    .alto    { background: linear-gradient(135deg, #922b21, #e74c3c); }
+    .muy-alto{ background: linear-gradient(135deg, #5b0000, #8e0000); }
+
+    /* Gauge SVG */
+    .gauge-wrap { text-align: center; margin-bottom: 20px; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.07); padding: 14px; text-align: center; border-top: 4px solid #c0392b; }
+    .kpi.verde { border-top-color: #27ae60; }
+    .kpi.azul  { border-top-color: #2980b9; }
+    .kpi .klbl { font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 6px; }
+    .kpi .kval { font-size: 19px; font-weight: 800; color: #8e0000; }
+    .kpi.verde .kval { color: #1e8449; }
+    .kpi.azul  .kval { color: #2980b9; }
+    .kpi .ksub { font-size: 11px; color: #aaa; margin-top: 3px; }
+
+    .factores-box { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 16px; }
+    .factor-chip { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+    .factor-chip.presente { background: #fdedec; color: #922b21; border: 1px solid #f5b7b1; }
+    .factor-chip.ausente  { background: #eafaf1; color: #1e8449; border: 1px solid #a9dfbf; }
+
+    .recomendaciones { list-style: none; }
+    .recomendaciones li { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid #fde8e8; font-size: 14px; line-height: 1.5; }
+    .recomendaciones li:last-child { border-bottom: none; }
+    .recomendaciones li .ico { flex-shrink: 0; font-size: 18px; margin-top: 1px; }
+
+    .meta-tabla { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .meta-tabla th { background: #8e0000; color: #fff; padding: 9px 12px; text-align: left; }
+    .meta-tabla td { padding: 9px 12px; border-bottom: 1px solid #fde8e8; }
+    .meta-tabla tr:nth-child(even) td { background: #fff5f5; }
+    .meta-tabla .logrado td { color: #1e8449; font-weight: 700; }
+    .meta-tabla .no-logrado td { color: #922b21; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .ref-table th { background: #8e0000; color: #fff; padding: 9px 12px; text-align: left; }
+    .ref-table td { padding: 9px 12px; border-bottom: 1px solid #fde8e8; }
+    .ref-table tr:nth-child(even) td { background: #fff5f5; }
+    .ref-table .bajo-r    td { background: #eafaf1; color: #1e8449; font-weight: 700; }
+    .ref-table .mod-r     td { background: #fef9e7; color: #7d6608; font-weight: 700; }
+    .ref-table .alto-r    td { background: #fdedec; color: #922b21; font-weight: 700; }
+    .ref-table .muyalto-r td { background: #f5b7b1; color: #5b0000; font-weight: 700; }
+
+    .alert { border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-top: 14px; line-height: 1.5; }
+    .alert-danger { background: #fdedec; border-left: 4px solid #c0392b; color: #7b241c; }
+    .alert-info   { background: #eaf4fb; border-left: 4px solid #2980b9; color: #1a5276; }
+    .alert-warn   { background: #fef9e7; border-left: 4px solid #f39c12; color: #7d6608; }
+
+    .disclaimer { background: #ecf0f1; border-radius: 10px; padding: 14px 18px; font-size: 12px; color: #636e72; margin-top: 28px; line-height: 1.6; }
+
+    @media (max-width: 600px) {
+      .grid2 { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2,1fr); }
+      .toggle-grid { grid-template-columns: 1fr; }
+      .riesgo-banner .pct { font-size: 46px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="brand">🛠️ HerramientasPro</a>
+  <span class="sep">›</span>
+  <a href="../../index.html#salud">Salud</a>
+  <span class="sep">›</span>
+  <span style="color:#fff;opacity:.7;">Score Framingham</span>
+</nav>
+
+<div class="hero">
+  <div class="badge">❤️ Cardiología · Medicina Interna</div>
+  <h1>Score de Riesgo Cardiovascular<br>Framingham</h1>
+  <p>Calcula el riesgo de evento cardiovascular mayor (infarto de miocardio, ACV, angina, muerte coronaria) a 10 años. Versión ATP III validada para población latinoamericana.</p>
+  <div class="chips">
+    <span class="chip">👨‍⚕️ Para médicos y residentes</span>
+    <span class="chip">📊 Riesgo a 10 años</span>
+    <span class="chip">💊 Recomendaciones clínicas</span>
+    <span class="chip">🏥 Uso en consulta externa y urgencias</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('calc')">Calculadora Framingham</button>
+    <button class="tab-btn" onclick="showTab('tabla')">Tablas de Puntuación</button>
+    <button class="tab-btn" onclick="showTab('guia')">Guía Clínica</button>
+  </div>
+
+  <!-- TAB 1: CALCULADORA -->
+  <div id="tab-calc">
+
+    <div class="alert alert-danger" style="margin-bottom:18px;">
+      ⚠️ <strong>Uso exclusivo para profesionales de la salud.</strong> Esta herramienta es de apoyo clínico. El diagnóstico y las decisiones terapéuticas son responsabilidad exclusiva del médico tratante.
+    </div>
+
+    <div class="card">
+      <h2>👤 1. Datos del paciente</h2>
+
+      <div style="margin-bottom:18px;">
+        <label style="display:block; margin-bottom:8px;">Sexo biológico <span class="req">*</span></label>
+        <div class="sexo-row">
+          <div class="sexo-btn" id="btn-m" onclick="selSexo('M')"><span class="ico">♂️</span>Masculino</div>
+          <div class="sexo-btn" id="btn-f" onclick="selSexo('F')"><span class="ico">♀️</span>Femenino</div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>Edad (años) <span class="req">*</span></label>
+          <input type="number" id="edad" placeholder="Ej: 55" min="20" max="79" />
+          <span class="hint">Rango válido: 20–79 años.</span>
+        </div>
+        <div class="field">
+          <label>Colesterol total (mg/dL) <span class="req">*</span></label>
+          <input type="number" id="col-total" placeholder="Ej: 210" min="100" max="400" />
+          <span class="hint">Normal: &lt; 200 mg/dL. Limítrofe: 200–239. Alto: ≥ 240.</span>
+        </div>
+        <div class="field">
+          <label>HDL colesterol (mg/dL) <span class="req">*</span></label>
+          <input type="number" id="hdl" placeholder="Ej: 45" min="20" max="100" />
+          <span class="hint">Óptimo hombres: &gt; 40. Mujeres: &gt; 50. Protector: &gt; 60.</span>
+        </div>
+        <div class="field">
+          <label>Presión arterial sistólica (mmHg) <span class="req">*</span></label>
+          <input type="number" id="pas" placeholder="Ej: 130" min="90" max="200" />
+          <span class="hint">El valor más alto de la tensión arterial (el primero).</span>
+        </div>
+        <div class="field">
+          <label>¿Está en tratamiento antihipertensivo?</label>
+          <select id="tto-hta">
+            <option value="no">No</option>
+            <option value="si">Sí, recibe medicación antihipertensiva</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>LDL colesterol (mg/dL) — opcional</label>
+          <input type="number" id="ldl" placeholder="Ej: 130" min="50" max="300" />
+          <span class="hint">Opcional. Se usa para evaluar metas de tratamiento.</span>
+        </div>
+        <div class="field">
+          <label>Triglicéridos (mg/dL) — opcional</label>
+          <input type="number" id="trigli" placeholder="Ej: 150" min="50" max="1000" />
+        </div>
+        <div class="field">
+          <label>Glucemia en ayunas (mg/dL) — opcional</label>
+          <input type="number" id="glucemia" placeholder="Ej: 95" min="50" max="500" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🔬 2. Factores de riesgo adicionales</h2>
+      <div class="toggle-grid">
+        <label class="toggle-item" id="lbl-tabaco">
+          <input type="checkbox" id="tabaco" onchange="toggleActivo('lbl-tabaco','tabaco')" />
+          <span class="tlbl">🚬 Fumador actual</span>
+        </label>
+        <label class="toggle-item" id="lbl-dm">
+          <input type="checkbox" id="dm" onchange="toggleActivo('lbl-dm','dm')" />
+          <span class="tlbl">🩸 Diabetes mellitus</span>
+        </label>
+        <label class="toggle-item" id="lbl-hf">
+          <input type="checkbox" id="hf" onchange="toggleActivo('lbl-hf','hf')" />
+          <span class="tlbl">👨‍👩‍👧 Historia familiar ECV prematura</span>
+        </label>
+        <label class="toggle-item" id="lbl-ecv">
+          <input type="checkbox" id="ecv" onchange="toggleActivo('lbl-ecv','ecv')" />
+          <span class="tlbl">💔 ECV establecida previa</span>
+        </label>
+        <label class="toggle-item" id="lbl-obesidad">
+          <input type="checkbox" id="obesidad" onchange="toggleActivo('lbl-obesidad','obesidad')" />
+          <span class="tlbl">⚖️ Obesidad (IMC ≥ 30)</span>
+        </label>
+        <label class="toggle-item" id="lbl-irc">
+          <input type="checkbox" id="irc" onchange="toggleActivo('lbl-irc','irc')" />
+          <span class="tlbl">🫘 Insuficiencia renal crónica</span>
+        </label>
+      </div>
+      <span class="hint" style="margin-top:10px; display:block;">ECV prematura: padre o hermano con IAM antes de los 55 años, madre o hermana antes de los 65 años. ECV establecida: IAM, ACV, angina, revascularización coronaria previos.</span>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-calc" onclick="calcFramingham()">❤️ Calcular riesgo cardiovascular</button>
+      <button class="btn-reset" onclick="resetCalc()">Limpiar</button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="resultado" class="result-box">
+
+      <div id="riesgo-banner" class="riesgo-banner bajo">
+        <h3>Riesgo cardiovascular a 10 años (Framingham ATP III)</h3>
+        <div class="pct" id="res-pct">0%</div>
+        <div class="categoria" id="res-categoria">BAJO</div>
+        <div class="sub" id="res-sub">Probabilidad de evento cardiovascular mayor en los próximos 10 años</div>
+      </div>
+
+      <!-- Gauge visual -->
+      <div class="gauge-wrap">
+        <svg viewBox="0 0 260 150" width="280" xmlns="http://www.w3.org/2000/svg">
+          <!-- arco fondo -->
+          <path d="M20,130 A110,110 0 0,1 240,130" fill="none" stroke="#e0e0e0" stroke-width="22" stroke-linecap="round"/>
+          <!-- arco bajo verde -->
+          <path d="M20,130 A110,110 0 0,1 240,130" fill="none" stroke="url(#ggrad)" stroke-width="22" stroke-linecap="round"
+                stroke-dasharray="345" stroke-dashoffset="345" id="gauge-arc"/>
+          <defs>
+            <linearGradient id="ggrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stop-color="#27ae60"/>
+              <stop offset="40%"  stop-color="#f39c12"/>
+              <stop offset="70%"  stop-color="#e74c3c"/>
+              <stop offset="100%" stop-color="#8e0000"/>
+            </linearGradient>
+          </defs>
+          <!-- aguja -->
+          <line id="gauge-needle" x1="130" y1="130" x2="130" y2="30" stroke="#333" stroke-width="3" stroke-linecap="round"
+                transform="rotate(0,130,130)"/>
+          <circle cx="130" cy="130" r="8" fill="#333"/>
+          <!-- labels -->
+          <text x="14"  y="148" font-size="11" fill="#27ae60" font-weight="700">0%</text>
+          <text x="80"  y="24"  font-size="11" fill="#f39c12" font-weight="700">10%</text>
+          <text x="198" y="24"  font-size="11" fill="#e74c3c" font-weight="700">20%</text>
+          <text x="228" y="148" font-size="11" fill="#8e0000" font-weight="700">30%+</text>
+        </svg>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="klbl">Puntuación Framingham</div>
+          <div class="kval" id="kpi-puntos">0 pts</div>
+          <div class="ksub">puntaje total</div>
+        </div>
+        <div class="kpi azul">
+          <div class="klbl">Edad vascular estimada</div>
+          <div class="kval" id="kpi-edad-vasc">—</div>
+          <div class="ksub">vs. edad real</div>
+        </div>
+        <div class="kpi verde">
+          <div class="klbl">Riesgo si fuera óptimo</div>
+          <div class="kval" id="kpi-riesgo-opt">—</div>
+          <div class="ksub">potencial de reducción</div>
+        </div>
+        <div class="kpi">
+          <div class="klbl">Categoría de riesgo</div>
+          <div class="kval" id="kpi-categ">—</div>
+          <div class="ksub">clasificación ATP III</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h2>🔬 Factores de riesgo identificados</h2>
+        <div class="factores-box" id="factores-box"></div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h2>🎯 Metas terapéuticas recomendadas</h2>
+        <table class="meta-tabla" id="meta-tabla"></table>
+      </div>
+
+      <div class="card">
+        <h2>💊 Recomendaciones clínicas</h2>
+        <ul class="recomendaciones" id="recomendaciones"></ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB 2: TABLAS -->
+  <div id="tab-tabla" style="display:none">
+    <div class="card">
+      <h2>📊 Tabla de puntuación Framingham — Hombres</h2>
+      <table class="ref-table" style="margin-bottom:20px;">
+        <thead><tr><th>Variable</th><th>Valor</th><th>Puntos</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="6"><strong>Edad</strong></td><td>20–34 años</td><td>-9</td></tr>
+          <tr><td>35–39 años</td><td>-4</td></tr>
+          <tr><td>40–44 años</td><td>0</td></tr>
+          <tr><td>45–49 años</td><td>3</td></tr>
+          <tr><td>50–54 años</td><td>6</td></tr>
+          <tr><td>55–59 años</td><td>8</td></tr>
+          <tr><td rowspan="5"><strong>Colesterol total</strong></td><td>&lt; 160 mg/dL</td><td>0</td></tr>
+          <tr><td>160–199</td><td>4</td></tr>
+          <tr><td>200–239</td><td>7</td></tr>
+          <tr><td>240–279</td><td>9</td></tr>
+          <tr><td>≥ 280</td><td>11</td></tr>
+          <tr><td rowspan="3"><strong>Tabaquismo</strong></td><td>No fumador</td><td>0</td></tr>
+          <tr><td>Exfumador</td><td>0</td></tr>
+          <tr><td>Fumador actual</td><td>8</td></tr>
+          <tr><td rowspan="5"><strong>HDL colesterol</strong></td><td>≥ 60 mg/dL</td><td>-1</td></tr>
+          <tr><td>50–59</td><td>0</td></tr>
+          <tr><td>40–49</td><td>1</td></tr>
+          <tr><td>&lt; 40</td><td>2</td></tr>
+          <tr><td>—</td><td>—</td></tr>
+          <tr><td rowspan="5"><strong>PAS no tratada</strong></td><td>&lt; 120</td><td>0</td></tr>
+          <tr><td>120–129</td><td>0</td></tr>
+          <tr><td>130–139</td><td>1</td></tr>
+          <tr><td>140–159</td><td>1</td></tr>
+          <tr><td>≥ 160</td><td>2</td></tr>
+          <tr><td rowspan="5"><strong>PAS tratada</strong></td><td>&lt; 120</td><td>0</td></tr>
+          <tr><td>120–129</td><td>3</td></tr>
+          <tr><td>130–139</td><td>4</td></tr>
+          <tr><td>140–159</td><td>5</td></tr>
+          <tr><td>≥ 160</td><td>6</td></tr>
+        </tbody>
+      </table>
+
+      <h2 style="margin-top:16px;">📊 Conversión puntos → riesgo % a 10 años (Hombres)</h2>
+      <table class="ref-table">
+        <thead><tr><th>Puntos</th><th>Riesgo 10 años</th><th>Puntos</th><th>Riesgo 10 años</th></tr></thead>
+        <tbody>
+          <tr class="bajo-r"><td>≤ 0</td><td>&lt; 1%</td><td>8</td><td>10%</td></tr>
+          <tr class="bajo-r"><td>1</td><td>1%</td><td>9</td><td>12%</td></tr>
+          <tr class="bajo-r"><td>2</td><td>1%</td><td>10</td><td>14%</td></tr>
+          <tr class="bajo-r"><td>3</td><td>1%</td><td>11</td><td>16%</td></tr>
+          <tr class="bajo-r"><td>4</td><td>1%</td><td>12</td><td>18%</td></tr>
+          <tr class="bajo-r"><td>5</td><td>2%</td><td>13</td><td>22%</td></tr>
+          <tr class="mod-r"><td>6</td><td>2%</td><td>14</td><td>27%</td></tr>
+          <tr class="mod-r"><td>7</td><td>3%</td><td>≥ 15</td><td>≥ 30%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>📊 Tabla de puntuación Framingham — Mujeres</h2>
+      <table class="ref-table" style="margin-bottom:20px;">
+        <thead><tr><th>Variable</th><th>Valor</th><th>Puntos</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="6"><strong>Edad</strong></td><td>20–34 años</td><td>-7</td></tr>
+          <tr><td>35–39 años</td><td>-3</td></tr>
+          <tr><td>40–44 años</td><td>0</td></tr>
+          <tr><td>45–49 años</td><td>3</td></tr>
+          <tr><td>50–54 años</td><td>6</td></tr>
+          <tr><td>55–59 años</td><td>8</td></tr>
+          <tr><td rowspan="5"><strong>Colesterol total</strong></td><td>&lt; 160 mg/dL</td><td>0</td></tr>
+          <tr><td>160–199</td><td>4</td></tr>
+          <tr><td>200–239</td><td>8</td></tr>
+          <tr><td>240–279</td><td>11</td></tr>
+          <tr><td>≥ 280</td><td>13</td></tr>
+          <tr><td rowspan="2"><strong>Tabaquismo</strong></td><td>No fumadora</td><td>0</td></tr>
+          <tr><td>Fumadora actual</td><td>9</td></tr>
+          <tr><td rowspan="4"><strong>HDL colesterol</strong></td><td>≥ 60 mg/dL</td><td>-1</td></tr>
+          <tr><td>50–59</td><td>0</td></tr>
+          <tr><td>40–49</td><td>1</td></tr>
+          <tr><td>&lt; 40</td><td>2</td></tr>
+          <tr><td rowspan="5"><strong>PAS no tratada</strong></td><td>&lt; 120</td><td>0</td></tr>
+          <tr><td>120–129</td><td>1</td></tr>
+          <tr><td>130–139</td><td>2</td></tr>
+          <tr><td>140–159</td><td>3</td></tr>
+          <tr><td>≥ 160</td><td>4</td></tr>
+          <tr><td rowspan="5"><strong>PAS tratada</strong></td><td>&lt; 120</td><td>0</td></tr>
+          <tr><td>120–129</td><td>3</td></tr>
+          <tr><td>130–139</td><td>4</td></tr>
+          <tr><td>140–159</td><td>5</td></tr>
+          <tr><td>≥ 160</td><td>6</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: GUÍA -->
+  <div id="tab-guia" style="display:none">
+    <div class="card">
+      <h2>📋 Guía clínica — Interpretación y manejo</h2>
+      <table class="ref-table" style="margin-bottom:20px;">
+        <thead><tr><th>Categoría</th><th>Riesgo 10 años</th><th>Meta LDL</th><th>Meta PAS</th><th>Conducta</th></tr></thead>
+        <tbody>
+          <tr class="bajo-r"><td><strong>BAJO</strong></td><td>&lt; 10%</td><td>&lt; 160 mg/dL</td><td>&lt; 140/90</td><td>Cambios estilo de vida. Control en 5 años.</td></tr>
+          <tr class="mod-r"><td><strong>MODERADO</strong></td><td>10–19%</td><td>&lt; 130 mg/dL</td><td>&lt; 140/90</td><td>Estatinas si LDL ≥ 130. Control anual.</td></tr>
+          <tr class="alto-r"><td><strong>ALTO</strong></td><td>20–30%</td><td>&lt; 100 mg/dL</td><td>&lt; 130/80</td><td>Estatinas obligatorias. AAS 100 mg/día. Control semestral.</td></tr>
+          <tr class="muyalto-r"><td><strong>MUY ALTO</strong></td><td>&gt; 30% o ECV establecida</td><td>&lt; 70 mg/dL</td><td>&lt; 130/80</td><td>Estatinas alta intensidad + AAS. Referir a cardiología.</td></tr>
+        </tbody>
+      </table>
+
+      <h2 style="margin-bottom:12px;">🫀 Factores de riesgo no incluidos en Framingham (pero clínicamente relevantes)</h2>
+      <table class="ref-table" style="margin-bottom:20px;">
+        <thead><tr><th>Factor adicional</th><th>Impacto en riesgo</th><th>Acción recomendada</th></tr></thead>
+        <tbody>
+          <tr><td>Proteína C reactiva ultrasensible (PCRus) &gt; 2 mg/L</td><td>Duplica el riesgo relativo</td><td>Considerar estatinas (JUPITER trial)</td></tr>
+          <tr><td>Score de calcio coronario (CAC) &gt; 0</td><td>Reclasificación a categoría superior</td><td>Reclasificar y tratar agresivamente</td></tr>
+          <tr><td>Índice tobillo-brazo (ITB) &lt; 0.9</td><td>Equivale a ECV establecida</td><td>Tratar como riesgo muy alto</td></tr>
+          <tr><td>Glucemia ayunas 100–125 mg/dL (prediabetes)</td><td>Aumenta 50% el riesgo</td><td>Cambios de estilo de vida intensivos</td></tr>
+          <tr><td>Microalbuminuria</td><td>Marcador de daño endotelial</td><td>Control estricto de PA y glicemia</td></tr>
+          <tr><td>Hipertrofia ventricular izquierda (HVI)</td><td>Factor de riesgo independiente</td><td>Control estricto de PA</td></tr>
+          <tr><td>Síndrome metabólico (3 o más criterios)</td><td>Riesgo aumentado significativamente</td><td>Cambios de estilo de vida + estatinas</td></tr>
+        </tbody>
+      </table>
+
+      <h2 style="margin-bottom:12px;">💊 Tratamiento farmacológico según categoría de riesgo</h2>
+      <div class="alert alert-info">
+        ℹ️ Las siguientes son recomendaciones generales basadas en guías ACC/AHA 2019 y Guía Colombiana de Riesgo Cardiovascular (Ministerio de Salud). El tratamiento debe ser individualizado por el médico tratante.
+      </div>
+      <table class="ref-table" style="margin-top:12px;">
+        <thead><tr><th>Medicamento</th><th>Indicación</th><th>Dosis orientativa</th><th>Meta</th></tr></thead>
+        <tbody>
+          <tr><td>Atorvastatina</td><td>Riesgo moderado-alto</td><td>10–80 mg/día (baja a alta intensidad)</td><td>Reducción LDL &gt; 30–50%</td></tr>
+          <tr><td>Rosuvastatina</td><td>Riesgo alto-muy alto</td><td>10–40 mg/día</td><td>LDL &lt; 70 mg/dL</td></tr>
+          <tr><td>AAS 100 mg</td><td>Prevención secundaria / riesgo alto</td><td>100 mg/día con alimentos</td><td>Prevención trombótica</td></tr>
+          <tr><td>IECA / ARA II</td><td>HTA + DM o HTA + proteinuria</td><td>Según molécula y PA objetivo</td><td>PAS &lt; 130 mmHg</td></tr>
+          <tr><td>Metformina</td><td>DM tipo 2 o prediabetes con alto riesgo</td><td>500–2000 mg/día</td><td>HbA1c &lt; 7%</td></tr>
+          <tr><td>Ezetimibe</td><td>LDL no controlado con estatina</td><td>10 mg/día</td><td>Adicional 15–20% de reducción LDL</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>⚠️ Solo para profesionales de la salud.</strong> El Score de Framingham es una herramienta de estimación epidemiológica validada en población norteamericana con ajustes para Latinoamérica. No reemplaza el juicio clínico. Factores como etnia, origen socioeconómico, acceso a tratamiento y comorbilidades específicas pueden modificar significativamente el riesgo individual. Las decisiones terapéuticas son responsabilidad exclusiva del médico tratante. Framingham Risk Score original: Wilson et al. Circulation 1998;97:1837-47. Adaptación ATP III: NCEP Expert Panel, JAMA 2001.
+    <br><br>
+    🗓️ <em>Referencia: NCEP-ATP III | ACC/AHA Guidelines 2019 | Guía Colombiana de RCV - Minsalud 2015. Actualización: Junio 2026.</em>
+  </div>
+
+</div>
+
+<script>
+  let sexo = null;
+
+  function selSexo(s) {
+    sexo = s;
+    document.getElementById('btn-m').classList.toggle('sel', s==='M');
+    document.getElementById('btn-f').classList.toggle('sel', s==='F');
+  }
+
+  function toggleActivo(lblId, cbId) {
+    const lbl = document.getElementById(lblId);
+    const cb  = document.getElementById(cbId);
+    lbl.classList.toggle('activo', cb.checked);
+  }
+
+  function showTab(t) {
+    ['calc','tabla','guia'].forEach(id => {
+      document.getElementById('tab-'+id).style.display = id===t?'block':'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+      b.classList.toggle('active',['calc','tabla','guia'][i]===t);
+    });
+  }
+
+  // ── FRAMINGHAM ATP III ────────────────────────────────────────────
+  function puntosEdad(edad, sexo) {
+    const tabM = [[20,34,-9],[35,39,-4],[40,44,0],[45,49,3],[50,54,6],[55,59,8],[60,64,10],[65,69,11],[70,74,12],[75,79,13]];
+    const tabF = [[20,34,-7],[35,39,-3],[40,44,0],[45,49,3],[50,54,6],[55,59,8],[60,64,10],[65,69,12],[70,74,14],[75,79,16]];
+    const tab = sexo==='M'?tabM:tabF;
+    for (const [desde, hasta, pts] of tab) if (edad>=desde && edad<=hasta) return pts;
+    return 0;
+  }
+  function puntosColTotal(col, edad, sexo) {
+    // Puntos varían según grupo de edad en ATP III. Simplificado a valores para 40-49.
+    const tabM = [[0,160,0],[160,200,4],[200,240,7],[240,280,9],[280,999,11]];
+    const tabF = [[0,160,0],[160,200,4],[200,240,8],[240,280,11],[280,999,13]];
+    const tab = sexo==='M'?tabM:tabF;
+    for (const [desde, hasta, pts] of tab) if (col>=desde && col<hasta) return pts;
+    return tab[tab.length-1][2];
+  }
+  function puntosHDL(hdl) {
+    if (hdl>=60) return -1;
+    if (hdl>=50) return 0;
+    if (hdl>=40) return 1;
+    return 2;
+  }
+  function puntosPAS(pas, tratado, sexo) {
+    if (sexo==='M') {
+      if (!tratado) {
+        if (pas<120) return 0;
+        if (pas<130) return 0;
+        if (pas<140) return 1;
+        if (pas<160) return 1;
+        return 2;
+      } else {
+        if (pas<120) return 0;
+        if (pas<130) return 3;
+        if (pas<140) return 4;
+        if (pas<160) return 5;
+        return 6;
+      }
+    } else {
+      if (!tratado) {
+        if (pas<120) return 0;
+        if (pas<130) return 1;
+        if (pas<140) return 2;
+        if (pas<160) return 3;
+        return 4;
+      } else {
+        if (pas<120) return 0;
+        if (pas<130) return 3;
+        if (pas<140) return 4;
+        if (pas<160) return 5;
+        return 6;
+      }
+    }
+  }
+  function puntosTabaco(fuma, sexo) { return fuma ? (sexo==='M'?8:9) : 0; }
+
+  function puntoADriesgo(puntos, sexo) {
+    const tabM = [[-99,0,0.01],[1,4,0.01],[5,5,0.02],[6,6,0.02],[7,7,0.03],[8,8,0.04],[9,9,0.05],[10,10,0.06],[11,11,0.08],[12,12,0.10],[13,13,0.12],[14,14,0.16],[15,15,0.20],[16,16,0.25],[17,999,0.30]];
+    const tabF = [[-99,8,0.01],[9,12,0.01],[13,13,0.02],[14,14,0.02],[15,15,0.03],[16,16,0.04],[17,17,0.05],[18,18,0.06],[19,19,0.08],[20,20,0.11],[21,21,0.14],[22,22,0.17],[23,23,0.22],[24,999,0.27]];
+    const tab = sexo==='M'?tabM:tabF;
+    for (const [desde,hasta,pct] of tab) if (puntos>=desde && puntos<=hasta) return pct;
+    return 0.30;
+  }
+
+  function edadVascular(puntos, sexo) {
+    // Aproximación: edad vascular según puntuación promedio para esa edad
+    const tabM = [[-99,-1,30],[0,0,30],[1,1,32],[2,2,34],[3,3,36],[4,4,38],[5,5,40],[6,6,42],[7,7,45],[8,8,48],[9,9,50],[10,10,53],[11,11,56],[12,12,60],[13,13,65],[14,999,70]];
+    const tabF = [[-99,8,30],[9,12,30],[13,14,35],[15,15,40],[16,16,45],[17,17,50],[18,18,52],[19,19,55],[20,20,60],[21,21,65],[22,999,70]];
+    const tab = sexo==='M'?tabM:tabF;
+    for (const [desde,hasta,ed] of tab) if (puntos>=desde && puntos<=hasta) return ed;
+    return 70;
+  }
+
+  function calcFramingham() {
+    if (!sexo) { alert('Seleccione el sexo biológico del paciente.'); return; }
+    const edad = parseInt(document.getElementById('edad').value);
+    const col  = parseInt(document.getElementById('col-total').value);
+    const hdl  = parseInt(document.getElementById('hdl').value);
+    const pas  = parseInt(document.getElementById('pas').value);
+    const tto  = document.getElementById('tto-hta').value==='si';
+    const fuma = document.getElementById('tabaco').checked;
+    const dm   = document.getElementById('dm').checked;
+    const hf   = document.getElementById('hf').checked;
+    const ecv  = document.getElementById('ecv').checked;
+    const obeso= document.getElementById('obesidad').checked;
+    const irc  = document.getElementById('irc').checked;
+    const ldl  = parseInt(document.getElementById('ldl').value) || null;
+    const trigli = parseInt(document.getElementById('trigli').value) || null;
+    const gluc = parseInt(document.getElementById('glucemia').value) || null;
+
+    if (!edad||!col||!hdl||!pas) { alert('Complete los campos obligatorios: edad, colesterol total, HDL y presión arterial sistólica.'); return; }
+    if (edad<20||edad>79) { alert('La calculadora es válida para pacientes de 20 a 79 años.'); return; }
+
+    // Puntuación
+    const pEdad   = puntosEdad(edad, sexo);
+    const pCol    = puntosColTotal(col, edad, sexo);
+    const pHDL    = puntosHDL(hdl);
+    const pPAS    = puntosPAS(pas, tto, sexo);
+    const pTabaco = puntosTabaco(fuma, sexo);
+    const total   = pEdad + pCol + pHDL + pPAS + pTabaco;
+
+    let riesgo = puntoADriesgo(total, sexo);
+
+    // Ajuste por DM (equivale a ECV, mínimo 20%)
+    if (dm && riesgo < 0.20) riesgo = 0.20;
+    // Ajuste por ECV establecida
+    if (ecv) riesgo = Math.max(riesgo, 0.30);
+    // Ajuste por IRC
+    if (irc && riesgo < 0.15) riesgo = 0.15;
+
+    const riesgoPct = Math.min(riesgo * 100, 99);
+    const edVasc    = edadVascular(total, sexo);
+
+    // Categoría
+    let cat, clsCss;
+    if (ecv || dm || riesgoPct >= 30) { cat='MUY ALTO'; clsCss='muy-alto'; }
+    else if (riesgoPct >= 20) { cat='ALTO'; clsCss='alto'; }
+    else if (riesgoPct >= 10) { cat='MODERADO'; clsCss='moderado'; }
+    else { cat='BAJO'; clsCss='bajo'; }
+
+    // Riesgo óptimo (sin tabaco, HDL ficticio 60, col <160, PAS <120, no tratado)
+    const ptsOpt = puntosEdad(edad,sexo) + 0 + (-1) + 0 + 0;
+    const riesgoOpt = puntoADriesgo(ptsOpt, sexo) * 100;
+
+    // Banner
+    document.getElementById('riesgo-banner').className = 'riesgo-banner ' + clsCss;
+    document.getElementById('res-pct').textContent = riesgoPct.toFixed(0) + '%';
+    document.getElementById('res-categoria').textContent = cat;
+    document.getElementById('res-sub').textContent = `Probabilidad de evento cardiovascular mayor en los próximos 10 años • Puntuación Framingham: ${total} pts`;
+
+    // Gauge
+    const arcLen = 345;
+    const frac = Math.min(riesgoPct / 35, 1);
+    document.getElementById('gauge-arc').setAttribute('stroke-dashoffset', arcLen * (1 - frac));
+    const ang = -90 + frac * 180;
+    document.getElementById('gauge-needle').setAttribute('transform', `rotate(${ang},130,130)`);
+
+    // KPIs
+    document.getElementById('kpi-puntos').textContent = total + ' pts';
+    document.getElementById('kpi-edad-vasc').textContent = edVasc <= edad ? `${edVasc} años ✅` : `${edVasc} años ⚠️`;
+    document.getElementById('kpi-riesgo-opt').textContent = riesgoOpt.toFixed(1) + '%';
+    document.getElementById('kpi-categ').textContent = cat;
+
+    // Factores
+    const facs = [
+      { lbl:'Edad', val: edad + ' años', presente: edad>45 },
+      { lbl:'Colesterol total', val: col + ' mg/dL', presente: col>=200 },
+      { lbl:'HDL', val: hdl + ' mg/dL', presente: hdl<50 },
+      { lbl:'PAS', val: pas + ' mmHg', presente: pas>=130 },
+      { lbl:'Tratamiento antihipertensivo', val: tto?'Sí':'No', presente: tto },
+      { lbl:'Tabaquismo activo', val: fuma?'Sí':'No', presente: fuma },
+      { lbl:'Diabetes mellitus', val: dm?'Sí':'No', presente: dm },
+      { lbl:'Historia familiar ECV', val: hf?'Sí':'No', presente: hf },
+      { lbl:'ECV establecida previa', val: ecv?'Sí':'No', presente: ecv },
+      { lbl:'Obesidad (IMC ≥ 30)', val: obeso?'Sí':'No', presente: obeso },
+      { lbl:'Insuficiencia renal crónica', val: irc?'Sí':'No', presente: irc },
+    ];
+    const fbox = document.getElementById('factores-box');
+    fbox.innerHTML = facs.map(f => `
+      <div class="factor-chip ${f.presente?'presente':'ausente'}">
+        <span>${f.presente?'⚠️':'✅'}</span>
+        <div><strong>${f.lbl}</strong><br><span style="font-weight:400">${f.val}</span></div>
+      </div>`).join('');
+
+    // Metas terapéuticas
+    let metaLDL = 160, metaPAS = 140, metaLDLlbl = '< 160 mg/dL', metaPASlbl = '< 140/90 mmHg';
+    if (cat==='MODERADO') { metaLDL=130; metaLDLlbl='< 130 mg/dL'; }
+    if (cat==='ALTO')     { metaLDL=100; metaLDLlbl='< 100 mg/dL'; metaPAS=130; metaPASlbl='< 130/80 mmHg'; }
+    if (cat==='MUY ALTO') { metaLDL=70;  metaLDLlbl='< 70 mg/dL';  metaPAS=130; metaPASlbl='< 130/80 mmHg'; }
+
+    const ldlOk = ldl && ldl < metaLDL;
+    const pasOk = pas < metaPAS;
+    document.getElementById('meta-tabla').innerHTML = `
+      <thead><tr><th>Parámetro</th><th>Valor actual</th><th>Meta para riesgo ${cat}</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr class="${ldlOk?'logrado':'no-logrado'}"><td>LDL colesterol</td><td>${ldl?ldl+' mg/dL':'No registrado'}</td><td>${metaLDLlbl}</td><td>${ldl?(ldlOk?'✅ Lograda':'⚠️ No lograda'):'—'}</td></tr>
+        <tr class="${pasOk?'logrado':'no-logrado'}"><td>Presión arterial sistólica</td><td>${pas} mmHg</td><td>${metaPASlbl}</td><td>${pasOk?'✅ Lograda':'⚠️ No lograda'}</td></tr>
+        <tr><td>Colesterol total</td><td>${col} mg/dL</td><td>&lt; 200 mg/dL</td><td>${col<200?'✅ Lograda':'⚠️ No lograda'}</td></tr>
+        <tr><td>HDL</td><td>${hdl} mg/dL</td><td>Hombres &gt; 40 / Mujeres &gt; 50</td><td>${(sexo==='M'&&hdl>40)||(sexo==='F'&&hdl>50)?'✅ Lograda':'⚠️ No lograda'}</td></tr>
+        ${trigli?`<tr><td>Triglicéridos</td><td>${trigli} mg/dL</td><td>&lt; 150 mg/dL</td><td>${trigli<150?'✅ Lograda':'⚠️ No lograda'}</td></tr>`:''}
+        ${gluc?`<tr><td>Glucemia en ayunas</td><td>${gluc} mg/dL</td><td>&lt; 100 mg/dL</td><td>${gluc<100?'✅ Lograda':'⚠️ No lograda'}</td></tr>`:''}
+      </tbody>`;
+
+    // Recomendaciones
+    const recs = [];
+    recs.push({ ico:'📋', txt:`<strong>Control en ${cat==='BAJO'?'5 años':cat==='MODERADO'?'1 año':'6 meses'}.</strong> Reevaluar score de Framingham periódicamente.` });
+    if (fuma) recs.push({ ico:'🚭', txt:`<strong>Cese del tabaquismo (prioridad máxima).</strong> El tabaquismo es el factor de riesgo modificable individual más importante. Ofrecer apoyo farmacológico (vareniclina, bupropión) y terapia conductual.` });
+    if (cat==='MODERADO'||cat==='ALTO'||cat==='MUY ALTO') recs.push({ ico:'💊', txt:`<strong>Estatinas.</strong> Meta LDL ${metaLDLlbl}. Iniciar con atorvastatina ${cat==='MUY ALTO'?'40–80':'10–20'} mg/día o rosuvastatina ${cat==='MUY ALTO'?'20–40':'10'} mg/día.` });
+    if (ecv||cat==='ALTO'||cat==='MUY ALTO') recs.push({ ico:'💊', txt:`<strong>AAS 100 mg/día</strong> en prevención secundaria o primaria de alto riesgo (valorar riesgo-beneficio individual vs. sangrado).` });
+    if (pas>=130) recs.push({ ico:'🫀', txt:`<strong>Control de presión arterial.</strong> Meta ${metaPASlbl}. ${tto?'Optimizar o escalar terapia antihipertensiva actual.':'Iniciar tratamiento farmacológico según guías.'}` });
+    if (col>=200 || (ldl && ldl>=metaLDL)) recs.push({ ico:'🥗', txt:`<strong>Dieta cardioprotectora.</strong> Patrón mediterráneo: aumentar consumo de vegetales, frutas, legumbres, pescado y aceite de oliva. Reducir grasas saturadas y grasas trans.` });
+    if (obeso) recs.push({ ico:'⚖️', txt:`<strong>Control de peso.</strong> Reducción del 5–10% del peso corporal mejora significativamente el perfil lipídico, la PA y la sensibilidad a la insulina.` });
+    recs.push({ ico:'🏃', txt:`<strong>Actividad física.</strong> Mínimo 150 min/semana de ejercicio aeróbico de moderada intensidad (30 min/día, 5 días). Reduce el riesgo CV un 30–35%.` });
+    if (dm) recs.push({ ico:'🩸', txt:`<strong>Control glucémico (DM).</strong> Meta HbA1c &lt; 7%. La DM es equivalente a enfermedad cardiovascular establecida: tratar como riesgo muy alto.` });
+    if (edVasc > edad + 5) recs.push({ ico:'⏰', txt:`<strong>Edad vascular estimada (${edVasc} años) mayor a la edad real (${edad} años).</strong> Los factores de riesgo presentes están envejeciendo el sistema cardiovascular prematuramente. Intervención intensiva.` });
+    if (cat==='MUY ALTO'||ecv) recs.push({ ico:'🏥', txt:`<strong>Referir a cardiología.</strong> Paciente de riesgo muy alto o con ECV establecida. Considerar perfil lipídico completo, prueba de esfuerzo y estudio de imagen según indicación.` });
+
+    document.getElementById('recomendaciones').innerHTML = recs.map(r => `
+      <li><span class="ico">${r.ico}</span><span>${r.txt}</span></li>`).join('');
+
+    document.getElementById('resultado').style.display = 'block';
+    document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetCalc() {
+    sexo = null;
+    document.getElementById('btn-m').classList.remove('sel');
+    document.getElementById('btn-f').classList.remove('sel');
+    ['edad','col-total','hdl','pas','ldl','trigli','glucemia'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.value='';
+    });
+    document.getElementById('tto-hta').value='no';
+    ['tabaco','dm','hf','ecv','obesidad','irc'].forEach(id=>{
+      document.getElementById(id).checked=false;
+      const lbl=document.getElementById('lbl-'+id);
+      if(lbl) lbl.classList.remove('activo');
+    });
+    document.getElementById('resultado').style.display='none';
+  }
+</script>
+</body>
+</html>
