@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Macronutrientes Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de macronutrientes, déficit calórico y distribución de proteínas, carbohidratos y grasas para nutricionistas colombianos." />
+  <meta name="keywords" content="calculadora macronutrientes colombia, deficit calorico, proteinas carbohidratos grasas, nutricionista colombia, plan nutricional colombia 2026" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --naranja: #e65100;
+      --naranja-medio: #f57c00;
+      --naranja-claro: #fff3e0;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #e65100 60%, #ff9800 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 110px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--naranja-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--naranja-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--naranja-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--naranja-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn { width: 100%; padding: 12px; background: var(--naranja-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--naranja); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--naranja-claro); border-left: 4px solid var(--naranja-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--naranja); }
+
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #e65100 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-kcal { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.15rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* BARRAS MACRO */
+    .macro-barras { margin-top: 1rem; }
+    .macro-barra-item { margin-bottom: 0.8rem; }
+    .macro-barra-header { display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px; }
+    .macro-barra-bg { height: 14px; background: rgba(255,255,255,0.15); border-radius: 7px; overflow: hidden; }
+    .macro-barra-fill { height: 100%; border-radius: 7px; transition: width 0.5s; }
+
+    /* DISTRIBUCIÓN COMIDAS */
+    .comidas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 0.7rem; margin-top: 1rem; }
+    .comida-card { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.8rem; text-align: center; font-size: 0.8rem; }
+    .comida-nombre { font-weight: 700; color: #ffe082; font-size: 0.85rem; margin-bottom: 4px; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--naranja-claro); }
+
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🥗 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Macronutrientes</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🥗 Nutricionistas y Dietistas</div>
+  <h1>Calculadora de Macronutrientes 2026</h1>
+  <p>Calcula la distribución óptima de proteínas, carbohidratos y grasas según el objetivo nutricional, el nivel de actividad física y las características del paciente.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">💪 Proteína, CHO, Grasa</span>
+    <span class="hero-chip">🔥 Déficit / Superávit</span>
+    <span class="hero-chip">🍽️ Distribución por comidas</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('macro', this)">🥗 Macronutrientes</button>
+    <button class="tab-btn" onclick="mostrarTab('deficit', this)">🔥 Déficit Calórico</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Referencia</button>
+  </div>
+
+  <!-- TAB 1: MACRONUTRIENTES -->
+  <div id="tab-macro" class="tab-panel active">
+    <div class="card">
+      <h2>🥗 Distribución de Macronutrientes</h2>
+      <div class="info-box">
+        <strong>¿Cómo funciona?</strong> Basado en el VCT (valor calórico total) del paciente, calcula los gramos de proteína, carbohidratos y grasas según el objetivo nutricional y el perfil del paciente.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Sexo biológico</label>
+          <select id="m-sexo">
+            <option value="M" selected>Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Edad (años)</label>
+          <input type="number" id="m-edad" value="30" min="15" max="80" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Peso actual (kg)</label>
+          <input type="number" id="m-peso" value="70" min="30" max="200" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Talla (cm)</label>
+          <input type="number" id="m-talla" value="170" min="140" max="220" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Nivel de actividad física</label>
+          <select id="m-actividad">
+            <option value="1.2">Sedentario (sin ejercicio)</option>
+            <option value="1.375" selected>Ligeramente activo (1–3 días/semana)</option>
+            <option value="1.55">Moderadamente activo (3–5 días/semana)</option>
+            <option value="1.725">Muy activo (6–7 días/semana)</option>
+            <option value="1.9">Extremadamente activo (2 veces/día)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Objetivo nutricional</label>
+          <select id="m-objetivo" onchange="actualizarDistribucion()">
+            <option value="perdida-peso">Pérdida de peso (déficit)</option>
+            <option value="mantenimiento" selected>Mantenimiento</option>
+            <option value="ganancia-muscular">Ganancia muscular (volumen)</option>
+            <option value="rendimiento">Rendimiento deportivo</option>
+            <option value="diabetes">Diabetes tipo 2</option>
+            <option value="renal">Enfermedad renal (restringido)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>% Proteína en la dieta</label>
+          <input type="number" id="m-pct-p" value="25" min="10" max="40" step="1" />
+          <span class="form-hint" id="hint-p">Mantenimiento: 20–25% | Volumen: 25–35%</span>
+        </div>
+        <div class="form-group">
+          <label>% Carbohidratos en la dieta</label>
+          <input type="number" id="m-pct-c" value="50" min="20" max="65" step="1" />
+          <span class="form-hint" id="hint-c">Mantenimiento: 45–55% | Diabetes: 30–40%</span>
+        </div>
+        <div class="form-group">
+          <label>% Grasas en la dieta</label>
+          <input type="number" id="m-pct-g" value="25" min="15" max="45" step="1" />
+          <span class="form-hint">La suma de P+C+G debe ser 100%</span>
+        </div>
+        <div class="form-group">
+          <label>VCT personalizado (kcal) — opcional</label>
+          <input type="number" id="m-vct-custom" value="0" min="0" step="50" />
+          <span class="form-hint">Si se deja en 0, se calcula automáticamente</span>
+        </div>
+        <div class="form-group">
+          <label>Número de comidas al día</label>
+          <select id="m-comidas">
+            <option value="3">3 comidas</option>
+            <option value="4">4 comidas</option>
+            <option value="5" selected>5 comidas</option>
+            <option value="6">6 comidas</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularMacros()">🥗 Calcular Macronutrientes</button>
+    </div>
+    <div id="resultado-macro" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: DÉFICIT CALÓRICO -->
+  <div id="tab-deficit" class="tab-panel">
+    <div class="card">
+      <h2>🔥 Calculadora de Déficit / Superávit Calórico</h2>
+      <div class="info-box">
+        <strong>Principio básico:</strong> 1 kg de grasa ≈ 7.700 kcal. Un déficit de 500–750 kcal/día genera una pérdida de 0.5–0.75 kg/semana de forma segura. Un superávit de 300–500 kcal/día favorece la ganancia muscular controlada.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Sexo biológico</label>
+          <select id="d-sexo">
+            <option value="M" selected>Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Edad (años)</label>
+          <input type="number" id="d-edad" value="30" min="15" max="80" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Peso actual (kg)</label>
+          <input type="number" id="d-peso" value="80" min="30" max="200" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Talla (cm)</label>
+          <input type="number" id="d-talla" value="170" min="140" max="220" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Peso objetivo (kg)</label>
+          <input type="number" id="d-peso-obj" value="70" min="30" max="200" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Nivel de actividad física</label>
+          <select id="d-actividad">
+            <option value="1.2">Sedentario</option>
+            <option value="1.375" selected>Ligeramente activo</option>
+            <option value="1.55">Moderadamente activo</option>
+            <option value="1.725">Muy activo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Velocidad de pérdida/ganancia deseada</label>
+          <select id="d-velocidad">
+            <option value="250">Muy lenta — 250 kcal/día (0.25 kg/semana)</option>
+            <option value="500" selected>Moderada — 500 kcal/día (0.5 kg/semana)</option>
+            <option value="750">Rápida — 750 kcal/día (0.75 kg/semana)</option>
+            <option value="1000">Muy rápida — 1000 kcal/día (1 kg/semana)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tipo de intervención</label>
+          <select id="d-tipo">
+            <option value="deficit" selected>Déficit calórico (pérdida de peso)</option>
+            <option value="superavit">Superávit calórico (ganancia muscular)</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularDeficit()">🔥 Calcular Plan Calórico</button>
+    </div>
+    <div id="resultado-deficit" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Distribución de Macronutrientes por Objetivo</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Objetivo</th><th>Proteína (%)</th><th>CHO (%)</th><th>Grasa (%)</th><th>Proteína (g/kg)</th></tr></thead>
+          <tbody>
+            <tr><td><b>Mantenimiento</b></td><td>20–25%</td><td>45–55%</td><td>25–30%</td><td>0.8–1.2 g/kg</td></tr>
+            <tr><td><b>Pérdida de peso</b></td><td>25–35%</td><td>35–45%</td><td>20–30%</td><td>1.2–1.6 g/kg</td></tr>
+            <tr><td><b>Ganancia muscular</b></td><td>25–35%</td><td>40–50%</td><td>20–30%</td><td>1.6–2.2 g/kg</td></tr>
+            <tr><td><b>Rendimiento deportivo</b></td><td>15–20%</td><td>55–65%</td><td>20–25%</td><td>1.4–1.7 g/kg</td></tr>
+            <tr><td><b>Diabetes tipo 2</b></td><td>20–30%</td><td>30–40%</td><td>30–40%</td><td>1.0–1.5 g/kg</td></tr>
+            <tr><td><b>Dieta cetogénica</b></td><td>20–25%</td><td>5–10%</td><td>65–75%</td><td>1.5–2.0 g/kg</td></tr>
+            <tr><td><b>Enfermedad renal</b></td><td>8–10%</td><td>55–65%</td><td>25–35%</td><td>0.6–0.8 g/kg</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Calorías por Gramo de Macronutriente (Atwater)</h2>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; text-align:center;">
+        <div style="background:var(--naranja-claro); border-radius:10px; padding:1.2rem;">
+          <div style="font-size:2rem;">🥩</div>
+          <div style="font-size:1.5rem; font-weight:900; color:var(--naranja);">4 kcal/g</div>
+          <div style="font-weight:700;">Proteína</div>
+          <div style="font-size:0.8rem; color:var(--texto-suave);">Aminoácidos esenciales, músculo, enzimas</div>
+        </div>
+        <div style="background:#fff8e1; border-radius:10px; padding:1.2rem;">
+          <div style="font-size:2rem;">🍚</div>
+          <div style="font-size:1.5rem; font-weight:900; color:#f9a825;">4 kcal/g</div>
+          <div style="font-weight:700;">Carbohidratos</div>
+          <div style="font-size:0.8rem; color:var(--texto-suave);">Principal fuente de energía, fibra</div>
+        </div>
+        <div style="background:#e8f5e9; border-radius:10px; padding:1.2rem;">
+          <div style="font-size:2rem;">🥑</div>
+          <div style="font-size:1.5rem; font-weight:900; color:#2e7d32;">9 kcal/g</div>
+          <div style="font-weight:700;">Grasa</div>
+          <div style="font-size:0.8rem; color:var(--texto-suave);">Hormonas, vitaminas liposolubles, reserva</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Factores de Actividad Física (Harris-Benedict)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Nivel</th><th>Factor</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td>Sedentario</td><td>×1.2</td><td>Sin ejercicio, trabajo de escritorio</td></tr>
+            <tr><td>Ligeramente activo</td><td>×1.375</td><td>Ejercicio ligero 1–3 días/semana</td></tr>
+            <tr><td>Moderadamente activo</td><td>×1.55</td><td>Ejercicio moderado 3–5 días/semana</td></tr>
+            <tr><td>Muy activo</td><td>×1.725</td><td>Ejercicio intenso 6–7 días/semana</td></tr>
+            <tr><td>Extremadamente activo</td><td>×1.9</td><td>Entrenamiento 2 veces/día, trabajo físico</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los cálculos de macronutrientes son estimaciones basadas en fórmulas de referencia. El plan nutricional definitivo debe ser elaborado y supervisado por un <strong>Nutricionista-Dietista graduado</strong>, ajustado a las necesidades individuales, condición clínica y preferencias del paciente. Referencias: Harris-Benedict 1919, Mifflin-St Jeor 1990, DRI USDA 2020.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n, dec=0) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function fmtD(n, d=1) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+
+function calcTMB(sexo, peso, talla, edad) {
+  // Mifflin-St Jeor (más precisa que Harris-Benedict)
+  if (sexo === 'M') return 10*peso + 6.25*talla - 5*edad + 5;
+  return 10*peso + 6.25*talla - 5*edad - 161;
+}
+
+function actualizarDistribucion() {
+  const obj = document.getElementById('m-objetivo').value;
+  const dist = {
+    'perdida-peso':      { p:30, c:40, g:30, hintP:'Pérdida: 25–35% proteína', hintC:'Pérdida: 35–45% carbohidratos' },
+    'mantenimiento':     { p:25, c:50, g:25, hintP:'Mantenimiento: 20–25%', hintC:'Mantenimiento: 45–55%' },
+    'ganancia-muscular': { p:30, c:45, g:25, hintP:'Volumen: 25–35% proteína', hintC:'Volumen: 40–50% carbohidratos' },
+    'rendimiento':       { p:18, c:57, g:25, hintP:'Deporte: 15–20% proteína', hintC:'Deporte: 55–65% carbohidratos' },
+    'diabetes':          { p:25, c:35, g:40, hintP:'Diabetes: 20–30%', hintC:'Diabetes: 30–40% CHO (bajo)' },
+    'renal':             { p:10, c:60, g:30, hintP:'Renal: 8–10% (restringido)', hintC:'Renal: 55–65%' },
+  };
+  const d = dist[obj] || dist['mantenimiento'];
+  document.getElementById('m-pct-p').value = d.p;
+  document.getElementById('m-pct-c').value = d.c;
+  document.getElementById('m-pct-g').value = d.g;
+  document.getElementById('hint-p').textContent = d.hintP;
+  document.getElementById('hint-c').textContent = d.hintC;
+}
+
+function calcularMacros() {
+  const sexo    = document.getElementById('m-sexo').value;
+  const edad    = parseFloat(document.getElementById('m-edad').value) || 30;
+  const peso    = parseFloat(document.getElementById('m-peso').value) || 70;
+  const talla   = parseFloat(document.getElementById('m-talla').value) || 170;
+  const activ   = parseFloat(document.getElementById('m-actividad').value) || 1.375;
+  const obj     = document.getElementById('m-objetivo').value;
+  const pctP    = parseFloat(document.getElementById('m-pct-p').value) || 25;
+  const pctC    = parseFloat(document.getElementById('m-pct-c').value) || 50;
+  const pctG    = parseFloat(document.getElementById('m-pct-g').value) || 25;
+  const vctCustom = parseFloat(document.getElementById('m-vct-custom').value) || 0;
+  const nComidas = parseInt(document.getElementById('m-comidas').value) || 5;
+
+  if (pctP + pctC + pctG !== 100) { alert(`La suma de macronutrientes es ${pctP+pctC+pctG}%. Debe ser exactamente 100%.`); return; }
+
+  const tmb = calcTMB(sexo, peso, talla, edad);
+  const get  = tmb * activ;
+  const vct  = vctCustom > 0 ? vctCustom : Math.round(get);
+
+  const kcalP = vct * pctP / 100;
+  const kcalC = vct * pctC / 100;
+  const kcalG = vct * pctG / 100;
+
+  const grP = kcalP / 4;
+  const grC = kcalC / 4;
+  const grG = kcalG / 9;
+
+  const gPKg = grP / peso;
+  const gCKg = grC / peso;
+  const gGKg = grG / peso;
+
+  // Distribución por comidas (proporciones típicas)
+  const distribPorComidas = {
+    3: [{ nombre:'Desayuno', pct:0.30 }, { nombre:'Almuerzo', pct:0.40 }, { nombre:'Cena', pct:0.30 }],
+    4: [{ nombre:'Desayuno', pct:0.25 }, { nombre:'Almuerzo', pct:0.35 }, { nombre:'Merienda', pct:0.15 }, { nombre:'Cena', pct:0.25 }],
+    5: [{ nombre:'Desayuno', pct:0.25 }, { nombre:'Media mañana', pct:0.10 }, { nombre:'Almuerzo', pct:0.30 }, { nombre:'Merienda', pct:0.10 }, { nombre:'Cena', pct:0.25 }],
+    6: [{ nombre:'Desayuno', pct:0.20 }, { nombre:'Media mañana', pct:0.10 }, { nombre:'Almuerzo', pct:0.25 }, { nombre:'Merienda', pct:0.10 }, { nombre:'Cena', pct:0.25 }, { nombre:'Colación noche', pct:0.10 }],
+  };
+  const comidas = distribPorComidas[nComidas] || distribPorComidas[5];
+
+  document.getElementById('resultado-macro').style.display = 'block';
+  document.getElementById('resultado-macro').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Distribución Macronutrientes — ${obj.replace(/-/g,' ')} | ${peso}kg | ${talla}cm</div>
+      <div class="resultado-kcal">${fmt(vct)} kcal/día</div>
+      <div class="resultado-sub">VCT diario — TMB: ${fmt(tmb)} kcal | GET: ${fmt(get)} kcal</div>
+
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor" style="color:#ef9a9a;">${fmt(grP)}g</div><div class="resultado-label">Proteína (${pctP}%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor" style="color:#ffe082;">${fmt(grC)}g</div><div class="resultado-label">Carbohidratos (${pctC}%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor" style="color:#a5d6a7;">${fmt(grG)}g</div><div class="resultado-label">Grasas (${pctG}%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(gPKg)}g/kg</div><div class="resultado-label">Proteína por kg</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(gCKg)}g/kg</div><div class="resultado-label">CHO por kg</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(gGKg)}g/kg</div><div class="resultado-label">Grasa por kg</div></div>
+      </div>
+
+      <div class="macro-barras">
+        <div class="macro-barra-item">
+          <div class="macro-barra-header"><span>🥩 Proteína — ${fmt(grP)}g (${pctP}%)</span><span>${fmt(kcalP)} kcal</span></div>
+          <div class="macro-barra-bg"><div class="macro-barra-fill" style="width:${pctP}%; background:#ef5350;"></div></div>
+        </div>
+        <div class="macro-barra-item">
+          <div class="macro-barra-header"><span>🍚 Carbohidratos — ${fmt(grC)}g (${pctC}%)</span><span>${fmt(kcalC)} kcal</span></div>
+          <div class="macro-barra-bg"><div class="macro-barra-fill" style="width:${pctC}%; background:#ffa726;"></div></div>
+        </div>
+        <div class="macro-barra-item">
+          <div class="macro-barra-header"><span>🥑 Grasas — ${fmt(grG)}g (${pctG}%)</span><span>${fmt(kcalG)} kcal</span></div>
+          <div class="macro-barra-bg"><div class="macro-barra-fill" style="width:${pctG}%; background:#66bb6a;"></div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <div style="font-size:0.78rem; opacity:0.7; margin-bottom:0.5rem; text-transform:uppercase;">Distribución por ${nComidas} comidas</div>
+        <div class="comidas-grid">
+          ${comidas.map(c => `<div class="comida-card">
+            <div class="comida-nombre">${c.nombre}</div>
+            <div>${fmt(vct*c.pct)} kcal</div>
+            <div style="font-size:0.75rem; opacity:0.8;">P: ${fmt(grP*c.pct)}g | C: ${fmt(grC*c.pct)}g | G: ${fmt(grG*c.pct)}g</div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="resultado-detalle">
+        <b>Fórmula Mifflin-St Jeor:</b><br>
+        TMB = 10×${peso} + 6.25×${talla} − 5×${edad} ${sexo==='M'?'+ 5':'− 161'} = <b>${fmt(tmb)} kcal</b><br>
+        GET = ${fmt(tmb)} × ${activ} (factor actividad) = <b>${fmt(get)} kcal</b><br>
+        VCT aplicado: <b>${fmt(vct)} kcal/día</b><br>
+        Proteína: ${vct} × ${pctP}% ÷ 4 = <b>${fmt(grP)}g/día (${fmtD(gPKg)}g/kg)</b><br>
+        Carbohidratos: ${vct} × ${pctC}% ÷ 4 = <b>${fmt(grC)}g/día</b><br>
+        Grasas: ${vct} × ${pctG}% ÷ 9 = <b>${fmt(grG)}g/día</b>
+      </div>
+    </div>`;
+}
+
+function calcularDeficit() {
+  const sexo     = document.getElementById('d-sexo').value;
+  const edad     = parseFloat(document.getElementById('d-edad').value) || 30;
+  const peso     = parseFloat(document.getElementById('d-peso').value) || 80;
+  const talla    = parseFloat(document.getElementById('d-talla').value) || 170;
+  const pesoObj  = parseFloat(document.getElementById('d-peso-obj').value) || 70;
+  const activ    = parseFloat(document.getElementById('d-actividad').value) || 1.375;
+  const veloc    = parseInt(document.getElementById('d-velocidad').value) || 500;
+  const tipo     = document.getElementById('d-tipo').value;
+
+  const tmb  = calcTMB(sexo, peso, talla, edad);
+  const get   = tmb * activ;
+  const diferencia = tipo === 'deficit' ? -veloc : +veloc;
+  const vctObjetivo = get + diferencia;
+  const difPeso = pesoObj - peso;
+  const kcalTotales = Math.abs(difPeso) * 7700;
+  const diasEstimados = Math.round(kcalTotales / Math.abs(veloc));
+  const semanasEstimadas = Math.round(diasEstimados / 7);
+
+  const esDeficit = tipo === 'deficit';
+  const perdSemana = veloc / 7700 * 7;
+
+  // Macros sugeridos para el objetivo
+  const grP = Math.round(peso * (esDeficit ? 1.6 : 1.8));
+  const kcalP = grP * 4;
+  const kcalG = vctObjetivo * 0.25;
+  const grG = Math.round(kcalG / 9);
+  const kcalC = vctObjetivo - kcalP - kcalG;
+  const grC = Math.round(kcalC / 4);
+
+  document.getElementById('resultado-deficit').style.display = 'block';
+  document.getElementById('resultado-deficit').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">${esDeficit ? 'Déficit Calórico — Pérdida de Peso' : 'Superávit Calórico — Ganancia Muscular'}</div>
+      <div class="resultado-kcal">${fmt(Math.round(vctObjetivo))} kcal/día</div>
+      <div class="resultado-sub">VCT objetivo con ${esDeficit?'déficit':'superávit'} de ${veloc} kcal/día vs GET: ${fmt(Math.round(get))} kcal</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(Math.round(get))}</div><div class="resultado-label">GET (mantenimiento)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${esDeficit?'−':'+'}${veloc}</div><div class="resultado-label">${esDeficit?'Déficit':'Superávit'} diario</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(Math.round(vctObjetivo))}</div><div class="resultado-label">VCT objetivo/día</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(perdSemana)}kg/sem</div><div class="resultado-label">${esDeficit?'Pérdida':'Ganancia'} estimada</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${diasEstimados} días</div><div class="resultado-label">Para llegar a ${pesoObj}kg</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${semanasEstimadas} semanas</div><div class="resultado-label">≈ ${Math.round(semanasEstimadas/4)} meses</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Cálculo:</b><br>
+        Peso actual: ${peso}kg → Peso objetivo: ${pesoObj}kg (diferencia: ${difPeso > 0?'+':''}${fmt(difPeso,1)}kg)<br>
+        Energía requerida: ${fmt(Math.abs(difPeso))}kg × 7.700 kcal/kg = <b>${fmt(kcalTotales)} kcal totales</b><br>
+        ${esDeficit?'Déficit':'Superávit'}: ${veloc} kcal/día → <b>${fmt(diasEstimados)} días (${semanasEstimadas} semanas)</b><br><br>
+        <b>Macros sugeridos para ${vctObjetivo > 0 ? fmt(Math.round(vctObjetivo)) : '—'} kcal:</b><br>
+        🥩 Proteína: ${grP}g (${fmtD(grP/peso)}g/kg × ${peso}kg) = ${fmt(kcalP)} kcal<br>
+        🥑 Grasas: ${grG}g (25% del VCT) = ${fmt(kcalG)} kcal<br>
+        🍚 Carbohidratos: ${grC}g (resto) = ${fmt(kcalC)} kcal<br>
+        ${veloc > 750 && esDeficit ? `⚠️ Un déficit de ${veloc} kcal/día puede ser agresivo. Se recomienda máximo 750 kcal/día para preservar masa muscular.` : '✅ Velocidad de pérdida/ganancia segura y sostenible.'}
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
