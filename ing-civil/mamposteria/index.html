@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Mampostería Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de mampostería para ingenieros civiles colombianos. Bloques, ladrillos, mortero, pega y pañete por m². Precios 2026." />
+  <meta name="keywords" content="calculadora mamposteria colombia, bloques ladrillos m2 colombia, mortero pega construccion, ingeniero civil colombia, presupuesto muros colombia 2026" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --cafe: #5d4037;
+      --cafe-medio: #795548;
+      --cafe-claro: #efebe9;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #5d4037 60%, #8d6e63 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 110px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--cafe-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--cafe-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--cafe-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--cafe-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--cafe-medio); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--cafe); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--cafe-claro); border-left: 4px solid var(--cafe-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--cafe); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #5d4037 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-total { font-size: 2.8rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.2rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .tabla-resultado { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .tabla-resultado th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: left; }
+    .tabla-resultado th:not(:first-child) { text-align: right; }
+    .tabla-resultado td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .tabla-resultado td:not(:first-child) { text-align: right; }
+    .tabla-resultado tr.total td { background: rgba(255,215,0,0.2); font-weight: 800; color: #ffe082; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--cafe-claro); }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🧱 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Mampostería</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🧱 Ingenieros Civiles y Constructores</div>
+  <h1>Calculadora de Mampostería 2026</h1>
+  <p>Calcula bloques, ladrillos, mortero de pega, pañete y costos para muros en Colombia. Precios de referencia 2026. Incluye descuentos por vanos.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Precios Colombia 2026</span>
+    <span class="hero-chip">🧱 Bloques y ladrillos</span>
+    <span class="hero-chip">🪣 Mortero y pañete</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('muro', this)">🧱 Cálculo de Muro</button>
+    <button class="tab-btn" onclick="mostrarTab('panete', this)">🪣 Pañete y Repello</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Precios y Rendimientos</button>
+  </div>
+
+  <!-- TAB 1: MURO -->
+  <div id="tab-muro" class="tab-panel active">
+    <div class="card">
+      <h2>🧱 Calculadora de Muro — Bloques y Ladrillos</h2>
+      <div class="info-box">
+        <strong>¿Cómo funciona?</strong> Ingresa las dimensiones del muro y el tipo de unidad de mampostería. La calculadora entrega la cantidad de bloques o ladrillos, el mortero de pega, cemento, arena y el costo estimado.
+      </div>
+
+      <h3>Dimensiones del muro</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Longitud total del muro (m)</label>
+          <input type="number" id="m-longitud" value="10" min="0.5" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Altura del muro (m)</label>
+          <input type="number" id="m-altura" value="2.5" min="0.5" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>N° de puertas (0.90 × 2.10 m)</label>
+          <input type="number" id="m-puertas" value="1" min="0" step="1" />
+        </div>
+        <div class="form-group">
+          <label>N° de ventanas (1.20 × 1.20 m)</label>
+          <input type="number" id="m-ventanas" value="1" min="0" step="1" />
+        </div>
+        <div class="form-group">
+          <label>N° de muros (mismas dimensiones)</label>
+          <input type="number" id="m-cantidad" value="1" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Desperdicio (%)</label>
+          <input type="number" id="m-desperdicio" value="5" min="0" max="20" step="1" />
+        </div>
+      </div>
+
+      <h3>Tipo de mampostería</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de unidad</label>
+          <select id="m-tipo" onchange="actualizarTipo()">
+            <option value="bloque10">Bloque de concreto 10×20×40 cm</option>
+            <option value="bloque15">Bloque de concreto 15×20×40 cm</option>
+            <option value="bloque20">Bloque de concreto 20×20×40 cm</option>
+            <option value="ladrillo-tolete">Ladrillo tolete (24×12×6 cm)</option>
+            <option value="ladrillo-farol" selected>Ladrillo farol / estructural (25×12×8 cm)</option>
+            <option value="ladrillo-prensado">Ladrillo prensado (20×10×5 cm)</option>
+            <option value="ladrillo-macizo">Ladrillo macizo (25×13×5 cm)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Precio por unidad ($ COP)</label>
+          <input type="number" id="m-precio-unidad" value="1800" min="100" step="50" />
+        </div>
+        <div class="form-group">
+          <label>Precio cemento ($ COP/50kg)</label>
+          <input type="number" id="m-precio-cemento" value="35000" min="0" step="1000" />
+        </div>
+        <div class="form-group">
+          <label>Precio arena ($ COP/m³)</label>
+          <input type="number" id="m-precio-arena" value="80000" min="0" step="5000" />
+        </div>
+        <div class="form-group">
+          <label>Junta de mortero (cm)</label>
+          <input type="number" id="m-junta" value="1.5" min="0.5" max="3" step="0.5" />
+          <span class="form-hint">Junta estándar: 1.0–1.5 cm</span>
+        </div>
+        <div class="form-group">
+          <label>Proporción mortero pega (C:A)</label>
+          <select id="m-proporcion">
+            <option value="1:3">1:3 (resistente — columnas, muros estructurales)</option>
+            <option value="1:4" selected>1:4 (estándar — muros divisorios)</option>
+            <option value="1:5">1:5 (economía — muros no estructurales)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularMuro()">🧱 Calcular Mampostería</button>
+    </div>
+    <div id="resultado-muro" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: PAÑETE -->
+  <div id="tab-panete" class="tab-panel">
+    <div class="card">
+      <h2>🪣 Calculadora de Pañete y Repello</h2>
+      <div class="info-box">
+        <strong>¿Qué incluye?</strong> Calcula el mortero de pañete (revoque), el número de bultos de cemento, arena y el costo total para revestir muros por ambas caras o una sola cara.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Área total a pañetar (m²)</label>
+          <input type="number" id="p-area" value="50" min="1" step="1" />
+          <span class="form-hint">O calcular automáticamente desde el muro</span>
+        </div>
+        <div class="form-group">
+          <label>¿Pañete en cuántas caras?</label>
+          <select id="p-caras">
+            <option value="1">1 cara (un solo lado)</option>
+            <option value="2" selected>2 caras (ambos lados)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Espesor del pañete (cm)</label>
+          <input type="number" id="p-espesor" value="1.5" min="0.5" max="3" step="0.5" />
+          <span class="form-hint">Pañete liso: 1.0–1.5 cm | Pañete rústico: 2.0–2.5 cm</span>
+        </div>
+        <div class="form-group">
+          <label>Tipo de pañete</label>
+          <select id="p-tipo">
+            <option value="liso" selected>Liso — proporción 1:3 (C:A)</option>
+            <option value="rustico">Rústico — proporción 1:4 (C:A)</option>
+            <option value="impermeabilizante">Impermeabilizante — 1:2 + aditivo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Precio cemento ($ COP/50kg)</label>
+          <input type="number" id="p-precio-cem" value="35000" min="0" step="1000" />
+        </div>
+        <div class="form-group">
+          <label>Precio arena de pañete ($ COP/m³)</label>
+          <input type="number" id="p-precio-arena" value="95000" min="0" step="5000" />
+          <span class="form-hint">Arena fina lavada para pañete: $90.000–$110.000/m³</span>
+        </div>
+        <div class="form-group">
+          <label>Mano de obra pañete ($ COP/m²)</label>
+          <input type="number" id="p-mo" value="18000" min="0" step="1000" />
+          <span class="form-hint">Referencia Colombia 2026: $15.000–$22.000/m²</span>
+        </div>
+        <div class="form-group">
+          <label>Desperdicio (%)</label>
+          <input type="number" id="p-desperdicio" value="10" min="0" max="25" step="1" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularPanete()">🪣 Calcular Pañete</button>
+    </div>
+    <div id="resultado-panete" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Tipos de Mampostería — Dimensiones y Rendimientos Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead>
+            <tr>
+              <th>Tipo</th><th>Dimensiones (cm)</th><th>Und/m²</th>
+              <th>Precio 2026</th><th>Uso típico</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><b>Bloque concreto 10</b></td><td>10×20×40</td><td>12.5</td><td>$1.200–$1.500</td><td>Muros divisorios interiores</td></tr>
+            <tr><td><b>Bloque concreto 15</b></td><td>15×20×40</td><td>12.5</td><td>$1.600–$2.000</td><td>Muros exteriores y de fachada</td></tr>
+            <tr><td><b>Bloque concreto 20</b></td><td>20×20×40</td><td>12.5</td><td>$2.200–$2.800</td><td>Muros estructurales y de carga</td></tr>
+            <tr><td><b>Ladrillo tolete</b></td><td>24×12×6</td><td>35–40</td><td>$600–$900</td><td>Muros comunes, fachadas</td></tr>
+            <tr><td><b>Ladrillo farol</b></td><td>25×12×8</td><td>28–32</td><td>$1.500–$2.200</td><td>Muros estructurales, fachadas</td></tr>
+            <tr><td><b>Ladrillo prensado</b></td><td>20×10×5</td><td>45–50</td><td>$400–$700</td><td>Muros divisorios ligeros</td></tr>
+            <tr><td><b>Ladrillo macizo</b></td><td>25×13×5</td><td>38–42</td><td>$700–$1.000</td><td>Muros de carga, chimeneas</td></tr>
+            <tr><td><b>Bloque tierra comprimida (BTC)</b></td><td>29×14×9</td><td>20–24</td><td>$1.000–$1.400</td><td>Muros ecológicos, fachadas</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Mortero de Pega — Proporciones y Rendimientos</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Proporción C:A</th><th>Cemento (kg/m³ mortero)</th><th>Arena (m³/m³ mortero)</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td><b>1:2</b></td><td>560 kg (11.2 bultos)</td><td>0.78 m³</td><td>Impermeabilizante, tanques, piscinas</td></tr>
+            <tr><td><b>1:3</b></td><td>440 kg (8.8 bultos)</td><td>0.92 m³</td><td>Muros estructurales, pegue de bloque estructural</td></tr>
+            <tr><td><b>1:4</b></td><td>350 kg (7.0 bultos)</td><td>0.98 m³</td><td>Muros divisorios, pañete estándar</td></tr>
+            <tr><td><b>1:5</b></td><td>290 kg (5.8 bultos)</td><td>1.00 m³</td><td>Muros no estructurales, rellenos</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Mano de Obra Mampostería — Colombia 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Actividad</th><th>Rendimiento</th><th>Precio MO 2026 ($ COP/m²)</th></tr></thead>
+          <tbody>
+            <tr><td>Pega de bloque de concreto</td><td>6–8 m²/jornal</td><td>$18.000–$25.000/m²</td></tr>
+            <tr><td>Pega de ladrillo farol</td><td>5–7 m²/jornal</td><td>$20.000–$28.000/m²</td></tr>
+            <tr><td>Pega de ladrillo tolete</td><td>4–6 m²/jornal</td><td>$22.000–$30.000/m²</td></tr>
+            <tr><td>Pañete liso (una cara)</td><td>8–12 m²/jornal</td><td>$15.000–$22.000/m²</td></tr>
+            <tr><td>Pañete rústico</td><td>10–15 m²/jornal</td><td>$12.000–$18.000/m²</td></tr>
+            <tr><td>Dintel prefabricado (instalación)</td><td>4–6 und/jornal</td><td>$8.000–$15.000/und</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Las cantidades y costos son estimaciones basadas en rendimientos típicos del mercado colombiano 2026. Para presupuestos oficiales, use mediciones reales y cotizaciones actualizadas con proveedores locales. Diseño y especificaciones bajo responsabilidad de <strong>Ingeniero Civil o Arquitecto matriculado ante COPNIA o SCA</strong>.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n, dec=2) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function fmtInt(n) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+const tiposUnidad = {
+  'bloque10':        { largo:0.40, alto:0.20, ancho:0.10, nombre:'Bloque concreto 10×20×40 cm', precio:1350 },
+  'bloque15':        { largo:0.40, alto:0.20, ancho:0.15, nombre:'Bloque concreto 15×20×40 cm', precio:1800 },
+  'bloque20':        { largo:0.40, alto:0.20, ancho:0.20, nombre:'Bloque concreto 20×20×40 cm', precio:2500 },
+  'ladrillo-tolete': { largo:0.24, alto:0.06, ancho:0.12, nombre:'Ladrillo tolete 24×12×6 cm', precio:750 },
+  'ladrillo-farol':  { largo:0.25, alto:0.08, ancho:0.12, nombre:'Ladrillo farol 25×12×8 cm', precio:1800 },
+  'ladrillo-prensado':{ largo:0.20, alto:0.05, ancho:0.10, nombre:'Ladrillo prensado 20×10×5 cm', precio:550 },
+  'ladrillo-macizo': { largo:0.25, alto:0.05, ancho:0.13, nombre:'Ladrillo macizo 25×13×5 cm', precio:850 },
+};
+
+const proporciones = { '1:3':{cem:440,arena:0.92}, '1:4':{cem:350,arena:0.98}, '1:5':{cem:290,arena:1.0} };
+
+function actualizarTipo() {
+  const tipo = document.getElementById('m-tipo').value;
+  const u = tiposUnidad[tipo];
+  if (u) document.getElementById('m-precio-unidad').value = u.precio;
+}
+
+function calcularMuro() {
+  const longitud  = parseFloat(document.getElementById('m-longitud').value) || 0;
+  const altura    = parseFloat(document.getElementById('m-altura').value) || 0;
+  const puertas   = parseInt(document.getElementById('m-puertas').value) || 0;
+  const ventanas  = parseInt(document.getElementById('m-ventanas').value) || 0;
+  const cantidad  = parseInt(document.getElementById('m-cantidad').value) || 1;
+  const desp      = parseFloat(document.getElementById('m-desperdicio').value) / 100;
+  const tipo      = document.getElementById('m-tipo').value;
+  const precioU   = parseFloat(document.getElementById('m-precio-unidad').value) || 0;
+  const precioCem = parseFloat(document.getElementById('m-precio-cemento').value) || 35000;
+  const precioAr  = parseFloat(document.getElementById('m-precio-arena').value) || 80000;
+  const junta     = parseFloat(document.getElementById('m-junta').value) / 100;
+  const proporcion= document.getElementById('m-proporcion').value;
+
+  const u = tiposUnidad[tipo];
+  if (!u) return;
+
+  // Área bruta por muro
+  const areaBruta = longitud * altura;
+  // Descuento vanos
+  const areaVanos = puertas * (0.90 * 2.10) + ventanas * (1.20 * 1.20);
+  const areaNeta  = Math.max(0, areaBruta - areaVanos);
+  const areaTotal = areaNeta * cantidad;
+
+  // Unidades por m²
+  // Área de cada unidad = (largo + junta) × (alto + junta)
+  const areaUnidad = (u.largo + junta) * (u.alto + junta);
+  const undPorM2   = 1 / areaUnidad;
+  const undNetas   = areaTotal * undPorM2;
+  const undConDesp = Math.ceil(undNetas * (1 + desp));
+
+  // Volumen de mortero de pega
+  // Volumen total del muro - volumen de las unidades = volumen de juntas
+  const volMuro      = areaTotal * u.ancho;
+  const volUnidades  = undNetas * u.largo * u.alto * u.ancho;
+  const volMortero   = Math.max(0, volMuro - volUnidades) * (1 + desp);
+
+  // Materiales del mortero
+  const prop = proporciones[proporcion];
+  const cemKg    = volMortero * prop.cem;
+  const cemBultos= Math.ceil(cemKg / 50);
+  const arenM3   = volMortero * prop.arena;
+
+  // Costos
+  const costoUnidades = undConDesp * precioU;
+  const costoCem      = cemBultos * precioCem;
+  const costoArena    = arenM3 * precioAr;
+  const costoMateriales = costoUnidades + costoCem + costoArena;
+  const costoM2       = costoMateriales / areaTotal;
+
+  // Mano de obra estimada
+  const moM2    = tipo.includes('bloque') ? 22000 : tipo.includes('tolete') ? 26000 : 24000;
+  const costoMO = areaTotal * moM2;
+  const costoTotal = costoMateriales + costoMO;
+
+  document.getElementById('resultado-muro').style.display = 'block';
+  document.getElementById('resultado-muro').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">${u.nombre} — ${cantidad} muro(s) de ${longitud}×${altura} m</div>
+      <div class="resultado-total">${fmtInt(undConDesp)} und</div>
+      <div class="resultado-sub">${u.nombre} con ${(desp*100).toFixed(0)}% desperdicio — Área neta: ${fmt(areaTotal,2)} m²</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(areaBruta*cantidad,2)} m²</div><div class="resultado-label">Área bruta total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(areaVanos*cantidad,2)} m²</div><div class="resultado-label">Área de vanos (−)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(areaTotal,2)} m²</div><div class="resultado-label">Área neta a construir</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(undPorM2,1)}/m²</div><div class="resultado-label">Unidades por m²</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtInt(undConDesp)}</div><div class="resultado-label">Unidades a comprar</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(volMortero,3)} m³</div><div class="resultado-label">Mortero de pega</div></div>
+      </div>
+      <table class="tabla-resultado" style="margin-top:1rem;">
+        <thead><tr><th>Material</th><th>Cantidad</th><th>Precio unit.</th><th>Costo ($)</th></tr></thead>
+        <tbody>
+          <tr><td>${u.nombre}</td><td>${fmtInt(undConDesp)} und</td><td>$ ${fmtInt(precioU)}</td><td>$ ${fmtInt(costoUnidades)}</td></tr>
+          <tr><td>Cemento Portland (${proporcion})</td><td>${cemBultos} bultos 50kg</td><td>$ ${fmtInt(precioCem)}</td><td>$ ${fmtInt(costoCem)}</td></tr>
+          <tr><td>Arena de pega</td><td>${fmt(arenM3,3)} m³</td><td>$ ${fmtInt(precioAr)}/m³</td><td>$ ${fmtInt(costoArena)}</td></tr>
+          <tr><td>Mano de obra (ref.)</td><td>${fmt(areaTotal,2)} m²</td><td>$ ${fmtInt(moM2)}/m²</td><td>$ ${fmtInt(costoMO)}</td></tr>
+          <tr class="total"><td>TOTAL</td><td></td><td>$ ${fmtInt(costoM2)}/m²</td><td>$ ${fmtInt(costoTotal)}</td></tr>
+        </tbody>
+      </table>
+      <div class="resultado-detalle">
+        <b>Cálculo unidades:</b><br>
+        Área unidad = (${u.largo*100}+${junta*100}) × (${u.alto*100}+${junta*100}) cm = ${fmt(areaUnidad*10000,2)} cm² → ${fmt(undPorM2,2)} und/m²<br>
+        Unidades netas: ${fmt(areaTotal,2)} m² × ${fmt(undPorM2,2)} = ${fmt(undNetas,1)} und → Con ${(desp*100).toFixed(0)}% desperdicio: <b>${fmtInt(undConDesp)} und</b><br>
+        Mortero pega: ${fmt(volMortero,3)} m³ → Cemento: <b>${cemBultos} bultos</b> | Arena: <b>${fmt(arenM3,3)} m³</b>
+      </div>
+    </div>`;
+
+  // Pasar área al pañete
+  document.getElementById('p-area').value = fmt(areaNeta*cantidad,1);
+}
+
+function calcularPanete() {
+  const area     = parseFloat(document.getElementById('p-area').value) || 0;
+  const caras    = parseInt(document.getElementById('p-caras').value) || 2;
+  const espesor  = parseFloat(document.getElementById('p-espesor').value) / 100;
+  const tipoPan  = document.getElementById('p-tipo').value;
+  const precioCem= parseFloat(document.getElementById('p-precio-cem').value) || 35000;
+  const precioAr = parseFloat(document.getElementById('p-precio-arena').value) || 95000;
+  const mo       = parseFloat(document.getElementById('p-mo').value) || 18000;
+  const desp     = parseFloat(document.getElementById('p-desperdicio').value) / 100;
+
+  const propMap = { liso:{ rel:'1:3', cem:440, ar:0.92 }, rustico:{ rel:'1:4', cem:350, ar:0.98 }, impermeabilizante:{ rel:'1:2', cem:560, ar:0.78 } };
+  const prop = propMap[tipoPan];
+
+  const areaTotal = area * caras;
+  const volMortero = areaTotal * espesor * (1 + desp);
+  const cemKg     = volMortero * prop.cem;
+  const cemBultos = Math.ceil(cemKg / 50);
+  const arenM3    = volMortero * prop.ar;
+
+  const costoCem  = cemBultos * precioCem;
+  const costoAr   = arenM3 * precioAr;
+  const costoMO   = areaTotal * mo;
+  const costoMat  = costoCem + costoAr;
+  const costoTotal= costoMat + costoMO;
+  const costoM2   = costoTotal / areaTotal;
+
+  document.getElementById('resultado-panete').style.display = 'block';
+  document.getElementById('resultado-panete').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Pañete ${tipoPan} — Proporción ${prop.rel} — ${caras} cara(s)</div>
+      <div class="resultado-total">$ ${fmtInt(costoTotal)}</div>
+      <div class="resultado-sub">Costo total — ${fmt(areaTotal,2)} m² de pañete (${caras} cara${caras>1?'s':''})</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(areaTotal,2)} m²</div><div class="resultado-label">Área total a pañetar</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(volMortero,3)} m³</div><div class="resultado-label">Mortero de pañete</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${cemBultos} bultos</div><div class="resultado-label">Cemento (50 kg)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(arenM3,3)} m³</div><div class="resultado-label">Arena de pañete</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(costoMat)}</div><div class="resultado-label">Costo materiales</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(costoM2)}/m²</div><div class="resultado-label">Costo total/m²</div></div>
+      </div>
+      <table class="tabla-resultado" style="margin-top:1rem;">
+        <thead><tr><th>Material</th><th>Cantidad</th><th>Precio</th><th>Costo ($)</th></tr></thead>
+        <tbody>
+          <tr><td>Cemento (proporción ${prop.rel})</td><td>${cemBultos} bultos</td><td>$ ${fmtInt(precioCem)}</td><td>$ ${fmtInt(costoCem)}</td></tr>
+          <tr><td>Arena fina de pañete</td><td>${fmt(arenM3,3)} m³</td><td>$ ${fmtInt(precioAr)}/m³</td><td>$ ${fmtInt(costoAr)}</td></tr>
+          <tr><td>Mano de obra pañete</td><td>${fmt(areaTotal,2)} m²</td><td>$ ${fmtInt(mo)}/m²</td><td>$ ${fmtInt(costoMO)}</td></tr>
+          <tr class="total"><td>TOTAL</td><td></td><td>$ ${fmtInt(costoM2)}/m²</td><td>$ ${fmtInt(costoTotal)}</td></tr>
+        </tbody>
+      </table>
+      <div class="resultado-detalle">
+        Área base: ${fmt(area,2)} m² × ${caras} caras = <b>${fmt(areaTotal,2)} m²</b><br>
+        Volumen mortero: ${fmt(areaTotal,2)} m² × ${(espesor*100).toFixed(1)} cm ÷ 100 × (1+${(desp*100).toFixed(0)}%) = <b>${fmt(volMortero,4)} m³</b><br>
+        Cemento: ${fmt(volMortero,4)} m³ × ${prop.cem} kg/m³ = ${fmt(cemKg,1)} kg → <b>${cemBultos} bultos de 50 kg</b><br>
+        Arena: ${fmt(volMortero,4)} m³ × ${prop.ar} = <b>${fmt(arenM3,4)} m³</b>
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
