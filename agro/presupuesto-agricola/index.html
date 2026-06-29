@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presupuesto Producción Agrícola Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de presupuesto de producción agrícola por lote para ingenieros agrónomos colombianos. Costos, ingresos, rentabilidad y punto de equilibrio." />
+  <meta name="keywords" content="presupuesto agricola colombia, costos produccion cultivos colombia, rentabilidad agricola colombia, ingeniero agronomo colombia, presupuesto lote agricola" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --verde: #1b5e20;
+      --verde-medio: #2e7d32;
+      --verde-claro: #e8f5e9;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #1b5e20 60%, #4caf50 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+    .container { max-width: 920px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 110px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--verde-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--verde-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--verde-medio); padding-left: 8px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:600px) { .form-grid { grid-template-columns: 1fr; } .form-grid-3 { grid-template-columns: 1fr 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--verde-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+    .btn { width: 100%; padding: 12px; background: var(--verde-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--verde); }
+    .btn:active { transform: scale(0.98); }
+    .btn-sm { padding: 7px 14px; font-size: 0.82rem; font-weight: 700; border: none; border-radius: 20px; cursor: pointer; background: var(--verde-medio); color: #fff; }
+    .info-box { background: var(--verde-claro); border-left: 4px solid var(--verde-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--verde); }
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #1b5e20 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grande { font-size: 2.8rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.1rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .tabla-presupuesto { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .tabla-presupuesto th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: left; }
+    .tabla-presupuesto th:not(:first-child) { text-align: right; }
+    .tabla-presupuesto td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .tabla-presupuesto td:not(:first-child) { text-align: right; }
+    .tabla-presupuesto tr.subtotal td { background: rgba(255,255,255,0.08); font-weight: 700; }
+    .tabla-presupuesto tr.total-final td { background: rgba(255,215,0,0.2); font-weight: 900; color: #ffe082; }
+    .tabla-presupuesto tr.ingreso td:not(:first-child) { color: #a5d6a7; }
+    .tabla-presupuesto tr.egreso td:not(:first-child) { color: #ef9a9a; }
+    .item-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 35px; gap: 6px; align-items: center; margin-bottom: 5px; }
+    .item-input { padding: 7px 10px; border: 1.5px solid var(--borde); border-radius: 7px; font-size: 0.85rem; background: var(--gris-bg); width: 100%; }
+    .item-input:focus { outline: none; border-color: var(--verde-medio); background: #fff; }
+    .item-delete { background: none; border: none; cursor: pointer; color: #c62828; font-size: 1.1rem; }
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--verde-claro); }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🌱 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Presupuesto Agrícola</a>
+  </div>
+</nav>
+<div class="hero">
+  <div class="hero-badge">🌱 Ingenieros Agrónomos — Colombia</div>
+  <h1>Presupuesto de Producción Agrícola 2026</h1>
+  <p>Calcula los costos directos e indirectos por hectárea, el ingreso esperado, la rentabilidad y el punto de equilibrio para cualquier cultivo colombiano.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Precios Colombia 2026</span>
+    <span class="hero-chip">📊 Costo por ha</span>
+    <span class="hero-chip">💰 Rentabilidad</span>
+    <span class="hero-chip">📈 Punto de equilibrio</span>
+  </div>
+</div>
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('presupuesto', this)">📊 Presupuesto</button>
+    <button class="tab-btn" onclick="mostrarTab('rentabilidad', this)">💰 Rentabilidad</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Costos Referencia</button>
+  </div>
+
+  <!-- TAB 1: PRESUPUESTO -->
+  <div id="tab-presupuesto" class="tab-panel active">
+    <div class="card">
+      <h2>📊 Presupuesto de Producción por Lote</h2>
+      <div class="info-box">
+        <strong>¿Cómo usar?</strong> Ingresa los datos generales del cultivo y agrega los ítems de costo. La calculadora genera el presupuesto completo con análisis de rentabilidad y punto de equilibrio.
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Cultivo</label>
+          <select id="p-cultivo" onchange="autoCultivo()">
+            <option value="cafe">☕ Café</option>
+            <option value="maiz" selected>🌽 Maíz</option>
+            <option value="papa">🥔 Papa</option>
+            <option value="arroz">🌾 Arroz</option>
+            <option value="platano">🍌 Plátano</option>
+            <option value="cacao">🍫 Cacao</option>
+            <option value="aguacate">🥑 Aguacate Hass</option>
+            <option value="tomate">🍅 Tomate</option>
+            <option value="otro">Otro cultivo</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Área del lote (ha)</label><input type="number" id="p-area" value="2" min="0.1" step="0.1" /></div>
+        <div class="form-group"><label>Rendimiento esperado (t/ha)</label><input type="number" id="p-rendimiento" value="8" min="0.1" step="0.5" /><span class="form-hint" id="p-hint-rend">Maíz tecnificado: 6–10 t/ha</span></div>
+        <div class="form-group"><label>Precio de venta ($ COP/kg)</label><input type="number" id="p-precio-venta" value="900" min="0" step="10" /></div>
+        <div class="form-group"><label>Duración del ciclo (meses)</label><input type="number" id="p-ciclo" value="5" min="1" step="1" /></div>
+        <div class="form-group"><label>Costo de oportunidad tierra ($/ha/mes)</label><input type="number" id="p-tierra" value="150000" min="0" step="10000" /></div>
+      </div>
+
+      <h3>💸 Costos Directos — Preparación y Siembra</h3>
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 35px; gap:6px; margin-bottom:4px;">
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Ítem</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Unidad</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Cantidad</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Precio unit. ($)</span>
+        <span></span>
+      </div>
+      <div id="siembra-container"></div>
+      <button class="btn-sm" onclick="agregarItem('siembra')">+ Agregar ítem</button>
+
+      <h3>🌿 Costos de Mantenimiento y Labores</h3>
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 35px; gap:6px; margin-bottom:4px;">
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Ítem</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Unidad</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Cantidad</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Precio unit. ($)</span>
+        <span></span>
+      </div>
+      <div id="mantenimiento-container"></div>
+      <button class="btn-sm" onclick="agregarItem('mantenimiento')">+ Agregar ítem</button>
+
+      <h3>🚜 Costos de Cosecha y Postcosecha</h3>
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 35px; gap:6px; margin-bottom:4px;">
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Ítem</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Unidad</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Cantidad</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Precio unit. ($)</span>
+        <span></span>
+      </div>
+      <div id="cosecha-container"></div>
+      <button class="btn-sm" onclick="agregarItem('cosecha')">+ Agregar ítem</button>
+
+      <hr class="sep" />
+      <div class="form-grid">
+        <div class="form-group"><label>Costos indirectos (% sobre costos directos)</label><input type="number" id="p-indirectos" value="10" min="0" max="30" step="1" /><span class="form-hint">Admin., imprevistos, transporte general: 10–15%</span></div>
+        <div class="form-group"><label>Asistencia técnica ($ COP/ha/ciclo)</label><input type="number" id="p-asistencia" value="200000" min="0" step="50000" /></div>
+      </div>
+      <button class="btn" onclick="calcularPresupuesto()">📊 Generar Presupuesto</button>
+    </div>
+    <div id="resultado-presupuesto" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: RENTABILIDAD -->
+  <div id="tab-rentabilidad" class="tab-panel">
+    <div class="card">
+      <h2>💰 Análisis de Rentabilidad Rápido</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> Calcula rápidamente la rentabilidad de un cultivo sin el detalle ítem por ítem. Útil para comparar escenarios de precio y rendimiento.
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Cultivo</label><input type="text" id="r-cultivo" value="Maíz tecnificado" /></div>
+        <div class="form-group"><label>Área (ha)</label><input type="number" id="r-area" value="5" min="0.1" step="0.5" /></div>
+        <div class="form-group"><label>Rendimiento (t/ha)</label><input type="number" id="r-rend" value="8" min="0.1" step="0.5" /></div>
+        <div class="form-group"><label>Precio de venta ($/kg)</label><input type="number" id="r-precio" value="900" min="0" step="10" /></div>
+        <div class="form-group"><label>Costo total de producción ($/ha)</label><input type="number" id="r-costo-ha" value="4500000" min="0" step="100000" /></div>
+        <div class="form-group"><label>Costo de oportunidad tierra ($/ha/ciclo)</label><input type="number" id="r-tierra" value="750000" min="0" step="50000" /></div>
+        <div class="form-group"><label>Precio escenario pesimista ($/kg)</label><input type="number" id="r-precio-min" value="700" min="0" step="10" /></div>
+        <div class="form-group"><label>Precio escenario optimista ($/kg)</label><input type="number" id="r-precio-max" value="1100" min="0" step="10" /></div>
+      </div>
+      <button class="btn" onclick="calcularRentabilidad()">💰 Analizar Rentabilidad</button>
+    </div>
+    <div id="resultado-rentabilidad" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Costos de Producción Referencia — Colombia 2026 ($/ha/ciclo)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Cultivo</th><th>Costo total $/ha</th><th>Rendimiento ref.</th><th>Precio ref. $/kg</th><th>Ingreso bruto $/ha</th><th>Margen bruto</th></tr></thead>
+          <tbody>
+            <tr><td>🌽 <b>Maíz tecnificado</b></td><td>$3.500.000–$5.000.000</td><td>7–10 t/ha</td><td>$800–$1.000</td><td>$5.600.000–$10.000.000</td><td>30–50%</td></tr>
+            <tr><td>☕ <b>Café (producción)</b></td><td>$8.000.000–$12.000.000</td><td>3–6 t cereza/ha</td><td>$2.500–$3.500</td><td>$7.500.000–$21.000.000</td><td>20–45%</td></tr>
+            <tr><td>🥔 <b>Papa</b></td><td>$12.000.000–$20.000.000</td><td>20–35 t/ha</td><td>$600–$1.200</td><td>$12.000.000–$42.000.000</td><td>15–40%</td></tr>
+            <tr><td>🌾 <b>Arroz riego</b></td><td>$5.000.000–$8.000.000</td><td>6–9 t/ha</td><td>$900–$1.200</td><td>$5.400.000–$10.800.000</td><td>20–35%</td></tr>
+            <tr><td>🍌 <b>Plátano tecnificado</b></td><td>$6.000.000–$10.000.000</td><td>12–20 t/ha</td><td>$600–$1.000</td><td>$7.200.000–$20.000.000</td><td>25–45%</td></tr>
+            <tr><td>🍫 <b>Cacao</b></td><td>$5.000.000–$8.000.000</td><td>1–2 t/ha</td><td>$8.000–$12.000</td><td>$8.000.000–$24.000.000</td><td>30–55%</td></tr>
+            <tr><td>🥑 <b>Aguacate Hass</b></td><td>$8.000.000–$15.000.000</td><td>12–20 t/ha</td><td>$1.500–$3.000</td><td>$18.000.000–$60.000.000</td><td>40–65%</td></tr>
+            <tr><td>🍅 <b>Tomate invernadero</b></td><td>$80.000.000–$150.000.000</td><td>60–100 t/ha</td><td>$1.200–$2.500</td><td>$72.000.000–$250.000.000</td><td>20–40%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">Fuentes: Agronet MADR, FEDEGAN, Fedecafé, Fenalce, DANE. Precios orientativos 2026.</p>
+    </div>
+    <div class="card">
+      <h2>📋 Mano de Obra Agrícola — Colombia 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Labor</th><th>Jornal ($/día)</th><th>Rendimiento</th></tr></thead>
+          <tbody>
+            <tr><td>Jornal general agrícola</td><td>$45.000–$60.000</td><td>8 horas efectivas</td></tr>
+            <tr><td>Aplicación de agroquímicos</td><td>$50.000–$65.000</td><td>3–5 ha/día (bomba espalda)</td></tr>
+            <tr><td>Cosecha manual (café cereza)</td><td>$50.000–$70.000</td><td>80–120 kg/jornal</td></tr>
+            <tr><td>Cosecha manual (plátano)</td><td>$55.000–$70.000</td><td>200–300 kg/jornal</td></tr>
+            <tr><td>Siembra manual</td><td>$45.000–$60.000</td><td>0.3–0.5 ha/jornal</td></tr>
+            <tr><td>Fertilización manual</td><td>$45.000–$60.000</td><td>1–2 ha/jornal</td></tr>
+            <tr><td>Poda y mantenimiento</td><td>$50.000–$70.000</td><td>Varía por cultivo</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los costos y rendimientos son referencias del mercado colombiano 2026. El presupuesto definitivo debe elaborarse con precios locales actualizados y ser validado por un <strong>Ingeniero Agrónomo matriculado ante el ICA</strong>. Fuentes: Agronet MADR, FEDEGAN, Fenalce, DANE Colombia.
+  </div>
+</div>
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n, dec=0) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function fmtD(n,d=1) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+
+const cultivoData = {
+  cafe:     { rend:4,   precio:2800, ciclo:12, hint:'Café: 3–6 t cereza/ha/año' },
+  maiz:     { rend:8,   precio:900,  ciclo:5,  hint:'Maíz tecnificado: 6–10 t/ha' },
+  papa:     { rend:25,  precio:800,  ciclo:5,  hint:'Papa: 20–35 t/ha' },
+  arroz:    { rend:7,   precio:1000, ciclo:4,  hint:'Arroz riego: 6–9 t/ha' },
+  platano:  { rend:15,  precio:700,  ciclo:12, hint:'Plátano tecnificado: 12–20 t/ha/año' },
+  cacao:    { rend:1.5, precio:9000, ciclo:12, hint:'Cacao: 1–2 t/ha/año' },
+  aguacate: { rend:15,  precio:2000, ciclo:12, hint:'Aguacate Hass: 12–20 t/ha/año' },
+  tomate:   { rend:80,  precio:1500, ciclo:6,  hint:'Tomate invernadero: 60–100 t/ha/ciclo' },
+  otro:     { rend:5,   precio:1000, ciclo:6,  hint:'Ingresa los datos del cultivo' },
+};
+
+const ejemplosSiembra = [
+  { nom:'Semilla certificada', und:'kg', cant:25, precio:8000 },
+  { nom:'Preparación terreno (maquinaria)', und:'ha', cant:1, precio:350000 },
+  { nom:'Fertilizante siembra (DAP)', und:'bulto 50kg', cant:3, precio:120000 },
+  { nom:'Mano de obra siembra', und:'jornal', cant:8, precio:55000 },
+];
+const ejemplosMantenimiento = [
+  { nom:'Fertilización edáfica (urea)', und:'bulto 50kg', cant:4, precio:85000 },
+  { nom:'Herbicida (glifosato)', und:'L', cant:3, precio:22000 },
+  { nom:'Fungicida preventivo', und:'L/kg', cant:2, precio:65000 },
+  { nom:'Insecticida', und:'L', cant:1, precio:45000 },
+  { nom:'Mano de obra mantenimiento', und:'jornal', cant:15, precio:55000 },
+];
+const ejemplosCosecha = [
+  { nom:'Mano de obra cosecha', und:'jornal', cant:12, precio:55000 },
+  { nom:'Empaques / sacos', und:'unidad', cant:200, precio:1500 },
+  { nom:'Transporte al mercado', und:'viaje', cant:2, precio:250000 },
+];
+
+let nItems = { siembra:0, mantenimiento:0, cosecha:0 };
+
+function autoCultivo() {
+  const c = cultivoData[document.getElementById('p-cultivo').value];
+  if (c) {
+    document.getElementById('p-rendimiento').value = c.rend;
+    document.getElementById('p-precio-venta').value = c.precio;
+    document.getElementById('p-ciclo').value = c.ciclo;
+    document.getElementById('p-hint-rend').textContent = c.hint;
+  }
+}
+
+function agregarItem(tipo, preset) {
+  nItems[tipo]++;
+  const n = nItems[tipo];
+  const c = document.getElementById(`${tipo}-container`);
+  const div = document.createElement('div');
+  div.className = 'item-row';
+  div.id = `${tipo}-${n}`;
+  const p = preset || { nom:`Ítem ${n}`, und:'jornal', cant:1, precio:55000 };
+  div.innerHTML = `
+    <input class="item-input" type="text"   id="${tipo}-nom-${n}" value="${p.nom}" />
+    <input class="item-input" type="text"   id="${tipo}-und-${n}" value="${p.und}" style="max-width:80px;" />
+    <input class="item-input" type="number" id="${tipo}-cant-${n}" value="${p.cant}" min="0" step="0.1" />
+    <input class="item-input" type="number" id="${tipo}-prec-${n}" value="${p.precio}" min="0" step="1000" />
+    <button class="item-delete" onclick="document.getElementById('${tipo}-${n}').remove()">✕</button>`;
+  c.appendChild(div);
+}
+
+function sumarSeccion(tipo) {
+  let total = 0;
+  document.querySelectorAll(`#${tipo}-container .item-row`).forEach(row => {
+    const id = row.id.split('-').slice(1).join('-');
+    const cant = parseFloat(document.getElementById(`${tipo}-cant-${nItems[tipo] - [...document.querySelectorAll(`#${tipo}-container .item-row`)].indexOf(row) + nItems[tipo] - document.querySelectorAll(`#${tipo}-container .item-row`).length}`)?.value || row.querySelector(`[id^="${tipo}-cant"]`)?.value) || 0;
+    const prec = parseFloat(row.querySelector(`[id^="${tipo}-prec"]`)?.value) || 0;
+    const c2   = parseFloat(row.querySelector(`[id^="${tipo}-cant"]`)?.value) || 0;
+    const p2   = parseFloat(row.querySelector(`[id^="${tipo}-prec"]`)?.value) || 0;
+    total += c2 * p2;
+  });
+  return total;
+}
+
+function calcularPresupuesto() {
+  const cultivo  = document.getElementById('p-cultivo').value;
+  const area     = parseFloat(document.getElementById('p-area').value) || 1;
+  const rend     = parseFloat(document.getElementById('p-rendimiento').value) || 5;
+  const precio   = parseFloat(document.getElementById('p-precio-venta').value) || 1000;
+  const ciclo    = parseInt(document.getElementById('p-ciclo').value) || 6;
+  const tierra   = parseFloat(document.getElementById('p-tierra').value) || 0;
+  const indPct   = parseFloat(document.getElementById('p-indirectos').value) / 100;
+  const asistencia = parseFloat(document.getElementById('p-asistencia').value) || 0;
+
+  const costSiembra = sumarSeccion('siembra');
+  const costMant    = sumarSeccion('mantenimiento');
+  const costCosecha = sumarSeccion('cosecha');
+  const costDirHa   = costSiembra + costMant + costCosecha;
+  const costInd     = costDirHa * indPct;
+  const costTierra  = tierra * ciclo;
+  const costTotal   = costDirHa + costInd + asistencia + costTierra;
+
+  const produccionKg  = rend * 1000 * area;
+  const ingresoTotal  = produccionKg * precio;
+  const utilidadBruta = ingresoTotal - costTotal;
+  const margen        = ingresoTotal > 0 ? (utilidadBruta/ingresoTotal)*100 : 0;
+  const costHa        = costTotal / area;
+  const peKg          = costTotal / produccionKg; // precio mínimo de venta
+  const peProduccion  = costTotal / precio;       // producción mínima en kg
+  const roi           = costTotal > 0 ? (utilidadBruta/costTotal)*100 : 0;
+
+  document.getElementById('resultado-presupuesto').style.display = 'block';
+  document.getElementById('resultado-presupuesto').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Presupuesto — ${cultivo} | ${area} ha | ${ciclo} meses</div>
+      <div class="resultado-grande">${utilidadBruta >= 0 ? '✅' : '🔴'} $ ${fmt(Math.round(utilidadBruta))}</div>
+      <div class="resultado-sub">Utilidad bruta estimada — Margen: ${fmtD(margen)}% | ROI: ${fmtD(roi)}%</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(ingresoTotal))}</div><div class="resultado-label">Ingreso bruto total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(costTotal))}</div><div class="resultado-label">Costo total producción</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(utilidadBruta))}</div><div class="resultado-label">Utilidad bruta</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(costHa))}/ha</div><div class="resultado-label">Costo por hectárea</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtD(peKg)}/kg</div><div class="resultado-label">Precio mínimo (PE)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(Math.round(peProduccion))} kg</div><div class="resultado-label">Producción mínima (PE)</div></div>
+      </div>
+      <table class="tabla-presupuesto" style="margin-top:1rem;">
+        <thead><tr><th>Concepto</th><th>$/ha</th><th>Total ${area} ha</th><th>% del costo</th></tr></thead>
+        <tbody>
+          <tr class="subtotal"><td>Costos directos — Siembra</td><td>$ ${fmt(costSiembra/area)}</td><td>$ ${fmt(costSiembra)}</td><td>${costTotal>0?fmtD(costSiembra/costTotal*100):0}%</td></tr>
+          <tr class="subtotal"><td>Costos directos — Mantenimiento</td><td>$ ${fmt(costMant/area)}</td><td>$ ${fmt(costMant)}</td><td>${costTotal>0?fmtD(costMant/costTotal*100):0}%</td></tr>
+          <tr class="subtotal"><td>Costos directos — Cosecha</td><td>$ ${fmt(costCosecha/area)}</td><td>$ ${fmt(costCosecha)}</td><td>${costTotal>0?fmtD(costCosecha/costTotal*100):0}%</td></tr>
+          <tr><td>Costos indirectos (${(indPct*100).toFixed(0)}%)</td><td>$ ${fmt(costInd/area)}</td><td>$ ${fmt(costInd)}</td><td>${costTotal>0?fmtD(costInd/costTotal*100):0}%</td></tr>
+          <tr><td>Asistencia técnica</td><td>$ ${fmt(asistencia)}</td><td>$ ${fmt(asistencia*area)}</td><td>${costTotal>0?fmtD(asistencia*area/costTotal*100):0}%</td></tr>
+          ${costTierra>0?`<tr><td>Costo de oportunidad tierra (${ciclo} meses)</td><td>$ ${fmt(costTierra)}</td><td>$ ${fmt(costTierra*area)}</td><td>${fmtD(costTierra*area/costTotal*100)}%</td></tr>`:''}
+          <tr class="total-final egreso"><td>COSTO TOTAL</td><td>$ ${fmt(costHa)}</td><td>$ ${fmt(costTotal)}</td><td>100%</td></tr>
+          <tr class="ingreso"><td>INGRESO BRUTO (${fmt(produccionKg)} kg × $ ${fmt(precio)}/kg)</td><td>$ ${fmt(ingresoTotal/area)}</td><td>$ ${fmt(ingresoTotal)}</td><td>—</td></tr>
+          <tr class="total-final"><td>UTILIDAD BRUTA</td><td>$ ${fmt(utilidadBruta/area)}</td><td>$ ${fmt(utilidadBruta)}</td><td>${fmtD(margen)}%</td></tr>
+        </tbody>
+      </table>
+      <div class="resultado-detalle">
+        <b>Punto de equilibrio:</b><br>
+        Precio mínimo de venta: $ ${fmtD(peKg,0)}/kg (con rendimiento de ${rend} t/ha)<br>
+        Producción mínima: ${fmt(Math.round(peProduccion))} kg (con precio de $ ${fmt(precio)}/kg)<br>
+        <b>ROI: ${fmtD(roi)}% | Si invierte $ ${fmt(costTotal)}, recupera $ ${fmt(Math.round(ingresoTotal))} en ${ciclo} meses</b>
+      </div>
+    </div>`;
+}
+
+function calcularRentabilidad() {
+  const cultivo   = document.getElementById('r-cultivo').value;
+  const area      = parseFloat(document.getElementById('r-area').value) || 1;
+  const rend      = parseFloat(document.getElementById('r-rend').value) || 5;
+  const precio    = parseFloat(document.getElementById('r-precio').value) || 1000;
+  const costoHa   = parseFloat(document.getElementById('r-costo-ha').value) || 4000000;
+  const tierra    = parseFloat(document.getElementById('r-tierra').value) || 0;
+  const precioMin = parseFloat(document.getElementById('r-precio-min').value) || 700;
+  const precioMax = parseFloat(document.getElementById('r-precio-max').value) || 1200;
+
+  const costoTotal = (costoHa + tierra) * area;
+  const prodKg     = rend * 1000 * area;
+
+  function calc(p) {
+    const ing  = prodKg * p;
+    const util = ing - costoTotal;
+    const margen = ing > 0 ? util/ing*100 : 0;
+    return { ing, util, margen };
+  }
+
+  const normal = calc(precio);
+  const pesim  = calc(precioMin);
+  const optim  = calc(precioMax);
+  const peKg   = costoTotal / prodKg;
+
+  document.getElementById('resultado-rentabilidad').style.display = 'block';
+  document.getElementById('resultado-rentabilidad').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Análisis Rentabilidad — ${cultivo} | ${area} ha | ${fmt(rend*1000*area)} kg producción</div>
+      <div class="resultado-grande">${normal.util >= 0 ? '✅' : '🔴'} $ ${fmt(Math.round(normal.util))}</div>
+      <div class="resultado-sub">Utilidad escenario normal — Precio: $ ${fmt(precio)}/kg</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(costoTotal)}</div><div class="resultado-label">Costo total producción</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(peKg,0)} $/kg</div><div class="resultado-label">Precio mínimo (PE)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(normal.margen)}%</div><div class="resultado-label">Margen normal</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(normal.util/costoTotal*100)}%</div><div class="resultado-label">ROI</div></div>
+      </div>
+      <table class="tabla-presupuesto" style="margin-top:1rem;">
+        <thead><tr><th>Escenario</th><th>Precio $/kg</th><th>Ingreso total</th><th>Utilidad</th><th>Margen</th></tr></thead>
+        <tbody>
+          <tr class="${pesim.util>=0?'ingreso':'egreso'}"><td>🔴 Pesimista</td><td>$ ${fmt(precioMin)}</td><td>$ ${fmt(Math.round(pesim.ing))}</td><td>$ ${fmt(Math.round(pesim.util))}</td><td>${fmtD(pesim.margen)}%</td></tr>
+          <tr class="subtotal"><td>⚪ Normal</td><td>$ ${fmt(precio)}</td><td>$ ${fmt(Math.round(normal.ing))}</td><td>$ ${fmt(Math.round(normal.util))}</td><td>${fmtD(normal.margen)}%</td></tr>
+          <tr class="ingreso"><td>🟢 Optimista</td><td>$ ${fmt(precioMax)}</td><td>$ ${fmt(Math.round(optim.ing))}</td><td>$ ${fmt(Math.round(optim.util))}</td><td>${fmtD(optim.margen)}%</td></tr>
+          <tr class="total-final"><td>PUNTO EQUILIBRIO</td><td>$ ${fmtD(peKg,0)}/kg</td><td>$ ${fmt(costoTotal)}</td><td>$ 0</td><td>0%</td></tr>
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// Inicializar con ejemplos
+document.addEventListener('DOMContentLoaded', () => {
+  ejemplosSiembra.forEach(p => agregarItem('siembra', p));
+  ejemplosMantenimiento.forEach(p => agregarItem('mantenimiento', p));
+  ejemplosCosecha.forEach(p => agregarItem('cosecha', p));
+});
+</script>
+</body>
+</html>
