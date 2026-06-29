@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Escalafón Docente Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de escalafón docente y proyección salarial Colombia 2026. Decreto 2277/1979 y Decreto 1278/2002. Deducciones, prestaciones y ascenso de grado." />
+  <meta name="keywords" content="escalafon docente colombia 2026, salario docente colombia, decreto 2277 decreto 1278, ascenso escalafon docente, prestaciones docentes colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --azul-doc: #1565c0;
+      --azul-claro: #e3f2fd;
+      --azul-oscuro: #0d47a1;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #1565c0 60%, #42a5f5 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 110px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--azul-doc); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--azul-doc); margin: 1rem 0 0.6rem; border-left: 3px solid var(--azul-doc); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--azul-doc); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn { width: 100%; padding: 12px; background: var(--azul-doc); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--azul-oscuro); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--azul-claro); border-left: 4px solid var(--azul-doc); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--azul-oscuro); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #1565c0 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-salario { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.15rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .nomina-tabla { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .nomina-tabla th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: left; }
+    .nomina-tabla th:last-child { text-align: right; }
+    .nomina-tabla td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .nomina-tabla td:last-child { text-align: right; font-weight: 700; }
+    .nomina-tabla tr.seccion td { background: rgba(255,255,255,0.08); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+    .nomina-tabla tr.total-pagar td { background: rgba(255,215,0,0.2); font-weight: 900; color: #ffe082; font-size: 0.95rem; }
+    .nomina-tabla tr.descuento td:last-child { color: #ef9a9a; }
+    .nomina-tabla tr.devengo td:last-child { color: #a5d6a7; }
+
+    /* PROYECCIÓN */
+    .tabla-proyeccion { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.8rem; }
+    .tabla-proyeccion th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: center; }
+    .tabla-proyeccion td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; text-align: center; }
+    .tabla-proyeccion tr.actual td { background: rgba(255,215,0,0.2); font-weight: 800; color: #ffe082; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--azul-claro); }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">📚 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Escalafón Docente</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">📚 Docentes Oficiales Colombia</div>
+  <h1>Escalafón Docente y Nómina 2026</h1>
+  <p>Calcula tu salario según grado de escalafón, deducciones de nómina, prestaciones sociales y proyección de ascenso. Decreto 2277/1979 y Decreto 1278/2002.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 SMMLV 2026 $1.423.500</span>
+    <span class="hero-chip">📋 Dec. 2277 y 1278</span>
+    <span class="hero-chip">💰 Nómina completa</span>
+    <span class="hero-chip">📈 Proyección ascenso</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('nomina', this)">💰 Nómina Mensual</button>
+    <button class="tab-btn" onclick="mostrarTab('proyeccion', this)">📈 Proyección Ascenso</button>
+    <button class="tab-btn" onclick="mostrarTab('escalafon', this)">📋 Tabla Escalafón</button>
+  </div>
+
+  <!-- TAB 1: NÓMINA -->
+  <div id="tab-nomina" class="tab-panel active">
+    <div class="card">
+      <h2>💰 Liquidación de Nómina Mensual Docente</h2>
+      <div class="info-box">
+        <strong>Parámetros 2026:</strong> SMMLV $1.423.500 | Aux. transporte $162.000 (si salario ≤ 2 SMMLV) | Salud empleado 4% | Pensión empleado 4% | Fondo solidaridad 1% (si &gt; 4 SMMLV)
+      </div>
+
+      <h3>Datos del docente</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Decreto de vinculación</label>
+          <select id="n-decreto" onchange="actualizarGrados()">
+            <option value="2277" selected>Decreto 2277/1979 (escalafón tradicional)</option>
+            <option value="1278">Decreto 1278/2002 (carrera docente)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Grado / Nivel de escalafón</label>
+          <select id="n-grado" onchange="autoSalario()"></select>
+        </div>
+        <div class="form-group">
+          <label>Salario básico mensual ($ COP)</label>
+          <input type="number" id="n-salario" value="3200000" min="1423500" step="50000" />
+          <span class="form-hint">Se actualiza automáticamente con el grado</span>
+        </div>
+        <div class="form-group">
+          <label>Asignación académica (horas semanales)</label>
+          <select id="n-horas">
+            <option value="22" selected>22 horas (preescolar/primaria)</option>
+            <option value="20">20 horas (secundaria)</option>
+            <option value="18">18 horas (media)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Zona o área de trabajo</label>
+          <select id="n-zona">
+            <option value="0">Urbana — sin bonificación adicional</option>
+            <option value="0.05">Rural — +5% bonificación</option>
+            <option value="0.10">Zona de difícil acceso — +10%</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>¿Tiene cargo directivo? (rector/coordinador)</label>
+          <select id="n-directivo">
+            <option value="0" selected>No</option>
+            <option value="300000">Coordinador — +$300.000</option>
+            <option value="600000">Rector sede principal — +$600.000</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Préstamo FOMAG / FNA ($ COP/mes)</label>
+          <input type="number" id="n-prestamo" value="0" min="0" step="50000" />
+        </div>
+        <div class="form-group">
+          <label>Libranza / crédito cooperativa ($ COP/mes)</label>
+          <input type="number" id="n-libranza" value="0" min="0" step="50000" />
+        </div>
+        <div class="form-group">
+          <label>Descuento sindicato / cooperativa (%)</label>
+          <input type="number" id="n-sindicato" value="0" min="0" max="5" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Embargo judicial ($ COP/mes)</label>
+          <input type="number" id="n-embargo" value="0" min="0" step="50000" />
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularNomina()">💰 Calcular Nómina</button>
+    </div>
+    <div id="resultado-nomina" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: PROYECCIÓN -->
+  <div id="tab-proyeccion" class="tab-panel">
+    <div class="card">
+      <h2>📈 Proyección Salarial por Ascenso de Grado</h2>
+      <div class="info-box">
+        <strong>Ascenso en el Decreto 2277:</strong> Requiere años de experiencia + títulos adicionales. Cada grado superior implica un incremento salarial significativo. <strong>Decreto 1278:</strong> El ascenso requiere evaluación de desempeño + título de mayor nivel.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Decreto</label>
+          <select id="pr-decreto" onchange="actualizarGradosProyeccion()">
+            <option value="2277" selected>Decreto 2277/1979</option>
+            <option value="1278">Decreto 1278/2002</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Grado actual</label>
+          <select id="pr-grado-actual"></select>
+        </div>
+        <div class="form-group">
+          <label>Años de experiencia actuales</label>
+          <input type="number" id="pr-experiencia" value="8" min="0" max="35" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Incremento salarial anual estimado (%)</label>
+          <input type="number" id="pr-incremento" value="6" min="0" max="15" step="0.5" />
+          <span class="form-hint">Promedio histórico: 5–7% anual (IPC + ajuste)</span>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularProyeccion()">📈 Proyectar Carrera Docente</button>
+    </div>
+    <div id="resultado-proyeccion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: ESCALAFÓN -->
+  <div id="tab-escalafon" class="tab-panel">
+    <div class="card">
+      <h2>📋 Tabla Escalafón Decreto 2277/1979 — Salarios 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Grado</th><th>Salario mensual 2026</th><th>Requisitos principales</th><th>Tiempo mínimo</th></tr></thead>
+          <tbody>
+            <tr><td><b>Grado 1</b></td><td>$1.423.500 – $1.600.000</td><td>Sin título — auxiliar docente</td><td>—</td></tr>
+            <tr><td><b>Grado 2A</b></td><td>$1.650.000 – $1.850.000</td><td>Bachiller pedagógico</td><td>—</td></tr>
+            <tr><td><b>Grado 4</b></td><td>$1.900.000 – $2.100.000</td><td>Normalista superior</td><td>2 años en grado 2</td></tr>
+            <tr><td><b>Grado 6</b></td><td>$2.150.000 – $2.350.000</td><td>Tecnólogo en educación</td><td>3 años en grado 4</td></tr>
+            <tr><td><b>Grado 8</b></td><td>$2.400.000 – $2.700.000</td><td>Licenciado / Profesional universitario</td><td>3 años en grado 6</td></tr>
+            <tr><td><b>Grado 10</b></td><td>$2.800.000 – $3.200.000</td><td>Lic. + 2 años experiencia en grado 8</td><td>4 años en grado 8</td></tr>
+            <tr><td><b>Grado 12</b></td><td>$3.300.000 – $3.800.000</td><td>Especialización</td><td>4 años en grado 10</td></tr>
+            <tr><td><b>Grado 14</b></td><td>$4.000.000 – $4.900.000</td><td>Maestría o Doctorado</td><td>4 años en grado 12</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Tabla Escalafón Decreto 1278/2002 — Salarios 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Nivel/Cat.</th><th>Salario mensual 2026</th><th>Título requerido</th><th>Evaluación</th></tr></thead>
+          <tbody>
+            <tr><td><b>Nivel 1 — Cat. A</b></td><td>$2.200.000 – $2.500.000</td><td>Normalista superior / Tecnólogo</td><td>Ingreso (concurso)</td></tr>
+            <tr><td><b>Nivel 1 — Cat. B</b></td><td>$2.600.000 – $2.900.000</td><td>Licenciado / Profesional</td><td>Concurso + eval. anual</td></tr>
+            <tr><td><b>Nivel 1 — Cat. C</b></td><td>$3.000.000 – $3.400.000</td><td>Especialización + eval. sobresaliente</td><td>Eval. acumulada</td></tr>
+            <tr><td><b>Nivel 2 — Cat. A</b></td><td>$3.500.000 – $4.000.000</td><td>Maestría + 3 años nivel 1</td><td>Eval. acumulada + prueba</td></tr>
+            <tr><td><b>Nivel 2 — Cat. B</b></td><td>$4.100.000 – $4.800.000</td><td>Maestría avanzada + 3 años nivel 2A</td><td>Eval. sobresaliente</td></tr>
+            <tr><td><b>Nivel 3 — Cat. A</b></td><td>$5.000.000 – $6.200.000</td><td>Doctorado + 3 años nivel 2</td><td>Eval. sobresaliente + prueba</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Prestaciones Sociales Docentes 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Prestación</th><th>Valor / Fórmula</th><th>Cuándo se paga</th><th>Base legal</th></tr></thead>
+          <tbody>
+            <tr><td><b>Prima de servicios</b></td><td>15 días de salario por semestre</td><td>Junio y diciembre</td><td>CST Art. 306 + Ley Docente</td></tr>
+            <tr><td><b>Cesantías</b></td><td>1 mes de salario por año (8.33%/mes)</td><td>Al retiro o anualmente (FOMAG)</td><td>CST Art. 249</td></tr>
+            <tr><td><b>Intereses sobre cesantías</b></td><td>12% anual sobre cesantías</td><td>Enero de cada año</td><td>Ley 52/1975</td></tr>
+            <tr><td><b>Vacaciones</b></td><td>15 días hábiles por año (jun-jul + dic)</td><td>Época de vacaciones escolares</td><td>CST Art. 186</td></tr>
+            <tr><td><b>Prima de vacaciones</b></td><td>15 días de salario (algunos regímenes)</td><td>Con las vacaciones de mitad año</td><td>Decreto 1042/1978</td></tr>
+            <tr><td><b>Prima de navidad</b></td><td>1 mes de salario</td><td>Diciembre</td><td>Decreto 1042/1978</td></tr>
+            <tr><td><b>Bonificación por servicios</b></td><td>Según grado y tiempo</td><td>Anual</td><td>Decreto 2277 y 1278</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los salarios y deducciones son estimaciones basadas en la normativa vigente. La nómina definitiva la liquida la Secretaría de Educación departamental. Para reclamaciones o consultas sobre su nómina, diríjase al Departamento de Nómina de su Secretaría de Educación o a su sindicato (FECODE). Parámetros 2026: SMMLV $1.423.500 | Aux. transporte $162.000.
+  </div>
+</div>
+
+<script>
+const SMMLV = 1423500;
+const AUX_TRANSP = 162000;
+
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function fmtD(n,d=1) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+
+// ── ESCALAFONES ──
+const escalafon2277 = [
+  { grado:'Grado 1',  salario:1480000, titulo:'Auxiliar docente (sin título)' },
+  { grado:'Grado 2A', salario:1720000, titulo:'Bachiller pedagógico' },
+  { grado:'Grado 4',  salario:1960000, titulo:'Normalista superior' },
+  { grado:'Grado 6',  salario:2240000, titulo:'Tecnólogo en educación' },
+  { grado:'Grado 8',  salario:2550000, titulo:'Licenciado / Profesional' },
+  { grado:'Grado 10', salario:3000000, titulo:'Lic. + experiencia' },
+  { grado:'Grado 12', salario:3550000, titulo:'Especialización' },
+  { grado:'Grado 14', salario:4450000, titulo:'Maestría / Doctorado' },
+];
+
+const escalafon1278 = [
+  { grado:'Nivel 1 — Cat. A', salario:2350000, titulo:'Normalista / Tecnólogo' },
+  { grado:'Nivel 1 — Cat. B', salario:2750000, titulo:'Licenciado / Profesional' },
+  { grado:'Nivel 1 — Cat. C', salario:3200000, titulo:'Especialización' },
+  { grado:'Nivel 2 — Cat. A', salario:3750000, titulo:'Maestría' },
+  { grado:'Nivel 2 — Cat. B', salario:4450000, titulo:'Maestría avanzada' },
+  { grado:'Nivel 3 — Cat. A', salario:5600000, titulo:'Doctorado' },
+];
+
+function getEscalafon(decreto) {
+  return decreto === '2277' ? escalafon2277 : escalafon1278;
+}
+
+function poblarSelect(selectId, decreto) {
+  const sel = document.getElementById(selectId);
+  sel.innerHTML = '';
+  getEscalafon(decreto).forEach((g, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${g.grado} — ${g.titulo}`;
+    sel.appendChild(opt);
+  });
+}
+
+function actualizarGrados() {
+  const decreto = document.getElementById('n-decreto').value;
+  poblarSelect('n-grado', decreto);
+  autoSalario();
+}
+
+function autoSalario() {
+  const decreto = document.getElementById('n-decreto').value;
+  const idx = parseInt(document.getElementById('n-grado').value);
+  const esc = getEscalafon(decreto);
+  if (esc[idx]) document.getElementById('n-salario').value = esc[idx].salario;
+}
+
+function actualizarGradosProyeccion() {
+  poblarSelect('pr-grado-actual', document.getElementById('pr-decreto').value);
+}
+
+// ── NÓMINA ──
+function calcularNomina() {
+  const decreto  = document.getElementById('n-decreto').value;
+  const idx      = parseInt(document.getElementById('n-grado').value);
+  const salario  = parseFloat(document.getElementById('n-salario').value) || SMMLV;
+  const zona     = parseFloat(document.getElementById('n-zona').value) || 0;
+  const directivo= parseFloat(document.getElementById('n-directivo').value) || 0;
+  const prestamo = parseFloat(document.getElementById('n-prestamo').value) || 0;
+  const libranza = parseFloat(document.getElementById('n-libranza').value) || 0;
+  const sindicato= parseFloat(document.getElementById('n-sindicato').value) / 100;
+  const embargo  = parseFloat(document.getElementById('n-embargo').value) || 0;
+  const esc      = getEscalafon(decreto);
+  const gradoNom = esc[idx]?.grado || '—';
+
+  // Devengos
+  const bonZona   = salario * zona;
+  const auxTransp = salario <= SMMLV * 2 ? AUX_TRANSP : 0;
+  const totalDevengado = salario + bonZona + directivo + auxTransp;
+
+  // Deducciones empleado
+  const baseIBC    = salario; // aux. transporte no es base para seg social
+  const descSalud  = baseIBC * 0.04;
+  const descPension= baseIBC * 0.04;
+  const descFondo  = baseIBC > SMMLV * 4 ? baseIBC * 0.01 : 0;
+  const descFomag  = baseIBC * 0.05; // aporte FOMAG docentes
+  const descSindicato = salario * sindicato;
+  const totalDescuentos = descSalud + descPension + descFondo + descFomag + prestamo + libranza + descSindicato + embargo;
+  const netoPagar  = totalDevengado - totalDescuentos;
+
+  // Aportes empleador (referencia)
+  const aporteSalud  = baseIBC * 0.085;
+  const aportePension= baseIBC * 0.12;
+  const aporteARL    = baseIBC * 0.00522;
+  const aporteSENA   = baseIBC * 0.02;
+  const aporteICBF   = baseIBC * 0.03;
+  const aporteCCF    = baseIBC * 0.04;
+  const totalEmpleador = aporteSalud + aportePension + aporteARL + aporteSENA + aporteICBF + aporteCCF;
+
+  // Prestaciones mensualizadas
+  const prima    = (salario + auxTransp) / 12;
+  const cesantias= (salario + auxTransp) * 0.0833;
+  const intCes   = cesantias * 0.12 / 12;
+  const vacaciones = salario / 24;
+  const primaNav = salario / 12;
+  const totalPrest = prima + cesantias + intCes + vacaciones + primaNav;
+  const costoTotal = totalDevengado + totalEmpleador + totalPrest;
+
+  document.getElementById('resultado-nomina').style.display = 'block';
+  document.getElementById('resultado-nomina').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Nómina Docente — ${gradoNom} — Decreto ${decreto}</div>
+      <div class="resultado-salario">$ ${fmt(netoPagar)}</div>
+      <div class="resultado-sub">Neto a pagar — Salario bruto: $ ${fmt(salario)}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(totalDevengado)}</div><div class="resultado-label">Total devengado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(totalDescuentos)}</div><div class="resultado-label">Total descuentos</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(netoPagar)}</div><div class="resultado-label">Neto a pagar</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalPrest))}</div><div class="resultado-label">Prestaciones/mes (ref.)</div></div>
+      </div>
+
+      <table class="nomina-tabla" style="margin-top:1rem;">
+        <thead><tr><th>Concepto</th><th>Valor ($ COP)</th></tr></thead>
+        <tbody>
+          <tr class="seccion"><td colspan="2">DEVENGOS</td></tr>
+          <tr class="devengo"><td>Salario básico mensual (${gradoNom})</td><td>$ ${fmt(salario)}</td></tr>
+          ${bonZona > 0 ? `<tr class="devengo"><td>Bonificación zona (${(zona*100).toFixed(0)}%)</td><td>$ ${fmt(Math.round(bonZona))}</td></tr>` : ''}
+          ${directivo > 0 ? `<tr class="devengo"><td>Asignación cargo directivo</td><td>$ ${fmt(directivo)}</td></tr>` : ''}
+          ${auxTransp > 0 ? `<tr class="devengo"><td>Auxilio de transporte</td><td>$ ${fmt(auxTransp)}</td></tr>` : ''}
+          <tr class="devengo" style="font-weight:700;"><td>TOTAL DEVENGADO</td><td>$ ${fmt(totalDevengado)}</td></tr>
+
+          <tr class="seccion"><td colspan="2">DESCUENTOS AL EMPLEADO</td></tr>
+          <tr class="descuento"><td>Salud (4% del IBC)</td><td>−$ ${fmt(Math.round(descSalud))}</td></tr>
+          <tr class="descuento"><td>Pensión (4% del IBC)</td><td>−$ ${fmt(Math.round(descPension))}</td></tr>
+          ${descFondo>0?`<tr class="descuento"><td>Fondo solidaridad (1%)</td><td>−$ ${fmt(Math.round(descFondo))}</td></tr>`:''}
+          <tr class="descuento"><td>Aporte FOMAG docente (5%)</td><td>−$ ${fmt(Math.round(descFomag))}</td></tr>
+          ${prestamo>0?`<tr class="descuento"><td>Préstamo FOMAG/FNA</td><td>−$ ${fmt(prestamo)}</td></tr>`:''}
+          ${libranza>0?`<tr class="descuento"><td>Libranza / cooperativa</td><td>−$ ${fmt(libranza)}</td></tr>`:''}
+          ${descSindicato>0?`<tr class="descuento"><td>Sindicato / cooperativa (${(sindicato*100).toFixed(1)}%)</td><td>−$ ${fmt(Math.round(descSindicato))}</td></tr>`:''}
+          ${embargo>0?`<tr class="descuento"><td>Embargo judicial</td><td>−$ ${fmt(embargo)}</td></tr>`:''}
+          <tr class="descuento" style="font-weight:700;"><td>TOTAL DESCUENTOS</td><td>−$ ${fmt(Math.round(totalDescuentos))}</td></tr>
+
+          <tr class="total-pagar"><td>💰 NETO A PAGAR</td><td>$ ${fmt(Math.round(netoPagar))}</td></tr>
+
+          <tr class="seccion"><td colspan="2">APORTES EMPLEADOR (referencia — no descuenta del neto)</td></tr>
+          <tr><td>Salud empleador (8.5%)</td><td>$ ${fmt(Math.round(aporteSalud))}</td></tr>
+          <tr><td>Pensión empleador (12%)</td><td>$ ${fmt(Math.round(aportePension))}</td></tr>
+          <tr><td>ARL (0.522%)</td><td>$ ${fmt(Math.round(aporteARL))}</td></tr>
+          <tr><td>SENA + ICBF + CCF (9%)</td><td>$ ${fmt(Math.round(aporteSENA+aporteICBF+aporteCCF))}</td></tr>
+          <tr style="font-weight:700;"><td>Total aportes empleador</td><td>$ ${fmt(Math.round(totalEmpleador))}</td></tr>
+
+          <tr class="seccion"><td colspan="2">PRESTACIONES SOCIALES MENSUALIZADAS (referencia)</td></tr>
+          <tr><td>Prima de servicios</td><td>$ ${fmt(Math.round(prima))}</td></tr>
+          <tr><td>Cesantías (8.33%)</td><td>$ ${fmt(Math.round(cesantias))}</td></tr>
+          <tr><td>Intereses sobre cesantías</td><td>$ ${fmt(Math.round(intCes))}</td></tr>
+          <tr><td>Vacaciones</td><td>$ ${fmt(Math.round(vacaciones))}</td></tr>
+          <tr><td>Prima de navidad</td><td>$ ${fmt(Math.round(primaNav))}</td></tr>
+          <tr style="font-weight:700;"><td>Total prestaciones/mes</td><td>$ ${fmt(Math.round(totalPrest))}</td></tr>
+          <tr class="total-pagar"><td>💼 COSTO TOTAL MENSUAL (empleador)</td><td>$ ${fmt(Math.round(costoTotal))}</td></tr>
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// ── PROYECCIÓN ──
+function calcularProyeccion() {
+  const decreto  = document.getElementById('pr-decreto').value;
+  const idxActual= parseInt(document.getElementById('pr-grado-actual').value);
+  const expActual= parseInt(document.getElementById('pr-experiencia').value) || 0;
+  const incr     = parseFloat(document.getElementById('pr-incremento').value) / 100;
+  const esc      = getEscalafon(decreto);
+  const anioActual = new Date().getFullYear();
+
+  let filas = '';
+  esc.forEach((g, i) => {
+    const esActual = i === idxActual;
+    const diferencia = i - idxActual;
+    const anioAscenso = diferencia <= 0 ? (diferencia === 0 ? anioActual : anioActual + diferencia*4) : anioActual + diferencia*4;
+    const salarioProy = g.salario * Math.pow(1 + incr, Math.max(0, diferencia*4));
+
+    filas += `<tr class="${esActual?'actual':''}">
+      <td>${g.grado}</td>
+      <td>${g.titulo}</td>
+      <td>${esActual ? `${anioActual} (actual)` : diferencia < 0 ? `Superado` : `~${anioActual + diferencia*4}`}</td>
+      <td>$ ${fmt(g.salario)}</td>
+      <td>$ ${fmt(Math.round(salarioProy))}</td>
+      <td>${diferencia <= 0 ? (esActual?'✅ ACTUAL':'✓ Superado') : `+$${fmt(Math.round(salarioProy - esc[idxActual].salario))}`}</td>
+    </tr>`;
+  });
+
+  const gradoMax   = esc[esc.length - 1];
+  const salarioMax = gradoMax.salario * Math.pow(1 + incr, (esc.length - 1 - idxActual) * 4);
+  const incrementoTotal = ((salarioMax / esc[idxActual].salario) - 1) * 100;
+
+  document.getElementById('resultado-proyeccion').style.display = 'block';
+  document.getElementById('resultado-proyeccion').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Proyección Carrera Docente — Decreto ${decreto}</div>
+      <div class="resultado-salario">$ ${fmt(Math.round(salarioMax))}</div>
+      <div class="resultado-sub">Salario proyectado en grado máximo (${gradoMax.grado}) con ${(incr*100).toFixed(1)}% incremento anual</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(esc[idxActual].salario)}</div><div class="resultado-label">Salario actual</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(salarioMax))}</div><div class="resultado-label">Salario máximo proyectado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">+${fmtD(incrementoTotal)}%</div><div class="resultado-label">Incremento potencial</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${(esc.length - 1 - idxActual)*4} años</div><div class="resultado-label">Años hasta grado máximo</div></div>
+      </div>
+      <table class="tabla-proyeccion" style="margin-top:1rem;">
+        <thead><tr><th>Grado</th><th>Título requerido</th><th>Año estimado</th><th>Salario base 2026</th><th>Salario proyectado</th><th>Diferencia</th></tr></thead>
+        <tbody>${filas}</tbody>
+      </table>
+      <div class="resultado-detalle">
+        <b>Supuestos:</b> Incremento salarial anual: ${(incr*100).toFixed(1)}% | Tiempo promedio entre grados: 4 años<br>
+        <b>Nota Decreto 1278:</b> El ascenso requiere evaluación de desempeño con resultado satisfactorio + título de mayor nivel. No es automático por tiempo.
+      </div>
+    </div>`;
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
+  actualizarGrados();
+  actualizarGradosProyeccion();
+  // Seleccionar grado 12 por defecto (índice 6 en 2277)
+  document.getElementById('n-grado').selectedIndex = 6;
+  autoSalario();
+  document.getElementById('pr-grado-actual').selectedIndex = 4;
+});
+</script>
+</body>
+</html>
