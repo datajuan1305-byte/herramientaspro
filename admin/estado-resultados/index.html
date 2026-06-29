@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estado de Resultados Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de estado de resultados automático para PYME colombianas 2026. P&L completo con análisis vertical, márgenes y comparativo de dos períodos." />
+  <meta name="keywords" content="estado de resultados colombia, PyG PYME colombia, analisis financiero estado resultados, margen operacional colombia, administrador empresas colombia 2026" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --teal: #006064;
+      --teal-medio: #00838f;
+      --teal-claro: #e0f7fa;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #006064 60%, #00acc1 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 110px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--teal-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--teal-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--teal-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:600px) { .form-grid { grid-template-columns: 1fr; } .form-grid-3 { grid-template-columns: 1fr 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--teal-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn { width: 100%; padding: 12px; background: var(--teal-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--teal); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--teal-claro); border-left: 4px solid var(--teal-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--teal); }
+
+    /* ESTADO DE RESULTADOS */
+    .pyg-tabla { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 1rem; }
+    .pyg-tabla th { background: var(--azul-navbar); color: #fff; padding: 10px 14px; text-align: left; font-size: 0.82rem; }
+    .pyg-tabla th:not(:first-child) { text-align: right; }
+    .pyg-tabla td { padding: 8px 14px; border-bottom: 1px solid var(--borde); }
+    .pyg-tabla td:not(:first-child) { text-align: right; font-weight: 600; }
+    .pyg-tabla tr.seccion td { background: #f0f9ff; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: var(--teal); padding: 6px 14px; }
+    .pyg-tabla tr.subtotal td { background: var(--teal-claro); font-weight: 700; }
+    .pyg-tabla tr.total-final td { background: var(--azul-navbar); color: #fff; font-weight: 900; font-size: 0.95rem; }
+    .pyg-tabla tr.total-final td:not(:first-child) { color: #ffe082; }
+    .pyg-tabla tr.negativo td:not(:first-child) { color: #c62828; }
+    .pyg-tabla tr.positivo td:not(:first-child) { color: #2e7d32; }
+
+    /* INDICADORES */
+    .indicadores-pyg { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 0.9rem; margin-top: 1rem; }
+    .ind-pyg { border-radius: 10px; padding: 1rem; text-align: center; }
+    .ind-pyg.verde   { background: #e8f5e9; border: 2px solid #2e7d32; }
+    .ind-pyg.rojo    { background: #ffebee; border: 2px solid #c62828; }
+    .ind-pyg.amarillo{ background: #fff8e1; border: 2px solid #f9a825; }
+    .ind-pyg.azul    { background: var(--teal-claro); border: 2px solid var(--teal-medio); }
+    .ind-nombre { font-size: 0.75rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; margin-bottom: 4px; }
+    .ind-valor  { font-size: 1.6rem; font-weight: 900; }
+    .ind-pyg.verde  .ind-valor { color: #1b5e20; }
+    .ind-pyg.rojo   .ind-valor { color: #b71c1c; }
+    .ind-pyg.amarillo .ind-valor { color: #e65100; }
+    .ind-pyg.azul   .ind-valor { color: var(--teal); }
+    .ind-sub { font-size: 0.72rem; color: var(--texto-suave); margin-top: 3px; }
+
+    /* COMPARATIVO */
+    .var-positiva { color: #2e7d32; font-weight: 700; }
+    .var-negativa { color: #c62828; font-weight: 700; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">📊 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Estado de Resultados</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">📊 Administradores — PYME Colombia</div>
+  <h1>Estado de Resultados Automático 2026</h1>
+  <p>Genera el Estado de Resultados (P&L) completo con análisis vertical, márgenes financieros y comparativo de dos períodos para PYME colombianas.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 NIIF PYME Colombia</span>
+    <span class="hero-chip">📊 Análisis vertical</span>
+    <span class="hero-chip">📈 Comparativo períodos</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('simple', this)">📋 P&L Simple</button>
+    <button class="tab-btn" onclick="mostrarTab('comparativo', this)">📈 Comparativo</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📚 Estructura P&L</button>
+  </div>
+
+  <!-- TAB 1: P&L SIMPLE -->
+  <div id="tab-simple" class="tab-panel active">
+    <div class="card">
+      <h2>📋 Estado de Resultados — Período Único</h2>
+      <div class="info-box">
+        <strong>¿Cómo usar?</strong> Ingresa los valores en millones de pesos COP. La herramienta genera el P&L completo con análisis vertical (% sobre ventas) e indicadores financieros clave.
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre de la empresa</label>
+          <input type="text" id="s-empresa" value="Mi Empresa SAS" />
+        </div>
+        <div class="form-group">
+          <label>Período</label>
+          <input type="text" id="s-periodo" value="Enero – Diciembre 2025" />
+        </div>
+      </div>
+
+      <h3>📈 Ingresos</h3>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Ventas brutas ($ millones)</label><input type="number" id="s-ventas-brutas" value="1500" min="0" step="1" /></div>
+        <div class="form-group"><label>Devoluciones y descuentos</label><input type="number" id="s-devoluciones" value="50" min="0" step="1" /></div>
+        <div class="form-group"><label>Otros ingresos operacionales</label><input type="number" id="s-otros-ing-op" value="30" min="0" step="1" /></div>
+      </div>
+
+      <h3>💰 Costos</h3>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Costo de ventas / producción</label><input type="number" id="s-costo-ventas" value="750" min="0" step="1" /></div>
+        <div class="form-group"><label>Mano de obra directa</label><input type="number" id="s-mod" value="0" min="0" step="1" /><span class="form-hint">Si ya está incluido en costo de ventas, dejar en 0</span></div>
+        <div class="form-group"><label>Costos indirectos de fabricación</label><input type="number" id="s-cif" value="0" min="0" step="1" /></div>
+      </div>
+
+      <h3>📑 Gastos Operacionales</h3>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Gastos de administración</label><input type="number" id="s-gasto-admin" value="180" min="0" step="1" /></div>
+        <div class="form-group"><label>Gastos de ventas y mercadeo</label><input type="number" id="s-gasto-ventas" value="120" min="0" step="1" /></div>
+        <div class="form-group"><label>Depreciación y amortización</label><input type="number" id="s-depreciacion" value="45" min="0" step="1" /></div>
+        <div class="form-group"><label>Otros gastos operacionales</label><input type="number" id="s-otros-gastos-op" value="20" min="0" step="1" /></div>
+      </div>
+
+      <h3>🏦 No Operacional</h3>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Ingresos financieros (intereses)</label><input type="number" id="s-ing-financ" value="15" min="0" step="1" /></div>
+        <div class="form-group"><label>Gastos financieros (intereses deuda)</label><input type="number" id="s-gasto-financ" value="60" min="0" step="1" /></div>
+        <div class="form-group"><label>Diferencia en cambio (neta)</label><input type="number" id="s-diferencia-cambio" value="0" step="1" /></div>
+        <div class="form-group"><label>Otros ingresos no operacionales</label><input type="number" id="s-otros-ing-no-op" value="10" min="0" step="1" /></div>
+        <div class="form-group"><label>Otros gastos no operacionales</label><input type="number" id="s-otros-gastos-no-op" value="5" min="0" step="1" /></div>
+        <div class="form-group"><label>Tasa de impuesto de renta (%)</label><input type="number" id="s-tasa-impuesto" value="35" min="0" max="50" step="1" /><span class="form-hint">Colombia 2026: tarifa general 35%</span></div>
+      </div>
+
+      <button class="btn" onclick="calcularPYG()">📊 Generar Estado de Resultados</button>
+    </div>
+    <div id="resultado-pyg" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: COMPARATIVO -->
+  <div id="tab-comparativo" class="tab-panel">
+    <div class="card">
+      <h2>📈 Comparativo de Dos Períodos</h2>
+      <div class="info-box">
+        <strong>Análisis comparativo:</strong> Ingresa los datos de dos períodos (por ejemplo, 2024 vs 2025) para calcular la variación absoluta y porcentual de cada línea del P&L.
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Empresa</label><input type="text" id="c-empresa" value="Mi Empresa SAS" /></div>
+        <div class="form-group"><label>Período 1 (anterior)</label><input type="text" id="c-per1" value="2024" /></div>
+        <div class="form-group"><label>Período 2 (actual)</label><input type="text" id="c-per2" value="2025" /></div>
+      </div>
+
+      <h3>Período 1 — Valores en $ millones</h3>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Ventas netas P1</label><input type="number" id="c1-ventas" value="1200" min="0" step="1" /></div>
+        <div class="form-group"><label>Costo de ventas P1</label><input type="number" id="c1-costo" value="620" min="0" step="1" /></div>
+        <div class="form-group"><label>Gastos operacionales P1</label><input type="number" id="c1-gastos" value="380" min="0" step="1" /></div>
+        <div class="form-group"><label>Gastos financieros P1</label><input type="number" id="c1-financ" value="55" min="0" step="1" /></div>
+        <div class="form-group"><label>Otros ingresos P1</label><input type="number" id="c1-otros" value="20" min="0" step="1" /></div>
+        <div class="form-group"><label>Impuesto renta P1 (%)</label><input type="number" id="c1-tasa" value="35" min="0" max="50" step="1" /></div>
+      </div>
+
+      <h3>Período 2 — Valores en $ millones</h3>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Ventas netas P2</label><input type="number" id="c2-ventas" value="1450" min="0" step="1" /></div>
+        <div class="form-group"><label>Costo de ventas P2</label><input type="number" id="c2-costo" value="730" min="0" step="1" /></div>
+        <div class="form-group"><label>Gastos operacionales P2</label><input type="number" id="c2-gastos" value="420" min="0" step="1" /></div>
+        <div class="form-group"><label>Gastos financieros P2</label><input type="number" id="c2-financ" value="60" min="0" step="1" /></div>
+        <div class="form-group"><label>Otros ingresos P2</label><input type="number" id="c2-otros" value="25" min="0" step="1" /></div>
+        <div class="form-group"><label>Impuesto renta P2 (%)</label><input type="number" id="c2-tasa" value="35" min="0" max="50" step="1" /></div>
+      </div>
+
+      <button class="btn" onclick="calcularComparativo()">📈 Generar Comparativo</button>
+    </div>
+    <div id="resultado-comparativo" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📚 Estructura del Estado de Resultados — NIIF PYME Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table" style="font-size:0.83rem;">
+          <thead><tr><th>Línea</th><th>Descripción</th><th>Fórmula</th></tr></thead>
+          <tbody>
+            <tr><td><b>Ventas netas</b></td><td>Ingresos por ventas menos devoluciones</td><td>Ventas brutas − Devoluciones</td></tr>
+            <tr><td><b>Costo de ventas</b></td><td>Costo de los bienes/servicios vendidos</td><td>Materia prima + MOD + CIF</td></tr>
+            <tr><td><b>Utilidad bruta</b></td><td>Ganancia después del costo</td><td>Ventas netas − Costo ventas</td></tr>
+            <tr><td><b>Gastos operacionales</b></td><td>Admin + Ventas + Depreciación</td><td>Suma de gastos del período</td></tr>
+            <tr><td><b>EBITDA</b></td><td>Utilidad antes de intereses, impuestos, deprec.</td><td>Utilidad op. + Depreciación</td></tr>
+            <tr><td><b>Utilidad operacional</b></td><td>Resultado de la operación principal</td><td>Utilidad bruta − Gastos op.</td></tr>
+            <tr><td><b>Ingresos/gastos financieros</b></td><td>Intereses ganados y pagados</td><td>Ing. financ. − Gastos financ.</td></tr>
+            <tr><td><b>Utilidad antes de impuestos (UAI)</b></td><td>Resultado antes de tributar</td><td>Utilidad op. ± No operacional</td></tr>
+            <tr><td><b>Impuesto de renta</b></td><td>35% tarifa general Colombia 2026</td><td>UAI × 35%</td></tr>
+            <tr><td><b>Utilidad neta</b></td><td>Ganancia final del período</td><td>UAI − Impuesto renta</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📚 Márgenes Financieros — Benchmarks PYME Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Margen</th><th>Fórmula</th><th>PYME Colombia (referencia)</th><th>Interpretación</th></tr></thead>
+          <tbody>
+            <tr><td><b>Margen bruto</b></td><td>Utilidad bruta ÷ Ventas</td><td>Comercio: 25–40% | Manufactura: 30–50% | Servicios: 50–70%</td><td>Eficiencia en costos directos</td></tr>
+            <tr><td><b>Margen EBITDA</b></td><td>EBITDA ÷ Ventas</td><td>Saludable: &gt; 15%</td><td>Generación de caja operativa</td></tr>
+            <tr><td><b>Margen operacional</b></td><td>Utilidad op. ÷ Ventas</td><td>Saludable: &gt; 8%</td><td>Rentabilidad de la operación</td></tr>
+            <tr><td><b>Margen neto</b></td><td>Utilidad neta ÷ Ventas</td><td>Saludable: &gt; 5%</td><td>Rentabilidad final del negocio</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> El Estado de Resultados oficial debe ser preparado y firmado por un <strong>Contador Público matriculado</strong>, bajo las Normas de Información Financiera para PYME (NIIF PYME) adoptadas en Colombia mediante el Decreto 3022/2013. Los valores están en millones de pesos COP.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function v(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
+function fmt(n, dec=1) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function pct(val, base) { return base !== 0 ? fmt(val/base*100)+'%' : '—'; }
+function semaforo(val) { return val >= 0 ? 'verde' : 'rojo'; }
+function varClase(val) { return val >= 0 ? 'var-positiva' : 'var-negativa'; }
+function varSigNo(val) { return val >= 0 ? '▲ +' : '▼ '; }
+
+function calcularPYG() {
+  const empresa  = document.getElementById('s-empresa').value || 'Empresa';
+  const periodo  = document.getElementById('s-periodo').value || '2025';
+
+  const ventasBrutas   = v('s-ventas-brutas');
+  const devoluciones   = v('s-devoluciones');
+  const otrosIngOp     = v('s-otros-ing-op');
+  const costoVentas    = v('s-costo-ventas') + v('s-mod') + v('s-cif');
+  const gastoAdmin     = v('s-gasto-admin');
+  const gastoVentas    = v('s-gasto-ventas');
+  const depreciacion   = v('s-depreciacion');
+  const otrosGastosOp  = v('s-otros-gastos-op');
+  const ingFinanc      = v('s-ing-financ');
+  const gastoFinanc    = v('s-gasto-financ');
+  const difCambio      = v('s-diferencia-cambio');
+  const otrosIngNoOp   = v('s-otros-ing-no-op');
+  const otrosGastNoOp  = v('s-otros-gastos-no-op');
+  const tasaImp        = v('s-tasa-impuesto') / 100;
+
+  // Cálculos
+  const ventasNetas    = ventasBrutas - devoluciones;
+  const ingTotalOp     = ventasNetas + otrosIngOp;
+  const utilBruta      = ventasNetas - costoVentas;
+  const margenBruto    = ventasNetas > 0 ? utilBruta/ventasNetas*100 : 0;
+  const gastosOp       = gastoAdmin + gastoVentas + depreciacion + otrosGastosOp;
+  const ebitda         = utilBruta - gastoAdmin - gastoVentas - otrosGastosOp;
+  const utilOp         = utilBruta - gastosOp;
+  const margenOp       = ventasNetas > 0 ? utilOp/ventasNetas*100 : 0;
+  const margenEBITDA   = ventasNetas > 0 ? ebitda/ventasNetas*100 : 0;
+  const noOp           = ingFinanc - gastoFinanc + difCambio + otrosIngNoOp - otrosGastNoOp;
+  const uai            = utilOp + noOp;
+  const impuesto       = Math.max(0, uai * tasaImp);
+  const utilNeta       = uai - impuesto;
+  const margenNeto     = ventasNetas > 0 ? utilNeta/ventasNetas*100 : 0;
+
+  const filas = [
+    { label:'(+) Ventas brutas', val:ventasBrutas, clase:'' },
+    { label:'(−) Devoluciones y descuentos', val:-devoluciones, clase:'negativo' },
+    { label:'(+) Otros ingresos operacionales', val:otrosIngOp, clase:'' },
+    { label:'VENTAS NETAS', val:ventasNetas, clase:'subtotal', bold:true },
+    { label:'', val:null, clase:'seccion', label2:'COSTO DE LO VENDIDO' },
+    { label:'(−) Costo de ventas', val:-costoVentas, clase:'negativo' },
+    { label:'UTILIDAD BRUTA', val:utilBruta, clase:'subtotal '+(utilBruta>=0?'positivo':'negativo'), bold:true },
+    { label:'', val:null, clase:'seccion', label2:'GASTOS OPERACIONALES' },
+    { label:'(−) Gastos de administración', val:-gastoAdmin, clase:'negativo' },
+    { label:'(−) Gastos de ventas', val:-gastoVentas, clase:'negativo' },
+    { label:'(−) Depreciación y amortización', val:-depreciacion, clase:'negativo' },
+    { label:'(−) Otros gastos operacionales', val:-otrosGastosOp, clase:'negativo' },
+    { label:'EBITDA', val:ebitda, clase:'subtotal '+(ebitda>=0?'positivo':'negativo'), bold:true },
+    { label:'UTILIDAD OPERACIONAL', val:utilOp, clase:'subtotal '+(utilOp>=0?'positivo':'negativo'), bold:true },
+    { label:'', val:null, clase:'seccion', label2:'INGRESOS Y GASTOS NO OPERACIONALES' },
+    { label:'(+) Ingresos financieros', val:ingFinanc, clase:'' },
+    { label:'(−) Gastos financieros', val:-gastoFinanc, clase:'negativo' },
+    { label:'(±) Diferencia en cambio', val:difCambio, clase:difCambio>=0?'':'negativo' },
+    { label:'(+) Otros ingresos no operacionales', val:otrosIngNoOp, clase:'' },
+    { label:'(−) Otros gastos no operacionales', val:-otrosGastNoOp, clase:'negativo' },
+    { label:'UTILIDAD ANTES DE IMPUESTOS (UAI)', val:uai, clase:'subtotal '+(uai>=0?'positivo':'negativo'), bold:true },
+    { label:`(−) Impuesto de renta (${(tasaImp*100).toFixed(0)}%)`, val:-impuesto, clase:'negativo' },
+  ];
+
+  const filasHTML = filas.map(f => {
+    if (f.clase === 'seccion') return `<tr class="seccion"><td colspan="3">${f.label2}</td></tr>`;
+    if (f.val === null) return '';
+    return `<tr class="${f.clase}">
+      <td ${f.bold?'style="font-weight:700;"':''}>${f.label}</td>
+      <td>$ ${fmt(Math.abs(f.val))}</td>
+      <td>${pct(f.val, ventasNetas)}</td>
+    </tr>`;
+  }).join('');
+
+  const indClasses = [semaforo(margenBruto), semaforo(margenEBITDA), semaforo(margenOp), semaforo(utilNeta)];
+
+  document.getElementById('resultado-pyg').style.display = 'block';
+  document.getElementById('resultado-pyg').innerHTML = `
+    <div class="card">
+      <h2>📊 ${empresa} — Estado de Resultados</h2>
+      <p style="font-size:0.82rem; color:var(--texto-suave); margin-bottom:0.5rem;">Período: ${periodo} | Valores en millones de pesos COP</p>
+
+      <div class="indicadores-pyg">
+        <div class="ind-pyg ${indClasses[0]}">
+          <div class="ind-nombre">Margen Bruto</div>
+          <div class="ind-valor">${fmt(margenBruto)}%</div>
+          <div class="ind-sub">Util. bruta / Ventas</div>
+        </div>
+        <div class="ind-pyg ${indClasses[1]}">
+          <div class="ind-nombre">Margen EBITDA</div>
+          <div class="ind-valor">${fmt(margenEBITDA)}%</div>
+          <div class="ind-sub">EBITDA / Ventas</div>
+        </div>
+        <div class="ind-pyg ${indClasses[2]}">
+          <div class="ind-nombre">Margen Operacional</div>
+          <div class="ind-valor">${fmt(margenOp)}%</div>
+          <div class="ind-sub">Util. op. / Ventas</div>
+        </div>
+        <div class="ind-pyg ${semaforo(utilNeta)}">
+          <div class="ind-nombre">Margen Neto</div>
+          <div class="ind-valor">${fmt(margenNeto)}%</div>
+          <div class="ind-sub">Util. neta / Ventas</div>
+        </div>
+        <div class="ind-pyg azul">
+          <div class="ind-nombre">EBITDA</div>
+          <div class="ind-valor">$ ${fmt(ebitda)}</div>
+          <div class="ind-sub">millones COP</div>
+        </div>
+        <div class="ind-pyg ${semaforo(utilNeta)}">
+          <div class="ind-nombre">Utilidad Neta</div>
+          <div class="ind-valor">$ ${fmt(utilNeta)}</div>
+          <div class="ind-sub">millones COP</div>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="pyg-tabla">
+          <thead><tr><th>Concepto</th><th>$ Millones</th><th>% Ventas</th></tr></thead>
+          <tbody>
+            ${filasHTML}
+            <tr class="total-final">
+              <td>💰 UTILIDAD NETA DEL PERÍODO</td>
+              <td>$ ${fmt(utilNeta)}</td>
+              <td>${pct(utilNeta, ventasNetas)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function calcularComparativo() {
+  const empresa = document.getElementById('c-empresa').value || 'Empresa';
+  const per1    = document.getElementById('c-per1').value || 'P1';
+  const per2    = document.getElementById('c-per2').value || 'P2';
+
+  const v1 = {
+    ventas: v('c1-ventas'), costo: v('c1-costo'),
+    gastos: v('c1-gastos'), financ: v('c1-financ'),
+    otros: v('c1-otros'),  tasa: v('c1-tasa')/100
+  };
+  const v2 = {
+    ventas: v('c2-ventas'), costo: v('c2-costo'),
+    gastos: v('c2-gastos'), financ: v('c2-financ'),
+    otros: v('c2-otros'),  tasa: v('c2-tasa')/100
+  };
+
+  function calcP(d) {
+    const utilBruta = d.ventas - d.costo;
+    const utilOp    = utilBruta - d.gastos;
+    const uai       = utilOp - d.financ + d.otros;
+    const imp       = Math.max(0, uai * d.tasa);
+    return { utilBruta, utilOp, uai, imp, utilNeta: uai - imp,
+      mB: d.ventas>0?utilBruta/d.ventas*100:0,
+      mO: d.ventas>0?utilOp/d.ventas*100:0,
+      mN: d.ventas>0?(uai-imp)/d.ventas*100:0 };
+  }
+
+  const r1 = calcP(v1);
+  const r2 = calcP(v2);
+
+  const lineas = [
+    { label:'Ventas netas',             p1:v1.ventas,    p2:v2.ventas },
+    { label:'Costo de ventas',          p1:v1.costo,     p2:v2.costo },
+    { label:'Utilidad bruta',           p1:r1.utilBruta, p2:r2.utilBruta, sub:true },
+    { label:'Gastos operacionales',     p1:v1.gastos,    p2:v2.gastos },
+    { label:'Utilidad operacional',     p1:r1.utilOp,    p2:r2.utilOp, sub:true },
+    { label:'Gastos financieros netos', p1:v1.financ,    p2:v2.financ },
+    { label:'Otros ingresos',           p1:v1.otros,     p2:v2.otros },
+    { label:'UAI',                      p1:r1.uai,       p2:r2.uai, sub:true },
+    { label:'Impuesto de renta',        p1:r1.imp,       p2:r2.imp },
+    { label:'UTILIDAD NETA',            p1:r1.utilNeta,  p2:r2.utilNeta, total:true },
+  ];
+
+  const filasHTML = lineas.map(l => {
+    const varAbs = l.p2 - l.p1;
+    const varPct = l.p1 !== 0 ? varAbs/Math.abs(l.p1)*100 : 0;
+    const clase  = l.total ? 'total-final' : l.sub ? 'subtotal' : '';
+    return `<tr class="${clase}">
+      <td ${l.total?'style="font-weight:900;"':''}>${l.label}</td>
+      <td>$ ${fmt(l.p1)}</td>
+      <td>${l.p1>0?pct(l.p1,v1.ventas):'—'}</td>
+      <td>$ ${fmt(l.p2)}</td>
+      <td>${l.p2>0?pct(l.p2,v2.ventas):'—'}</td>
+      <td class="${varClase(varAbs)}">${varSigNo(varAbs)}${fmt(Math.abs(varAbs))}</td>
+      <td class="${varClase(varPct)}">${varSigNo(varPct)}${fmt(Math.abs(varPct))}%</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('resultado-comparativo').style.display = 'block';
+  document.getElementById('resultado-comparativo').innerHTML = `
+    <div class="card">
+      <h2>📈 ${empresa} — Comparativo ${per1} vs ${per2}</h2>
+      <div class="indicadores-pyg" style="margin-bottom:1rem;">
+        <div class="ind-pyg ${semaforo(v2.ventas-v1.ventas)}">
+          <div class="ind-nombre">Crecimiento Ventas</div>
+          <div class="ind-valor">${varSigNo(v2.ventas-v1.ventas)}${fmt(Math.abs((v2.ventas-v1.ventas)/v1.ventas*100))}%</div>
+          <div class="ind-sub">${per1}: $${fmt(v1.ventas)}M → ${per2}: $${fmt(v2.ventas)}M</div>
+        </div>
+        <div class="ind-pyg ${semaforo(r2.mB-r1.mB)}">
+          <div class="ind-nombre">Δ Margen Bruto</div>
+          <div class="ind-valor">${varSigNo(r2.mB-r1.mB)}${fmt(Math.abs(r2.mB-r1.mB))}pp</div>
+          <div class="ind-sub">${fmt(r1.mB)}% → ${fmt(r2.mB)}%</div>
+        </div>
+        <div class="ind-pyg ${semaforo(r2.mO-r1.mO)}">
+          <div class="ind-nombre">Δ Margen Operac.</div>
+          <div class="ind-valor">${varSigNo(r2.mO-r1.mO)}${fmt(Math.abs(r2.mO-r1.mO))}pp</div>
+          <div class="ind-sub">${fmt(r1.mO)}% → ${fmt(r2.mO)}%</div>
+        </div>
+        <div class="ind-pyg ${semaforo(r2.utilNeta-r1.utilNeta)}">
+          <div class="ind-nombre">Δ Utilidad Neta</div>
+          <div class="ind-valor">${varSigNo(r2.utilNeta-r1.utilNeta)}$${fmt(Math.abs(r2.utilNeta-r1.utilNeta))}M</div>
+          <div class="ind-sub">${fmt(r1.mN)}% → ${fmt(r2.mN)}%</div>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="pyg-tabla">
+          <thead>
+            <tr>
+              <th>Concepto</th>
+              <th>${per1} ($M)</th><th>${per1} (%)</th>
+              <th>${per2} ($M)</th><th>${per2} (%)</th>
+              <th>Var. Abs.</th><th>Var. %</th>
+            </tr>
+          </thead>
+          <tbody>${filasHTML}</tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+// ─ Tabla referencia ─
+const refTable = document.querySelector('.ref-table');
+</script>
+</body>
+</html>
