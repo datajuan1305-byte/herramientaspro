@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indicadores Financieros Empresas Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de indicadores financieros para administradores colombianos. Liquidez, endeudamiento, rentabilidad y actividad. Análisis financiero PYME Colombia 2026." />
+  <meta name="keywords" content="indicadores financieros colombia, razon corriente liquidez, ROE ROA rentabilidad, analisis financiero PYME colombia, administrador empresas colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --indigo: #283593;
+      --indigo-medio: #3949ab;
+      --indigo-claro: #e8eaf6;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #283593 60%, #5c6bc0 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 940px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 100px; padding: 9px 8px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--indigo-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--indigo-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--indigo-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:700px) { .form-grid-3 { grid-template-columns: 1fr 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--indigo-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn { width: 100%; padding: 12px; background: var(--indigo-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--indigo); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--indigo-claro); border-left: 4px solid var(--indigo-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--indigo); }
+
+    /* TARJETAS DE INDICADORES */
+    .indicadores-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .ind-card {
+      border-radius: var(--radio); padding: 1.2rem; border: 2px solid transparent;
+      position: relative; overflow: hidden;
+    }
+    .ind-card.verde  { background: #e8f5e9; border-color: #2e7d32; }
+    .ind-card.amarillo { background: #fff8e1; border-color: #f9a825; }
+    .ind-card.rojo   { background: #ffebee; border-color: #c62828; }
+    .ind-card.gris   { background: var(--indigo-claro); border-color: var(--indigo-medio); }
+
+    .ind-nombre { font-size: 0.75rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
+    .ind-valor  { font-size: 2rem; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+    .ind-card.verde  .ind-valor { color: #1b5e20; }
+    .ind-card.amarillo .ind-valor { color: #e65100; }
+    .ind-card.rojo   .ind-valor { color: #b71c1c; }
+    .ind-card.gris   .ind-valor { color: var(--indigo); }
+    .ind-estado { font-size: 0.78rem; font-weight: 700; }
+    .ind-formula { font-size: 0.72rem; color: var(--texto-suave); margin-top: 4px; font-style: italic; }
+    .ind-ref { font-size: 0.72rem; margin-top: 3px; }
+    .ind-ref span { font-weight: 700; }
+
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #283593 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-detalle { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .semaforo { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 700; margin-top: 0.5rem; }
+    .sem-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--indigo-claro); }
+
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">📊 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Indicadores Financieros</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">📊 Administradores de Empresas</div>
+  <h1>Indicadores Financieros Empresas 2026</h1>
+  <p>Calcula y analiza los indicadores de liquidez, endeudamiento, rentabilidad y actividad de tu empresa. Benchmarks para PYME colombianas 2026.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Benchmarks PYME Colombia</span>
+    <span class="hero-chip">💧 Liquidez</span>
+    <span class="hero-chip">📈 Rentabilidad</span>
+    <span class="hero-chip">⚖️ Endeudamiento</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('datos', this)">📋 Datos Financieros</button>
+    <button class="tab-btn" onclick="mostrarTab('liquidez', this)">💧 Liquidez</button>
+    <button class="tab-btn" onclick="mostrarTab('endeudamiento', this)">⚖️ Endeudamiento</button>
+    <button class="tab-btn" onclick="mostrarTab('rentabilidad', this)">📈 Rentabilidad</button>
+    <button class="tab-btn" onclick="mostrarTab('actividad', this)">🔄 Actividad</button>
+  </div>
+
+  <!-- TAB 1: DATOS -->
+  <div id="tab-datos" class="tab-panel active">
+    <div class="card">
+      <h2>📋 Ingresa los Datos del Balance General y Estado de Resultados</h2>
+      <div class="info-box">
+        <strong>¿Cómo usar?</strong> Ingresa los datos de tu empresa y haz clic en "Calcular todos los indicadores". Puedes navegar por cada grupo de indicadores usando las pestañas. Los valores están en millones de pesos COP.
+      </div>
+
+      <h3>Balance General — Activos</h3>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Caja y bancos ($ millones)</label><input type="number" id="d-caja" value="80" min="0" step="1" /></div>
+        <div class="form-group"><label>Inversiones temporales</label><input type="number" id="d-inv-temp" value="40" min="0" step="1" /></div>
+        <div class="form-group"><label>Cartera / Cuentas por cobrar</label><input type="number" id="d-cartera" value="180" min="0" step="1" /></div>
+        <div class="form-group"><label>Inventarios</label><input type="number" id="d-inventarios" value="150" min="0" step="1" /></div>
+        <div class="form-group"><label>Otros activos corrientes</label><input type="number" id="d-otros-corr" value="30" min="0" step="1" /></div>
+        <div class="form-group"><label>Total activo fijo (neto)</label><input type="number" id="d-activo-fijo" value="600" min="0" step="1" /></div>
+        <div class="form-group"><label>Otros activos no corrientes</label><input type="number" id="d-otros-nc" value="50" min="0" step="1" /></div>
+      </div>
+
+      <h3>Balance General — Pasivos y Patrimonio</h3>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Obligaciones financieras CP</label><input type="number" id="d-ob-financ" value="90" min="0" step="1" /></div>
+        <div class="form-group"><label>Proveedores / Cuentas por pagar</label><input type="number" id="d-proveed" value="100" min="0" step="1" /></div>
+        <div class="form-group"><label>Impuestos y aportes por pagar</label><input type="number" id="d-impuestos" value="40" min="0" step="1" /></div>
+        <div class="form-group"><label>Otros pasivos corrientes</label><input type="number" id="d-otros-pc" value="20" min="0" step="1" /></div>
+        <div class="form-group"><label>Deudas largo plazo (LP)</label><input type="number" id="d-deuda-lp" value="200" min="0" step="1" /></div>
+        <div class="form-group"><label>Total patrimonio</label><input type="number" id="d-patrimonio" value="680" min="0" step="1" /></div>
+      </div>
+
+      <h3>Estado de Resultados</h3>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Ventas netas</label><input type="number" id="d-ventas" value="1200" min="0" step="1" /></div>
+        <div class="form-group"><label>Costo de ventas</label><input type="number" id="d-costo-ventas" value="720" min="0" step="1" /></div>
+        <div class="form-group"><label>Gastos operacionales</label><input type="number" id="d-gastos-op" value="280" min="0" step="1" /></div>
+        <div class="form-group"><label>Gastos financieros (intereses)</label><input type="number" id="d-gastos-fin" value="35" min="0" step="1" /></div>
+        <div class="form-group"><label>Otros ingresos no operacionales</label><input type="number" id="d-otros-ing" value="15" min="0" step="1" /></div>
+        <div class="form-group"><label>Impuesto de renta</label><input type="number" id="d-impuesto-renta" value="54" min="0" step="1" /></div>
+      </div>
+
+      <h3>Datos adicionales</h3>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Depreciación y amortización</label><input type="number" id="d-depreciacion" value="45" min="0" step="1" /></div>
+        <div class="form-group"><label>Sector empresarial</label>
+          <select id="d-sector">
+            <option value="comercio">Comercio</option>
+            <option value="manufactura" selected>Manufactura / Industria</option>
+            <option value="servicios">Servicios</option>
+            <option value="construccion">Construcción</option>
+            <option value="agro">Agropecuario</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Tamaño empresa</label>
+          <select id="d-tamano">
+            <option value="micro">Microempresa (&lt; $800M ventas)</option>
+            <option value="pequena" selected>Pequeña ($800M – $6.400M)</option>
+            <option value="mediana">Mediana ($6.400M – $51.200M)</option>
+            <option value="grande">Grande (&gt; $51.200M)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularTodos()">📊 Calcular Todos los Indicadores</button>
+    </div>
+    <div id="resumen-general" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: LIQUIDEZ -->
+  <div id="tab-liquidez" class="tab-panel">
+    <div id="resultado-liquidez">
+      <div class="card"><h2>💧 Indicadores de Liquidez</h2><p style="color:var(--texto-suave); font-size:0.9rem;">Ingresa los datos en la pestaña "Datos Financieros" y calcula los indicadores primero.</p></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: ENDEUDAMIENTO -->
+  <div id="tab-endeudamiento" class="tab-panel">
+    <div id="resultado-endeudamiento">
+      <div class="card"><h2>⚖️ Indicadores de Endeudamiento</h2><p style="color:var(--texto-suave); font-size:0.9rem;">Ingresa los datos en la pestaña "Datos Financieros" y calcula los indicadores primero.</p></div>
+    </div>
+  </div>
+
+  <!-- TAB 4: RENTABILIDAD -->
+  <div id="tab-rentabilidad" class="tab-panel">
+    <div id="resultado-rentabilidad">
+      <div class="card"><h2>📈 Indicadores de Rentabilidad</h2><p style="color:var(--texto-suave); font-size:0.9rem;">Ingresa los datos en la pestaña "Datos Financieros" y calcula los indicadores primero.</p></div>
+    </div>
+  </div>
+
+  <!-- TAB 5: ACTIVIDAD -->
+  <div id="tab-actividad" class="tab-panel">
+    <div id="resultado-actividad">
+      <div class="card"><h2>🔄 Indicadores de Actividad</h2><p style="color:var(--texto-suave); font-size:0.9rem;">Ingresa los datos en la pestaña "Datos Financieros" y calcula los indicadores primero.</p></div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los indicadores financieros deben ser analizados en contexto por un <strong>Administrador de Empresas o Contador Público</strong>, considerando las particularidades del sector, el ciclo económico y la estrategia de la empresa. Los benchmarks son referencias generales para PYME colombianas 2026.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function v(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
+function fmt(n, dec=2) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+
+function semaforo(valor, bueno, regular, inverted=false) {
+  // inverted: menor es mejor (como endeudamiento)
+  if (!inverted) {
+    if (valor >= bueno)   return 'verde';
+    if (valor >= regular) return 'amarillo';
+    return 'rojo';
+  } else {
+    if (valor <= bueno)   return 'verde';
+    if (valor <= regular) return 'amarillo';
+    return 'rojo';
+  }
+}
+
+function estadoTexto(color) {
+  return color === 'verde' ? '✅ Favorable' : color === 'amarillo' ? '⚠️ Aceptable' : '🔴 Crítico';
+}
+
+function indCard(nombre, valor, unidad, formula, refBueno, refAceptable, color, descripcion) {
+  return `<div class="ind-card ${color}">
+    <div class="ind-nombre">${nombre}</div>
+    <div class="ind-valor">${fmt(valor)}${unidad}</div>
+    <div class="ind-estado">${estadoTexto(color)}</div>
+    <div class="ind-formula">${formula}</div>
+    <div class="ind-ref">Ref PYME: <span>Bueno ${refBueno} | Aceptable ${refAceptable}</span></div>
+    <div style="font-size:0.72rem; color:var(--texto-suave); margin-top:3px;">${descripcion}</div>
+  </div>`;
+}
+
+function calcularTodos() {
+  // ── LEER DATOS ──
+  const caja        = v('d-caja');
+  const invTemp     = v('d-inv-temp');
+  const cartera     = v('d-cartera');
+  const inventarios = v('d-inventarios');
+  const otrosCorr   = v('d-otros-corr');
+  const activoFijo  = v('d-activo-fijo');
+  const otrosNC     = v('d-otros-nc');
+
+  const obFinanc    = v('d-ob-financ');
+  const proveed     = v('d-proveed');
+  const impuestos   = v('d-impuestos');
+  const otrosPC     = v('d-otros-pc');
+  const deudaLP     = v('d-deuda-lp');
+  const patrimonio  = v('d-patrimonio');
+
+  const ventas      = v('d-ventas');
+  const costoVentas = v('d-costo-ventas');
+  const gastosOp    = v('d-gastos-op');
+  const gastosFin   = v('d-gastos-fin');
+  const otrosIng    = v('d-otros-ing');
+  const impRenta    = v('d-impuesto-renta');
+  const depreciacion= v('d-depreciacion');
+
+  // CALCULAR SUBTOTALES
+  const activoCorriente = caja + invTemp + cartera + inventarios + otrosCorr;
+  const activoTotal     = activoCorriente + activoFijo + otrosNC;
+  const pasivoCorriente = obFinanc + proveed + impuestos + otrosPC;
+  const pasivoTotal     = pasivoCorriente + deudaLP;
+  const activoPrueba    = activoCorriente - inventarios; // activo prueba ácida
+
+  const utilidadBruta   = ventas - costoVentas;
+  const utilidadOp      = utilidadBruta - gastosOp;
+  const ebitda          = utilidadOp + depreciacion;
+  const utilidadAIR     = utilidadOp + otrosIng - gastosFin;
+  const utilidadNeta    = utilidadAIR - impRenta;
+
+  // ── INDICADORES DE LIQUIDEZ ──
+  const razonCorriente = pasivoCorriente > 0 ? activoCorriente / pasivoCorriente : 0;
+  const pruebaAcida    = pasivoCorriente > 0 ? activoPrueba / pasivoCorriente : 0;
+  const capitalTrabajo = activoCorriente - pasivoCorriente;
+  const efectividad    = pasivoCorriente > 0 ? (caja + invTemp) / pasivoCorriente : 0;
+
+  // ── INDICADORES DE ENDEUDAMIENTO ──
+  const nivelEndeud    = activoTotal > 0 ? (pasivoTotal / activoTotal) * 100 : 0;
+  const autonomia      = pasivoTotal > 0 ? patrimonio / pasivoTotal : 0;
+  const concCP         = pasivoTotal > 0 ? (pasivoCorriente / pasivoTotal) * 100 : 0;
+  const cobIntereses   = gastosFin > 0 ? utilidadOp / gastosFin : 0;
+  const deudaEBITDA    = ebitda > 0 ? pasivoTotal / ebitda : 0;
+
+  // ── INDICADORES DE RENTABILIDAD ──
+  const margenBruto    = ventas > 0 ? (utilidadBruta / ventas) * 100 : 0;
+  const margenOp       = ventas > 0 ? (utilidadOp / ventas) * 100 : 0;
+  const margenNeto     = ventas > 0 ? (utilidadNeta / ventas) * 100 : 0;
+  const margenEBITDA   = ventas > 0 ? (ebitda / ventas) * 100 : 0;
+  const roa            = activoTotal > 0 ? (utilidadNeta / activoTotal) * 100 : 0;
+  const roe            = patrimonio > 0 ? (utilidadNeta / patrimonio) * 100 : 0;
+
+  // ── INDICADORES DE ACTIVIDAD ──
+  const rotacionCartera   = ventas > 0 && cartera > 0 ? ventas / cartera : 0;
+  const diasCartera       = rotacionCartera > 0 ? 360 / rotacionCartera : 0;
+  const rotacionInv       = costoVentas > 0 && inventarios > 0 ? costoVentas / inventarios : 0;
+  const diasInv           = rotacionInv > 0 ? 360 / rotacionInv : 0;
+  const rotacionProveed   = costoVentas > 0 && proveed > 0 ? costoVentas / proveed : 0;
+  const diasProveed       = rotacionProveed > 0 ? 360 / rotacionProveed : 0;
+  const cicloOperativo    = diasCartera + diasInv;
+  const cicloFinanciero   = cicloOperativo - diasProveed;
+  const rotacionActivos   = activoTotal > 0 ? ventas / activoTotal : 0;
+
+  // ── RESUMEN GENERAL ──
+  const puntos = [
+    razonCorriente >= 1.5, pruebaAcida >= 1.0,
+    nivelEndeud <= 60, cobIntereses >= 2,
+    margenOp >= 8, roe >= 10,
+    rotacionActivos >= 1
+  ].filter(Boolean).length;
+
+  const salud = puntos >= 6 ? 'Excelente' : puntos >= 4 ? 'Buena' : puntos >= 2 ? 'Regular' : 'Crítica';
+  const saludColor = puntos >= 6 ? '#2e7d32' : puntos >= 4 ? '#f57c00' : '#c62828';
+
+  // ── RENDERIZAR ──
+  // RESUMEN
+  document.getElementById('resumen-general').style.display = 'block';
+  document.getElementById('resumen-general').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Resumen Financiero</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:0.8rem;">
+        <div style="background:rgba(255,255,255,0.12); border-radius:8px; padding:0.8rem; text-align:center;">
+          <div style="font-size:2rem; font-weight:900; color:#ffe082;">${salud}</div>
+          <div style="font-size:0.72rem; opacity:0.8;">${puntos}/7 indicadores favorables</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.12); border-radius:8px; padding:0.8rem; text-align:center;">
+          <div style="font-size:1.3rem; font-weight:800; color:#ffe082;">$ ${fmt(activoTotal)} M</div><div style="font-size:0.72rem; opacity:0.8;">Activo total</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.12); border-radius:8px; padding:0.8rem; text-align:center;">
+          <div style="font-size:1.3rem; font-weight:800; color:#ffe082;">$ ${fmt(ventas)} M</div><div style="font-size:0.72rem; opacity:0.8;">Ventas netas</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.12); border-radius:8px; padding:0.8rem; text-align:center;">
+          <div style="font-size:1.3rem; font-weight:800; color:#ffe082;">$ ${fmt(utilidadNeta)} M</div><div style="font-size:0.72rem; opacity:0.8;">Utilidad neta</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.12); border-radius:8px; padding:0.8rem; text-align:center;">
+          <div style="font-size:1.3rem; font-weight:800; color:#ffe082;">$ ${fmt(ebitda)} M</div><div style="font-size:0.72rem; opacity:0.8;">EBITDA</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.12); border-radius:8px; padding:0.8rem; text-align:center;">
+          <div style="font-size:1.3rem; font-weight:800; color:#ffe082;">$ ${fmt(capitalTrabajo)} M</div><div style="font-size:0.72rem; opacity:0.8;">Capital de trabajo</div>
+        </div>
+      </div>
+      <div class="resultado-detalle" style="margin-top:1rem;">
+        <b>Estado de Resultados resumido:</b><br>
+        Ventas netas: $ ${fmt(ventas)} M | Costo ventas: $ ${fmt(costoVentas)} M | Utilidad bruta: $ ${fmt(utilidadBruta)} M (${fmt(margenBruto,1)}%)<br>
+        Gastos operacionales: $ ${fmt(gastosOp)} M | Utilidad operacional: $ ${fmt(utilidadOp)} M (${fmt(margenOp,1)}%)<br>
+        EBITDA: $ ${fmt(ebitda)} M (${fmt(margenEBITDA,1)}%) | Gastos financieros: $ ${fmt(gastosFin)} M<br>
+        <b>Utilidad neta: $ ${fmt(utilidadNeta)} M (Margen neto: ${fmt(margenNeto,1)}%)</b>
+      </div>
+    </div>`;
+
+  // LIQUIDEZ
+  document.getElementById('resultado-liquidez').innerHTML = `
+    <div class="card"><h2>💧 Indicadores de Liquidez</h2>
+      <div class="indicadores-grid">
+        ${indCard('Razón Corriente', razonCorriente, 'x', 'Activo corriente ÷ Pasivo corriente', '≥ 1.5', '1.0–1.5', semaforo(razonCorriente,1.5,1.0), 'Capacidad de pago a corto plazo. Ideal: entre 1.5 y 2.5')}
+        ${indCard('Prueba Ácida', pruebaAcida, 'x', '(Activo corr. − Inventarios) ÷ Pasivo corr.', '≥ 1.0', '0.7–1.0', semaforo(pruebaAcida,1.0,0.7), 'Liquidez sin depender de inventarios')}
+        ${indCard('Razón Efectivo', efectividad, 'x', '(Caja + Inv. temporales) ÷ Pasivo corr.', '≥ 0.3', '0.2–0.3', semaforo(efectividad,0.3,0.2), 'Disponibilidad inmediata de efectivo')}
+        ${indCard('Capital de Trabajo', capitalTrabajo, ' M', 'Activo corriente − Pasivo corriente', '> 0', '> 0', capitalTrabajo >= 0 ? 'verde' : 'rojo', 'Excedente de recursos corrientes. Debe ser positivo')}
+      </div>
+      <div class="resultado-box" style="margin-top:1rem;">
+        <div class="resultado-detalle">
+          <b>Activo corriente:</b> $ ${fmt(activoCorriente)} M (caja: ${fmt(caja)}, cartera: ${fmt(cartera)}, inventarios: ${fmt(inventarios)})<br>
+          <b>Pasivo corriente:</b> $ ${fmt(pasivoCorriente)} M (oblig. financ: ${fmt(obFinanc)}, proveedores: ${fmt(proveed)})<br>
+          <b>Capital de trabajo:</b> $ ${fmt(capitalTrabajo)} M ${capitalTrabajo < 0 ? '⚠️ NEGATIVO — riesgo de iliquidez' : '✅ Positivo'}
+        </div>
+      </div>
+    </div>`;
+
+  // ENDEUDAMIENTO
+  document.getElementById('resultado-endeudamiento').innerHTML = `
+    <div class="card"><h2>⚖️ Indicadores de Endeudamiento</h2>
+      <div class="indicadores-grid">
+        ${indCard('Nivel de Endeudamiento', nivelEndeud, '%', 'Pasivo total ÷ Activo total × 100', '≤ 50%', '50–70%', semaforo(nivelEndeud,50,70,true), 'Proporción de activos financiados con deuda')}
+        ${indCard('Autonomía Financiera', autonomia, 'x', 'Patrimonio ÷ Pasivo total', '≥ 1.0', '0.5–1.0', semaforo(autonomia,1.0,0.5), 'Recursos propios vs deuda. Mayor = más independiente')}
+        ${indCard('Concentración CP', concCP, '%', 'Pasivo corriente ÷ Pasivo total × 100', '≤ 50%', '50–70%', semaforo(concCP,50,70,true), 'Proporción de la deuda que vence en el corto plazo')}
+        ${indCard('Cobertura Intereses', cobIntereses, 'x', 'Utilidad operacional ÷ Gastos financieros', '≥ 3x', '1.5–3x', semaforo(cobIntereses,3,1.5), 'Capacidad de cubrir intereses con utilidad operacional')}
+        ${indCard('Deuda / EBITDA', deudaEBITDA, 'x', 'Pasivo total ÷ EBITDA', '≤ 2x', '2–4x', semaforo(deudaEBITDA,2,4,true), 'Años necesarios para pagar deuda con EBITDA')}
+      </div>
+      <div class="resultado-box" style="margin-top:1rem;">
+        <div class="resultado-detalle">
+          <b>Pasivo total:</b> $ ${fmt(pasivoTotal)} M (CP: ${fmt(pasivoCorriente)} + LP: ${fmt(deudaLP)})<br>
+          <b>Patrimonio:</b> $ ${fmt(patrimonio)} M | <b>Activo total:</b> $ ${fmt(activoTotal)} M<br>
+          <b>EBITDA:</b> $ ${fmt(ebitda)} M | <b>Deuda/EBITDA:</b> ${fmt(deudaEBITDA,1)}x
+        </div>
+      </div>
+    </div>`;
+
+  // RENTABILIDAD
+  document.getElementById('resultado-rentabilidad').innerHTML = `
+    <div class="card"><h2>📈 Indicadores de Rentabilidad</h2>
+      <div class="indicadores-grid">
+        ${indCard('Margen Bruto', margenBruto, '%', 'Utilidad bruta ÷ Ventas × 100', '≥ 35%', '20–35%', semaforo(margenBruto,35,20), 'Rentabilidad después del costo de ventas')}
+        ${indCard('Margen Operacional', margenOp, '%', 'Utilidad operacional ÷ Ventas × 100', '≥ 10%', '5–10%', semaforo(margenOp,10,5), 'Rentabilidad de la operación principal')}
+        ${indCard('Margen EBITDA', margenEBITDA, '%', 'EBITDA ÷ Ventas × 100', '≥ 15%', '8–15%', semaforo(margenEBITDA,15,8), 'Generación de caja operativa')}
+        ${indCard('Margen Neto', margenNeto, '%', 'Utilidad neta ÷ Ventas × 100', '≥ 7%', '3–7%', semaforo(margenNeto,7,3), 'Rentabilidad final después de todos los costos')}
+        ${indCard('ROA', roa, '%', 'Utilidad neta ÷ Activo total × 100', '≥ 8%', '4–8%', semaforo(roa,8,4), 'Rentabilidad sobre activos totales')}
+        ${indCard('ROE', roe, '%', 'Utilidad neta ÷ Patrimonio × 100', '≥ 12%', '6–12%', semaforo(roe,12,6), 'Rentabilidad sobre el capital de los socios')}
+      </div>
+      <div class="resultado-box" style="margin-top:1rem;">
+        <div class="resultado-detalle">
+          <b>Utilidad bruta:</b> $ ${fmt(utilidadBruta)} M (${fmt(margenBruto,1)}%) | <b>Utilidad operacional:</b> $ ${fmt(utilidadOp)} M (${fmt(margenOp,1)}%)<br>
+          <b>EBITDA:</b> $ ${fmt(ebitda)} M (${fmt(margenEBITDA,1)}%) | <b>Utilidad neta:</b> $ ${fmt(utilidadNeta)} M (${fmt(margenNeto,1)}%)<br>
+          <b>ROA:</b> ${fmt(roa,1)}% | <b>ROE:</b> ${fmt(roe,1)}%
+        </div>
+      </div>
+    </div>`;
+
+  // ACTIVIDAD
+  document.getElementById('resultado-actividad').innerHTML = `
+    <div class="card"><h2>🔄 Indicadores de Actividad y Eficiencia</h2>
+      <div class="indicadores-grid">
+        ${indCard('Rot. Cartera', rotacionCartera, 'x', 'Ventas ÷ Cartera', '≥ 6x', '4–6x', semaforo(rotacionCartera,6,4), `Cobra cada ${fmt(diasCartera,0)} días. Ideal &lt; 45 días`)}
+        ${indCard('Días de Cartera', diasCartera, ' días', '360 ÷ Rotación cartera', '≤ 30 d', '30–60 d', semaforo(diasCartera,30,60,true), 'Tiempo promedio de cobro a clientes')}
+        ${indCard('Rot. Inventarios', rotacionInv, 'x', 'Costo ventas ÷ Inventarios', '≥ 6x', '4–6x', semaforo(rotacionInv,6,4), `Rota cada ${fmt(diasInv,0)} días`)}
+        ${indCard('Días Inventario', diasInv, ' días', '360 ÷ Rot. inventarios', '≤ 30 d', '30–60 d', semaforo(diasInv,30,60,true), 'Días que permanece el inventario')}
+        ${indCard('Días Proveedores', diasProveed, ' días', '360 ÷ Rot. proveedores', '≥ 30 d', '15–30 d', semaforo(diasProveed,30,15), 'Días que tarda en pagar a proveedores')}
+        ${indCard('Ciclo Financiero', cicloFinanciero, ' días', 'Días cartera + Inv − Proveedores', '≤ 30 d', '30–60 d', semaforo(cicloFinanciero,30,60,true), 'Días que requiere financiamiento operativo')}
+        ${indCard('Rot. Activos', rotacionActivos, 'x', 'Ventas ÷ Activo total', '≥ 1.2x', '0.8–1.2x', semaforo(rotacionActivos,1.2,0.8), 'Eficiencia en el uso de activos para generar ventas')}
+      </div>
+      <div class="resultado-box" style="margin-top:1rem;">
+        <div class="resultado-detalle">
+          <b>Ciclo operativo:</b> ${fmt(diasCartera,0)} días (cartera) + ${fmt(diasInv,0)} días (inventario) = <b>${fmt(cicloOperativo,0)} días</b><br>
+          <b>Ciclo financiero:</b> ${fmt(cicloOperativo,0)} − ${fmt(diasProveed,0)} días (proveedores) = <b>${fmt(cicloFinanciero,0)} días</b><br>
+          ${cicloFinanciero > 60 ? `⚠️ Ciclo financiero elevado: la empresa necesita financiar ${fmt(cicloFinanciero,0)} días de operación con capital de trabajo propio.` : `✅ Ciclo financiero controlado.`}
+        </div>
+      </div>
+    </div>`;
+
+  // Ir a la pestaña de liquidez para ver resultados
+  mostrarTab('liquidez', document.querySelectorAll('.tab-btn')[1]);
+  setTimeout(() => {
+    mostrarTab('datos', document.querySelectorAll('.tab-btn')[0]);
+    document.getElementById('resumen-general').scrollIntoView({behavior:'smooth'});
+  }, 100);
+}
+</script>
+</body>
+</html>
