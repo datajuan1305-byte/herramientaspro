@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Nómina PYME Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de nómina completa para PYME colombianas 2026. Salario, prestaciones, aportes parafiscales, seguridad social y costo total del empleado." />
+  <meta name="keywords" content="nomina PYME colombia 2026, calculo nomina empleado colombia, prestaciones sociales colombia, aportes parafiscales colombia, costo empleado colombia 2026" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --indigo: #283593;
+      --indigo-medio: #3949ab;
+      --indigo-claro: #e8eaf6;
+      --amarillo: #f5a623;
+      --verde: #2e7d32;
+      --rojo: #c62828;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #283593 60%, #5c6bc0 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 920px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 110px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--indigo-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--indigo-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--indigo-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:600px) { .form-grid { grid-template-columns: 1fr; } .form-grid-3 { grid-template-columns: 1fr 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--indigo-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn { width: 100%; padding: 12px; background: var(--indigo-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--indigo); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--indigo-claro); border-left: 4px solid var(--indigo-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--indigo); }
+
+    /* RESULTADO */
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #283593 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-neto { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.15rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+
+    /* TABLA NÓMINA */
+    .nomina-tabla { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .nomina-tabla td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .nomina-tabla td:last-child { text-align: right; font-weight: 600; }
+    .nomina-tabla tr.seccion td { background: rgba(255,255,255,0.08); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; color: rgba(255,255,255,0.7); padding: 5px 10px; }
+    .nomina-tabla tr.devengo td:last-child { color: #a5d6a7; }
+    .nomina-tabla tr.descuento td:last-child { color: #ef9a9a; }
+    .nomina-tabla tr.neto td { background: rgba(255,215,0,0.2); font-weight: 900; color: #ffe082; font-size: 0.95rem; }
+    .nomina-tabla tr.empleador td:last-child { color: #80cbc4; }
+    .nomina-tabla tr.costo-total td { background: rgba(255,255,255,0.1); font-weight: 900; font-size: 0.9rem; }
+
+    /* TABLA MULTI */
+    .multi-tabla { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.8rem; }
+    .multi-tabla th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: right; }
+    .multi-tabla th:first-child { text-align: left; }
+    .multi-tabla td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; text-align: right; }
+    .multi-tabla td:first-child { text-align: left; }
+    .multi-tabla tr.total-multi td { background: rgba(255,215,0,0.2); font-weight: 800; color: #ffe082; }
+
+    /* FILAS EMPLEADOS */
+    .emp-row { display: grid; grid-template-columns: 2fr 1.2fr 1fr 1fr 35px; gap: 6px; align-items: center; margin-bottom: 5px; }
+    .emp-input { padding: 7px 10px; border: 1.5px solid var(--borde); border-radius: 7px; font-size: 0.85rem; background: var(--gris-bg); width: 100%; }
+    .emp-input:focus { outline: none; border-color: var(--indigo-medio); background: #fff; }
+    .emp-delete { background: none; border: none; cursor: pointer; color: #c62828; font-size: 1.1rem; }
+    .btn-sm { padding: 7px 14px; font-size: 0.82rem; font-weight: 700; border: none; border-radius: 20px; cursor: pointer; background: var(--indigo-medio); color: #fff; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--indigo-claro); }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">📊 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Nómina PYME</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">📊 Administradores — PYME Colombia</div>
+  <h1>Calculadora de Nómina PYME 2026</h1>
+  <p>Liquida la nómina mensual completa con prestaciones, seguridad social y parafiscales. SMMLV 2026 $1.423.500. Cálculo individual y para toda la nómina.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 SMMLV $1.423.500</span>
+    <span class="hero-chip">👥 Nómina completa</span>
+    <span class="hero-chip">💰 Costo real empleador</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('individual', this)">👤 Empleado Individual</button>
+    <button class="tab-btn" onclick="mostrarTab('multiple', this)">👥 Nómina Múltiple</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Tasas y Referencias</button>
+  </div>
+
+  <!-- TAB 1: INDIVIDUAL -->
+  <div id="tab-individual" class="tab-panel active">
+    <div class="card">
+      <h2>👤 Liquidación de Nómina — Empleado Individual</h2>
+      <div class="info-box">
+        <strong>Parámetros 2026:</strong> SMMLV $1.423.500 | Aux. transporte $162.000 (si salario ≤ 2 SMMLV) | UVT $47.065 | Retención mínima: $128 UVT = $6.024.320/mes
+      </div>
+
+      <h3>Datos del empleado</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre del empleado</label>
+          <input type="text" id="e-nombre" value="Juan Pérez" />
+        </div>
+        <div class="form-group">
+          <label>Cargo</label>
+          <input type="text" id="e-cargo" value="Auxiliar administrativo" />
+        </div>
+        <div class="form-group">
+          <label>Salario básico mensual ($ COP)</label>
+          <input type="number" id="e-salario" value="2000000" min="1423500" step="50000" />
+          <span class="form-hint">Mínimo: SMMLV $1.423.500</span>
+        </div>
+        <div class="form-group">
+          <label>Tipo de contrato</label>
+          <select id="e-contrato">
+            <option value="indefinido" selected>Término indefinido</option>
+            <option value="fijo">Término fijo</option>
+            <option value="obra">Obra o labor</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Días laborados en el mes</label>
+          <input type="number" id="e-dias" value="30" min="1" max="30" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Horas extras diurnas (cantidad)</label>
+          <input type="number" id="e-he-diurnas" value="0" min="0" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Horas extras nocturnas</label>
+          <input type="number" id="e-he-nocturnas" value="0" min="0" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Comisiones / bonificaciones ($ COP)</label>
+          <input type="number" id="e-comisiones" value="0" min="0" step="50000" />
+          <span class="form-hint">Pagos que constituyen factor salarial</span>
+        </div>
+        <div class="form-group">
+          <label>Otros devengos no salariales ($ COP)</label>
+          <input type="number" id="e-no-salarial" value="0" min="0" step="10000" />
+          <span class="form-hint">Viáticos, gastos de representación (no base SS)</span>
+        </div>
+        <div class="form-group">
+          <label>Préstamos / libranzas ($ COP/mes)</label>
+          <input type="number" id="e-prestamo" value="0" min="0" step="50000" />
+        </div>
+        <div class="form-group">
+          <label>Embargos judiciales ($ COP/mes)</label>
+          <input type="number" id="e-embargo" value="0" min="0" step="50000" />
+        </div>
+        <div class="form-group">
+          <label>Tamaño de la empresa</label>
+          <select id="e-tamano">
+            <option value="micro">Microempresa — exenta SENA e ICBF</option>
+            <option value="pequena" selected>Pequeña / mediana / grande — paga todo</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularNomina()">💰 Calcular Nómina</button>
+    </div>
+    <div id="resultado-individual" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: MÚLTIPLE -->
+  <div id="tab-multiple" class="tab-panel">
+    <div class="card">
+      <h2>👥 Nómina para Múltiples Empleados</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> Calcula el costo total de nómina para varios empleados simultáneamente. Útil para presupuestar el gasto de personal mensual y anual de la PYME.
+      </div>
+
+      <div style="display:grid; grid-template-columns:2fr 1.2fr 1fr 1fr 35px; gap:6px; margin-bottom:4px;">
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Empleado / Cargo</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Salario ($ COP)</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Días</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">HE diurnas</span>
+        <span></span>
+      </div>
+      <div id="empleados-container"></div>
+      <div style="display:flex; gap:0.8rem; margin-top:0.8rem;">
+        <button class="btn-sm" onclick="agregarEmpleado()">+ Agregar empleado</button>
+        <button class="btn-sm" style="background:var(--azul-navbar);" onclick="cargarEjemplo()">📋 Cargar ejemplo</button>
+      </div>
+
+      <hr class="sep" />
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tamaño empresa</label>
+          <select id="m-tamano">
+            <option value="micro">Microempresa — exenta SENA e ICBF</option>
+            <option value="pequena" selected>Pequeña / mediana / grande</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mes de liquidación</label>
+          <select id="m-mes">
+            <option value="1">Enero</option><option value="2">Febrero</option>
+            <option value="3">Marzo</option><option value="4">Abril</option>
+            <option value="5">Mayo</option><option value="6">Junio</option>
+            <option value="7">Julio</option><option value="8">Agosto</option>
+            <option value="9">Septiembre</option><option value="10">Octubre</option>
+            <option value="11">Noviembre</option><option value="12" selected>Diciembre</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularMultiple()">👥 Calcular Nómina Total</button>
+    </div>
+    <div id="resultado-multiple" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Aportes Parafiscales y Seguridad Social — Colombia 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Concepto</th><th>% Empleador</th><th>% Empleado</th><th>Base</th><th>Beneficiario</th></tr></thead>
+          <tbody>
+            <tr><td><b>Salud</b></td><td>8.5%</td><td>4%</td><td>Salario</td><td>EPS</td></tr>
+            <tr><td><b>Pensión</b></td><td>12%</td><td>4%</td><td>Salario</td><td>AFP / Colpensiones</td></tr>
+            <tr><td><b>Fondo solidaridad pensional</b></td><td>—</td><td>1% (si &gt; 4 SMMLV)</td><td>Salario</td><td>Solidaridad</td></tr>
+            <tr><td><b>ARL (Riesgo I)</b></td><td>0.522%</td><td>—</td><td>Salario</td><td>ARL</td></tr>
+            <tr><td><b>SENA</b></td><td>2%</td><td>—</td><td>Salario</td><td>SENA</td></tr>
+            <tr><td><b>ICBF</b></td><td>3%</td><td>—</td><td>Salario</td><td>ICBF</td></tr>
+            <tr><td><b>Caja de compensación (CCF)</b></td><td>4%</td><td>—</td><td>Salario</td><td>CCF</td></tr>
+            <tr><td><b>Prima de servicios</b></td><td>8.33%/mes</td><td>—</td><td>Salario + Aux. transp.</td><td>Empleado (jun y dic)</td></tr>
+            <tr><td><b>Cesantías</b></td><td>8.33%/mes</td><td>—</td><td>Salario + Aux. transp.</td><td>Empleado (al retiro)</td></tr>
+            <tr><td><b>Intereses cesantías</b></td><td>1%/mes (12%/año)</td><td>—</td><td>Cesantías</td><td>Empleado (enero)</td></tr>
+            <tr><td><b>Vacaciones</b></td><td>4.17%/mes</td><td>—</td><td>Salario</td><td>Empleado (15 días/año)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">⚠️ Microempresas (activos &lt; 500 SMMLV o nómina &lt; 10 SMMLV): exentas de SENA (2%) e ICBF (3%) según Ley 590/2000 y Ley 1429/2010.</p>
+    </div>
+    <div class="card">
+      <h2>📋 Recargos y Horas Extras — CST Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Tipo</th><th>Recargo</th><th>Horario</th><th>Base legal</th></tr></thead>
+          <tbody>
+            <tr><td><b>Hora extra diurna</b></td><td>+25% sobre hora ordinaria</td><td>6:00 am – 9:00 pm</td><td>CST Art. 168</td></tr>
+            <tr><td><b>Hora extra nocturna</b></td><td>+75% sobre hora ordinaria</td><td>9:00 pm – 6:00 am</td><td>CST Art. 168</td></tr>
+            <tr><td><b>Recargo nocturno</b></td><td>+35% sobre hora ordinaria</td><td>9:00 pm – 6:00 am (ordinaria)</td><td>CST Art. 168</td></tr>
+            <tr><td><b>Dominical / festivo ordinario</b></td><td>+75% sobre hora ordinaria</td><td>Día completo</td><td>CST Art. 179</td></tr>
+            <tr><td><b>Extra diurna dominical</b></td><td>+100% sobre hora ordinaria</td><td>Día dominical</td><td>CST Art. 179</td></tr>
+            <tr><td><b>Extra nocturna dominical</b></td><td>+150% sobre hora ordinaria</td><td>Noche dominical</td><td>CST Art. 179</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> La nómina definitiva debe ser elaborada por un <strong>Contador Público o Administrador de Empresas</strong>. Los porcentajes de aportes pueden variar según el nivel de riesgo ARL, acuerdos colectivos y beneficios tributarios aplicables. SMMLV 2026: $1.423.500 | Aux. transporte: $162.000 | UVT: $47.065.
+  </div>
+</div>
+
+<script>
+const SMMLV = 1423500;
+const AUX_TRANSP = 162000;
+const UVT = 47065;
+const HORA_MES = 240; // horas ordinarias al mes
+
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n) { return Number(n).toLocaleString('es-CO', {minimumFractionDigits:0, maximumFractionDigits:0}); }
+function fmtD(n,d=1) { return Number(n).toLocaleString('es-CO', {minimumFractionDigits:d, maximumFractionDigits:d}); }
+
+function liquidarEmpleado(salario, dias, heDiurnas, heNocturnas, comisiones, noSalarial, prestamo, embargo, tamano) {
+  // Salario proporcional
+  const salProp = salario * dias / 30;
+  const auxTransp = salario <= SMMLV * 2 ? AUX_TRANSP * dias / 30 : 0;
+
+  // Horas extras
+  const valorHora = salario / HORA_MES;
+  const heD = heDiurnas  * valorHora * 1.25;
+  const heN = heNocturnas * valorHora * 1.75;
+
+  // Total devengado
+  const totalSalarial = salProp + heD + heN + comisiones;
+  const totalDevengado = totalSalarial + noSalarial + auxTransp;
+
+  // Base IBC (sin aux. transporte, sin no salariales)
+  const ibc = totalSalarial;
+
+  // Descuentos empleado
+  const descSalud  = ibc * 0.04;
+  const descPension= ibc * 0.04;
+  const descFondo  = ibc > SMMLV * 4 ? ibc * 0.01 : 0;
+  const totalDesc  = descSalud + descPension + descFondo + prestamo + embargo;
+  const netoPagar  = totalDevengado - totalDesc;
+
+  // Aportes empleador
+  const aSalud   = ibc * 0.085;
+  const aPension = ibc * 0.12;
+  const aARL     = ibc * 0.00522;
+  const aSENA    = tamano === 'micro' ? 0 : ibc * 0.02;
+  const aICBF    = tamano === 'micro' ? 0 : ibc * 0.03;
+  const aCCF     = ibc * 0.04;
+  const totalEmpleador = aSalud + aPension + aARL + aSENA + aICBF + aCCF;
+
+  // Prestaciones mensualizadas
+  const basePresta = (salProp + auxTransp);
+  const prima      = basePresta / 12;
+  const cesantias  = basePresta * 0.0833;
+  const intCes     = cesantias * 0.12 / 12;
+  const vacaciones = salProp / 24;
+  const totalPrest = prima + cesantias + intCes + vacaciones;
+
+  const costoTotal = totalDevengado + totalEmpleador + totalPrest;
+  const factorPrest = costoTotal / totalSalarial;
+
+  return { salProp, auxTransp, heD, heN, comisiones, noSalarial, totalSalarial, totalDevengado,
+    ibc, descSalud, descPension, descFondo, prestamo, embargo, totalDesc, netoPagar,
+    aSalud, aPension, aARL, aSENA, aICBF, aCCF, totalEmpleador,
+    prima, cesantias, intCes, vacaciones, totalPrest, costoTotal, factorPrest };
+}
+
+function calcularNomina() {
+  const nombre    = document.getElementById('e-nombre').value || 'Empleado';
+  const cargo     = document.getElementById('e-cargo').value || '';
+  const salario   = parseFloat(document.getElementById('e-salario').value) || SMMLV;
+  const dias      = parseInt(document.getElementById('e-dias').value) || 30;
+  const heDiurnas = parseInt(document.getElementById('e-he-diurnas').value) || 0;
+  const heNoc     = parseInt(document.getElementById('e-he-nocturnas').value) || 0;
+  const comisiones= parseFloat(document.getElementById('e-comisiones').value) || 0;
+  const noSalarial= parseFloat(document.getElementById('e-no-salarial').value) || 0;
+  const prestamo  = parseFloat(document.getElementById('e-prestamo').value) || 0;
+  const embargo   = parseFloat(document.getElementById('e-embargo').value) || 0;
+  const tamano    = document.getElementById('e-tamano').value;
+
+  const r = liquidarEmpleado(salario, dias, heDiurnas, heNoc, comisiones, noSalarial, prestamo, embargo, tamano);
+
+  document.getElementById('resultado-individual').style.display = 'block';
+  document.getElementById('resultado-individual').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Nómina — ${nombre} | ${cargo} | ${dias} días</div>
+      <div class="resultado-neto">$ ${fmt(Math.round(r.netoPagar))}</div>
+      <div class="resultado-sub">Neto a pagar — Costo total empleador: $ ${fmt(Math.round(r.costoTotal))}/mes</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(r.totalDevengado))}</div><div class="resultado-label">Total devengado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(r.totalDesc))}</div><div class="resultado-label">Descuentos empleado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(r.netoPagar))}</div><div class="resultado-label">💰 Neto a pagar</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(r.totalEmpleador))}</div><div class="resultado-label">Aportes empleador</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(r.totalPrest))}</div><div class="resultado-label">Prestaciones/mes</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(r.costoTotal))}</div><div class="resultado-label">Costo total empleador</div></div>
+      </div>
+
+      <table class="nomina-tabla" style="margin-top:1rem;">
+        <tr class="seccion"><td colspan="2">DEVENGOS</td></tr>
+        <tr class="devengo"><td>Salario básico (${dias} días)</td><td>$ ${fmt(Math.round(r.salProp))}</td></tr>
+        ${r.auxTransp > 0 ? `<tr class="devengo"><td>Auxilio de transporte</td><td>$ ${fmt(Math.round(r.auxTransp))}</td></tr>` : ''}
+        ${r.heD > 0 ? `<tr class="devengo"><td>Horas extras diurnas (${heDiurnas} h × 125%)</td><td>$ ${fmt(Math.round(r.heD))}</td></tr>` : ''}
+        ${r.heN > 0 ? `<tr class="devengo"><td>Horas extras nocturnas (${heNoc} h × 175%)</td><td>$ ${fmt(Math.round(r.heN))}</td></tr>` : ''}
+        ${r.comisiones > 0 ? `<tr class="devengo"><td>Comisiones / bonificaciones</td><td>$ ${fmt(r.comisiones)}</td></tr>` : ''}
+        ${r.noSalarial > 0 ? `<tr class="devengo"><td>Otros devengos no salariales</td><td>$ ${fmt(r.noSalarial)}</td></tr>` : ''}
+        <tr class="devengo" style="font-weight:700;"><td>TOTAL DEVENGADO</td><td>$ ${fmt(Math.round(r.totalDevengado))}</td></tr>
+
+        <tr class="seccion"><td colspan="2">DESCUENTOS EMPLEADO</td></tr>
+        <tr class="descuento"><td>Salud empleado (4%)</td><td>−$ ${fmt(Math.round(r.descSalud))}</td></tr>
+        <tr class="descuento"><td>Pensión empleado (4%)</td><td>−$ ${fmt(Math.round(r.descPension))}</td></tr>
+        ${r.descFondo > 0 ? `<tr class="descuento"><td>Fondo solidaridad (1%)</td><td>−$ ${fmt(Math.round(r.descFondo))}</td></tr>` : ''}
+        ${r.prestamo > 0 ? `<tr class="descuento"><td>Préstamo / libranza</td><td>−$ ${fmt(r.prestamo)}</td></tr>` : ''}
+        ${r.embargo > 0 ? `<tr class="descuento"><td>Embargo judicial</td><td>−$ ${fmt(r.embargo)}</td></tr>` : ''}
+        <tr class="descuento" style="font-weight:700;"><td>TOTAL DESCUENTOS</td><td>−$ ${fmt(Math.round(r.totalDesc))}</td></tr>
+
+        <tr class="neto"><td>💰 NETO A PAGAR</td><td>$ ${fmt(Math.round(r.netoPagar))}</td></tr>
+
+        <tr class="seccion"><td colspan="2">APORTES EMPLEADOR (no descuenta del neto)</td></tr>
+        <tr class="empleador"><td>Salud empleador (8.5%)</td><td>$ ${fmt(Math.round(r.aSalud))}</td></tr>
+        <tr class="empleador"><td>Pensión empleador (12%)</td><td>$ ${fmt(Math.round(r.aPension))}</td></tr>
+        <tr class="empleador"><td>ARL (0.522% — riesgo I)</td><td>$ ${fmt(Math.round(r.aARL))}</td></tr>
+        ${r.aSENA > 0 ? `<tr class="empleador"><td>SENA (2%)</td><td>$ ${fmt(Math.round(r.aSENA))}</td></tr>` : `<tr class="empleador"><td>SENA — Exento (microempresa)</td><td>$ 0</td></tr>`}
+        ${r.aICBF > 0 ? `<tr class="empleador"><td>ICBF (3%)</td><td>$ ${fmt(Math.round(r.aICBF))}</td></tr>` : `<tr class="empleador"><td>ICBF — Exento (microempresa)</td><td>$ 0</td></tr>`}
+        <tr class="empleador"><td>Caja de Compensación (4%)</td><td>$ ${fmt(Math.round(r.aCCF))}</td></tr>
+        <tr class="empleador" style="font-weight:700;"><td>TOTAL APORTES EMPLEADOR</td><td>$ ${fmt(Math.round(r.totalEmpleador))}</td></tr>
+
+        <tr class="seccion"><td colspan="2">PRESTACIONES SOCIALES MENSUALIZADAS</td></tr>
+        <tr class="empleador"><td>Prima de servicios (1/12)</td><td>$ ${fmt(Math.round(r.prima))}</td></tr>
+        <tr class="empleador"><td>Cesantías (8.33%)</td><td>$ ${fmt(Math.round(r.cesantias))}</td></tr>
+        <tr class="empleador"><td>Intereses s/cesantías (1%/mes)</td><td>$ ${fmt(Math.round(r.intCes))}</td></tr>
+        <tr class="empleador"><td>Vacaciones (4.17%)</td><td>$ ${fmt(Math.round(r.vacaciones))}</td></tr>
+        <tr class="empleador" style="font-weight:700;"><td>TOTAL PRESTACIONES/MES</td><td>$ ${fmt(Math.round(r.totalPrest))}</td></tr>
+
+        <tr class="costo-total"><td>💼 COSTO TOTAL MENSUAL EMPLEADOR</td><td>$ ${fmt(Math.round(r.costoTotal))}</td></tr>
+        <tr class="costo-total"><td>Factor prestacional (costo/salario)</td><td>${fmtD(r.factorPrest)}× el salario</td></tr>
+      </table>
+    </div>`;
+}
+
+// ── MÚLTIPLE ──
+let nEmp = 0;
+
+function agregarEmpleado(preset) {
+  nEmp++;
+  const c = document.getElementById('empleados-container');
+  const div = document.createElement('div');
+  div.className = 'emp-row';
+  div.id = `emp-${nEmp}`;
+  const p = preset || { nombre:`Empleado ${nEmp}`, salario: SMMLV, dias:30, he:0 };
+  div.innerHTML = `
+    <input class="emp-input" type="text"   id="m-nom-${nEmp}" value="${p.nombre}" />
+    <input class="emp-input" type="number" id="m-sal-${nEmp}" value="${p.salario}" min="${SMMLV}" step="50000" />
+    <input class="emp-input" type="number" id="m-dias-${nEmp}" value="${p.dias}" min="1" max="30" />
+    <input class="emp-input" type="number" id="m-he-${nEmp}"  value="${p.he}" min="0" />
+    <button class="emp-delete" onclick="document.getElementById('emp-${nEmp}').remove()">✕</button>`;
+  c.appendChild(div);
+}
+
+function cargarEjemplo() {
+  document.getElementById('empleados-container').innerHTML = '';
+  nEmp = 0;
+  const ejemplo = [
+    { nombre:'Gerente General',      salario:5000000, dias:30, he:0 },
+    { nombre:'Contador',             salario:3500000, dias:30, he:0 },
+    { nombre:'Vendedor 1',           salario:1800000, dias:30, he:4 },
+    { nombre:'Vendedor 2',           salario:1800000, dias:30, he:0 },
+    { nombre:'Auxiliar contable',    salario:1600000, dias:30, he:0 },
+    { nombre:'Mensajero / Conductor',salario:1423500, dias:30, he:0 },
+  ];
+  ejemplo.forEach(p => agregarEmpleado(p));
+}
+
+function calcularMultiple() {
+  const tamano = document.getElementById('m-tamano').value;
+  const mes    = parseInt(document.getElementById('m-mes').value);
+  const meses  = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const esPrima = mes === 6 || mes === 12;
+
+  const emps = document.querySelectorAll('.emp-row');
+  if (emps.length === 0) { alert('Agrega al menos un empleado.'); return; }
+
+  let totalNeto=0, totalCosto=0, totalDevengado=0, totalPrest=0, totalEmpleador=0;
+  let filasHTML = '';
+
+  emps.forEach(row => {
+    const id  = row.id.split('-')[1];
+    const nom = document.getElementById(`m-nom-${id}`)?.value || '';
+    const sal = parseFloat(document.getElementById(`m-sal-${id}`)?.value) || SMMLV;
+    const dias= parseInt(document.getElementById(`m-dias-${id}`)?.value) || 30;
+    const he  = parseInt(document.getElementById(`m-he-${id}`)?.value) || 0;
+
+    const r = liquidarEmpleado(sal, dias, he, 0, 0, 0, 0, 0, tamano);
+    const primaExtra = esPrima ? r.basePresta || (sal + (sal <= SMMLV*2 ? AUX_TRANSP:0)) / 2 : 0;
+
+    totalNeto      += r.netoPagar;
+    totalCosto     += r.costoTotal;
+    totalDevengado += r.totalDevengado;
+    totalPrest     += r.totalPrest;
+    totalEmpleador += r.totalEmpleador;
+
+    filasHTML += `<tr>
+      <td>${nom}</td>
+      <td>$ ${fmt(sal)}</td>
+      <td>$ ${fmt(Math.round(r.totalDevengado))}</td>
+      <td>$ ${fmt(Math.round(r.totalDesc))}</td>
+      <td>$ ${fmt(Math.round(r.netoPagar))}</td>
+      <td>$ ${fmt(Math.round(r.totalEmpleador))}</td>
+      <td>$ ${fmt(Math.round(r.totalPrest))}</td>
+      <td>$ ${fmt(Math.round(r.costoTotal))}</td>
+    </tr>`;
+  });
+
+  document.getElementById('resultado-multiple').style.display = 'block';
+  document.getElementById('resultado-multiple').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Nómina Total — ${meses[mes]} 2026 — ${emps.length} empleados</div>
+      <div class="resultado-neto">$ ${fmt(Math.round(totalNeto))}</div>
+      <div class="resultado-sub">Total neto a pagar — Costo total empresa: $ ${fmt(Math.round(totalCosto))}/mes</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${emps.length}</div><div class="resultado-label">Empleados</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalDevengado))}</div><div class="resultado-label">Total devengado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalNeto))}</div><div class="resultado-label">Total neto</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalEmpleador))}</div><div class="resultado-label">Aportes empleador</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalPrest))}</div><div class="resultado-label">Prestaciones/mes</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalCosto))}</div><div class="resultado-label">Costo total mes</div></div>
+      </div>
+      <div style="overflow-x:auto; margin-top:1rem;">
+        <table class="multi-tabla">
+          <thead><tr><th>Empleado</th><th>Salario</th><th>Devengado</th><th>Descuentos</th><th>Neto</th><th>Empleador</th><th>Prestac.</th><th>Costo total</th></tr></thead>
+          <tbody>${filasHTML}</tbody>
+          <tr class="total-multi">
+            <td><b>TOTALES</b></td>
+            <td>—</td>
+            <td>$ ${fmt(Math.round(totalDevengado))}</td>
+            <td>—</td>
+            <td>$ ${fmt(Math.round(totalNeto))}</td>
+            <td>$ ${fmt(Math.round(totalEmpleador))}</td>
+            <td>$ ${fmt(Math.round(totalPrest))}</td>
+            <td>$ ${fmt(Math.round(totalCosto))}</td>
+          </tr>
+        </table>
+      </div>
+      <div style="background:rgba(255,255,255,0.1); border-radius:8px; padding:0.9rem; margin-top:1rem; font-size:0.83rem; color:#fff;">
+        <b style="color:#ffe082;">Proyección anual:</b><br>
+        Nómina anual (×12): $ ${fmt(Math.round(totalNeto*12))}<br>
+        Costo total anual empleador (×12): $ ${fmt(Math.round(totalCosto*12))}<br>
+        ${esPrima ? `⭐ <b>${meses[mes]}: mes de prima de servicios</b> — recordar pagar la prima antes del 30 de ${meses[mes]}.` : ''}
+      </div>
+    </div>`;
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => { cargarEjemplo(); });
+</script>
+</body>
+</html>
