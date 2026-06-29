@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iluminación y Conductores Eléctricos RETIE 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de iluminación industrial y dimensionamiento de conductores eléctricos para ingenieros colombianos. RETIE y NTC 2050." />
+  <meta name="keywords" content="iluminacion industrial colombia, dimensionamiento conductores electricos, calibre cable AWG colombia, RETIE NTC 2050, ingeniero electrico colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --naranja-el: #e65100;
+      --naranja-claro: #fff3e0;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #e65100 60%, #ff9800 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 920px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 110px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--naranja-el); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--naranja-el); margin: 1rem 0 0.6rem; border-left: 3px solid var(--naranja-el); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--naranja-el); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn { width: 100%; padding: 12px; background: var(--naranja-el); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: #bf360c; }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--naranja-claro); border-left: 4px solid var(--naranja-el); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--naranja-el); }
+
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #e65100 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grande { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.2rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .tabla-result { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .tabla-result th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: left; }
+    .tabla-result th:not(:first-child) { text-align: center; }
+    .tabla-result td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; text-align: center; }
+    .tabla-result td:first-child { text-align: left; }
+    .tabla-result tr.recomendado td { background: rgba(255,215,0,0.2); font-weight: 800; color: #ffe082; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--naranja-claro); }
+
+    .badge-ok  { background: #d4edda; color: #155724; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+    .badge-warn{ background: #fff3cd; color: #856404; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">⚡ <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Iluminación y Conductores</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">⚡ Ingenieros Eléctricos — RETIE 2026</div>
+  <h1>Iluminación Industrial y Conductores 2026</h1>
+  <p>Diseño de iluminación por lúmenes para industria, dimensionamiento de conductores por capacidad y caída de tensión, y corrección por factor de potencia. RETIE y NTC 2050.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 RETIE + NTC 2050</span>
+    <span class="hero-chip">💡 Método lúmenes</span>
+    <span class="hero-chip">🔌 Calibre AWG/MCM</span>
+    <span class="hero-chip">⚡ Caída de tensión</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('iluminacion', this)">💡 Iluminación Industrial</button>
+    <button class="tab-btn" onclick="mostrarTab('conductores', this)">🔌 Conductores</button>
+    <button class="tab-btn" onclick="mostrarTab('fp', this)">⚡ Factor de Potencia</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Tablas NTC 2050</button>
+  </div>
+
+  <!-- TAB 1: ILUMINACIÓN INDUSTRIAL -->
+  <div id="tab-iluminacion" class="tab-panel active">
+    <div class="card">
+      <h2>💡 Diseño de Iluminación — Método de los Lúmenes</h2>
+      <div class="info-box">
+        <strong>Método lúmenes:</strong> N = (E × A) ÷ (Φ × CU × FM) — Donde E = iluminancia (lux), A = área, Φ = lúmenes/luminaria, CU = coeficiente de utilización, FM = factor de mantenimiento. Referencia: RETIE Art. 20, NTC 2050 Art. 220.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de instalación</label>
+          <select id="il-instalacion" onchange="autoLuxIndustrial()">
+            <option value="bodega">Bodega / almacén — 100 lux</option>
+            <option value="taller">Taller general — 300 lux</option>
+            <option value="taller-fino" selected>Taller trabajo fino — 500 lux</option>
+            <option value="oficina-ind">Oficina industrial — 500 lux</option>
+            <option value="laboratorio">Laboratorio / control calidad — 750 lux</option>
+            <option value="ensamble">Ensamble de precisión — 1000 lux</option>
+            <option value="estacionamiento">Estacionamiento cubierto — 50 lux</option>
+            <option value="pasillo-ind">Pasillo / circulación — 150 lux</option>
+            <option value="custom-ind">Personalizado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Iluminancia requerida (lux)</label>
+          <input type="number" id="il-lux" value="500" min="50" max="2000" step="50" />
+        </div>
+        <div class="form-group">
+          <label>Largo del área (m)</label>
+          <input type="number" id="il-largo" value="30" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Ancho del área (m)</label>
+          <input type="number" id="il-ancho" value="20" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Altura al plano de trabajo (m)</label>
+          <input type="number" id="il-altura" value="6" min="2" max="20" step="0.5" />
+          <span class="form-hint">Altura útil = altura techo − 0.8 m (plano trabajo)</span>
+        </div>
+        <div class="form-group">
+          <label>Tipo de luminaria industrial</label>
+          <select id="il-tipo-lum" onchange="autoLuminaria()">
+            <option value="led-highbay-100">LED High Bay 100W — 13.000 lm</option>
+            <option value="led-highbay-150">LED High Bay 150W — 19.500 lm</option>
+            <option value="led-highbay-200" selected>LED High Bay 200W — 26.000 lm</option>
+            <option value="led-highbay-240">LED High Bay 240W — 32.000 lm</option>
+            <option value="led-panel-60">LED Panel 60W — 6.000 lm</option>
+            <option value="led-lineal-40">LED Lineal 40W — 4.400 lm</option>
+            <option value="fluorescente-2x36">Fluorescente 2×36W — 5.400 lm</option>
+            <option value="sodio-250">Sodio alta presión 250W — 28.000 lm</option>
+            <option value="custom-lum">Personalizada</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Lúmenes por luminaria (lm)</label>
+          <input type="number" id="il-lumenes" value="26000" min="500" step="100" />
+        </div>
+        <div class="form-group">
+          <label>Potencia por luminaria (W)</label>
+          <input type="number" id="il-potencia" value="200" min="10" step="5" />
+        </div>
+        <div class="form-group">
+          <label>Reflectancia techo/paredes</label>
+          <select id="il-cu">
+            <option value="0.75">Alta — techo blanco, paredes claras (CU ≈ 0.75)</option>
+            <option value="0.60" selected>Media — colores intermedios (CU ≈ 0.60)</option>
+            <option value="0.45">Baja — superficies oscuras (CU ≈ 0.45)</option>
+            <option value="0.35">Muy baja — industrial sucio (CU ≈ 0.35)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Factor de mantenimiento (FM)</label>
+          <select id="il-fm">
+            <option value="0.80" selected>0.80 — Limpieza frecuente (industria limpia)</option>
+            <option value="0.70">0.70 — Limpieza normal</option>
+            <option value="0.60">0.60 — Ambiente con polvo / humo</option>
+            <option value="0.50">0.50 — Muy sucio / corrosivo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Precio unitario luminaria ($ COP)</label>
+          <input type="number" id="il-precio" value="350000" min="0" step="10000" />
+        </div>
+        <div class="form-group">
+          <label>Costo kWh ($ COP)</label>
+          <input type="number" id="il-kwh" value="750" min="0" step="10" />
+          <span class="form-hint">Tarifa industrial Colombia 2026: $600–$850/kWh</span>
+        </div>
+        <div class="form-group">
+          <label>Horas de operación al día</label>
+          <input type="number" id="il-horas" value="10" min="1" max="24" step="1" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularIluminacion()">💡 Diseñar Sistema de Iluminación</button>
+    </div>
+    <div id="resultado-iluminacion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: CONDUCTORES -->
+  <div id="tab-conductores" class="tab-panel">
+    <div class="card">
+      <h2>🔌 Dimensionamiento de Conductores — NTC 2050</h2>
+      <div class="info-box">
+        <strong>Dos criterios simultáneos (NTC 2050):</strong> (1) Capacidad de corriente — el conductor debe soportar la corriente sin calentarse. (2) Caída de tensión — máximo 3% en ramales, 5% total (acometida + ramal). Se toma el calibre mayor de ambos criterios.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Sistema eléctrico</label>
+          <select id="c-sistema">
+            <option value="monofasico-120">Monofásico 120 V</option>
+            <option value="monofasico-220" selected>Monofásico 220 V</option>
+            <option value="trifasico-208">Trifásico 208 V</option>
+            <option value="trifasico-220">Trifásico 220/127 V</option>
+            <option value="trifasico-440">Trifásico 440 V</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Potencia de la carga (kW)</label>
+          <input type="number" id="c-potencia" value="15" min="0.1" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Factor de potencia (FP)</label>
+          <input type="number" id="c-fp" value="0.90" min="0.5" max="1.0" step="0.01" />
+          <span class="form-hint">Motores: 0.80–0.92 | Resistivo: 1.0 | Alumbrado: 0.90–0.95</span>
+        </div>
+        <div class="form-group">
+          <label>Longitud del circuito (m)</label>
+          <input type="number" id="c-longitud" value="80" min="1" step="1" />
+          <span class="form-hint">Distancia desde el tablero hasta la carga</span>
+        </div>
+        <div class="form-group">
+          <label>Caída de tensión máxima permitida (%)</label>
+          <select id="c-caida-max">
+            <option value="3" selected>3% — Ramales (NTC 2050 recomendado)</option>
+            <option value="5">5% — Total acometida + ramal</option>
+            <option value="2">2% — Alumbrado crítico</option>
+            <option value="1">1% — Alta precisión</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Material del conductor</label>
+          <select id="c-material">
+            <option value="Cu" selected>Cobre (Cu) — más común en Colombia</option>
+            <option value="Al">Aluminio (Al)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tipo de aislamiento</label>
+          <select id="c-aislamiento">
+            <option value="THHN" selected>THHN/THWN — 90°C (más usado)</option>
+            <option value="THW">THW — 75°C</option>
+            <option value="TW">TW — 60°C</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Método de instalación</label>
+          <select id="c-instalacion">
+            <option value="conduit" selected>En conduit (tubería) — Factor 0.80</option>
+            <option value="bandeja">Bandeja portacables — Factor 0.70</option>
+            <option value="libre">Al aire libre — Factor 1.0</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Temperatura ambiente (°C)</label>
+          <select id="c-temperatura">
+            <option value="30" selected>30°C (interior templado — Colombia)</option>
+            <option value="35">35°C (interior cálido)</option>
+            <option value="40">40°C (zona caliente)</option>
+            <option value="25">25°C (zona fría)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>N° conductores en conduit / bandeja</label>
+          <select id="c-nconductores">
+            <option value="1.0">1–3 conductores — Factor 1.0</option>
+            <option value="0.80" selected>4–6 conductores — Factor 0.80</option>
+            <option value="0.70">7–9 conductores — Factor 0.70</option>
+            <option value="0.50">10+ conductores — Factor 0.50</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularConductores()">🔌 Dimensionar Conductor</button>
+    </div>
+    <div id="resultado-conductores" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: FACTOR DE POTENCIA -->
+  <div id="tab-fp" class="tab-panel">
+    <div class="card">
+      <h2>⚡ Corrección del Factor de Potencia — Banco de Condensadores</h2>
+      <div class="info-box">
+        <strong>¿Por qué corregir el FP?</strong> Un factor de potencia bajo genera sobrecarga en conductores y transformadores, aumenta pérdidas y puede generar penalizaciones por parte de la empresa de energía. La CREG establece penalización para FP &lt; 0.9 en Colombia.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Potencia activa de la instalación (kW)</label>
+          <input type="number" id="fp-kw" value="100" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Factor de potencia actual</label>
+          <input type="number" id="fp-actual" value="0.75" min="0.3" max="0.99" step="0.01" />
+          <span class="form-hint">Leer en el medidor o calcular con kW/kVA</span>
+        </div>
+        <div class="form-group">
+          <label>Factor de potencia deseado (objetivo)</label>
+          <input type="number" id="fp-objetivo" value="0.95" min="0.85" max="1.0" step="0.01" />
+          <span class="form-hint">CREG Colombia: mínimo 0.90. Recomendado: 0.95–0.98</span>
+        </div>
+        <div class="form-group">
+          <label>Tensión del sistema (V)</label>
+          <select id="fp-tension">
+            <option value="220" selected>220 V monofásico</option>
+            <option value="440">440 V trifásico</option>
+            <option value="13200">13.200 V media tensión</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Precio kWh ($ COP)</label>
+          <input type="number" id="fp-kwh" value="750" min="0" step="10" />
+        </div>
+        <div class="form-group">
+          <label>Horas de operación mensual</label>
+          <input type="number" id="fp-horas" value="200" min="1" max="720" step="10" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularFP()">⚡ Calcular Banco de Condensadores</button>
+    </div>
+    <div id="resultado-fp" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 4: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Capacidad de Corriente — Conductores Cu THHN en Conduit (NTC 2050 Tabla 310-16)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Calibre AWG/MCM</th><th>Área (mm²)</th><th>Capacidad (A) @90°C</th><th>Capacidad (A) @75°C</th><th>Resistencia (mΩ/m)</th><th>Uso típico</th></tr></thead>
+          <tbody id="tabla-conductores-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Iluminancias Recomendadas — Colombia (RETIE Art. 20)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Tipo de área</th><th>Lux recomendados</th><th>Temperatura color</th><th>IRC mín.</th></tr></thead>
+          <tbody>
+            <tr><td>Almacén / bodega general</td><td>100–200 lux</td><td>4000–6500 K</td><td>60</td></tr>
+            <tr><td>Taller de trabajo general</td><td>300–500 lux</td><td>4000–5000 K</td><td>80</td></tr>
+            <tr><td>Trabajo fino (electrónica, costura)</td><td>500–750 lux</td><td>4000–6500 K</td><td>80</td></tr>
+            <tr><td>Ensamble de alta precisión</td><td>750–1500 lux</td><td>5000–6500 K</td><td>90</td></tr>
+            <tr><td>Laboratorio / control calidad</td><td>500–1000 lux</td><td>5000–6500 K</td><td>90</td></tr>
+            <tr><td>Oficinas industriales</td><td>300–500 lux</td><td>3000–4000 K</td><td>80</td></tr>
+            <tr><td>Estacionamiento cubierto</td><td>50–100 lux</td><td>4000–6500 K</td><td>60</td></tr>
+            <tr><td>Pasillos / circulación</td><td>100–200 lux</td><td>4000 K</td><td>60</td></tr>
+            <tr><td>Área de emergencia / salida</td><td>≥ 10 lux</td><td>—</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> El diseño definitivo de instalaciones eléctricas debe ser firmado por un <strong>Ingeniero Eléctrico o Electricista Grado 2 matriculado ante el COPNIA</strong>. Todo proyecto requiere certificado de conformidad RETIE. Normativa: RETIE Res. 90708/2013 actualizada, NTC 2050.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n, dec=2) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function fmtInt(n) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+// ── TABLA CONDUCTORES ──
+const conductores = [
+  { cal:'#14 AWG', area:2.08,  cap90:25,  cap75:20,  res:8.45,  uso:'Circuitos de 15A' },
+  { cal:'#12 AWG', area:3.31,  cap90:30,  cap75:25,  res:5.31,  uso:'Circuitos de 20A' },
+  { cal:'#10 AWG', area:5.26,  cap90:40,  cap75:35,  res:3.34,  uso:'Circuitos de 30A, ducha' },
+  { cal:'#8 AWG',  area:8.37,  cap90:55,  cap75:50,  res:2.09,  uso:'Circuitos de 40–50A' },
+  { cal:'#6 AWG',  area:13.3,  cap90:75,  cap75:65,  res:1.32,  uso:'Circuitos de 60A' },
+  { cal:'#4 AWG',  area:21.2,  cap90:95,  cap75:85,  res:0.829, uso:'Tableros pequeños' },
+  { cal:'#3 AWG',  area:26.7,  cap90:115, cap75:100, res:0.657, uso:'Motores medianos' },
+  { cal:'#2 AWG',  area:33.6,  cap90:130, cap75:115, res:0.521, uso:'Motores 15–25 HP' },
+  { cal:'#1 AWG',  area:42.4,  cap90:150, cap75:130, res:0.413, uso:'Motores 25–40 HP' },
+  { cal:'#1/0 AWG',area:53.5,  cap90:170, cap75:150, res:0.327, uso:'Acometidas pequeñas' },
+  { cal:'#2/0 AWG',area:67.4,  cap90:195, cap75:175, res:0.260, uso:'Acometidas medianas' },
+  { cal:'#3/0 AWG',area:85.0,  cap90:225, cap75:200, res:0.206, uso:'Transformadores' },
+  { cal:'#4/0 AWG',area:107.2, cap90:260, cap75:230, res:0.164, uso:'Alimentadores principales' },
+  { cal:'250 MCM', area:127.0, cap90:290, cap75:255, res:0.138, uso:'Grandes instalaciones' },
+  { cal:'350 MCM', area:177.0, cap90:350, cap75:310, res:0.0990,uso:'Industria pesada' },
+  { cal:'500 MCM', area:253.0, cap90:430, cap75:380, res:0.0691,uso:'Subestaciones' },
+];
+
+// Llenar tabla referencia
+document.addEventListener('DOMContentLoaded', () => {
+  const tbody = document.getElementById('tabla-conductores-body');
+  conductores.forEach(c => {
+    tbody.innerHTML += `<tr>
+      <td><b>${c.cal}</b></td>
+      <td>${c.area} mm²</td>
+      <td>${c.cap90} A</td>
+      <td>${c.cap75} A</td>
+      <td>${c.res} mΩ/m</td>
+      <td>${c.uso}</td>
+    </tr>`;
+  });
+});
+
+// ── ILUMINACIÓN ──
+const luxPorInstalacion = { bodega:100, taller:300, 'taller-fino':500, 'oficina-ind':500, laboratorio:750, ensamble:1000, estacionamiento:50, 'pasillo-ind':150, 'custom-ind':500 };
+const lumPorTipo = {
+  'led-highbay-100':{lm:13000,w:100}, 'led-highbay-150':{lm:19500,w:150},
+  'led-highbay-200':{lm:26000,w:200}, 'led-highbay-240':{lm:32000,w:240},
+  'led-panel-60':   {lm:6000, w:60},  'led-lineal-40':  {lm:4400,w:40},
+  'fluorescente-2x36':{lm:5400,w:72},'sodio-250':       {lm:28000,w:250},
+  'custom-lum':     {lm:10000,w:150},
+};
+
+function autoLuxIndustrial() {
+  const tipo = document.getElementById('il-instalacion').value;
+  document.getElementById('il-lux').value = luxPorInstalacion[tipo] || 500;
+}
+function autoLuminaria() {
+  const tipo = document.getElementById('il-tipo-lum').value;
+  const l = lumPorTipo[tipo];
+  if (l) { document.getElementById('il-lumenes').value = l.lm; document.getElementById('il-potencia').value = l.w; }
+}
+
+function calcularIluminacion() {
+  const lux    = parseFloat(document.getElementById('il-lux').value);
+  const largo  = parseFloat(document.getElementById('il-largo').value);
+  const ancho  = parseFloat(document.getElementById('il-ancho').value);
+  const altura = parseFloat(document.getElementById('il-altura').value);
+  const lm     = parseFloat(document.getElementById('il-lumenes').value);
+  const potW   = parseFloat(document.getElementById('il-potencia').value);
+  const cu     = parseFloat(document.getElementById('il-cu').value);
+  const fm     = parseFloat(document.getElementById('il-fm').value);
+  const precio = parseFloat(document.getElementById('il-precio').value);
+  const kwh    = parseFloat(document.getElementById('il-kwh').value);
+  const horas  = parseFloat(document.getElementById('il-horas').value);
+  const inst   = document.getElementById('il-instalacion').value;
+
+  const area  = largo * ancho;
+  const K     = (largo * ancho) / ((largo + ancho) * (altura - 0.8));
+  const nLum  = Math.ceil((lux * area) / (lm * cu * fm));
+  const luxReal = (nLum * lm * cu * fm) / area;
+  const potTotal = nLum * potW;
+  const wM2   = potTotal / area;
+
+  // Filas × columnas sugerido
+  const filas = Math.round(Math.sqrt(nLum * (largo / ancho)));
+  const cols  = Math.ceil(nLum / Math.max(1, filas));
+  const sepLargo = largo / Math.max(1, filas);
+  const sepAncho = ancho / Math.max(1, cols);
+
+  // Costos
+  const costInversion = nLum * precio;
+  const consumoMes    = (potTotal / 1000) * horas * 25; // kWh/mes
+  const costoMes      = consumoMes * kwh;
+  const costoAnual    = costoMes * 12;
+
+  document.getElementById('resultado-iluminacion').style.display = 'block';
+  document.getElementById('resultado-iluminacion').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Diseño Iluminación Industrial — ${inst.replace(/-/g,' ')} (${lux} lux)</div>
+      <div class="resultado-grande">${nLum} luminarias</div>
+      <div class="resultado-sub">${fmt(luxReal,0)} lux reales — ${fmt(area,0)} m² — K = ${fmt(K,2)}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${nLum}</div><div class="resultado-label">Luminarias totales</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(luxReal,0)} lux</div><div class="resultado-label">Iluminancia real</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(potTotal/1000,2)} kW</div><div class="resultado-label">Potencia total instalada</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(wM2,1)} W/m²</div><div class="resultado-label">Densidad W/m²</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(costInversion)}</div><div class="resultado-label">Inversión luminarias</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(costoMes)}</div><div class="resultado-label">Costo energía/mes</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Método lúmenes:</b> N = (${lux} × ${fmt(area,0)}) ÷ (${fmtInt(lm)} × ${cu} × ${fm}) = <b>${nLum} luminarias</b><br>
+        Índice del local (K) = (${largo}×${ancho}) ÷ ((${largo}+${ancho}) × ${fmt(altura-0.8,1)}) = <b>${fmt(K,2)}</b><br>
+        <b>Distribución sugerida:</b> ${filas} filas × ${cols} columnas<br>
+        Separación entre luminarias: <b>${fmt(sepLargo,1)} m (largo) × ${fmt(sepAncho,1)} m (ancho)</b><br>
+        Potencia total: ${nLum} × ${potW}W = <b>${fmtInt(potTotal)}W (${fmt(potTotal/1000,2)} kW)</b><br>
+        Densidad energética: ${fmt(wM2,1)} W/m² ${wM2 <= 15 ? '✅ Eficiente (LED industrial)' : '⚠️ Revisar eficiencia luminosa'}<br>
+        Consumo mensual: ${fmt(potTotal/1000,2)} kW × ${horas}h × 25 días = <b>${fmt(consumoMes,0)} kWh/mes</b><br>
+        Costo energía anual: $ ${fmtInt(costoAnual)} COP
+      </div>
+    </div>`;
+}
+
+// ── CONDUCTORES ──
+function calcularConductores() {
+  const sistema  = document.getElementById('c-sistema').value;
+  const potKW    = parseFloat(document.getElementById('c-potencia').value);
+  const fp       = parseFloat(document.getElementById('c-fp').value);
+  const longitud = parseFloat(document.getElementById('c-longitud').value);
+  const caidaMax = parseFloat(document.getElementById('c-caida-max').value) / 100;
+  const material = document.getElementById('c-material').value;
+  const aisl     = document.getElementById('c-aislamiento').value;
+  const factInst = parseFloat(document.getElementById('c-instalacion').value);
+  const temp     = parseInt(document.getElementById('c-temperatura').value);
+  const factN    = parseFloat(document.getElementById('c-nconductores').value);
+
+  // Tensión y tipo
+  const tensiones = { 'monofasico-120':120, 'monofasico-220':220, 'trifasico-208':208, 'trifasico-220':220, 'trifasico-440':440 };
+  const V = tensiones[sistema] || 220;
+  const esTrifasico = sistema.startsWith('trifasico');
+
+  // Corriente
+  const potVA  = (potKW * 1000) / fp;
+  const I      = esTrifasico ? potVA / (Math.sqrt(3) * V) : potVA / V;
+  const I125   = I * 1.25; // 125% NEC para circuitos continuos
+
+  // Factor de corrección por temperatura (THHN 90°C base)
+  const factTemp = temp <= 30 ? 1.0 : temp <= 35 ? 0.96 : temp <= 40 ? 0.91 : 0.87;
+  const factTotal = factInst * factN * factTemp;
+
+  // ── CRITERIO 1: Por capacidad de corriente ──
+  const iRequerida = I125 / factTotal;
+  let idxCapacidad = 0;
+  const tabCap = conductores.map((c, i) => ({ ...c, capAdj: c.cap90 * factTotal, i }));
+  idxCapacidad = tabCap.findIndex(c => c.capAdj >= iRequerida);
+  if (idxCapacidad < 0) idxCapacidad = conductores.length - 1;
+
+  // ── CRITERIO 2: Por caída de tensión ──
+  // ΔV = (2 × L × I × R) / 1000 para monofásico; (√3 × L × I × R) / 1000 para trifásico
+  // R en mΩ/m; Factor Al ≈ 1.6 × Cu
+  const factAl = material === 'Al' ? 1.64 : 1.0;
+  // Despejamos R necesaria: R = (ΔV% × V × 1000) / (factor × L × I)
+  const factorSistema = esTrifasico ? Math.sqrt(3) : 2;
+  const R_necesaria = (caidaMax * V * 1000) / (factorSistema * longitud * I);
+  // Convertir a resistividad por calibre (ajustar por Al)
+  const R_cu = R_necesaria * factAl; // si Al, necesitamos menos resistencia → calibre mayor
+  let idxCaida = conductores.findIndex(c => c.res <= R_cu);
+  if (idxCaida < 0) idxCaida = conductores.length - 1;
+  if (idxCaida < 0) idxCaida = 0;
+
+  // Tomar el mayor de ambos criterios
+  const idxFinal = Math.max(idxCapacidad, idxCaida);
+  const condFinal = conductores[idxFinal];
+
+  // Caída de tensión con el conductor seleccionado
+  const caidaReal = (factorSistema * longitud * I * condFinal.res * factAl) / (V * 1000) * 100;
+
+  // Tabla comparativa
+  const idxMostrar = [Math.max(0, idxFinal-2), Math.max(0, idxFinal-1), idxFinal, Math.min(conductores.length-1, idxFinal+1)];
+  const filasHTML = [...new Set(idxMostrar)].map(i => {
+    const c   = conductores[i];
+    const cd  = (factorSistema * longitud * I * c.res * factAl) / (V * 1000) * 100;
+    const cap = c.cap90 * factTotal;
+    const ok  = cap >= I125 && cd <= caidaMax * 100;
+    return `<tr class="${i === idxFinal ? 'recomendado' : ''}">
+      <td>${c.cal}${i === idxFinal ? ' ← RECOMENDADO' : ''}</td>
+      <td>${fmt(cap,1)} A</td>
+      <td>${fmt(I125,1)} A</td>
+      <td>${cap >= I125 ? '✅' : '❌'}</td>
+      <td>${fmt(cd,2)}%</td>
+      <td>${cd <= caidaMax*100 ? '✅' : '❌'}</td>
+      <td>${ok ? '✅ OK' : '⚠️'}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('resultado-conductores').style.display = 'block';
+  document.getElementById('resultado-conductores').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Conductor Recomendado — ${sistema.replace(/-/g,' ')} | ${potKW} kW | ${longitud} m</div>
+      <div class="resultado-grande">${condFinal.cal}${material === 'Al' ? ' Al' : ' Cu'}</div>
+      <div class="resultado-sub">${condFinal.area} mm² — ${aisl} — Caída: ${fmt(caidaReal,2)}% (máx ${(caidaMax*100).toFixed(0)}%)</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(I,1)} A</div><div class="resultado-label">Corriente nominal</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(I125,1)} A</div><div class="resultado-label">Corriente diseño (×1.25)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(condFinal.cap90 * factTotal,1)} A</div><div class="resultado-label">Capacidad ajustada</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(caidaReal,2)}%</div><div class="resultado-label">Caída de tensión real</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${condFinal.cal}</div><div class="resultado-label">Calibre recomendado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(caidaReal * V / 100,1)} V</div><div class="resultado-label">Caída en voltios</div></div>
+      </div>
+      <table class="tabla-result" style="margin-top:1rem;">
+        <thead><tr><th>Calibre</th><th>Cap. ajust.</th><th>I diseño</th><th>Cap ✓</th><th>Caída %</th><th>Caída ✓</th><th>Cumple</th></tr></thead>
+        <tbody>${filasHTML}</tbody>
+      </table>
+      <div class="resultado-detalle">
+        <b>Datos del sistema:</b> ${V}V ${esTrifasico?'trifásico':'monofásico'} | FP: ${fp} | Longitud: ${longitud} m<br>
+        <b>Corriente:</b> ${fmt(potKW*1000,0)} W ÷ (${fp} × ${V}V${esTrifasico?` × √3`:''}) = <b>${fmt(I,2)} A → diseño: ${fmt(I125,2)} A (×1.25)</b><br>
+        Factores de corrección: temp (${factTemp}) × instalación (${factInst}) × agrupamiento (${factN}) = <b>${fmt(factTotal,3)}</b><br>
+        Criterio capacidad → <b>${conductores[idxCapacidad].cal}</b> | Criterio caída → <b>${conductores[idxCaida].cal}</b><br>
+        <b>Conductor final (mayor criterio): ${condFinal.cal} ${material} ${aisl}</b>
+      </div>
+    </div>`;
+}
+
+// ── FACTOR DE POTENCIA ──
+function calcularFP() {
+  const kw       = parseFloat(document.getElementById('fp-kw').value);
+  const fpActual = parseFloat(document.getElementById('fp-actual').value);
+  const fpObj    = parseFloat(document.getElementById('fp-objetivo').value);
+  const V        = parseFloat(document.getElementById('fp-tension').value);
+  const kwh      = parseFloat(document.getElementById('fp-kwh').value);
+  const horas    = parseFloat(document.getElementById('fp-horas').value);
+
+  // kVAr necesario = kW × (tan φ1 − tan φ2)
+  const phi1 = Math.acos(fpActual);
+  const phi2 = Math.acos(fpObj);
+  const kvar  = kw * (Math.tan(phi1) - Math.tan(phi2));
+
+  // kVA actual y objetivo
+  const kvaActual = kw / fpActual;
+  const kvaObj    = kw / fpObj;
+
+  // Reducción de corriente
+  const iActual = kvaActual * 1000 / (Math.sqrt(3) * V);
+  const iObj    = kvaObj    * 1000 / (Math.sqrt(3) * V);
+  const reducI  = ((iActual - iObj) / iActual) * 100;
+
+  // Pérdidas en conductores (estimado)
+  const reducPerdidas = (1 - Math.pow(fpActual/fpObj, 2)) * 100;
+  const ahorroMes     = kw * horas * (1 - fpActual/fpObj) * kwh / 1000 * 0.03; // estimado 3%
+
+  // Capacitor en µF (monofásico / trifásico según V)
+  const esTrifasico = V > 1000 ? false : true;
+  const capuF = esTrifasico
+    ? (kvar * 1e6) / (3 * 2 * Math.PI * 60 * V * V) * 1000
+    : (kvar * 1e6) / (2 * Math.PI * 60 * V * V);
+
+  document.getElementById('resultado-fp').style.display = 'block';
+  document.getElementById('resultado-fp').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Corrección Factor de Potencia — ${fpActual} → ${fpObj}</div>
+      <div class="resultado-grande">${fmt(kvar,1)} kVAr</div>
+      <div class="resultado-sub">Banco de condensadores requerido para pasar de FP ${fpActual} a FP ${fpObj}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(kvar,1)} kVAr</div><div class="resultado-label">Banco requerido</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(kvaActual,1)} kVA</div><div class="resultado-label">kVA actual</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(kvaObj,1)} kVA</div><div class="resultado-label">kVA con corrección</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(reducI,1)}%</div><div class="resultado-label">Reducción corriente</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(reducPerdidas,1)}%</div><div class="resultado-label">Reducción pérdidas</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(ahorroMes)}</div><div class="resultado-label">Ahorro estimado/mes</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Cálculo:</b><br>
+        kVAr = ${kw} kW × (tan(arccos ${fpActual}) − tan(arccos ${fpObj}))<br>
+        kVAr = ${kw} × (${fmt(Math.tan(phi1),3)} − ${fmt(Math.tan(phi2),3)}) = <b>${fmt(kvar,2)} kVAr</b><br>
+        Reducción de corriente: ${fmt(iActual,1)} A → ${fmt(iObj,1)} A (<b>−${fmt(reducI,1)}%</b>)<br>
+        Reducción de pérdidas en conductores: <b>−${fmt(reducPerdidas,1)}%</b><br>
+        <b>Capacidad del banco de condensadores: ${fmt(kvar,1)} kVAr a ${V} V</b><br>
+        ${fpActual < 0.9 ? `⚠️ FP actual (${fpActual}) es menor a 0.90. La CREG Colombia aplica penalizaciones a usuarios industriales con FP &lt; 0.90.` : `✅ Con la corrección se alcanza FP ${fpObj}, por encima del mínimo CREG (0.90).`}
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
