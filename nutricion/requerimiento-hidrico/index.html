@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Requerimiento Hídrico 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de requerimiento hídrico diario para nutricionistas colombianos. Agua según peso, actividad física, clima y condición clínica. OMS y EFSA." />
+  <meta name="keywords" content="requerimiento hidrico colombia, calculadora agua diaria, hidratacion nutricionista, necesidades hidricas adulto nino colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --azul-agua: #0277bd;
+      --azul-claro: #e1f5fe;
+      --azul-oscuro: #01579b;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #0277bd 60%, #29b6f6 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 120px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--azul-agua); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--azul-agua); margin: 1rem 0 0.6rem; border-left: 3px solid var(--azul-agua); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--azul-agua); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--azul-agua); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--azul-oscuro); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--azul-claro); border-left: 4px solid var(--azul-agua); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--azul-oscuro); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #0277bd 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-agua { font-size: 3.5rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.2rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* VASOS DE AGUA VISUAL */
+    .vasos-wrap { margin-top: 1rem; }
+    .vasos-titulo { font-size: 0.78rem; opacity: 0.75; margin-bottom: 0.5rem; }
+    .vasos-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+    .vaso { font-size: 1.2rem; }
+
+    /* DISTRIBUCIÓN DIARIA */
+    .horario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.6rem; margin-top: 0.8rem; }
+    .horario-item { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.6rem; text-align: center; font-size: 0.78rem; }
+    .horario-hora { font-weight: 700; color: #ffe082; font-size: 0.85rem; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--azul-claro); }
+
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🥗 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Requerimiento Hídrico</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">💧 Nutricionistas y Dietistas</div>
+  <h1>Calculadora de Requerimiento Hídrico 2026</h1>
+  <p>Calcula las necesidades de agua diarias según peso, edad, actividad física, clima colombiano y condición clínica. Referencias OMS, EFSA y IOM.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Clima colombiano</span>
+    <span class="hero-chip">💧 Múltiples fórmulas</span>
+    <span class="hero-chip">🏥 Ajuste clínico</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('adulto', this)">👤 Adulto</button>
+    <button class="tab-btn" onclick="mostrarTab('pediatrico', this)">👶 Pediátrico</button>
+    <button class="tab-btn" onclick="mostrarTab('clinico', this)">🏥 Clínico / Patológico</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Referencias</button>
+  </div>
+
+  <!-- TAB 1: ADULTO -->
+  <div id="tab-adulto" class="tab-panel active">
+    <div class="card">
+      <h2>💧 Requerimiento Hídrico — Adulto</h2>
+      <div class="info-box">
+        <strong>Múltiples métodos:</strong> La calculadora usa simultáneamente las fórmulas por peso corporal (35 mL/kg), por energía (1 mL/kcal), y las recomendaciones de la EFSA (2,5 L hombres / 2,0 L mujeres) ajustadas por actividad y clima.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Sexo biológico</label>
+          <select id="a-sexo">
+            <option value="M" selected>Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Edad (años)</label>
+          <input type="number" id="a-edad" value="35" min="18" max="99" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Peso corporal (kg)</label>
+          <input type="number" id="a-peso" value="70" min="30" max="200" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Requerimiento calórico diario (kcal)</label>
+          <input type="number" id="a-kcal" value="2000" min="1000" max="5000" step="50" />
+          <span class="form-hint">Calculado en la app VCT — o ingresa aquí</span>
+        </div>
+        <div class="form-group">
+          <label>Nivel de actividad física</label>
+          <select id="a-actividad">
+            <option value="sedentario">Sedentario (+0 mL)</option>
+            <option value="leve" selected>Levemente activo (+300 mL)</option>
+            <option value="moderado">Moderadamente activo (+600 mL)</option>
+            <option value="intenso">Muy activo (+1000 mL)</option>
+            <option value="deportista">Deportista de alto rendimiento (+1500 mL)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Clima / Temperatura ambiental</label>
+          <select id="a-clima">
+            <option value="frio">Frío (Bogotá, Manizales &lt; 18°C) (+0 mL)</option>
+            <option value="templado" selected>Templado (Medellín, Bucaramanga 18–24°C) (+200 mL)</option>
+            <option value="calido">Cálido (Cali, Armenia 24–30°C) (+400 mL)</option>
+            <option value="muy-calido">Muy cálido (Barranquilla, Cartagena &gt; 30°C) (+700 mL)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Condición especial</label>
+          <select id="a-condicion">
+            <option value="ninguna" selected>Ninguna</option>
+            <option value="embarazo">Embarazo (+300 mL/día)</option>
+            <option value="lactancia">Lactancia (+700 mL/día)</option>
+            <option value="adulto-mayor">Adulto mayor &gt;65 años (ajuste especial)</option>
+            <option value="fiebre">Fiebre &gt;38°C (+500 mL/°C sobre 37°C)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Temperatura corporal (°C) — solo si hay fiebre</label>
+          <input type="number" id="a-temperatura" value="37" min="36" max="42" step="0.1" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularAdulto()">💧 Calcular Requerimiento Hídrico</button>
+    </div>
+    <div id="resultado-adulto" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: PEDIÁTRICO -->
+  <div id="tab-pediatrico" class="tab-panel">
+    <div class="card">
+      <h2>👶 Requerimiento Hídrico Pediátrico — Holiday-Segar</h2>
+      <div class="info-box">
+        <strong>Fórmula de Holiday-Segar (1957):</strong> Método estándar para calcular necesidades hídricas en pediatría. Considera el peso corporal del niño para determinar los requerimientos diarios y la velocidad de infusión si se requiere hidratación IV.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Peso del niño (kg)</label>
+          <input type="number" id="p-peso" value="20" min="1" max="80" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Edad</label>
+          <input type="number" id="p-edad-m" value="7" min="0" max="18" step="1" />
+          <select id="p-edad-unidad">
+            <option value="anios" selected>Años</option>
+            <option value="meses">Meses</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Actividad / condición</label>
+          <select id="p-condicion">
+            <option value="normal" selected>Normal / ambulatorio</option>
+            <option value="fiebre">Con fiebre (&gt;38°C) (+10–12% por grado)</option>
+            <option value="diarrea">Diarrea / vómito (+10–20% adicional)</option>
+            <option value="hospitalizado">Hospitalizado (basal)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Temperatura (°C) — si tiene fiebre</label>
+          <input type="number" id="p-temp" value="37" min="36" max="42" step="0.1" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularPediatrico()">👶 Calcular Hidratación Pediátrica</button>
+    </div>
+    <div id="resultado-pediatrico" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: CLÍNICO -->
+  <div id="tab-clinico" class="tab-panel">
+    <div class="card">
+      <h2>🏥 Requerimiento Hídrico en Condiciones Clínicas</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> Calcula el requerimiento hídrico en pacientes con condiciones clínicas que modifican las necesidades de agua: insuficiencia renal, insuficiencia cardíaca, cirrosis, quemaduras, etc.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Peso corporal (kg)</label>
+          <input type="number" id="cl-peso" value="70" min="20" max="200" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Diuresis en 24h (mL)</label>
+          <input type="number" id="cl-diuresis" value="1200" min="0" step="50" />
+          <span class="form-hint">Normal: 1000–2000 mL/día</span>
+        </div>
+        <div class="form-group">
+          <label>Condición clínica principal</label>
+          <select id="cl-condicion">
+            <option value="normal" selected>Sin restricción</option>
+            <option value="renal-leve">Insuficiencia renal leve (TFG 30–59)</option>
+            <option value="renal-mod">Insuficiencia renal moderada (TFG 15–29)</option>
+            <option value="dialisis">En diálisis (restricción severa)</option>
+            <option value="cardiaca">Insuficiencia cardíaca (restricción)</option>
+            <option value="cirrosis">Cirrosis con ascitis (restricción)</option>
+            <option value="quemaduras">Quemaduras (Parkland)</option>
+            <option value="sepsis">Sepsis / UCI</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>% de superficie corporal quemada (SCQ)</label>
+          <input type="number" id="cl-scq" value="0" min="0" max="100" step="1" />
+          <span class="form-hint">Solo para quemaduras — Fórmula de Parkland</span>
+        </div>
+        <div class="form-group">
+          <label>Temperatura corporal (°C)</label>
+          <input type="number" id="cl-temp" value="37" min="35" max="42" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>¿Recibe nutrición enteral o parenteral?</label>
+          <select id="cl-nutricion">
+            <option value="no" selected>No</option>
+            <option value="enteral">Nutrición enteral (incluye agua en fórmula)</option>
+            <option value="parenteral">Nutrición parenteral</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularClinico()">🏥 Calcular Hidratación Clínica</button>
+    </div>
+    <div id="resultado-clinico" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 4: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Recomendaciones de Ingesta de Agua — OMS / EFSA / IOM</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Grupo poblacional</th><th>EFSA (L/día)</th><th>IOM (L/día)</th><th>Incluye</th></tr></thead>
+          <tbody>
+            <tr><td>Bebés 0–6 meses</td><td>0.68 (leche materna)</td><td>0.70</td><td>Solo leche materna</td></tr>
+            <tr><td>Bebés 6–12 meses</td><td>0.80–1.0</td><td>0.80</td><td>Leche + alimentos + agua</td></tr>
+            <tr><td>Niños 1–3 años</td><td>1.3</td><td>1.3</td><td>Todas las fuentes</td></tr>
+            <tr><td>Niños 4–8 años</td><td>1.6</td><td>1.7</td><td>Todas las fuentes</td></tr>
+            <tr><td>Niños 9–13 años (H)</td><td>2.1</td><td>2.4</td><td>Todas las fuentes</td></tr>
+            <tr><td>Niños 9–13 años (M)</td><td>1.9</td><td>2.1</td><td>Todas las fuentes</td></tr>
+            <tr><td>Adolescentes 14–18 (H)</td><td>2.5</td><td>3.3</td><td>Todas las fuentes</td></tr>
+            <tr><td>Adolescentes 14–18 (M)</td><td>2.0</td><td>2.3</td><td>Todas las fuentes</td></tr>
+            <tr><td><b>Adultos hombres</b></td><td><b>2.5</b></td><td><b>3.7</b></td><td>Todas las fuentes</td></tr>
+            <tr><td><b>Adultos mujeres</b></td><td><b>2.0</b></td><td><b>2.7</b></td><td>Todas las fuentes</td></tr>
+            <tr><td>Embarazo</td><td>2.3</td><td>3.0</td><td>+300 mL sobre basal</td></tr>
+            <tr><td>Lactancia</td><td>2.7</td><td>3.8</td><td>+700 mL sobre basal</td></tr>
+            <tr><td>Adultos mayores &gt;65 años</td><td>2.0–2.5</td><td>2.7–3.7</td><td>Mayor riesgo deshidratación</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">EFSA: European Food Safety Authority (2010). IOM: Institute of Medicine USA (2004). Los valores incluyen agua de bebidas Y alimentos (~20% del total proviene de alimentos).</p>
+    </div>
+
+    <div class="card">
+      <h2>📋 Señales de Deshidratación por Nivel</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Déficit hídrico</th><th>% peso corporal</th><th>Síntomas</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td><b style="color:#2e7d32;">Sin deshidratación</b></td><td>0%</td><td>Orina clara a amarillo pálido</td><td>Mantener hidratación adecuada</td></tr>
+            <tr><td><b style="color:#f57c00;">Leve</b></td><td>1–2%</td><td>Sed, orina amarilla oscura, fatiga</td><td>Aumentar ingesta de agua inmediatamente</td></tr>
+            <tr><td><b style="color:#e65100;">Moderada</b></td><td>3–5%</td><td>Boca seca, dolor de cabeza, disminución rendimiento cognitivo</td><td>Hidratación activa + evaluación médica si persiste</td></tr>
+            <tr><td><b style="color:#c62828;">Severa</b></td><td>&gt;6%</td><td>Taquicardia, hipotensión, confusión, orina muy oscura o ausente</td><td>Hidratación IV urgente — Urgencias</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Contenido de Agua en Alimentos Comunes</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Alimento</th><th>% agua</th><th>Porción (g)</th><th>Agua aportada (mL)</th></tr></thead>
+          <tbody>
+            <tr><td>Pepino</td><td>97%</td><td>100</td><td>97 mL</td></tr>
+            <tr><td>Sandía</td><td>92%</td><td>200</td><td>184 mL</td></tr>
+            <tr><td>Lechuga</td><td>96%</td><td>80</td><td>77 mL</td></tr>
+            <tr><td>Naranja</td><td>87%</td><td>150</td><td>131 mL</td></tr>
+            <tr><td>Leche entera</td><td>88%</td><td>250 mL</td><td>220 mL</td></tr>
+            <tr><td>Yogur natural</td><td>85%</td><td>200</td><td>170 mL</td></tr>
+            <tr><td>Pollo cocido</td><td>65%</td><td>100</td><td>65 mL</td></tr>
+            <tr><td>Arroz cocido</td><td>68%</td><td>150</td><td>102 mL</td></tr>
+            <tr><td>Pan blanco</td><td>37%</td><td>60</td><td>22 mL</td></tr>
+            <tr><td>Galletas</td><td>5%</td><td>30</td><td>2 mL</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">Aproximadamente el 20–30% del agua diaria proviene de los alimentos. El resto debe consumirse como bebidas (principalmente agua).</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los requerimientos hídricos son estimaciones basadas en ecuaciones de referencia. Las necesidades reales varían según el estado clínico individual. En pacientes hospitalizados o con patologías, el balance hídrico debe ser determinado por el <strong>médico tratante y/o Nutricionista-Dietista</strong>. Referencias: OMS 2005, EFSA 2010, IOM 2004, Holiday-Segar 1957, Parkland 1974.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n, dec=0) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function fmtD(n, d=1) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+
+// ── TAB 1: ADULTO ──
+function calcularAdulto() {
+  const sexo      = document.getElementById('a-sexo').value;
+  const edad      = parseFloat(document.getElementById('a-edad').value) || 35;
+  const peso      = parseFloat(document.getElementById('a-peso').value) || 70;
+  const kcal      = parseFloat(document.getElementById('a-kcal').value) || 2000;
+  const actividad = document.getElementById('a-actividad').value;
+  const clima     = document.getElementById('a-clima').value;
+  const condicion = document.getElementById('a-condicion').value;
+  const temp      = parseFloat(document.getElementById('a-temperatura').value) || 37;
+
+  // Método 1: por peso corporal (35 mL/kg — adultos activos; 30 mL/kg — adultos mayores)
+  const mLKg = edad >= 65 ? 30 : 35;
+  const m1   = peso * mLKg;
+
+  // Método 2: por energía (1 mL/kcal — adultos; 1.5 mL/kcal — niños)
+  const m2 = kcal * 1.0;
+
+  // Método 3: EFSA basal
+  const efsa = sexo === 'M' ? 2500 : 2000;
+
+  // Promedio base
+  let base = (m1 + m2 + efsa) / 3;
+
+  // Ajustes por actividad
+  const actAdj = { sedentario:0, leve:300, moderado:600, intenso:1000, deportista:1500 };
+  base += actAdj[actividad] || 0;
+
+  // Ajustes por clima
+  const climaAdj = { frio:0, templado:200, calido:400, 'muy-calido':700 };
+  base += climaAdj[clima] || 0;
+
+  // Ajustes por condición especial
+  let condAdj = 0, condNota = '';
+  if (condicion === 'embarazo') { condAdj = 300; condNota = '+300 mL por embarazo'; }
+  if (condicion === 'lactancia') { condAdj = 700; condNota = '+700 mL por lactancia'; }
+  if (condicion === 'adulto-mayor') { base = peso * 30; condNota = 'Adulto mayor: 30 mL/kg (mayor riesgo de deshidratación)'; }
+  if (condicion === 'fiebre' && temp > 37) { condAdj = (temp - 37) * 500; condNota = `+${fmt((temp-37)*500)} mL por fiebre ${temp}°C`; }
+  base += condAdj;
+
+  const totalML = Math.round(base);
+  const totalL  = totalML / 1000;
+  const vasos250= Math.ceil(totalML / 250);
+  const aguaBebida = Math.round(totalML * 0.75); // 75% como bebida, 25% de alimentos
+  const horario = [
+    { hora:'Al despertar (7am)', ml:250 },
+    { hora:'Media mañana (10am)', ml:250 },
+    { hora:'Almuerzo (12pm)', ml:400 },
+    { hora:'Tarde (3pm)', ml:250 },
+    { hora:'Merienda (5pm)', ml:250 },
+    { hora:'Cena (7pm)', ml:350 },
+    { hora:'Antes de dormir', ml:Math.max(0, aguaBebida - 1750) },
+  ];
+
+  const vasosHTML = Array.from({length: vasos250}, (_,i) =>
+    `<span class="vaso" title="Vaso ${i+1} — 250 mL">🥛</span>`).join('');
+
+  document.getElementById('resultado-adulto').style.display = 'block';
+  document.getElementById('resultado-adulto').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Requerimiento Hídrico Diario</div>
+      <div class="resultado-agua">${fmtD(totalL)} L</div>
+      <div class="resultado-sub">${fmt(totalML)} mL/día totales — ${fmt(aguaBebida)} mL como bebidas</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(totalML)} mL</div><div class="resultado-label">Total diario</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(totalL)} L</div><div class="resultado-label">En litros</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${vasos250}</div><div class="resultado-label">Vasos de 250 mL</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(aguaBebida)} mL</div><div class="resultado-label">Como bebidas (75%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(totalML - aguaBebida)} mL</div><div class="resultado-label">De alimentos (25%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${mLKg} mL/kg</div><div class="resultado-label">Factor aplicado</div></div>
+      </div>
+
+      <div class="vasos-wrap">
+        <div class="vasos-titulo">Representación visual — ${vasos250} vasos de 250 mL</div>
+        <div class="vasos-grid">${vasosHTML}</div>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <div style="font-size:0.78rem; opacity:0.7; margin-bottom:0.5rem; text-transform:uppercase;">Distribución horaria sugerida</div>
+        <div class="horario-grid">
+          ${horario.filter(h=>h.ml>0).map(h=>`<div class="horario-item"><div class="horario-hora">${h.hora}</div><div>${fmt(h.ml)} mL</div></div>`).join('')}
+        </div>
+      </div>
+
+      <div class="resultado-detalle">
+        <b>Cálculo (promedio de 3 métodos):</b><br>
+        Método 1 (${mLKg} mL/kg): ${peso} kg × ${mLKg} = ${fmt(m1)} mL<br>
+        Método 2 (1 mL/kcal): ${fmt(kcal)} kcal × 1.0 = ${fmt(m2)} mL<br>
+        Método 3 (EFSA ${sexo==='M'?'hombre':'mujer'}): ${fmt(efsa)} mL<br>
+        Base promedio: ${fmt((m1+m2+efsa)/3)} mL<br>
+        + Actividad (${actividad}): +${actAdj[actividad]} mL<br>
+        + Clima (${clima}): +${climaAdj[clima] || 0} mL<br>
+        ${condicion !== 'ninguna' ? `+ ${condNota}: +${fmt(condAdj)} mL<br>` : ''}
+        <b>Total: ${fmt(totalML)} mL/día = ${fmtD(totalL)} L/día</b>
+      </div>
+    </div>`;
+}
+
+// ── TAB 2: PEDIÁTRICO ──
+function calcularPediatrico() {
+  const peso    = parseFloat(document.getElementById('p-peso').value) || 20;
+  const edad    = parseFloat(document.getElementById('p-edad-m').value) || 7;
+  const unidad  = document.getElementById('p-edad-unidad').value;
+  const condic  = document.getElementById('p-condicion').value;
+  const temp    = parseFloat(document.getElementById('p-temp').value) || 37;
+  const edadM   = unidad === 'anios' ? edad * 12 : edad;
+
+  // Holiday-Segar
+  let baseHS = 0, formula = '';
+  if (peso <= 10) {
+    baseHS  = peso * 100;
+    formula = `${peso} kg × 100 mL/kg = ${fmt(baseHS)} mL`;
+  } else if (peso <= 20) {
+    baseHS  = 1000 + (peso - 10) * 50;
+    formula = `1.000 + (${peso}-10) × 50 = ${fmt(baseHS)} mL`;
+  } else {
+    baseHS  = 1500 + (peso - 20) * 20;
+    formula = `1.500 + (${peso}-20) × 20 = ${fmt(baseHS)} mL`;
+  }
+
+  // Ajustes
+  let ajuste = 0, notaAjuste = '';
+  if (condic === 'fiebre' && temp > 38) {
+    ajuste = baseHS * 0.12 * (temp - 38);
+    notaAjuste = `+${fmt(ajuste)} mL por fiebre ${temp}°C (+12% por grado sobre 38°C)`;
+  }
+  if (condic === 'diarrea') {
+    ajuste = baseHS * 0.15;
+    notaAjuste = `+${fmt(ajuste)} mL por pérdidas diarrea/vómito (+15%)`;
+  }
+
+  const totalML   = Math.round(baseHS + ajuste);
+  const mlH       = totalML / 24;
+  const vasos     = Math.ceil(totalML / 150); // vasos de 150 mL para niños
+
+  document.getElementById('resultado-pediatrico').style.display = 'block';
+  document.getElementById('resultado-pediatrico').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Hidratación Pediátrica — Fórmula Holiday-Segar</div>
+      <div class="resultado-agua">${fmt(totalML)} mL</div>
+      <div class="resultado-sub">${fmtD(totalML/1000)} L/día — ${fmtD(mlH,1)} mL/hora</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(baseHS)} mL</div><div class="resultado-label">Requerimiento basal</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(ajuste)} mL</div><div class="resultado-label">Ajuste por condición</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(totalML)} mL</div><div class="resultado-label">Total diario</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(mlH,1)} mL/h</div><div class="resultado-label">Velocidad (si IV)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${vasos}</div><div class="resultado-label">Vasos 150 mL aprox.</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(totalML/peso,0)} mL/kg</div><div class="resultado-label">mL por kg de peso</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Fórmula de Holiday-Segar:</b><br>
+        ${formula}<br>
+        ${ajuste > 0 ? `Ajuste: ${notaAjuste}<br>` : ''}
+        <b>Total: ${fmt(totalML)} mL/día = ${fmtD(mlH,1)} mL/h</b><br>
+        Si requiere hidratación IV: programar bomba a <b>${fmtD(mlH,1)} mL/h</b><br>
+        Mínimo diuresis esperada: ${fmt(peso*1)} mL/h (1 mL/kg/h) = ${fmt(peso*24)} mL/día
+      </div>
+    </div>`;
+}
+
+// ── TAB 3: CLÍNICO ──
+function calcularClinico() {
+  const peso    = parseFloat(document.getElementById('cl-peso').value) || 70;
+  const diures  = parseFloat(document.getElementById('cl-diuresis').value) || 1200;
+  const condic  = document.getElementById('cl-condicion').value;
+  const scq     = parseFloat(document.getElementById('cl-scq').value) || 0;
+  const temp    = parseFloat(document.getElementById('cl-temp').value) || 37;
+  const nutric  = document.getElementById('cl-nutricion').value;
+
+  let recom = 0, restriccion = false, nota = '', formula = '';
+
+  if (condic === 'normal') {
+    recom = peso * 35;
+    formula = `35 mL/kg × ${peso} kg = ${fmt(recom)} mL`;
+  } else if (condic === 'renal-leve') {
+    recom = peso * 30;
+    formula = `30 mL/kg × ${peso} kg = ${fmt(recom)} mL (reducción leve)`;
+  } else if (condic === 'renal-mod') {
+    recom = diures + 500;
+    formula = `Diuresis (${fmt(diures)} mL) + 500 mL pérdidas insensibles = ${fmt(recom)} mL`;
+    nota = 'Insuficiencia renal moderada: balance estricto = diuresis + pérdidas insensibles';
+  } else if (condic === 'dialisis') {
+    recom = diures + 750;
+    restriccion = true;
+    formula = `Diuresis (${fmt(diures)} mL) + 750 mL (residual + insensibles) = ${fmt(recom)} mL`;
+    nota = '⚠️ En diálisis: balance muy estricto. Diuresis residual + 750 mL máximo.';
+  } else if (condic === 'cardiaca') {
+    recom = Math.min(peso * 25, 1500);
+    restriccion = true;
+    formula = `Restricción: mínimo entre ${peso*25} mL y 1.500 mL = ${fmt(recom)} mL`;
+    nota = '⚠️ ICC: restricción hídrica 1.000–1.500 mL/día. Balance estricto.';
+  } else if (condic === 'cirrosis') {
+    recom = 1000;
+    restriccion = true;
+    formula = `Cirrosis con ascitis: restricción a 1.000 mL/día`;
+    nota = '⚠️ Cirrosis con ascitis: restricción severa. Evaluar con nefrología/hepatología.';
+  } else if (condic === 'quemaduras' && scq > 0) {
+    // Parkland: 4 mL × kg × % SCQ en 24h (50% en primeras 8h)
+    recom = 4 * peso * scq;
+    formula = `Parkland: 4 mL × ${peso} kg × ${scq}% SCQ = ${fmt(recom)} mL en 24h`;
+    nota = `50% (${fmt(recom/2)} mL) en las primeras 8h. 50% restante en las siguientes 16h.`;
+  } else if (condic === 'sepsis') {
+    recom = 30 * peso;
+    formula = `Sepsis: 30 mL/kg × ${peso} kg = ${fmt(recom)} mL (reanimación inicial)`;
+    nota = 'Sepsis-3: bolo inicial 30 mL/kg. Ajustar según respuesta hemodinámica.';
+  }
+
+  // Ajuste por fiebre
+  const ajusteFiebre = temp > 37 ? (temp - 37) * 300 : 0;
+  if (ajusteFiebre > 0 && !restriccion) { recom += ajusteFiebre; }
+
+  // Ajuste por nutrición
+  let ajusteNutric = 0;
+  if (nutric === 'enteral') { ajusteNutric = -300; nota += ' | La fórmula enteral aporta ~300 mL de agua.'; }
+
+  const total = Math.max(500, recom + ajusteNutric);
+
+  document.getElementById('resultado-clinico').style.display = 'block';
+  document.getElementById('resultado-clinico').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Hidratación Clínica — ${condic.replace(/-/g,' ').toUpperCase()}</div>
+      <div class="resultado-agua">${fmt(total)} mL</div>
+      <div class="resultado-sub">${fmtD(total/1000)} L/día ${restriccion ? '— ⚠️ RESTRICCIÓN HÍDRICA' : ''}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(recom)} mL</div><div class="resultado-label">Requerimiento base</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${ajusteFiebre > 0 ? '+'+fmt(ajusteFiebre) : '0'} mL</div><div class="resultado-label">Ajuste por fiebre</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(diures)} mL</div><div class="resultado-label">Diuresis 24h</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(total - diures)} mL</div><div class="resultado-label">Balance hídrico</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(total/24,1)} mL/h</div><div class="resultado-label">Velocidad IV</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(total)} mL</div><div class="resultado-label">Total recomendado</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Fórmula aplicada:</b> ${formula}<br>
+        ${temp > 37 && !restriccion ? `Ajuste fiebre ${temp}°C: +${fmt(ajusteFiebre)} mL<br>` : ''}
+        ${nutric !== 'no' ? `Nutrición ${nutric}: ${fmt(ajusteNutric)} mL ajuste<br>` : ''}
+        <b>Total recomendado: ${fmt(total)} mL/día = ${fmtD(total/24,1)} mL/h</b><br>
+        ${nota ? `⚠️ <b>Nota clínica:</b> ${nota}` : ''}
+      </div>
+    </div>
+    <div class="${restriccion ? 'alerta-warn' : 'alerta-ok'}" style="margin-top:0.8rem;">
+      ${restriccion
+        ? `⚠️ <strong>Restricción hídrica activa.</strong> El balance hídrico debe ser monitoreado diariamente por el equipo médico. Pesar al paciente cada 24h.`
+        : `✅ Sin restricción hídrica. Monitorear diuresis y signos de deshidratación o sobrecarga.`}
+    </div>`;
+}
+</script>
+</body>
+</html>
