@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fecha Probable de Parto Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de fecha probable de parto para médicos y obstetras colombianos. Regla de Naegele, edad gestacional, trimestres y calendario de controles prenatales." />
+  <meta name="keywords" content="fecha probable de parto colombia, calculadora FPP, edad gestacional semanas, regla de naegele colombia, control prenatal colombia, obstetricia colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --rosa: #ad1457;
+      --rosa-medio: #c2185b;
+      --rosa-claro: #fce4ec;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #ad1457 60%, #e91e63 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 110px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--rosa-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--rosa-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--rosa-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--rosa-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn { width: 100%; padding: 12px; background: var(--rosa-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--rosa); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--rosa-claro); border-left: 4px solid var(--rosa-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--rosa); }
+
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #ad1457 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-fpp { font-size: 2.4rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.15rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* BARRA GESTACIÓN */
+    .barra-gestacion { margin: 1rem 0; }
+    .barra-label { display: flex; justify-content: space-between; font-size: 0.75rem; opacity: 0.75; margin-bottom: 4px; }
+    .barra-bg { height: 14px; background: rgba(255,255,255,0.15); border-radius: 7px; overflow: hidden; position: relative; }
+    .barra-fill { height: 100%; border-radius: 7px; transition: width 0.5s; }
+    .barra-trim { position: absolute; top: 0; height: 100%; border-right: 2px dashed rgba(255,255,255,0.4); }
+    .barra-etiquetas { display: flex; justify-content: space-between; font-size: 0.68rem; opacity: 0.65; margin-top: 3px; }
+
+    /* CONTROLES PRENATALES */
+    .controles-tabla { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.8rem; }
+    .controles-tabla th { background: rgba(255,255,255,0.15); color: #fff; padding: 7px 10px; text-align: left; }
+    .controles-tabla td { padding: 6px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 0.8rem; }
+    .controles-tabla tr.pasado td { opacity: 0.5; }
+    .controles-tabla tr.proximo td { background: rgba(255,215,0,0.15); font-weight: 700; }
+    .controles-tabla tr.actual td { background: rgba(255,255,255,0.15); font-weight: 800; color: #ffe082; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--rosa-claro); }
+
+    .trimestre-card { border-radius: 8px; padding: 0.9rem; margin-bottom: 0.6rem; }
+    .trim-1 { background: rgba(255,193,7,0.15); border-left: 3px solid #ffc107; }
+    .trim-2 { background: rgba(76,175,80,0.15); border-left: 3px solid #4caf50; }
+    .trim-3 { background: rgba(33,150,243,0.15); border-left: 3px solid #2196f3; }
+    .trim-titulo { font-weight: 700; font-size: 0.88rem; margin-bottom: 0.3rem; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🩺 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Fecha de Parto</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🩺 Médicos — Obstetricia — Enfermería</div>
+  <h1>Calculadora Fecha Probable de Parto 2026</h1>
+  <p>Calcula la FPP por Regla de Naegele, edad gestacional en semanas y días, trimestre actual, controles prenatales y fecha de viabilidad fetal. Guías MinSalud Colombia.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Guías MinSalud Colombia</span>
+    <span class="hero-chip">📅 Regla de Naegele</span>
+    <span class="hero-chip">📋 Controles prenatales</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('fpp', this)">📅 Fecha de Parto</button>
+    <button class="tab-btn" onclick="mostrarTab('controles', this)">📋 Controles Prenatales</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📚 Referencia</button>
+  </div>
+
+  <!-- TAB 1: FPP -->
+  <div id="tab-fpp" class="tab-panel active">
+    <div class="card">
+      <h2>📅 Calculadora de Fecha Probable de Parto</h2>
+      <div class="info-box">
+        <strong>Regla de Naegele:</strong> FPP = Fecha de última menstruación (FUM) + 280 días (40 semanas). Se puede calcular también desde la fecha de concepción (+266 días) o desde ecografía del primer trimestre.
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Método de cálculo</label>
+          <select id="f-metodo" onchange="actualizarMetodo()">
+            <option value="fum" selected>FUM — Fecha última menstruación (Naegele)</option>
+            <option value="concepcion">Fecha de concepción estimada</option>
+            <option value="ecografia">Edad gestacional por ecografía</option>
+          </select>
+        </div>
+        <div class="form-group" id="grp-fum">
+          <label>Fecha de última menstruación (FUM)</label>
+          <input type="date" id="f-fum" />
+        </div>
+        <div class="form-group" id="grp-concepcion" style="display:none;">
+          <label>Fecha de concepción estimada</label>
+          <input type="date" id="f-concepcion" />
+        </div>
+        <div class="form-group" id="grp-eco-sem" style="display:none;">
+          <label>Semanas de gestación (por ecografía)</label>
+          <input type="number" id="f-eco-sem" value="12" min="4" max="40" step="1" />
+        </div>
+        <div class="form-group" id="grp-eco-dias" style="display:none;">
+          <label>Días adicionales</label>
+          <input type="number" id="f-eco-dias" value="0" min="0" max="6" step="1" />
+        </div>
+        <div class="form-group" id="grp-eco-fecha" style="display:none;">
+          <label>Fecha de la ecografía</label>
+          <input type="date" id="f-eco-fecha" />
+        </div>
+        <div class="form-group">
+          <label>Ciclo menstrual (días)</label>
+          <select id="f-ciclo">
+            <option value="28" selected>28 días (estándar)</option>
+            <option value="21">21 días (ciclo corto)</option>
+            <option value="35">35 días (ciclo largo)</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nombre de la paciente (opcional)</label>
+          <input type="text" id="f-paciente" placeholder="Ej: María García" />
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularFPP()">📅 Calcular Fecha de Parto</button>
+    </div>
+    <div id="resultado-fpp" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: CONTROLES -->
+  <div id="tab-controles" class="tab-panel">
+    <div class="card">
+      <h2>📋 Calendario de Controles Prenatales — MinSalud Colombia</h2>
+      <div class="info-box">
+        <strong>Resolución 3280/2018 MinSalud:</strong> Mínimo 8 controles prenatales. El primero antes de la semana 10, el último entre semanas 38–40. Incluye tamizajes, vacunas y ecografías obligatorias.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Fecha de última menstruación (FUM)</label>
+          <input type="date" id="c-fum" />
+        </div>
+        <div class="form-group">
+          <label>Nombre de la paciente (opcional)</label>
+          <input type="text" id="c-paciente" placeholder="Ej: Ana Rodríguez" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularControles()">📋 Generar Calendario Prenatal</button>
+    </div>
+    <div id="resultado-controles" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📚 Desarrollo Fetal por Trimestre</h2>
+      <div class="trimestre-card trim-1">
+        <div class="trim-titulo" style="color:#e65100;">🟡 Primer Trimestre — Semanas 1 a 13</div>
+        <p style="font-size:0.85rem;">Formación de todos los órganos principales. Semana 6: latido cardíaco. Semana 8: todos los sistemas presentes. Semana 12: placenta funcional. <strong>Riesgo de aborto más alto.</strong> Ecografía 11–13+6 semanas (translucencia nucal).</p>
+      </div>
+      <div class="trimestre-card trim-2">
+        <div class="trim-titulo" style="color:#2e7d32;">🟢 Segundo Trimestre — Semanas 14 a 27</div>
+        <p style="font-size:0.85rem;">Semana 18–20: ecografía morfológica. Semana 20: movimientos fetales perceptibles. Semana 24: límite de viabilidad fetal. Semana 26: apertura de ojos. <strong>Período más estable del embarazo.</strong></p>
+      </div>
+      <div class="trimestre-card trim-3">
+        <div class="trim-titulo" style="color:#1565c0;">🔵 Tercer Trimestre — Semanas 28 a 40</div>
+        <p style="font-size:0.85rem;">Semana 28: maduración pulmonar. Semana 32: posición cefálica. Semana 36: pulmones maduros. Semana 37: término completo. Semana 40: FPP. <strong>Monitoreo frecuente del bienestar fetal.</strong></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 Controles Prenatales — Resolución 3280/2018 MinSalud</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Control</th><th>Semana ideal</th><th>Contenido principal</th><th>Exámenes / Tamizajes</th></tr></thead>
+          <tbody>
+            <tr><td><b>1°</b></td><td>≤ 10 semanas</td><td>Historia clínica completa, toma de signos, valoración riesgo</td><td>Hemograma, glicemia, VDRL, VIH, urocultivo, toxoplasma, tipo sanguíneo</td></tr>
+            <tr><td><b>2°</b></td><td>10–13+6 sem</td><td>Ecografía 1er trimestre, translucencia nucal</td><td>Eco + TN, riesgo cromosomopatías</td></tr>
+            <tr><td><b>3°</b></td><td>16–18 sem</td><td>Control rutinario, educación prenatal</td><td>Hemograma, VDRL, glicemia, urocultivo</td></tr>
+            <tr><td><b>4°</b></td><td>18–22 sem</td><td>Ecografía morfológica fetal</td><td>Eco morfológica (anomalías estructurales)</td></tr>
+            <tr><td><b>5°</b></td><td>26–28 sem</td><td>Tamizaje diabetes gestacional</td><td>Curva de tolerancia glucosa (CTOG), hemograma</td></tr>
+            <tr><td><b>6°</b></td><td>30–32 sem</td><td>Valoración presentación fetal</td><td>Hemograma, urocultivo, eco crecimiento</td></tr>
+            <tr><td><b>7°</b></td><td>34–36 sem</td><td>Cultivo estreptococo grupo B (EGB)</td><td>Cultivo vagino-rectal EGB, VDRL</td></tr>
+            <tr><td><b>8°</b></td><td>38–40 sem</td><td>Valoración final, plan de parto</td><td>Monitoreo fetal, decisión vía del parto</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 Vacunas en el Embarazo — PAI Colombia 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Vacuna</th><th>Semana recomendada</th><th>Dosis</th><th>Observación</th></tr></thead>
+          <tbody>
+            <tr><td><b>Tdap (Tosferina)</b></td><td>27–36 semanas</td><td>1 dosis cada embarazo</td><td>Protege al recién nacido antes de su primera dosis</td></tr>
+            <tr><td><b>Influenza</b></td><td>Cualquier trimestre</td><td>1 dosis anual</td><td>Vacuna inactivada — segura en embarazo</td></tr>
+            <tr><td><b>COVID-19</b></td><td>Cualquier trimestre</td><td>Según esquema vigente</td><td>Recomendada por MinSalud Colombia</td></tr>
+            <tr><td><b>Hepatitis B</b></td><td>Si no vacunada</td><td>3 dosis (0, 1, 6 meses)</td><td>Para prevenir transmisión vertical</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo clínico.</strong> La fecha probable de parto es una estimación. La FPP definitiva debe ser confirmada por ecografía del primer trimestre realizada por el <strong>médico tratante o ginecólogo-obstetra</strong>. El control prenatal debe seguir los lineamientos de la <strong>Resolución 3280/2018 del MinSalud Colombia</strong>. Esta herramienta no reemplaza la valoración clínica.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function actualizarMetodo() {
+  const metodo = document.getElementById('f-metodo').value;
+  document.getElementById('grp-fum').style.display        = metodo === 'fum' ? 'flex' : 'none';
+  document.getElementById('grp-concepcion').style.display = metodo === 'concepcion' ? 'flex' : 'none';
+  document.getElementById('grp-eco-sem').style.display    = metodo === 'ecografia' ? 'flex' : 'none';
+  document.getElementById('grp-eco-dias').style.display   = metodo === 'ecografia' ? 'flex' : 'none';
+  document.getElementById('grp-eco-fecha').style.display  = metodo === 'ecografia' ? 'flex' : 'none';
+}
+
+const MESES_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const DIAS_ES  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+function formatFecha(d) {
+  return `${DIAS_ES[d.getDay()]} ${d.getDate()} de ${MESES_ES[d.getMonth()]} de ${d.getFullYear()}`;
+}
+function addDays(d, n) {
+  const r = new Date(d); r.setDate(r.getDate() + n); return r;
+}
+function diffDays(a, b) { return Math.round((b - a) / 86400000); }
+function semanasDias(dias) {
+  const s = Math.floor(dias / 7);
+  const d = dias % 7;
+  return { semanas: s, dias: d, texto: `${s} semanas${d > 0 ? ` y ${d} día${d>1?'s':''}` : ''}` };
+}
+
+function calcularFPP() {
+  const metodo   = document.getElementById('f-metodo').value;
+  const ciclo    = parseInt(document.getElementById('f-ciclo').value) || 28;
+  const paciente = document.getElementById('f-paciente').value || 'Paciente';
+  const hoy      = new Date(); hoy.setHours(0,0,0,0);
+
+  let fum; // fecha de última menstruación equivalente
+
+  if (metodo === 'fum') {
+    const val = document.getElementById('f-fum').value;
+    if (!val) { alert('Ingresa la fecha de última menstruación.'); return; }
+    fum = new Date(val);
+    // Ajuste por ciclo diferente a 28 días
+    fum = addDays(fum, ciclo - 28);
+  } else if (metodo === 'concepcion') {
+    const val = document.getElementById('f-concepcion').value;
+    if (!val) { alert('Ingresa la fecha de concepción.'); return; }
+    fum = addDays(new Date(val), -14);
+  } else {
+    const semEco  = parseInt(document.getElementById('f-eco-sem').value) || 12;
+    const diasEco = parseInt(document.getElementById('f-eco-dias').value) || 0;
+    const fechaEco= document.getElementById('f-eco-fecha').value;
+    if (!fechaEco) { alert('Ingresa la fecha de la ecografía.'); return; }
+    const ecoDate = new Date(fechaEco);
+    const diasGestEco = semEco * 7 + diasEco;
+    fum = addDays(ecoDate, -diasGestEco);
+  }
+
+  fum.setHours(0,0,0,0);
+
+  // FPP = FUM + 280 días
+  const fpp = addDays(fum, 280);
+
+  // Edad gestacional actual
+  const diasGest = diffDays(fum, hoy);
+  const eg       = semanasDias(Math.max(0, diasGest));
+  const diasParaParto = diffDays(hoy, fpp);
+
+  // Trimestre
+  let trimestre, trimColor;
+  if (diasGest <= 91)       { trimestre = '1er Trimestre (sem 1–13)'; trimColor = '#ffa000'; }
+  else if (diasGest <= 189) { trimestre = '2do Trimestre (sem 14–27)'; trimColor = '#2e7d32'; }
+  else if (diasGest <= 280) { trimestre = '3er Trimestre (sem 28–40)'; trimColor = '#1565c0'; }
+  else                      { trimestre = '⚠️ Embarazo postérmino'; trimColor = '#c62828'; }
+
+  // Fechas clave
+  const viabilidad  = addDays(fum, 168); // 24 semanas
+  const termino     = addDays(fum, 259); // 37 semanas
+  const postermino  = addDays(fum, 294); // 42 semanas
+
+  // Barra progreso
+  const pct = Math.min(100, Math.max(0, (diasGest / 280) * 100));
+
+  // Trimestres en barra
+  const pct1 = (91/280)*100;
+  const pct2 = (189/280)*100;
+
+  document.getElementById('resultado-fpp').style.display = 'block';
+  document.getElementById('resultado-fpp').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">${paciente} — FPP calculada por ${metodo === 'fum' ? 'Regla de Naegele' : metodo === 'concepcion' ? 'Fecha de concepción' : 'Ecografía'}</div>
+      <div class="resultado-fpp">${formatFecha(fpp)}</div>
+      <div class="resultado-sub">Fecha Probable de Parto — ${diasParaParto > 0 ? `Faltan ${diasParaParto} días` : diasParaParto === 0 ? '¡Hoy es la FPP!' : `${Math.abs(diasParaParto)} días después de la FPP`}</div>
+
+      <div class="barra-gestacion">
+        <div class="barra-label"><span>FUM: ${formatFecha(fum)}</span><span>FPP: ${formatFecha(fpp)}</span></div>
+        <div class="barra-bg">
+          <div class="barra-fill" style="width:${pct}%; background: linear-gradient(to right, #ffa000, #4caf50, #1565c0);"></div>
+          <div class="barra-trim" style="left:${pct1}%;"></div>
+          <div class="barra-trim" style="left:${pct2}%;"></div>
+        </div>
+        <div class="barra-etiquetas"><span>Sem 1</span><span>13</span><span>27</span><span>40</span></div>
+      </div>
+
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${eg.semanas}+${eg.dias}</div><div class="resultado-label">Edad gestacional actual</div></div>
+        <div class="resultado-item"><div class="resultado-valor" style="color:${trimColor};">${trimestre.split(' ')[0]} ${trimestre.split(' ')[1]}</div><div class="resultado-label">Trimestre</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${diasParaParto > 0 ? diasParaParto : 0} días</div><div class="resultado-label">Días para el parto</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${Math.round(pct)}%</div><div class="resultado-label">Gestación completada</div></div>
+      </div>
+
+      <table class="controles-tabla" style="margin-top:1rem;">
+        <thead><tr><th>Fecha clave</th><th>Semana</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr class="${hoy >= viabilidad ? 'pasado' : 'proximo'}">
+            <td>${formatFecha(viabilidad)}</td><td>Semana 24</td><td>Límite de viabilidad fetal</td>
+          </tr>
+          <tr class="${hoy >= termino ? 'pasado' : 'proximo'}">
+            <td>${formatFecha(termino)}</td><td>Semana 37</td><td>Embarazo a término completo</td>
+          </tr>
+          <tr class="actual">
+            <td>${formatFecha(fpp)}</td><td>Semana 40</td><td>⭐ Fecha Probable de Parto (FPP)</td>
+          </tr>
+          <tr class="${hoy >= postermino ? 'pasado' : 'proximo'}">
+            <td>${formatFecha(postermino)}</td><td>Semana 42</td><td>⚠️ Embarazo postérmino — evaluar inducción</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="resultado-detalle">
+        <b>Cálculo (Regla de Naegele):</b><br>
+        FUM: ${formatFecha(fum)} + 280 días = <b>FPP: ${formatFecha(fpp)}</b><br>
+        Edad gestacional: ${eg.semanas} semanas + ${eg.dias} días (<b>${eg.texto}</b>)<br>
+        Trimestre: <b>${trimestre}</b><br>
+        ${diasParaParto > 0 ? `Faltan <b>${diasParaParto} días</b> para la FPP (${Math.floor(diasParaParto/7)} semanas y ${diasParaParto%7} días)` : ''}
+      </div>
+    </div>`;
+}
+
+function calcularControles() {
+  const fumVal   = document.getElementById('c-fum').value;
+  const paciente = document.getElementById('c-paciente').value || 'Paciente';
+  if (!fumVal) { alert('Ingresa la fecha de última menstruación.'); return; }
+
+  const fum = new Date(fumVal);
+  fum.setHours(0,0,0,0);
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const fpp = addDays(fum, 280);
+
+  // Controles prenatales según Res. 3280/2018
+  const controles = [
+    { num:1, sem:8,  desc:'1° Control — Historia clínica, laboratorios iniciales', examen:'Hemograma, glicemia, VDRL, VIH, urocultivo, tipo sanguíneo, toxoplasma' },
+    { num:2, sem:12, desc:'2° Control — Ecografía 1er trimestre + Translucencia nucal', examen:'Eco 11–13+6 semanas, riesgo cromosomopatías' },
+    { num:3, sem:18, desc:'3° Control — Control rutinario + educación prenatal', examen:'Hemograma, VDRL, glicemia, urocultivo' },
+    { num:4, sem:20, desc:'4° Control — Ecografía morfológica fetal', examen:'Eco morfológica (anomalías estructurales)' },
+    { num:5, sem:27, desc:'5° Control — Tamizaje diabetes gestacional', examen:'CTOG (curva tolerancia glucosa 75g), hemograma' },
+    { num:6, sem:31, desc:'6° Control — Valoración presentación fetal', examen:'Hemograma, urocultivo, eco crecimiento fetal' },
+    { num:7, sem:35, desc:'7° Control — Cultivo estreptococo grupo B', examen:'Cultivo vagino-rectal EGB, VDRL, Tdap' },
+    { num:8, sem:39, desc:'8° Control — Valoración final y plan de parto', examen:'Monitoreo fetal NST, decisión vía del parto' },
+  ];
+
+  const diasGest = diffDays(fum, hoy);
+  const semActual = Math.floor(diasGest / 7);
+
+  let filasHTML = controles.map(c => {
+    const fechaControl = addDays(fum, c.sem * 7);
+    const esPasado = hoy > fechaControl;
+    const esProximo = !esPasado && diffDays(hoy, fechaControl) <= 21;
+    const esActual  = semActual >= c.sem - 1 && semActual <= c.sem + 1;
+    const clase = esPasado ? 'pasado' : esProximo ? 'proximo' : '';
+    return `<tr class="${clase}">
+      <td>${esPasado ? '✓' : esProximo ? '⭐' : '○'} ${c.num}° Control</td>
+      <td>Sem ${c.sem}</td>
+      <td>${formatFecha(fechaControl)}</td>
+      <td>${c.desc}</td>
+      <td style="font-size:0.75rem;">${c.examen}</td>
+    </tr>`;
+  }).join('');
+
+  const proximoControl = controles.find(c => !( hoy > addDays(fum, c.sem * 7) ));
+
+  document.getElementById('resultado-controles').style.display = 'block';
+  document.getElementById('resultado-controles').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Calendario Prenatal — ${paciente}</div>
+      <div class="resultado-fpp">${formatFecha(fpp)}</div>
+      <div class="resultado-sub">FPP — Edad gestacional actual: ${semActual} semanas</div>
+      <div class="resultado-grid" style="margin-top:1rem;">
+        <div class="resultado-item"><div class="resultado-valor">${semActual}+${diasGest%7}</div><div class="resultado-label">Edad gestacional</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${controles.filter(c => hoy > addDays(fum, c.sem*7)).length}/8</div><div class="resultado-label">Controles realizados</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${proximoControl ? `Sem ${proximoControl.sem}` : 'Completo'}</div><div class="resultado-label">Próximo control</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${diffDays(hoy, fpp)} días</div><div class="resultado-label">Días para el parto</div></div>
+      </div>
+      <div style="overflow-x:auto; margin-top:1rem;">
+        <table class="controles-tabla">
+          <thead><tr><th>Control</th><th>Semana</th><th>Fecha</th><th>Descripción</th><th>Exámenes</th></tr></thead>
+          <tbody>${filasHTML}</tbody>
+        </table>
+      </div>
+      <div class="resultado-detalle">
+        ${proximoControl ? `<b>Próximo control:</b> ${proximoControl.num}° Control — Semana ${proximoControl.sem} — ${formatFecha(addDays(fum, proximoControl.sem*7))}<br>
+        <b>Exámenes:</b> ${proximoControl.examen}` : '<b>✅ Todos los controles completados</b>'}
+      </div>
+    </div>`;
+}
+
+// Inicializar fechas
+document.addEventListener('DOMContentLoaded', () => {
+  const hoy = new Date().toISOString().split('T')[0];
+  const hace10sem = new Date();
+  hace10sem.setDate(hace10sem.getDate() - 70);
+  const fumDefault = hace10sem.toISOString().split('T')[0];
+  document.getElementById('f-fum').value = fumDefault;
+  document.getElementById('f-eco-fecha').value = hoy;
+  document.getElementById('f-concepcion').value = fumDefault;
+  document.getElementById('c-fum').value = fumDefault;
+});
+</script>
+</body>
+</html>
