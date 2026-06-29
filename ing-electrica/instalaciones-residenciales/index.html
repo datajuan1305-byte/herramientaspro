@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instalaciones Eléctricas Residenciales RETIE 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de instalaciones eléctricas residenciales para ingenieros eléctricos colombianos. Diseño de circuitos, tablero, iluminación y tomacorrientes según RETIE y NTC 2050." />
+  <meta name="keywords" content="instalaciones electricas residenciales colombia, RETIE NTC 2050, diseño circuitos electricos casa colombia, tablero electrico residencial colombia, ingeniero electrico colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --amarillo-el: #f9a825;
+      --amarillo-claro: #fff8e1;
+      --amarillo-oscuro: #f57f17;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #f57f17 60%, #ffca28 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 110px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--amarillo-oscuro); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--amarillo-oscuro); margin: 1rem 0 0.6rem; border-left: 3px solid var(--amarillo-oscuro); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--amarillo-oscuro); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--amarillo-oscuro); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: #e65100; }
+    .btn:active { transform: scale(0.98); }
+    .btn-sm { padding: 7px 14px; font-size: 0.82rem; font-weight: 700; border: none; border-radius: 20px; cursor: pointer; background: var(--amarillo-oscuro); color: #fff; }
+
+    .info-box { background: var(--amarillo-claro); border-left: 4px solid var(--amarillo-oscuro); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--amarillo-oscuro); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #f57f17 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.3rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* TABLA CIRCUITOS */
+    .tabla-circ { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.8rem; }
+    .tabla-circ th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: left; }
+    .tabla-circ th:not(:first-child) { text-align: center; }
+    .tabla-circ td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; text-align: center; }
+    .tabla-circ td:first-child { text-align: left; }
+    .tabla-circ tr.total td { background: rgba(255,215,0,0.2); font-weight: 800; color: #ffe082; }
+
+    /* FILAS AMBIENTES */
+    .ambiente-row {
+      display: grid; grid-template-columns: 1.8fr 0.8fr 0.8fr 0.8fr 0.8fr 35px;
+      gap: 6px; align-items: center; margin-bottom: 5px;
+    }
+    .amb-input { padding: 7px 10px; border: 1.5px solid var(--borde); border-radius: 7px; font-size: 0.85rem; background: var(--gris-bg); width: 100%; }
+    .amb-input:focus { outline: none; border-color: var(--amarillo-oscuro); background: #fff; }
+    .amb-delete { background: none; border: none; cursor: pointer; color: #c62828; font-size: 1.1rem; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--amarillo-claro); }
+
+    .badge-ok  { background: #d4edda; color: #155724; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+    .badge-warn{ background: #fff3cd; color: #856404; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+    .badge-mal { background: #f8d7da; color: #721c24; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+
+    .alerta-ok  { background: #d4edda; color: #155724; border-left: 4px solid #28a745; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-warn{ background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .norma-chip { display: inline-block; background: var(--azul-navbar); color: #fff; border-radius: 4px; padding: 1px 6px; font-size: 0.72rem; font-weight: 700; vertical-align: middle; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">⚡ <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Instalaciones Eléctricas</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">⚡ Ingenieros Eléctricos — RETIE 2026</div>
+  <h1>Instalaciones Eléctricas Residenciales 2026</h1>
+  <p>Diseño de circuitos por ambiente, tablero de distribución, iluminación y tomacorrientes según RETIE y NTC 2050 para viviendas colombianas.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 RETIE + NTC 2050</span>
+    <span class="hero-chip">🏠 Diseño residencial</span>
+    <span class="hero-chip">📋 Tablero de distribución</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('circuitos', this)">🏠 Circuitos por Ambiente</button>
+    <button class="tab-btn" onclick="mostrarTab('iluminacion', this)">💡 Iluminación</button>
+    <button class="tab-btn" onclick="mostrarTab('tablero', this)">📋 Tablero General</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📚 RETIE Residencial</button>
+  </div>
+
+  <!-- TAB 1: CIRCUITOS -->
+  <div id="tab-circuitos" class="tab-panel active">
+    <div class="card">
+      <h2>🏠 Diseño de Circuitos por Ambiente <span class="norma-chip">NTC 2050 §220</span></h2>
+      <div class="info-box">
+        <strong>NTC 2050 §220:</strong> Cada circuito derivado no debe superar el 80% de su capacidad. Máximo 10 tomacorrientes o puntos de luz por circuito de 15A. La cocina y el comedor deben tener mínimo 2 circuitos pequeños de aparatos de 20A.
+      </div>
+
+      <div class="form-grid" style="margin-bottom:1rem;">
+        <div class="form-group">
+          <label>Tensión del sistema (V)</label>
+          <select id="c-tension">
+            <option value="120" selected>120 V (monofásico — más común en Colombia)</option>
+            <option value="220">220 V (monofásico)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Factor de demanda residencial</label>
+          <select id="c-factor">
+            <option value="1.0">100% — vivienda pequeña (&lt; 80 m²)</option>
+            <option value="0.85" selected>85% — vivienda media (80–150 m²)</option>
+            <option value="0.70">70% — vivienda grande (&gt; 150 m²)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1.8fr 0.8fr 0.8fr 0.8fr 0.8fr 35px; gap:6px; margin-bottom:4px;">
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Ambiente</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Área (m²)</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Tomacorrientes</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Puntos luz</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Carga esp. (W)</span>
+        <span></span>
+      </div>
+      <div id="ambientes-container"></div>
+      <div style="display:flex; gap:0.8rem; margin-top:0.8rem; flex-wrap:wrap;">
+        <button class="btn-sm" onclick="agregarAmbiente()">+ Agregar ambiente</button>
+        <button class="btn-sm" style="background:var(--azul-navbar);" onclick="agregarAmbienteEspecial()">+ Carga especial</button>
+      </div>
+
+      <button class="btn" onclick="calcularCircuitos()">⚡ Diseñar Circuitos</button>
+    </div>
+    <div id="resultado-circuitos" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: ILUMINACIÓN -->
+  <div id="tab-iluminacion" class="tab-panel">
+    <div class="card">
+      <h2>💡 Calculadora de Iluminación por Ambiente <span class="norma-chip">RETIE Art. 20</span></h2>
+      <div class="info-box">
+        <strong>Método de los lúmenes:</strong> Número de luminarias = (E × Área) ÷ (Φ × CU × FM)<br>
+        Donde E = iluminancia requerida (lux), Φ = flujo luminoso por luminaria, CU = coeficiente de utilización, FM = factor de mantenimiento.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de ambiente</label>
+          <select id="il-tipo" onchange="autoLux()">
+            <option value="sala">Sala / comedor — 200 lux</option>
+            <option value="cocina">Cocina — 300 lux</option>
+            <option value="habitacion" selected>Habitación — 150 lux</option>
+            <option value="bano">Baño — 250 lux</option>
+            <option value="oficina">Oficina / estudio — 500 lux</option>
+            <option value="garaje">Garaje / bodega — 100 lux</option>
+            <option value="pasillo">Pasillo / escalera — 100 lux</option>
+            <option value="custom">Personalizado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Iluminancia requerida E (lux)</label>
+          <input type="number" id="il-lux" value="150" min="50" max="1000" step="50" />
+          <span class="form-hint">RETIE: sala 200 lx, cocina 300 lx, oficina 500 lx</span>
+        </div>
+        <div class="form-group">
+          <label>Largo del ambiente (m)</label>
+          <input type="number" id="il-largo" value="4.5" min="1" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Ancho del ambiente (m)</label>
+          <input type="number" id="il-ancho" value="3.5" min="1" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Altura del techo (m)</label>
+          <input type="number" id="il-altura" value="2.5" min="2" max="6" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Tipo de luminaria</label>
+          <select id="il-luminaria" onchange="autoLuminaria()">
+            <option value="led-panel">LED Panel 24W — 2400 lm</option>
+            <option value="led-downlight">LED Downlight 12W — 1000 lm</option>
+            <option value="led-bulb" selected>LED Bulbo 13W — 1300 lm</option>
+            <option value="led-tubo">LED Tubo 20W — 2200 lm</option>
+            <option value="fluorescente">Fluorescente 40W — 3200 lm</option>
+            <option value="halogena">Halógena 75W — 1200 lm</option>
+            <option value="custom">Personalizada</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Flujo luminoso por luminaria (lm)</label>
+          <input type="number" id="il-lumenes" value="1300" min="100" step="100" />
+        </div>
+        <div class="form-group">
+          <label>Potencia por luminaria (W)</label>
+          <input type="number" id="il-potencia" value="13" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Reflectancia techo / paredes / piso</label>
+          <select id="il-reflec">
+            <option value="0.70">Alta (techo blanco, paredes claras) — CU ≈ 0.70</option>
+            <option value="0.55" selected>Media (colores pastel) — CU ≈ 0.55</option>
+            <option value="0.40">Baja (colores oscuros) — CU ≈ 0.40</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Factor de mantenimiento (FM)</label>
+          <select id="il-fm">
+            <option value="0.8" selected>0.80 — Limpieza frecuente</option>
+            <option value="0.7">0.70 — Limpieza normal</option>
+            <option value="0.6">0.60 — Ambiente con polvo</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularIluminacion()">💡 Calcular Iluminación</button>
+    </div>
+    <div id="resultado-iluminacion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: TABLERO -->
+  <div id="tab-tablero" class="tab-panel">
+    <div class="card">
+      <h2>📋 Diseño del Tablero de Distribución Residencial</h2>
+      <div class="info-box">
+        <strong>RETIE Art. 16:</strong> Todo tablero residencial debe tener breaker principal, circuitos independientes para cocina, lavadora, ducha eléctrica y aires acondicionados. Polo a tierra obligatorio.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Área total de la vivienda (m²)</label>
+          <input type="number" id="tb-area" value="100" min="20" step="5" />
+        </div>
+        <div class="form-group">
+          <label>Número de habitaciones</label>
+          <input type="number" id="tb-habitaciones" value="3" min="1" max="10" step="1" />
+        </div>
+        <div class="form-group">
+          <label>¿Tiene ducha eléctrica?</label>
+          <select id="tb-ducha">
+            <option value="si" selected>Sí — 3.300 W</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>¿Tiene aire acondicionado?</label>
+          <select id="tb-aa">
+            <option value="no" selected>No</option>
+            <option value="1">1 equipo — 1.500 W</option>
+            <option value="2">2 equipos — 3.000 W</option>
+            <option value="3">3 equipos — 4.500 W</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>¿Tiene lavadora?</label>
+          <select id="tb-lavadora">
+            <option value="si" selected>Sí — 1.200 W</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>¿Tiene secadora?</label>
+          <select id="tb-secadora">
+            <option value="no" selected>No</option>
+            <option value="si">Sí — 3.000 W</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>¿Tiene cocina eléctrica / horno?</label>
+          <select id="tb-cocina">
+            <option value="si" selected>Sí — 4.000 W</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tensión del sistema (V)</label>
+          <select id="tb-tension">
+            <option value="120" selected>120 V monofásico</option>
+            <option value="220">220 V monofásico</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularTablero()">📋 Diseñar Tablero</button>
+    </div>
+    <div id="resultado-tablero" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 4: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📚 Requisitos RETIE para Instalaciones Residenciales</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Requisito</th><th>Especificación</th><th>Base legal</th></tr></thead>
+          <tbody>
+            <tr><td><b>Puesta a tierra</b></td><td>Obligatoria en toda instalación. R ≤ 25 Ω residencial</td><td>RETIE Art. 15</td></tr>
+            <tr><td><b>Interruptor diferencial (GFCI)</b></td><td>Obligatorio en baños, cocinas, áreas exteriores y garajes</td><td>RETIE Art. 16, NTC 2050 §210-8</td></tr>
+            <tr><td><b>Tomacorrientes</b></td><td>Mínimo 1 por cada 3.7 m de pared; mínimo 2 en cocina (20A)</td><td>NTC 2050 §210-52</td></tr>
+            <tr><td><b>Alumbrado</b></td><td>Mínimo 1 punto de luz controlado por interruptor en cada habitación</td><td>NTC 2050 §210-70</td></tr>
+            <tr><td><b>Circuito ducha eléctrica</b></td><td>Circuito exclusivo 30A / 120V o 15A / 220V con GFCI</td><td>RETIE Art. 16</td></tr>
+            <tr><td><b>Calibre mínimo</b></td><td>#12 AWG circuitos de 20A | #14 AWG circuitos de 15A</td><td>NTC 2050 Tabla 310-16</td></tr>
+            <tr><td><b>Breaker principal</b></td><td>Debe poder interrumpir toda la corriente del tablero</td><td>RETIE Art. 16</td></tr>
+            <tr><td><b>Identificación circuitos</b></td><td>Todos los circuitos deben estar identificados en el tablero</td><td>RETIE Art. 16</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 Niveles de Iluminación Recomendados — Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Ambiente</th><th>Iluminancia (lux)</th><th>Temperatura de color</th></tr></thead>
+          <tbody>
+            <tr><td>Dormitorio</td><td>100–200 lux</td><td>2700–3000 K (cálido)</td></tr>
+            <tr><td>Sala / comedor</td><td>150–300 lux</td><td>2700–4000 K</td></tr>
+            <tr><td>Cocina</td><td>300–500 lux</td><td>4000 K (neutro)</td></tr>
+            <tr><td>Baño</td><td>200–300 lux</td><td>4000–5000 K</td></tr>
+            <tr><td>Oficina / estudio</td><td>400–600 lux</td><td>4000–6500 K (frío)</td></tr>
+            <tr><td>Pasillo</td><td>100–150 lux</td><td>3000–4000 K</td></tr>
+            <tr><td>Garaje</td><td>100–200 lux</td><td>4000–6500 K</td></tr>
+            <tr><td>Escaleras</td><td>150–300 lux</td><td>4000 K</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> El diseño definitivo de instalaciones eléctricas debe ser elaborado y firmado por un <strong>Ingeniero Eléctrico o Electricista matriculado ante el COPNIA</strong>. Toda instalación eléctrica en Colombia requiere certificado de conformidad RETIE expedido por organismo acreditado. Normativa: RETIE Resolución 90708/2013 y actualizaciones, NTC 2050.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n, dec=2) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function fmtInt(n) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+// ── TAB 1: CIRCUITOS ──
+let nAmb = 0;
+const ambientesPreset = [
+  { nombre:'Sala / Comedor', area:20, tc:6, lum:4, esp:0 },
+  { nombre:'Cocina', area:10, tc:4, lum:3, esp:3300 },
+  { nombre:'Habitación principal', area:15, tc:4, lum:2, esp:0 },
+  { nombre:'Habitación 2', area:12, tc:3, lum:2, esp:0 },
+  { nombre:'Baño principal', area:6, tc:2, lum:2, esp:3300 },
+  { nombre:'Lavandería', area:5, tc:2, lum:1, esp:1200 },
+];
+
+function agregarAmbiente(preset) {
+  nAmb++;
+  const c = document.getElementById('ambientes-container');
+  const div = document.createElement('div');
+  div.className = 'ambiente-row';
+  div.id = `amb-${nAmb}`;
+  const p = preset || { nombre:`Ambiente ${nAmb}`, area:12, tc:3, lum:2, esp:0 };
+  div.innerHTML = `
+    <input class="amb-input" type="text"   id="a-nom-${nAmb}" value="${p.nombre}" />
+    <input class="amb-input" type="number" id="a-area-${nAmb}" value="${p.area}" min="1" step="1" />
+    <input class="amb-input" type="number" id="a-tc-${nAmb}"   value="${p.tc}"   min="0" step="1" />
+    <input class="amb-input" type="number" id="a-lum-${nAmb}"  value="${p.lum}"  min="0" step="1" />
+    <input class="amb-input" type="number" id="a-esp-${nAmb}"  value="${p.esp}"  min="0" step="100" />
+    <button class="amb-delete" onclick="document.getElementById('amb-${nAmb}').remove()">✕</button>`;
+  c.appendChild(div);
+}
+
+function agregarAmbienteEspecial() {
+  agregarAmbiente({ nombre:'Carga especial (A/A, horno)', area:0, tc:0, lum:0, esp:2000 });
+}
+
+function calcularCircuitos() {
+  const tension = parseFloat(document.getElementById('c-tension').value);
+  const factor  = parseFloat(document.getElementById('c-factor').value);
+  const ambs    = document.querySelectorAll('.ambiente-row');
+  if (ambs.length === 0) { alert('Agrega al menos un ambiente.'); return; }
+
+  let circuitos = [];
+  let cargaTotalBruta = 0;
+
+  ambs.forEach(row => {
+    const id   = row.id.split('-')[1];
+    const nom  = document.getElementById(`a-nom-${id}`)?.value || '';
+    const area = parseFloat(document.getElementById(`a-area-${id}`)?.value) || 0;
+    const tc   = parseInt(document.getElementById(`a-tc-${id}`)?.value) || 0;
+    const lum  = parseInt(document.getElementById(`a-lum-${id}`)?.value) || 0;
+    const esp  = parseFloat(document.getElementById(`a-esp-${id}`)?.value) || 0;
+
+    // Carga de alumbrado: 33 VA/m²
+    const cAlumb = area * 33;
+    // Carga tomacorrientes: 180 VA cada uno
+    const cTC    = tc * 180;
+    // Carga especial directa
+    const cargaAmb = cAlumb + cTC + esp;
+    cargaTotalBruta += cargaAmb;
+
+    // Circuitos necesarios
+    const cargaCircuito15A = tension * 15 * 0.80; // 80% = 1440 VA a 120V
+    const cargaCircuito20A = tension * 20 * 0.80; // 80% = 1920 VA a 120V
+
+    let nCirc15 = 0, nCirc20 = 0;
+    if (esp > 0) {
+      nCirc20 = Math.ceil(esp / cargaCircuito20A);
+    }
+    const cargaNorm = cAlumb + cTC;
+    nCirc15 = Math.ceil(cargaNorm / cargaCircuito15A);
+
+    const puntosTotales = lum + tc;
+    const circPorPuntos = Math.ceil(puntosTotales / 10);
+    nCirc15 = Math.max(nCirc15, circPorPuntos, 1);
+
+    const corriente = cargaAmb / tension;
+    circuitos.push({ nom, area, tc, lum, esp, cargaAmb, nCirc15, nCirc20, corriente });
+  });
+
+  const cargaConFactor = cargaTotalBruta * factor;
+  const corrienteTotal = cargaConFactor / tension;
+  const totalCirc15   = circuitos.reduce((s,c)=>s+c.nCirc15,0);
+  const totalCirc20   = circuitos.reduce((s,c)=>s+c.nCirc20,0);
+  const totalCircuitos= totalCirc15 + totalCirc20;
+
+  // Breaker principal
+  const breakerPrincipal = [15,20,30,40,50,60,70,80,100,110,125].find(b => b >= corrienteTotal * 1.25) || '>125A';
+
+  let filasHTML = circuitos.map(c => `
+    <tr>
+      <td>${c.nom}</td>
+      <td>${c.tc}</td><td>${c.lum}</td>
+      <td>${fmt(c.cargaAmb,0)} VA</td>
+      <td>${fmt(c.corriente,1)} A</td>
+      <td>${c.nCirc15 > 0 ? `${c.nCirc15} × 15A` : '—'}</td>
+      <td>${c.nCirc20 > 0 ? `${c.nCirc20} × 20A` : '—'}</td>
+    </tr>`).join('');
+
+  document.getElementById('resultado-circuitos').style.display = 'block';
+  document.getElementById('resultado-circuitos').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Diseño de Circuitos Residenciales — ${tension}V</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(cargaTotalBruta,0)} VA</div><div class="resultado-label">Carga bruta total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(cargaConFactor,0)} VA</div><div class="resultado-label">Carga con factor demanda</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(corrienteTotal,1)} A</div><div class="resultado-label">Corriente total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${breakerPrincipal} A</div><div class="resultado-label">Breaker principal</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${totalCirc15}</div><div class="resultado-label">Circuitos 15A</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${totalCirc20}</div><div class="resultado-label">Circuitos 20A</div></div>
+      </div>
+      <table class="tabla-circ" style="margin-top:1rem;">
+        <thead><tr><th>Ambiente</th><th>TC</th><th>Luz</th><th>Carga (VA)</th><th>I (A)</th><th>Circ. 15A</th><th>Circ. 20A</th></tr></thead>
+        <tbody>${filasHTML}</tbody>
+        <tr class="total"><td>TOTAL</td><td></td><td></td><td>${fmt(cargaTotalBruta,0)} VA</td><td>${fmt(corrienteTotal,1)} A</td><td>${totalCirc15}</td><td>${totalCirc20}</td></tr>
+      </table>
+      <div class="resultado-detalle">
+        <b>Resumen del tablero:</b><br>
+        Circuitos de iluminación/tomacorrientes (15A): <b>${totalCirc15}</b><br>
+        Circuitos de cargas especiales (20A): <b>${totalCirc20}</b><br>
+        Total circuitos: <b>${totalCircuitos}</b> → Tablero mínimo: <b>${totalCircuitos + 2} espacios</b> (incluye espacio para futuras ampliaciones)<br>
+        Breaker principal recomendado: <b>${breakerPrincipal} A</b>
+      </div>
+    </div>`;
+}
+
+// ── TAB 2: ILUMINACIÓN ──
+const luxPorTipo = { sala:200, cocina:300, habitacion:150, bano:250, oficina:500, garaje:100, pasillo:100, custom:200 };
+const luminarias = {
+  'led-panel':    { lm:2400, w:24 }, 'led-downlight':{ lm:1000, w:12 },
+  'led-bulb':     { lm:1300, w:13 }, 'led-tubo':     { lm:2200, w:20 },
+  'fluorescente': { lm:3200, w:40 }, 'halogena':     { lm:1200, w:75 }, 'custom':{ lm:1000, w:15 }
+};
+
+function autoLux() {
+  const tipo = document.getElementById('il-tipo').value;
+  document.getElementById('il-lux').value = luxPorTipo[tipo] || 200;
+}
+function autoLuminaria() {
+  const tipo = document.getElementById('il-luminaria').value;
+  const l = luminarias[tipo];
+  if (l) { document.getElementById('il-lumenes').value = l.lm; document.getElementById('il-potencia').value = l.w; }
+}
+
+function calcularIluminacion() {
+  const lux    = parseFloat(document.getElementById('il-lux').value);
+  const largo  = parseFloat(document.getElementById('il-largo').value);
+  const ancho  = parseFloat(document.getElementById('il-ancho').value);
+  const altura = parseFloat(document.getElementById('il-altura').value);
+  const lm     = parseFloat(document.getElementById('il-lumenes').value);
+  const potW   = parseFloat(document.getElementById('il-potencia').value);
+  const cu     = parseFloat(document.getElementById('il-reflec').value);
+  const fm     = parseFloat(document.getElementById('il-fm').value);
+  const tipo   = document.getElementById('il-tipo').value;
+
+  const area   = largo * ancho;
+  // Índice del local (K)
+  const K      = (largo * ancho) / ((largo + ancho) * (altura - 0.8));
+  // Número de luminarias
+  const nLum   = Math.ceil((lux * area) / (lm * cu * fm));
+  const potTotal = nLum * potW;
+  const luxReal  = (nLum * lm * cu * fm) / area;
+  const wM2      = potTotal / area;
+
+  document.getElementById('resultado-iluminacion').style.display = 'block';
+  document.getElementById('resultado-iluminacion').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Iluminación — ${tipo.charAt(0).toUpperCase()+tipo.slice(1)} ${largo}×${ancho} m</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${nLum}</div><div class="resultado-label">Luminarias requeridas</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(luxReal,0)} lux</div><div class="resultado-label">Iluminancia real</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${potTotal} W</div><div class="resultado-label">Potencia total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(wM2,1)} W/m²</div><div class="resultado-label">Densidad (W/m²)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(K,2)}</div><div class="resultado-label">Índice local (K)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(area,1)} m²</div><div class="resultado-label">Área del ambiente</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Método de los lúmenes:</b><br>
+        N = (E × Área) ÷ (Φ × CU × FM)<br>
+        N = (${lux} × ${fmt(area,1)}) ÷ (${lm} × ${cu} × ${fm}) = <b>${nLum} luminarias</b><br>
+        Iluminancia real: (${nLum} × ${lm} × ${cu} × ${fm}) ÷ ${fmt(area,1)} = <b>${fmt(luxReal,0)} lux</b><br>
+        Potencia: ${nLum} × ${potW}W = <b>${potTotal}W</b> (${fmt(wM2,1)} W/m²)<br>
+        ${luxReal >= lux ? `✅ Cumple la iluminancia requerida de ${lux} lux` : `⚠️ Verificar: iluminancia calculada ${fmt(luxReal,0)} lux < requerida ${lux} lux`}
+      </div>
+    </div>`;
+}
+
+// ── TAB 3: TABLERO ──
+function calcularTablero() {
+  const area    = parseFloat(document.getElementById('tb-area').value) || 100;
+  const hab     = parseInt(document.getElementById('tb-habitaciones').value) || 3;
+  const ducha   = document.getElementById('tb-ducha').value === 'si';
+  const aa      = parseInt(document.getElementById('tb-aa').value) || 0;
+  const lavadora= document.getElementById('tb-lavadora').value === 'si';
+  const secadora= document.getElementById('tb-secadora').value === 'si';
+  const cocina  = document.getElementById('tb-cocina').value === 'si';
+  const tension = parseInt(document.getElementById('tb-tension').value);
+
+  const circuitos = [
+    { desc:'Alumbrado general (sala, pasillos, comunes)', A:15, cant:Math.ceil(area/50), carga:area*33*0.5 },
+    { desc:`Tomacorrientes habitaciones (${hab} hab.)`, A:15, cant:Math.max(1,Math.ceil(hab*4*180/1440)), carga:hab*4*180 },
+    { desc:'Tomacorrientes sala/comedor', A:15, cant:1, carga:900 },
+    { desc:'Circuitos pequeños aparatos cocina', A:20, cant:2, carga:3000 },
+  ];
+
+  if (ducha)   circuitos.push({ desc:'Ducha eléctrica (exclusivo)', A:30, cant:1, carga:3300 });
+  if (lavadora)circuitos.push({ desc:'Lavadora (exclusivo)', A:20, cant:1, carga:1200 });
+  if (secadora)circuitos.push({ desc:'Secadora (exclusivo)', A:30, cant:1, carga:3000 });
+  if (cocina)  circuitos.push({ desc:'Cocina eléctrica / horno (exclusivo)', A:40, cant:1, carga:4000 });
+  if (aa > 0)  circuitos.push({ desc:`Aire acondicionado (${aa} equipo${aa>1?'s':''})`, A:20, cant:aa, carga:aa*1500 });
+
+  const cargaTotal = circuitos.reduce((s,c)=>s+c.carga,0) * 0.85;
+  const iTotal     = cargaTotal / tension;
+  const bkrPrinc   = [40,50,60,70,80,100,110,125,150].find(b=>b>=iTotal*1.25) || '>150A';
+  const totalEsp   = circuitos.reduce((s,c)=>s+c.cant,0);
+
+  document.getElementById('resultado-tablero').style.display = 'block';
+  document.getElementById('resultado-tablero').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Tablero de Distribución Residencial — ${tension}V | ${area} m²</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(cargaTotal,0)} VA</div><div class="resultado-label">Carga total (85% FD)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(iTotal,1)} A</div><div class="resultado-label">Corriente total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${bkrPrinc} A</div><div class="resultado-label">Breaker principal</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${totalEsp}</div><div class="resultado-label">Circuitos totales</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${totalEsp + 4}</div><div class="resultado-label">Espacios tablero</div></div>
+      </div>
+      <table class="tabla-circ" style="margin-top:1rem;">
+        <thead><tr><th>Circuito</th><th>Amp.</th><th>Cant.</th><th>Carga (VA)</th><th>Calibre</th></tr></thead>
+        <tbody>
+          ${circuitos.map(c=>`<tr>
+            <td>${c.desc}</td>
+            <td>${c.A}A</td><td>${c.cant}</td>
+            <td>${fmtInt(c.carga)}</td>
+            <td>${c.A<=15?'#14 AWG':c.A<=20?'#12 AWG':c.A<=30?'#10 AWG':'#8 AWG'}</td>
+          </tr>`).join('')}
+          <tr class="total"><td>BREAKER PRINCIPAL</td><td><b>${bkrPrinc} A</b></td><td>${totalEsp}</td><td>${fmt(cargaTotal,0)} VA</td><td>#${bkrPrinc<=60?'8':bkrPrinc<=100?'4':'2'} AWG</td></tr>
+        </tbody>
+      </table>
+      <div class="resultado-detalle">
+        <b>Tablero recomendado:</b> ${totalEsp + 4} espacios (${totalEsp} circuitos + 4 de reserva)<br>
+        <b>Breaker principal:</b> ${bkrPrinc} A (calibre conductor acometida: #${bkrPrinc<=60?'8':bkrPrinc<=100?'4':'2'} AWG Cu THHN)<br>
+        <b>Obligatorio según RETIE:</b> Polo a tierra en todos los circuitos | GFCI en baños y cocina | Identificación de todos los circuitos
+      </div>
+    </div>`;
+}
+
+// Inicializar con ambientes predeterminados
+document.addEventListener('DOMContentLoaded', () => {
+  ambientesPreset.forEach(p => agregarAmbiente(p));
+  document.getElementById('tb-area').value = 100;
+});
+</script>
+</body>
+</html>
