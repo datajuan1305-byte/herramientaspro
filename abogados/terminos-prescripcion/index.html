@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Términos de Prescripción Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de términos de prescripción, caducidad y vencimiento de acciones legales para abogados colombianos. Civil, penal, laboral y administrativo." />
+  <meta name="keywords" content="terminos prescripcion colombia, prescripcion accion civil colombia, caducidad accion contencioso administrativo, prescripcion penal colombia, abogado colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --vino: #880e4f;
+      --vino-medio: #ad1457;
+      --vino-claro: #fce4ec;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #880e4f 60%, #e91e63 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 100px; padding: 9px 8px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--vino-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--vino-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--vino-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--vino-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn { width: 100%; padding: 12px; background: var(--vino-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--vino); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--vino-claro); border-left: 4px solid var(--vino-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--vino); }
+
+    .resultado-box {
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-box.vigente  { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+    .resultado-box.proximo  { background: linear-gradient(135deg, #e65100, #f57c00); }
+    .resultado-box.vencido  { background: linear-gradient(135deg, #b71c1c, #c62828); }
+
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-fecha  { font-size: 2.4rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub    { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid   { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item   { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor  { font-size: 1.15rem; font-weight: 800; color: #ffe082; }
+    .resultado-label  { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle{ margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* BARRA TIEMPO */
+    .barra-tiempo-wrap { margin: 1rem 0 0; }
+    .barra-tiempo-label { display: flex; justify-content: space-between; font-size: 0.75rem; opacity: 0.75; margin-bottom: 4px; }
+    .barra-tiempo-bg { height: 12px; background: rgba(255,255,255,0.15); border-radius: 6px; overflow: hidden; }
+    .barra-tiempo-fill { height: 100%; border-radius: 6px; transition: width 0.5s; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+    .ref-table tr:hover td { background: var(--vino-claro); }
+
+    .alerta-ok   { background:#d4edda; color:#155724; border-left:4px solid #28a745; border-radius:8px; padding:0.8rem 1rem; font-size:0.85rem; margin-top:0.8rem; }
+    .alerta-warn { background:#fff3cd; color:#856404; border-left:4px solid #ffc107; border-radius:8px; padding:0.8rem 1rem; font-size:0.85rem; margin-top:0.8rem; }
+    .alerta-mal  { background:#f8d7da; color:#721c24; border-left:4px solid #dc3545; border-radius:8px; padding:0.8rem 1rem; font-size:0.85rem; margin-top:0.8rem; }
+
+    .sep { border:none; border-top:1.5px solid var(--borde); margin:1rem 0; }
+    .disclaimer { background:#fff3cd; border:1px solid #ffc107; border-radius:var(--radio); padding:1rem 1.2rem; font-size:0.8rem; color:#5a4a00; margin-top:2rem; text-align:center; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">⚖️ <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Prescripción</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">⚖️ Abogados — Litigantes</div>
+  <h1>Términos de Prescripción y Caducidad 2026</h1>
+  <p>Calcula el vencimiento de términos de prescripción y caducidad para acciones civiles, penales, laborales, contencioso-administrativas y comerciales. Código Civil, CGP, CPP y CPACA.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Código Civil Colombia</span>
+    <span class="hero-chip">⏱️ Prescripción y caducidad</span>
+    <span class="hero-chip">📋 Civil, Penal, Laboral</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('calculadora', this)">⏱️ Calculadora</button>
+    <button class="tab-btn" onclick="mostrarTab('civil', this)">📜 Civil y Comercial</button>
+    <button class="tab-btn" onclick="mostrarTab('administrativo', this)">🏛️ Administrativo</button>
+    <button class="tab-btn" onclick="mostrarTab('laboral', this)">💼 Laboral y Penal</button>
+  </div>
+
+  <!-- TAB 1: CALCULADORA -->
+  <div id="tab-calculadora" class="tab-panel active">
+    <div class="card">
+      <h2>⏱️ Calculadora de Términos de Prescripción y Caducidad</h2>
+      <div class="info-box">
+        <strong>Diferencia clave:</strong> La <b>prescripción</b> extingue el derecho si no se ejerce (puede interrumpirse). La <b>caducidad</b> extingue la acción por el solo paso del tiempo (no se interrumpe). Ambas corren desde el momento en que nace la acción.
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Área del derecho</label>
+          <select id="c-area" onchange="actualizarAcciones()">
+            <option value="civil">Civil — Código Civil</option>
+            <option value="comercial">Comercial — Código de Comercio</option>
+            <option value="laboral">Laboral — CST y Ley 712/2001</option>
+            <option value="administrativo">Contencioso Administrativo — CPACA</option>
+            <option value="penal">Penal — CPP y CP</option>
+            <option value="seguridad-social">Seguridad Social</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tipo de acción</label>
+          <select id="c-accion"></select>
+        </div>
+        <div class="form-group">
+          <label>Fecha en que nació el derecho / hecho dañino</label>
+          <input type="date" id="c-fecha-inicio" />
+          <span class="form-hint">Fecha del contrato, hecho, sentencia, acto administrativo, etc.</span>
+        </div>
+        <div class="form-group">
+          <label>¿Hubo interrupción del término?</label>
+          <select id="c-interrupcion">
+            <option value="no" selected>No</option>
+            <option value="si">Sí — demanda, reconocimiento, notificación</option>
+          </select>
+        </div>
+        <div class="form-group" id="grp-interrupcion" style="display:none;">
+          <label>Fecha de la interrupción</label>
+          <input type="date" id="c-fecha-interrupcion" />
+          <span class="form-hint">Desde esta fecha se reinicia el conteo</span>
+        </div>
+        <div class="form-group">
+          <label>Caso / cliente (opcional)</label>
+          <input type="text" id="c-caso" placeholder="Ej: García vs Transportes Ltda." />
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularPrescripcion()">⏱️ Calcular Vencimiento</button>
+    </div>
+    <div id="resultado-prescripcion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: CIVIL Y COMERCIAL -->
+  <div id="tab-civil" class="tab-panel">
+    <div class="card">
+      <h2>📜 Prescripción Civil y Comercial — Código Civil y Código de Comercio</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Acción</th><th>Término</th><th>Desde cuándo</th><th>Base legal</th></tr></thead>
+          <tbody>
+            <tr><td><b>Prescripción ordinaria (acciones personales)</b></td><td>10 años</td><td>Nacimiento de la obligación</td><td>CC Art. 2536</td></tr>
+            <tr><td><b>Acciones hipotecarias</b></td><td>20 años</td><td>Constitución de la hipoteca</td><td>CC Art. 2536</td></tr>
+            <tr><td><b>Cobro ejecutivo (título ejecutivo)</b></td><td>5 años</td><td>Vencimiento de la obligación</td><td>CC Art. 2536 mod. Ley 791/2002</td></tr>
+            <tr><td><b>Acciones posesorias</b></td><td>1 año</td><td>Perturbación o despojo</td><td>CC Art. 975</td></tr>
+            <tr><td><b>Prescripción adquisitiva ordinaria</b></td><td>5 años</td><td>Inicio posesión con justo título</td><td>CC Art. 2529</td></tr>
+            <tr><td><b>Prescripción adquisitiva extraordinaria</b></td><td>10 años</td><td>Inicio posesión (sin justo título)</td><td>CC Art. 2531</td></tr>
+            <tr><td><b>Acción de resolución de contrato</b></td><td>2 años</td><td>Incumplimiento del contrato</td><td>CC Art. 1546</td></tr>
+            <tr><td><b>Acción de nulidad de contrato (relativa)</b></td><td>2 años</td><td>Descubrimiento del vicio</td><td>CC Art. 1750</td></tr>
+            <tr><td><b>Acción de nulidad absoluta</b></td><td>10 años</td><td>Celebración del acto</td><td>CC Art. 1742</td></tr>
+            <tr><td><b>Responsabilidad extracontractual</b></td><td>3 años</td><td>Conocimiento del daño y el autor</td><td>CC Art. 2356, CGP</td></tr>
+            <tr><td><b>Acciones comerciales (obligaciones)</b></td><td>2 años</td><td>Exigibilidad de la obligación</td><td>C.Co. Art. 993</td></tr>
+            <tr><td><b>Acciones cambiarias directas (letra, cheque)</b></td><td>3 años</td><td>Vencimiento del título</td><td>C.Co. Art. 789</td></tr>
+            <tr><td><b>Acciones cambiarias indirectas</b></td><td>1 año</td><td>Rechazo o protesto</td><td>C.Co. Art. 793</td></tr>
+            <tr><td><b>Prescripción seguros (daños)</b></td><td>2 años</td><td>Ocurrencia del siniestro</td><td>C.Co. Art. 1081</td></tr>
+            <tr><td><b>Prescripción seguros (personas)</b></td><td>5 años</td><td>Ocurrencia del siniestro</td><td>C.Co. Art. 1081</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: ADMINISTRATIVO -->
+  <div id="tab-administrativo" class="tab-panel">
+    <div class="card">
+      <h2>🏛️ Caducidad Contencioso Administrativo — CPACA Ley 1437/2011</h2>
+      <div class="info-box">
+        <strong>Importante:</strong> En lo contencioso administrativo se habla de <b>caducidad</b> (no prescripción). La caducidad no se interrumpe ni se suspende (salvo casos especiales). Vencido el término, la acción se extingue.
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Acción</th><th>Término caducidad</th><th>Desde cuándo</th><th>Art. CPACA</th></tr></thead>
+          <tbody>
+            <tr><td><b>Nulidad simple</b></td><td>No caduca (imprescriptible)</td><td>—</td><td>Art. 164 num. 1a</td></tr>
+            <tr><td><b>Nulidad y restablecimiento del derecho</b></td><td>4 meses</td><td>Notificación del acto / silencio administrativo</td><td>Art. 164 num. 2d</td></tr>
+            <tr><td><b>Reparación directa (daño)</b></td><td>2 años</td><td>Ocurrencia del daño o conocimiento</td><td>Art. 164 num. 2i</td></tr>
+            <tr><td><b>Contratos estatales</b></td><td>2 años</td><td>Terminación, liquidación o ejecutoria del acto</td><td>Art. 164 num. 2j</td></tr>
+            <tr><td><b>Repetición</b></td><td>2 años</td><td>Pago de la condena al Estado</td><td>Art. 164 num. 2k</td></tr>
+            <tr><td><b>Acción ejecutiva contra entidades públicas</b></td><td>5 años</td><td>Ejecutoria de la sentencia o acto</td><td>Art. 164 num. 2l</td></tr>
+            <tr><td><b>Nulidad actos electorales</b></td><td>30 días hábiles</td><td>Publicación del acto</td><td>Art. 164 num. 2a</td></tr>
+            <tr><td><b>Pérdida de investidura</b></td><td>No caduca</td><td>—</td><td>Art. 164 num. 1b</td></tr>
+            <tr><td><b>Acción popular</b></td><td>No caduca (imprescriptible)</td><td>—</td><td>Ley 472/1998 Art. 11</td></tr>
+            <tr><td><b>Acción de grupo</b></td><td>2 años</td><td>Ocurrencia del daño / conocimiento</td><td>Ley 472/1998 Art. 47</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: LABORAL Y PENAL -->
+  <div id="tab-laboral" class="tab-panel">
+    <div class="card">
+      <h2>💼 Prescripción Laboral — CST y Ley 712/2001</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Acción / Derecho</th><th>Término</th><th>Desde cuándo</th><th>Base legal</th></tr></thead>
+          <tbody>
+            <tr><td><b>Prescripción general laboral</b></td><td>3 años</td><td>Causación del derecho</td><td>CST Art. 488</td></tr>
+            <tr><td><b>Salarios y prestaciones sociales</b></td><td>3 años</td><td>Causación de cada período</td><td>CST Art. 488</td></tr>
+            <tr><td><b>Reclamo escrito interrumpe prescripción</b></td><td>+1 año adicional</td><td>Desde el reclamo escrito</td><td>CST Art. 489</td></tr>
+            <tr><td><b>Fuero sindical (reintegro)</b></td><td>2 meses</td><td>Desde el despido</td><td>CST Art. 405 y 408</td></tr>
+            <tr><td><b>Acción de reintegro discriminatorio</b></td><td>3 años</td><td>Desde la terminación</td><td>Ley 361/1997</td></tr>
+            <tr><td><b>Pensión de vejez (reconocimiento)</b></td><td>No prescribe</td><td>—</td><td>L. 100/93 Art. 33</td></tr>
+            <tr><td><b>Mesadas pensionales causadas</b></td><td>3 años</td><td>Cada mesada causada</td><td>CST Art. 488</td></tr>
+            <tr><td><b>Accidente de trabajo — daños</b></td><td>3 años</td><td>Desde el accidente</td><td>Ley 712/2001</td></tr>
+            <tr><td><b>Enfermedad laboral</b></td><td>3 años</td><td>Diagnóstico definitivo</td><td>Decreto 1832/1994</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🚔 Prescripción Penal — Código Penal Arts. 83–86</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Delito / Situación</th><th>Término prescripción</th><th>Observaciones</th></tr></thead>
+          <tbody>
+            <tr><td><b>Regla general (delitos)</b></td><td>Igual a la pena máxima en la ley</td><td>Mínimo 5 años, máximo 20 años</td></tr>
+            <tr><td><b>Contravenciones</b></td><td>2 años</td><td>Desde la comisión</td></tr>
+            <tr><td><b>Delitos contra menores</b></td><td>No prescribe hasta mayoría de edad + tiempo legal</td><td>CP Art. 83 parágrafo</td></tr>
+            <tr><td><b>Delitos de lesa humanidad</b></td><td>Imprescriptibles</td><td>DIH y tratados internacionales</td></tr>
+            <tr><td><b>Prescripción en la instrucción</b></td><td>½ de la pena máxima (mín. 5 años)</td><td>Desde comisión hasta resolución acusatoria</td></tr>
+            <tr><td><b>Prescripción en el juicio</b></td><td>½ del término de instrucción</td><td>Desde resolución acusatoria</td></tr>
+            <tr><td><b>Interrupción</b></td><td>Con la resolución de acusación</td><td>Se inicia nuevo término para el juicio</td></tr>
+            <tr><td><b>Acción civil dentro del proceso penal</b></td><td>Igual a la prescripción del delito</td><td>CP Art. 86</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los términos de prescripción y caducidad dependen de las particularidades de cada caso. Esta calculadora es una guía de referencia y no reemplaza el análisis de un <strong>abogado matriculado ante el Consejo Superior de la Judicatura</strong>. Siempre verifique la normativa vigente al momento de la consulta. Fuentes: Código Civil, C. de Comercio, CST, CPP, CP, CPACA, CGP.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+const acciones = {
+  civil: [
+    { label:'Prescripción ordinaria (acciones personales)',    anios:10, tipo:'prescripcion', norma:'CC Art. 2536' },
+    { label:'Cobro ejecutivo (título ejecutivo)',               anios:5,  tipo:'prescripcion', norma:'CC Art. 2536 — Ley 791/2002' },
+    { label:'Acciones hipotecarias',                           anios:20, tipo:'prescripcion', norma:'CC Art. 2536' },
+    { label:'Responsabilidad extracontractual (daños)',         anios:3,  tipo:'prescripcion', norma:'CC Art. 2356' },
+    { label:'Nulidad relativa de contrato',                    anios:2,  tipo:'prescripcion', norma:'CC Art. 1750' },
+    { label:'Nulidad absoluta de contrato',                    anios:10, tipo:'prescripcion', norma:'CC Art. 1742' },
+    { label:'Resolución de contrato',                          anios:2,  tipo:'prescripcion', norma:'CC Art. 1546' },
+    { label:'Prescripción adquisitiva ordinaria',              anios:5,  tipo:'prescripcion', norma:'CC Art. 2529' },
+    { label:'Prescripción adquisitiva extraordinaria',         anios:10, tipo:'prescripcion', norma:'CC Art. 2531' },
+    { label:'Acciones posesorias',                             anios:1,  tipo:'prescripcion', norma:'CC Art. 975' },
+    { label:'Petición de herencia',                            anios:10, tipo:'prescripcion', norma:'CC Art. 1321' },
+  ],
+  comercial: [
+    { label:'Obligaciones comerciales (general)',              anios:2,  tipo:'prescripcion', norma:'C.Co. Art. 993' },
+    { label:'Acción cambiaria directa (letra, cheque, pagaré)',anios:3,  tipo:'prescripcion', norma:'C.Co. Art. 789' },
+    { label:'Acción cambiaria indirecta (de regreso)',         anios:1,  tipo:'prescripcion', norma:'C.Co. Art. 793' },
+    { label:'Prescripción contrato seguro (daños)',            anios:2,  tipo:'prescripcion', norma:'C.Co. Art. 1081' },
+    { label:'Prescripción contrato seguro (personas)',         anios:5,  tipo:'prescripcion', norma:'C.Co. Art. 1081' },
+    { label:'Acciones del transportador',                      anios:2,  tipo:'prescripcion', norma:'C.Co. Art. 993' },
+    { label:'Nulidad acto societario',                         anios:2,  tipo:'prescripcion', norma:'C.Co. Art. 900' },
+  ],
+  laboral: [
+    { label:'Salarios, prestaciones y derechos laborales',     anios:3,  tipo:'prescripcion', norma:'CST Art. 488', meses:0 },
+    { label:'Con reclamo escrito previo (1 año adicional)',    anios:3,  tipo:'prescripcion', norma:'CST Art. 489', extra:'+1 año por reclamo escrito' },
+    { label:'Fuero sindical — reintegro',                      anios:0,  meses:2, tipo:'prescripcion', norma:'CST Art. 408' },
+    { label:'Mesadas pensionales causadas',                    anios:3,  tipo:'prescripcion', norma:'CST Art. 488' },
+    { label:'Accidente de trabajo / enfermedad laboral',       anios:3,  tipo:'prescripcion', norma:'Ley 712/2001' },
+  ],
+  administrativo: [
+    { label:'Nulidad y restablecimiento del derecho',          anios:0,  meses:4, tipo:'caducidad', norma:'CPACA Art. 164 2d' },
+    { label:'Reparación directa (daño del Estado)',            anios:2,  tipo:'caducidad', norma:'CPACA Art. 164 2i' },
+    { label:'Contratos estatales',                             anios:2,  tipo:'caducidad', norma:'CPACA Art. 164 2j' },
+    { label:'Repetición contra funcionario',                   anios:2,  tipo:'caducidad', norma:'CPACA Art. 164 2k' },
+    { label:'Acción ejecutiva contra entidad pública',         anios:5,  tipo:'caducidad', norma:'CPACA Art. 164 2l' },
+    { label:'Actos electorales',                               anios:0,  meses:0, dias:30, tipo:'caducidad', norma:'CPACA Art. 164 2a', esHabil:true },
+    { label:'Acción de grupo',                                 anios:2,  tipo:'caducidad', norma:'Ley 472/1998 Art. 47' },
+    { label:'Nulidad simple (imprescriptible)',                 anios:999, tipo:'caducidad', norma:'CPACA Art. 164 1a', imprescriptible:true },
+  ],
+  penal: [
+    { label:'Delito con pena máxima 5 años',    anios:5,  tipo:'prescripcion', norma:'CP Art. 83' },
+    { label:'Delito con pena máxima 8 años',    anios:8,  tipo:'prescripcion', norma:'CP Art. 83' },
+    { label:'Delito con pena máxima 12 años',   anios:12, tipo:'prescripcion', norma:'CP Art. 83' },
+    { label:'Delito con pena máxima 16 años',   anios:16, tipo:'prescripcion', norma:'CP Art. 83' },
+    { label:'Delito con pena máxima 20 años',   anios:20, tipo:'prescripcion', norma:'CP Art. 83' },
+    { label:'Contravenciones',                  anios:2,  tipo:'prescripcion', norma:'CP Art. 83' },
+    { label:'Acción civil en proceso penal',    anios:5,  tipo:'prescripcion', norma:'CP Art. 86' },
+  ],
+  'seguridad-social': [
+    { label:'Incapacidad temporal — cobro',     anios:3, tipo:'prescripcion', norma:'Ley 100/93 + CST 488' },
+    { label:'Pensión de invalidez — cobro mesadas causadas', anios:3, tipo:'prescripcion', norma:'CST Art. 488' },
+    { label:'Devolución de saldos AFP',         anios:3, tipo:'prescripcion', norma:'Ley 100/93 Art. 66' },
+    { label:'Indemnización sustitutiva',        anios:3, tipo:'prescripcion', norma:'Ley 100/93' },
+    { label:'Sanción moratoria EPS / ARL',      anios:3, tipo:'prescripcion', norma:'CST Art. 488' },
+  ],
+};
+
+function actualizarAcciones() {
+  const area = document.getElementById('c-area').value;
+  const sel  = document.getElementById('c-accion');
+  sel.innerHTML = '';
+  (acciones[area] || []).forEach((a, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = a.label;
+    sel.appendChild(opt);
+  });
+}
+
+document.getElementById('c-interrupcion').addEventListener('change', function() {
+  document.getElementById('grp-interrupcion').style.display = this.value === 'si' ? 'flex' : 'none';
+});
+
+function calcularPrescripcion() {
+  const area   = document.getElementById('c-area').value;
+  const idx    = parseInt(document.getElementById('c-accion').value);
+  const fInicio= document.getElementById('c-fecha-inicio').value;
+  const inter  = document.getElementById('c-interrupcion').value;
+  const fInter = document.getElementById('c-fecha-interrupcion').value;
+  const caso   = document.getElementById('c-caso').value || 'Caso sin nombre';
+
+  if (!fInicio) { alert('Ingresa la fecha de inicio del término.'); return; }
+
+  const acc  = (acciones[area] || [])[idx];
+  if (!acc)  { alert('Selecciona una acción válida.'); return; }
+
+  if (acc.imprescriptible) {
+    document.getElementById('resultado-prescripcion').style.display = 'block';
+    document.getElementById('resultado-prescripcion').innerHTML = `
+      <div class="resultado-box vigente">
+        <div class="resultado-titulo">${caso} — ${acc.tipo.toUpperCase()}</div>
+        <div class="resultado-fecha">Imprescriptible</div>
+        <div class="resultado-sub">La acción de ${acc.label} no está sujeta a término de prescripción o caducidad</div>
+        <div class="resultado-detalle"><b>Base legal:</b> ${acc.norma}</div>
+      </div>`;
+    return;
+  }
+
+  // Fecha base
+  let fechaBase = new Date(fInicio);
+  if (inter === 'si' && fInter) {
+    fechaBase = new Date(fInter); // Se reinicia desde la interrupción
+  }
+
+  // Calcular fecha de vencimiento
+  const anios = acc.anios || 0;
+  const meses = acc.meses || 0;
+  const dias  = acc.dias  || 0;
+
+  const fVence = new Date(fechaBase);
+  fVence.setFullYear(fVence.getFullYear() + anios);
+  fVence.setMonth(fVence.getMonth() + meses);
+  fVence.setDate(fVence.getDate() + dias);
+
+  const hoy   = new Date();
+  hoy.setHours(0,0,0,0);
+  const fV2   = new Date(fVence);
+  fV2.setHours(0,0,0,0);
+
+  const diasRestantes = Math.round((fV2 - hoy) / 86400000);
+  const diasTotal     = Math.round((fV2 - fechaBase) / 86400000);
+  const diasTransc    = Math.round((hoy - fechaBase) / 86400000);
+  const pctTransc     = Math.min(100, Math.max(0, (diasTransc / diasTotal) * 100));
+
+  let estado, colorClass, alertaHTML;
+  if (diasRestantes < 0) {
+    estado = 'VENCIDO';
+    colorClass = 'vencido';
+    alertaHTML = `<div class="alerta-mal" style="margin-top:0.8rem;">🚨 <strong>TÉRMINO VENCIDO</strong> hace ${Math.abs(diasRestantes)} días. La acción puede estar ${acc.tipo === 'caducidad' ? 'caducada (irrecuperable)' : 'prescrita (salvo excepción)'}. Consulte con su abogado de inmediato.</div>`;
+  } else if (diasRestantes <= 30) {
+    estado = 'PRÓXIMO A VENCER';
+    colorClass = 'proximo';
+    alertaHTML = `<div class="alerta-warn" style="margin-top:0.8rem;">⚠️ <strong>URGENTE:</strong> El término vence en <strong>${diasRestantes} días</strong>. Presente la demanda o interrumpa el término a la mayor brevedad.</div>`;
+  } else {
+    estado = 'VIGENTE';
+    colorClass = 'vigente';
+    alertaHTML = `<div class="alerta-ok" style="margin-top:0.8rem;">✅ El término está vigente. Restan <strong>${diasRestantes} días</strong> para el vencimiento.</div>`;
+  }
+
+  const termino = anios > 0 ? `${anios} año${anios>1?'s':''}` : meses > 0 ? `${meses} mes${meses>1?'es':''}` : `${dias} días${acc.esHabil?' hábiles':''}`;
+
+  document.getElementById('resultado-prescripcion').style.display = 'block';
+  document.getElementById('resultado-prescripcion').innerHTML = `
+    <div class="resultado-box ${colorClass}">
+      <div class="resultado-titulo">${caso} — ${acc.tipo.toUpperCase()} — ${estado}</div>
+      <div class="resultado-fecha">${fVence.toLocaleDateString('es-CO',{year:'numeric',month:'long',day:'numeric'})}</div>
+      <div class="resultado-sub">Fecha de vencimiento — ${acc.label}</div>
+
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${termino}</div><div class="resultado-label">Término total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${diasRestantes < 0 ? Math.abs(diasRestantes)+' días vencido' : diasRestantes+' días'}</div><div class="resultado-label">${diasRestantes < 0 ? 'Días vencido' : 'Días restantes'}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${diasTransc} días</div><div class="resultado-label">Días transcurridos</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${pctTransc.toFixed(1)}%</div><div class="resultado-label">% del término usado</div></div>
+      </div>
+
+      <div class="barra-tiempo-wrap">
+        <div class="barra-tiempo-label">
+          <span>${new Date(fInicio).toLocaleDateString('es-CO')}</span>
+          <span>Vence: ${fVence.toLocaleDateString('es-CO')}</span>
+        </div>
+        <div class="barra-tiempo-bg">
+          <div class="barra-tiempo-fill" style="width:${pctTransc}%; background:${diasRestantes<0?'#ef5350':diasRestantes<=30?'#ffa726':'#ffe082'};"></div>
+        </div>
+      </div>
+
+      <div class="resultado-detalle">
+        <b>Acción:</b> ${acc.label}<br>
+        <b>Tipo:</b> ${acc.tipo === 'caducidad' ? 'Caducidad (no se interrumpe)' : 'Prescripción (puede interrumpirse)'}<br>
+        <b>Término:</b> ${termino}<br>
+        <b>Inicio del cómputo:</b> ${new Date(fInicio).toLocaleDateString('es-CO')}<br>
+        ${inter === 'si' && fInter ? `<b>Interrupción:</b> ${new Date(fInter).toLocaleDateString('es-CO')} — Término reiniciado desde esta fecha<br>` : ''}
+        <b>Vencimiento:</b> ${fVence.toLocaleDateString('es-CO',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}<br>
+        <b>Base legal:</b> ${acc.norma}
+        ${acc.extra ? `<br><b>Nota:</b> ${acc.extra}` : ''}
+      </div>
+    </div>
+    ${alertaHTML}`;
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
+  actualizarAcciones();
+  const hoy = new Date();
+  const hace3 = new Date(hoy.getFullYear()-1, hoy.getMonth(), hoy.getDate()).toISOString().split('T')[0];
+  document.getElementById('c-fecha-inicio').value = hace3;
+  document.getElementById('c-fecha-interrupcion').value = new Date().toISOString().split('T')[0];
+});
+</script>
+</body>
+</html>
