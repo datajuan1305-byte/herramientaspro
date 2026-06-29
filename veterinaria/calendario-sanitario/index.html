@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendario Sanitario Veterinario Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calendario de vacunación y sanidad animal para veterinarios colombianos. Bovinos, porcinos, aves y pequeños animales. Normativa ICA Colombia 2026." />
+  <meta name="keywords" content="calendario sanitario bovinos colombia, vacunacion animales colombia, sanidad animal ICA colombia, veterinario colombia, calendario vacunacion porcinos aves" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --verde: #1b5e20;
+      --verde-medio: #2e7d32;
+      --verde-claro: #e8f5e9;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #1b5e20 60%, #4caf50 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 920px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 100px; padding: 9px 8px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--verde-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--verde-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--verde-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--verde-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn { width: 100%; padding: 12px; background: var(--verde-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--verde); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--verde-claro); border-left: 4px solid var(--verde-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--verde); }
+
+    /* CALENDARIO VISUAL */
+    .calendario-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 1rem; margin-top: 1rem; }
+    .evento-card { border-radius: 10px; padding: 1rem; border-left: 4px solid; }
+    .evento-card.obligatorio { background: #fff8e1; border-color: #f9a825; }
+    .evento-card.recomendado { background: var(--verde-claro); border-color: var(--verde-medio); }
+    .evento-card.vencido     { background: #ffebee; border-color: #c62828; }
+    .evento-card.proximo     { background: #e3f2fd; border-color: #1565c0; }
+    .evento-nombre { font-weight: 700; font-size: 0.9rem; margin-bottom: 3px; }
+    .evento-fecha  { font-size: 0.78rem; color: var(--texto-suave); }
+    .evento-tipo   { font-size: 0.72rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; display: inline-block; margin-top: 4px; }
+    .tipo-ob  { background: #f9a825; color: #5a3a00; }
+    .tipo-rec { background: #2e7d32; color: #fff; }
+    .tipo-ve  { background: #c62828; color: #fff; }
+    .tipo-pr  { background: #1565c0; color: #fff; }
+
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #1b5e20 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 0.8rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.2rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+    .ref-table tr:hover td { background: var(--verde-claro); }
+
+    .alerta-mal  { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🐄 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Calendario Sanitario</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🐄 Veterinarios y Zootecnistas — ICA Colombia</div>
+  <h1>Calendario Sanitario Veterinario 2026</h1>
+  <p>Genera el calendario de vacunación, desparasitación y manejo sanitario para tu finca o lote. Bovinos, porcinos, aves, ovinos y caninos. Normativa ICA Colombia.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Normativa ICA Colombia</span>
+    <span class="hero-chip">🐄 🐷 🐔 🐑 🐕</span>
+    <span class="hero-chip">📅 Fechas automáticas</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('calendario', this)">📅 Mi Calendario</button>
+    <button class="tab-btn" onclick="mostrarTab('bovinos', this)">🐄 Bovinos</button>
+    <button class="tab-btn" onclick="mostrarTab('porcinos', this)">🐷 Porcinos y Aves</button>
+    <button class="tab-btn" onclick="mostrarTab('mascotas', this)">🐕 Mascotas</button>
+  </div>
+
+  <!-- TAB 1: MI CALENDARIO -->
+  <div id="tab-calendario" class="tab-panel active">
+    <div class="card">
+      <h2>📅 Generador de Calendario Sanitario Personalizado</h2>
+      <div class="info-box">
+        <strong>¿Cómo funciona?</strong> Selecciona la especie, ingresa la fecha de nacimiento o ingreso del animal y el sistema genera automáticamente el calendario completo de vacunaciones, desparasitaciones y controles sanitarios con fechas exactas.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Especie animal</label>
+          <select id="cal-especie">
+            <option value="bovino" selected>🐄 Bovino (cría/novillo/vaca)</option>
+            <option value="porcino">🐷 Porcino</option>
+            <option value="ave-pollo">🐔 Pollo de engorde</option>
+            <option value="ave-ponedora">🥚 Gallina ponedora</option>
+            <option value="ovino">🐑 Ovino / Caprino</option>
+            <option value="canino">🐕 Canino</option>
+            <option value="felino">🐱 Felino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nombre / Identificación del animal / lote</label>
+          <input type="text" id="cal-nombre" value="Lote 1" />
+        </div>
+        <div class="form-group">
+          <label>Fecha de nacimiento / ingreso</label>
+          <input type="date" id="cal-fecha-nac" />
+        </div>
+        <div class="form-group">
+          <label>Fecha de referencia (hoy)</label>
+          <input type="date" id="cal-fecha-hoy" />
+        </div>
+        <div class="form-group">
+          <label>Región / Departamento</label>
+          <select id="cal-region">
+            <option value="tropical" selected>Trópico bajo (Costa, Llanos, Valle del Cauca)</option>
+            <option value="templado">Trópico medio (Antioquia, Eje cafetero)</option>
+            <option value="frio">Trópico alto (Cundinamarca, Nariño, Boyacá)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Número de animales en el lote</label>
+          <input type="number" id="cal-animales" value="50" min="1" step="1" />
+        </div>
+      </div>
+      <button class="btn" onclick="generarCalendario()">📅 Generar Calendario Sanitario</button>
+    </div>
+    <div id="resultado-calendario" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: BOVINOS -->
+  <div id="tab-bovinos" class="tab-panel">
+    <div class="card">
+      <h2>🐄 Calendario Sanitario Bovino — ICA Colombia</h2>
+      <div class="info-box">
+        <strong>Obligatorio ICA:</strong> La vacunación contra Fiebre Aftosa y Brucelosis es <strong>obligatoria por ley</strong> en Colombia (Ley 395/1997 y Decreto ICA). El incumplimiento implica sanciones y movilización restringida.
+      </div>
+
+      <h3>🔴 Vacunas Obligatorias ICA</h3>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Vacuna</th><th>Edad/Frecuencia</th><th>Dosis</th><th>Vía</th><th>Período retiro</th><th>Base legal</th></tr></thead>
+          <tbody>
+            <tr><td><b>Fiebre Aftosa</b></td><td>Desde 4 meses. Revacunar cada 6 meses (ciclos nacionales)</td><td>2 mL</td><td>SC</td><td>Carne: 28 días | Leche: 0</td><td>Ley 395/1997 ICA</td></tr>
+            <tr><td><b>Brucelosis (hembras)</b></td><td>Única dosis entre 3–8 meses de edad (hembras solamente)</td><td>2 mL</td><td>SC</td><td>Carne: 0</td><td>Decreto ICA 3244/2010</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>🟡 Vacunas Recomendadas</h3>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Vacuna</th><th>Frecuencia</th><th>Indicación</th><th>Vía</th></tr></thead>
+          <tbody>
+            <tr><td><b>Carbón sintomático + Edema maligno</b></td><td>Anual (antes lluvias)</td><td>Terneros desde 6 meses. Zonas endémicas.</td><td>SC / IM</td></tr>
+            <tr><td><b>IBR / BVD / DVB</b></td><td>Anual</td><td>Hatos lecheros y de cría con problemas reproductivos</td><td>IM / SC</td></tr>
+            <tr><td><b>Leptospirosis</b></td><td>Cada 6 meses</td><td>Zonas húmedas, vaquillas y vacas en producción</td><td>SC</td></tr>
+            <tr><td><b>Rabia paralítica bovina</b></td><td>Anual (zonas con vampiros)</td><td>Obligatoria en zonas endémicas de murciélagos</td><td>SC / IM</td></tr>
+            <tr><td><b>Pasteurelosis / Hemofiliasis</b></td><td>Anual</td><td>Terneros, zonas húmedas</td><td>SC</td></tr>
+            <tr><td><b>Rotavirus / Coronavirus (terneros)</b></td><td>Vacas 60 días preparto</td><td>Prevención diarrea neonatal</td><td>IM</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>🟢 Desparasitación Bovinos</h3>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Producto</th><th>Frecuencia</th><th>Indicación</th></tr></thead>
+          <tbody>
+            <tr><td>Ivermectina (ecto + endoparásitos)</td><td>Cada 3–4 meses</td><td>Garrapatas, gusano barrenador, parásitos GI</td></tr>
+            <tr><td>Albendazol / Fenbendazol</td><td>Cada 6 meses</td><td>Parásitos gastrointestinales y hepáticos</td></tr>
+            <tr><td>Triclabendazol</td><td>Anual (época seca)</td><td>Fasciola hepatica (zonas húmedas y frías)</td></tr>
+            <tr><td>Baño garrapaticida</td><td>Según infestación</td><td>Rhipicephalus microplus — resistencia frecuente</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: PORCINOS Y AVES -->
+  <div id="tab-porcinos" class="tab-panel">
+    <div class="card">
+      <h2>🐷 Calendario Sanitario Porcino</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Vacuna / Manejo</th><th>Edad / Frecuencia</th><th>Vía</th><th>Observación</th></tr></thead>
+          <tbody>
+            <tr><td><b>Fiebre Aftosa</b></td><td>Desde 2 meses. Cada 6 meses.</td><td>SC</td><td>Obligatoria ICA</td></tr>
+            <tr><td><b>Peste Porcina Clásica (PPC)</b></td><td>4–6 semanas. Revacunar a los 6 meses.</td><td>IM</td><td>Obligatoria zonas endémicas — ICA</td></tr>
+            <tr><td><b>Parvo + Erisipela (cerdas)</b></td><td>Preparto (2–4 semanas antes)</td><td>IM</td><td>Protección camada</td></tr>
+            <tr><td><b>Circovirus PCV2</b></td><td>3 semanas de edad</td><td>IM</td><td>Síndrome desmedro postdestete</td></tr>
+            <tr><td><b>Mycoplasma hyopneumoniae</b></td><td>1–3 semanas edad</td><td>IM</td><td>Neumonía enzoótica</td></tr>
+            <tr><td><b>Actinobacillus (APP)</b></td><td>6–8 semanas</td><td>IM</td><td>Pleuroneumonía porcina</td></tr>
+            <tr><td><b>Desparasitación</b></td><td>Cada 3–4 meses</td><td>PO / IM</td><td>Ivermectina o Doramectina</td></tr>
+            <tr><td><b>Hierro (lechones)</b></td><td>2–3 días de vida</td><td>IM</td><td>Anemia ferropénica — obligatorio en confinamiento</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🐔 Calendario Sanitario Avícola — Pollo de Engorde y Ponedoras</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Vacuna</th><th>Día de vida</th><th>Vía</th><th>Especie</th></tr></thead>
+          <tbody>
+            <tr><td><b>Marek</b></td><td>Día 0 (incubadora)</td><td>SC</td><td>Ponedoras / reproductoras</td></tr>
+            <tr><td><b>Newcastle (cepa La Sota)</b></td><td>Día 7–10</td><td>Ocular / Agua</td><td>Pollo / Ponedora</td></tr>
+            <tr><td><b>Gumboro (IBD) — cepa suave</b></td><td>Día 14–18</td><td>Agua</td><td>Pollo / Ponedora</td></tr>
+            <tr><td><b>Gumboro — cepa intermedia</b></td><td>Día 24–28</td><td>Agua</td><td>Pollo / Ponedora</td></tr>
+            <tr><td><b>Newcastle (refuerzo)</b></td><td>Día 28–35</td><td>Agua / Aspersión</td><td>Pollo / Ponedora</td></tr>
+            <tr><td><b>Bronquitis infecciosa (IB)</b></td><td>Día 10–14 y 28</td><td>Agua / Aspersión</td><td>Ponedoras</td></tr>
+            <tr><td><b>Viruela aviar</b></td><td>Semana 8–10</td><td>Ala web</td><td>Ponedoras</td></tr>
+            <tr><td><b>ENC (Enfermedad Newcastle — vacuna oleosa)</b></td><td>Semana 6–8</td><td>SC / IM</td><td>Ponedoras antes de postura</td></tr>
+            <tr><td><b>Coccidiosis (Eimeria)</b></td><td>Día 1–7 (spray)</td><td>Spray / Agua</td><td>Pollo / Ponedora</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">⚠️ Los programas de vacunación avícola varían según el historial del lote anterior, la presión de campo y el diagnóstico de laboratorio. Ajustar con médico veterinario de la integradora.</p>
+    </div>
+  </div>
+
+  <!-- TAB 4: MASCOTAS -->
+  <div id="tab-mascotas" class="tab-panel">
+    <div class="card">
+      <h2>🐕 Calendario de Vacunación Canina — Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Vacuna</th><th>Edad / Frecuencia</th><th>Vía</th><th>Observación</th></tr></thead>
+          <tbody>
+            <tr><td><b>Múltiple (Distemper + Parvovirus + Hepatitis + Parainfluenza)</b></td><td>6–8 semanas, repetir a las 10–12 y 14–16 semanas</td><td>SC</td><td>Serie primaria — 3 dosis</td></tr>
+            <tr><td><b>Rabia</b></td><td>12–16 semanas. Revacunar anualmente.</td><td>SC / IM</td><td>Obligatoria en Colombia — Ley 9/1979</td></tr>
+            <tr><td><b>Bordetella (tos de las perreras)</b></td><td>8 semanas. Anual.</td><td>Intranasal / SC</td><td>Si contacto con otros perros</td></tr>
+            <tr><td><b>Leptospirosis</b></td><td>12 semanas. Anual.</td><td>SC</td><td>Riesgo en zonas rurales y húmedas</td></tr>
+            <tr><td><b>Refuerzo anual múltiple + rabia</b></td><td>Anual de por vida</td><td>SC</td><td>Mantener protección</td></tr>
+            <tr><td><b>Desparasitación interna</b></td><td>Cada 3 meses (adultos)</td><td>PO</td><td>Praziquantel + pirantel o fenbendazol</td></tr>
+            <tr><td><b>Desparasitación externa (antipulgas/garrapatas)</b></td><td>Mensual</td><td>Tópico / Collar</td><td>Pipeta, collar o tableta oral</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>🐱 Calendario de Vacunación Felina — Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Vacuna</th><th>Edad / Frecuencia</th><th>Vía</th><th>Observación</th></tr></thead>
+          <tbody>
+            <tr><td><b>Triple felina (RCP: Rinotraqueítis + Calicivirus + Panleucopenia)</b></td><td>8 semanas, repetir 12 y 16 semanas</td><td>SC</td><td>Serie primaria — 3 dosis</td></tr>
+            <tr><td><b>Rabia</b></td><td>12–16 semanas. Anual.</td><td>SC / IM</td><td>Obligatoria Colombia</td></tr>
+            <tr><td><b>Leucemia felina (FeLV)</b></td><td>8–9 semanas. Anual.</td><td>SC</td><td>Si tiene acceso al exterior</td></tr>
+            <tr><td><b>Refuerzo anual RCP + Rabia</b></td><td>Anual de por vida</td><td>SC</td><td>Obligatorio</td></tr>
+            <tr><td><b>Desparasitación</b></td><td>Cada 3 meses</td><td>PO</td><td>Praziquantel + pamoato de pirantel</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los calendarios sanitarios deben ser ajustados por un <strong>Médico Veterinario matriculado ante el ICA</strong> según el historial clínico, la presión de campo local y los resultados de laboratorio. Las vacunas contra Fiebre Aftosa y Brucelosis son <strong>obligatorias por ley en Colombia</strong>. Normativa: ICA Resolución 3585/2008, Ley 395/1997, Decreto 3244/2010.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate()+n); return r; }
+function addWeeks(d, n) { return addDays(d, n*7); }
+function addMonths(d, n) { const r = new Date(d); r.setMonth(r.getMonth()+n); return r; }
+function fmtFecha(d) { return `${d.getDate()} de ${MESES[d.getMonth()]} ${d.getFullYear()}`; }
+function diffDays(a,b) { return Math.round((b-a)/86400000); }
+
+// Calendarios por especie
+const calendarios = {
+  bovino: (nac, region) => [
+    { nombre:'Vacuna Fiebre Aftosa #1', fecha: addWeeks(nac,16), tipo:'obligatorio', nota:'ICA — Obligatoria. 2 mL SC.' },
+    { nombre:'Vacuna Brucelosis (hembras)', fecha: addWeeks(nac,14), tipo:'obligatorio', nota:'Solo hembras 3–8 meses. 2 mL SC. Única dosis.' },
+    { nombre:'Desparasitación #1 (Ivermectina)', fecha: addWeeks(nac,8), tipo:'recomendado', nota:'0.2 mg/kg SC. Ecto + endoparásitos.' },
+    { nombre:'Vacuna Carbón sintomático', fecha: addWeeks(nac,24), tipo:'recomendado', nota:'Zonas endémicas. Anual antes de lluvias.' },
+    { nombre:'Desparasitación #2', fecha: addMonths(nac,6), tipo:'recomendado', nota:'Ivermectina o Albendazol.' },
+    { nombre:'Vacuna Fiebre Aftosa #2 (refuerzo)', fecha: addMonths(nac,10), tipo:'obligatorio', nota:'Ciclo semestral ICA. 2 mL SC.' },
+    { nombre:'Vacuna Leptospirosis', fecha: addMonths(nac,6), tipo:'recomendado', nota:'Zonas húmedas. Revacunar cada 6 meses.' },
+    { nombre:'Desparasitación #3', fecha: addMonths(nac,9), tipo:'recomendado', nota:'Albendazol 7.5 mg/kg PO.' },
+    { nombre:'Vacuna IBR/BVD', fecha: addMonths(nac,8), tipo:'recomendado', nota:'Hatos lecheros y de cría. Anual.' },
+    { nombre:'Vacuna Fiebre Aftosa — Ciclo anual', fecha: addMonths(nac,16), tipo:'obligatorio', nota:'Mantenimiento ciclo semestral ICA.' },
+    ...(region === 'tropical' ? [{ nombre:'Vacuna Rabia paralítica', fecha: addMonths(nac,7), tipo:'recomendado', nota:'Zonas con murciélagos vampiros. Anual.' }] : []),
+  ],
+  porcino: (nac) => [
+    { nombre:'Hierro dextrano (lechones)', fecha: addDays(nac,2), tipo:'obligatorio', nota:'2 mL IM. Prevención anemia.' },
+    { nombre:'Vacuna PPC (Peste Porcina Clásica)', fecha: addWeeks(nac,4), tipo:'obligatorio', nota:'ICA — Obligatoria zonas endémicas.' },
+    { nombre:'Vacuna Fiebre Aftosa', fecha: addWeeks(nac,8), tipo:'obligatorio', nota:'ICA — Obligatoria. SC.' },
+    { nombre:'Vacuna Circovirus PCV2', fecha: addWeeks(nac,3), tipo:'recomendado', nota:'IM. Síndrome desmedro.' },
+    { nombre:'Vacuna Mycoplasma', fecha: addWeeks(nac,2), tipo:'recomendado', nota:'IM. Neumonía enzoótica.' },
+    { nombre:'Desparasitación #1', fecha: addWeeks(nac,6), tipo:'recomendado', nota:'Ivermectina 0.3 mg/kg SC.' },
+    { nombre:'Desparasitación #2', fecha: addMonths(nac,3), tipo:'recomendado', nota:'Ivermectina o Doramectina.' },
+    { nombre:'Vacuna PPC — Refuerzo', fecha: addMonths(nac,6), tipo:'obligatorio', nota:'Ciclo semestral.' },
+  ],
+  'ave-pollo': (nac) => [
+    { nombre:'Vacuna Coccidiosis (Eimeria)', fecha: addDays(nac,1), tipo:'recomendado', nota:'Spray en incubadora o día 1.' },
+    { nombre:'Vacuna Newcastle (La Sota)', fecha: addDays(nac,7), tipo:'obligatorio', nota:'Ocular / Agua de bebida.' },
+    { nombre:'Vacuna Gumboro (cepa suave)', fecha: addDays(nac,14), tipo:'obligatorio', nota:'Agua de bebida.' },
+    { nombre:'Vacuna Gumboro (cepa intermedia)', fecha: addDays(nac,24), tipo:'recomendado', nota:'Agua de bebida. Según presión de campo.' },
+    { nombre:'Vacuna Newcastle (refuerzo)', fecha: addDays(nac,28), tipo:'obligatorio', nota:'Agua / Aspersión.' },
+    { nombre:'Vacuna Bronquitis infecciosa', fecha: addDays(nac,14), tipo:'recomendado', nota:'Agua / Aspersión.' },
+    { nombre:'Pesaje y control de conversión', fecha: addDays(nac,21), tipo:'recomendado', nota:'Verificar GDP y consumo alimento.' },
+    { nombre:'Pesaje semana 4 — meta 1.8 kg', fecha: addDays(nac,28), tipo:'recomendado', nota:'GDP esperada: >60 g/día.' },
+  ],
+  'ave-ponedora': (nac) => [
+    { nombre:'Vacuna Marek (incubadora)', fecha: addDays(nac,0), tipo:'obligatorio', nota:'SC — Día de nacimiento.' },
+    { nombre:'Newcastle + IB (día 7)', fecha: addDays(nac,7), tipo:'obligatorio', nota:'Ocular / Agua.' },
+    { nombre:'Gumboro cepa suave', fecha: addDays(nac,14), tipo:'obligatorio', nota:'Agua de bebida.' },
+    { nombre:'Gumboro cepa intermedia', fecha: addDays(nac,24), tipo:'recomendado', nota:'Según presión campo.' },
+    { nombre:'Newcastle refuerzo', fecha: addDays(nac,35), tipo:'obligatorio', nota:'Agua / Aspersión.' },
+    { nombre:'Viruela aviar', fecha: addWeeks(nac,9), tipo:'recomendado', nota:'Ala web — emplume.' },
+    { nombre:'Newcastle oleosa + IB', fecha: addWeeks(nac,8), tipo:'obligatorio', nota:'SC / IM — Prepico.' },
+    { nombre:'Inicio de postura (semana 18–20)', fecha: addWeeks(nac,18), tipo:'recomendado', nota:'Meta: >90% postura semana 26.' },
+  ],
+  ovino: (nac) => [
+    { nombre:'Vacuna Enterotoxemia (C perfringens)', fecha: addWeeks(nac,4), tipo:'obligatorio', nota:'SC. Revacunar anualmente.' },
+    { nombre:'Desparasitación #1', fecha: addWeeks(nac,6), tipo:'recomendado', nota:'Ivermectina 0.2 mg/kg SC.' },
+    { nombre:'Vacuna Fiebre Aftosa', fecha: addWeeks(nac,16), tipo:'obligatorio', nota:'ICA — Obligatoria.' },
+    { nombre:'Desparasitación #2', fecha: addMonths(nac,4), tipo:'recomendado', nota:'Closantel o Albendazol.' },
+    { nombre:'Vacuna Brucelosis (hembras)', fecha: addWeeks(nac,14), tipo:'recomendado', nota:'Solo hembras. Única dosis.' },
+    { nombre:'Suplemento vitamínico', fecha: addMonths(nac,2), tipo:'recomendado', nota:'Vitaminas ADE + Selenio.' },
+  ],
+  canino: (nac) => [
+    { nombre:'Vacuna múltiple #1 (DHPP)', fecha: addWeeks(nac,6), tipo:'obligatorio', nota:'SC. Distemper+Parvovirus+Hepatitis+Parainfluenza.' },
+    { nombre:'Vacuna múltiple #2 (DHPP)', fecha: addWeeks(nac,9), tipo:'obligatorio', nota:'SC. Refuerzo 3 semanas.' },
+    { nombre:'Vacuna múltiple #3 + Rabia', fecha: addWeeks(nac,12), tipo:'obligatorio', nota:'SC. Rabia obligatoria Colombia.' },
+    { nombre:'Desparasitación interna #1', fecha: addWeeks(nac,2), tipo:'recomendado', nota:'Pamoato de pirantel PO.' },
+    { nombre:'Desparasitación #2', fecha: addWeeks(nac,6), tipo:'recomendado', nota:'Fenbendazol o Praziquantel.' },
+    { nombre:'Vacuna Leptospirosis', fecha: addWeeks(nac,12), tipo:'recomendado', nota:'SC. Zona rural o húmeda.' },
+    { nombre:'Refuerzo anual DHPP + Rabia', fecha: addWeeks(nac,52), tipo:'obligatorio', nota:'Anual de por vida.' },
+    { nombre:'Desparasitación externa (antipulgas)', fecha: addWeeks(nac,8), tipo:'recomendado', nota:'Pipeta o tableta mensual.' },
+  ],
+  felino: (nac) => [
+    { nombre:'Vacuna triple felina #1 (RCP)', fecha: addWeeks(nac,8), tipo:'obligatorio', nota:'SC. Rinotraqueítis+Calicivirus+Panleucopenia.' },
+    { nombre:'Vacuna triple felina #2 (RCP)', fecha: addWeeks(nac,11), tipo:'obligatorio', nota:'SC. Refuerzo.' },
+    { nombre:'Vacuna triple + Rabia', fecha: addWeeks(nac,14), tipo:'obligatorio', nota:'SC. Rabia obligatoria Colombia.' },
+    { nombre:'Desparasitación #1', fecha: addWeeks(nac,2), tipo:'recomendado', nota:'Pamoato de pirantel PO.' },
+    { nombre:'Vacuna Leucemia felina (FeLV)', fecha: addWeeks(nac,9), tipo:'recomendado', nota:'Si tiene acceso al exterior.' },
+    { nombre:'Refuerzo anual RCP + Rabia', fecha: addWeeks(nac,52), tipo:'obligatorio', nota:'Anual de por vida.' },
+    { nombre:'Desparasitación trimestral', fecha: addMonths(nac,3), tipo:'recomendado', nota:'Praziquantel + pirantel.' },
+  ],
+};
+
+function generarCalendario() {
+  const especie  = document.getElementById('cal-especie').value;
+  const nombre   = document.getElementById('cal-nombre').value || 'Lote';
+  const fechaNac = document.getElementById('cal-fecha-nac').value;
+  const fechaHoy = document.getElementById('cal-fecha-hoy').value;
+  const region   = document.getElementById('cal-region').value;
+  const animales = parseInt(document.getElementById('cal-animales').value) || 1;
+
+  if (!fechaNac) { alert('Ingresa la fecha de nacimiento o ingreso.'); return; }
+
+  const nac = new Date(fechaNac); nac.setHours(0,0,0,0);
+  const hoy = fechaHoy ? new Date(fechaHoy) : new Date(); hoy.setHours(0,0,0,0);
+
+  const fn = calendarios[especie];
+  if (!fn) return;
+  const eventos = fn(nac, region).sort((a,b) => a.fecha - b.fecha);
+
+  const vencidos = eventos.filter(e => e.fecha < hoy).length;
+  const proximos = eventos.filter(e => diffDays(hoy,e.fecha) >= 0 && diffDays(hoy,e.fecha) <= 30).length;
+  const pendientes = eventos.filter(e => e.fecha >= hoy).length;
+
+  const tarjetas = eventos.map(e => {
+    const diff = diffDays(hoy, e.fecha);
+    let clase, tipoClase, tipoLabel;
+    if (e.fecha < hoy)         { clase='vencido';    tipoClase='tipo-ve'; tipoLabel=`Venció hace ${Math.abs(diff)} días`; }
+    else if (diff <= 30)       { clase='proximo';    tipoClase='tipo-pr'; tipoLabel=`En ${diff} días`; }
+    else if (e.tipo==='obligatorio') { clase='obligatorio'; tipoClase='tipo-ob'; tipoLabel='Obligatorio ICA'; }
+    else                       { clase='recomendado'; tipoClase='tipo-rec'; tipoLabel='Recomendado'; }
+
+    return `<div class="evento-card ${clase}">
+      <div class="evento-nombre">${e.nombre}</div>
+      <div class="evento-fecha">📅 ${fmtFecha(e.fecha)}</div>
+      <div class="evento-fecha">${e.nota}</div>
+      <span class="evento-tipo ${tipoClase}">${tipoLabel}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('resultado-calendario').style.display = 'block';
+  document.getElementById('resultado-calendario').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Calendario Sanitario — ${nombre} | ${animales} animales | ${especie}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${eventos.length}</div><div class="resultado-label">Eventos totales</div></div>
+        <div class="resultado-item"><div class="resultado-valor" style="color:#ef9a9a;">${vencidos}</div><div class="resultado-label">Vencidos / Realizados</div></div>
+        <div class="resultado-item"><div class="resultado-valor" style="color:#ffe082;">${proximos}</div><div class="resultado-label">Próximos 30 días</div></div>
+        <div class="resultado-item"><div class="resultado-valor" style="color:#a5d6a7;">${pendientes}</div><div class="resultado-label">Pendientes</div></div>
+      </div>
+    </div>
+    <div class="calendario-grid" style="margin-top:1rem;">${tarjetas}</div>
+    ${vencidos > 0 ? `<div class="alerta-mal" style="margin-top:1rem;">🚨 <strong>${vencidos} evento(s) vencidos.</strong> Ponerse al día con la vacunación puede implicar sanciones ICA o mayor riesgo sanitario.</div>` : ''}
+    ${proximos > 0 ? `<div class="alerta-warn" style="margin-top:0.5rem;">⚠️ <strong>${proximos} evento(s) próximos en los siguientes 30 días.</strong> Programar con el proveedor de vacunas y el veterinario.</div>` : ''}
+    ${vencidos === 0 && proximos === 0 ? `<div class="alerta-ok" style="margin-top:1rem;">✅ Calendario sanitario al día. Próximo evento: ${fmtFecha(eventos.find(e=>e.fecha>=hoy)?.fecha || nac)}</div>` : ''}`;
+}
+
+// Inicializar fechas
+document.addEventListener('DOMContentLoaded', () => {
+  const hoy = new Date().toISOString().split('T')[0];
+  const hace3meses = new Date(); hace3meses.setMonth(hace3meses.getMonth()-3);
+  document.getElementById('cal-fecha-nac').value = hace3meses.toISOString().split('T')[0];
+  document.getElementById('cal-fecha-hoy').value = hoy;
+});
+</script>
+</body>
+</html>
