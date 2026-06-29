@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test AUDIT Consumo de Alcohol Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Test AUDIT de consumo de alcohol para psicólogos y trabajadores sociales colombianos. Tamizaje validado OMS con interpretación clínica y recomendaciones." />
+  <meta name="keywords" content="test AUDIT alcohol colombia, consumo alcohol tamizaje, psicologia colombia, trabajador social colombia, AUDIT OMS alcohol colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --purpura: #4a148c;
+      --purpura-medio: #6a1b9a;
+      --purpura-claro: #f3e5f5;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #4a148c 60%, #9c27b0 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 120px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--purpura-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--purpura-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--purpura-medio); padding-left: 8px; }
+
+    .info-box { background: var(--purpura-claro); border-left: 4px solid var(--purpura-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--purpura); }
+
+    /* PREGUNTAS */
+    .pregunta-card { background: var(--gris-bg); border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 0.9rem; border: 1.5px solid var(--borde); transition: border-color 0.2s; }
+    .pregunta-card.respondida { border-color: var(--purpura-medio); }
+    .pregunta-num { font-size: 0.72rem; font-weight: 700; color: var(--purpura-medio); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .pregunta-texto { font-size: 0.92rem; font-weight: 600; margin-bottom: 0.8rem; }
+    .opciones-audit { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 6px; }
+    .opcion-audit { padding: 8px 10px; border: 1.5px solid var(--borde); border-radius: 8px; background: #fff; font-size: 0.78rem; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.15s; color: var(--texto-suave); }
+    .opcion-audit:hover { border-color: var(--purpura-medio); color: var(--purpura-medio); background: var(--purpura-claro); }
+    .opcion-audit.sel { background: var(--purpura-medio); color: #fff; border-color: var(--purpura-medio); }
+
+    /* PROGRESO */
+    .progreso-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; font-size: 0.82rem; color: var(--texto-suave); }
+    .progreso-track { flex: 1; height: 6px; background: var(--borde); border-radius: 3px; }
+    .progreso-fill { height: 100%; background: var(--purpura-medio); border-radius: 3px; transition: width 0.3s; }
+
+    .btn { width: 100%; padding: 12px; background: var(--purpura-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--purpura); }
+    .btn:active { transform: scale(0.98); }
+    .btn-reset { background: var(--azul-navbar); margin-top: 0.5rem; }
+
+    /* RESULTADO */
+    .resultado-box { border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-box.zona-I   { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+    .resultado-box.zona-II  { background: linear-gradient(135deg, #e65100, #f57c00); }
+    .resultado-box.zona-III { background: linear-gradient(135deg, #b71c1c, #c62828); }
+    .resultado-box.zona-IV  { background: linear-gradient(135deg, #4a148c, #6a1b9a); }
+
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
+    .resultado-score  { font-size: 4rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-zona   { font-size: 1.2rem; font-weight: 800; margin-top: 0.3rem; }
+    .resultado-sub    { font-size: 0.9rem; opacity: 0.88; margin-top: 0.3rem; }
+
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.1rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+
+    /* BARRA SCORE */
+    .score-barra-wrap { margin: 1rem 0; }
+    .score-barra-bg { height: 14px; border-radius: 7px; overflow: hidden; background: linear-gradient(to right, #2e7d32 0%, #2e7d32 25%, #f57c00 25%, #f57c00 50%, #c62828 50%, #c62828 75%, #6a1b9a 75%, #6a1b9a 100%); position: relative; }
+    .score-marker { position: absolute; top: -3px; bottom: -3px; width: 6px; background: #fff; border-radius: 3px; transform: translateX(-50%); box-shadow: 0 0 4px rgba(0,0,0,0.5); transition: left 0.5s; }
+    .score-labels { display: flex; justify-content: space-between; font-size: 0.68rem; opacity: 0.75; margin-top: 4px; }
+
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .detalle-preguntas { margin-top: 0.8rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 0.5rem; }
+    .det-item { background: rgba(255,255,255,0.1); border-radius: 6px; padding: 0.5rem; text-align: center; font-size: 0.75rem; }
+    .det-val { font-size: 1rem; font-weight: 800; color: #ffe082; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--purpura-claro); }
+
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🧠 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">AUDIT Alcohol</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🧠 Psicólogos — Trabajadores Sociales</div>
+  <h1>Test AUDIT — Consumo de Alcohol 2026</h1>
+  <p>Instrumento de tamizaje validado por la OMS para identificar consumo de riesgo, perjudicial y dependencia al alcohol. Versión adaptada para Colombia.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Validado Colombia</span>
+    <span class="hero-chip">🍺 10 preguntas OMS</span>
+    <span class="hero-chip">📊 4 zonas de riesgo</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('test', this)">📋 Test AUDIT</button>
+    <button class="tab-btn" onclick="mostrarTab('audit-c', this)">⚡ AUDIT-C (3 preguntas)</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📚 Interpretación</button>
+  </div>
+
+  <!-- TAB 1: AUDIT COMPLETO -->
+  <div id="tab-test" class="tab-panel active">
+    <div class="card">
+      <h2>📋 AUDIT — Alcohol Use Disorders Identification Test (OMS)</h2>
+      <div class="info-box">
+        <strong>Instrucciones:</strong> Las siguientes preguntas se refieren al consumo de alcohol durante el <strong>último año</strong>. Una "bebida" equivale a: 1 cerveza (330 mL), 1 copa de vino (150 mL) o 1 trago de licor (45 mL).
+      </div>
+
+      <div class="progreso-wrap">
+        <span id="audit-prog-txt">0 de 10 respondidas</span>
+        <div class="progreso-track"><div class="progreso-fill" id="audit-prog" style="width:0%"></div></div>
+      </div>
+
+      <div id="audit-preguntas"></div>
+
+      <button class="btn" onclick="calcularAUDIT()">📊 Calcular Resultado AUDIT</button>
+      <button class="btn btn-reset" onclick="resetAUDIT()">↺ Reiniciar</button>
+    </div>
+    <div id="resultado-audit" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: AUDIT-C -->
+  <div id="tab-audit-c" class="tab-panel">
+    <div class="card">
+      <h2>⚡ AUDIT-C — Versión Abreviada (3 preguntas)</h2>
+      <div class="info-box">
+        <strong>AUDIT-C:</strong> Versión corta del AUDIT con solo las 3 primeras preguntas. Útil como tamizaje rápido en atención primaria. Sensibilidad 85–90% para consumo de riesgo. Puntaje máximo: 12 puntos.
+      </div>
+
+      <div class="progreso-wrap">
+        <span id="auditc-prog-txt">0 de 3 respondidas</span>
+        <div class="progreso-track"><div class="progreso-fill" id="auditc-prog" style="width:0%"></div></div>
+      </div>
+
+      <div id="auditc-preguntas"></div>
+
+      <button class="btn" onclick="calcularAUDITC()">⚡ Calcular AUDIT-C</button>
+      <button class="btn btn-reset" onclick="resetAUDITC()">↺ Reiniciar</button>
+    </div>
+    <div id="resultado-auditc" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📚 Interpretación AUDIT — Zonas de Riesgo OMS</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Zona</th><th>Puntaje</th><th>Clasificación</th><th>Intervención recomendada</th></tr></thead>
+          <tbody>
+            <tr><td><b style="color:#2e7d32;">Zona I</b></td><td>0–7</td><td style="color:#2e7d32; font-weight:700;">Consumo de bajo riesgo o abstinencia</td><td>Educación sobre alcohol. Refuerzo positivo si abstinente.</td></tr>
+            <tr><td><b style="color:#f57c00;">Zona II</b></td><td>8–15</td><td style="color:#f57c00; font-weight:700;">Consumo de riesgo</td><td>Consejo breve estructurado (5–10 min). Psicoeducación.</td></tr>
+            <tr><td><b style="color:#c62828;">Zona III</b></td><td>16–19</td><td style="color:#c62828; font-weight:700;">Consumo perjudicial</td><td>Consejo breve + seguimiento. Referir a profesional de salud.</td></tr>
+            <tr><td><b style="color:#6a1b9a;">Zona IV</b></td><td>20–40</td><td style="color:#6a1b9a; font-weight:700;">Posible dependencia al alcohol</td><td>Derivación urgente a especialista en adicciones / psiquiatría.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 Interpretación AUDIT-C</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Puntaje</th><th>Hombres</th><th>Mujeres</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td>0–2</td><td colspan="2" style="text-align:center;">Consumo de bajo riesgo</td><td>Sin intervención específica</td></tr>
+            <tr><td>3–4</td><td>Bajo riesgo</td><td style="color:#f57c00; font-weight:700;">Consumo de riesgo</td><td>Mujeres: intervención breve</td></tr>
+            <tr><td>4–5</td><td style="color:#f57c00; font-weight:700;">Consumo de riesgo</td><td style="color:#c62828; font-weight:700;">Consumo perjudicial</td><td>Intervención breve todos</td></tr>
+            <tr><td>≥ 6</td><td colspan="2" style="color:#c62828; font-weight:700; text-align:center;">Consumo perjudicial / posible dependencia</td><td>Referir a especialista</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">Puntos de corte: Hombres ≥ 4 puntos = consumo de riesgo | Mujeres ≥ 3 puntos = consumo de riesgo (Bush et al. 1998, adaptación OMS).</p>
+    </div>
+
+    <div class="card">
+      <h2>📚 Preguntas AUDIT y Subescalas</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Pregunta</th><th>Dominio</th><th>Qué mide</th></tr></thead>
+          <tbody>
+            <tr><td>P1, P2, P3</td><td>Consumo de alcohol</td><td>Frecuencia, cantidad e ingesta intensa</td></tr>
+            <tr><td>P4, P5, P6</td><td>Dependencia</td><td>Pérdida de control, incapacidad de abstenerse, inicio matutino</td></tr>
+            <tr><td>P7, P8</td><td>Daño relacionado con el alcohol</td><td>Culpa, lagunas mentales</td></tr>
+            <tr><td>P9, P10</td><td>Daño en otros</td><td>Lesiones propias o a terceros, preocupación de familiares</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">Saunders JB et al. Development of the alcohol use disorders identification test (AUDIT). Addiction 1993;88(6):791-804. Validación Colombia: Gómez A et al. 2005.</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Instrumento de tamizaje — No diagnóstico.</strong> El AUDIT es una herramienta de tamizaje validada por la OMS. Un puntaje elevado sugiere la necesidad de evaluación clínica completa por un <strong>Psicólogo, Psiquiatra o Médico</strong> especialista en adicciones. En Colombia, el consumo problemático de alcohol puede abordarse a través de la Ruta de Atención en Salud Mental (Resolución 4886/2018 MinSalud).
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── PREGUNTAS AUDIT COMPLETO ──
+const preguntasAUDIT = [
+  {
+    texto: '¿Con qué frecuencia consume alguna bebida alcohólica?',
+    opciones: ['Nunca (0)','Una o menos veces al mes (1)','De 2 a 4 veces al mes (2)','De 2 a 3 veces por semana (3)','4 o más veces por semana (4)']
+  },
+  {
+    texto: '¿Cuántas bebidas alcohólicas suele tomar en un día de consumo normal?',
+    opciones: ['1 o 2 (0)','3 o 4 (1)','5 o 6 (2)','De 7 a 9 (3)','10 o más (4)']
+  },
+  {
+    texto: '¿Con qué frecuencia toma 6 o más bebidas alcohólicas en una sola ocasión?',
+    opciones: ['Nunca (0)','Menos de una vez al mes (1)','Mensualmente (2)','Semanalmente (3)','A diario o casi a diario (4)']
+  },
+  {
+    texto: '¿Con qué frecuencia en el curso del último año ha sido incapaz de parar de beber una vez que había empezado?',
+    opciones: ['Nunca (0)','Menos de una vez al mes (1)','Mensualmente (2)','Semanalmente (3)','A diario o casi a diario (4)']
+  },
+  {
+    texto: '¿Con qué frecuencia en el curso del último año no pudo hacer lo que se esperaba de usted porque había bebido?',
+    opciones: ['Nunca (0)','Menos de una vez al mes (1)','Mensualmente (2)','Semanalmente (3)','A diario o casi a diario (4)']
+  },
+  {
+    texto: '¿Con qué frecuencia en el curso del último año ha necesitado beber en ayunas para recuperarse después de haber bebido mucho el día anterior?',
+    opciones: ['Nunca (0)','Menos de una vez al mes (1)','Mensualmente (2)','Semanalmente (3)','A diario o casi a diario (4)']
+  },
+  {
+    texto: '¿Con qué frecuencia en el curso del último año ha tenido remordimientos o sentimientos de culpa después de haber bebido?',
+    opciones: ['Nunca (0)','Menos de una vez al mes (1)','Mensualmente (2)','Semanalmente (3)','A diario o casi a diario (4)']
+  },
+  {
+    texto: '¿Con qué frecuencia en el curso del último año no ha podido recordar lo que sucedió la noche anterior porque había estado bebiendo?',
+    opciones: ['Nunca (0)','Menos de una vez al mes (1)','Mensualmente (2)','Semanalmente (3)','A diario o casi a diario (4)']
+  },
+  {
+    texto: '¿Usted o alguna otra persona ha resultado herida porque usted había bebido?',
+    opciones: ['No (0)','Sí, pero no en el curso del último año (2)','Sí, en el último año (4)']
+  },
+  {
+    texto: '¿Algún familiar, amigo, médico o profesional sanitario ha mostrado preocupación por su consumo de alcohol o le ha sugerido que deje de beber?',
+    opciones: ['No (0)','Sí, pero no en el curso del último año (2)','Sí, en el último año (4)']
+  },
+];
+
+const respAUDIT  = {};
+const respAUDITC = {};
+
+function getValor(opcion) {
+  const match = opcion.match(/\((\d+)\)/);
+  return match ? parseInt(match[1]) : 0;
+}
+
+function renderAUDIT() {
+  const cont = document.getElementById('audit-preguntas');
+  cont.innerHTML = '';
+  preguntasAUDIT.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'pregunta-card';
+    div.id = `audit-card-${i}`;
+    div.innerHTML = `
+      <div class="pregunta-num">Pregunta ${i+1} de 10</div>
+      <div class="pregunta-texto">${p.texto}</div>
+      <div class="opciones-audit" id="audit-opc-${i}">
+        ${p.opciones.map((op,j) => `
+          <button class="opcion-audit" onclick="selAUDIT(${i}, ${j}, ${getValor(op)})">
+            ${op.replace(/\s*\(\d+\)/,'')}
+          </button>`).join('')}
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+function renderAUDITC() {
+  const cont = document.getElementById('auditc-preguntas');
+  cont.innerHTML = '';
+  preguntasAUDIT.slice(0,3).forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'pregunta-card';
+    div.id = `auditc-card-${i}`;
+    div.innerHTML = `
+      <div class="pregunta-num">Pregunta ${i+1} de 3</div>
+      <div class="pregunta-texto">${p.texto}</div>
+      <div class="opciones-audit" id="auditc-opc-${i}">
+        ${p.opciones.map((op,j) => `
+          <button class="opcion-audit" onclick="selAUDITC(${i}, ${j}, ${getValor(op)})">
+            ${op.replace(/\s*\(\d+\)/,'')}
+          </button>`).join('')}
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+function selAUDIT(pregIdx, opIdx, valor) {
+  respAUDIT[pregIdx] = valor;
+  document.querySelectorAll(`#audit-opc-${pregIdx} .opcion-audit`).forEach(b => b.classList.remove('sel'));
+  document.querySelectorAll(`#audit-opc-${pregIdx} .opcion-audit`)[opIdx].classList.add('sel');
+  document.getElementById(`audit-card-${pregIdx}`).classList.add('respondida');
+  const n = Object.keys(respAUDIT).length;
+  document.getElementById('audit-prog').style.width = (n/10*100)+'%';
+  document.getElementById('audit-prog-txt').textContent = `${n} de 10 respondidas`;
+}
+
+function selAUDITC(pregIdx, opIdx, valor) {
+  respAUDITC[pregIdx] = valor;
+  document.querySelectorAll(`#auditc-opc-${pregIdx} .opcion-audit`).forEach(b => b.classList.remove('sel'));
+  document.querySelectorAll(`#auditc-opc-${pregIdx} .opcion-audit`)[opIdx].classList.add('sel');
+  document.getElementById(`auditc-card-${pregIdx}`).classList.add('respondida');
+  const n = Object.keys(respAUDITC).length;
+  document.getElementById('auditc-prog').style.width = (n/3*100)+'%';
+  document.getElementById('auditc-prog-txt').textContent = `${n} de 3 respondidas`;
+}
+
+function clasificarAUDIT(score) {
+  if (score <= 7)  return { zona:'Zona I',   color:'zona-I',   clase:'Consumo de bajo riesgo o abstinencia', intervencion:'Educación sobre los efectos del alcohol y refuerzo de conductas saludables. No se requiere intervención específica.' };
+  if (score <= 15) return { zona:'Zona II',  color:'zona-II',  clase:'Consumo de riesgo', intervencion:'Consejo breve estructurado (5–10 min). Psicoeducación sobre consumo responsable. Seguimiento en 3 meses.' };
+  if (score <= 19) return { zona:'Zona III', color:'zona-III', clase:'Consumo perjudicial', intervencion:'Consejo breve + seguimiento programado. Referir a médico o psicólogo para evaluación diagnóstica completa.' };
+  return             { zona:'Zona IV',  color:'zona-IV',  clase:'Posible dependencia al alcohol', intervencion:'Derivación urgente a especialista en adicciones o psiquiatría. Posible necesidad de desintoxicación supervisada.' };
+}
+
+function calcularAUDIT() {
+  if (Object.keys(respAUDIT).length < 10) { alert('Por favor responde las 10 preguntas antes de calcular.'); return; }
+
+  const puntajes = Array.from({length:10}, (_,i) => respAUDIT[i] || 0);
+  const score    = puntajes.reduce((a,b) => a+b, 0);
+  const clasif   = clasificarAUDIT(score);
+  const pct      = Math.min(100, (score/40)*100);
+
+  const subConsumo = puntajes.slice(0,3).reduce((a,b)=>a+b,0);
+  const subDep     = puntajes.slice(3,6).reduce((a,b)=>a+b,0);
+  const subDano    = puntajes.slice(6,10).reduce((a,b)=>a+b,0);
+
+  document.getElementById('resultado-audit').style.display = 'block';
+  document.getElementById('resultado-audit').innerHTML = `
+    <div class="resultado-box ${clasif.color}">
+      <div class="resultado-titulo">Resultado AUDIT — Tamizaje Consumo de Alcohol</div>
+      <div class="resultado-score">${score}</div>
+      <div class="resultado-zona">${clasif.zona} — ${clasif.clase}</div>
+      <div class="resultado-sub">Puntaje total: ${score} / 40 puntos</div>
+
+      <div class="score-barra-wrap" style="margin-top:1rem;">
+        <div class="score-barra-bg" style="height:18px; border-radius:9px;">
+          <div class="score-marker" style="left:${pct}%;"></div>
+        </div>
+        <div class="score-labels"><span>0 Zona I</span><span>8 Zona II</span><span>16 Zona III</span><span>20 Zona IV</span><span>40</span></div>
+      </div>
+
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${score}</div><div class="resultado-label">Puntaje total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${subConsumo}/12</div><div class="resultado-label">Consumo (P1–P3)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${subDep}/12</div><div class="resultado-label">Dependencia (P4–P6)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${subDano}/16</div><div class="resultado-label">Daño (P7–P10)</div></div>
+      </div>
+
+      <div class="detalle-preguntas">
+        ${puntajes.map((p,i) => `<div class="det-item"><div class="det-val">${p}</div><div>P${i+1}</div></div>`).join('')}
+      </div>
+
+      <div class="resultado-detalle">
+        <b>Clasificación:</b> ${clasif.zona} — ${clasif.clase}<br>
+        <b>Intervención recomendada:</b> ${clasif.intervencion}<br>
+        ${score >= 8 ? `<b>⚠️ Nota:</b> Un puntaje ≥ 8 indica consumo problemático. Se recomienda intervención profesional.` : `<b>✅</b> Consumo de bajo riesgo. Reforzar hábitos saludables.`}
+      </div>
+    </div>`;
+}
+
+function calcularAUDITC() {
+  if (Object.keys(respAUDITC).length < 3) { alert('Por favor responde las 3 preguntas antes de calcular.'); return; }
+
+  const puntajes = Array.from({length:3}, (_,i) => respAUDITC[i] || 0);
+  const score    = puntajes.reduce((a,b) => a+b, 0);
+
+  let clasH, clasM, colorH, colorM;
+  if (score <= 2)       { clasH='Bajo riesgo'; colorH='zona-I';   clasM='Bajo riesgo'; colorM='zona-I'; }
+  else if (score <= 3)  { clasH='Bajo riesgo'; colorH='zona-I';   clasM='Consumo de riesgo'; colorM='zona-II'; }
+  else if (score <= 4)  { clasH='Bajo riesgo'; colorH='zona-I';   clasM='Consumo de riesgo'; colorM='zona-II'; }
+  else if (score <= 5)  { clasH='Consumo de riesgo'; colorH='zona-II'; clasM='Consumo perjudicial'; colorM='zona-III'; }
+  else                  { clasH='Consumo perjudicial / dependencia'; colorH='zona-III'; clasM='Posible dependencia'; colorM='zona-IV'; }
+
+  document.getElementById('resultado-auditc').style.display = 'block';
+  document.getElementById('resultado-auditc').innerHTML = `
+    <div class="resultado-box zona-II">
+      <div class="resultado-titulo">Resultado AUDIT-C — Tamizaje Rápido</div>
+      <div class="resultado-score">${score}</div>
+      <div class="resultado-zona">Puntaje AUDIT-C: ${score} / 12</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${score}/12</div><div class="resultado-label">Puntaje total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${puntajes[0]}</div><div class="resultado-label">P1 — Frecuencia</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${puntajes[1]}</div><div class="resultado-label">P2 — Cantidad</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${puntajes[2]}</div><div class="resultado-label">P3 — Ingesta intensa</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Interpretación por sexo:</b><br>
+        👨 Hombres (punto de corte ≥ 4): <b>${clasH}</b><br>
+        👩 Mujeres (punto de corte ≥ 3): <b>${clasM}</b><br><br>
+        ${score >= 4 ? `⚠️ Se recomienda aplicar el <b>AUDIT completo</b> para una evaluación más detallada.` : `✅ Puntaje bajo. Sin indicadores de consumo de riesgo por AUDIT-C.`}
+      </div>
+    </div>`;
+}
+
+function resetAUDIT() {
+  Object.keys(respAUDIT).forEach(k => delete respAUDIT[k]);
+  renderAUDIT();
+  document.getElementById('resultado-audit').style.display = 'none';
+  document.getElementById('audit-prog').style.width = '0%';
+  document.getElementById('audit-prog-txt').textContent = '0 de 10 respondidas';
+}
+
+function resetAUDITC() {
+  Object.keys(respAUDITC).forEach(k => delete respAUDITC[k]);
+  renderAUDITC();
+  document.getElementById('resultado-auditc').style.display = 'none';
+  document.getElementById('auditc-prog').style.width = '0%';
+  document.getElementById('auditc-prog-txt').textContent = '0 de 3 respondidas';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderAUDIT();
+  renderAUDITC();
+});
+</script>
+</body>
+</html>
