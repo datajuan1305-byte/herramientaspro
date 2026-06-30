@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Herramientas digitales gratuitas para ingenieros de alimentos colombianos. Vida útil, balance de masa, pH y acidez titulable." />
+  <meta name="keywords" content="ingenieria de alimentos colombia, vida util alimentos, balance de masa, pH acidez titulable, control de calidad alimentos colombia" />
+  <title>Ingeniería de Alimentos — HerramientasPro Colombia</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde: #1D9E75;
+      --verde-dark: #0F6E56;
+      --verde-light: #E1F5EE;
+      --azul: #1a3a5c;
+      --text: #1a1a1a;
+      --text-sec: #555;
+      --text-muted: #888;
+      --bg: #f7f7f5;
+      --card: #ffffff;
+      --border: #e0e0dc;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* HEADER */
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--verde);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .logo-text { font-size: 17px; font-weight: 600; color: var(--text); }
+    .logo-sub  { font-size: 11px; color: var(--text-muted); }
+    .header-badge {
+      font-size: 12px;
+      background: var(--verde-light);
+      color: var(--verde-dark);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      max-width: 1100px;
+      margin: 1.2rem auto 0;
+      padding: 0 1.5rem;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .breadcrumb a { color: var(--verde-dark); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    /* HERO */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.2rem 1.5rem 2rem;
+      text-align: center;
+    }
+    .hero-icon { font-size: 42px; margin-bottom: 0.4rem; }
+    .hero h1 {
+      font-size: 26px; font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px; line-height: 1.3;
+    }
+    .hero h1 span { color: var(--verde); }
+    .hero p {
+      font-size: 15px; color: var(--text-sec);
+      max-width: 600px; margin: 0 auto 1.2rem;
+    }
+    .hero-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .badge { font-size: 12px; padding: 5px 12px; border-radius: 20px; font-weight: 500; }
+    .badge-green { background: var(--verde-light); color: var(--verde-dark); }
+    .badge-gray  { background: #f0f0ec; color: #555; }
+
+    /* CONTENT */
+    .content-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.5rem 1.5rem 3rem;
+    }
+
+    /* TOOLS GRID */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .tool-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1.2rem;
+      text-decoration: none;
+      color: var(--text);
+      display: flex; flex-direction: column; gap: 8px;
+      transition: box-shadow 0.15s, transform 0.15s;
+      cursor: pointer;
+    }
+    .tool-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    .tool-card-icon {
+      width: 46px; height: 46px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 2px;
+    }
+    .tool-card-name { font-size: 15px; font-weight: 600; line-height: 1.3; }
+    .tool-card-desc { font-size: 13px; color: var(--text-sec); line-height: 1.4; flex: 1; }
+    .tool-status {
+      font-size: 11px; font-weight: 500;
+      padding: 3px 8px; border-radius: 10px;
+      display: inline-block; width: fit-content; margin-top: 4px;
+      background: var(--verde-light); color: var(--verde-dark);
+    }
+
+    .disclaimer {
+      background: #fff8e1; border: 1px solid #ffc107;
+      border-radius: 8px; padding: 0.8rem 1rem;
+      font-size: 12px; color: #5a4a00;
+      margin: 1.5rem auto 0; max-width: 1100px;
+      text-align: center;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--azul);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 1.8rem 1rem;
+      font-size: 13px;
+    }
+    footer a { color: #f5a623; text-decoration: none; }
+
+    @media(max-width: 600px) {
+      .tools-grid { grid-template-columns: 1fr 1fr; }
+      .hero h1 { font-size: 21px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="../" class="logo">
+      <div class="logo-icon">🔧</div>
+      <div>
+        <div class="logo-text">HerramientasPro Colombia</div>
+        <div class="logo-sub">Herramientas digitales para profesionales</div>
+      </div>
+    </a>
+    <span class="header-badge">✅ 100% Gratuito</span>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="../">← Volver a todas las profesiones</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-icon">🧪</div>
+  <h1>Herramientas para <span>Ingenieros de Alimentos</span></h1>
+  <p>Cálculos para la industria alimentaria colombiana — procesos, formulación y control de calidad. Sin registro, sin suscripción, sin límites.</p>
+  <div class="hero-badges">
+    <span class="badge badge-green">🔄 Actualizado 2026</span>
+    <span class="badge badge-gray">📱 Funciona en celular</span>
+    <span class="badge badge-green">⚡ Sin registro</span>
+    <span class="badge badge-gray">🇨🇴 Normativa colombiana</span>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content-section">
+  <div class="tools-grid">
+    <a class="tool-card" href="vida-util/">
+      <div class="tool-card-icon" style="background:#FAEEDA">⏱️</div>
+      <div class="tool-card-name">Vida útil de alimentos (Arrhenius)</div>
+      <div class="tool-card-desc">Estimación por temperatura, Q10 y actividad de agua</div>
+      <span class="tool-status">✅ Disponible</span>
+    </a>
+    <a class="tool-card" href="balance-masa/">
+      <div class="tool-card-icon" style="background:#E1F5EE">⚖️</div>
+      <div class="tool-card-name">Balance de masa en producción</div>
+      <div class="tool-card-desc">Entradas, salidas y mermas del proceso</div>
+      <span class="tool-status">✅ Disponible</span>
+    </a>
+    <a class="tool-card" href="ph-acidez-titulable/">
+      <div class="tool-card-icon" style="background:#EAF3DE">🧫</div>
+      <div class="tool-card-name">pH y acidez titulable</div>
+      <div class="tool-card-desc">Cálculos de control de calidad y normativa NTC</div>
+      <span class="tool-status">✅ Disponible</span>
+    </a>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Uso orientativo.</strong> Los resultados deben verificarse con un profesional idóneo. Normativa NTC e INVIMA vigente 2026.
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong style="color:#fff;">HerramientasPro Colombia</strong> — Plataforma de herramientas digitales gratuitas<br>
+  Desarrollado para profesionales colombianos · <a href="mailto:datajuan1305@gmail.com">Contacto</a>
+</footer>
+
+</body>
+</html>
