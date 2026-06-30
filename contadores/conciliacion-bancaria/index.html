@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conciliación Bancaria Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de conciliación bancaria automática para contadores colombianos. Partidas de conciliación, libro de bancos vs extracto bancario." />
+  <meta name="keywords" content="conciliacion bancaria colombia, partidas conciliacion contabilidad, libro bancos extracto bancario, contador publico colombia 2026" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --azul-cont: #1565c0;
+      --azul-claro: #e3f2fd;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #1565c0 60%, #42a5f5 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 580px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+    .container { max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 110px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--azul-cont); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--azul-cont); margin: 1rem 0 0.6rem; border-left: 3px solid var(--azul-cont); padding-left: 8px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:600px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--azul-cont); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+    .btn { width: 100%; padding: 12px; background: var(--azul-cont); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: #0d47a1; }
+    .btn:active { transform: scale(0.98); }
+    .btn-sm { padding: 7px 14px; font-size: 0.82rem; font-weight: 700; border: none; border-radius: 20px; cursor: pointer; background: var(--azul-cont); color: #fff; margin-right: 6px; }
+    .btn-sm.secundario { background: var(--azul-navbar); }
+    .info-box { background: var(--azul-claro); border-left: 4px solid var(--azul-cont); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: #0d47a1; }
+
+    .item-row { display: grid; grid-template-columns: 2.2fr 1fr 1.2fr 1fr 35px; gap: 6px; align-items: center; margin-bottom: 5px; }
+    .item-input { padding: 7px 9px; border: 1.5px solid var(--borde); border-radius: 7px; font-size: 0.84rem; background: var(--gris-bg); width: 100%; }
+    .item-input:focus { outline: none; border-color: var(--azul-cont); background: #fff; }
+    .item-delete { background: none; border: none; cursor: pointer; color: #c62828; font-size: 1.1rem; }
+    .item-header { display: grid; grid-template-columns: 2.2fr 1fr 1.2fr 1fr 35px; gap: 6px; padding: 4px; margin-bottom: 3px; }
+    .item-header span { font-size: 0.73rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; }
+
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #1565c0 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grande { font-size: 2.6rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.1rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .conciliacion-tabla { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .conciliacion-tabla th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: left; }
+    .conciliacion-tabla th:not(:first-child):not(:nth-child(2)) { text-align: right; }
+    .conciliacion-tabla td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .conciliacion-tabla td:not(:first-child):not(:nth-child(2)) { text-align: right; font-weight: 600; }
+    .conciliacion-tabla tr.seccion td { background: rgba(255,255,255,0.08); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+    .conciliacion-tabla tr.subtotal td { background: rgba(255,255,255,0.1); font-weight: 700; }
+    .conciliacion-tabla tr.total-final td { background: rgba(255,215,0,0.2); font-weight: 900; color: #ffe082; font-size: 0.95rem; }
+    .conciliacion-tabla tr.suma td:nth-child(3) { color: #a5d6a7; }
+    .conciliacion-tabla tr.resta td:nth-child(3) { color: #ef9a9a; }
+
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-mal  { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+    .ref-table tr:hover td { background: var(--azul-claro); }
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🧮 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Conciliación Bancaria</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🧮 Contadores Públicos — Colombia</div>
+  <h1>Conciliación Bancaria Automática 2026</h1>
+  <p>Concilia el saldo en libros con el saldo del extracto bancario. Identifica partidas de conciliación, detecta diferencias y genera el reporte de conciliación mensual.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🏦 Libros vs Extracto</span>
+    <span class="hero-chip">📋 Partidas conciliatorias</span>
+    <span class="hero-chip">⚠️ Detección diferencias</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('conciliacion', this)">🏦 Conciliación</button>
+    <button class="tab-btn" onclick="mostrarTab('partidas', this)">📋 Tipos de Partidas</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📚 Guía Contable</button>
+  </div>
+
+  <!-- TAB 1: CONCILIACIÓN -->
+  <div id="tab-conciliacion" class="tab-panel active">
+    <div class="card">
+      <h2>🏦 Conciliación Bancaria — Libros vs Extracto</h2>
+      <div class="info-box">
+        <strong>Método de conciliación al saldo del banco:</strong> Saldo extracto + Depósitos en tránsito − Cheques pendientes ± Otras partidas = Saldo en libros (ajustado). Si los dos saldos ajustados coinciden, la conciliación está correcta.
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group"><label>Empresa / Cuenta</label><input type="text" id="c-empresa" value="Mi Empresa SAS — Cta. Corriente Bancolombia" /></div>
+        <div class="form-group"><label>Mes de conciliación</label><input type="text" id="c-mes" value="Junio 2026" /></div>
+        <div class="form-group"><label>Saldo según libros (contabilidad)</label><input type="number" id="c-saldo-libros" value="45800000" step="1000" /></div>
+        <div class="form-group"><label>Saldo según extracto bancario</label><input type="number" id="c-saldo-banco" value="48650000" step="1000" /></div>
+      </div>
+
+      <h3>➕ Partidas que AUMENTAN el saldo en libros</h3>
+      <div class="item-header"><span>Concepto</span><span>Tipo</span><span>Valor ($)</span><span>Fecha</span><span></span></div>
+      <div id="aumenta-libros-container"></div>
+      <button class="btn-sm" onclick="addPartida('aumenta-libros')">+ Agregar</button>
+
+      <h3>➖ Partidas que DISMINUYEN el saldo en libros</h3>
+      <div class="item-header"><span>Concepto</span><span>Tipo</span><span>Valor ($)</span><span>Fecha</span><span></span></div>
+      <div id="disminuye-libros-container"></div>
+      <button class="btn-sm" onclick="addPartida('disminuye-libros')">+ Agregar</button>
+
+      <h3>➕ Partidas que AUMENTAN el saldo del banco (en tránsito)</h3>
+      <div class="item-header"><span>Concepto</span><span>Tipo</span><span>Valor ($)</span><span>Fecha</span><span></span></div>
+      <div id="aumenta-banco-container"></div>
+      <button class="btn-sm" onclick="addPartida('aumenta-banco')">+ Agregar</button>
+
+      <h3>➖ Partidas que DISMINUYEN el saldo del banco (cheques pendientes)</h3>
+      <div class="item-header"><span>Concepto</span><span>Tipo</span><span>Valor ($)</span><span>Fecha</span><span></span></div>
+      <div id="disminuye-banco-container"></div>
+      <button class="btn-sm" onclick="addPartida('disminuye-banco')">+ Agregar</button>
+
+      <hr class="sep" />
+      <div style="display:flex; gap:0.8rem; flex-wrap:wrap;">
+        <button class="btn-sm secundario" onclick="cargarEjemplo()">📋 Cargar ejemplo</button>
+        <button class="btn-sm secundario" onclick="limpiarTodo()">🗑️ Limpiar todo</button>
+      </div>
+
+      <button class="btn" onclick="calcularConciliacion()">🏦 Generar Conciliación</button>
+    </div>
+    <div id="resultado-conciliacion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: TIPOS DE PARTIDAS -->
+  <div id="tab-partidas" class="tab-panel">
+    <div class="card">
+      <h2>📋 Tipos de Partidas de Conciliación Más Comunes</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Partida</th><th>Afecta</th><th>Efecto</th><th>Ejemplo</th></tr></thead>
+          <tbody>
+            <tr><td><b>Notas crédito bancarias</b></td><td>Libros</td><td style="color:#2e7d32;">(+) Aumenta</td><td>Intereses ganados, abonos por consignación de terceros</td></tr>
+            <tr><td><b>Notas débito bancarias</b></td><td>Libros</td><td style="color:#c62828;">(−) Disminuye</td><td>4×1000, comisiones bancarias, cuota manejo, IVA comisión</td></tr>
+            <tr><td><b>Cheques devueltos / consignaciones rechazadas</b></td><td>Libros</td><td style="color:#c62828;">(−) Disminuye</td><td>Cheque de cliente sin fondos, consignación falsa</td></tr>
+            <tr><td><b>Errores de registro contable</b></td><td>Libros</td><td style="color:#2e7d32;">(±) Ajusta</td><td>Transposición de cifras, doble registro</td></tr>
+            <tr><td><b>Depósitos en tránsito</b></td><td>Banco</td><td style="color:#2e7d32;">(+) Aumenta</td><td>Consignación de fin de mes no procesada por el banco</td></tr>
+            <tr><td><b>Cheques girados pendientes de cobro</b></td><td>Banco</td><td style="color:#c62828;">(−) Disminuye</td><td>Cheque entregado a proveedor, aún no cobrado</td></tr>
+            <tr><td><b>Transferencias en tránsito</b></td><td>Banco</td><td style="color:#2e7d32;">(+) Aumenta</td><td>Transferencia enviada, no reflejada en el extracto</td></tr>
+            <tr><td><b>Errores del banco</b></td><td>Banco</td><td style="color:#2e7d32;">(±) Ajusta</td><td>Cargo o abono indebido por el banco</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Costos Bancarios Típicos Colombia 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Concepto</th><th>Valor / Tarifa referencia 2026</th></tr></thead>
+          <tbody>
+            <tr><td>GMF (4×1000)</td><td>0.4% sobre transacciones (retiros, transferencias)</td></tr>
+            <tr><td>Cuota de manejo cuenta corriente PYME</td><td>$18.000 – $35.000/mes</td></tr>
+            <tr><td>Comisión transferencia interbancaria (PSE/ACH)</td><td>$3.000 – $8.000 por transacción</td></tr>
+            <tr><td>Comisión cheque de gerencia</td><td>$15.000 – $25.000</td></tr>
+            <tr><td>Comisión consignación nacional</td><td>$5.000 – $12.000 (montos altos)</td></tr>
+            <tr><td>IVA sobre comisiones bancarias</td><td>19% sobre el valor de la comisión</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📚 Metodología de Conciliación Bancaria</h2>
+      <h3>Método 1: Ajustar ambos saldos a un saldo conciliado común</h3>
+      <p style="font-size:0.88rem; margin-bottom:0.8rem;">
+        <b>Saldo en libros</b> + Notas crédito no contabilizadas − Notas débito no contabilizadas ± Errores en libros = <b>Saldo conciliado</b><br><br>
+        <b>Saldo en extracto</b> + Depósitos en tránsito − Cheques pendientes ± Errores del banco = <b>Saldo conciliado</b>
+      </p>
+      <h3>Método 2: Conciliar al saldo del banco</h3>
+      <p style="font-size:0.88rem;">
+        Saldo del extracto bancario<br>
+        (+) Depósitos en tránsito<br>
+        (−) Cheques girados pendientes de cobro<br>
+        = <b>Saldo de bancos ajustado</b><br><br>
+        Este saldo debe ser igual al <b>saldo en libros</b> después de registrar las notas débito/crédito bancarias.
+      </p>
+    </div>
+    <div class="card">
+      <h2>📚 Registro Contable de Ajustes — Plan Único de Cuentas Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Ajuste</th><th>Cuenta débito</th><th>Cuenta crédito</th></tr></thead>
+          <tbody>
+            <tr><td>Comisión bancaria</td><td>5305 — Gastos financieros, comisiones</td><td>1110 — Bancos</td></tr>
+            <tr><td>4×1000 (GMF)</td><td>5305 — Gastos financieros, GMF</td><td>1110 — Bancos</td></tr>
+            <tr><td>Intereses ganados (cuenta de ahorros)</td><td>1110 — Bancos</td><td>4210 — Ingresos financieros</td></tr>
+            <tr><td>Cheque devuelto por insuficiencia de fondos</td><td>1305 — Clientes</td><td>1110 — Bancos</td></tr>
+            <tr><td>IVA sobre comisión bancaria</td><td>2408 — IVA descontable</td><td>1110 — Bancos</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> La conciliación bancaria debe ser preparada y revisada por un <strong>Contador Público matriculado</strong> según el Plan Único de Cuentas (PUC) y las normas NIIF aplicables a la entidad. El registro contable de los ajustes identificados debe hacerse en el período correspondiente.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+let nPart = { 'aumenta-libros':0, 'disminuye-libros':0, 'aumenta-banco':0, 'disminuye-banco':0 };
+
+const tiposPartida = {
+  'aumenta-libros': ['Nota crédito bancaria','Intereses ganados','Abono por consignación tercero','Corrección error contable','Otro'],
+  'disminuye-libros': ['Comisión bancaria','4×1000 (GMF)','Cuota de manejo','Cheque devuelto','IVA comisión','Otro'],
+  'aumenta-banco': ['Depósito en tránsito','Transferencia en tránsito','Consignación fin de mes','Otro'],
+  'disminuye-banco': ['Cheque pendiente de cobro','Cheque girado no cobrado','Transferencia pendiente proveedor','Otro'],
+};
+
+function addPartida(tipo, preset) {
+  nPart[tipo]++;
+  const n = nPart[tipo];
+  const c = document.getElementById(`${tipo}-container`);
+  const div = document.createElement('div');
+  div.className = 'item-row';
+  div.id = `${tipo}-row-${n}`;
+  const p = preset || { concepto:'', valor:0, fecha:'' };
+  const opciones = tiposPartida[tipo].map(t => `<option value="${t}" ${p.tipo===t?'selected':''}>${t}</option>`).join('');
+  div.innerHTML = `
+    <input class="item-input" type="text"   id="${tipo}-conc-${n}" value="${p.concepto}" placeholder="Descripción" />
+    <select class="item-input" id="${tipo}-tipo-${n}">${opciones}</select>
+    <input class="item-input" type="number" id="${tipo}-val-${n}" value="${p.valor}" min="0" step="1000" />
+    <input class="item-input" type="date" id="${tipo}-fecha-${n}" value="${p.fecha}" />
+    <button class="item-delete" onclick="document.getElementById('${tipo}-row-${n}').remove()">✕</button>`;
+  c.appendChild(div);
+}
+
+function sumarPartidas(tipo) {
+  let total = 0;
+  const items = [];
+  document.querySelectorAll(`#${tipo}-container .item-row`).forEach(row => {
+    const id = row.id.split('-').pop();
+    const conc = document.getElementById(`${tipo}-conc-${id}`)?.value || '';
+    const tip  = document.getElementById(`${tipo}-tipo-${id}`)?.value || '';
+    const val  = parseFloat(document.getElementById(`${tipo}-val-${id}`)?.value) || 0;
+    total += val;
+    if (val > 0 || conc) items.push({ conc, tip, val });
+  });
+  return { total, items };
+}
+
+function cargarEjemplo() {
+  limpiarTodo();
+  addPartida('aumenta-libros', { concepto:'Intereses ganados cuenta de ahorros', tipo:'Intereses ganados', valor:85000, fecha:'2026-06-28' });
+  addPartida('disminuye-libros', { concepto:'Comisión cuota de manejo', tipo:'Cuota de manejo', valor:32000, fecha:'2026-06-15' });
+  addPartida('disminuye-libros', { concepto:'4×1000 sobre transferencias', tipo:'4×1000 (GMF)', valor:48000, fecha:'2026-06-20' });
+  addPartida('disminuye-libros', { concepto:'IVA sobre comisión bancaria', tipo:'IVA comisión', valor:6080, fecha:'2026-06-15' });
+  addPartida('aumenta-banco', { concepto:'Consignación 30 de junio (en tránsito)', tipo:'Depósito en tránsito', valor:3500000, fecha:'2026-06-30' });
+  addPartida('disminuye-banco', { concepto:'Cheque No. 1234 a proveedor ABC', tipo:'Cheque pendiente de cobro', valor:1200000, fecha:'2026-06-25' });
+  addPartida('disminuye-banco', { concepto:'Cheque No. 1235 a proveedor XYZ', tipo:'Cheque girado no cobrado', valor:850000, fecha:'2026-06-27' });
+}
+
+function limpiarTodo() {
+  ['aumenta-libros','disminuye-libros','aumenta-banco','disminuye-banco'].forEach(t => {
+    document.getElementById(`${t}-container`).innerHTML = '';
+    nPart[t] = 0;
+  });
+}
+
+function calcularConciliacion() {
+  const empresa     = document.getElementById('c-empresa').value || 'Empresa';
+  const mes         = document.getElementById('c-mes').value || '';
+  const saldoLibros = parseFloat(document.getElementById('c-saldo-libros').value) || 0;
+  const saldoBanco  = parseFloat(document.getElementById('c-saldo-banco').value) || 0;
+
+  const aumLibros = sumarPartidas('aumenta-libros');
+  const disLibros = sumarPartidas('disminuye-libros');
+  const aumBanco  = sumarPartidas('aumenta-banco');
+  const disBanco  = sumarPartidas('disminuye-banco');
+
+  const saldoLibrosAjustado = saldoLibros + aumLibros.total - disLibros.total;
+  const saldoBancoAjustado  = saldoBanco + aumBanco.total - disBanco.total;
+  const diferencia = saldoLibrosAjustado - saldoBancoAjustado;
+  const conciliado = Math.abs(diferencia) < 1;
+
+  function filasItems(items, claseSigno) {
+    return items.map(i => `<tr class="${claseSigno}">
+      <td>${i.conc}</td><td>${i.tip}</td><td>$ ${fmt(i.val)}</td>
+    </tr>`).join('');
+  }
+
+  document.getElementById('resultado-conciliacion').style.display = 'block';
+  document.getElementById('resultado-conciliacion').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">${empresa} — Conciliación Bancaria ${mes}</div>
+      <div class="resultado-grande">${conciliado ? '✅ CONCILIADO' : '⚠️ DIFERENCIA'}</div>
+      <div class="resultado-sub">${conciliado ? 'Los saldos ajustados coinciden perfectamente' : `Diferencia detectada: $ ${fmt(Math.abs(diferencia))}`}</div>
+
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(saldoLibros)}</div><div class="resultado-label">Saldo en libros (original)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(saldoBanco)}</div><div class="resultado-label">Saldo extracto (original)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(saldoLibrosAjustado)}</div><div class="resultado-label">Saldo libros ajustado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(saldoBancoAjustado)}</div><div class="resultado-label">Saldo banco ajustado</div></div>
+      </div>
+
+      <table class="conciliacion-tabla" style="margin-top:1rem;">
+        <thead><tr><th>Concepto</th><th>Tipo</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr class="seccion"><td colspan="3">AJUSTE AL SALDO EN LIBROS</td></tr>
+          <tr class="subtotal"><td>Saldo según libros (contabilidad)</td><td></td><td>$ ${fmt(saldoLibros)}</td></tr>
+          ${filasItems(aumLibros.items,'suma')}
+          ${filasItems(disLibros.items,'resta')}
+          <tr class="total-final"><td colspan="2">SALDO EN LIBROS AJUSTADO</td><td>$ ${fmt(saldoLibrosAjustado)}</td></tr>
+
+          <tr class="seccion"><td colspan="3">AJUSTE AL SALDO DEL BANCO</td></tr>
+          <tr class="subtotal"><td>Saldo según extracto bancario</td><td></td><td>$ ${fmt(saldoBanco)}</td></tr>
+          ${filasItems(aumBanco.items,'suma')}
+          ${filasItems(disBanco.items,'resta')}
+          <tr class="total-final"><td colspan="2">SALDO BANCO AJUSTADO</td><td>$ ${fmt(saldoBancoAjustado)}</td></tr>
+        </tbody>
+      </table>
+
+      <div class="resultado-detalle">
+        <b>Verificación:</b><br>
+        Saldo libros ajustado: $ ${fmt(saldoLibrosAjustado)}<br>
+        Saldo banco ajustado: $ ${fmt(saldoBancoAjustado)}<br>
+        Diferencia: $ ${fmt(Math.abs(diferencia))}<br>
+        ${conciliado
+          ? '✅ La conciliación está correcta. Ambos saldos ajustados coinciden.'
+          : `⚠️ Existe una diferencia de $ ${fmt(Math.abs(diferencia))} sin identificar. Revisar partidas adicionales: posibles errores de transcripción, partidas duplicadas, o movimientos no registrados en ninguno de los dos libros.`}
+      </div>
+    </div>
+    ${conciliado
+      ? `<div class="alerta-ok">✅ <strong>Conciliación exitosa.</strong> Registrar las notas débito/crédito identificadas en la contabilidad para que el saldo en libros quede actualizado.</div>`
+      : `<div class="alerta-mal">⚠️ <strong>Diferencia sin conciliar de $ ${fmt(Math.abs(diferencia))}.</strong> Revisar: transacciones duplicadas, errores de digitación, partidas del mes anterior no resueltas, o movimientos faltantes por identificar.</div>`}
+    `;
+}
+
+document.addEventListener('DOMContentLoaded', () => { cargarEjemplo(); });
+</script>
+</body>
+</html>
