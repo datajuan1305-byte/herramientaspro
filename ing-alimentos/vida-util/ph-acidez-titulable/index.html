@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora pH y Acidez Titulable Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de pH y acidez titulable para ingenieros de alimentos colombianos. Determinación de acidez, normativa NTC y control de calidad en alimentos." />
+  <meta name="keywords" content="acidez titulable colombia, calculadora pH alimentos, control calidad alimentos colombia, NTC acidez lacteos, ingeniero alimentos colombia 2026" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --teal: #00695c;
+      --teal-medio: #00897b;
+      --teal-claro: #e0f2f1;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #00695c 60%, #26a69a 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 580px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 110px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--teal-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--teal-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--teal-medio); padding-left: 8px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--teal-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+    .btn { width: 100%; padding: 12px; background: var(--teal-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--teal); }
+    .btn:active { transform: scale(0.98); }
+    .info-box { background: var(--teal-claro); border-left: 4px solid var(--teal-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--teal); }
+
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #00695c 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grande { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.15rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* ESCALA PH VISUAL */
+    .ph-escala-wrap { margin: 1rem 0; }
+    .ph-escala-bg { height: 24px; border-radius: 12px; background: linear-gradient(to right, #d32f2f 0%, #f57c00 16%, #fbc02d 33%, #afb42b 42%, #689f38 50%, #388e3c 58%, #00897b 66%, #0277bd 75%, #1565c0 83%, #4527a0 92%, #6a1b9a 100%); position: relative; }
+    .ph-marker { position: absolute; top: -6px; bottom: -6px; width: 4px; background: #fff; border-radius: 2px; transform: translateX(-50%); box-shadow: 0 0 6px rgba(0,0,0,0.6); transition: left 0.5s; }
+    .ph-labels { display: flex; justify-content: space-between; font-size: 0.68rem; opacity: 0.8; margin-top: 4px; }
+
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-mal  { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--teal-claro); }
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🧪 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">pH y Acidez Titulable</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🧪 Ingenieros de Alimentos — Control de Calidad</div>
+  <h1>Calculadora pH y Acidez Titulable 2026</h1>
+  <p>Calcula la acidez titulable de productos alimenticios mediante el método de neutralización con NaOH, y evalúa la conformidad según normas técnicas colombianas (NTC).</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 NTC Colombia</span>
+    <span class="hero-chip">🧪 Titulación NaOH</span>
+    <span class="hero-chip">📊 % Ácido expresado</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('acidez', this)">🧪 Acidez Titulable</button>
+    <button class="tab-btn" onclick="mostrarTab('ph', this)">📊 Conversión pH</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Normativa NTC</button>
+  </div>
+
+  <!-- TAB 1: ACIDEZ TITULABLE -->
+  <div id="tab-acidez" class="tab-panel active">
+    <div class="card">
+      <h2>🧪 Cálculo de Acidez Titulable</h2>
+      <div class="info-box">
+        <strong>Método:</strong> % Acidez = (V × N × Meq × 100) ÷ M — Donde V = volumen de NaOH gastado (mL), N = normalidad del NaOH, Meq = miliequivalente del ácido predominante, M = masa o volumen de muestra (g o mL).
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de producto</label>
+          <select id="a-producto" onchange="autoProducto()">
+            <option value="leche" selected>Leche cruda / pasteurizada</option>
+            <option value="yogur">Yogur / leches fermentadas</option>
+            <option value="queso">Queso fresco</option>
+            <option value="jugo-citrico">Jugo de cítricos (naranja, limón)</option>
+            <option value="jugo-otros">Jugo de frutas (no cítrico)</option>
+            <option value="vinagre">Vinagre</option>
+            <option value="vino">Vino</option>
+            <option value="miel">Miel</option>
+            <option value="custom">Personalizado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ácido predominante a expresar</label>
+          <select id="a-acido" onchange="autoAcido()">
+            <option value="lactico">Ácido láctico (Meq 0.090)</option>
+            <option value="citrico">Ácido cítrico (Meq 0.064)</option>
+            <option value="acetico">Ácido acético (Meq 0.060)</option>
+            <option value="tartarico">Ácido tartárico (Meq 0.075)</option>
+            <option value="malico">Ácido málico (Meq 0.067)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Volumen de NaOH gastado (mL)</label>
+          <input type="number" id="a-volumen" value="6.8" min="0" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Normalidad del NaOH (N)</label>
+          <input type="number" id="a-normalidad" value="0.1" min="0.01" max="1" step="0.01" />
+          <span class="form-hint">Estándar: 0.1 N (estandarizado con biftalato de potasio)</span>
+        </div>
+        <div class="form-group">
+          <label>Miliequivalente del ácido (g/meq)</label>
+          <input type="number" id="a-meq" value="0.090" min="0.01" step="0.001" />
+        </div>
+        <div class="form-group">
+          <label>Masa/volumen de la muestra (g o mL)</label>
+          <input type="number" id="a-muestra" value="9" min="0.1" step="0.1" />
+          <span class="form-hint">Leche: 9 g (con fenolftaleína) | Jugos: 10 mL diluido</span>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularAcidez()">🧪 Calcular Acidez Titulable</button>
+    </div>
+    <div id="resultado-acidez" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: CONVERSIÓN PH -->
+  <div id="tab-ph" class="tab-panel">
+    <div class="card">
+      <h2>📊 Conversión pH ↔ Concentración de H⁺</h2>
+      <div class="info-box">
+        <strong>Relación:</strong> pH = -log[H⁺] — A menor pH, mayor concentración de iones hidrógeno (más ácido). El pH 7.0 es neutro a 25°C.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Modo de cálculo</label>
+          <select id="ph-modo" onchange="actualizarModoPH()">
+            <option value="ph-a-h" selected>De pH a [H⁺]</option>
+            <option value="h-a-ph">De [H⁺] a pH</option>
+          </select>
+        </div>
+        <div class="form-group" id="grp-ph-input">
+          <label>Valor de pH</label>
+          <input type="number" id="ph-valor" value="4.6" min="0" max="14" step="0.01" />
+        </div>
+        <div class="form-group" id="grp-h-input" style="display:none;">
+          <label>Concentración [H⁺] (mol/L)</label>
+          <input type="number" id="h-valor" value="0.0000251" step="0.0000001" />
+        </div>
+        <div class="form-group">
+          <label>Tipo de alimento (referencia)</label>
+          <select id="ph-alimento">
+            <option value="custom">— Solo calcular —</option>
+            <option value="2.0">Jugo de limón (pH ≈ 2.0)</option>
+            <option value="3.0">Vinagre (pH ≈ 3.0)</option>
+            <option value="3.5">Jugo de naranja (pH ≈ 3.5)</option>
+            <option value="4.0">Tomate (pH ≈ 4.0)</option>
+            <option value="4.6">Límite alimentos ácidos/bajos en ácido (pH 4.6)</option>
+            <option value="6.6">Leche fresca (pH ≈ 6.6)</option>
+            <option value="7.0">Agua pura (pH = 7.0)</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularPH()">📊 Calcular Conversión</button>
+    </div>
+    <div id="resultado-ph" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Acidez Titulable Máxima — Normativa Colombiana (NTC / Res. INVIMA)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Producto</th><th>Acidez (% ác. predominante)</th><th>pH típico</th><th>Norma</th></tr></thead>
+          <tbody>
+            <tr><td><b>Leche cruda</b></td><td>0.13 – 0.17% (ác. láctico)</td><td>6.6 – 6.8</td><td>NTC 399 / Res. 017/2012 MinSalud</td></tr>
+            <tr><td><b>Leche pasteurizada</b></td><td>0.14 – 0.18% (ác. láctico)</td><td>6.5 – 6.7</td><td>NTC 399</td></tr>
+            <tr><td><b>Yogur natural</b></td><td>0.6 – 1.2% (ác. láctico)</td><td>3.8 – 4.4</td><td>NTC 805</td></tr>
+            <tr><td><b>Queso fresco</b></td><td>0.4 – 0.8% (ác. láctico)</td><td>5.0 – 5.5</td><td>NTC 750</td></tr>
+            <tr><td><b>Jugo de naranja</b></td><td>0.6 – 1.5% (ác. cítrico)</td><td>3.3 – 4.0</td><td>NTC 5468</td></tr>
+            <tr><td><b>Jugo de limón</b></td><td>4.5 – 8.0% (ác. cítrico)</td><td>2.0 – 2.6</td><td>NTC 5468</td></tr>
+            <tr><td><b>Vinagre de uso alimentario</b></td><td>≥ 4.0% (ác. acético)</td><td>2.4 – 3.4</td><td>NTC 1334</td></tr>
+            <tr><td><b>Vino</b></td><td>0.4 – 0.9% (ác. tartárico)</td><td>3.0 – 4.0</td><td>NTC 708</td></tr>
+            <tr><td><b>Miel</b></td><td>≤ 0.5% (ác. fórmico)</td><td>3.5 – 4.5</td><td>NTC 1273</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Clasificación de Alimentos por pH — FDA / Codex Alimentarius</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Categoría</th><th>Rango de pH</th><th>Riesgo microbiológico</th><th>Ejemplos</th></tr></thead>
+          <tbody>
+            <tr><td><b>Alimentos de alta acidez</b></td><td>pH &lt; 3.7</td><td>Bajo (mayoría de patógenos no crecen)</td><td>Limón, vinagre, encurtidos</td></tr>
+            <tr><td><b>Alimentos ácidos</b></td><td>pH 3.7 – 4.6</td><td>Bajo-medio</td><td>Tomate, jugos cítricos, salsas</td></tr>
+            <tr><td><b>Punto crítico de control</b></td><td>pH = 4.6</td><td>Límite Clostridium botulinum</td><td>Define proceso térmico requerido</td></tr>
+            <tr><td><b>Alimentos de baja acidez</b></td><td>pH &gt; 4.6</td><td>Alto (requiere esterilización)</td><td>Leche, carnes, vegetales, pescado</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">⚠️ El pH 4.6 es el punto crítico de control en la industria de alimentos enlatados: por debajo de este valor, Clostridium botulinum no puede proliferar ni producir toxina.</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los análisis de acidez titulable y pH deben realizarse con equipos calibrados (potenciómetro, bureta certificada) bajo la supervisión de un <strong>Ingeniero de Alimentos o profesional de control de calidad</strong>. Para certificación de producto, consultar las normas técnicas NTC vigentes e INVIMA.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n, dec=3) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function fmtD(n,d=2) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+
+const productosData = {
+  leche:        { acido:'lactico', vol:1.7, norm:0.1111, muestra:9,  rango:[0.13,0.17], nombre:'Leche', meq:0.090 },
+  yogur:        { acido:'lactico', vol:8.5, norm:0.1,    muestra:9,  rango:[0.6,1.2],   nombre:'Yogur', meq:0.090 },
+  queso:        { acido:'lactico', vol:5.5, norm:0.1,    muestra:10, rango:[0.4,0.8],   nombre:'Queso fresco', meq:0.090 },
+  'jugo-citrico':{ acido:'citrico', vol:9.4, norm:0.1,   muestra:10, rango:[0.6,1.5],   nombre:'Jugo cítrico', meq:0.064 },
+  'jugo-otros': { acido:'malico',  vol:6.0, norm:0.1,    muestra:10, rango:[0.3,0.8],   nombre:'Jugo de frutas', meq:0.067 },
+  vinagre:      { acido:'acetico', vol:66.7,norm:0.1,    muestra:10, rango:[4.0,8.0],   nombre:'Vinagre', meq:0.060 },
+  vino:         { acido:'tartarico',vol:8.0,norm:0.1,    muestra:10, rango:[0.4,0.9],   nombre:'Vino', meq:0.075 },
+  miel:         { acido:'lactico', vol:2.0, norm:0.1,    muestra:10, rango:[0.1,0.5],   nombre:'Miel', meq:0.090 },
+  custom:       { acido:'lactico', vol:5.0, norm:0.1,    muestra:10, rango:[0,100],     nombre:'Personalizado', meq:0.090 },
+};
+
+const acidosMeq = { lactico:0.090, citrico:0.064, acetico:0.060, tartarico:0.075, malico:0.067 };
+
+function autoProducto() {
+  const p = productosData[document.getElementById('a-producto').value];
+  if (p) {
+    document.getElementById('a-acido').value = p.acido;
+    document.getElementById('a-volumen').value = p.vol;
+    document.getElementById('a-normalidad').value = p.norm;
+    document.getElementById('a-muestra').value = p.muestra;
+    document.getElementById('a-meq').value = p.meq;
+  }
+}
+function autoAcido() {
+  const acido = document.getElementById('a-acido').value;
+  document.getElementById('a-meq').value = acidosMeq[acido] || 0.090;
+}
+
+function calcularAcidez() {
+  const productoKey = document.getElementById('a-producto').value;
+  const producto = productosData[productoKey];
+  const acido    = document.getElementById('a-acido').value;
+  const V        = parseFloat(document.getElementById('a-volumen').value) || 0;
+  const N        = parseFloat(document.getElementById('a-normalidad').value) || 0.1;
+  const Meq      = parseFloat(document.getElementById('a-meq').value) || 0.090;
+  const M        = parseFloat(document.getElementById('a-muestra').value) || 10;
+
+  const acidezPct = (V * N * Meq * 100) / M;
+
+  const acidoNombres = { lactico:'Ácido láctico', citrico:'Ácido cítrico', acetico:'Ácido acético', tartarico:'Ácido tartárico', malico:'Ácido málico' };
+
+  let estado, colorEstado;
+  if (producto && producto.rango[1] < 100) {
+    if (acidezPct < producto.rango[0]) { estado = `⚠️ Por debajo del rango normal (${producto.rango[0]}–${producto.rango[1]}%)`; colorEstado = 'warn'; }
+    else if (acidezPct > producto.rango[1]) { estado = `⚠️ Por encima del rango normal (${producto.rango[0]}–${producto.rango[1]}%) — posible alteración/fermentación`; colorEstado = 'mal'; }
+    else { estado = `✅ Dentro del rango normal (${producto.rango[0]}–${producto.rango[1]}%)`; colorEstado = 'ok'; }
+  } else {
+    estado = 'Cálculo completado — compara con la norma específica de tu producto';
+    colorEstado = 'warn';
+  }
+
+  document.getElementById('resultado-acidez').style.display = 'block';
+  document.getElementById('resultado-acidez').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Acidez Titulable — ${producto ? producto.nombre : 'Producto'} (expresada en ${acidoNombres[acido]})</div>
+      <div class="resultado-grande">${fmtD(acidezPct,3)}%</div>
+      <div class="resultado-sub">Acidez titulable expresada como ${acidoNombres[acido].toLowerCase()}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(V,1)} mL</div><div class="resultado-label">NaOH gastado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${N}</div><div class="resultado-label">Normalidad NaOH</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${Meq}</div><div class="resultado-label">Meq del ácido</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(M,1)}</div><div class="resultado-label">Masa/vol. muestra</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(acidezPct,3)}%</div><div class="resultado-label">% Acidez</div></div>
+        ${producto && producto.rango[1] < 100 ? `<div class="resultado-item"><div class="resultado-valor">${producto.rango[0]}–${producto.rango[1]}%</div><div class="resultado-label">Rango normativo NTC</div></div>` : ''}
+      </div>
+      <div class="resultado-detalle">
+        <b>Fórmula:</b> % Acidez = (V × N × Meq × 100) ÷ M<br>
+        % Acidez = (${fmtD(V,1)} × ${N} × ${Meq} × 100) ÷ ${fmtD(M,1)}<br>
+        % Acidez = <b>${fmtD(acidezPct,3)}%</b> (expresado como ${acidoNombres[acido].toLowerCase()})
+      </div>
+    </div>
+    <div class="alerta-${colorEstado}">${colorEstado==='ok'?'✅':colorEstado==='mal'?'🔴':'⚠️'} <strong>${estado}</strong></div>`;
+}
+
+function actualizarModoPH() {
+  const modo = document.getElementById('ph-modo').value;
+  document.getElementById('grp-ph-input').style.display = modo === 'ph-a-h' ? 'flex' : 'none';
+  document.getElementById('grp-h-input').style.display  = modo === 'h-a-ph' ? 'flex' : 'none';
+}
+
+document.getElementById('ph-alimento')?.addEventListener('change', function() {
+  if (this.value !== 'custom') {
+    document.getElementById('ph-valor').value = this.value;
+    document.getElementById('ph-modo').value = 'ph-a-h';
+    actualizarModoPH();
+  }
+});
+
+function calcularPH() {
+  const modo = document.getElementById('ph-modo').value;
+  let ph, hConc;
+
+  if (modo === 'ph-a-h') {
+    ph = parseFloat(document.getElementById('ph-valor').value);
+    if (isNaN(ph)) { alert('Ingresa un valor de pH válido.'); return; }
+    hConc = Math.pow(10, -ph);
+  } else {
+    hConc = parseFloat(document.getElementById('h-valor').value);
+    if (isNaN(hConc) || hConc <= 0) { alert('Ingresa una concentración [H⁺] válida.'); return; }
+    ph = -Math.log10(hConc);
+  }
+
+  const poh = 14 - ph;
+  const ohConc = Math.pow(10, -poh);
+
+  let categoria, color;
+  if (ph < 3.7)      { categoria = 'Alimento de alta acidez (bajo riesgo microbiológico)'; color = '#c62828'; }
+  else if (ph < 4.6)  { categoria = 'Alimento ácido (riesgo bajo-medio)'; color = '#f57c00'; }
+  else if (ph < 7)    { categoria = 'Alimento de baja acidez (alto riesgo — requiere esterilización)'; color = '#1565c0'; }
+  else if (ph === 7)  { categoria = 'Neutro'; color = '#2e7d32'; }
+  else                 { categoria = 'Alcalino/Básico'; color = '#6a1b9a'; }
+
+  const pctEscala = (ph / 14) * 100;
+
+  document.getElementById('resultado-ph').style.display = 'block';
+  document.getElementById('resultado-ph').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Conversión pH ↔ [H⁺]</div>
+      <div class="resultado-grande">pH ${fmtD(ph,2)}</div>
+      <div class="resultado-sub" style="color:${color === '#2e7d32' ? '#a5d6a7' : '#ffe082'};">${categoria}</div>
+
+      <div class="ph-escala-wrap">
+        <div class="ph-escala-bg">
+          <div class="ph-marker" style="left:${pctEscala}%;"></div>
+        </div>
+        <div class="ph-labels"><span>0 (ácido)</span><span>7 (neutro)</span><span>14 (básico)</span></div>
+      </div>
+
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(ph,2)}</div><div class="resultado-label">pH</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${hConc.toExponential(3)}</div><div class="resultado-label">[H⁺] mol/L</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(poh,2)}</div><div class="resultado-label">pOH</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${ohConc.toExponential(3)}</div><div class="resultado-label">[OH⁻] mol/L</div></div>
+      </div>
+
+      <div class="resultado-detalle">
+        <b>Relación:</b> pH + pOH = 14 (a 25°C)<br>
+        [H⁺] = 10⁻ᵖᴴ = 10⁻${fmtD(ph,2)} = <b>${hConc.toExponential(3)} mol/L</b><br>
+        pOH = 14 − ${fmtD(ph,2)} = <b>${fmtD(poh,2)}</b><br>
+        [OH⁻] = 10⁻ᵖᴼᴴ = <b>${ohConc.toExponential(3)} mol/L</b><br><br>
+        <b>Clasificación alimentaria:</b> ${categoria}
+        ${ph < 4.6 ? ' — Por debajo del punto crítico de control (pH 4.6), Clostridium botulinum no puede proliferar.' : ph >= 4.6 && ph < 7 ? ' — Por encima de pH 4.6: requiere tratamiento térmico de esterilización (no solo pasteurización) para productos enlatados.' : ''}
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
