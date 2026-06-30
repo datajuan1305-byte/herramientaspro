@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riesgo Psicosocial Laboral Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de riesgo psicosocial laboral para psicólogos colombianos. Batería de instrumentos Resolución 2646/2008. Tamizaje de estrés y factores intralaborales." />
+  <meta name="keywords" content="riesgo psicosocial laboral colombia, resolucion 2646, bateria riesgo psicosocial, estres laboral colombia, psicologo organizacional colombia 2026" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --purpura: #4a148c;
+      --purpura-medio: #6a1b9a;
+      --purpura-claro: #f3e5f5;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #4a148c 60%, #9c27b0 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 580px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+    .container { max-width: 880px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 120px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--purpura-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--purpura-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--purpura-medio); padding-left: 8px; }
+    .info-box { background: var(--purpura-claro); border-left: 4px solid var(--purpura-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--purpura); }
+
+    .pregunta-card { background: var(--gris-bg); border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 0.9rem; border: 1.5px solid var(--borde); transition: border-color 0.2s; }
+    .pregunta-card.respondida { border-color: var(--purpura-medio); }
+    .pregunta-num { font-size: 0.72rem; font-weight: 700; color: var(--purpura-medio); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .pregunta-texto { font-size: 0.92rem; font-weight: 600; margin-bottom: 0.8rem; }
+    .opciones-likert { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap: 6px; }
+    .opcion-likert { padding: 8px 8px; border: 1.5px solid var(--borde); border-radius: 8px; background: #fff; font-size: 0.76rem; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.15s; color: var(--texto-suave); }
+    .opcion-likert:hover { border-color: var(--purpura-medio); color: var(--purpura-medio); background: var(--purpura-claro); }
+    .opcion-likert.sel { background: var(--purpura-medio); color: #fff; border-color: var(--purpura-medio); }
+
+    .progreso-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; font-size: 0.82rem; color: var(--texto-suave); }
+    .progreso-track { flex: 1; height: 6px; background: var(--borde); border-radius: 3px; }
+    .progreso-fill { height: 100%; background: var(--purpura-medio); border-radius: 3px; transition: width 0.3s; }
+
+    .btn { width: 100%; padding: 12px; background: var(--purpura-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--purpura); }
+    .btn:active { transform: scale(0.98); }
+    .btn-reset { background: var(--azul-navbar); margin-top: 0.5rem; }
+
+    .resultado-box { border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-box.sin     { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+    .resultado-box.bajo    { background: linear-gradient(135deg, #1565c0, #1976d2); }
+    .resultado-box.medio   { background: linear-gradient(135deg, #e65100, #f57c00); }
+    .resultado-box.alto    { background: linear-gradient(135deg, #b71c1c, #c62828); }
+    .resultado-box.muyalto { background: linear-gradient(135deg, #4a148c, #6a1b9a); }
+
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
+    .resultado-score  { font-size: 3.2rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-zona   { font-size: 1.15rem; font-weight: 800; margin-top: 0.3rem; }
+    .resultado-sub    { font-size: 0.9rem; opacity: 0.88; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.1rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+
+    .dimension-barras { margin-top: 1rem; }
+    .dim-item { margin-bottom: 0.8rem; }
+    .dim-header { display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px; }
+    .dim-bg { height: 12px; background: rgba(255,255,255,0.15); border-radius: 6px; overflow: hidden; }
+    .dim-fill { height: 100%; border-radius: 6px; transition: width 0.5s; }
+
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+    .ref-table tr:hover td { background: var(--purpura-claro); }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🧠 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Riesgo Psicosocial</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🧠 Psicólogos — SST — SG-SST Colombia</div>
+  <h1>Tamizaje de Riesgo Psicosocial Laboral 2026</h1>
+  <p>Instrumento de tamizaje rápido de factores de riesgo psicosocial intralaboral, basado en los dominios de la batería de instrumentos del Ministerio de Trabajo (Resolución 2646/2008).</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Resolución 2646/2008</span>
+    <span class="hero-chip">📋 SG-SST</span>
+    <span class="hero-chip">📊 4 dominios intralaborales</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('test', this)">📋 Tamizaje Individual</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📚 Marco Normativo</button>
+  </div>
+
+  <!-- TAB 1: TEST -->
+  <div id="tab-test" class="tab-panel active">
+    <div class="card">
+      <h2>📋 Cuestionario de Tamizaje — Factores Intralaborales</h2>
+      <div class="info-box">
+        <strong>Instrucciones:</strong> Responda pensando en su situación laboral durante el <strong>último mes</strong>. Este es un instrumento de tamizaje rápido (no sustituye la batería oficial del Ministerio de Trabajo, que debe aplicarse por profesional con licencia SST).
+      </div>
+
+      <div class="progreso-wrap">
+        <span id="rp-prog-txt">0 de 16 respondidas</span>
+        <div class="progreso-track"><div class="progreso-fill" id="rp-prog" style="width:0%"></div></div>
+      </div>
+
+      <div id="rp-preguntas"></div>
+
+      <button class="btn" onclick="calcularRiesgo()">📊 Calcular Nivel de Riesgo</button>
+      <button class="btn btn-reset" onclick="resetTest()">↺ Reiniciar</button>
+    </div>
+    <div id="resultado-riesgo" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📚 Marco Normativo — Riesgo Psicosocial Colombia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Norma</th><th>Contenido</th></tr></thead>
+          <tbody>
+            <tr><td><b>Resolución 2646/2008</b></td><td>Define factores de riesgo psicosocial, establece la obligación de identificarlos, evaluarlos y prevenirlos en el ámbito laboral colombiano.</td></tr>
+            <tr><td><b>Batería de instrumentos MinTrabajo (2010)</b></td><td>Instrumento validado oficial para evaluación de factores psicosociales intralaborales, extralaborales y estrés. Debe ser aplicado por psicólogo con licencia SST.</td></tr>
+            <tr><td><b>Resolución 2404/2019</b></td><td>Adopta la batería de instrumentos y establece su aplicación obligatoria cada 2 años (o anual en riesgo alto).</td></tr>
+            <tr><td><b>Decreto 1072/2015</b></td><td>Decreto Único Reglamentario del Sector Trabajo — incluye SG-SST y gestión de riesgo psicosocial.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📚 Dominios de la Batería Oficial — Factores Intralaborales</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Dominio</th><th>Dimensiones que incluye</th></tr></thead>
+          <tbody>
+            <tr><td><b>Liderazgo y relaciones sociales</b></td><td>Características del liderazgo, relaciones sociales en el trabajo, retroalimentación del desempeño, relación con colaboradores</td></tr>
+            <tr><td><b>Control sobre el trabajo</b></td><td>Claridad de rol, capacitación, participación y manejo del cambio, oportunidades de desarrollo, control y autonomía sobre el trabajo</td></tr>
+            <tr><td><b>Demandas del trabajo</b></td><td>Demandas ambientales y de esfuerzo físico, demandas emocionales, demandas cuantitativas, influencia del trabajo sobre el entorno extralaboral, exigencias de responsabilidad, demandas de carga mental, demandas de jornada de trabajo</td></tr>
+            <tr><td><b>Recompensas</b></td><td>Recompensas derivadas de la pertenencia a la organización, reconocimiento y compensación</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📚 Niveles de Riesgo y Acciones — Batería Oficial</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Nivel</th><th>Interpretación</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td><b style="color:#2e7d32;">Sin riesgo / Riesgo despreciable</b></td><td>Ausencia de síntomas de riesgo</td><td>Mantener condiciones favorables. Promoción de hábitos saludables.</td></tr>
+            <tr><td><b style="color:#1565c0;">Riesgo bajo</b></td><td>No se espera repercusión importante en la salud</td><td>Intervenir si se considera necesario. Acciones de promoción.</td></tr>
+            <tr><td><b style="color:#f57c00;">Riesgo medio</b></td><td>Probabilidad de respuesta de estrés moderada</td><td>Intervención a corto y mediano plazo. Programa de vigilancia epidemiológica.</td></tr>
+            <tr><td><b style="color:#c62828;">Riesgo alto</b></td><td>Asociado a respuestas de estrés alto y enfermedad</td><td>Intervención inmediata. Programa de vigilancia epidemiológica activo.</td></tr>
+            <tr><td><b style="color:#6a1b9a;">Riesgo muy alto</b></td><td>Alta probabilidad de efectos nocivos en salud</td><td>Intervención inmediata y prioritaria. Seguimiento médico y psicológico.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Instrumento de tamizaje — No reemplaza la batería oficial.</strong> Este cuestionario es una herramienta de aproximación rápida. La evaluación oficial de riesgo psicosocial en Colombia debe realizarse con la <strong>Batería de Instrumentos del Ministerio de Trabajo</strong>, aplicada por un <strong>Psicólogo con licencia en Seguridad y Salud en el Trabajo (SST)</strong>, conforme a la Resolución 2646/2008 y 2404/2019.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// 16 preguntas, 4 por dominio. Escala 0-4 (Siempre=4 es más riesgo en preguntas "directas"; algunas son inversas)
+const dominios = ['Liderazgo y Relaciones Sociales', 'Control sobre el Trabajo', 'Demandas del Trabajo', 'Recompensas'];
+
+const preguntas = [
+  // Liderazgo y relaciones sociales
+  { texto:'Mi jefe inmediato me da instrucciones claras sobre cómo realizar mi trabajo.', dominio:0, inversa:true },
+  { texto:'Recibo retroalimentación constructiva sobre mi desempeño laboral.', dominio:0, inversa:true },
+  { texto:'Existen conflictos frecuentes con mis compañeros de trabajo.', dominio:0, inversa:false },
+  { texto:'Siento que puedo contar con el apoyo de mis compañeros cuando lo necesito.', dominio:0, inversa:true },
+  // Control sobre el trabajo
+  { texto:'Tengo claridad sobre las funciones y responsabilidades de mi puesto de trabajo.', dominio:1, inversa:true },
+  { texto:'Tengo autonomía para decidir cómo organizar mi trabajo diario.', dominio:1, inversa:true },
+  { texto:'He recibido la capacitación necesaria para realizar mis funciones adecuadamente.', dominio:1, inversa:true },
+  { texto:'Siento que no tengo posibilidades de desarrollo o ascenso en mi trabajo actual.', dominio:1, inversa:false },
+  // Demandas del trabajo
+  { texto:'La cantidad de trabajo que debo realizar excede el tiempo disponible en mi jornada.', dominio:2, inversa:false },
+  { texto:'Mi trabajo me exige un nivel de concentración o atención muy alto durante toda la jornada.', dominio:2, inversa:false },
+  { texto:'Debo atender situaciones emocionalmente difíciles o estresantes en mi trabajo.', dominio:2, inversa:false },
+  { texto:'Mi trabajo interfiere negativamente con mi vida personal o familiar.', dominio:2, inversa:false },
+  // Recompensas
+  { texto:'Siento que mi esfuerzo laboral es reconocido por la organización.', dominio:3, inversa:true },
+  { texto:'Mi salario es justo en relación con las responsabilidades de mi cargo.', dominio:3, inversa:true },
+  { texto:'Me siento orgulloso(a) de pertenecer a esta organización.', dominio:3, inversa:true },
+  { texto:'Considero que mi trabajo es estable y seguro.', dominio:3, inversa:true },
+];
+
+const opcionesLikert = ['Nunca','Casi nunca','Algunas veces','Casi siempre','Siempre'];
+const respRP = {};
+
+function renderTest() {
+  const cont = document.getElementById('rp-preguntas');
+  cont.innerHTML = '';
+  preguntas.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'pregunta-card';
+    div.id = `rp-card-${i}`;
+    div.innerHTML = `
+      <div class="pregunta-num">Pregunta ${i+1} de 16 — ${dominios[p.dominio]}</div>
+      <div class="pregunta-texto">${p.texto}</div>
+      <div class="opciones-likert" id="rp-opc-${i}">
+        ${opcionesLikert.map((op,j) => `<button class="opcion-likert" onclick="selRP(${i}, ${j})">${op}</button>`).join('')}
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+function selRP(pregIdx, opIdx) {
+  // Si es inversa, invertir el puntaje (4-opIdx); si no, usar opIdx directo
+  const p = preguntas[pregIdx];
+  const valor = p.inversa ? (4 - opIdx) : opIdx;
+  respRP[pregIdx] = valor;
+  document.querySelectorAll(`#rp-opc-${pregIdx} .opcion-likert`).forEach(b => b.classList.remove('sel'));
+  document.querySelectorAll(`#rp-opc-${pregIdx} .opcion-likert`)[opIdx].classList.add('sel');
+  document.getElementById(`rp-card-${pregIdx}`).classList.add('respondida');
+  const n = Object.keys(respRP).length;
+  document.getElementById('rp-prog').style.width = (n/16*100)+'%';
+  document.getElementById('rp-prog-txt').textContent = `${n} de 16 respondidas`;
+}
+
+function clasificarRiesgo(pctScore) {
+  if (pctScore <= 20)  return { nivel:'Sin riesgo / Riesgo despreciable', color:'sin',     accion:'Mantener las condiciones laborales favorables actuales. Continuar con acciones de promoción de hábitos saludables.' };
+  if (pctScore <= 40)  return { nivel:'Riesgo bajo', color:'bajo',    accion:'No se espera repercusión importante en la salud. Intervenir si se considera necesario.' };
+  if (pctScore <= 60)  return { nivel:'Riesgo medio', color:'medio',   accion:'Probabilidad de respuesta de estrés moderada. Se recomienda intervención a corto y mediano plazo, e incluir en el programa de vigilancia epidemiológica.' };
+  if (pctScore <= 80)  return { nivel:'Riesgo alto', color:'alto',    accion:'Asociado a alta probabilidad de respuesta de estrés y posible afectación de la salud. Requiere intervención inmediata.' };
+  return                 { nivel:'Riesgo muy alto', color:'muyalto', accion:'Alta probabilidad de efectos nocivos en la salud. Intervención inmediata y prioritaria, con seguimiento médico y psicológico.' };
+}
+
+function calcularRiesgo() {
+  if (Object.keys(respRP).length < 16) { alert('Por favor responde las 16 preguntas antes de calcular.'); return; }
+
+  const puntajesPorDominio = [0,0,0,0];
+  const conteoPorDominio   = [0,0,0,0];
+
+  preguntas.forEach((p, i) => {
+    puntajesPorDominio[p.dominio] += respRP[i];
+    conteoPorDominio[p.dominio]++;
+  });
+
+  // Cada dominio: máximo 4 preguntas × 4 puntos = 16. Convertir a %.
+  const pctDominios = puntajesPorDominio.map((s,i) => (s / (conteoPorDominio[i]*4)) * 100);
+  const pctGlobal = pctDominios.reduce((a,b)=>a+b,0) / 4;
+
+  const clasif = clasificarRiesgo(pctGlobal);
+
+  const dimColors = ['#ef9a9a','#ffcc80','#fff59d','#a5d6a7'];
+
+  document.getElementById('resultado-riesgo').style.display = 'block';
+  document.getElementById('resultado-riesgo').innerHTML = `
+    <div class="resultado-box ${clasif.color}">
+      <div class="resultado-titulo">Resultado del Tamizaje de Riesgo Psicosocial</div>
+      <div class="resultado-score">${pctGlobal.toFixed(0)}%</div>
+      <div class="resultado-zona">${clasif.nivel}</div>
+      <div class="resultado-sub">Puntaje global de riesgo psicosocial intralaboral</div>
+
+      <div class="resultado-grid">
+        ${dominios.map((d,i) => `<div class="resultado-item"><div class="resultado-valor">${pctDominios[i].toFixed(0)}%</div><div class="resultado-label">${d}</div></div>`).join('')}
+      </div>
+
+      <div class="dimension-barras">
+        ${dominios.map((d,i) => `
+          <div class="dim-item">
+            <div class="dim-header"><span>${d}</span><span>${pctDominios[i].toFixed(0)}%</span></div>
+            <div class="dim-bg"><div class="dim-fill" style="width:${pctDominios[i]}%; background:${dimColors[i]};"></div></div>
+          </div>`).join('')}
+      </div>
+
+      <div class="resultado-detalle">
+        <b>Clasificación:</b> ${clasif.nivel}<br>
+        <b>Acción recomendada:</b> ${clasif.accion}<br><br>
+        <b>Dominio con mayor riesgo:</b> ${dominios[pctDominios.indexOf(Math.max(...pctDominios))]} (${Math.max(...pctDominios).toFixed(0)}%)<br>
+        ${pctGlobal > 60 ? '⚠️ Se recomienda aplicar la <b>Batería oficial de instrumentos del Ministerio de Trabajo</b> para una evaluación completa y formal según la normativa SG-SST.' : '✅ Continuar con el monitoreo periódico según el SG-SST de la organización.'}
+      </div>
+    </div>`;
+}
+
+function resetTest() {
+  Object.keys(respRP).forEach(k => delete respRP[k]);
+  renderTest();
+  document.getElementById('resultado-riesgo').style.display = 'none';
+  document.getElementById('rp-prog').style.width = '0%';
+  document.getElementById('rp-prog-txt').textContent = '0 de 16 respondidas';
+}
+
+document.addEventListener('DOMContentLoaded', () => { renderTest(); });
+</script>
+</body>
+</html>
