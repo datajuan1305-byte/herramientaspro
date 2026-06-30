@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Transformadores kVA Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de transformadores eléctricos para ingenieros colombianos. Capacidad kVA, corriente nominal, protecciones y selección de transformador. RETIE NTC 2050." />
+  <meta name="keywords" content="calculadora transformador kva colombia, corriente nominal transformador, dimensionamiento transformador electrico, RETIE transformadores, ingeniero electrico colombia 2026" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --naranja-el: #e65100;
+      --naranja-claro: #fff3e0;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #e65100 60%, #ff9800 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 580px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+    .container { max-width: 920px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 110px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--naranja-el); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--naranja-el); margin: 1rem 0 0.6rem; border-left: 3px solid var(--naranja-el); padding-left: 8px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--naranja-el); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+    .btn { width: 100%; padding: 12px; background: var(--naranja-el); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: #bf360c; }
+    .btn:active { transform: scale(0.98); }
+    .btn-sm { padding: 7px 14px; font-size: 0.82rem; font-weight: 700; border: none; border-radius: 20px; cursor: pointer; background: var(--naranja-el); color: #fff; margin-right: 6px; }
+    .info-box { background: var(--naranja-claro); border-left: 4px solid var(--naranja-el); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--naranja-el); }
+
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #e65100 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grande { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.15rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .tabla-result { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .tabla-result th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: left; }
+    .tabla-result th:not(:first-child) { text-align: center; }
+    .tabla-result td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; text-align: center; }
+    .tabla-result td:first-child { text-align: left; }
+    .tabla-result tr.recomendado td { background: rgba(255,215,0,0.2); font-weight: 800; color: #ffe082; }
+
+    /* CARGAS DINÁMICAS */
+    .carga-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 35px; gap: 6px; align-items: center; margin-bottom: 5px; }
+    .carga-input { padding: 7px 10px; border: 1.5px solid var(--borde); border-radius: 7px; font-size: 0.85rem; background: var(--gris-bg); width: 100%; }
+    .carga-input:focus { outline: none; border-color: var(--naranja-el); background: #fff; }
+    .carga-delete { background: none; border: none; cursor: pointer; color: #c62828; font-size: 1.1rem; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--naranja-claro); }
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">⚡ <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Transformadores</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">⚡ Ingenieros Eléctricos — RETIE 2026</div>
+  <h1>Calculadora de Transformadores kVA 2026</h1>
+  <p>Calcula la capacidad del transformador requerido a partir de la carga total, corrientes en el primario y secundario, y selecciona las protecciones según NTC 2050.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 RETIE + NTC 2050</span>
+    <span class="hero-chip">⚡ kVA por carga</span>
+    <span class="hero-chip">🔌 Corriente primario/secundario</span>
+    <span class="hero-chip">🛡️ Protecciones</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('dimensionamiento', this)">⚡ Dimensionamiento</button>
+    <button class="tab-btn" onclick="mostrarTab('protecciones', this)">🛡️ Protecciones</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Tablas Referencia</button>
+  </div>
+
+  <!-- TAB 1: DIMENSIONAMIENTO -->
+  <div id="tab-dimensionamiento" class="tab-panel active">
+    <div class="card">
+      <h2>⚡ Cálculo de Capacidad del Transformador (kVA)</h2>
+      <div class="info-box">
+        <strong>¿Cómo funciona?</strong> Suma todas las cargas conectadas, aplica el factor de demanda y el factor de crecimiento futuro, y selecciona el transformador comercial inmediatamente superior según norma ICONTEC NTC 819.
+      </div>
+
+      <h3>Cargas a conectar</h3>
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 35px; gap:6px; margin-bottom:4px;">
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Descripción</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">Potencia (kW)</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">FP</span>
+        <span style="font-size:0.75rem; font-weight:700; color:var(--texto-suave);">F. Demanda</span>
+        <span></span>
+      </div>
+      <div id="cargas-container"></div>
+      <div style="margin-top:0.8rem;">
+        <button class="btn-sm" onclick="addCarga()">+ Agregar carga</button>
+        <button class="btn-sm" style="background:var(--azul-navbar);" onclick="cargarEjemplo()">📋 Ejemplo edificio comercial</button>
+      </div>
+
+      <hr class="sep" />
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Factor de crecimiento futuro (%)</label>
+          <input type="number" id="d-crecimiento" value="20" min="0" max="100" step="5" />
+          <span class="form-hint">Reserva para ampliaciones futuras: 15–25%</span>
+        </div>
+        <div class="form-group">
+          <label>Tensión primaria (kV)</label>
+          <select id="d-tension-prim">
+            <option value="13.2" selected>13.2 kV (distribución típica)</option>
+            <option value="11.4">11.4 kV</option>
+            <option value="34.5">34.5 kV</option>
+            <option value="7.6">7.6 kV</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tensión secundaria</label>
+          <select id="d-tension-sec">
+            <option value="220-3f" selected>220/127 V trifásico</option>
+            <option value="208-3f">208/120 V trifásico</option>
+            <option value="440-3f">440/254 V trifásico</option>
+            <option value="120-1f">120/240 V monofásico</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tipo de transformador</label>
+          <select id="d-tipo">
+            <option value="seco" selected>Seco (interior — edificios)</option>
+            <option value="aceite">Sumergido en aceite (exterior/pedestal)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularTransformador()">⚡ Calcular Transformador Requerido</button>
+    </div>
+    <div id="resultado-dimensionamiento" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: PROTECCIONES -->
+  <div id="tab-protecciones" class="tab-panel">
+    <div class="card">
+      <h2>🛡️ Protecciones del Transformador — NTC 2050 / IEEE C57</h2>
+      <div class="info-box">
+        <strong>NTC 2050 Tabla 450-3:</strong> La protección de sobrecorriente del transformador depende de la tensión y si tiene protección secundaria. Se calcula tanto en el lado primario como en el secundario.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Capacidad del transformador (kVA)</label>
+          <input type="number" id="p-kva" value="225" min="5" step="5" />
+        </div>
+        <div class="form-group">
+          <label>Tensión primaria (V)</label>
+          <input type="number" id="p-tension-prim" value="13200" min="200" step="100" />
+        </div>
+        <div class="form-group">
+          <label>Tensión secundaria (V)</label>
+          <input type="number" id="p-tension-sec" value="220" min="110" step="10" />
+        </div>
+        <div class="form-group">
+          <label>Sistema</label>
+          <select id="p-sistema">
+            <option value="trifasico" selected>Trifásico</option>
+            <option value="monofasico">Monofásico</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>¿Tiene protección en el secundario?</label>
+          <select id="p-prot-sec">
+            <option value="si" selected>Sí — tiene protección secundaria</option>
+            <option value="no">No — solo protección primaria</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularProtecciones()">🛡️ Calcular Protecciones</button>
+    </div>
+    <div id="resultado-protecciones" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Capacidades Comerciales de Transformadores — NTC 819</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>kVA</th><th>I secundario 220V trifásico (A)</th><th>I secundario 440V trifásico (A)</th><th>Uso típico</th></tr></thead>
+          <tbody id="tabla-transf-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Factores de Demanda Típicos — NTC 2050</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Tipo de carga</th><th>Factor de demanda</th><th>Factor de potencia típico</th></tr></thead>
+          <tbody>
+            <tr><td>Iluminación general (oficinas/comercio)</td><td>80–100%</td><td>0.90–0.95</td></tr>
+            <tr><td>Iluminación residencial</td><td>40–70% (según NTC 2050 220-11)</td><td>0.95–1.0</td></tr>
+            <tr><td>Tomacorrientes generales</td><td>50–80%</td><td>0.85–0.95</td></tr>
+            <tr><td>Motores (1 motor, mayor carga)</td><td>100%</td><td>0.80–0.88</td></tr>
+            <tr><td>Motores (varios, diversidad)</td><td>65–85%</td><td>0.80–0.88</td></tr>
+            <tr><td>Aire acondicionado / HVAC</td><td>80–100%</td><td>0.85–0.92</td></tr>
+            <tr><td>Equipos de cocina comercial</td><td>65–100% (según cantidad)</td><td>0.90–0.95</td></tr>
+            <tr><td>Cargas de soldadura</td><td>100% (la mayor) + diversidad</td><td>0.50–0.70</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Protección de Transformadores — NTC 2050 Tabla 450-3(b)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Tensión primaria</th><th>Protección primaria (% In)</th><th>Protección secundaria con sec. (% In)</th><th>Protección secundaria sin sec. (% In)</th></tr></thead>
+          <tbody>
+            <tr><td>≥ 1000 V</td><td>300% (máx. 600% si &lt;6A)</td><td>250%</td><td>125%</td></tr>
+            <tr><td>&lt; 1000 V</td><td>125% (250% si protección térmica)</td><td>—</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">In = Corriente nominal del transformador. Valores según NTC 2050 (equivalente NEC 450).</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> El diseño definitivo del sistema de transformación debe ser elaborado y firmado por un <strong>Ingeniero Eléctrico matriculado ante el COPNIA</strong>, con certificado de conformidad RETIE. Coordinar con el operador de red (OR) local para nivel de tensión y punto de conexión. Normativa: RETIE, NTC 2050, NTC 819.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n, dec=2) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function fmtInt(n) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+// Capacidades comerciales NTC 819 (kVA)
+const capacidadesTransf = [10, 15, 25, 30, 37.5, 45, 50, 75, 100, 112.5, 150, 160, 200, 225, 250, 300, 315, 400, 500, 630, 750, 800, 1000, 1250, 1500, 2000];
+
+function llenarTablaTransf() {
+  const tbody = document.getElementById('tabla-transf-body');
+  const usos = { 10:'Vivienda pequeña / rural', 15:'Vivienda / pequeño comercio', 25:'Comercio pequeño', 30:'Comercio pequeño', 37.5:'Edificio residencial pequeño', 45:'Comercio mediano', 50:'Comercio mediano', 75:'Edificio residencial', 100:'Edificio comercial pequeño', 112.5:'Edificio comercial', 150:'Edificio comercial mediano', 160:'Edificio comercial mediano', 200:'Edificio comercial grande', 225:'Centro comercial pequeño', 250:'Centro comercial pequeño', 300:'Industria pequeña', 315:'Industria pequeña', 400:'Industria mediana', 500:'Industria mediana', 630:'Industria grande', 750:'Industria grande', 800:'Industria grande', 1000:'Industria grande / subestación', 1250:'Subestación industrial', 1500:'Subestación industrial', 2000:'Gran industria' };
+  capacidadesTransf.forEach(kva => {
+    const i220 = (kva*1000)/(Math.sqrt(3)*220);
+    const i440 = (kva*1000)/(Math.sqrt(3)*440);
+    tbody.innerHTML += `<tr><td><b>${kva}</b></td><td>${fmt(i220,1)} A</td><td>${fmt(i440,1)} A</td><td>${usos[kva]||''}</td></tr>`;
+  });
+}
+document.addEventListener('DOMContentLoaded', llenarTablaTransf);
+
+// ── CARGAS DINÁMICAS ──
+let nCargas = 0;
+function addCarga(preset) {
+  nCargas++;
+  const c = document.getElementById('cargas-container');
+  const div = document.createElement('div');
+  div.className = 'carga-row';
+  div.id = `carga-${nCargas}`;
+  const p = preset || { desc:`Carga ${nCargas}`, kw:10, fp:0.90, fd:0.8 };
+  div.innerHTML = `
+    <input class="carga-input" type="text"   id="c-desc-${nCargas}" value="${p.desc}" />
+    <input class="carga-input" type="number" id="c-kw-${nCargas}"   value="${p.kw}" min="0" step="0.5" />
+    <input class="carga-input" type="number" id="c-fp-${nCargas}"   value="${p.fp}" min="0.5" max="1" step="0.01" />
+    <input class="carga-input" type="number" id="c-fd-${nCargas}"   value="${p.fd}" min="0.1" max="1" step="0.05" />
+    <button class="carga-delete" onclick="document.getElementById('carga-${nCargas}').remove()">✕</button>`;
+  c.appendChild(div);
+}
+
+function cargarEjemplo() {
+  document.getElementById('cargas-container').innerHTML = '';
+  nCargas = 0;
+  [
+    { desc:'Iluminación general', kw:25, fp:0.95, fd:0.90 },
+    { desc:'Tomacorrientes normales', kw:40, fp:0.90, fd:0.70 },
+    { desc:'Aires acondicionados', kw:60, fp:0.88, fd:0.85 },
+    { desc:'Ascensores (2 unidades)', kw:30, fp:0.85, fd:0.65 },
+    { desc:'Equipos de cocina', kw:35, fp:0.92, fd:0.70 },
+    { desc:'Bombas de presión', kw:15, fp:0.83, fd:0.80 },
+  ].forEach(p => addCarga(p));
+}
+
+function calcularTransformador() {
+  const crecimiento = parseFloat(document.getElementById('d-crecimiento').value) / 100;
+  const tensionSec  = document.getElementById('d-tension-sec').value;
+  const tipo        = document.getElementById('d-tipo').value;
+
+  const rows = document.querySelectorAll('.carga-row');
+  if (rows.length === 0) { alert('Agrega al menos una carga.'); return; }
+
+  let totalKW = 0, totalKVA = 0, sumaFP = 0;
+  const detalle = [];
+
+  rows.forEach(row => {
+    const id  = row.id.split('-').pop();
+    const desc= document.getElementById(`c-desc-${id}`)?.value || '';
+    const kw  = parseFloat(document.getElementById(`c-kw-${id}`)?.value) || 0;
+    const fp  = parseFloat(document.getElementById(`c-fp-${id}`)?.value) || 0.9;
+    const fd  = parseFloat(document.getElementById(`c-fd-${id}`)?.value) || 1;
+
+    const kwDemandado  = kw * fd;
+    const kvaDemandado = kwDemandado / fp;
+
+    totalKW  += kwDemandado;
+    totalKVA += kvaDemandado;
+    sumaFP   += kw;
+
+    detalle.push({ desc, kw, fp, fd, kwDemandado, kvaDemandado });
+  });
+
+  const fpPromedio = totalKW / totalKVA;
+  const kvaConCrecimiento = totalKVA * (1 + crecimiento);
+
+  // Buscar transformador comercial inmediatamente superior
+  const transfRecomendado = capacidadesTransf.find(c => c >= kvaConCrecimiento) || capacidadesTransf[capacidadesTransf.length-1];
+
+  // Tensiones secundarias
+  const tensiones = { '220-3f':220, '208-3f':208, '440-3f':440, '120-1f':120 };
+  const Vsec = tensiones[tensionSec] || 220;
+  const esTrifasico = !tensionSec.includes('1f');
+
+  const Isec = esTrifasico
+    ? (transfRecomendado*1000)/(Math.sqrt(3)*Vsec)
+    : (transfRecomendado*1000)/Vsec;
+
+  const filasHTML = detalle.map(d => `<tr>
+    <td>${d.desc}</td><td>${fmt(d.kw,1)}</td><td>${d.fp}</td><td>${d.fd}</td><td>${fmt(d.kwDemandado,2)}</td><td>${fmt(d.kvaDemandado,2)}</td>
+  </tr>`).join('');
+
+  document.getElementById('resultado-dimensionamiento').style.display = 'block';
+  document.getElementById('resultado-dimensionamiento').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Transformador Requerido — Tipo ${tipo}</div>
+      <div class="resultado-grande">${transfRecomendado} kVA</div>
+      <div class="resultado-sub">Capacidad comercial recomendada — Demanda total: ${fmt(kvaConCrecimiento,1)} kVA (con ${(crecimiento*100).toFixed(0)}% crecimiento)</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(totalKW,1)} kW</div><div class="resultado-label">Demanda activa total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(totalKVA,1)} kVA</div><div class="resultado-label">Demanda aparente</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(fpPromedio,2)}</div><div class="resultado-label">FP promedio ponderado</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(kvaConCrecimiento,1)} kVA</div><div class="resultado-label">Con crecimiento futuro</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${transfRecomendado} kVA</div><div class="resultado-label">Transformador comercial</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(Isec,1)} A</div><div class="resultado-label">Corriente secundario (${Vsec}V)</div></div>
+      </div>
+      <table class="tabla-result" style="margin-top:1rem;">
+        <thead><tr><th>Carga</th><th>kW inst.</th><th>FP</th><th>F.Dem.</th><th>kW dem.</th><th>kVA dem.</th></tr></thead>
+        <tbody>
+          ${filasHTML}
+          <tr class="recomendado"><td><b>TOTAL DEMANDADO</b></td><td></td><td></td><td></td><td><b>${fmt(totalKW,2)}</b></td><td><b>${fmt(totalKVA,2)}</b></td></tr>
+        </tbody>
+      </table>
+      <div class="resultado-detalle">
+        <b>Cálculo:</b><br>
+        Demanda con factor de demanda: Σ(kW × FD) = <b>${fmt(totalKW,2)} kW</b><br>
+        Demanda aparente: Σ(kW dem. ÷ FP) = <b>${fmt(totalKVA,2)} kVA</b><br>
+        Con crecimiento futuro (+${(crecimiento*100).toFixed(0)}%): ${fmt(totalKVA,2)} × ${(1+crecimiento).toFixed(2)} = <b>${fmt(kvaConCrecimiento,2)} kVA</b><br>
+        <b>Transformador comercial seleccionado: ${transfRecomendado} kVA</b> (siguiente capacidad NTC 819 ≥ demanda)<br>
+        Corriente en el secundario (${Vsec}V ${esTrifasico?'trifásico':'monofásico'}): <b>${fmt(Isec,1)} A</b>
+      </div>
+    </div>`;
+}
+
+function calcularProtecciones() {
+  const kva       = parseFloat(document.getElementById('p-kva').value) || 225;
+  const Vprim     = parseFloat(document.getElementById('p-tension-prim').value) || 13200;
+  const Vsec      = parseFloat(document.getElementById('p-tension-sec').value) || 220;
+  const sistema   = document.getElementById('p-sistema').value;
+  const protSec   = document.getElementById('p-prot-sec').value;
+
+  const esTrifasico = sistema === 'trifasico';
+
+  const Iprim = esTrifasico ? (kva*1000)/(Math.sqrt(3)*Vprim) : (kva*1000)/Vprim;
+  const Isec  = esTrifasico ? (kva*1000)/(Math.sqrt(3)*Vsec)  : (kva*1000)/Vsec;
+
+  // NTC 2050 Tabla 450-3
+  let pctPrim, pctSec;
+  if (Vprim >= 1000) {
+    pctPrim = Iprim < 9 ? 6.0 : Iprim < 6 ? 6.0 : 3.0; // >1000V: 300% (600% si <6A según tabla simplificada)
+    pctSec  = protSec === 'si' ? 2.5 : 1.25;
+  } else {
+    pctPrim = 1.25;
+    pctSec  = 1.0;
+  }
+
+  const protPrimA = Iprim * pctPrim;
+  const protSecA  = Isec * pctSec;
+
+  // Valores comerciales de breakers/fusibles
+  const valoresComerciales = [15,20,25,30,35,40,45,50,60,70,80,90,100,110,125,150,175,200,225,250,300,350,400,450,500,600,700,800,1000,1200];
+  const fusiblePrim = valoresComerciales.find(v => v >= protPrimA) || protPrimA;
+  const breakerSec  = valoresComerciales.find(v => v >= protSecA) || protSecA;
+
+  document.getElementById('resultado-protecciones').style.display = 'block';
+  document.getElementById('resultado-protecciones').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Protecciones — Transformador ${kva} kVA</div>
+      <div class="resultado-grande">${fusiblePrim} A</div>
+      <div class="resultado-sub">Protección primaria recomendada (lado de ${fmtInt(Vprim)}V)</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(Iprim,2)} A</div><div class="resultado-label">Corriente nominal primario</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(Isec,1)} A</div><div class="resultado-label">Corriente nominal secundario</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fusiblePrim} A</div><div class="resultado-label">Fusible/Breaker primario</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${breakerSec} A</div><div class="resultado-label">Breaker secundario</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Cálculo corriente primaria:</b> ${fmtInt(kva)}.000 ÷ (${esTrifasico?'√3 × ':''}${fmtInt(Vprim)}) = <b>${fmt(Iprim,2)} A</b><br>
+        <b>Protección primaria (${Vprim>=1000?'≥1000V':'<1000V'}):</b> ${fmt(Iprim,2)} × ${pctPrim*100}% = ${fmt(protPrimA,1)} A → comercial: <b>${fusiblePrim} A</b><br>
+        <b>Cálculo corriente secundaria:</b> ${fmtInt(kva)}.000 ÷ (${esTrifasico?'√3 × ':''}${fmtInt(Vsec)}) = <b>${fmt(Isec,1)} A</b><br>
+        <b>Protección secundaria (${protSec==='si'?'con protección secundaria':'sin protección secundaria'}):</b> ${fmt(Isec,1)} × ${pctSec*100}% = ${fmt(protSecA,1)} A → comercial: <b>${breakerSec} A</b><br>
+        <i>Referencia: NTC 2050 Tabla 450-3(b), equivalente a NEC Art. 450.</i>
+      </div>
+    </div>`;
+}
+
+document.addEventListener('DOMContentLoaded', () => { cargarEjemplo(); });
+</script>
+</body>
+</html>
