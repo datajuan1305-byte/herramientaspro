@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>APU Análisis Precios Unitarios Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de Análisis de Precios Unitarios APU para ingenieros civiles colombianos. Materiales, mano de obra, equipos y costos indirectos 2026." />
+  <meta name="keywords" content="APU analisis precios unitarios colombia, presupuesto construccion colombia, costo unitario obra colombia, ingeniero civil colombia 2026" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --cafe: #4e342e;
+      --cafe-medio: #6d4c41;
+      --cafe-claro: #efebe9;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #4e342e 60%, #8d6e63 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 580px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+    .container { max-width: 980px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 110px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--cafe-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--cafe-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--cafe-medio); padding-left: 8px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:600px) { .form-grid { grid-template-columns: 1fr; } .form-grid-3 { grid-template-columns: 1fr 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--cafe-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+    .btn { width: 100%; padding: 12px; background: var(--cafe-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--cafe); }
+    .btn:active { transform: scale(0.98); }
+    .btn-sm { padding: 7px 14px; font-size: 0.82rem; font-weight: 700; border: none; border-radius: 20px; cursor: pointer; background: var(--cafe-medio); color: #fff; margin-right: 6px; }
+    .btn-sm.secundario { background: var(--azul-navbar); }
+    .info-box { background: var(--cafe-claro); border-left: 4px solid var(--cafe-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--cafe); }
+
+    /* TABLA APU */
+    .apu-header { display: grid; grid-template-columns: 2.5fr 0.8fr 1fr 1.2fr 1.2fr 35px; gap: 6px; padding: 6px 4px; margin-bottom: 3px; }
+    .apu-header span { font-size: 0.74rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; }
+    .apu-row { display: grid; grid-template-columns: 2.5fr 0.8fr 1fr 1.2fr 1.2fr 35px; gap: 6px; align-items: center; margin-bottom: 5px; background: var(--gris-bg); border-radius: 7px; padding: 4px 4px; }
+    .apu-input { padding: 7px 9px; border: 1.5px solid var(--borde); border-radius: 7px; font-size: 0.84rem; background: #fff; width: 100%; }
+    .apu-input:focus { outline: none; border-color: var(--cafe-medio); }
+    .apu-total { padding: 7px 9px; background: #fff8f5; border: 1.5px solid var(--cafe-claro); border-radius: 7px; font-size: 0.84rem; font-weight: 700; color: var(--cafe); text-align: right; }
+    .apu-delete { background: none; border: none; cursor: pointer; color: #c62828; font-size: 1.1rem; }
+
+    /* RESULTADO */
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #4e342e 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-precio { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.1rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    /* TABLA RESUMEN APU */
+    .tabla-apu { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .tabla-apu th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: left; }
+    .tabla-apu th:not(:first-child) { text-align: right; }
+    .tabla-apu td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .tabla-apu td:not(:first-child) { text-align: right; font-weight: 600; }
+    .tabla-apu tr.seccion td { background: rgba(255,255,255,0.08); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+    .tabla-apu tr.subtotal td { background: rgba(255,255,255,0.1); font-weight: 700; }
+    .tabla-apu tr.total-apu td { background: rgba(255,215,0,0.2); font-weight: 900; color: #ffe082; font-size: 0.95rem; }
+    .tabla-apu tr.indirecto td { color: #ffcc80; }
+
+    /* PRESUPUESTO MULTI-ITEM */
+    .presup-row { display: grid; grid-template-columns: 2.5fr 0.8fr 1fr 1.2fr 1.2fr 35px; gap: 6px; align-items: center; margin-bottom: 5px; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--cafe-claro); }
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🏗️ <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">APU</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🏗️ Ingenieros Civiles — Colombia</div>
+  <h1>APU — Análisis de Precios Unitarios 2026</h1>
+  <p>Calcula el precio unitario de cualquier actividad de construcción desagregando materiales, mano de obra, equipos y costos indirectos. Conforme a metodología SICE-INVIAS.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Precios Colombia 2026</span>
+    <span class="hero-chip">🧱 Materiales + MO + Equipos</span>
+    <span class="hero-chip">📋 AIU configurable</span>
+    <span class="hero-chip">📊 Presupuesto multi-item</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('apu', this)">🧮 APU Individual</button>
+    <button class="tab-btn" onclick="mostrarTab('presupuesto', this)">📊 Presupuesto Obra</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Precios Referencia</button>
+  </div>
+
+  <!-- TAB 1: APU INDIVIDUAL -->
+  <div id="tab-apu" class="tab-panel active">
+    <div class="card">
+      <h2>🧮 Análisis de Precio Unitario — Actividad Individual</h2>
+      <div class="info-box">
+        <strong>Metodología APU:</strong> Precio unitario = (Materiales + Mano de obra + Equipos) × (1 + AIU%). El AIU (Administración, Imprevistos, Utilidad) es el porcentaje de costos indirectos que aplica el contratista sobre los costos directos.
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre de la actividad</label>
+          <input type="text" id="a-nombre" value="Concreto 21 MPa (3000 PSI) fundido en sitio" />
+        </div>
+        <div class="form-group">
+          <label>Unidad de medida</label>
+          <select id="a-unidad">
+            <option value="m3" selected>m³ (metro cúbico)</option>
+            <option value="m2">m² (metro cuadrado)</option>
+            <option value="ml">ml (metro lineal)</option>
+            <option value="kg">kg (kilogramo)</option>
+            <option value="und">und (unidad)</option>
+            <option value="gl">gl (global)</option>
+            <option value="ton">ton (tonelada)</option>
+            <option value="jornal">jornal</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>% Administración (A)</label>
+          <input type="number" id="a-admin" value="10" min="0" max="30" step="0.5" />
+          <span class="form-hint">Típico obra privada: 8–12% | Obra pública: 10–15%</span>
+        </div>
+        <div class="form-group">
+          <label>% Imprevistos (I)</label>
+          <input type="number" id="a-imprevistos" value="3" min="0" max="10" step="0.5" />
+          <span class="form-hint">Típico: 2–5% según complejidad</span>
+        </div>
+        <div class="form-group">
+          <label>% Utilidad (U)</label>
+          <input type="number" id="a-utilidad" value="5" min="0" max="20" step="0.5" />
+          <span class="form-hint">Típico: 4–8% | Obra pública: hasta 10%</span>
+        </div>
+        <div class="form-group">
+          <label>Rendimiento (unidades por jornada de 8h)</label>
+          <input type="number" id="a-rendimiento" value="4" min="0.1" step="0.5" />
+          <span class="form-hint">Ej: 4 m³/jornada de concreto fundido en sitio</span>
+        </div>
+      </div>
+
+      <h3>🧱 Materiales</h3>
+      <div class="apu-header">
+        <span>Descripción</span><span>Unidad</span><span>Cantidad</span><span>Precio unit. ($)</span><span>Subtotal ($)</span><span></span>
+      </div>
+      <div id="mat-container"></div>
+      <button class="btn-sm" onclick="addRow('mat')">+ Material</button>
+
+      <h3>👷 Mano de Obra</h3>
+      <div class="apu-header">
+        <span>Cargo</span><span>Unidad</span><span>Cantidad</span><span>Salario/jornal ($)</span><span>Subtotal ($)</span><span></span>
+      </div>
+      <div id="mo-container"></div>
+      <button class="btn-sm" onclick="addRow('mo')">+ Mano de obra</button>
+
+      <h3>🚛 Equipos y Herramientas</h3>
+      <div class="apu-header">
+        <span>Equipo</span><span>Unidad</span><span>Cantidad</span><span>Tarifa ($)</span><span>Subtotal ($)</span><span></span>
+      </div>
+      <div id="eq-container"></div>
+      <button class="btn-sm" onclick="addRow('eq')">+ Equipo</button>
+
+      <hr class="sep" />
+      <div style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:0.5rem;">
+        <button class="btn-sm secundario" onclick="cargarEjemplo()">📋 Cargar ejemplo (Concreto 21 MPa)</button>
+        <button class="btn-sm secundario" onclick="limpiarTodo()">🗑️ Limpiar todo</button>
+      </div>
+
+      <button class="btn" onclick="calcularAPU()">🧮 Calcular Precio Unitario</button>
+    </div>
+    <div id="resultado-apu" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: PRESUPUESTO OBRA -->
+  <div id="tab-presupuesto" class="tab-panel">
+    <div class="card">
+      <h2>📊 Presupuesto de Obra — Múltiples Ítems APU</h2>
+      <div class="info-box">
+        <strong>¿Cómo usar?</strong> Ingresa cada capítulo del presupuesto con su precio unitario (ya calculado en la pestaña APU) y la cantidad de obra. La herramienta totaliza por capítulo y entrega el presupuesto global con AIU.
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Nombre del proyecto</label><input type="text" id="pr-nombre" value="Construcción vivienda unifamiliar" /></div>
+        <div class="form-group"><label>Ubicación</label><input type="text" id="pr-ubicacion" value="Bogotá D.C." /></div>
+        <div class="form-group"><label>% AIU total del proyecto</label><input type="number" id="pr-aiu" value="18" min="0" max="40" step="0.5" /><span class="form-hint">A+I+U: Administración + Imprevistos + Utilidad</span></div>
+        <div class="form-group"><label>% IVA sobre utilidad (si aplica)</label><input type="number" id="pr-iva" value="0" min="0" max="19" step="1" /><span class="form-hint">Obra pública: IVA sobre utilidad. Privada: generalmente 0%</span></div>
+      </div>
+
+      <h3>Ítems del Presupuesto</h3>
+      <div class="apu-header" style="grid-template-columns:2.5fr 0.8fr 1fr 1.2fr 1.2fr 35px;">
+        <span>Descripción del ítem</span><span>Unidad</span><span>Cantidad</span><span>PU sin AIU ($)</span><span>Total ($)</span><span></span>
+      </div>
+      <div id="presup-container"></div>
+      <div style="margin-top:0.8rem;">
+        <button class="btn-sm" onclick="addPresupItem()">+ Agregar ítem</button>
+        <button class="btn-sm secundario" onclick="cargarEjemploPresup()">📋 Ejemplo vivienda</button>
+      </div>
+      <button class="btn" onclick="calcularPresupuesto()">📊 Generar Presupuesto</button>
+    </div>
+    <div id="resultado-presupuesto" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Precios Unitarios Referencia — Colombia 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Actividad</th><th>Unidad</th><th>Precio unitario referencia</th><th>Incluye</th></tr></thead>
+          <tbody>
+            <tr><td colspan="4" style="background:#f5f5f5; font-weight:700; color:#4e342e;">🏗️ CONCRETOS</td></tr>
+            <tr><td>Concreto 21 MPa (3000 PSI) fundido en sitio</td><td>m³</td><td>$480.000 – $580.000</td><td>Mat + MO + mezcladora</td></tr>
+            <tr><td>Concreto premezclado 21 MPa bombeado</td><td>m³</td><td>$420.000 – $480.000</td><td>Solo material puesto</td></tr>
+            <tr><td>Concreto 28 MPa (4000 PSI)</td><td>m³</td><td>$530.000 – $640.000</td><td>Mat + MO</td></tr>
+            <tr><td>Concreto ciclópeo (60% concreto + 40% rajón)</td><td>m³</td><td>$320.000 – $400.000</td><td>Mat + MO</td></tr>
+            <tr><td colspan="4" style="background:#f5f5f5; font-weight:700; color:#4e342e;">🔩 ACERO Y MAMPOSTERÍA</td></tr>
+            <tr><td>Acero de refuerzo corrugado fy=420 MPa</td><td>kg</td><td>$4.200 – $5.500</td><td>Mat + figurado + instalación</td></tr>
+            <tr><td>Bloque 15×20×40 cm mortero 1:4</td><td>m²</td><td>$55.000 – $75.000</td><td>Mat + MO</td></tr>
+            <tr><td>Ladrillo farol pegado con mortero</td><td>m²</td><td>$65.000 – $90.000</td><td>Mat + MO</td></tr>
+            <tr><td colspan="4" style="background:#f5f5f5; font-weight:700; color:#4e342e;">🪵 FORMALETA Y ACABADOS</td></tr>
+            <tr><td>Formaleta en madera columnas/vigas (1 uso)</td><td>m²</td><td>$35.000 – $55.000</td><td>Mat + MO instalación</td></tr>
+            <tr><td>Formaleta metálica alquiler</td><td>m²/mes</td><td>$8.000 – $15.000</td><td>Alquiler + transporte</td></tr>
+            <tr><td>Pañete interior 1:3 e=1.5 cm</td><td>m²</td><td>$25.000 – $38.000</td><td>Mat + MO</td></tr>
+            <tr><td>Pintura vinilo interior (2 manos)</td><td>m²</td><td>$12.000 – $20.000</td><td>Mat + MO</td></tr>
+            <tr><td colspan="4" style="background:#f5f5f5; font-weight:700; color:#4e342e;">🌍 MOVIMIENTO DE TIERRAS</td></tr>
+            <tr><td>Excavación manual en tierra</td><td>m³</td><td>$35.000 – $55.000</td><td>Solo MO</td></tr>
+            <tr><td>Excavación mecánica (retroexcavadora)</td><td>m³</td><td>$18.000 – $28.000</td><td>Equipo + operario</td></tr>
+            <tr><td>Relleno compactado material seleccionado</td><td>m³</td><td>$45.000 – $70.000</td><td>Mat + MO + compactador</td></tr>
+            <tr><td>Cargue y transporte material sobrante</td><td>m³</td><td>$25.000 – $45.000</td><td>Volqueta + cargue</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">Precios sin AIU. Referencia: SINCO INVIAS 2026, Camacol, Lista de precios DADEP Bogotá 2025. Varían según zona del país y condiciones de mercado.</p>
+    </div>
+    <div class="card">
+      <h2>📋 Mano de Obra Construcción — Salarios Referencia 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Cargo</th><th>Jornal diario ($)</th><th>Con prestaciones (factor 1.6)</th></tr></thead>
+          <tbody>
+            <tr><td>Oficial de construcción</td><td>$62.000 – $80.000</td><td>$99.000 – $128.000</td></tr>
+            <tr><td>Ayudante / peón</td><td>$50.000 – $62.000</td><td>$80.000 – $99.000</td></tr>
+            <tr><td>Maestro de obra</td><td>$90.000 – $130.000</td><td>$144.000 – $208.000</td></tr>
+            <tr><td>Fierrero / armador</td><td>$70.000 – $90.000</td><td>$112.000 – $144.000</td></tr>
+            <tr><td>Carpintero de formaleta</td><td>$70.000 – $90.000</td><td>$112.000 – $144.000</td></tr>
+            <tr><td>Electricista instalador</td><td>$75.000 – $100.000</td><td>$120.000 – $160.000</td></tr>
+            <tr><td>Plomero / fontanero</td><td>$70.000 – $95.000</td><td>$112.000 – $152.000</td></tr>
+            <tr><td>Operador retroexcavadora</td><td>$120.000 – $160.000</td><td>$192.000 – $256.000</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">Factor prestacional 1.6 incluye: salud, pensión, ARL, SENA, ICBF, CCF, prima, cesantías, intereses, vacaciones. SMMLV 2026: $1.423.500.</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los precios unitarios son referencias del mercado colombiano 2026. El APU definitivo debe ser elaborado por un <strong>Ingeniero Civil matriculado ante el COPNIA</strong> con precios locales actualizados. Metodología: SICE-INVIAS, Manual de Costos INVIAS 2024.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n, dec=0) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function fmtD(n,d=1) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+
+let nRows = { mat:0, mo:0, eq:0 };
+let nPresup = 0;
+
+const UNIDADES = ['m3','m2','ml','kg','und','gl','ton','jornal','bolsa','litro'];
+
+function addRow(tipo, preset) {
+  nRows[tipo]++;
+  const n = nRows[tipo];
+  const c = document.getElementById(`${tipo}-container`);
+  const div = document.createElement('div');
+  div.className = 'apu-row';
+  div.id = `${tipo}-row-${n}`;
+  const p = preset || { desc:'', und:'und', cant:1, precio:0 };
+  div.innerHTML = `
+    <input class="apu-input" type="text"   id="${tipo}-desc-${n}" value="${p.desc}" placeholder="Descripción" oninput="updateTotal('${tipo}',${n})" />
+    <input class="apu-input" type="text"   id="${tipo}-und-${n}"  value="${p.und}" style="text-align:center;" />
+    <input class="apu-input" type="number" id="${tipo}-cant-${n}" value="${p.cant}" min="0" step="0.001" oninput="updateTotal('${tipo}',${n})" />
+    <input class="apu-input" type="number" id="${tipo}-prec-${n}" value="${p.precio}" min="0" step="100" oninput="updateTotal('${tipo}',${n})" />
+    <div class="apu-total" id="${tipo}-tot-${n}">$ ${fmt(p.cant*p.precio)}</div>
+    <button class="apu-delete" onclick="document.getElementById('${tipo}-row-${n}').remove()">✕</button>`;
+  c.appendChild(div);
+}
+
+function updateTotal(tipo, n) {
+  const cant  = parseFloat(document.getElementById(`${tipo}-cant-${n}`)?.value) || 0;
+  const prec  = parseFloat(document.getElementById(`${tipo}-prec-${n}`)?.value) || 0;
+  const tot   = document.getElementById(`${tipo}-tot-${n}`);
+  if (tot) tot.textContent = '$ ' + fmt(cant * prec);
+}
+
+function sumar(tipo) {
+  let total = 0;
+  document.querySelectorAll(`#${tipo}-container .apu-row`).forEach(row => {
+    const id = row.id.split('-').pop();
+    const cant = parseFloat(document.getElementById(`${tipo}-cant-${id}`)?.value) || 0;
+    const prec = parseFloat(document.getElementById(`${tipo}-prec-${id}`)?.value) || 0;
+    total += cant * prec;
+  });
+  return total;
+}
+
+function getRows(tipo) {
+  const rows = [];
+  document.querySelectorAll(`#${tipo}-container .apu-row`).forEach(row => {
+    const id   = row.id.split('-').pop();
+    const desc = document.getElementById(`${tipo}-desc-${id}`)?.value || '';
+    const und  = document.getElementById(`${tipo}-und-${id}`)?.value || '';
+    const cant = parseFloat(document.getElementById(`${tipo}-cant-${id}`)?.value) || 0;
+    const prec = parseFloat(document.getElementById(`${tipo}-prec-${id}`)?.value) || 0;
+    if (desc || cant > 0) rows.push({ desc, und, cant, prec, tot: cant*prec });
+  });
+  return rows;
+}
+
+function calcularAPU() {
+  const nombre    = document.getElementById('a-nombre').value || 'Actividad';
+  const unidad    = document.getElementById('a-unidad').value;
+  const pctAdmin  = parseFloat(document.getElementById('a-admin').value) / 100;
+  const pctImp    = parseFloat(document.getElementById('a-imprevistos').value) / 100;
+  const pctUtil   = parseFloat(document.getElementById('a-utilidad').value) / 100;
+  const rendim    = parseFloat(document.getElementById('a-rendimiento').value) || 1;
+
+  const totalMat  = sumar('mat');
+  const totalMO   = sumar('mo');
+  const totalEq   = sumar('eq');
+  const costDirec = totalMat + totalMO + totalEq;
+
+  const pctAIU    = pctAdmin + pctImp + pctUtil;
+  const valorAIU  = costDirec * pctAIU;
+  const precioUnit= costDirec + valorAIU;
+
+  const rowsMat   = getRows('mat');
+  const rowsMO    = getRows('mo');
+  const rowsEq    = getRows('eq');
+
+  const filasMat  = rowsMat.map(r => `<tr><td>${r.desc}</td><td>${r.und}</td><td>${fmtD(r.cant,3)}</td><td>$ ${fmt(r.prec)}</td><td>$ ${fmt(Math.round(r.tot))}</td><td>${costDirec>0?fmtD(r.tot/costDirec*100):0}%</td></tr>`).join('');
+  const filasMO   = rowsMO.map(r  => `<tr><td>${r.desc}</td><td>${r.und}</td><td>${fmtD(r.cant,3)}</td><td>$ ${fmt(r.prec)}</td><td>$ ${fmt(Math.round(r.tot))}</td><td>${costDirec>0?fmtD(r.tot/costDirec*100):0}%</td></tr>`).join('');
+  const filasEq   = rowsEq.map(r  => `<tr><td>${r.desc}</td><td>${r.und}</td><td>${fmtD(r.cant,3)}</td><td>$ ${fmt(r.prec)}</td><td>$ ${fmt(Math.round(r.tot))}</td><td>${costDirec>0?fmtD(r.tot/costDirec*100):0}%</td></tr>`).join('');
+
+  document.getElementById('resultado-apu').style.display = 'block';
+  document.getElementById('resultado-apu').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">APU — ${nombre} (por ${unidad})</div>
+      <div class="resultado-precio">$ ${fmt(Math.round(precioUnit))}</div>
+      <div class="resultado-sub">Precio unitario con AIU ${fmtD((pctAIU*100))}% — Costo directo: $ ${fmt(Math.round(costDirec))} / ${unidad}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalMat))}</div><div class="resultado-label">Materiales (${costDirec>0?fmtD(totalMat/costDirec*100):0}%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalMO))}</div><div class="resultado-label">Mano de obra (${costDirec>0?fmtD(totalMO/costDirec*100):0}%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalEq))}</div><div class="resultado-label">Equipos (${costDirec>0?fmtD(totalEq/costDirec*100):0}%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(valorAIU))}</div><div class="resultado-label">AIU (${fmtD(pctAIU*100)}%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(precioUnit))}</div><div class="resultado-label">Precio unitario total</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(rendim,1)} ${unidad}/jorn.</div><div class="resultado-label">Rendimiento</div></div>
+      </div>
+      <table class="tabla-apu" style="margin-top:1rem;">
+        <thead><tr><th>Descripción</th><th>Und</th><th>Cant.</th><th>Precio unit.</th><th>Subtotal</th><th>% CD</th></tr></thead>
+        <tbody>
+          <tr class="seccion"><td colspan="6">MATERIALES</td></tr>
+          ${filasMat || '<tr><td colspan="6" style="opacity:0.5;">Sin materiales</td></tr>'}
+          <tr class="subtotal"><td colspan="4">Subtotal Materiales</td><td>$ ${fmt(Math.round(totalMat))}</td><td>${costDirec>0?fmtD(totalMat/costDirec*100):0}%</td></tr>
+          <tr class="seccion"><td colspan="6">MANO DE OBRA</td></tr>
+          ${filasMO || '<tr><td colspan="6" style="opacity:0.5;">Sin mano de obra</td></tr>'}
+          <tr class="subtotal"><td colspan="4">Subtotal Mano de Obra</td><td>$ ${fmt(Math.round(totalMO))}</td><td>${costDirec>0?fmtD(totalMO/costDirec*100):0}%</td></tr>
+          <tr class="seccion"><td colspan="6">EQUIPOS Y HERRAMIENTAS</td></tr>
+          ${filasEq || '<tr><td colspan="6" style="opacity:0.5;">Sin equipos</td></tr>'}
+          <tr class="subtotal"><td colspan="4">Subtotal Equipos</td><td>$ ${fmt(Math.round(totalEq))}</td><td>${costDirec>0?fmtD(totalEq/costDirec*100):0}%</td></tr>
+          <tr class="subtotal"><td colspan="4"><b>COSTO DIRECTO TOTAL</b></td><td><b>$ ${fmt(Math.round(costDirec))}</b></td><td>100%</td></tr>
+          <tr class="indirecto"><td colspan="4">Administración (${fmtD(pctAdmin*100)}%)</td><td>$ ${fmt(Math.round(costDirec*pctAdmin))}</td><td></td></tr>
+          <tr class="indirecto"><td colspan="4">Imprevistos (${fmtD(pctImp*100)}%)</td><td>$ ${fmt(Math.round(costDirec*pctImp))}</td><td></td></tr>
+          <tr class="indirecto"><td colspan="4">Utilidad (${fmtD(pctUtil*100)}%)</td><td>$ ${fmt(Math.round(costDirec*pctUtil))}</td><td></td></tr>
+          <tr class="total-apu"><td colspan="4">💰 PRECIO UNITARIO (con AIU ${fmtD(pctAIU*100)}%)</td><td>$ ${fmt(Math.round(precioUnit))}</td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="resultado-detalle">
+        <b>Fórmula:</b> PU = CD × (1 + AIU%) = $ ${fmt(Math.round(costDirec))} × (1 + ${fmtD(pctAIU*100)}%) = <b>$ ${fmt(Math.round(precioUnit))} / ${unidad}</b><br>
+        Rendimiento: ${fmtD(rendim,1)} ${unidad}/jornada → costo mano de obra por ${unidad}: $ ${fmt(Math.round(totalMO))}
+      </div>
+    </div>`;
+}
+
+// ── PRESUPUESTO MULTI-ITEM ──
+function addPresupItem(preset) {
+  nPresup++;
+  const n = nPresup;
+  const c = document.getElementById('presup-container');
+  const div = document.createElement('div');
+  div.className = 'apu-row';
+  div.id = `pr-row-${n}`;
+  const p = preset || { desc:'', und:'m2', cant:1, pu:0 };
+  div.innerHTML = `
+    <input class="apu-input" type="text"   id="pr-desc-${n}" value="${p.desc}" placeholder="Ítem" oninput="" />
+    <input class="apu-input" type="text"   id="pr-und-${n}"  value="${p.und}" style="text-align:center;" />
+    <input class="apu-input" type="number" id="pr-cant-${n}" value="${p.cant}" min="0" step="0.01" oninput="updatePresupTotal(${n})" />
+    <input class="apu-input" type="number" id="pr-pu-${n}"   value="${p.pu}"   min="0" step="1000" oninput="updatePresupTotal(${n})" />
+    <div class="apu-total" id="pr-tot-${n}">$ ${fmt(p.cant*p.pu)}</div>
+    <button class="apu-delete" onclick="document.getElementById('pr-row-${n}').remove()">✕</button>`;
+  c.appendChild(div);
+}
+
+function updatePresupTotal(n) {
+  const cant = parseFloat(document.getElementById(`pr-cant-${n}`)?.value) || 0;
+  const pu   = parseFloat(document.getElementById(`pr-pu-${n}`)?.value) || 0;
+  const tot  = document.getElementById(`pr-tot-${n}`);
+  if (tot) tot.textContent = '$ ' + fmt(cant * pu);
+}
+
+function calcularPresupuesto() {
+  const nombre = document.getElementById('pr-nombre').value || 'Proyecto';
+  const ubicac = document.getElementById('pr-ubicacion').value || '';
+  const pctAIU = parseFloat(document.getElementById('pr-aiu').value) / 100;
+  const pctIVA = parseFloat(document.getElementById('pr-iva').value) / 100;
+
+  const rows = [];
+  document.querySelectorAll('#presup-container .apu-row').forEach(row => {
+    const id   = row.id.split('-').pop();
+    const desc = document.getElementById(`pr-desc-${id}`)?.value || '';
+    const und  = document.getElementById(`pr-und-${id}`)?.value || '';
+    const cant = parseFloat(document.getElementById(`pr-cant-${id}`)?.value) || 0;
+    const pu   = parseFloat(document.getElementById(`pr-pu-${id}`)?.value) || 0;
+    rows.push({ desc, und, cant, pu, tot: cant*pu });
+  });
+
+  if (rows.length === 0) { alert('Agrega al menos un ítem al presupuesto.'); return; }
+
+  const totalCD  = rows.reduce((a,r) => a+r.tot, 0);
+  const valorAIU = totalCD * pctAIU;
+  const subtotal = totalCD + valorAIU;
+  const iva      = subtotal * pctIVA * (pctIVA > 0 ? 1 : 0);
+  const total    = subtotal + iva;
+
+  const filasHTML = rows.map((r,i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td>${r.desc}</td>
+      <td style="text-align:center;">${r.und}</td>
+      <td style="text-align:right;">${fmtD(r.cant,2)}</td>
+      <td style="text-align:right;">$ ${fmt(r.pu)}</td>
+      <td style="text-align:right;">$ ${fmt(Math.round(r.tot))}</td>
+      <td style="text-align:right;">${totalCD>0?fmtD(r.tot/totalCD*100):0}%</td>
+    </tr>`).join('');
+
+  document.getElementById('resultado-presupuesto').style.display = 'block';
+  document.getElementById('resultado-presupuesto').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Presupuesto — ${nombre} | ${ubicac}</div>
+      <div class="resultado-precio">$ ${fmt(Math.round(total))}</div>
+      <div class="resultado-sub">Valor total del proyecto con AIU ${fmtD(pctAIU*100)}%</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${rows.length}</div><div class="resultado-label">Ítems</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalCD))}</div><div class="resultado-label">Costo directo</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(valorAIU))}</div><div class="resultado-label">AIU (${fmtD(pctAIU*100)}%)</div></div>
+        ${pctIVA > 0 ? `<div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(iva))}</div><div class="resultado-label">IVA (${fmtD(pctIVA*100)}%)</div></div>` : ''}
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(total))}</div><div class="resultado-label">TOTAL PROYECTO</div></div>
+      </div>
+      <div style="overflow-x:auto; margin-top:1rem;">
+        <table class="tabla-apu">
+          <thead><tr><th>#</th><th>Descripción</th><th>Und</th><th>Cant.</th><th>PU sin AIU</th><th>Total</th><th>%</th></tr></thead>
+          <tbody>
+            ${filasHTML}
+            <tr class="subtotal"><td colspan="5">Costo directo total</td><td>$ ${fmt(Math.round(totalCD))}</td><td>100%</td></tr>
+            <tr class="indirecto"><td colspan="5">AIU (${fmtD(pctAIU*100)}%)</td><td>$ ${fmt(Math.round(valorAIU))}</td><td></td></tr>
+            ${pctIVA>0?`<tr class="indirecto"><td colspan="5">IVA (${fmtD(pctIVA*100)}%)</td><td>$ ${fmt(Math.round(iva))}</td><td></td></tr>`:''}
+            <tr class="total-apu"><td colspan="5">💰 VALOR TOTAL DEL PROYECTO</td><td>$ ${fmt(Math.round(total))}</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+// ── EJEMPLOS ──
+function cargarEjemplo() {
+  limpiarTodo();
+  [
+    { desc:'Cemento Portland tipo I (50 kg)', und:'bolsa', cant:7.0, precio:28000 },
+    { desc:'Arena de río lavada', und:'m3', cant:0.65, precio:85000 },
+    { desc:'Grava 3/4"', und:'m3', cant:0.85, precio:95000 },
+    { desc:'Agua', und:'m3', cant:0.18, precio:5000 },
+  ].forEach(p => addRow('mat', p));
+  [
+    { desc:'Oficial concreto (con prest.)', und:'jornal', cant:0.25, precio:110000 },
+    { desc:'Ayudante (con prestaciones)', und:'jornal', cant:0.50, precio:85000 },
+  ].forEach(p => addRow('mo', p));
+  [
+    { desc:'Mezcladora 1 saco (alquiler)', und:'día', cant:0.13, precio:80000 },
+    { desc:'Vibrador de concreto', und:'hora', cant:1.0, precio:15000 },
+    { desc:'Herramienta menor (3%CD)', und:'gl', cant:1, precio:12000 },
+  ].forEach(p => addRow('eq', p));
+  document.getElementById('a-nombre').value = 'Concreto 21 MPa fundido en sitio';
+  document.getElementById('a-rendimiento').value = 4;
+}
+
+function limpiarTodo() {
+  ['mat','mo','eq'].forEach(t => {
+    document.getElementById(`${t}-container`).innerHTML = '';
+    nRows[t] = 0;
+  });
+}
+
+function cargarEjemploPresup() {
+  document.getElementById('presup-container').innerHTML = '';
+  nPresup = 0;
+  [
+    { desc:'Localización y replanteo', und:'m2', cant:80, pu:4500 },
+    { desc:'Excavación manual para cimientos', und:'m3', cant:35, pu:45000 },
+    { desc:'Concreto ciclópeo cimientos', und:'m3', cant:18, pu:380000 },
+    { desc:'Mamposterìa bloque 15 cm', und:'m2', cant:120, pu:68000 },
+    { desc:'Concreto 21 MPa columnas/vigas', und:'m3', cant:12, pu:540000 },
+    { desc:'Acero de refuerzo fy=420 MPa', und:'kg', cant:1200, pu:5000 },
+    { desc:'Cubierta teja fibrocemento', und:'m2', cant:95, pu:85000 },
+    { desc:'Pañete interior 1:3', und:'m2', cant:220, pu:32000 },
+    { desc:'Instalaciones eléctricas', und:'gl', cant:1, pu:4500000 },
+    { desc:'Instalaciones hidrosanitarias', und:'gl', cant:1, pu:3800000 },
+  ].forEach(p => addPresupItem(p));
+}
+
+document.addEventListener('DOMContentLoaded', () => { cargarEjemplo(); });
+</script>
+</body>
+</html>
