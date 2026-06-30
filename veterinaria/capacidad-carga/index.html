@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capacidad de Carga por Hectárea Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Calculadora de capacidad de carga animal por hectárea para veterinarios y zootecnistas colombianos. UGG, aforo de pasturas y carga ganadera sostenible." />
+  <meta name="keywords" content="capacidad carga ganadera colombia, UGG unidad gran ganado, aforo pasturas colombia, carga animal hectarea, zootecnista colombia 2026" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --verde: #1b5e20;
+      --verde-medio: #2e7d32;
+      --verde-claro: #e8f5e9;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #1b5e20 60%, #4caf50 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 580px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+    .container { max-width: 920px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 110px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--verde-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--verde-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--verde-medio); padding-left: 8px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--verde-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+    .btn { width: 100%; padding: 12px; background: var(--verde-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--verde); }
+    .btn:active { transform: scale(0.98); }
+    .info-box { background: var(--verde-claro); border-left: 4px solid var(--verde-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--verde); }
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #1b5e20 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grande { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.15rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+    .tabla-carga { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .tabla-carga th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: left; }
+    .tabla-carga th:not(:first-child) { text-align: right; }
+    .tabla-carga td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .tabla-carga td:not(:first-child) { text-align: right; }
+    .tabla-carga tr.total td { background: rgba(255,215,0,0.2); font-weight: 800; color: #ffe082; }
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-mal  { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.85rem; margin-top: 0.8rem; }
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--verde-claro); }
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🐄 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Capacidad de Carga</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🐄 Veterinarios y Zootecnistas — Colombia</div>
+  <h1>Capacidad de Carga por Hectárea 2026</h1>
+  <p>Calcula la capacidad de carga animal (UGG/ha) según el tipo de pastura, la oferta forrajera y el peso de los animales. Determina si tu finca está sobrecargada o subutilizada.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Pasturas Colombia</span>
+    <span class="hero-chip">📊 UGG (Unidad Gran Ganado)</span>
+    <span class="hero-chip">🌿 Aforo de pastura</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('carga', this)">📊 Capacidad de Carga</button>
+    <button class="tab-btn" onclick="mostrarTab('aforo', this)">🌿 Aforo de Pastura</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Referencia</button>
+  </div>
+
+  <!-- TAB 1: CAPACIDAD DE CARGA -->
+  <div id="tab-carga" class="tab-panel active">
+    <div class="card">
+      <h2>📊 Calculadora de Capacidad de Carga (UGG/ha)</h2>
+      <div class="info-box">
+        <strong>UGG (Unidad Gran Ganado):</strong> Equivalente a una vaca adulta de 450 kg con consumo de 2.5% de su peso vivo en materia seca/día (≈11.25 kg MS/día). Todos los animales se convierten a UGG para comparar diferentes categorías y especies.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de pastura</label>
+          <select id="c-pastura" onchange="autoPastura()">
+            <option value="kikuyo" selected>Kikuyo (trópico alto)</option>
+            <option value="estrella">Estrella africana (trópico bajo)</option>
+            <option value="brachiaria">Brachiaria decumbens/brizantha</option>
+            <option value="angleton">Angleton / Pará</option>
+            <option value="guinea">Guinea (Panicum maximum)</option>
+            <option value="raigras">Raigrás (trópico alto)</option>
+            <option value="custom">Personalizado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Producción de forraje (kg MS/ha/año)</label>
+          <input type="number" id="c-produccion" value="12000" min="2000" max="40000" step="500" />
+          <span class="form-hint" id="c-hint-prod">Kikuyo bien fertilizado: 10.000–15.000 kg MS/ha/año</span>
+        </div>
+        <div class="form-group">
+          <label>Eficiencia de utilización (%)</label>
+          <select id="c-eficiencia">
+            <option value="0.45">Pastoreo continuo — 45%</option>
+            <option value="0.55" selected>Pastoreo rotacional — 55%</option>
+            <option value="0.65">Pastoreo rotacional intensivo — 65%</option>
+            <option value="0.75">Sistema silvopastoril intensivo — 75%</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Área disponible (ha)</label>
+          <input type="number" id="c-area" value="20" min="0.5" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Días de descanso del potrero</label>
+          <input type="number" id="c-descanso" value="35" min="15" max="90" step="5" />
+          <span class="form-hint">Trópico alto: 35–45 días | Trópico bajo: 28–35 días</span>
+        </div>
+      </div>
+
+      <h3>🐄 Composición del hato (animales en la finca)</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Vacas adultas en producción/seca (450 kg)</label><input type="number" id="c-vacas" value="25" min="0" step="1" /></div>
+        <div class="form-group"><label>Toros (700 kg)</label><input type="number" id="c-toros" value="1" min="0" step="1" /></div>
+        <div class="form-group"><label>Novillas de levante (250–350 kg)</label><input type="number" id="c-novillas" value="10" min="0" step="1" /></div>
+        <div class="form-group"><label>Terneros/as (100–150 kg)</label><input type="number" id="c-terneros" value="15" min="0" step="1" /></div>
+      </div>
+
+      <button class="btn" onclick="calcularCarga()">📊 Calcular Capacidad de Carga</button>
+    </div>
+    <div id="resultado-carga" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: AFORO -->
+  <div id="tab-aforo" class="tab-panel">
+    <div class="card">
+      <h2>🌿 Aforo de Pastura — Método del Cuadrante</h2>
+      <div class="info-box">
+        <strong>¿Cómo aforar?</strong> Cortar todo el forraje dentro de un cuadrante de área conocida (ej. 0.25 m² = 50×50 cm), pesarlo en fresco, secar una muestra para determinar % de materia seca, y extrapolar a kg MS/ha.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Área del cuadrante (m²)</label>
+          <select id="a-cuadrante">
+            <option value="0.25" selected>0.25 m² (50×50 cm)</option>
+            <option value="1.0">1.0 m² (1×1 m)</option>
+            <option value="0.5">0.5 m² (50×100 cm)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Número de muestras tomadas</label>
+          <input type="number" id="a-muestras" value="10" min="1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Peso fresco promedio por muestra (gramos)</label>
+          <input type="number" id="a-peso-fresco" value="450" min="10" step="10" />
+        </div>
+        <div class="form-group">
+          <label>% Materia seca del forraje</label>
+          <input type="number" id="a-pct-ms" value="20" min="10" max="40" step="1" />
+          <span class="form-hint">Pasturas tropicales frescas: 18–25% MS</span>
+        </div>
+        <div class="form-group">
+          <label>% Disponible para consumo (deja remanente)</label>
+          <input type="number" id="a-pct-disponible" value="60" min="30" max="80" step="5" />
+          <span class="form-hint">Dejar 5–7 cm de remanente — no aforar todo</span>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularAforo()">🌿 Calcular Producción de Forraje</button>
+    </div>
+    <div id="resultado-aforo" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Equivalencias UGG por Categoría Animal</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Categoría</th><th>Peso vivo (kg)</th><th>Equivalencia UGG</th><th>Consumo MS (kg/día)</th></tr></thead>
+          <tbody>
+            <tr><td>Vaca adulta (referencia)</td><td>450</td><td>1.00</td><td>11.25</td></tr>
+            <tr><td>Toro reproductor</td><td>700–900</td><td>1.40–1.80</td><td>15.75–20.25</td></tr>
+            <tr><td>Novillo de engorde (300–400 kg)</td><td>350</td><td>0.78</td><td>8.75</td></tr>
+            <tr><td>Novilla de levante (250–350 kg)</td><td>300</td><td>0.67</td><td>7.50</td></tr>
+            <tr><td>Ternero/a destete (100–150 kg)</td><td>125</td><td>0.28</td><td>3.13</td></tr>
+            <tr><td>Vaca lactante (alta producción &gt;20L)</td><td>500</td><td>1.20</td><td>13.50</td></tr>
+            <tr><td>Búfalo adulto</td><td>600</td><td>1.33</td><td>15.00</td></tr>
+            <tr><td>Caballo / equino adulto</td><td>450</td><td>1.25</td><td>12.50</td></tr>
+            <tr><td>Oveja / cabra adulta</td><td>45</td><td>0.15</td><td>1.69</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">UGG = Peso vivo del animal ÷ 450 kg (peso de referencia de la vaca adulta). Fuente: FEDEGAN Colombia.</p>
+    </div>
+    <div class="card">
+      <h2>📋 Producción de Forraje y Capacidad de Carga por Tipo de Pastura</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Pastura</th><th>Producción (kg MS/ha/año)</th><th>Capacidad carga (UGG/ha)</th><th>Zona</th></tr></thead>
+          <tbody>
+            <tr><td><b>Kikuyo (Pennisetum clandestinum)</b></td><td>10.000–18.000</td><td>2.5–4.0</td><td>Trópico alto (&gt;2.000 msnm)</td></tr>
+            <tr><td><b>Raigrás + trébol</b></td><td>12.000–20.000</td><td>3.0–4.5</td><td>Trópico alto</td></tr>
+            <tr><td><b>Estrella africana (Cynodon)</b></td><td>15.000–25.000</td><td>3.5–5.5</td><td>Trópico bajo (&lt;1.000 msnm)</td></tr>
+            <tr><td><b>Brachiaria decumbens</b></td><td>8.000–14.000</td><td>1.8–3.0</td><td>Trópico bajo, suelos pobres</td></tr>
+            <tr><td><b>Brachiaria brizantha</b></td><td>12.000–20.000</td><td>2.5–4.0</td><td>Trópico bajo, mejorada</td></tr>
+            <tr><td><b>Angleton / Pará</b></td><td>6.000–10.000</td><td>1.2–2.0</td><td>Sabana inundable</td></tr>
+            <tr><td><b>Guinea (Panicum maximum)</b></td><td>10.000–18.000</td><td>2.0–3.5</td><td>Trópico bajo-medio</td></tr>
+            <tr><td><b>Sistema silvopastoril intensivo</b></td><td>18.000–30.000</td><td>4.0–6.0</td><td>Todas las zonas</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> La capacidad de carga real depende de las condiciones específicas del suelo, fertilización, manejo del pastoreo y clima de cada finca. Se recomienda validación con un <strong>Médico Veterinario Zootecnista</strong> y análisis de suelo y forraje actualizado. Referencias: FEDEGAN Colombia, CIAT, ICA.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n, dec=0) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function fmtD(n,d=2) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+
+const pasturas = {
+  kikuyo:     { prod:13000, hint:'Kikuyo bien fertilizado: 10.000–15.000 kg MS/ha/año' },
+  estrella:   { prod:19000, hint:'Estrella africana: 15.000–25.000 kg MS/ha/año' },
+  brachiaria: { prod:14000, hint:'Brachiaria brizantha mejorada: 12.000–20.000 kg MS/ha/año' },
+  angleton:   { prod:8000,  hint:'Angleton/Pará sabana: 6.000–10.000 kg MS/ha/año' },
+  guinea:     { prod:13000, hint:'Guinea: 10.000–18.000 kg MS/ha/año' },
+  raigras:    { prod:15000, hint:'Raigrás + trébol: 12.000–20.000 kg MS/ha/año' },
+  custom:     { prod:12000, hint:'Ingresa el valor según tu análisis o referencia local' },
+};
+
+function autoPastura() {
+  const p = pasturas[document.getElementById('c-pastura').value];
+  if (p) {
+    document.getElementById('c-produccion').value = p.prod;
+    document.getElementById('c-hint-prod').textContent = p.hint;
+  }
+}
+
+function calcularCarga() {
+  const produccion = parseFloat(document.getElementById('c-produccion').value) || 12000;
+  const eficiencia = parseFloat(document.getElementById('c-eficiencia').value) || 0.55;
+  const area       = parseFloat(document.getElementById('c-area').value) || 1;
+  const descanso   = parseFloat(document.getElementById('c-descanso').value) || 35;
+
+  const vacas    = parseInt(document.getElementById('c-vacas').value) || 0;
+  const toros    = parseInt(document.getElementById('c-toros').value) || 0;
+  const novillas = parseInt(document.getElementById('c-novillas').value) || 0;
+  const terneros = parseInt(document.getElementById('c-terneros').value) || 0;
+
+  // UGG por categoría
+  const uggVacas    = vacas * 1.00;
+  const uggToros    = toros * 1.60;
+  const uggNovillas = novillas * 0.67;
+  const uggTerneros = terneros * 0.28;
+  const uggTotal    = uggVacas + uggToros + uggNovillas + uggTerneros;
+
+  // Forraje disponible
+  const forrajeDisponibleHa = produccion * eficiencia;
+  const forrajeTotalDisponible = forrajeDisponibleHa * area;
+
+  // Consumo total del hato (kg MS/día)
+  const consumoDiarioHato = uggTotal * 11.25;
+  const consumoAnualHato  = consumoDiarioHato * 365;
+
+  // Capacidad de carga (UGG/ha que soporta la pastura)
+  const capacidadCargaUGGha = forrajeDisponibleHa / (11.25 * 365);
+  const capacidadCargaTotal = capacidadCargaUGGha * area;
+
+  // Carga actual
+  const cargaActualUGGha = uggTotal / area;
+
+  // Balance
+  const balance = capacidadCargaTotal - uggTotal;
+  const pctUso  = (uggTotal / capacidadCargaTotal) * 100;
+
+  let estado, colorEstado;
+  if (pctUso > 110)      { estado = 'SOBRECARGADA — Riesgo de degradación'; colorEstado = 'mal'; }
+  else if (pctUso > 95)  { estado = 'CARGA ÓPTIMA — Cerca del límite'; colorEstado = 'warn'; }
+  else if (pctUso > 60)  { estado = 'CARGA ADECUADA'; colorEstado = 'ok'; }
+  else                   { estado = 'SUBUTILIZADA — Capacidad disponible'; colorEstado = 'warn'; }
+
+  document.getElementById('resultado-carga').style.display = 'block';
+  document.getElementById('resultado-carga').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Capacidad de Carga — ${area} ha | Hato actual: ${fmtD(uggTotal)} UGG</div>
+      <div class="resultado-grande">${fmtD(capacidadCargaUGGha)} UGG/ha</div>
+      <div class="resultado-sub">Capacidad de carga sostenible — Carga actual: ${fmtD(cargaActualUGGha)} UGG/ha (${fmtD(pctUso,0)}% de uso)</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(uggTotal)}</div><div class="resultado-label">UGG totales del hato</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(capacidadCargaTotal)}</div><div class="resultado-label">UGG soportables (${area}ha)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${balance >= 0 ? '+' : ''}${fmtD(balance)}</div><div class="resultado-label">Balance UGG (${balance>=0?'disponible':'déficit'})</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(forrajeTotalDisponible)} kg</div><div class="resultado-label">Forraje disponible/año</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(consumoAnualHato)} kg</div><div class="resultado-label">Consumo anual hato</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(pctUso,0)}%</div><div class="resultado-label">% de utilización</div></div>
+      </div>
+      <table class="tabla-carga" style="margin-top:1rem;">
+        <thead><tr><th>Categoría</th><th>Cantidad</th><th>Factor UGG</th><th>UGG total</th></tr></thead>
+        <tbody>
+          <tr><td>Vacas adultas (450 kg)</td><td>${vacas}</td><td>1.00</td><td>${fmtD(uggVacas)}</td></tr>
+          <tr><td>Toros (700 kg)</td><td>${toros}</td><td>1.60</td><td>${fmtD(uggToros)}</td></tr>
+          <tr><td>Novillas de levante</td><td>${novillas}</td><td>0.67</td><td>${fmtD(uggNovillas)}</td></tr>
+          <tr><td>Terneros/as</td><td>${terneros}</td><td>0.28</td><td>${fmtD(uggTerneros)}</td></tr>
+          <tr class="total"><td>TOTAL HATO</td><td>${vacas+toros+novillas+terneros} animales</td><td></td><td>${fmtD(uggTotal)} UGG</td></tr>
+        </tbody>
+      </table>
+      <div class="resultado-detalle">
+        <b>Cálculo:</b><br>
+        Forraje disponible: ${fmt(produccion)} kg MS/ha/año × ${(eficiencia*100).toFixed(0)}% eficiencia = <b>${fmt(forrajeDisponibleHa)} kg MS/ha/año</b><br>
+        Consumo UGG: 11.25 kg MS/día × 365 días = 4.106 kg MS/año por UGG<br>
+        Capacidad de carga: ${fmt(forrajeDisponibleHa)} ÷ 4.106 = <b>${fmtD(capacidadCargaUGGha)} UGG/ha</b><br>
+        Para ${area} ha: <b>${fmtD(capacidadCargaTotal)} UGG soportables</b><br>
+        Días de descanso recomendados: ${descanso} días entre pastoreos
+      </div>
+    </div>
+    <div class="alerta-${colorEstado}">
+      ${colorEstado === 'mal' ? '🚨' : colorEstado === 'warn' ? '⚠️' : '✅'} <strong>${estado}.</strong>
+      ${colorEstado === 'mal' ? ` Reducir el hato en ${fmtD(Math.abs(balance))} UGG o aumentar el área/suplementación para evitar degradación de la pastura.` :
+        pctUso < 60 ? ` Hay capacidad disponible para ${fmtD(Math.abs(balance))} UGG adicionales (~${Math.floor(Math.abs(balance))} vacas más).` :
+        ' Monitorear la condición de la pastura periódicamente.'}
+    </div>`;
+}
+
+function calcularAforo() {
+  const cuadrante  = parseFloat(document.getElementById('a-cuadrante').value) || 0.25;
+  const muestras   = parseInt(document.getElementById('a-muestras').value) || 10;
+  const pesoFresco = parseFloat(document.getElementById('a-peso-fresco').value) || 450;
+  const pctMS      = parseFloat(document.getElementById('a-pct-ms').value) / 100;
+  const pctDisp    = parseFloat(document.getElementById('a-pct-disponible').value) / 100;
+
+  // Peso seco por muestra
+  const pesoSecoG = pesoFresco * pctMS;
+  // kg MS/m²
+  const kgMSm2 = (pesoSecoG / 1000) / cuadrante;
+  // kg MS/ha (1 ha = 10.000 m²)
+  const kgMSha = kgMSm2 * 10000;
+  const kgMSdisponible = kgMSha * pctDisp;
+
+  // Estimación anual (asumiendo 8-10 ciclos de pastoreo al año en trópico)
+  const ciclosAno = 9;
+  const produccionAnual = kgMSha * ciclosAno;
+
+  document.getElementById('resultado-aforo').style.display = 'block';
+  document.getElementById('resultado-aforo').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Resultado del Aforo — ${muestras} muestras de ${cuadrante} m²</div>
+      <div class="resultado-grande">${fmt(kgMSha)} kg MS/ha</div>
+      <div class="resultado-sub">Producción de forraje por corte — Disponible: ${fmt(kgMSdisponible)} kg MS/ha</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmtD(kgMSm2,3)} kg/m²</div><div class="resultado-label">Materia seca por m²</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(kgMSha)} kg/ha</div><div class="resultado-label">MS por hectárea (corte)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(kgMSdisponible)} kg/ha</div><div class="resultado-label">Disponible para consumo</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(produccionAnual)} kg/ha/año</div><div class="resultado-label">Estimado anual (${ciclosAno} ciclos)</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Cálculo:</b><br>
+        Peso seco por muestra: ${fmt(pesoFresco)}g fresco × ${(pctMS*100).toFixed(0)}% MS = <b>${fmtD(pesoSecoG,0)}g MS</b><br>
+        Por m²: ${fmtD(pesoSecoG,0)}g ÷ ${cuadrante}m² = <b>${fmtD(kgMSm2*1000,0)}g/m² = ${fmtD(kgMSm2,3)} kg/m²</b><br>
+        Por hectárea: ${fmtD(kgMSm2,3)} kg/m² × 10.000 m² = <b>${fmt(kgMSha)} kg MS/ha por corte</b><br>
+        Disponible (${(pctDisp*100).toFixed(0)}% — dejando remanente): <b>${fmt(kgMSdisponible)} kg MS/ha</b><br><br>
+        💡 Usa este valor en la pestaña "Capacidad de Carga" como producción de forraje por ciclo, o multiplica por el número de ciclos de pastoreo al año.
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
