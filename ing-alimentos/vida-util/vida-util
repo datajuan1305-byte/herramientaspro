@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Vida Útil Alimentos Arrhenius 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de vida útil de alimentos por modelo de Arrhenius para ingenieros de alimentos colombianos. Estimación por temperatura, Q10 y aceleración térmica." />
+  <meta name="keywords" content="vida util alimentos colombia, modelo arrhenius alimentos, Q10 alimentos, shelf life colombia, ingeniero alimentos colombia, INVIMA vida util" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --naranja: #bf360c;
+      --naranja-medio: #e64a19;
+      --naranja-claro: #fbe9e7;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #bf360c 60%, #ff7043 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 120px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--naranja-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--naranja-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--naranja-medio); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--naranja-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--naranja-medio); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--naranja); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--naranja-claro); border-left: 4px solid var(--naranja-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--naranja); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #bf360c 100%);
+      border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-vida { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.2rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.73rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .tabla-proyeccion { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 0.8rem; }
+    .tabla-proyeccion th { background: rgba(255,255,255,0.15); color: #fff; padding: 8px 10px; text-align: center; }
+    .tabla-proyeccion td { padding: 7px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; color: #fff; }
+    .tabla-proyeccion tr.referencia td { background: rgba(255,224,130,0.2); font-weight: 700; color: #ffe082; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--naranja-claro); }
+
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.73rem; font-weight: 700; }
+    .badge-ok   { background: #d4edda; color: #155724; }
+    .badge-warn { background: #fff3cd; color: #856404; }
+    .badge-mal  { background: #f8d7da; color: #721c24; }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🧪 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Vida Útil Alimentos</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🧪 Ingenieros de Alimentos</div>
+  <h1>Calculadora Vida Útil de Alimentos 2026</h1>
+  <p>Estimación de vida útil por modelo de Arrhenius, factor Q10 y estudios acelerados de temperatura. Referencia para declaración ante INVIMA Colombia.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 Referencia INVIMA</span>
+    <span class="hero-chip">🌡️ Modelo Arrhenius</span>
+    <span class="hero-chip">⚡ Factor Q10</span>
+    <span class="hero-chip">📊 Estudios acelerados</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('arrhenius', this)">🌡️ Modelo Arrhenius</button>
+    <button class="tab-btn" onclick="mostrarTab('q10', this)">⚡ Factor Q10</button>
+    <button class="tab-btn" onclick="mostrarTab('acelerado', this)">🔬 Estudio Acelerado</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Referencia</button>
+  </div>
+
+  <!-- TAB 1: ARRHENIUS -->
+  <div id="tab-arrhenius" class="tab-panel active">
+    <div class="card">
+      <h2>🌡️ Modelo de Arrhenius — Vida Útil por Temperatura</h2>
+      <div class="info-box">
+        <strong>Modelo de Arrhenius:</strong> La velocidad de deterioro de un alimento aumenta exponencialmente con la temperatura. Con la energía de activación (Ea) y la constante de velocidad a una temperatura de referencia, se puede predecir la vida útil a cualquier temperatura de almacenamiento.
+      </div>
+
+      <h3>Datos de referencia (condición conocida)</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Temperatura de referencia (°C)</label>
+          <input type="number" id="a-temp-ref" value="25" min="-20" max="60" step="1" />
+          <span class="form-hint">Temperatura a la que se conoce la vida útil</span>
+        </div>
+        <div class="form-group">
+          <label>Vida útil conocida a esa temperatura</label>
+          <input type="number" id="a-vida-ref" value="12" min="0.1" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Unidad de tiempo</label>
+          <select id="a-unidad">
+            <option value="dias" selected>Días</option>
+            <option value="semanas">Semanas</option>
+            <option value="meses">Meses</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Energía de activación — Ea (kJ/mol)</label>
+          <input type="number" id="a-ea" value="80" min="10" max="200" step="1" />
+          <span class="form-hint">Típico: lácteos 60–90, grasas 50–100, microbiológico 80–120</span>
+        </div>
+      </div>
+
+      <h3>Temperatura objetivo de almacenamiento</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Temperatura objetivo (°C)</label>
+          <input type="number" id="a-temp-obj" value="4" min="-20" max="60" step="1" />
+          <span class="form-hint">Temperatura real de almacenamiento / distribución</span>
+        </div>
+        <div class="form-group">
+          <label>Tipo de producto</label>
+          <select id="a-producto" onchange="autoEa()">
+            <option value="lacteo">Lácteos (Ea ≈ 80 kJ/mol)</option>
+            <option value="carne">Carnes y pescados (Ea ≈ 100 kJ/mol)</option>
+            <option value="grasa">Grasas y aceites (Ea ≈ 70 kJ/mol)</option>
+            <option value="panificado">Panificados (Ea ≈ 60 kJ/mol)</option>
+            <option value="fruta">Frutas y verduras (Ea ≈ 50 kJ/mol)</option>
+            <option value="bebida">Bebidas (Ea ≈ 90 kJ/mol)</option>
+            <option value="enlatado">Enlatados / conservas (Ea ≈ 110 kJ/mol)</option>
+            <option value="custom">Personalizado</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularArrhenius()">🌡️ Calcular Vida Útil</button>
+    </div>
+    <div id="resultado-arrhenius" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: Q10 -->
+  <div id="tab-q10" class="tab-panel">
+    <div class="card">
+      <h2>⚡ Factor Q10 — Regla de Van't Hoff</h2>
+      <div class="info-box">
+        <strong>Q10:</strong> Indica cuántas veces aumenta la velocidad de deterioro por cada 10°C de incremento de temperatura. La mayoría de alimentos tiene Q10 entre 1.5 y 3.0. A mayor Q10, más sensible es el producto a la temperatura.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Vida útil conocida (días)</label>
+          <input type="number" id="q-vida-ref" value="30" min="0.1" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Temperatura de referencia (°C)</label>
+          <input type="number" id="q-temp-ref" value="25" min="-20" max="60" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Factor Q10</label>
+          <input type="number" id="q-q10" value="2.0" min="1.1" max="5" step="0.1" />
+          <span class="form-hint">Típico: 1.5–3.0 | Microbiológico: 2–4 | Enzimático: 1.5–2.5</span>
+        </div>
+        <div class="form-group">
+          <label>Temperatura objetivo (°C)</label>
+          <input type="number" id="q-temp-obj" value="4" min="-20" max="60" step="1" />
+        </div>
+      </div>
+      <button class="btn" onclick="calcularQ10()">⚡ Calcular con Q10</button>
+    </div>
+    <div id="resultado-q10" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: ESTUDIO ACELERADO -->
+  <div id="tab-acelerado" class="tab-panel">
+    <div class="card">
+      <h2>🔬 Diseño de Estudio de Vida Útil Acelerado (ASLT)</h2>
+      <div class="info-box">
+        <strong>Accelerated Shelf Life Testing (ASLT):</strong> Se almacena el producto a temperatura elevada para acelerar el deterioro y predecir la vida útil a temperatura normal en menor tiempo. Metodología aceptada por INVIMA para declaración de fecha de vencimiento.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Temperatura normal de almacenamiento (°C)</label>
+          <input type="number" id="ac-temp-normal" value="25" min="-20" max="50" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Temperatura acelerada de estudio (°C)</label>
+          <input type="number" id="ac-temp-acelerada" value="40" min="20" max="70" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Vida útil esperada (meses)</label>
+          <input type="number" id="ac-vida-esperada" value="12" min="1" max="60" step="1" />
+          <span class="form-hint">Vida útil que se desea declarar</span>
+        </div>
+        <div class="form-group">
+          <label>Factor Q10 del producto</label>
+          <input type="number" id="ac-q10" value="2.0" min="1.1" max="5" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Energía de activación Ea (kJ/mol)</label>
+          <input type="number" id="ac-ea" value="80" min="10" max="200" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Parámetro de deterioro a monitorear</label>
+          <select id="ac-parametro">
+            <option value="sensorial">Sensorial (color, sabor, textura)</option>
+            <option value="microbiologico">Microbiológico</option>
+            <option value="fisicoquimico">Fisicoquímico (pH, acidez, humedad)</option>
+            <option value="oxidacion">Oxidación lipídica (TBARS, índice peróxido)</option>
+            <option value="vitaminas">Degradación de vitaminas</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularASLT()">🔬 Diseñar Estudio Acelerado</button>
+    </div>
+    <div id="resultado-aslt" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 4: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Valores de Energía de Activación (Ea) por Reacción</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Tipo de reacción / producto</th><th>Ea (kJ/mol)</th><th>Q10 típico</th><th>Mecanismo</th></tr></thead>
+          <tbody>
+            <tr><td>Oxidación lipídica (aceites)</td><td>50–100</td><td>1.5–2.5</td><td>Rancidez oxidativa</td></tr>
+            <tr><td>Reacción de Maillard (pardeamiento)</td><td>100–160</td><td>2–5</td><td>Azúcares + aminoácidos</td></tr>
+            <tr><td>Degradación de vitamina C</td><td>60–100</td><td>2–3</td><td>Oxidación ácido ascórbico</td></tr>
+            <tr><td>Crecimiento microbiano (mesófilos)</td><td>80–120</td><td>2–4</td><td>Multiplicación bacteriana</td></tr>
+            <tr><td>Degradación de clorofila</td><td>50–90</td><td>2–3</td><td>Oxidación / acidez</td></tr>
+            <tr><td>Hidrólisis de proteínas</td><td>60–100</td><td>1.5–2.5</td><td>Enzimática / química</td></tr>
+            <tr><td>Retrogradación del almidón</td><td>40–80</td><td>1.5–2</td><td>Envejecimiento panificados</td></tr>
+            <tr><td>Deterioro lácteos (pasteurizados)</td><td>70–100</td><td>2–3</td><td>Microbiano + enzimático</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Temperaturas de Almacenamiento — Colombia (INVIMA)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Condición</th><th>Temperatura</th><th>Productos típicos</th><th>Normativa</th></tr></thead>
+          <tbody>
+            <tr><td><b>Congelación</b></td><td>≤ −18°C</td><td>Carnes, helados, pescado</td><td>Decreto 1500/07</td></tr>
+            <tr><td><b>Refrigeración</b></td><td>0 – 4°C</td><td>Lácteos, carnes frescas, frutas cortadas</td><td>Resolución 2674/13</td></tr>
+            <tr><td><b>Refrigeración moderada</b></td><td>4 – 8°C</td><td>Huevos, embutidos, quesos</td><td>NTC 1325</td></tr>
+            <tr><td><b>Temperatura ambiente Colombia</b></td><td>18 – 30°C</td><td>Productos secos, conservas, bebidas</td><td>—</td></tr>
+            <tr><td><b>Condición acelerada ASLT</b></td><td>37 – 45°C</td><td>Estudios de vida útil acelerados</td><td>ICMSF / Codex</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Vida Útil Típica de Alimentos Colombianos</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Producto</th><th>Temperatura</th><th>Vida útil típica</th><th>Factor limitante</th></tr></thead>
+          <tbody>
+            <tr><td>Leche pasteurizada</td><td>4°C</td><td>15–21 días</td><td>Microbiano</td></tr>
+            <tr><td>Yogur</td><td>4°C</td><td>21–45 días</td><td>Post-acidificación</td></tr>
+            <tr><td>Queso fresco</td><td>4°C</td><td>7–15 días</td><td>Microbiano / humedad</td></tr>
+            <tr><td>Carne fresca bovina</td><td>0–4°C</td><td>3–7 días</td><td>Microbiano / oxidación</td></tr>
+            <tr><td>Pollo fresco</td><td>0–4°C</td><td>2–4 días</td><td>Microbiano</td></tr>
+            <tr><td>Pan artesanal</td><td>Ambiente</td><td>2–5 días</td><td>Mohos / retrogradación</td></tr>
+            <tr><td>Aceite vegetal refinado</td><td>Ambiente</td><td>12–24 meses</td><td>Oxidación lipídica</td></tr>
+            <tr><td>Mermelada (azúcar alta)</td><td>Ambiente</td><td>12–18 meses</td><td>Pardeamiento / cristalización</td></tr>
+            <tr><td>Jugo pasteurizado envasado</td><td>4°C</td><td>30–60 días</td><td>Vitamina C / pardeamiento</td></tr>
+            <tr><td>Chorizo / embutido cocido</td><td>4°C</td><td>15–30 días</td><td>Microbiano / oxidación</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los resultados son estimaciones matemáticas basadas en modelos teóricos. La vida útil declarada ante el INVIMA debe estar respaldada por <strong>estudios experimentales validados</strong> (análisis microbiológicos, fisicoquímicos y sensoriales) realizados por un laboratorio acreditado. Referencia: Labuza & Riboh 1982, Van Boekel 2009, Resolución INVIMA 2674/2013.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n, dec=2) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+const R = 8.314; // J/(mol·K) — constante de gases
+
+function autoEa() {
+  const prod = document.getElementById('a-producto').value;
+  const ea = { lacteo:80, carne:100, grasa:70, panificado:60, fruta:50, bebida:90, enlatado:110, custom:80 };
+  document.getElementById('a-ea').value = ea[prod] || 80;
+}
+
+// ── ARRHENIUS ──
+function calcularArrhenius() {
+  const tempRef  = parseFloat(document.getElementById('a-temp-ref').value) + 273.15;
+  const vidaRef  = parseFloat(document.getElementById('a-vida-ref').value);
+  const unidad   = document.getElementById('a-unidad').value;
+  const ea       = parseFloat(document.getElementById('a-ea').value) * 1000; // J/mol
+  const tempObj  = parseFloat(document.getElementById('a-temp-obj').value) + 273.15;
+
+  // k_ref / k_obj = exp(Ea/R * (1/T_ref - 1/T_obj))
+  // vida_obj = vida_ref * (k_ref / k_obj) = vida_ref * exp(Ea/R * (1/T_obj - 1/T_ref))
+  const factor = Math.exp((ea / R) * (1/tempObj - 1/tempRef));
+  const vidaObj = vidaRef * factor;
+
+  const unidades = { dias:'días', semanas:'semanas', meses:'meses' };
+  const label = unidades[unidad];
+
+  // Factor de aceleración (cuántas veces más rápido deteriora a T_obj vs T_ref)
+  const factorAceleracion = factor < 1 ? 1/factor : factor;
+  const esMasLarga = factor > 1;
+
+  // Proyección a múltiples temperaturas
+  const temps = [-18, 0, 4, 10, 15, 20, 25, 30, 35, 40];
+  const proyeccion = temps.map(t => {
+    const tk = t + 273.15;
+    const f = Math.exp((ea / R) * (1/tk - 1/tempRef));
+    return { temp: t, vida: vidaRef * f };
+  });
+
+  const tempObjC = parseFloat(document.getElementById('a-temp-obj').value);
+
+  document.getElementById('resultado-arrhenius').style.display = 'block';
+  document.getElementById('resultado-arrhenius').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Resultado — Modelo de Arrhenius</div>
+      <div class="resultado-vida">${fmt(vidaObj, 1)} ${label}</div>
+      <div class="resultado-sub">Vida útil estimada a ${tempObjC}°C</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(vidaObj, 1)}</div><div class="resultado-label">Vida útil a ${tempObjC}°C (${label})</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(factor, 2)}×</div><div class="resultado-label">Factor relativo vs referencia</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${ea/1000} kJ/mol</div><div class="resultado-label">Energía activación (Ea)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${vidaRef} ${label}</div><div class="resultado-label">Vida útil referencia (${parseFloat(document.getElementById('a-temp-ref').value)}°C)</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Ecuación de Arrhenius aplicada:</b><br>
+        k(T) = A × exp(−Ea/RT)<br>
+        Factor = exp(Ea/R × (1/T₂ − 1/T₁))<br>
+        Factor = exp(${ea/1000}×1000/8.314 × (1/${fmt(tempObj,2)} − 1/${fmt(tempRef,2)})) = <b>${fmt(factor,4)}</b><br>
+        Vida útil a ${tempObjC}°C = ${vidaRef} × ${fmt(factor,4)} = <b>${fmt(vidaObj,2)} ${label}</b><br>
+        ${esMasLarga ? `✅ A menor temperatura el producto dura <b>${fmt(factor,1)}× más</b> que a la temperatura de referencia.`
+          : `⚠️ A mayor temperatura el producto dura <b>${fmt(1/factor,1)}× menos</b> que a la temperatura de referencia.`}
+      </div>
+      <div style="overflow-x:auto; margin-top:1rem;">
+        <table class="tabla-proyeccion">
+          <thead><tr><th>Temperatura</th><th>Vida útil estimada (${label})</th><th>Factor vs ${parseFloat(document.getElementById('a-temp-ref').value)}°C</th></tr></thead>
+          <tbody>
+            ${proyeccion.map(p => {
+              const f = Math.exp((ea/R)*(1/(p.temp+273.15)-1/tempRef));
+              const esRef = Math.abs(p.temp - (parseFloat(document.getElementById('a-temp-ref').value))) < 0.5;
+              const esObj = Math.abs(p.temp - tempObjC) < 0.5;
+              return `<tr class="${esRef||esObj?'referencia':''}">
+                <td>${p.temp}°C${esRef?' ← Referencia':''}${esObj?' ← Objetivo':''}</td>
+                <td>${fmt(p.vida,1)}</td>
+                <td>${fmt(f,2)}×</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+// ── Q10 ──
+function calcularQ10() {
+  const vidaRef  = parseFloat(document.getElementById('q-vida-ref').value);
+  const tempRef  = parseFloat(document.getElementById('q-temp-ref').value);
+  const q10      = parseFloat(document.getElementById('q-q10').value);
+  const tempObj  = parseFloat(document.getElementById('q-temp-obj').value);
+
+  const deltaT  = tempObj - tempRef;
+  const factor  = Math.pow(q10, deltaT / 10);
+  // vida_obj = vida_ref / factor (si T_obj > T_ref, vida es menor)
+  const vidaObj = vidaRef / factor;
+
+  const temps = [0, 4, 10, 15, 20, 25, 30, 35, 40];
+  const proyeccion = temps.map(t => ({
+    temp: t,
+    vida: vidaRef / Math.pow(q10, (t - tempRef) / 10)
+  }));
+
+  document.getElementById('resultado-q10').style.display = 'block';
+  document.getElementById('resultado-q10').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Resultado — Factor Q10</div>
+      <div class="resultado-vida">${fmt(vidaObj, 1)} días</div>
+      <div class="resultado-sub">Vida útil estimada a ${tempObj}°C con Q10 = ${q10}</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(vidaObj,1)} días</div><div class="resultado-label">Vida útil a ${tempObj}°C</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${q10}</div><div class="resultado-label">Factor Q10</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(factor,2)}×</div><div class="resultado-label">Factor aceleración</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${deltaT > 0 ? '+' : ''}${deltaT}°C</div><div class="resultado-label">Diferencia de temperatura</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Fórmula Q10:</b> Vida útil(T₂) = Vida útil(T₁) ÷ Q10^((T₂−T₁)/10)<br>
+        ΔT = ${tempObj}°C − ${tempRef}°C = ${deltaT}°C<br>
+        Factor = Q10^(ΔT/10) = ${q10}^(${deltaT}/10) = <b>${fmt(factor,4)}</b><br>
+        Vida útil a ${tempObj}°C = ${vidaRef} ÷ ${fmt(factor,4)} = <b>${fmt(vidaObj,2)} días</b>
+      </div>
+      <div style="overflow-x:auto; margin-top:1rem;">
+        <table class="tabla-proyeccion">
+          <thead><tr><th>Temperatura</th><th>Vida útil (días)</th><th>Vida útil (meses)</th></tr></thead>
+          <tbody>
+            ${proyeccion.map(p => {
+              const esRef = Math.abs(p.temp - tempRef) < 0.5;
+              const esObj = Math.abs(p.temp - tempObj) < 0.5;
+              return `<tr class="${esRef||esObj?'referencia':''}">
+                <td>${p.temp}°C${esRef?' ← Ref':''}${esObj?' ← Objetivo':''}</td>
+                <td>${fmt(Math.max(0,p.vida),1)}</td>
+                <td>${fmt(Math.max(0,p.vida/30),1)}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+// ── ASLT ──
+function calcularASLT() {
+  const tNormal    = parseFloat(document.getElementById('ac-temp-normal').value);
+  const tAcelerada = parseFloat(document.getElementById('ac-temp-acelerada').value);
+  const vidaEsperada = parseFloat(document.getElementById('ac-vida-esperada').value);
+  const q10        = parseFloat(document.getElementById('ac-q10').value);
+  const ea         = parseFloat(document.getElementById('ac-ea').value) * 1000;
+  const parametro  = document.getElementById('ac-parametro').value;
+
+  const deltaT = tAcelerada - tNormal;
+  const factorQ10 = Math.pow(q10, deltaT / 10);
+  const factorArr = Math.exp((ea/R)*((1/(tNormal+273.15))-(1/(tAcelerada+273.15))));
+
+  // Duración del estudio acelerado
+  const duracionQ10 = (vidaEsperada * 30) / factorQ10; // en días
+  const duracionArr = (vidaEsperada * 30) / factorArr;
+
+  // Puntos de muestreo sugeridos (7 puntos distribuidos)
+  const nPuntos = 7;
+  const intervaloDias = Math.round(duracionQ10 / (nPuntos - 1));
+  const puntosQ10 = Array.from({length: nPuntos}, (_, i) => Math.round(i * intervaloDias));
+
+  const paramLabels = {
+    sensorial: 'Análisis sensorial (panel entrenado)',
+    microbiologico: 'Recuento microbiano (UFC/g)',
+    fisicoquimico: 'pH, acidez, Aw, humedad',
+    oxidacion: 'TBARS, índice de peróxido, anisidina',
+    vitaminas: 'HPLC vitaminas (C, B1, B2, etc.)'
+  };
+
+  document.getElementById('resultado-aslt').style.display = 'block';
+  document.getElementById('resultado-aslt').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Diseño Estudio ASLT — Vida útil declarada: ${vidaEsperada} meses a ${tNormal}°C</div>
+      <div class="resultado-vida">${fmt(duracionQ10, 0)} días</div>
+      <div class="resultado-sub">Duración del estudio acelerado a ${tAcelerada}°C (modelo Q10)</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(duracionQ10,0)} días</div><div class="resultado-label">Duración estudio (Q10)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(duracionArr,0)} días</div><div class="resultado-label">Duración estudio (Arrhenius)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(factorQ10,1)}×</div><div class="resultado-label">Factor aceleración</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${nPuntos} puntos</div><div class="resultado-label">Muestreos sugeridos</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Condiciones del estudio:</b><br>
+        Temperatura normal: ${tNormal}°C | Temperatura acelerada: ${tAcelerada}°C | ΔT: +${deltaT}°C<br>
+        Factor aceleración Q10: ${q10}^(${deltaT}/10) = <b>${fmt(factorQ10,2)}×</b><br>
+        Factor aceleración Arrhenius (Ea=${ea/1000} kJ/mol): <b>${fmt(factorArr,2)}×</b><br>
+        Vida útil esperada: ${vidaEsperada} meses (${vidaEsperada*30} días a ${tNormal}°C)<br>
+        <b>Duración del estudio acelerado: ${fmt(duracionQ10,0)} días (~${fmt(duracionQ10/30,1)} meses) a ${tAcelerada}°C</b><br><br>
+        <b>Parámetro a monitorear:</b> ${paramLabels[parametro]}<br><br>
+        <b>Cronograma de muestreo sugerido (días):</b><br>
+        ${puntosQ10.map((d,i) => `Punto ${i+1}: día ${d}`).join(' | ')}
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,0.12); border-radius:8px; padding:1rem; margin-top:0.8rem; color:#fff; font-size:0.83rem;">
+      <b style="color:#ffe082;">📋 Documentos requeridos por INVIMA:</b><br>
+      • Protocolo del estudio con fundamento científico<br>
+      • Resultados de análisis en puntos de muestreo definidos<br>
+      • Concepto de un profesional competente (Ing. de Alimentos o similar)<br>
+      • Validación con estudio en tiempo real en condiciones normales (paralelo)
+    </div>`;
+}
+</script>
+</body>
+</html>
