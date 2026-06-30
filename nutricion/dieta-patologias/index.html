@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plan Nutricional Diabetes e Hipertensión Colombia 2026 — HerramientasPro</title>
+  <meta name="description" content="Planificador de dieta para diabetes tipo 2 e hipertensión arterial para nutricionistas colombianos. Calorías, sodio, carbohidratos y plan de comidas." />
+  <meta name="keywords" content="dieta diabetes colombia, dieta hipertension HTA, plan nutricional diabetes tipo 2, dieta DASH sodio, nutricionista colombia 2026" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --rojo-salud: #c62828;
+      --rojo-medio: #d32f2f;
+      --rojo-claro: #ffebee;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+    nav { background: var(--azul-navbar); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #c62828 60%, #ef5350 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 580px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+    .container { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 110px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--rojo-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--rojo-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--rojo-medio); padding-left: 8px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--rojo-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+    .btn { width: 100%; padding: 12px; background: var(--rojo-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--rojo-salud); }
+    .btn:active { transform: scale(0.98); }
+    .info-box { background: var(--rojo-claro); border-left: 4px solid var(--rojo-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--rojo-salud); }
+
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #c62828 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grande { font-size: 2.8rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.1rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .comidas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 0.7rem; margin-top: 1rem; }
+    .comida-card { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.8rem; font-size: 0.8rem; }
+    .comida-nombre { font-weight: 700; color: #ffe082; font-size: 0.85rem; margin-bottom: 4px; }
+
+    .alimentos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    @media(max-width:600px) { .alimentos-grid { grid-template-columns: 1fr; } }
+    .alimentos-col { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 0.8rem; font-size: 0.8rem; }
+    .alimentos-col.permitidos { border-left: 3px solid #66bb6a; }
+    .alimentos-col.evitar { border-left: 3px solid #ef5350; }
+    .alimentos-col h4 { font-size: 0.85rem; margin-bottom: 0.5rem; color: #ffe082; }
+    .alimentos-col ul { padding-left: 1.2rem; }
+    .alimentos-col li { margin-bottom: 3px; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--rojo-claro); }
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🥗 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Dieta Patologías</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🥗 Nutricionistas — Diabetes e Hipertensión</div>
+  <h1>Plan Nutricional para Diabetes e Hipertensión 2026</h1>
+  <p>Calcula el VCT, distribución de carbohidratos, límite de sodio y genera el plan de comidas para pacientes con diabetes tipo 2, hipertensión arterial o ambas condiciones.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🩸 Diabetes tipo 2</span>
+    <span class="hero-chip">💓 Hipertensión / DASH</span>
+    <span class="hero-chip">🧂 Control de sodio</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('plan', this)">📋 Plan Nutricional</button>
+    <button class="tab-btn" onclick="mostrarTab('alimentos', this)">🍽️ Alimentos</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📚 Referencia Clínica</button>
+  </div>
+
+  <!-- TAB 1: PLAN -->
+  <div id="tab-plan" class="tab-panel active">
+    <div class="card">
+      <h2>📋 Generador de Plan Nutricional</h2>
+      <div class="info-box">
+        <strong>¿Cómo funciona?</strong> Selecciona la(s) condición(es) del paciente. La calculadora ajusta automáticamente el VCT, la distribución de macronutrientes, el límite de sodio y genera el plan de comidas correspondiente.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Condición(es) del paciente</label>
+          <select id="p-condicion" onchange="actualizarCondicion()">
+            <option value="diabetes" selected>Diabetes tipo 2</option>
+            <option value="hta">Hipertensión arterial (HTA)</option>
+            <option value="ambas">Diabetes + Hipertensión</option>
+            <option value="prediabetes">Prediabetes / Síndrome metabólico</option>
+            <option value="renal-diabetes">Diabetes + Enfermedad renal</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Sexo biológico</label>
+          <select id="p-sexo">
+            <option value="M" selected>Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Edad (años)</label>
+          <input type="number" id="p-edad" value="55" min="18" max="95" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Peso actual (kg)</label>
+          <input type="number" id="p-peso" value="78" min="35" max="200" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Talla (cm)</label>
+          <input type="number" id="p-talla" value="165" min="130" max="210" step="1" />
+        </div>
+        <div class="form-group">
+          <label>Nivel de actividad física</label>
+          <select id="p-actividad">
+            <option value="1.2">Sedentario</option>
+            <option value="1.375" selected>Ligeramente activo</option>
+            <option value="1.55">Moderadamente activo</option>
+            <option value="1.725">Muy activo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Presión arterial actual (sistólica/diastólica)</label>
+          <input type="text" id="p-pa" value="148/92" placeholder="Ej: 140/90" />
+        </div>
+        <div class="form-group">
+          <label>Glicemia en ayunas (mg/dL)</label>
+          <input type="number" id="p-glicemia" value="165" min="60" max="500" step="1" />
+        </div>
+        <div class="form-group">
+          <label>HbA1c (%) — si disponible</label>
+          <input type="number" id="p-hba1c" value="7.8" min="4" max="15" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label>Objetivo de peso</label>
+          <select id="p-objetivo">
+            <option value="mantener">Mantener peso actual</option>
+            <option value="perder" selected>Pérdida de peso (5–10%)</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularPlan()">📋 Generar Plan Nutricional</button>
+    </div>
+    <div id="resultado-plan" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: ALIMENTOS -->
+  <div id="tab-alimentos" class="tab-panel">
+    <div class="card">
+      <h2>🍽️ Guía de Alimentos — Diabetes Tipo 2</h2>
+      <div class="alimentos-grid">
+        <div style="background:#e8f5e9; border-left:3px solid #2e7d32; border-radius:8px; padding:0.9rem;">
+          <h4 style="color:#1b5e20;">✅ Recomendados</h4>
+          <ul style="font-size:0.85rem; padding-left:1.2rem;">
+            <li>Verduras no almidonadas (brócoli, espinaca, lechuga, pepino)</li>
+            <li>Granos enteros (avena, quinua, arroz integral)</li>
+            <li>Legumbres (fríjol, lenteja, garbanzo)</li>
+            <li>Proteínas magras (pollo sin piel, pescado, huevo)</li>
+            <li>Frutas enteras con moderación (manzana, pera, fresas)</li>
+            <li>Grasas saludables (aguacate, aceite de oliva, frutos secos)</li>
+            <li>Lácteos bajos en grasa sin azúcar añadida</li>
+          </ul>
+        </div>
+        <div style="background:#ffebee; border-left:3px solid #c62828; border-radius:8px; padding:0.9rem;">
+          <h4 style="color:#b71c1c;">❌ Evitar / Limitar</h4>
+          <ul style="font-size:0.85rem; padding-left:1.2rem;">
+            <li>Azúcar refinada, panela, miel en exceso</li>
+            <li>Bebidas azucaradas, jugos en caja, gaseosas</li>
+            <li>Harinas refinadas (pan blanco, pasteles)</li>
+            <li>Frituras y alimentos procesados</li>
+            <li>Frutas en almíbar o jugos concentrados</li>
+            <li>Alcohol en exceso</li>
+            <li>Productos light con exceso de fructosa</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>🍽️ Guía de Alimentos — Hipertensión / Dieta DASH</h2>
+      <div class="alimentos-grid">
+        <div style="background:#e8f5e9; border-left:3px solid #2e7d32; border-radius:8px; padding:0.9rem;">
+          <h4 style="color:#1b5e20;">✅ Recomendados</h4>
+          <ul style="font-size:0.85rem; padding-left:1.2rem;">
+            <li>Frutas y verduras frescas (ricas en potasio)</li>
+            <li>Lácteos bajos en grasa</li>
+            <li>Granos enteros</li>
+            <li>Pescado, aves sin piel, legumbres</li>
+            <li>Frutos secos sin sal añadida</li>
+            <li>Hierbas y especias naturales (orégano, comino, ajo)</li>
+            <li>Aceite de oliva, aguacate</li>
+          </ul>
+        </div>
+        <div style="background:#ffebee; border-left:3px solid #c62828; border-radius:8px; padding:0.9rem;">
+          <h4 style="color:#b71c1c;">❌ Evitar / Limitar</h4>
+          <ul style="font-size:0.85rem; padding-left:1.2rem;">
+            <li>Sal de mesa y caldos concentrados (cubitos)</li>
+            <li>Embutidos (chorizo, salchichón, jamón, mortadela)</li>
+            <li>Enlatados y conservas (sopas, atún en lata sin lavar)</li>
+            <li>Quesos curados y procesados</li>
+            <li>Comida rápida y snacks empacados (papas, pasabocas)</li>
+            <li>Salsas industriales (soya, inglesa, tomate comercial)</li>
+            <li>Alimentos ahumados y encurtidos</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📚 Metas Clínicas — Diabetes Tipo 2 (ALAD / ADA)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Parámetro</th><th>Meta general</th><th>Meta individualizada (adulto mayor/frágil)</th></tr></thead>
+          <tbody>
+            <tr><td>HbA1c</td><td>&lt; 7.0%</td><td>&lt; 8.0%</td></tr>
+            <tr><td>Glicemia en ayunas</td><td>80–130 mg/dL</td><td>90–150 mg/dL</td></tr>
+            <tr><td>Glicemia postprandial (2h)</td><td>&lt; 180 mg/dL</td><td>&lt; 200 mg/dL</td></tr>
+            <tr><td>Presión arterial (si diabético)</td><td>&lt; 130/80 mmHg</td><td>&lt; 140/90 mmHg</td></tr>
+            <tr><td>LDL colesterol</td><td>&lt; 100 mg/dL (&lt;70 si alto riesgo CV)</td><td>&lt; 130 mg/dL</td></tr>
+            <tr><td>Distribución carbohidratos</td><td>40–50% del VCT, preferir IG bajo</td><td>Individualizar</td></tr>
+            <tr><td>Fibra dietética</td><td>25–35 g/día</td><td>Según tolerancia</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📚 Clasificación de Presión Arterial (ACC/AHA 2017)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Categoría</th><th>Sistólica (mmHg)</th><th>Diastólica (mmHg)</th><th>Sodio máximo recomendado</th></tr></thead>
+          <tbody>
+            <tr><td>Normal</td><td>&lt; 120</td><td>&lt; 80</td><td>&lt; 2.300 mg/día</td></tr>
+            <tr><td>Elevada</td><td>120–129</td><td>&lt; 80</td><td>&lt; 2.300 mg/día</td></tr>
+            <tr><td>HTA Estadio 1</td><td>130–139</td><td>80–89</td><td>&lt; 1.500–2.000 mg/día</td></tr>
+            <tr><td>HTA Estadio 2</td><td>≥ 140</td><td>≥ 90</td><td>&lt; 1.500 mg/día (dieta DASH estricta)</td></tr>
+            <tr><td>Crisis hipertensiva</td><td>&gt; 180</td><td>&gt; 120</td><td>Atención médica inmediata</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📚 Contenido de Sodio en Alimentos Comunes (Colombia)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Alimento</th><th>Porción</th><th>Sodio (mg)</th></tr></thead>
+          <tbody>
+            <tr><td>Sal de mesa</td><td>1 cucharadita (5g)</td><td>2.000 mg</td></tr>
+            <tr><td>Caldo de pollo en cubito</td><td>1 cubito</td><td>1.200–1.800 mg</td></tr>
+            <tr><td>Salchicha/chorizo</td><td>1 unidad (50g)</td><td>450–600 mg</td></tr>
+            <tr><td>Queso costeño/campesino</td><td>30g</td><td>250–400 mg</td></tr>
+            <tr><td>Sopa enlatada</td><td>1 taza</td><td>700–900 mg</td></tr>
+            <tr><td>Pan blanco</td><td>1 tajada</td><td>120–180 mg</td></tr>
+            <tr><td>Papas fritas paquete</td><td>1 bolsa pequeña</td><td>180–250 mg</td></tr>
+            <tr><td>Salsa de soya</td><td>1 cucharada</td><td>900–1.000 mg</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> El plan nutricional definitivo debe ser elaborado y supervisado por un <strong>Nutricionista-Dietista graduado</strong>, en coordinación con el médico tratante. Los pacientes con diabetes e hipertensión requieren seguimiento médico continuo y ajuste de medicación según evolución. Referencias: ADA Standards of Care 2024, ALAD, Guía DASH NIH, MinSalud Colombia.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n, dec=0) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function fmtD(n,d=1) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+
+function calcTMB(sexo, peso, talla, edad) {
+  if (sexo === 'M') return 10*peso + 6.25*talla - 5*edad + 5;
+  return 10*peso + 6.25*talla - 5*edad - 161;
+}
+
+const condicionData = {
+  diabetes:        { sodioMax:2300, pctCHO:[40,50], pctProt:[20,25], pctGrasa:[25,35], deficit:500, nombre:'Diabetes Tipo 2' },
+  hta:              { sodioMax:1500, pctCHO:[50,55], pctProt:[18,20], pctGrasa:[25,30], deficit:300, nombre:'Hipertensión Arterial (DASH)' },
+  ambas:            { sodioMax:1500, pctCHO:[40,45], pctProt:[20,25], pctGrasa:[25,30], deficit:500, nombre:'Diabetes + Hipertensión' },
+  prediabetes:      { sodioMax:2000, pctCHO:[45,50], pctProt:[20,25], pctGrasa:[25,30], deficit:500, nombre:'Prediabetes / Síndrome Metabólico' },
+  'renal-diabetes': { sodioMax:2000, pctCHO:[45,50], pctProt:[10,12], pctGrasa:[30,35], deficit:300, nombre:'Diabetes + Enfermedad Renal' },
+};
+
+function actualizarCondicion() {
+  // Solo informativo, los cálculos se hacen en calcularPlan
+}
+
+function calcularPlan() {
+  const condKey  = document.getElementById('p-condicion').value;
+  const cond     = condicionData[condKey];
+  const sexo     = document.getElementById('p-sexo').value;
+  const edad     = parseFloat(document.getElementById('p-edad').value) || 55;
+  const peso     = parseFloat(document.getElementById('p-peso').value) || 75;
+  const talla    = parseFloat(document.getElementById('p-talla').value) || 165;
+  const activ    = parseFloat(document.getElementById('p-actividad').value) || 1.375;
+  const pa       = document.getElementById('p-pa').value || '120/80';
+  const glicemia = parseFloat(document.getElementById('p-glicemia').value) || 100;
+  const hba1c    = parseFloat(document.getElementById('p-hba1c').value) || 6.0;
+  const objetivo = document.getElementById('p-objetivo').value;
+
+  const tmb = calcTMB(sexo, peso, talla, edad);
+  const get = tmb * activ;
+  const deficit = objetivo === 'perder' ? cond.deficit : 0;
+  const vct = Math.round(get - deficit);
+
+  const pctCHOmedio   = (cond.pctCHO[0] + cond.pctCHO[1]) / 2;
+  const pctProtMedio  = (cond.pctProt[0] + cond.pctProt[1]) / 2;
+  const pctGrasaMedio = (cond.pctGrasa[0] + cond.pctGrasa[1]) / 2;
+
+  const grCHO   = Math.round(vct * pctCHOmedio/100 / 4);
+  const grProt  = Math.round(vct * pctProtMedio/100 / 4);
+  const grGrasa = Math.round(vct * pctGrasaMedio/100 / 9);
+
+  // Análisis de presión arterial
+  const [sis, dia] = pa.split('/').map(s => parseInt(s.trim()) || 0);
+  let claseHTA, colorHTA;
+  if (sis < 120 && dia < 80)       { claseHTA = 'Normal'; colorHTA = '#2e7d32'; }
+  else if (sis < 130)              { claseHTA = 'Elevada'; colorHTA = '#f9a825'; }
+  else if (sis < 140 || dia < 90)  { claseHTA = 'HTA Estadio 1'; colorHTA = '#f57c00'; }
+  else if (sis < 180)              { claseHTA = 'HTA Estadio 2'; colorHTA = '#c62828'; }
+  else                              { claseHTA = '⚠️ Crisis hipertensiva — Derivar urgente'; colorHTA = '#b71c1c'; }
+
+  // Análisis glicemia
+  let claseGlic, colorGlic;
+  if (glicemia < 100)       { claseGlic = 'Normal'; colorGlic = '#2e7d32'; }
+  else if (glicemia < 126)  { claseGlic = 'Prediabetes (glic. alterada)'; colorGlic = '#f9a825'; }
+  else if (glicemia < 180)  { claseGlic = 'Diabetes — control aceptable'; colorGlic = '#f57c00'; }
+  else                       { claseGlic = '⚠️ Diabetes — control deficiente'; colorGlic = '#c62828'; }
+
+  // Distribución de comidas (5 comidas, fraccionando CHO para diabetes)
+  const comidas = [
+    { nombre:'Desayuno', pct:0.20 },
+    { nombre:'Media mañana', pct:0.10 },
+    { nombre:'Almuerzo', pct:0.30 },
+    { nombre:'Merienda', pct:0.10 },
+    { nombre:'Cena', pct:0.30 },
+  ];
+
+  // IMC
+  const imc = peso / Math.pow(talla/100, 2);
+  const pesoIdeal = 22 * Math.pow(talla/100, 2);
+  const pesoPerder = objetivo === 'perder' ? Math.max(0, peso - pesoIdeal*1.05) : 0;
+
+  document.getElementById('resultado-plan').style.display = 'block';
+  document.getElementById('resultado-plan').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Plan Nutricional — ${cond.nombre}</div>
+      <div class="resultado-grande">${fmt(vct)} kcal/día</div>
+      <div class="resultado-sub">VCT objetivo — TMB: ${fmt(tmb)} kcal | GET: ${fmt(get)} kcal ${deficit>0?`| Déficit: ${deficit} kcal`:''}</div>
+
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor" style="color:#ffcc80;">${grCHO}g</div><div class="resultado-label">Carbohidratos (${pctCHOmedio.toFixed(0)}%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor" style="color:#ef9a9a;">${grProt}g</div><div class="resultado-label">Proteína (${pctProtMedio.toFixed(0)}%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor" style="color:#a5d6a7;">${grGrasa}g</div><div class="resultado-label">Grasa (${pctGrasaMedio.toFixed(0)}%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(cond.sodioMax)} mg</div><div class="resultado-label">Sodio máximo/día</div></div>
+        <div class="resultado-item"><div class="resultado-valor" style="color:${colorHTA}">${pa}</div><div class="resultado-label">PA — ${claseHTA}</div></div>
+        <div class="resultado-item"><div class="resultado-valor" style="color:${colorGlic}">${glicemia} mg/dL</div><div class="resultado-label">Glicemia — ${claseGlic}</div></div>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <div style="font-size:0.78rem; opacity:0.7; margin-bottom:0.5rem; text-transform:uppercase;">Distribución por comidas (CHO fraccionado)</div>
+        <div class="comidas-grid">
+          ${comidas.map(c => `<div class="comida-card">
+            <div class="comida-nombre">${c.nombre}</div>
+            <div>${fmt(vct*c.pct)} kcal</div>
+            <div style="font-size:0.75rem; opacity:0.8;">CHO: ${fmt(grCHO*c.pct)}g | Sodio máx: ${fmt(cond.sodioMax*c.pct)}mg</div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="resultado-detalle">
+        <b>IMC actual:</b> ${fmtD(imc)} kg/m² | <b>Peso ideal estimado:</b> ${fmt(pesoIdeal)} kg<br>
+        ${objetivo==='perder' && pesoPerder>0 ? `<b>Meta de pérdida:</b> ${fmt(pesoPerder)} kg (5–10% del peso actual)<br>` : ''}
+        <b>HbA1c actual:</b> ${hba1c}% ${hba1c < 7 ? '✅ Meta cumplida (&lt;7%)' : hba1c < 8 ? '⚠️ Cerca de la meta' : '🔴 Por encima de la meta — ajustar plan'}<br><br>
+        <b>Recomendaciones clave:</b><br>
+        ${condKey.includes('diabetes') || condKey === 'ambas' || condKey === 'prediabetes' ? '• Fraccionar carbohidratos en 5 comidas para evitar picos glicémicos<br>• Preferir carbohidratos de bajo índice glicémico (avena, quinua, legumbres)<br>' : ''}
+        ${condKey.includes('hta') || condKey === 'ambas' ? '• Eliminar sal de mesa y caldos concentrados<br>• Aumentar potasio (frutas, verduras) salvo contraindicación renal<br>' : ''}
+        ${condKey === 'renal-diabetes' ? '• Restricción proteica — evaluar fósforo y potasio según función renal<br>' : ''}
+        • Actividad física: 150 min/semana de ejercicio aeróbico moderado (si no hay contraindicación médica)
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
