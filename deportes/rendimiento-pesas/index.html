@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rendimiento Pesas — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de rendimiento para halterofilia y pesas. 1RM Brzycki/Epley, Wilks Score, Sinclair, déficit de fuerza, velocidad de barra. Análisis estadístico y recomendaciones." />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--azul:#1a3a5c;--morado:#6a1b9a;--morado-medio:#8e24aa;--morado-claro:#f3e5f5;--amarillo:#f5a623;--gris-bg:#f4f6f9;--card:#fff;--texto:#1e2d3d;--texto-suave:#5a6a7a;--borde:#dde3ea;--sombra:0 2px 12px rgba(26,58,92,0.09);--radio:12px}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gris-bg);color:var(--texto);font-size:16px;line-height:1.6}
+    nav{background:var(--azul);padding:0 1.2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.18)}
+    .nav-brand{color:#fff;font-weight:700;font-size:1.1rem;text-decoration:none}
+    .nav-brand span{color:var(--amarillo)}
+    .nav-links a{color:rgba(255,255,255,0.82);text-decoration:none;font-size:0.82rem;padding:4px 10px;border-radius:20px}
+    .nav-links a.active{background:var(--amarillo);color:var(--azul);font-weight:700}
+    .hero{background:linear-gradient(135deg,#1a3a5c 0%,#6a1b9a 60%,#ab47bc 100%);padding:2.5rem 1.2rem 2rem;text-align:center;color:#fff}
+    .hero-badge{display:inline-block;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);border-radius:20px;padding:4px 14px;font-size:0.78rem;font-weight:600;margin-bottom:0.8rem;text-transform:uppercase}
+    .hero h1{font-size:clamp(1.4rem,4vw,2rem);font-weight:800;margin-bottom:0.5rem}
+    .hero p{font-size:0.95rem;opacity:0.92;max-width:580px;margin:0 auto 1rem}
+    .hero-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+    .hero-chip{background:rgba(255,255,255,0.2);border-radius:20px;padding:3px 12px;font-size:0.78rem;font-weight:600}
+    .container{max-width:960px;margin:0 auto;padding:1.5rem 1rem 3rem}
+    .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.4rem;background:var(--card);padding:6px;border-radius:var(--radio);box-shadow:var(--sombra)}
+    .tab-btn{flex:1;min-width:120px;padding:9px 10px;border:none;border-radius:8px;background:transparent;color:var(--texto-suave);font-size:0.83rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+    .tab-btn.active{background:var(--morado-medio);color:#fff}
+    .tab-panel{display:none}.tab-panel.active{display:block}
+    .card{background:var(--card);border-radius:var(--radio);box-shadow:var(--sombra);padding:1.4rem;margin-bottom:1.2rem}
+    .card h2{font-size:1.05rem;font-weight:700;color:var(--azul);margin-bottom:1rem}
+    .card h3{font-size:0.88rem;font-weight:700;color:var(--morado);margin:1rem 0 0.6rem;border-left:3px solid var(--morado);padding-left:8px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem}
+    .form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem}
+    @media(max-width:580px){.form-grid,.form-grid-3{grid-template-columns:1fr}}
+    .form-group{display:flex;flex-direction:column;gap:4px}
+    label{font-size:0.82rem;font-weight:600;color:var(--texto-suave)}
+    input,select{padding:9px 12px;border:1.5px solid var(--borde);border-radius:8px;font-size:0.92rem;color:var(--texto);background:var(--gris-bg);width:100%}
+    input:focus,select:focus{outline:none;border-color:var(--morado);background:#fff}
+    .form-hint{font-size:0.75rem;color:var(--texto-suave);font-style:italic}
+    .btn{width:100%;padding:12px;background:var(--morado-medio);color:#fff;border:none;border-radius:30px;font-size:1rem;font-weight:800;cursor:pointer;margin-top:1rem;transition:background 0.2s}
+    .btn:hover{background:var(--morado)}
+    .info-box{background:var(--morado-claro);border-left:4px solid var(--morado);border-radius:8px;padding:0.9rem 1rem;font-size:0.85rem;margin-bottom:1rem}
+    .resultado-box{background:linear-gradient(135deg,#1a3a5c 0%,#6a1b9a 100%);border-radius:var(--radio);padding:1.4rem;color:#fff;margin-top:1.2rem}
+    .resultado-titulo{font-size:0.78rem;font-weight:600;opacity:0.7;text-transform:uppercase;margin-bottom:0.8rem}
+    .resultado-grande{font-size:3rem;font-weight:900;color:#ffe082;line-height:1}
+    .resultado-sub{font-size:0.95rem;opacity:0.85;margin-top:0.3rem}
+    .resultado-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.8rem;margin-top:1rem}
+    .resultado-item{background:rgba(255,255,255,0.12);border-radius:8px;padding:0.8rem;text-align:center}
+    .resultado-valor{font-size:1.1rem;font-weight:800;color:#ffe082}
+    .resultado-label{font-size:0.72rem;opacity:0.85;margin-top:2px}
+    .resultado-detalle{margin-top:1rem;background:rgba(255,255,255,0.1);border-radius:8px;padding:0.9rem;font-size:0.83rem;line-height:2}
+    .resultado-detalle b{color:#ffe082}
+    .rec-card{background:rgba(255,255,255,0.1);border-radius:8px;padding:0.9rem;margin-top:0.8rem}
+    .rec-card h4{font-size:0.85rem;font-weight:700;color:#ffe082;margin-bottom:6px}
+    .rec-card p{font-size:0.82rem;line-height:1.6}
+    .ref-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+    .ref-table th{background:var(--azul);color:#fff;padding:8px 10px;text-align:left}
+    .ref-table td{padding:7px 10px;border-bottom:1px solid var(--borde)}
+    .ref-table tr:hover td{background:var(--morado-claro)}
+    .disclaimer{background:#fff3cd;border:1px solid #ffc107;border-radius:var(--radio);padding:1rem 1.2rem;font-size:0.8rem;color:#5a4a00;margin-top:2rem;text-align:center}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://herramientaspro.com.co" class="nav-brand">🏋️ <span>HerramientasPro</span></a>
+  <div class="nav-links"><a href="https://herramientaspro.com.co">← Inicio</a><a href="#" class="active">Rendimiento Pesas</a></div>
+</nav>
+<div class="hero">
+  <div class="hero-badge">🏋️ Entrenadores Deportivos — Pesas / Halterofilia</div>
+  <h1>Calculadora de Rendimiento — Pesas y Halterofilia</h1>
+  <p>1RM (Brzycki, Epley, O'Connor), Wilks Score, Índice de Sinclair, déficit de fuerza y velocidad de barra. Análisis estadístico y recomendaciones para entrenadores.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🏆 Wilks & Sinclair</span>
+    <span class="hero-chip">💪 Múltiples fórmulas 1RM</span>
+    <span class="hero-chip">🎯 Recomendaciones automáticas</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('evaluacion',this)">📊 Evaluación</button>
+    <button class="tab-btn" onclick="mostrarTab('estadistica',this)">🔬 Análisis Estadístico</button>
+    <button class="tab-btn" onclick="mostrarTab('recomendaciones',this)">🎯 Recomendaciones</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia',this)">📋 Tablas Referencia</button>
+  </div>
+
+  <!-- EVALUACIÓN -->
+  <div id="tab-evaluacion" class="tab-panel active">
+    <div class="card">
+      <h2>📊 Evaluación del Pesista / Halterófilo</h2>
+      <div class="info-box"><strong>¿Cómo usar?</strong> Ingresa los datos del atleta y los resultados de las pruebas. La calculadora determina el 1RM por múltiples fórmulas, el Wilks Score (comparación entre peso corporal) y el Índice de Sinclair (halterofilia olímpica).</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Nombre del atleta</label><input type="text" id="p-nombre" value="Atleta 1"/></div>
+        <div class="form-group"><label>Sexo biológico</label><select id="p-sexo"><option value="M" selected>Masculino</option><option value="F">Femenino</option></select></div>
+        <div class="form-group"><label>Edad (años)</label><input type="number" id="p-edad" value="24" min="14" max="60"/></div>
+        <div class="form-group"><label>Peso corporal (kg)</label><input type="number" id="p-peso" value="80" min="40" max="200" step="0.1"/></div>
+        <div class="form-group"><label>Categoría de competencia</label>
+          <select id="p-categoria">
+            <option value="55">-55 kg</option><option value="61">-61 kg</option>
+            <option value="67">-67 kg</option><option value="73">-73 kg</option>
+            <option value="81">-81 kg</option><option value="89">-89 kg</option>
+            <option value="96" selected>-96 kg</option><option value="102">-102 kg</option>
+            <option value="109">-109 kg</option><option value="plus">+109 kg</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Modalidad</label>
+          <select id="p-modalidad">
+            <option value="powerlifting" selected>Powerlifting (sentadilla+press+peso muerto)</option>
+            <option value="halterofilia">Halterofilia (arranque+envión)</option>
+            <option value="crossfit">CrossFit / Fitness funcional</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>💪 Cálculo de 1RM — Repetición Máxima</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Ejercicio principal</label>
+          <select id="p-ejercicio">
+            <option value="sentadilla" selected>Sentadilla (Squat)</option>
+            <option value="press">Press de banca (Bench Press)</option>
+            <option value="peso-muerto">Peso muerto (Deadlift)</option>
+            <option value="arranque">Arranque (Snatch)</option>
+            <option value="envion">Envión (Clean & Jerk)</option>
+            <option value="press-hombro">Press de hombro (OHP)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Peso levantado (kg)</label><input type="number" id="p-carga" value="120" min="10" max="500" step="0.5"/></div>
+        <div class="form-group"><label>Repeticiones realizadas</label><input type="number" id="p-reps" value="5" min="1" max="30"/><span class="form-hint">Para máxima precisión, usar 1-10 repeticiones</span></div>
+        <div class="form-group"><label>RIR (Repeticiones en Reserva)</label><select id="p-rir"><option value="0" selected>0 — Fallo muscular</option><option value="1">1 — Podría hacer 1 más</option><option value="2">2 — Podría hacer 2 más</option><option value="3">3 — Podría hacer 3 más</option></select></div>
+      </div>
+
+      <h3>🏆 Marcas de competencia (Powerlifting / Halterofilia)</h3>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Sentadilla / Arranque (kg)</label><input type="number" id="p-m1" value="160" min="0" max="500" step="0.5"/></div>
+        <div class="form-group"><label>Press banca / Envión (kg)</label><input type="number" id="p-m2" value="110" min="0" max="500" step="0.5"/></div>
+        <div class="form-group"><label>Peso muerto / Total (kg)</label><input type="number" id="p-m3" value="200" min="0" max="500" step="0.5"/></div>
+      </div>
+
+      <h3>⚡ Velocidad de la Barra (Perfil Fuerza-Velocidad)</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Velocidad al 60% 1RM (m/s)</label><input type="number" id="p-v60" value="0.85" min="0.1" max="2.0" step="0.01"/><span class="form-hint">Medida con encoder lineal o app de velocidad</span></div>
+        <div class="form-group"><label>Velocidad al 80% 1RM (m/s)</label><input type="number" id="p-v80" value="0.55" min="0.1" max="1.5" step="0.01"/></div>
+        <div class="form-group"><label>Velocidad al 90% 1RM (m/s)</label><input type="number" id="p-v90" value="0.35" min="0.05" max="1.0" step="0.01"/></div>
+        <div class="form-group"><label>Velocidad mínima alcanzable (m/s)</label><input type="number" id="p-vmin" value="0.18" min="0.05" max="0.5" step="0.01"/><span class="form-hint">~0.15-0.20 m/s = fallo técnico inminente</span></div>
+      </div>
+      <button class="btn" onclick="calcularPesas()">📊 Calcular Perfil de Fuerza</button>
+    </div>
+    <div id="resultado-pesas" style="display:none;"></div>
+  </div>
+
+  <!-- ESTADÍSTICA -->
+  <div id="tab-estadistica" class="tab-panel">
+    <div class="card">
+      <h2>🔬 Análisis Estadístico — Progresión de Fuerza</h2>
+      <div class="info-box"><strong>¿Para qué sirve?</strong> Compara el 1RM estimado o las marcas de competencia de un grupo de atletas en dos momentos y determina si la mejora es estadísticamente significativa.</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Variable a comparar</label>
+          <select id="sp-variable">
+            <option value="1rm">1RM estimado (kg)</option>
+            <option value="wilks">Wilks Score (puntos)</option>
+            <option value="total">Total de competencia (kg)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Ejercicio / Prueba</label>
+          <select id="sp-ejercicio">
+            <option value="sentadilla" selected>Sentadilla</option>
+            <option value="press">Press de banca</option>
+            <option value="peso-muerto">Peso muerto</option>
+            <option value="total">Total powerlifting</option>
+          </select>
+        </div>
+      </div>
+      <h3>Resultados del grupo (mín. 3 atletas)</h3>
+      <div id="pesistas-container"></div>
+      <button style="padding:8px 18px;border:none;border-radius:20px;background:var(--morado-medio);color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:0.6rem;" onclick="agregarPesista()">+ Agregar atleta</button>
+      <button class="btn" onclick="calcularEstPesas()">🔬 Analizar Progresión de Fuerza</button>
+    </div>
+    <div id="resultado-est-pesas" style="display:none;"></div>
+  </div>
+
+  <!-- RECOMENDACIONES -->
+  <div id="tab-recomendaciones" class="tab-panel">
+    <div class="card">
+      <h2>🎯 Recomendaciones por Perfil de Fuerza</h2>
+      <div class="form-grid">
+        <div class="form-group"><label>Modalidad</label>
+          <select id="rp-modalidad">
+            <option value="powerlifting" selected>Powerlifting</option>
+            <option value="halterofilia">Halterofilia</option>
+            <option value="fuerza-general">Fuerza general / CrossFit</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Nivel de experiencia</label>
+          <select id="rp-nivel">
+            <option value="principiante">Principiante (0-1 año)</option>
+            <option value="intermedio" selected>Intermedio (1-3 años)</option>
+            <option value="avanzado">Avanzado (3-5 años)</option>
+            <option value="elite">Élite (>5 años competencia)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Déficit principal identificado</label>
+          <select id="rp-deficit">
+            <option value="fuerza-maxima" selected>Fuerza máxima (1RM bajo)</option>
+            <option value="potencia">Potencia / velocidad de barra baja</option>
+            <option value="tecnica">Técnica (asimetría, profundidad)</option>
+            <option value="fuerza-resistencia">Fuerza-resistencia (muchas reps)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Fase de preparación</label>
+          <select id="rp-fase">
+            <option value="acumulacion">Acumulación (volumen alto)</option>
+            <option value="intensificacion" selected>Intensificación</option>
+            <option value="pico">Pico (pre-competencia)</option>
+            <option value="transicion">Transición / recuperación</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="recomendarPesas()">🎯 Generar Recomendaciones</button>
+    </div>
+    <div id="resultado-rec-pesas" style="display:none;"></div>
+  </div>
+
+  <!-- REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Estándares de Fuerza — Powerlifting (hombres, kg)</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Ejercicio</th><th>Principiante</th><th>Novato</th><th>Intermedio</th><th>Avanzado</th><th>Élite</th></tr></thead>
+          <tbody>
+            <tr><td>Sentadilla (80kg)</td><td>70</td><td>115</td><td>150</td><td>190</td><td>235</td></tr>
+            <tr><td>Press banca (80kg)</td><td>50</td><td>80</td><td>105</td><td>130</td><td>165</td></tr>
+            <tr><td>Peso muerto (80kg)</td><td>90</td><td>140</td><td>180</td><td>220</td><td>270</td></tr>
+            <tr><td>Total PL (80kg)</td><td>210</td><td>335</td><td>435</td><td>540</td><td>670</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem;color:var(--texto-suave);margin-top:0.5rem;">Fuente: Strength Level / ExRx.net — valores para hombres de 80 kg de peso corporal.</p>
+    </div>
+    <div class="card">
+      <h2>📋 Zonas de Intensidad — Entrenamiento de Fuerza</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>% 1RM</th><th>Zona</th><th>Reps estimadas</th><th>Objetivo principal</th></tr></thead>
+          <tbody>
+            <tr><td>55-65%</td><td>Técnica / Velocidad</td><td>8-12</td><td>Técnica, velocidad de barra, hipertrofia leve</td></tr>
+            <tr><td>65-75%</td><td>Hipertrofia</td><td>6-10</td><td>Masa muscular, base de fuerza</td></tr>
+            <tr><td>75-85%</td><td>Fuerza funcional</td><td>4-6</td><td>Fuerza y potencia aplicadas</td></tr>
+            <tr><td>85-92%</td><td>Fuerza máxima</td><td>2-4</td><td>Reclutamiento neural, fuerza máxima</td></tr>
+            <tr><td>92-100%</td><td>Pico / Competencia</td><td>1-2</td><td>Expresión máxima de fuerza</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Interpretación Wilks Score</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Wilks Score</th><th>Nivel</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td>&lt;200</td><td>Principiante</td><td>Inicio en el deporte</td></tr>
+            <tr><td>200-300</td><td>Novato</td><td>Primer año de entrenamiento sistemático</td></tr>
+            <tr><td>300-400</td><td>Intermedio</td><td>Competidor regional</td></tr>
+            <tr><td>400-500</td><td>Avanzado</td><td>Competidor nacional</td></tr>
+            <tr><td>500-600</td><td>Élite</td><td>Competidor internacional</td></tr>
+            <tr><td>&gt;600</td><td>Élite mundial</td><td>Récord mundial / Top 10 mundial</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="disclaimer">⚠️ <strong>Herramienta orientativa.</strong> Los resultados deben ser interpretados por un <strong>entrenador certificado en fuerza y acondicionamiento</strong>. Referencias: IPF (International Powerlifting Federation), IWF (International Weightlifting Federation), NSCA.</div>
+</div>
+
+<script>
+function mostrarTab(id,btn){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');}
+function fmt(n,d=1){return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});}
+
+function calcularPesas(){
+  const nombre=document.getElementById('p-nombre').value;
+  const sexo=document.getElementById('p-sexo').value;
+  const edad=parseInt(document.getElementById('p-edad').value);
+  const peso=parseFloat(document.getElementById('p-peso').value);
+  const ejercicio=document.getElementById('p-ejercicio').value;
+  const carga=parseFloat(document.getElementById('p-carga').value);
+  const reps=parseInt(document.getElementById('p-reps').value);
+  const rir=parseInt(document.getElementById('p-rir').value);
+  const m1=parseFloat(document.getElementById('p-m1').value);
+  const m2=parseFloat(document.getElementById('p-m2').value);
+  const m3=parseFloat(document.getElementById('p-m3').value);
+  const v60=parseFloat(document.getElementById('p-v60').value);
+  const v80=parseFloat(document.getElementById('p-v80').value);
+  const v90=parseFloat(document.getElementById('p-v90').value);
+  const vmin=parseFloat(document.getElementById('p-vmin').value);
+
+  const repsEfectivas=reps+rir;
+  // Fórmulas 1RM
+  const brzycki=carga*(36/(37-repsEfectivas));
+  const epley=carga*(1+repsEfectivas/30);
+  const oconnor=carga*(1+0.025*repsEfectivas);
+  const lombardi=carga*Math.pow(repsEfectivas,0.10);
+  const rm1Prom=(brzycki+epley+oconnor+lombardi)/4;
+
+  // Wilks Score
+  const a=sexo==='M'?[-216.0475144,16.2606339,-0.002388645,-0.00113732,7.01863E-06,-1.291E-08]:
+                     [594.31747775582,-27.23842536447,0.82112226871,-0.00930733913,4.731582E-05,-9.054E-08];
+  const denom=a[0]+a[1]*peso+a[2]*peso**2+a[3]*peso**3+a[4]*peso**4+a[5]*peso**5;
+  const total=m1+m2+m3;
+  const wilks=total*(500/denom);
+
+  // Sinclair (simplificado para halterofilia)
+  const b=sexo==='M'?[0.784780654,174.393]:[ 0.897260740,148.026];
+  const sinclair=total*Math.pow(10,b[0]*Math.log10(peso/b[1])**2);
+
+  // Porcentajes de trabajo
+  const p70=fmt(rm1Prom*0.70);
+  const p80=fmt(rm1Prom*0.80);
+  const p85=fmt(rm1Prom*0.85);
+  const p90=fmt(rm1Prom*0.90);
+
+  // Perfil velocidad
+  const pendiente=(vmin-v60)/(rm1Prom*0.4);
+  const vm90est=v60+pendiente*(rm1Prom*0.9-rm1Prom*0.6);
+
+  const nivelWilks=wilks<200?'🔴 Principiante':wilks<300?'🟡 Novato':wilks<400?'🔵 Intermedio':wilks<500?'🟢 Avanzado':'⭐ Élite';
+
+  document.getElementById('resultado-pesas').style.display='block';
+  document.getElementById('resultado-pesas').innerHTML=`
+  <div class="resultado-box">
+    <div class="resultado-titulo">Perfil de Fuerza — ${nombre} | ${peso}kg | ${ejercicio}</div>
+    <div class="resultado-grande">${fmt(rm1Prom)} kg</div>
+    <div class="resultado-sub">1RM estimado (promedio 4 fórmulas) — ${ejercicio}</div>
+    <div class="resultado-grid">
+      <div class="resultado-item"><div class="resultado-valor">${fmt(brzycki)} kg</div><div class="resultado-label">1RM Brzycki</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(epley)} kg</div><div class="resultado-label">1RM Epley</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(oconnor)} kg</div><div class="resultado-label">1RM O'Connor</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(lombardi)} kg</div><div class="resultado-label">1RM Lombardi</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(wilks,1)}</div><div class="resultado-label">Wilks Score ${nivelWilks}</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(sinclair,1)}</div><div class="resultado-label">Índice Sinclair</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${total} kg</div><div class="resultado-label">Total competencia</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(total/peso,2)}</div><div class="resultado-label">Relación total/peso corporal</div></div>
+    </div>
+    <div class="resultado-detalle">
+      <b>Cargas de entrenamiento recomendadas:</b><br>
+      70% = ${p70} kg | 80% = ${p80} kg | 85% = ${p85} kg | 90% = ${p90} kg<br>
+      <b>Perfil de velocidad:</b><br>
+      60% → ${fmt(v60,2)} m/s | 80% → ${fmt(v80,2)} m/s | 90% → ${fmt(v90,2)} m/s<br>
+      <b>Zona de falla técnica:</b> velocidades &lt;${fmt(vmin,2)} m/s (≈${fmt(rm1Prom*0.95)} kg)<br>
+      <b>Wilks Score = ${fmt(wilks,1)} → ${nivelWilks}</b> (permite comparar entre categorías de peso)
+    </div>
+  </div>`;
+}
+
+// ESTADÍSTICA
+let nPesistas=0;
+function agregarPesista(p){
+  nPesistas++;
+  const c=document.getElementById('pesistas-container');
+  const d=document.createElement('div');
+  d.id=`pes-${nPesistas}`;
+  d.style.cssText='display:grid;grid-template-columns:2fr 1fr 1fr 35px;gap:6px;align-items:center;margin-bottom:6px;';
+  const pr=p||{n:`Atleta ${nPesistas}`,v1:'',v2:''};
+  d.innerHTML=`<input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="text" id="pn-${nPesistas}" value="${pr.n}"/><input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="number" id="p1-${nPesistas}" value="${pr.v1}" step="0.5" placeholder="Med. 1 (kg)"/><input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="number" id="p2-${nPesistas}" value="${pr.v2}" step="0.5" placeholder="Med. 2 (kg)"/><button style="background:none;border:none;cursor:pointer;color:#c62828;font-size:1.1rem;" onclick="document.getElementById('pes-${nPesistas}').remove()">✕</button>`;
+  c.appendChild(d);
+}
+
+function calcularEstPesas(){
+  const rows=document.querySelectorAll('#pesistas-container > div');
+  if(rows.length<3){alert('Ingresa al menos 3 atletas.');return;}
+  const datos=[];
+  rows.forEach(row=>{
+    const id=row.id.split('-')[1];
+    const v1=parseFloat(document.getElementById(`p1-${id}`)?.value);
+    const v2=parseFloat(document.getElementById(`p2-${id}`)?.value);
+    const n=document.getElementById(`pn-${id}`)?.value||'';
+    if(!isNaN(v1)&&!isNaN(v2))datos.push({n,v1,v2,diff:v2-v1});
+  });
+  if(datos.length<3){alert('Ingresa valores válidos para al menos 3 atletas.');return;}
+  const diffs=datos.map(d=>d.diff);
+  const n=datos.length;
+  const meanD=diffs.reduce((a,b)=>a+b,0)/n;
+  const sdD=Math.sqrt(diffs.map(d=>(d-meanD)**2).reduce((a,b)=>a+b,0)/(n-1));
+  const tStat=meanD/(sdD/Math.sqrt(n));
+  const mean1=datos.map(d=>d.v1).reduce((a,b)=>a+b,0)/n;
+  const mean2=datos.map(d=>d.v2).reduce((a,b)=>a+b,0)/n;
+  const sd1=Math.sqrt(datos.map(d=>d.v1).map(v=>(v-mean1)**2).reduce((a,b)=>a+b,0)/(n-1));
+  const sd2=Math.sqrt(datos.map(d=>d.v2).map(v=>(v-mean2)**2).reduce((a,b)=>a+b,0)/(n-1));
+  const pooled=Math.sqrt(((n-1)*sd1**2+(n-1)*sd2**2)/(2*n-2));
+  const cohenD=Math.abs(meanD)/pooled;
+  const tcrit=n>=10?2.228:n>=7?2.447:n>=5?2.776:3.182;
+  const sig=Math.abs(tStat)>tcrit;
+  const cohenI=cohenD<0.2?'Trivial':cohenD<0.5?'Pequeño':cohenD<0.8?'Moderado':'Grande';
+  const filasHTML=datos.map(d=>`<tr><td>${d.n}</td><td style="text-align:right">${fmt(d.v1)} kg</td><td style="text-align:right">${fmt(d.v2)} kg</td><td style="text-align:right;color:${d.diff>0?'#a5d6a7':'#ef9a9a'};font-weight:700;">${d.diff>0?'+':''}${fmt(d.diff)} kg</td></tr>`).join('');
+  document.getElementById('resultado-est-pesas').style.display='block';
+  document.getElementById('resultado-est-pesas').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">Análisis estadístico progresión de fuerza — n=${n} atletas</div><div class="resultado-grande">${sig?'✅ SÍ hay progresión':'⚠️ NO significativo'}</div><div class="resultado-sub">t(${n-1})=${fmt(Math.abs(tStat),3)} | p ${sig?'< 0.05':'> 0.05'} | Cohen's d=${fmt(cohenD,2)} (${cohenI})</div><div class="resultado-grid"><div class="resultado-item"><div class="resultado-valor">${fmt(mean1)} kg</div><div class="resultado-label">Media medición 1</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(mean2)} kg</div><div class="resultado-label">Media medición 2</div></div><div class="resultado-item"><div class="resultado-valor">+${fmt(meanD)} kg</div><div class="resultado-label">Ganancia promedio</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(cohenD,2)}</div><div class="resultado-label">Cohen's d (${cohenI})</div></div></div><div style="overflow-x:auto;margin-top:1rem;"><table style="width:100%;border-collapse:collapse;font-size:0.83rem;"><thead><tr style="background:rgba(255,255,255,0.15);"><th style="padding:8px;text-align:left;color:#fff;">Atleta</th><th style="padding:8px;text-align:right;color:#fff;">Med. 1</th><th style="padding:8px;text-align:right;color:#fff;">Med. 2</th><th style="padding:8px;text-align:right;color:#fff;">Ganancia</th></tr></thead><tbody style="color:#fff;">${filasHTML}</tbody></table></div><div class="resultado-detalle"><b>Interpretación:</b><br>${sig?'✅ La progresión de fuerza ES estadísticamente significativa (p<0.05). El programa de entrenamiento fue efectivo.':'⚠️ La progresión NO es significativa (p>0.05). Revisar programa: posible estancamiento o período insuficiente.'}<br><b>Cohen\'s d=${fmt(cohenD,2)} (${cohenI}):</b> ${cohenD<0.2?'Cambio trivial — revisar metodología.':cohenD<0.5?'Ganancia pequeña pero real.':cohenD<0.8?'Ganancia moderada — buen progreso.':'Ganancia grande — programa muy efectivo.'}</div></div>`;
+}
+
+// RECOMENDACIONES
+function recomendarPesas(){
+  const modalidad=document.getElementById('rp-modalidad').value;
+  const nivel=document.getElementById('rp-nivel').value;
+  const deficit=document.getElementById('rp-deficit').value;
+  const fase=document.getElementById('rp-fase').value;
+  const entrenamientos={
+    powerlifting:{
+      principiante:'Programa lineal 3 días/semana (Starting Strength o StrongLifts 5×5). Sentadilla, press y peso muerto en cada sesión. Progresar 2.5-5 kg por sesión. Prioridad absoluta: técnica sobre carga.',
+      intermedio:'Periodización ondulante (DUP): variar intensidad y volumen entre sesiones. Lunes pesado (85-90%), miércoles moderado (75-80%), viernes ligero-técnico (65-70%). Añadir accesorios: buenos días, press inclinado, remo.',
+      avanzado:'Periodización por bloques: 4-6 semanas acumulación, 3-4 semanas intensificación, 2-3 semanas pico. Trabajo de pausa y pins para puntos débiles específicos.',
+      elite:'Programación individualizada basada en respuesta al entrenamiento. Alta frecuencia (4-6 días). Trabajo de debilidades específicas con accesorios seleccionados por análisis de video.',
+    },
+    halterofilia:{
+      principiante:'Técnica de arranque y cuelgue diarios. Trabajo con barra vacía y cargas mínimas. Sentadilla frontal y posterior como base de fuerza. 3-4 sesiones/semana.',
+      intermedio:'Periodización búlgara modificada: máximos diarios en arranque y cuelgue-envión. Sentadilla frontal pesada 3 días. Trabajo de fuerza accesoria (tirones, press, buenos días).',
+      avanzado:'Alta frecuencia (5-6 días). Dobles y triples al 85-95%. Ciclos de 3 semanas carga + 1 descarga. Trabajo técnico con cargas submáximas para engrosar automatismo.',
+      elite:'Programación de entrenador certificado IWF. Periodización anual con ciclos olímpicos. Trabajo por encima del máximo con bandas elásticas o en rack.',
+    },
+    'fuerza-general':{
+      principiante:'Programa full-body 3 días/semana. Movimientos fundamentales: sentadilla, empuje, jalón, bisagra de cadera. Progresión lineal simple.',
+      intermedio:'División upper/lower 4 días. Integrar movimientos explosivos (saltos, kettlebell swings). Combinar fuerza máxima (3-5 reps) con potencia (6-12 reps).',
+      avanzado:'Periodización conjugada (Westside modificado). Días de esfuerzo máximo y días de esfuerzo dinámico. Alta variación de ejercicios accesorios.',
+      elite:'Programa individualizado basado en análisis de debilidades. Integración de velocidad, fuerza y potencia en misma semana.',
+    },
+  };
+  const deficitRec={
+    'fuerza-maxima':'Aumentar intensidad (85-92% 1RM): series de 3-5 repeticiones, 4-6 series por ejercicio principal. Frecuencia del ejercicio deficiente: 3-4 veces/semana. Trabajo de pausa en puntos muertos.',
+    potencia:'Entrenamiento basado en velocidad (VBT): trabajar al 55-75% 1RM con máxima intención de velocidad. Ejercicios olímpicos derivados (tirones, cuelgues). Target: velocidad >0.70 m/s en ejercicios de potencia.',
+    tecnica:'Reducir cargas al 70-80% 1RM. Aumentar volumen técnico. Grabar cada levantamiento y comparar con referencia de élite. Trabajo de pausa en posición de debilidad técnica identificada.',
+    'fuerza-resistencia':'Aumentar volumen (8-15 reps, 3-4 series). Reducir períodos de descanso (60-90 seg). Circuitos metabólicos con cargas moderadas (50-65% 1RM).',
+  };
+  const faseRec={
+    acumulacion:'Volumen alto (15-25 series/sesión), intensidad moderada (65-80% 1RM). 4-6 ejercicios por sesión. Descansos cortos (60-120 seg). Construir base de masa muscular y tolerancia al volumen.',
+    intensificacion:'Reducir volumen (8-15 series/sesión), aumentar intensidad (80-92% 1RM). 3-4 ejercicios principales. Descansos completos (3-5 min). Enfoque en fuerza máxima y técnica bajo fatiga.',
+    pico:'Volumen mínimo (4-8 series/sesión), intensidad máxima (90-100% 1RM). 2-3 ejercicios de competencia únicamente. Descansos completos (5-8 min). Practicar intentos de competencia.',
+    transicion:'Reducir carga al 50-60%. Actividades alternativas (natación, ciclismo). Máximo 2-3 sesiones/semana. Recuperación activa y trabajo de movilidad. Mínimo 2 semanas.',
+  };
+  const nutrPesas={
+    principiante:'Superávit calórico moderado (+200-300 kcal/día). Proteína: 1.6-1.8 g/kg/día. Distribuir en 4-5 comidas. Colación post-entrenamiento (30-40g proteína + 60-80g CHO) en los primeros 30 min.',
+    intermedio:'Proteína: 1.8-2.0 g/kg/día. Periodización nutricional: mayor CHO en días de entrenamiento intenso (5-6 g/kg), menor en días de descanso (3-4 g/kg). Creatina: 3-5 g/día — respaldada por evidencia.',
+    avanzado:'Nutrición precisa: proteína 2.0-2.2 g/kg. Timing de nutrientes crítico. Evaluar con nutricionista deportivo. Considerar suplementación de cafeína pre-entrenamiento (3-6 mg/kg, 60 min antes).',
+    elite:'Trabajo con nutricionista deportivo certificado. Seguimiento de composición corporal semanal. Estrategia de pesaje para competencia planificada con 8-12 semanas de anticipación.',
+  };
+  document.getElementById('resultado-rec-pesas').style.display='block';
+  document.getElementById('resultado-rec-pesas').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">Recomendaciones — ${modalidad} | ${nivel} | Fase: ${fase}</div><div class="resultado-grande">💪 Plan de Fuerza</div><div class="resultado-sub">Recomendaciones específicas por modalidad, nivel y fase de preparación</div><div class="rec-card"><h4>🏋️ Entrenamiento — ${modalidad} (nivel ${nivel})</h4><p>${entrenamientos[modalidad][nivel]}</p></div><div class="rec-card"><h4>⚠️ Déficit identificado: ${deficit}</h4><p>${deficitRec[deficit]}</p></div><div class="rec-card"><h4>📅 Fase de preparación: ${fase}</h4><p>${faseRec[fase]}</p></div><div class="rec-card"><h4>🥗 Nutrición para fuerza — nivel ${nivel}</h4><p>${nutrPesas[nivel]}</p></div></div>`;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  [{n:'Atleta 1',v1:'140',v2:'152.5'},{n:'Atleta 2',v1:'125',v2:'135'},{n:'Atleta 3',v1:'160',v2:'170'},{n:'Atleta 4',v1:'110',v2:'122.5'},{n:'Atleta 5',v1:'150',v2:'162.5'}].forEach(e=>agregarPesista(e));
+});
+</script>
+</body>
+</html>
