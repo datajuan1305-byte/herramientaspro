@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rendimiento Fútbol — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de rendimiento físico para futbolistas colombianos. VO2 máx, Test Yo-Yo, RSA, RPE de Foster, VAM. Análisis estadístico y recomendaciones para entrenadores." />
+  <meta name="keywords" content="rendimiento futbol colombia, vo2 max futbolistas, test yo-yo futbol, RSA sprint repetido, entrenador futbol colombia, ciencias del deporte colombia" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul: #1a3a5c;
+      --verde-fut: #1b5e20;
+      --verde-medio: #2e7d32;
+      --verde-claro: #e8f5e9;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+    nav { background: var(--azul); padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul); font-weight: 700; }
+    .hero { background: linear-gradient(135deg, #1a3a5c 0%, #1b5e20 60%, #4caf50 100%); padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 580px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+    .container { max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem; background: var(--card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra); }
+    .tab-btn { flex: 1; min-width: 130px; padding: 9px 10px; border: none; border-radius: 8px; background: transparent; color: var(--texto-suave); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--verde-medio); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .card { background: var(--card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--verde-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--verde-medio); padding-left: 8px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.9rem; }
+    @media(max-width:580px) { .form-grid, .form-grid-3 { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select { padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.92rem; color: var(--texto); background: var(--gris-bg); transition: border-color 0.2s; width: 100%; }
+    input:focus, select:focus { outline: none; border-color: var(--verde-medio); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+    .btn { width: 100%; padding: 12px; background: var(--verde-medio); color: #fff; border: none; border-radius: 30px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s; }
+    .btn:hover { background: var(--verde-fut); }
+    .btn:active { transform: scale(0.98); }
+    .info-box { background: var(--verde-claro); border-left: 4px solid var(--verde-medio); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--verde-fut); }
+    .resultado-box { background: linear-gradient(135deg, #1a3a5c 0%, #1b5e20 100%); border-radius: var(--radio); padding: 1.4rem; color: #fff; margin-top: 1.2rem; }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grande { font-size: 3rem; font-weight: 900; color: #ffe082; line-height: 1; }
+    .resultado-sub { font-size: 0.95rem; opacity: 0.85; margin-top: 0.3rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.1rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+    .nivel-badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; margin-top: 6px; }
+    .nivel-excelente { background: #ffe082; color: #1b5e20; }
+    .nivel-bueno { background: #a5d6a7; color: #1b5e20; }
+    .nivel-aceptable { background: #fff59d; color: #f57f17; }
+    .nivel-bajo { background: #ef9a9a; color: #b71c1c; }
+    .rec-card { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; margin-top: 0.8rem; }
+    .rec-card h4 { font-size: 0.85rem; font-weight: 700; color: #ffe082; margin-bottom: 6px; }
+    .rec-card p { font-size: 0.82rem; line-height: 1.6; }
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--verde-claro); }
+    .stat-box { background: var(--card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .stat-resultado { background: linear-gradient(135deg, #1a3a5c, #1b5e20); border-radius: var(--radio); padding: 1.2rem; color: #fff; margin-top: 1rem; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://herramientaspro.com.co" class="nav-brand">⚽ <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://herramientaspro.com.co">← Inicio</a>
+    <a href="#" class="active">Rendimiento Fútbol</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">⚽ Entrenadores Deportivos — Fútbol</div>
+  <h1>Calculadora de Rendimiento Físico — Fútbol</h1>
+  <p>Evalúa el rendimiento físico de tus futbolistas con métricas internacionales FIFA. VO2 máx, Test Yo-Yo, RSA, carga de entrenamiento RPE y velocidad aeróbica máxima VAM.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">📊 Estándares FIFA</span>
+    <span class="hero-chip">🔬 Análisis estadístico</span>
+    <span class="hero-chip">🎯 Recomendaciones automáticas</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('evaluacion', this)">📊 Evaluación Física</button>
+    <button class="tab-btn" onclick="mostrarTab('estadistica', this)">🔬 Análisis Estadístico</button>
+    <button class="tab-btn" onclick="mostrarTab('recomendaciones', this)">🎯 Recomendaciones</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📋 Tablas Referencia</button>
+  </div>
+
+  <!-- TAB 1: EVALUACIÓN FÍSICA -->
+  <div id="tab-evaluacion" class="tab-panel active">
+    <div class="card">
+      <h2>📊 Evaluación Física del Futbolista</h2>
+      <div class="info-box">
+        <strong>¿Cómo usar?</strong> Ingresa los datos del deportista y los resultados de las pruebas de campo. La calculadora determina el nivel físico en cada capacidad y genera un perfil de rendimiento completo.
+      </div>
+
+      <h3>Datos del deportista</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Nombre del deportista</label><input type="text" id="e-nombre" value="Jugador 1" /></div>
+        <div class="form-group"><label>Posición</label>
+          <select id="e-posicion">
+            <option value="portero">Portero</option>
+            <option value="defensa">Defensa central / lateral</option>
+            <option value="mediocampista" selected>Mediocampista</option>
+            <option value="extremo">Extremo / Carrilero</option>
+            <option value="delantero">Delantero</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Edad (años)</label><input type="number" id="e-edad" value="22" min="14" max="40" /></div>
+        <div class="form-group"><label>Peso (kg)</label><input type="number" id="e-peso" value="72" min="50" max="120" step="0.5" /></div>
+        <div class="form-group"><label>Talla (cm)</label><input type="number" id="e-talla" value="175" min="150" max="210" /></div>
+        <div class="form-group"><label>FC en reposo (lpm)</label><input type="number" id="e-fc-reposo" value="58" min="40" max="90" /></div>
+        <div class="form-group"><label>FC máxima (lpm)</label><input type="number" id="e-fc-max" value="195" min="150" max="220" /><span class="form-hint">Si no la conoces, se estima como 220 - edad</span></div>
+        <div class="form-group"><label>Fecha de evaluación</label><input type="date" id="e-fecha" /></div>
+      </div>
+
+      <h3>🫁 VO2 máx — Test de Course Navette (Beep Test)</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Nivel alcanzado</label><input type="number" id="e-vo2-nivel" value="10" min="1" max="21" step="1" /><span class="form-hint">Número de palier completado (1-21)</span></div>
+        <div class="form-group"><label>Número de lanzadera</label><input type="number" id="e-vo2-lanzadera" value="5" min="1" max="16" step="1" /></div>
+      </div>
+
+      <h3>🏃 Test Yo-Yo Resistencia Intermitente (Nivel 1)</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Distancia total recorrida (metros)</label><input type="number" id="e-yoyo" value="1680" min="160" max="3200" step="40" /><span class="form-hint">Estándar FIFA: ≥1600m hombres / ≥800m mujeres</span></div>
+        <div class="form-group"><label>Sexo biológico</label>
+          <select id="e-sexo">
+            <option value="M" selected>Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>⚡ RSA — Sprint Repetido (6 × 30m con 20s descanso)</h3>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Sprint 1 (seg)</label><input type="number" id="e-s1" value="4.12" min="3" max="7" step="0.01" /></div>
+        <div class="form-group"><label>Sprint 2 (seg)</label><input type="number" id="e-s2" value="4.18" min="3" max="7" step="0.01" /></div>
+        <div class="form-group"><label>Sprint 3 (seg)</label><input type="number" id="e-s3" value="4.22" min="3" max="7" step="0.01" /></div>
+        <div class="form-group"><label>Sprint 4 (seg)</label><input type="number" id="e-s4" value="4.25" min="3" max="7" step="0.01" /></div>
+        <div class="form-group"><label>Sprint 5 (seg)</label><input type="number" id="e-s5" value="4.28" min="3" max="7" step="0.01" /></div>
+        <div class="form-group"><label>Sprint 6 (seg)</label><input type="number" id="e-s6" value="4.35" min="3" max="7" step="0.01" /></div>
+      </div>
+
+      <h3>💪 Carga de Entrenamiento — RPE de Foster</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Duración de la sesión (minutos)</label><input type="number" id="e-duracion" value="90" min="15" max="180" /></div>
+        <div class="form-group"><label>RPE percibido (escala 1-10)</label>
+          <select id="e-rpe">
+            <option value="1">1 — Muy muy suave</option>
+            <option value="2">2 — Muy suave</option>
+            <option value="3">3 — Suave</option>
+            <option value="4">4 — Moderado bajo</option>
+            <option value="5">5 — Moderado</option>
+            <option value="6" selected>6 — Moderado alto</option>
+            <option value="7">7 — Intenso</option>
+            <option value="8">8 — Muy intenso</option>
+            <option value="9">9 — Muy muy intenso</option>
+            <option value="10">10 — Máximo esfuerzo</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Sesiones en la semana</label><input type="number" id="e-sesiones" value="5" min="1" max="14" /></div>
+        <div class="form-group"><label>RPE promedio de la semana</label><input type="number" id="e-rpe-semana" value="6" min="1" max="10" step="0.5" /></div>
+      </div>
+
+      <button class="btn" onclick="calcularEvaluacion()">📊 Generar Perfil de Rendimiento</button>
+    </div>
+    <div id="resultado-evaluacion" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: ANÁLISIS ESTADÍSTICO -->
+  <div id="tab-estadistica" class="tab-panel">
+    <div class="card">
+      <h2>🔬 Análisis Estadístico — Comparación de Rendimiento</h2>
+      <div class="info-box">
+        <strong>¿Para qué sirve?</strong> Compara dos mediciones del mismo deportista (pre y post entrenamiento, o dos fechas distintas) y determina si la mejora es <strong>estadísticamente significativa</strong> usando t-test pareado y el tamaño del efecto de Cohen's d.
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group"><label>Nombre del deportista</label><input type="text" id="s-nombre" value="Jugador 1" /></div>
+        <div class="form-group"><label>Variable a comparar</label>
+          <select id="s-variable">
+            <option value="vo2">VO2 máx (ml/kg/min)</option>
+            <option value="yoyo">Test Yo-Yo (metros)</option>
+            <option value="sprint">Mejor tiempo sprint 30m (seg)</option>
+            <option value="rsa">Índice de fatiga RSA (%)</option>
+            <option value="vam">VAM (km/h)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Fecha medición 1 (inicial)</label><input type="date" id="s-fecha1" /></div>
+        <div class="form-group"><label>Fecha medición 2 (final)</label><input type="date" id="s-fecha2" /></div>
+      </div>
+
+      <h3>Ingresa los resultados del grupo (mínimo 3 deportistas)</h3>
+      <div class="info-box">Ingresa los resultados de cada deportista en las dos mediciones. La app calcula el t-test pareado para el grupo.</div>
+
+      <div id="jugadores-container"></div>
+      <button class="btn" style="margin-top:0.8rem;padding:8px 20px;width:auto;border-radius:20px;font-size:0.85rem;" onclick="agregarJugador()">+ Agregar deportista</button>
+
+      <button class="btn" onclick="calcularEstadistica()">🔬 Calcular Análisis Estadístico</button>
+    </div>
+    <div id="resultado-estadistica" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: RECOMENDACIONES -->
+  <div id="tab-recomendaciones" class="tab-panel">
+    <div class="card">
+      <h2>🎯 Recomendaciones por Perfil de Rendimiento</h2>
+      <div class="info-box">
+        <strong>¿Cómo funciona?</strong> Selecciona el nivel identificado en cada capacidad física y la posición del jugador. La app genera recomendaciones específicas de entrenamiento, nutrición y decisiones tácticas.
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Posición</label>
+          <select id="r-posicion">
+            <option value="portero">Portero</option>
+            <option value="defensa">Defensa</option>
+            <option value="mediocampista" selected>Mediocampista</option>
+            <option value="extremo">Extremo</option>
+            <option value="delantero">Delantero</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Nivel VO2 máx</label>
+          <select id="r-vo2">
+            <option value="excelente">Excelente (≥60 ml/kg/min)</option>
+            <option value="bueno" selected>Bueno (52-59)</option>
+            <option value="aceptable">Aceptable (44-51)</option>
+            <option value="bajo">Bajo (&lt;44)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Nivel Test Yo-Yo</label>
+          <select id="r-yoyo">
+            <option value="excelente">Excelente (≥2000m)</option>
+            <option value="bueno" selected>Bueno (1600-1999m)</option>
+            <option value="aceptable">Aceptable (1200-1599m)</option>
+            <option value="bajo">Bajo (&lt;1200m)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Nivel RSA (índice de fatiga)</label>
+          <select id="r-rsa">
+            <option value="excelente">Excelente (&lt;3%)</option>
+            <option value="bueno" selected>Bueno (3-5%)</option>
+            <option value="aceptable">Aceptable (5-8%)</option>
+            <option value="bajo">Bajo (&gt;8%)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Carga semanal (UA)</label>
+          <select id="r-carga">
+            <option value="baja">Baja (&lt;1500 UA)</option>
+            <option value="optima" selected>Óptima (1500-2500 UA)</option>
+            <option value="alta">Alta (2500-3500 UA)</option>
+            <option value="excesiva">Excesiva (&gt;3500 UA)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Fase de la temporada</label>
+          <select id="r-temporada">
+            <option value="pretemporada">Pretemporada</option>
+            <option value="competencia" selected>Competencia</option>
+            <option value="transicion">Transición</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="generarRecomendaciones()">🎯 Generar Recomendaciones</button>
+    </div>
+    <div id="resultado-recomendaciones" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 4: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Tablas de Referencia — Estándares FIFA / Internacionales</h2>
+      <h3>VO2 máx por posición (ml/kg/min) — Fútbol masculino profesional</h3>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Posición</th><th>Bajo</th><th>Aceptable</th><th>Bueno</th><th>Excelente</th></tr></thead>
+          <tbody>
+            <tr><td>Portero</td><td>&lt;48</td><td>48-53</td><td>54-58</td><td>≥59</td></tr>
+            <tr><td>Defensa central</td><td>&lt;52</td><td>52-56</td><td>57-61</td><td>≥62</td></tr>
+            <tr><td>Lateral</td><td>&lt;54</td><td>54-58</td><td>59-63</td><td>≥64</td></tr>
+            <tr><td>Mediocampista</td><td>&lt;55</td><td>55-59</td><td>60-64</td><td>≥65</td></tr>
+            <tr><td>Extremo</td><td>&lt;56</td><td>56-60</td><td>61-65</td><td>≥66</td></tr>
+            <tr><td>Delantero</td><td>&lt;53</td><td>53-57</td><td>58-62</td><td>≥63</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Test Yo-Yo Nivel 1 — Valores de referencia</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Nivel</th><th>Hombres</th><th>Mujeres</th><th>Interpretación</th></tr></thead>
+          <tbody>
+            <tr><td>Bajo</td><td>&lt;1200 m</td><td>&lt;600 m</td><td>Requiere trabajo aeróbico prioritario</td></tr>
+            <tr><td>Aceptable</td><td>1200-1599 m</td><td>600-799 m</td><td>Capacidad mínima para competir</td></tr>
+            <tr><td>Bueno</td><td>1600-1999 m</td><td>800-999 m</td><td>Estándar FIFA para fútbol profesional</td></tr>
+            <tr><td>Excelente</td><td>≥2000 m</td><td>≥1000 m</td><td>Nivel élite — excelente resistencia intermitente</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Carga de Entrenamiento — Método RPE de Foster</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Carga semanal (UA)</th><th>Clasificación</th><th>Recomendación</th></tr></thead>
+          <tbody>
+            <tr><td>&lt;1500 UA</td><td>Baja</td><td>Pretemporada inicial o recuperación</td></tr>
+            <tr><td>1500-2500 UA</td><td>Óptima</td><td>Mantenimiento en temporada de competencia</td></tr>
+            <tr><td>2500-3500 UA</td><td>Alta</td><td>Semanas de carga — máximo 2 semanas seguidas</td></tr>
+            <tr><td>&gt;3500 UA</td><td>Excesiva</td><td>Riesgo de sobreentrenamiento — reducir inmediatamente</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem;color:var(--texto-suave);margin-top:0.6rem;">UA = Unidades Arbitrarias. Fórmula: Duración (min) × RPE (1-10). Fuente: Foster et al., JSCR 2001.</p>
+    </div>
+    <div class="card">
+      <h2>📋 Interpretación Cohen's d — Tamaño del efecto</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Valor d</th><th>Tamaño del efecto</th><th>Interpretación práctica</th></tr></thead>
+          <tbody>
+            <tr><td>&lt;0.2</td><td>Trivial</td><td>Cambio no relevante en la práctica</td></tr>
+            <tr><td>0.2 - 0.49</td><td>Pequeño</td><td>Cambio real pero de baja magnitud</td></tr>
+            <tr><td>0.5 - 0.79</td><td>Moderado</td><td>Cambio importante — continuar el proceso</td></tr>
+            <tr><td>≥0.8</td><td>Grande</td><td>Cambio de alta magnitud — entrenamiento muy efectivo</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los resultados deben ser interpretados por un <strong>Licenciado en Educación Física, Entrenador deportivo certificado o Profesional en Ciencias del Deporte</strong>. Las recomendaciones son orientativas y deben adaptarse al contexto individual de cada deportista. Referencias: FIFA Medical Assessment and Research Centre (F-MARC), Bangsbo et al.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function fmt(n, d=1) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+
+// ── EVALUACIÓN ────────────────────────────────────────────────────────────────
+function calcularVO2Navette(nivel, lanzadera) {
+  const velocidadInicial = 8.0;
+  const incremento = 0.5;
+  const velocidad = velocidadInicial + (nivel - 1) * incremento;
+  const vo2 = 31.025 + 3.238 * velocidad - 3.248 * 1 + 0.1536 * velocidad * 1;
+  return Math.round((vo2 + (nivel * 0.2)) * 10) / 10;
+}
+
+function calcularVAM(vo2) { return Math.round((vo2 / 3.5) * 10) / 10; }
+
+function calcularRSA(sprints) {
+  const mejor = Math.min(...sprints);
+  const peor  = Math.max(...sprints);
+  const prom  = sprints.reduce((a,b)=>a+b,0)/sprints.length;
+  const idxFatiga = ((peor - mejor) / mejor) * 100;
+  const decremento = ((prom - mejor) / mejor) * 100;
+  return { mejor, peor, prom, idxFatiga, decremento };
+}
+
+function nivelVO2(vo2, posicion) {
+  const umbrales = {
+    portero:       [48,53,58],
+    defensa:       [52,56,61],
+    mediocampista: [55,59,64],
+    extremo:       [56,60,65],
+    delantero:     [53,57,62],
+  };
+  const u = umbrales[posicion] || umbrales.mediocampista;
+  if (vo2 >= u[2]) return { nivel:'Excelente', clase:'nivel-excelente', emoji:'🟢' };
+  if (vo2 >= u[1]) return { nivel:'Bueno',     clase:'nivel-bueno',     emoji:'🔵' };
+  if (vo2 >= u[0]) return { nivel:'Aceptable', clase:'nivel-aceptable', emoji:'🟡' };
+  return               { nivel:'Bajo',      clase:'nivel-bajo',      emoji:'🔴' };
+}
+
+function nivelYoYo(metros, sexo) {
+  const u = sexo === 'M' ? [1200,1600,2000] : [600,800,1000];
+  if (metros >= u[2]) return { nivel:'Excelente', clase:'nivel-excelente', emoji:'🟢' };
+  if (metros >= u[1]) return { nivel:'Bueno',     clase:'nivel-bueno',     emoji:'🔵' };
+  if (metros >= u[0]) return { nivel:'Aceptable', clase:'nivel-aceptable', emoji:'🟡' };
+  return               { nivel:'Bajo',      clase:'nivel-bajo',      emoji:'🔴' };
+}
+
+function nivelRSA(idx) {
+  if (idx < 3) return { nivel:'Excelente', clase:'nivel-excelente', emoji:'🟢' };
+  if (idx < 5) return { nivel:'Bueno',     clase:'nivel-bueno',     emoji:'🔵' };
+  if (idx < 8) return { nivel:'Aceptable', clase:'nivel-aceptable', emoji:'🟡' };
+  return               { nivel:'Bajo',     clase:'nivel-bajo',      emoji:'🔴' };
+}
+
+function calcularEvaluacion() {
+  const nombre   = document.getElementById('e-nombre').value;
+  const posicion = document.getElementById('e-posicion').value;
+  const edad     = parseInt(document.getElementById('e-edad').value);
+  const peso     = parseFloat(document.getElementById('e-peso').value);
+  const talla    = parseFloat(document.getElementById('e-talla').value);
+  const fcRep    = parseInt(document.getElementById('e-fc-reposo').value);
+  const fcMax    = parseInt(document.getElementById('e-fc-max').value) || (220 - edad);
+  const sexo     = document.getElementById('e-sexo').value;
+
+  const nivelNav  = parseInt(document.getElementById('e-vo2-nivel').value);
+  const lanzNav   = parseInt(document.getElementById('e-vo2-lanzadera').value);
+  const yoyoM     = parseInt(document.getElementById('e-yoyo').value);
+
+  const s = [1,2,3,4,5,6].map(i => parseFloat(document.getElementById(`e-s${i}`).value));
+  const duracion  = parseInt(document.getElementById('e-duracion').value);
+  const rpe       = parseInt(document.getElementById('e-rpe').value);
+  const sesiones  = parseInt(document.getElementById('e-sesiones').value);
+  const rpeSem    = parseFloat(document.getElementById('e-rpe-semana').value);
+
+  const imc    = peso / Math.pow(talla/100, 2);
+  const fcRes  = fcMax - fcRep;
+  const vo2    = calcularVO2Navette(nivelNav, lanzNav);
+  const vam    = calcularVAM(vo2);
+  const rsa    = calcularRSA(s);
+  const cargaSesion = duracion * rpe;
+  const cargaSemana = duracion * sesiones * rpeSem;
+
+  const nVO2  = nivelVO2(vo2, posicion);
+  const nYoYo = nivelYoYo(yoyoM, sexo);
+  const nRSA  = nivelRSA(rsa.idxFatiga);
+
+  const posNombres = { portero:'Portero', defensa:'Defensa', mediocampista:'Mediocampista', extremo:'Extremo', delantero:'Delantero' };
+
+  document.getElementById('resultado-evaluacion').style.display = 'block';
+  document.getElementById('resultado-evaluacion').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Perfil de Rendimiento — ${nombre} | ${posNombres[posicion]} | ${edad} años</div>
+      <div class="resultado-grande">${fmt(vo2)} ml/kg/min</div>
+      <div class="resultado-sub">VO2 máx estimado — Nivel: <span class="nivel-badge ${nVO2.clase}">${nVO2.emoji} ${nVO2.nivel}</span></div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(vo2)} ml/kg/min</div><div class="resultado-label">VO2 máx ${nVO2.emoji} ${nVO2.nivel}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(vam)} km/h</div><div class="resultado-label">VAM (Vel. Aeróbica Máx.)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${yoyoM} m</div><div class="resultado-label">Test Yo-Yo ${nYoYo.emoji} ${nYoYo.nivel}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(rsa.mejor,2)} seg</div><div class="resultado-label">Mejor sprint 30m</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(rsa.idxFatiga,1)}%</div><div class="resultado-label">Índice fatiga RSA ${nRSA.emoji} ${nRSA.nivel}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${cargaSesion} UA</div><div class="resultado-label">Carga sesión (RPE ${rpe})</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${Math.round(cargaSemana)} UA</div><div class="resultado-label">Carga semanal estimada</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(imc,1)} kg/m²</div><div class="resultado-label">IMC</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Resumen del perfil:</b><br>
+        VO2 máx: ${fmt(vo2)} ml/kg/min (Nivel ${nivelNav} Navette) → <b>${nVO2.nivel}</b><br>
+        VAM: ${fmt(vam)} km/h → Umbral al <b>${fmt(vam*0.85)} km/h (85% VAM)</b> y <b>${fmt(vam*0.75)} km/h (75% VAM)</b><br>
+        Test Yo-Yo: ${yoyoM}m → <b>${nYoYo.nivel}</b><br>
+        RSA: Mejor ${fmt(rsa.mejor,2)}s | Peor ${fmt(rsa.peor,2)}s | Índice fatiga ${fmt(rsa.idxFatiga,1)}% → <b>${nRSA.nivel}</b><br>
+        Carga semanal: ~${Math.round(cargaSemana)} UA → <b>${cargaSemana < 1500 ? 'Baja' : cargaSemana < 2500 ? 'Óptima' : cargaSemana < 3500 ? 'Alta' : 'Excesiva'}</b><br>
+        FC reserva: ${fcRes} lpm | IMC: ${fmt(imc,1)} kg/m²
+      </div>
+    </div>`;
+}
+
+// ── ESTADÍSTICA ───────────────────────────────────────────────────────────────
+let nJugadores = 0;
+
+function agregarJugador(preset) {
+  nJugadores++;
+  const c = document.getElementById('jugadores-container');
+  const div = document.createElement('div');
+  div.id = `jug-${nJugadores}`;
+  div.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1fr 35px;gap:6px;align-items:center;margin-bottom:6px;';
+  const p = preset || { nombre:`Jugador ${nJugadores}`, v1:'', v2:'' };
+  div.innerHTML = `
+    <input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="text" id="jn-${nJugadores}" value="${p.nombre}" placeholder="Nombre" />
+    <input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="number" id="j1-${nJugadores}" value="${p.v1}" placeholder="Medición 1" step="0.01" />
+    <input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="number" id="j2-${nJugadores}" value="${p.v2}" placeholder="Medición 2" step="0.01" />
+    <button style="background:none;border:none;cursor:pointer;color:#c62828;font-size:1.1rem;" onclick="document.getElementById('jug-${nJugadores}').remove()">✕</button>`;
+  c.appendChild(div);
+}
+
+function calcularEstadistica() {
+  const variable = document.getElementById('s-variable').value;
+  const nombre   = document.getElementById('s-nombre').value;
+  const varNombres = { vo2:'VO2 máx (ml/kg/min)', yoyo:'Test Yo-Yo (m)', sprint:'Sprint 30m (seg)', rsa:'Índice fatiga RSA (%)', vam:'VAM (km/h)' };
+
+  const rows = document.querySelectorAll('#jugadores-container > div');
+  if (rows.length < 3) { alert('Ingresa al menos 3 deportistas para el análisis estadístico.'); return; }
+
+  const datos = [];
+  rows.forEach(row => {
+    const id  = row.id.split('-')[1];
+    const v1  = parseFloat(document.getElementById(`j1-${id}`)?.value);
+    const v2  = parseFloat(document.getElementById(`j2-${id}`)?.value);
+    const nom = document.getElementById(`jn-${id}`)?.value || '';
+    if (!isNaN(v1) && !isNaN(v2)) datos.push({ nom, v1, v2, diff: v2 - v1 });
+  });
+
+  if (datos.length < 3) { alert('Asegúrate de haber ingresado los valores de al menos 3 deportistas.'); return; }
+
+  const n     = datos.length;
+  const diffs = datos.map(d => d.diff);
+  const meanD = diffs.reduce((a,b)=>a+b,0) / n;
+  const sdD   = Math.sqrt(diffs.map(d=>(d-meanD)**2).reduce((a,b)=>a+b,0) / (n-1));
+  const tStat = meanD / (sdD / Math.sqrt(n));
+  const se    = sdD / Math.sqrt(n);
+
+  const mean1 = datos.map(d=>d.v1).reduce((a,b)=>a+b,0)/n;
+  const mean2 = datos.map(d=>d.v2).reduce((a,b)=>a+b,0)/n;
+  const sd1   = Math.sqrt(datos.map(d=>d.v1).map(v=>(v-mean1)**2).reduce((a,b)=>a+b,0)/(n-1));
+  const sd2   = Math.sqrt(datos.map(d=>d.v2).map(v=>(v-mean2)**2).reduce((a,b)=>a+b,0)/(n-1));
+  const pooledSD = Math.sqrt(((n-1)*sd1**2 + (n-1)*sd2**2) / (2*n-2));
+  const cohenD = Math.abs(meanD) / pooledSD;
+
+  const tcrit = n >= 10 ? 2.228 : n >= 7 ? 2.447 : n >= 5 ? 2.776 : 3.182;
+  const significant = Math.abs(tStat) > tcrit;
+
+  const cohenInterp = cohenD < 0.2 ? 'Trivial' : cohenD < 0.5 ? 'Pequeño' : cohenD < 0.8 ? 'Moderado' : 'Grande';
+  const mejoroEmpeoró = meanD > 0 ? '📈 Mejoró' : '📉 Empeoró';
+
+  const filasHTML = datos.map(d => `
+    <tr>
+      <td>${d.nom}</td>
+      <td style="text-align:right;">${fmt(d.v1,2)}</td>
+      <td style="text-align:right;">${fmt(d.v2,2)}</td>
+      <td style="text-align:right;color:${d.diff>0?'#a5d6a7':'#ef9a9a'};font-weight:700;">${d.diff>0?'+':''}${fmt(d.diff,2)}</td>
+    </tr>`).join('');
+
+  document.getElementById('resultado-estadistica').style.display = 'block';
+  document.getElementById('resultado-estadistica').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Análisis estadístico — ${varNombres[variable]} | n=${n} deportistas</div>
+      <div class="resultado-grande">${significant ? '✅ SÍ hay diferencia' : '⚠️ NO significativo'}</div>
+      <div class="resultado-sub">t(${n-1}) = ${fmt(Math.abs(tStat),3)} | p ${significant ? '< 0.05' : '> 0.05'} | Cohen's d = ${fmt(cohenD,2)} (${cohenInterp})</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">${fmt(mean1,2)}</div><div class="resultado-label">Media medición 1</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(mean2,2)}</div><div class="resultado-label">Media medición 2</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${meanD>0?'+':''}${fmt(meanD,2)}</div><div class="resultado-label">Cambio promedio ${mejoroEmpeoró}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(cohenD,2)}</div><div class="resultado-label">Cohen's d (${cohenInterp})</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(Math.abs(tStat),3)}</div><div class="resultado-label">t estadístico</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(sdD,2)}</div><div class="resultado-label">DE de las diferencias</div></div>
+      </div>
+      <div style="overflow-x:auto;margin-top:1rem;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.83rem;">
+          <thead><tr style="background:rgba(255,255,255,0.15);">
+            <th style="padding:8px;text-align:left;color:#fff;">Deportista</th>
+            <th style="padding:8px;text-align:right;color:#fff;">Medición 1</th>
+            <th style="padding:8px;text-align:right;color:#fff;">Medición 2</th>
+            <th style="padding:8px;text-align:right;color:#fff;">Cambio</th>
+          </tr></thead>
+          <tbody style="color:#fff;">${filasHTML}</tbody>
+        </table>
+      </div>
+      <div class="resultado-detalle">
+        <b>Interpretación:</b><br>
+        ${significant
+          ? `✅ La diferencia entre medición 1 y 2 ES estadísticamente significativa (p<0.05). El entrenamiento produjo un cambio real, no atribuible al azar.`
+          : `⚠️ La diferencia NO es estadísticamente significativa (p>0.05). El cambio observado podría deberse al azar. Se recomienda continuar el proceso de entrenamiento y reevaluar.`}<br>
+        <b>Tamaño del efecto (Cohen's d = ${fmt(cohenD,2)}):</b> ${cohenInterp} — ${
+          cohenD < 0.2 ? 'El cambio es trivial en la práctica deportiva.' :
+          cohenD < 0.5 ? 'Hay un cambio real pero de baja magnitud. Revisar el programa.' :
+          cohenD < 0.8 ? 'Cambio de magnitud moderada. El proceso de entrenamiento está funcionando.' :
+          'Cambio de alta magnitud. El entrenamiento fue muy efectivo.'
+        }
+      </div>
+    </div>`;
+}
+
+// ── RECOMENDACIONES ───────────────────────────────────────────────────────────
+function generarRecomendaciones() {
+  const pos      = document.getElementById('r-posicion').value;
+  const vo2Niv   = document.getElementById('r-vo2').value;
+  const yoyoNiv  = document.getElementById('r-yoyo').value;
+  const rsaNiv   = document.getElementById('r-rsa').value;
+  const cargaNiv = document.getElementById('r-carga').value;
+  const temp     = document.getElementById('r-temporada').value;
+
+  const posNombres = { portero:'Portero', defensa:'Defensa', mediocampista:'Mediocampista', extremo:'Extremo', delantero:'Delantero' };
+
+  const recsEntrenamiento = {
+    bajo: {
+      vo2:  'Incrementar el volumen aeróbico: 3-4 sesiones/semana de carrera continua a 70-75% FC máx (30-45 min). Incluir juegos en espacios reducidos (rondos 4v4, 5v5) con alta densidad de movimiento.',
+      yoyo: 'Implementar trabajos intermitentes: series de 15-15 (15 seg al 120% VAM / 15 seg recuperación) o fartlek continuo. Progresión de 4 a 8 series en 6 semanas.',
+      rsa:  'Reducir el número de sprints por sesión y aumentar el tiempo de recuperación (ratio 1:8 trabajo:descanso). Priorizar calidad sobre cantidad en los sprints. Evaluar el estado nutricional del deportista.',
+    },
+    aceptable: {
+      vo2:  'Mantener base aeróbica y agregar trabajos al umbral anaeróbico: 2 sesiones/semana al 85-90% VAM en series de 4-6 min con 2-3 min recuperación.',
+      yoyo: 'Trabajos interválicos de alta intensidad (HIIT): 10-15 repeticiones de 20 seg al 130% VAM con 100 seg de recuperación. Progresar 2 repeticiones/semana.',
+      rsa:  'Incorporar circuitos de sprints con recuperación incompleta (1:5). Meta: reducir el índice de fatiga en 1-2% en 4 semanas de entrenamiento específico.',
+    },
+    bueno: {
+      vo2:  'Mantener con 2 sesiones aeróbicas/semana. Focalizar esfuerzos en velocidad y potencia. Incluir acciones técnico-tácticas a alta intensidad para transferencia deportiva.',
+      yoyo: 'Nivel adecuado para competencia. Mantener con 1-2 sesiones intermitentes/semana. Evaluar cada 6-8 semanas para detectar posible deterioro en temporada.',
+      rsa:  'Mantener con trabajo específico de sprint 1-2 veces/semana. Incluir cambios de dirección (COD) en los circuitos para mayor especificidad futbolística.',
+    },
+    excelente: {
+      vo2:  'Nivel élite. Mantener con volumen reducido (1 sesión aeróbica/semana). Maximizar trabajo técnico-táctico y recuperación. Prevención de lesiones como prioridad.',
+      yoyo: 'Nivel élite. Reducir frecuencia de tests para evitar fatiga acumulada. Mantener con trabajos intermitentes de baja-moderada intensidad en temporada.',
+      rsa:  'Capacidad de sprint excelente. Mantener con 1 sesión específica/semana. Priorizar la recuperación entre sesiones de alta intensidad.',
+    },
+  };
+
+  const recsNutricion = {
+    bajo: 'Incrementar ingesta de carbohidratos complejos (5-7 g/kg/día) para mejorar disponibilidad energética. Asegurar hidratación pre, durante y post entrenamiento (500ml pre / 200ml cada 20 min durante / 1.5L por kg perdido post). Evaluar niveles de ferritina y hemoglobina (posible anemia ferropénica).',
+    aceptable: 'Carbohidratos 6-8 g/kg/día en días de entrenamiento intenso. Proteína 1.6-1.8 g/kg/día para recuperación muscular. Incluir colación post-entrenamiento (CHO + PRO) en los primeros 30 minutos post sesión.',
+    bueno: 'Mantener balance energético adecuado (CHO 6-7 g/kg/día, PRO 1.6 g/kg/día). Periodizar la nutrición según la carga semanal. Suplementación con creatina (3-5 g/día) puede ser evaluada con el médico del equipo.',
+    excelente: 'Nutrición de alto rendimiento: CHO 7-10 g/kg en días de partido/entrenamiento intenso. Hidratación optimizada con sodio (bebida isotónica). Considerar periodización nutricional con el nutricionista del equipo.',
+  };
+
+  const recsCarga = {
+    baja: 'Incrementar gradualmente la carga (no más del 10% semanal). Añadir sesiones de entrenamiento o aumentar la duración/intensidad de las existentes.',
+    optima: 'Carga adecuada. Mantener la distribución actual. Incluir al menos 1-2 días de recuperación activa por semana.',
+    alta: 'Monitorear signos de fatiga acumulada (velocidad de reacción, calidad del sueño, variabilidad de FC). Considerar una semana de descarga (reducir 30% del volumen) cada 3-4 semanas de carga alta.',
+    excesiva: '⚠️ RIESGO DE SOBREENTRENAMIENTO. Reducir inmediatamente el volumen y/o intensidad. Implementar una semana de recuperación completa. Evaluar al deportista con el médico del equipo.',
+  };
+
+  const recsDecision = {
+    portero: 'Trabajo específico de potencia explosiva y flexibilidad. El VO2 máx tiene menor peso que en jugadores de campo. Priorizar reactividad, anticipación y trabajo de tren superior.',
+    defensa: 'Equilibrar resistencia aeróbica con velocidad de reacción y potencia en duelos. Los déficits en RSA son críticos para recuperar posición tras acciones explosivas.',
+    mediocampista: 'La resistencia intermitente (Yo-Yo) es el indicador más crítico. Un mediocampista de élite recorre 10-13 km por partido con alta intensidad. Priorizar si está en nivel bajo o aceptable.',
+    extremo: 'El RSA es la capacidad más determinante. Los extremos realizan hasta 25-30 sprints por partido. Un índice de fatiga >5% limita su efectividad en el segundo tiempo.',
+    delantero: 'Priorizar la potencia y el RSA sobre el volumen aeróbico. La capacidad de realizar sprints decisivos en los últimos 15 minutos del partido es el factor diferencial.',
+  };
+
+  const nivGeneral = [vo2Niv, yoyoNiv, rsaNiv].filter(n=>n==='bajo').length >= 2 ? 'bajo' :
+                     [vo2Niv, yoyoNiv, rsaNiv].filter(n=>n==='excelente').length >= 2 ? 'excelente' :
+                     [vo2Niv, yoyoNiv, rsaNiv].filter(n=>n==='bueno').length >= 2 ? 'bueno' : 'aceptable';
+
+  document.getElementById('resultado-recomendaciones').style.display = 'block';
+  document.getElementById('resultado-recomendaciones').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Recomendaciones — ${posNombres[pos]} | Fase: ${temp}</div>
+      <div class="resultado-grande">${nivGeneral === 'excelente' ? '🟢' : nivGeneral === 'bueno' ? '🔵' : nivGeneral === 'aceptable' ? '🟡' : '🔴'} Perfil ${nivGeneral.charAt(0).toUpperCase()+nivGeneral.slice(1)}</div>
+      <div class="resultado-sub">Recomendaciones específicas por capacidad física y posición</div>
+
+      <div class="rec-card">
+        <h4>🫁 Entrenamiento aeróbico (VO2 máx — ${vo2Niv})</h4>
+        <p>${recsEntrenamiento[vo2Niv].vo2}</p>
+      </div>
+      <div class="rec-card">
+        <h4>🏃 Resistencia intermitente (Yo-Yo — ${yoyoNiv})</h4>
+        <p>${recsEntrenamiento[yoyoNiv].yoyo}</p>
+      </div>
+      <div class="rec-card">
+        <h4>⚡ Capacidad de sprint repetido (RSA — ${rsaNiv})</h4>
+        <p>${recsEntrenamiento[rsaNiv].rsa}</p>
+      </div>
+      <div class="rec-card">
+        <h4>📊 Gestión de la carga — ${cargaNiv}</h4>
+        <p>${recsCarga[cargaNiv]}</p>
+      </div>
+      <div class="rec-card">
+        <h4>🥗 Recomendaciones nutricionales</h4>
+        <p>${recsNutricion[nivGeneral]}</p>
+      </div>
+      <div class="rec-card">
+        <h4>🎯 Decisión táctica por posición — ${posNombres[pos]}</h4>
+        <p>${recsDecision[pos]}</p>
+      </div>
+      <div class="resultado-detalle">
+        <b>Prioridad de intervención:</b><br>
+        ${vo2Niv === 'bajo' ? '🔴 URGENTE: Incrementar base aeróbica antes de trabajar resistencia intermitente.<br>' : ''}
+        ${rsaNiv === 'bajo' ? '🔴 URGENTE: Revisar recuperación y nutrición. El RSA bajo limita el rendimiento en partido.<br>' : ''}
+        ${cargaNiv === 'excesiva' ? '🔴 URGENTE: Reducir carga inmediatamente. Riesgo de lesión y sobreentrenamiento.<br>' : ''}
+        ${nivGeneral === 'excelente' ? '🟢 El deportista está en condiciones óptimas. Mantener y periodizar para el momento de mayor competencia.' : ''}
+        ${temp === 'pretemporada' ? '📅 Fase pretemporada: priorizar volumen sobre intensidad las primeras 3-4 semanas.' : ''}
+        ${temp === 'transicion' ? '📅 Fase de transición: reducir carga al 50%. Trabajo regenerativo y actividad alternativa.' : ''}
+      </div>
+    </div>`;
+}
+
+// Cargar jugadores de ejemplo al inicio
+document.addEventListener('DOMContentLoaded', () => {
+  const ejemplos = [
+    { nombre:'Jugador 1', v1:'52.3', v2:'55.1' },
+    { nombre:'Jugador 2', v1:'49.8', v2:'52.4' },
+    { nombre:'Jugador 3', v1:'54.1', v2:'56.8' },
+    { nombre:'Jugador 4', v1:'51.2', v2:'53.9' },
+    { nombre:'Jugador 5', v1:'48.7', v2:'51.5' },
+  ];
+  ejemplos.forEach(e => agregarJugador(e));
+
+  // Fecha por defecto
+  const hoy = new Date().toISOString().split('T')[0];
+  document.getElementById('e-fecha').value = hoy;
+  document.getElementById('s-fecha1').value = hoy;
+  document.getElementById('s-fecha2').value = hoy;
+});
+</script>
+</body>
+</html>
