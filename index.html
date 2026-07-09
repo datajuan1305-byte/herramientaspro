@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Herramientas digitales gratuitas para profesionales colombianos. Calculadoras y simuladores adaptados a la normativa colombiana 2026." />
-  <meta name="keywords" content="herramientas profesionales colombia, calculadora laboral, liquidacion colombia, fertilizacion NPK, nomina colombia" />
+  <meta name="keywords" content="herramientas profesionales colombia, calculadora laboral, liquidacion colombia, fertilizacion NPK, nomina colombia, rendimiento deportivo colombia, entrenadores deportivos, vo2 max futbol, 1rm halterofilia, test cooper atletismo" />
   <title>HerramientasPro Colombia — Herramientas digitales gratuitas</title>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BRHFQTZC5D"></script>
@@ -324,8 +324,8 @@
 
 <!-- STATS -->
 <div class="stats">
-  <div class="stat"><div class="stat-n">62</div><div class="stat-l">Herramientas</div></div>
-  <div class="stat"><div class="stat-n">12</div><div class="stat-l">Profesiones</div></div>
+  <div class="stat"><div class="stat-n">67</div><div class="stat-l">Herramientas</div></div></div>
+  <div class="stat"><div class="stat-n">13</div><div class="stat-l">Categorías</div></div>
   <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Gratuito</div></div>
   <div class="stat"><div class="stat-n">2026</div><div class="stat-l">Normativa vigente</div></div>
 </div>
@@ -347,6 +347,7 @@
       <button class="tab" onclick="switchTab(this,'abogados')"><span class="tab-emoji">⚖️</span> Abogados</button>
       <button class="tab" onclick="switchTab(this,'psicologia')"><span class="tab-emoji">🧠</span> Psicólogos</button>
       <button class="tab" onclick="switchTab(this,'alimentos')"><span class="tab-emoji">🧪</span> Ing. Alimentos</button>
+      <button class="tab" onclick="switchTab(this,'deportes')" style="border:2px solid #e65100;color:#e65100;font-weight:700;"><span class="tab-emoji">🏅</span> Entrenadores</button>
     </div>
   </div>
 </div>
@@ -511,6 +512,17 @@ const profesiones = {
       { emoji: '⚖️', bg: '#E1F5EE', name: 'Balance de masa en producción', desc: 'Entradas, salidas y mermas del proceso', url: 'ing-alimentos/balance-masa/', ready: true },
       { emoji: '🧫', bg: '#EAF3DE', name: 'pH y acidez titulable', desc: 'Cálculos de control de calidad', url: 'ing-alimentos/ph-acidez-titulable/', ready: true },
       { emoji: '🌡️', bg: '#FCEBEB', name: 'Pasteurización (tiempo-temperatura)', desc: 'Equivalencia de tratamiento térmico', url: '', ready: false },
+    ]
+  },
+  deportes: {
+    titulo: '🏅 Entrenadores Deportivos',
+    desc: 'Herramientas de evaluación del rendimiento físico, análisis estadístico inferencial y recomendaciones automáticas de entrenamiento y nutrición. Estándares internacionales FIFA, IAAF, IPF e IWF adaptadas al contexto deportivo colombiano.',
+    apps: [
+      { emoji: '⚽', bg: '#E8F5E9', name: 'Rendimiento Fútbol', desc: 'VO2 máx (Navette), Test Yo-Yo, RSA sprint repetido, carga RPE de Foster, VAM. T-test + Cohen\'s d + recomendaciones por posición', url: 'deportes/rendimiento-futbol/', ready: true },
+      { emoji: '🏃', bg: '#FFF3E0', name: 'Rendimiento Atletismo', desc: 'VDOT de Daniels, Test Cooper, puntos IAAF, velocidad crítica, zonas E/M/T/I/R. Análisis estadístico y recomendaciones por prueba', url: 'deportes/rendimiento-atletismo/', ready: true },
+      { emoji: '🏋️', bg: '#F3E5F5', name: 'Rendimiento Pesas / Halterofilia', desc: '1RM (Brzycki, Epley, O\'Connor, Lombardi), Wilks Score, Sinclair, velocidad de barra, déficit de fuerza. Periodización y recomendaciones', url: 'deportes/rendimiento-pesas/', ready: true },
+      { emoji: '🥊', bg: '#FFEBEE', name: 'Rendimiento Boxeo', desc: 'Potencia de golpe, CMJ (Sayers), Test Wingate 30s, índice de recuperación FC, relación peso/potencia. Recomendaciones por estilo de combate', url: 'deportes/rendimiento-boxeo/', ready: true },
+      { emoji: '📊', bg: '#E3F2FD', name: 'Análisis Estadístico Deportivo', desc: 'T-test pareado, ANOVA de una vía, Cohen\'s d, percentiles por grupo, tendencia lineal de rendimiento. Aplicable a todos los deportes', url: 'deportes/estadistica-deportiva/', ready: true },
     ]
   }
 };
@@ -697,4 +709,3 @@ renderContent('agro');
 </script>
 </body>
 </html>
-
