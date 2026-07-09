@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Estadística Deportiva — HerramientasPro Colombia</title>
+  <meta name="description" content="Herramienta de estadística inferencial para entrenadores deportivos. T-test pareado, ANOVA, Cohen's d, percentiles, tendencia lineal. Aplicable a todos los deportes."/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--azul:#1a3a5c;--cian:#00838f;--cian-medio:#0097a7;--cian-claro:#e0f7fa;--amarillo:#f5a623;--gris-bg:#f4f6f9;--card:#fff;--texto:#1e2d3d;--texto-suave:#5a6a7a;--borde:#dde3ea;--sombra:0 2px 12px rgba(26,58,92,0.09);--radio:12px}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gris-bg);color:var(--texto);font-size:16px;line-height:1.6}
+    nav{background:var(--azul);padding:0 1.2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.18)}
+    .nav-brand{color:#fff;font-weight:700;font-size:1.1rem;text-decoration:none}
+    .nav-brand span{color:var(--amarillo)}
+    .nav-links a{color:rgba(255,255,255,0.82);text-decoration:none;font-size:0.82rem;padding:4px 10px;border-radius:20px}
+    .nav-links a.active{background:var(--amarillo);color:var(--azul);font-weight:700}
+    .hero{background:linear-gradient(135deg,#1a3a5c 0%,#00838f 60%,#26c6da 100%);padding:2.5rem 1.2rem 2rem;text-align:center;color:#fff}
+    .hero-badge{display:inline-block;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);border-radius:20px;padding:4px 14px;font-size:0.78rem;font-weight:600;margin-bottom:0.8rem;text-transform:uppercase}
+    .hero h1{font-size:clamp(1.4rem,4vw,2rem);font-weight:800;margin-bottom:0.5rem}
+    .hero p{font-size:0.95rem;opacity:0.92;max-width:600px;margin:0 auto 1rem}
+    .hero-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+    .hero-chip{background:rgba(255,255,255,0.2);border-radius:20px;padding:3px 12px;font-size:0.78rem;font-weight:600}
+    .container{max-width:960px;margin:0 auto;padding:1.5rem 1rem 3rem}
+    .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.4rem;background:var(--card);padding:6px;border-radius:var(--radio);box-shadow:var(--sombra)}
+    .tab-btn{flex:1;min-width:100px;padding:9px 10px;border:none;border-radius:8px;background:transparent;color:var(--texto-suave);font-size:0.83rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+    .tab-btn.active{background:var(--cian-medio);color:#fff}
+    .tab-panel{display:none}.tab-panel.active{display:block}
+    .card{background:var(--card);border-radius:var(--radio);box-shadow:var(--sombra);padding:1.4rem;margin-bottom:1.2rem}
+    .card h2{font-size:1.05rem;font-weight:700;color:var(--azul);margin-bottom:1rem}
+    .card h3{font-size:0.88rem;font-weight:700;color:var(--cian);margin:1rem 0 0.6rem;border-left:3px solid var(--cian);padding-left:8px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem}
+    @media(max-width:580px){.form-grid{grid-template-columns:1fr}}
+    .form-group{display:flex;flex-direction:column;gap:4px}
+    label{font-size:0.82rem;font-weight:600;color:var(--texto-suave)}
+    input,select,textarea{padding:9px 12px;border:1.5px solid var(--borde);border-radius:8px;font-size:0.92rem;color:var(--texto);background:var(--gris-bg);width:100%}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--cian);background:#fff}
+    .form-hint{font-size:0.75rem;color:var(--texto-suave);font-style:italic}
+    .btn{width:100%;padding:12px;background:var(--cian-medio);color:#fff;border:none;border-radius:30px;font-size:1rem;font-weight:800;cursor:pointer;margin-top:1rem;transition:background 0.2s}
+    .btn:hover{background:var(--cian)}
+    .info-box{background:var(--cian-claro);border-left:4px solid var(--cian);border-radius:8px;padding:0.9rem 1rem;font-size:0.85rem;margin-bottom:1rem}
+    .resultado-box{background:linear-gradient(135deg,#1a3a5c 0%,#00838f 100%);border-radius:var(--radio);padding:1.4rem;color:#fff;margin-top:1.2rem}
+    .resultado-titulo{font-size:0.78rem;font-weight:600;opacity:0.7;text-transform:uppercase;margin-bottom:0.8rem}
+    .resultado-grande{font-size:2.8rem;font-weight:900;color:#ffe082;line-height:1}
+    .resultado-sub{font-size:0.95rem;opacity:0.85;margin-top:0.3rem}
+    .resultado-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.8rem;margin-top:1rem}
+    .resultado-item{background:rgba(255,255,255,0.12);border-radius:8px;padding:0.8rem;text-align:center}
+    .resultado-valor{font-size:1.1rem;font-weight:800;color:#ffe082}
+    .resultado-label{font-size:0.72rem;opacity:0.85;margin-top:2px}
+    .resultado-detalle{margin-top:1rem;background:rgba(255,255,255,0.1);border-radius:8px;padding:0.9rem;font-size:0.83rem;line-height:2}
+    .resultado-detalle b{color:#ffe082}
+    .ref-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+    .ref-table th{background:var(--azul);color:#fff;padding:8px 10px;text-align:left}
+    .ref-table td{padding:7px 10px;border-bottom:1px solid var(--borde)}
+    .ref-table tr:hover td{background:var(--cian-claro)}
+    .disclaimer{background:#fff3cd;border:1px solid #ffc107;border-radius:var(--radio);padding:1rem 1.2rem;font-size:0.8rem;color:#5a4a00;margin-top:2rem;text-align:center}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://herramientaspro.com.co" class="nav-brand">📊 <span>HerramientasPro</span></a>
+  <div class="nav-links"><a href="https://herramientaspro.com.co">← Inicio</a><a href="#" class="active">Estadística Deportiva</a></div>
+</nav>
+<div class="hero">
+  <div class="hero-badge">📊 Entrenadores Deportivos — Estadística</div>
+  <h1>Análisis Estadístico Deportivo</h1>
+  <p>T-test pareado, ANOVA de una vía, Cohen's d, percentiles por edad y sexo, y tendencia lineal de rendimiento. Aplicable a todos los deportes: fútbol, atletismo, pesas, boxeo y más.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🔬 T-test pareado</span>
+    <span class="hero-chip">📈 ANOVA</span>
+    <span class="hero-chip">📊 Cohen's d</span>
+    <span class="hero-chip">📉 Tendencia lineal</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('ttest',this)">🔬 T-test Pareado</button>
+    <button class="tab-btn" onclick="mostrarTab('anova',this)">📈 ANOVA</button>
+    <button class="tab-btn" onclick="mostrarTab('percentiles',this)">📊 Percentiles</button>
+    <button class="tab-btn" onclick="mostrarTab('tendencia',this)">📉 Tendencia Lineal</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia',this)">📋 Guía Estadística</button>
+  </div>
+
+  <!-- T-TEST -->
+  <div id="tab-ttest" class="tab-panel active">
+    <div class="card">
+      <h2>🔬 T-test Pareado — ¿Mejoró el deportista?</h2>
+      <div class="info-box"><strong>¿Cuándo usarlo?</strong> Cuando mides la <strong>misma variable</strong> en el <strong>mismo grupo</strong> en <strong>dos momentos distintos</strong> (pre y post entrenamiento). Determina si la mejora es real o se debe al azar. Mínimo 3 sujetos.</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Nombre del test / variable</label><input type="text" id="tt-nombre" value="VO2 máx (ml/kg/min)"/></div>
+        <div class="form-group"><label>Tipo de mejora esperada</label><select id="tt-tipo"><option value="mayor" selected>Mayor es mejor (VO2, salto, fuerza, velocidad)</option><option value="menor">Menor es mejor (tiempo, FC, índice fatiga)</option></select></div>
+      </div>
+      <h3>Ingresa los datos del grupo</h3>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 35px;gap:6px;margin-bottom:4px;">
+        <span style="font-size:0.78rem;font-weight:700;color:var(--texto-suave);">Nombre</span>
+        <span style="font-size:0.78rem;font-weight:700;color:var(--texto-suave);">Medición 1 (Pre)</span>
+        <span style="font-size:0.78rem;font-weight:700;color:var(--texto-suave);">Medición 2 (Post)</span>
+        <span></span>
+      </div>
+      <div id="tt-container"></div>
+      <button style="padding:8px 18px;border:none;border-radius:20px;background:var(--cian-medio);color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:0.6rem;" onclick="agregarFila('tt')">+ Agregar deportista</button>
+      <button class="btn" onclick="calcularTTest()">🔬 Calcular T-test Pareado</button>
+    </div>
+    <div id="resultado-ttest" style="display:none;"></div>
+  </div>
+
+  <!-- ANOVA -->
+  <div id="tab-anova" class="tab-panel">
+    <div class="card">
+      <h2>📈 ANOVA de una vía — ¿Hay diferencias entre grupos?</h2>
+      <div class="info-box"><strong>¿Cuándo usarlo?</strong> Cuando quieres comparar <strong>3 o más grupos diferentes</strong> (ej: grupo A entrenó fuerza, grupo B aeróbico, grupo C mixto) y determinar si hay diferencias significativas entre ellos en una misma variable.</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Variable medida</label><input type="text" id="av-nombre" value="Rendimiento (puntos)"/></div>
+        <div class="form-group"><label>Número de grupos</label><select id="av-ngrupos" onchange="configurarGruposAnova()"><option value="3" selected>3 grupos</option><option value="4">4 grupos</option><option value="5">5 grupos</option></select></div>
+      </div>
+      <div id="av-grupos-container"></div>
+      <button class="btn" onclick="calcularAnova()">📈 Calcular ANOVA</button>
+    </div>
+    <div id="resultado-anova" style="display:none;"></div>
+  </div>
+
+  <!-- PERCENTILES -->
+  <div id="tab-percentiles" class="tab-panel">
+    <div class="card">
+      <h2>📊 Percentiles — ¿Dónde está el deportista?</h2>
+      <div class="info-box"><strong>¿Para qué sirve?</strong> Calcula el percentil de un deportista dentro de su grupo de referencia (mismo deporte, edad y sexo). Determina si está por encima o por debajo del promedio del grupo.</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Variable medida</label><input type="text" id="pc-variable" value="VO2 máx (ml/kg/min)"/></div>
+        <div class="form-group"><label>Valor del deportista</label><input type="number" id="pc-valor" value="55.3" step="0.1"/></div>
+      </div>
+      <h3>Datos del grupo de referencia</h3>
+      <div class="info-box">Ingresa los valores de todo el grupo. El sistema calculará la media, desviación estándar y el percentil del deportista objetivo.</div>
+      <div class="form-group">
+        <label>Valores del grupo (separados por comas o saltos de línea)</label>
+        <textarea id="pc-datos" rows="5" placeholder="Ejemplo: 48.2, 52.1, 55.3, 58.7, 61.2, 45.8, 53.9, 49.4, 57.1, 62.3">48.2, 52.1, 55.3, 58.7, 61.2, 45.8, 53.9, 49.4, 57.1, 62.3, 50.5, 54.8, 59.2, 46.3, 63.1</textarea>
+      </div>
+      <button class="btn" onclick="calcularPercentil()">📊 Calcular Percentil</button>
+    </div>
+    <div id="resultado-percentil" style="display:none;"></div>
+  </div>
+
+  <!-- TENDENCIA LINEAL -->
+  <div id="tab-tendencia" class="tab-panel">
+    <div class="card">
+      <h2>📉 Tendencia Lineal — Proyección de Rendimiento</h2>
+      <div class="info-box"><strong>¿Para qué sirve?</strong> Analiza la progresión de rendimiento de un deportista a lo largo del tiempo y proyecta el rendimiento futuro basado en la tendencia histórica. Ideal para seguimiento de temporada.</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Nombre del deportista</label><input type="text" id="tl-nombre" value="Deportista 1"/></div>
+        <div class="form-group"><label>Variable medida (con unidad)</label><input type="text" id="tl-variable" value="VO2 máx (ml/kg/min)"/></div>
+      </div>
+      <h3>Registros históricos (fecha y valor)</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr 35px;gap:6px;margin-bottom:4px;">
+        <span style="font-size:0.78rem;font-weight:700;color:var(--texto-suave);">Semana / Mes</span>
+        <span style="font-size:0.78rem;font-weight:700;color:var(--texto-suave);">Valor medido</span>
+        <span></span>
+      </div>
+      <div id="tl-container"></div>
+      <button style="padding:8px 18px;border:none;border-radius:20px;background:var(--cian-medio);color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:0.6rem;" onclick="agregarFila('tl')">+ Agregar medición</button>
+      <div class="form-grid" style="margin-top:1rem;">
+        <div class="form-group"><label>Proyectar a (semanas/meses adelante)</label><input type="number" id="tl-proyeccion" value="4" min="1" max="24"/></div>
+        <div class="form-group"><label>Meta de rendimiento</label><input type="number" id="tl-meta" value="65" step="0.1"/></div>
+      </div>
+      <button class="btn" onclick="calcularTendencia()">📉 Calcular Tendencia y Proyección</button>
+    </div>
+    <div id="resultado-tendencia" style="display:none;"></div>
+  </div>
+
+  <!-- REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Guía de Estadística para Entrenadores</h2>
+      <h3>¿Qué prueba usar?</h3>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Situación</th><th>Prueba recomendada</th><th>Ejemplo deportivo</th></tr></thead>
+          <tbody>
+            <tr><td>Mismo grupo, 2 mediciones (pre/post)</td><td><strong>T-test pareado</strong></td><td>VO2 máx antes y después de 8 semanas de entrenamiento</td></tr>
+            <tr><td>3+ grupos distintos, 1 variable</td><td><strong>ANOVA de una vía</strong></td><td>Comparar 3 métodos de entrenamiento en fuerza</td></tr>
+            <tr><td>Magnitud del cambio</td><td><strong>Cohen's d</strong></td><td>¿Qué tan grande fue la mejora en el 1RM?</td></tr>
+            <tr><td>Posición en el grupo</td><td><strong>Percentil</strong></td><td>¿En qué percentil está el atleta respecto a sus compañeros?</td></tr>
+            <tr><td>Progresión en el tiempo</td><td><strong>Tendencia lineal</strong></td><td>¿A qué ritmo mejora el deportista mes a mes?</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Interpretación de Cohen's d</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Valor d</th><th>Magnitud</th><th>Interpretación práctica en deporte</th></tr></thead>
+          <tbody>
+            <tr><td>&lt;0.2</td><td>Trivial</td><td>El cambio no es relevante. Revisar programa o extender período.</td></tr>
+            <tr><td>0.2 - 0.49</td><td>Pequeño</td><td>Cambio real pero de baja magnitud. Continuar y reevaluar.</td></tr>
+            <tr><td>0.5 - 0.79</td><td>Moderado</td><td>Cambio importante. El entrenamiento está produciendo efecto.</td></tr>
+            <tr><td>≥0.8</td><td>Grande</td><td>Cambio de alta magnitud. Entrenamiento muy efectivo.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Niveles de significancia estadística</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Valor p</th><th>Interpretación</th><th>Decisión práctica</th></tr></thead>
+          <tbody>
+            <tr><td>p &lt; 0.01</td><td>Altamente significativo</td><td>Cambio muy confiable. Alta certeza.</td></tr>
+            <tr><td>p &lt; 0.05</td><td>Significativo</td><td>Cambio real. Decisión con confianza.</td></tr>
+            <tr><td>0.05 ≤ p &lt; 0.10</td><td>Tendencia</td><td>Posible cambio. Ampliar muestra.</td></tr>
+            <tr><td>p ≥ 0.10</td><td>No significativo</td><td>Sin evidencia suficiente de cambio.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">⚠️ <strong>Herramienta de uso orientativo.</strong> Los análisis estadísticos deben ser interpretados por un <strong>profesional en Ciencias del Deporte o estadística aplicada</strong>. El tamaño de muestra pequeño (n&lt;10) reduce la potencia estadística. Referencias: Cohen, J. (1988); Field, A. (2013).</div>
+</div>
+
+<script>
+function mostrarTab(id,btn){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');}
+function fmt(n,d=2){return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});}
+
+// ── FILAS DINÁMICAS ──
+let contadores={tt:0,tl:0};
+function agregarFila(tipo,p){
+  contadores[tipo]++;
+  const id=contadores[tipo];
+  const c=document.getElementById(`${tipo}-container`);
+  const d=document.createElement('div');
+  d.id=`${tipo}-row-${id}`;
+  if(tipo==='tt'){
+    const pr=p||{n:`Deportista ${id}`,v1:'',v2:''};
+    d.style.cssText='display:grid;grid-template-columns:2fr 1fr 1fr 35px;gap:6px;align-items:center;margin-bottom:6px;';
+    d.innerHTML=`<input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="text" id="${tipo}-n-${id}" value="${pr.n}"/><input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="number" id="${tipo}-1-${id}" value="${pr.v1}" step="0.01" placeholder="Pre"/><input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="number" id="${tipo}-2-${id}" value="${pr.v2}" step="0.01" placeholder="Post"/><button style="background:none;border:none;cursor:pointer;color:#c62828;font-size:1.1rem;" onclick="document.getElementById('${tipo}-row-${id}').remove()">✕</button>`;
+  } else if(tipo==='tl'){
+    const pr=p||{n:`Sem ${id}`,v1:''};
+    d.style.cssText='display:grid;grid-template-columns:1fr 1fr 35px;gap:6px;align-items:center;margin-bottom:6px;';
+    d.innerHTML=`<input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="text" id="${tipo}-n-${id}" value="${pr.n}"/><input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="number" id="${tipo}-1-${id}" value="${pr.v1}" step="0.01" placeholder="Valor"/><button style="background:none;border:none;cursor:pointer;color:#c62828;font-size:1.1rem;" onclick="document.getElementById('${tipo}-row-${id}').remove()">✕</button>`;
+  }
+  c.appendChild(d);
+}
+
+// ── T-TEST ──
+function calcularTTest(){
+  const nombre=document.getElementById('tt-nombre').value;
+  const tipo=document.getElementById('tt-tipo').value;
+  const rows=document.querySelectorAll('#tt-container > div');
+  if(rows.length<3){alert('Ingresa al menos 3 deportistas.');return;}
+  const datos=[];
+  rows.forEach(row=>{
+    const id=row.id.replace('tt-row-','');
+    const v1=parseFloat(document.getElementById(`tt-1-${id}`)?.value);
+    const v2=parseFloat(document.getElementById(`tt-2-${id}`)?.value);
+    const n=document.getElementById(`tt-n-${id}`)?.value||'';
+    if(!isNaN(v1)&&!isNaN(v2))datos.push({n,v1,v2,diff:v2-v1});
+  });
+  if(datos.length<3){alert('Valores insuficientes.');return;}
+  const diffs=datos.map(d=>d.diff);
+  const n=datos.length;
+  const meanD=diffs.reduce((a,b)=>a+b,0)/n;
+  const sdD=Math.sqrt(diffs.map(d=>(d-meanD)**2).reduce((a,b)=>a+b,0)/(n-1));
+  const tStat=meanD/(sdD/Math.sqrt(n));
+  const mean1=datos.map(d=>d.v1).reduce((a,b)=>a+b,0)/n;
+  const mean2=datos.map(d=>d.v2).reduce((a,b)=>a+b,0)/n;
+  const sd1=Math.sqrt(datos.map(d=>d.v1).map(v=>(v-mean1)**2).reduce((a,b)=>a+b,0)/(n-1));
+  const sd2=Math.sqrt(datos.map(d=>d.v2).map(v=>(v-mean2)**2).reduce((a,b)=>a+b,0)/(n-1));
+  const pooled=Math.sqrt(((n-1)*sd1**2+(n-1)*sd2**2)/(2*n-2));
+  const cohenD=Math.abs(meanD)/pooled;
+  const tcrit=n>=30?2.042:n>=20?2.086:n>=15?2.131:n>=10?2.228:n>=7?2.447:n>=5?2.776:3.182;
+  const sig=Math.abs(tStat)>tcrit;
+  const mejoró=tipo==='menor'?meanD<0:meanD>0;
+  const cohenI=cohenD<0.2?'Trivial':cohenD<0.5?'Pequeño':cohenD<0.8?'Moderado':'Grande';
+  const ic95=1.96*sdD/Math.sqrt(n);
+  const filasHTML=datos.map(d=>`<tr><td>${d.n}</td><td style="text-align:right">${fmt(d.v1,2)}</td><td style="text-align:right">${fmt(d.v2,2)}</td><td style="text-align:right;color:${(tipo==='menor'?d.diff<0:d.diff>0)?'#a5d6a7':'#ef9a9a'};font-weight:700;">${d.diff>0?'+':''}${fmt(d.diff,2)}</td></tr>`).join('');
+  const cambPct=Math.abs(meanD/mean1*100);
+  document.getElementById('resultado-ttest').style.display='block';
+  document.getElementById('resultado-ttest').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">T-test Pareado — ${nombre} | n=${n} deportistas</div><div class="resultado-grande">${sig?'✅ SIGNIFICATIVO':'⚠️ NO significativo'}</div><div class="resultado-sub">t(${n-1}) = ${fmt(Math.abs(tStat),3)} | p ${sig?'< 0.05':'> 0.05'} | IC95%: [${fmt(meanD-ic95,2)}, ${fmt(meanD+ic95,2)}]</div><div class="resultado-grid"><div class="resultado-item"><div class="resultado-valor">${fmt(mean1,2)}</div><div class="resultado-label">Media Pre</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(mean2,2)}</div><div class="resultado-label">Media Post</div></div><div class="resultado-item"><div class="resultado-valor">${meanD>0?'+':''}${fmt(meanD,2)}</div><div class="resultado-label">Cambio promedio</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(cambPct,1)}%</div><div class="resultado-label">Cambio porcentual</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(cohenD,2)}</div><div class="resultado-label">Cohen's d (${cohenI})</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(sdD,2)}</div><div class="resultado-label">DE diferencias</div></div></div><div style="overflow-x:auto;margin-top:1rem;"><table style="width:100%;border-collapse:collapse;font-size:0.83rem;"><thead><tr style="background:rgba(255,255,255,0.15);"><th style="padding:8px;text-align:left;color:#fff;">Deportista</th><th style="padding:8px;text-align:right;color:#fff;">Pre</th><th style="padding:8px;text-align:right;color:#fff;">Post</th><th style="padding:8px;text-align:right;color:#fff;">Cambio</th></tr></thead><tbody style="color:#fff;">${filasHTML}</tbody></table></div><div class="resultado-detalle"><b>Interpretación completa:</b><br>${sig?`✅ El cambio ES estadísticamente significativo (p<0.05, t=${fmt(Math.abs(tStat),3)} > t_crit=${tcrit}). La mejora de ${fmt(Math.abs(meanD),2)} unidades (${fmt(cambPct,1)}%) NO se debe al azar.`:`⚠️ El cambio NO es estadísticamente significativo (p>0.05). El cambio observado podría deberse al azar o al tamaño de muestra insuficiente. Se recomienda: (1) ampliar el período de intervención, (2) aumentar el tamaño del grupo, (3) revisar la intensidad del programa.`}<br><b>Magnitud del efecto (Cohen's d = ${fmt(cohenD,2)}):</b> ${cohenI} — ${cohenD<0.2?'El cambio es trivial en la práctica.':cohenD<0.5?'Cambio pequeño pero real.':cohenD<0.8?'Cambio de magnitud moderada — el programa está funcionando.':'Cambio de gran magnitud — programa muy efectivo.'}<br><b>Intervalo de confianza 95%:</b> El cambio verdadero está entre ${fmt(meanD-ic95,2)} y ${fmt(meanD+ic95,2)} unidades con 95% de certeza.</div></div>`;
+}
+
+// ── ANOVA ──
+function configurarGruposAnova(){
+  const n=parseInt(document.getElementById('av-ngrupos').value);
+  const c=document.getElementById('av-grupos-container');
+  c.innerHTML='';
+  const nombres=['Grupo A','Grupo B','Grupo C','Grupo D','Grupo E'];
+  for(let i=0;i<n;i++){
+    const div=document.createElement('div');
+    div.className='card';
+    div.style.marginBottom='0.8rem';
+    div.innerHTML=`<h3>${nombres[i]}</h3><div class="form-group"><label>Valores del grupo (separados por comas)</label><input type="text" id="av-g${i}" style="width:100%;padding:9px 12px;border:1.5px solid var(--borde);border-radius:8px;font-size:0.85rem;" placeholder="Ejemplo: 52.3, 55.1, 48.7, 61.2, 57.4" value="${['52.3,55.1,48.7,61.2,57.4','58.2,62.1,55.8,64.3,60.1','49.8,52.4,46.3,55.7,51.2'][i]||''}"/></div>`;
+    c.appendChild(div);
+  }
+}
+
+function calcularAnova(){
+  const nGrupos=parseInt(document.getElementById('av-ngrupos').value);
+  const variable=document.getElementById('av-nombre').value;
+  const grupos=[];
+  for(let i=0;i<nGrupos;i++){
+    const vals=document.getElementById(`av-g${i}`)?.value.split(',').map(v=>parseFloat(v.trim())).filter(v=>!isNaN(v));
+    if(vals&&vals.length>=2)grupos.push(vals);
+  }
+  if(grupos.length<3){alert('Se necesitan al menos 3 grupos con datos.');return;}
+
+  const N=grupos.reduce((a,g)=>a+g.length,0);
+  const k=grupos.length;
+  const grandMean=grupos.flat().reduce((a,b)=>a+b,0)/N;
+  const SSB=grupos.reduce((a,g)=>{const gm=g.reduce((x,y)=>x+y,0)/g.length;return a+g.length*(gm-grandMean)**2;},0);
+  const SSW=grupos.reduce((a,g)=>{const gm=g.reduce((x,y)=>x+y,0)/g.length;return a+g.reduce((x,v)=>x+(v-gm)**2,0);},0);
+  const dfB=k-1,dfW=N-k;
+  const MSB=SSB/dfB,MSW=SSW/dfW;
+  const F=MSB/MSW;
+  const Fcrit=dfB===2&&dfW>=20?3.49:dfB===2&&dfW>=10?4.26:dfB===3&&dfW>=20?3.10:dfB===3&&dfW>=10?3.71:dfB===4&&dfW>=20?2.87:3.48;
+  const sig=F>Fcrit;
+  const etaCuadrado=SSB/(SSB+SSW);
+
+  const gruposHTML=grupos.map((g,i)=>{
+    const gm=g.reduce((a,b)=>a+b,0)/g.length;
+    const gsd=Math.sqrt(g.map(v=>(v-gm)**2).reduce((a,b)=>a+b,0)/(g.length-1));
+    return `<div class="resultado-item"><div class="resultado-valor">${fmt(gm,2)}</div><div class="resultado-label">Grupo ${['A','B','C','D','E'][i]} (n=${g.length})<br>DE: ${fmt(gsd,2)}</div></div>`;
+  }).join('');
+
+  document.getElementById('resultado-anova').style.display='block';
+  document.getElementById('resultado-anova').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">ANOVA — ${variable} | ${k} grupos | N total=${N}</div><div class="resultado-grande">${sig?'✅ SÍ hay diferencias':'⚠️ Sin diferencias'}</div><div class="resultado-sub">F(${dfB},${dfW}) = ${fmt(F,3)} | p ${sig?'< 0.05':'> 0.05'} | η² = ${fmt(etaCuadrado,3)}</div><div class="resultado-grid">${gruposHTML}<div class="resultado-item"><div class="resultado-valor">F = ${fmt(F,3)}</div><div class="resultado-label">F estadístico</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(etaCuadrado,3)}</div><div class="resultado-label">η² (eta cuadrado)</div></div></div><div class="resultado-detalle"><b>Interpretación:</b><br>${sig?`✅ ANOVA SIGNIFICATIVO (p<0.05, F=${fmt(F,3)} > F_crit≈${Fcrit}). Existe al menos una diferencia significativa entre los ${k} grupos. Se recomienda aplicar prueba post-hoc (Tukey HSD) para identificar qué grupos difieren entre sí.`:`⚠️ ANOVA NO significativo. No hay evidencia suficiente de diferencias entre los grupos (p>0.05). Los grupos pueden considerarse equivalentes en ${variable}.`}<br><b>Eta cuadrado (η² = ${fmt(etaCuadrado,3)}):</b> El factor grupo explica el <b>${fmt(etaCuadrado*100,1)}%</b> de la varianza total. ${etaCuadrado<0.01?'Efecto trivial.':etaCuadrado<0.06?'Efecto pequeño.':etaCuadrado<0.14?'Efecto moderado.':'Efecto grande.'}</div></div>`;
+}
+
+// ── PERCENTILES ──
+function calcularPercentil(){
+  const variable=document.getElementById('pc-variable').value;
+  const valorObj=parseFloat(document.getElementById('pc-valor').value);
+  const datos=document.getElementById('pc-datos').value.split(/[,\n]/).map(v=>parseFloat(v.trim())).filter(v=>!isNaN(v));
+  if(datos.length<5){alert('Ingresa al menos 5 valores en el grupo de referencia.');return;}
+  datos.sort((a,b)=>a-b);
+  const n=datos.length;
+  const mean=datos.reduce((a,b)=>a+b,0)/n;
+  const sd=Math.sqrt(datos.map(v=>(v-mean)**2).reduce((a,b)=>a+b,0)/(n-1));
+  const menores=datos.filter(v=>v<valorObj).length;
+  const percentil=Math.round((menores/n)*100);
+  const zScore=(valorObj-mean)/sd;
+  const p25=datos[Math.floor(n*0.25)];
+  const p50=datos[Math.floor(n*0.50)];
+  const p75=datos[Math.floor(n*0.75)];
+  const nivelPerc=percentil>=90?'🟢 Muy superior al promedio':percentil>=75?'🔵 Superior al promedio':percentil>=50?'🟡 Sobre el promedio':percentil>=25?'🟠 Bajo el promedio':'🔴 Muy bajo el promedio';
+
+  document.getElementById('resultado-percentil').style.display='block';
+  document.getElementById('resultado-percentil').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">Percentil — ${variable} | n=${n} deportistas en grupo</div><div class="resultado-grande">P${percentil}</div><div class="resultado-sub">El deportista supera al ${percentil}% del grupo | ${nivelPerc}</div><div class="resultado-grid"><div class="resultado-item"><div class="resultado-valor">${fmt(valorObj,2)}</div><div class="resultado-label">Valor del deportista</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(mean,2)}</div><div class="resultado-label">Media del grupo</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(sd,2)}</div><div class="resultado-label">DE del grupo</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(zScore,2)}</div><div class="resultado-label">Z-score</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(p25,2)}</div><div class="resultado-label">Percentil 25 (Q1)</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(p50,2)}</div><div class="resultado-label">Mediana (P50)</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(p75,2)}</div><div class="resultado-label">Percentil 75 (Q3)</div></div><div class="resultado-item"><div class="resultado-valor">${datos[0]} - ${datos[n-1]}</div><div class="resultado-label">Rango (mín - máx)</div></div></div><div class="resultado-detalle"><b>Interpretación:</b><br>El deportista con valor <b>${fmt(valorObj,2)}</b> está en el <b>percentil ${percentil}</b> del grupo — supera a <b>${menores} de ${n}</b> deportistas evaluados.<br><b>Z-score = ${fmt(zScore,2)}:</b> El deportista está ${Math.abs(zScore)<1?'dentro de':zScore>0?'por encima de':'por debajo de'} la desviación estándar del grupo.<br><b>Distribución del grupo:</b> 25% tiene menos de ${fmt(p25,2)} | 50% tiene menos de ${fmt(p50,2)} | 75% tiene menos de ${fmt(p75,2)}</div></div>`;
+}
+
+// ── TENDENCIA LINEAL ──
+function calcularTendencia(){
+  const nombre=document.getElementById('tl-nombre').value;
+  const variable=document.getElementById('tl-variable').value;
+  const proyeccion=parseInt(document.getElementById('tl-proyeccion').value);
+  const meta=parseFloat(document.getElementById('tl-meta').value);
+  const rows=document.querySelectorAll('#tl-container > div');
+  if(rows.length<3){alert('Ingresa al menos 3 mediciones.');return;}
+  const datos=[];
+  rows.forEach((row,idx)=>{
+    const id=row.id.replace('tl-row-','');
+    const etiqueta=document.getElementById(`tl-n-${id}`)?.value||`T${idx+1}`;
+    const v=parseFloat(document.getElementById(`tl-1-${id}`)?.value);
+    if(!isNaN(v))datos.push({x:idx+1,y:v,etiqueta});
+  });
+  if(datos.length<3){alert('Ingresa valores válidos para al menos 3 mediciones.');return;}
+  const n=datos.length;
+  const sumX=datos.reduce((a,d)=>a+d.x,0);
+  const sumY=datos.reduce((a,d)=>a+d.y,0);
+  const sumXY=datos.reduce((a,d)=>a+d.x*d.y,0);
+  const sumX2=datos.reduce((a,d)=>a+d.x**2,0);
+  const slope=(n*sumXY-sumX*sumY)/(n*sumX2-sumX**2);
+  const intercept=(sumY-slope*sumX)/n;
+  const yPred=datos.map(d=>intercept+slope*d.x);
+  const meanY=sumY/n;
+  const ss_res=datos.map((d,i)=>(d.y-yPred[i])**2).reduce((a,b)=>a+b,0);
+  const ss_tot=datos.map(d=>(d.y-meanY)**2).reduce((a,b)=>a+b,0);
+  const r2=1-(ss_res/ss_tot);
+  const r=Math.sqrt(r2)*(slope>0?1:-1);
+  const xFuturo=n+proyeccion;
+  const yFuturo=intercept+slope*xFuturo;
+  const semanasParaMeta=slope>0&&meta>datos[n-1].y?Math.ceil((meta-intercept)/slope-n):slope<0&&meta<datos[n-1].y?Math.ceil((meta-intercept)/slope-n):null;
+  const tendencia=slope>0.01?'📈 Mejora progresiva':slope<-0.01?'📉 Declive':'➡️ Estabilidad';
+
+  const filasHTML=datos.map((d,i)=>`<tr><td>${d.etiqueta}</td><td style="text-align:right">${fmt(d.y,2)}</td><td style="text-align:right">${fmt(yPred[i],2)}</td><td style="text-align:right;color:${d.y>=yPred[i]?'#a5d6a7':'#ef9a9a'}">${d.y>=yPred[i]?'▲':'▼'} ${fmt(Math.abs(d.y-yPred[i]),2)}</td></tr>`).join('');
+
+  document.getElementById('resultado-tendencia').style.display='block';
+  document.getElementById('resultado-tendencia').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">Tendencia lineal — ${nombre} | ${variable} | n=${n} mediciones</div><div class="resultado-grande">${tendencia}</div><div class="resultado-sub">Pendiente: ${slope>0?'+':''}${fmt(slope,3)} unidades/período | R² = ${fmt(r2,3)}</div><div class="resultado-grid"><div class="resultado-item"><div class="resultado-valor">${fmt(slope,3)}</div><div class="resultado-label">Pendiente (cambio/período)</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(r2,3)}</div><div class="resultado-label">R² (bondad del ajuste)</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(r,3)}</div><div class="resultado-label">Correlación (r)</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(yFuturo,2)}</div><div class="resultado-label">Proyección en +${proyeccion} períodos</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(meta,2)}</div><div class="resultado-label">Meta establecida</div></div><div class="resultado-item"><div class="resultado-valor">${semanasParaMeta?`~${semanasParaMeta} períodos`:'Fuera de tendencia'}</div><div class="resultado-label">Estimado para llegar a meta</div></div></div><div style="overflow-x:auto;margin-top:1rem;"><table style="width:100%;border-collapse:collapse;font-size:0.83rem;"><thead><tr style="background:rgba(255,255,255,0.15);"><th style="padding:8px;text-align:left;color:#fff;">Período</th><th style="padding:8px;text-align:right;color:#fff;">Valor real</th><th style="padding:8px;text-align:right;color:#fff;">Valor predicho</th><th style="padding:8px;text-align:right;color:#fff;">Residuo</th></tr></thead><tbody style="color:#fff;">${filasHTML}</tbody></table></div><div class="resultado-detalle"><b>Interpretación de la tendencia:</b><br>La variable mejora/cambia a una tasa de <b>${fmt(Math.abs(slope),3)} unidades por período</b> (${tendencia}).<br><b>R² = ${fmt(r2,3)}:</b> El modelo lineal explica el <b>${fmt(r2*100,1)}%</b> de la varianza. ${r2>0.8?'Ajuste excelente — la tendencia lineal es una buena representación del progreso.':r2>0.5?'Ajuste moderado — el progreso tiene variación pero sigue la tendencia.':'Ajuste bajo — el rendimiento es irregular. Considerar factores externos que afectan la progresión.'}<br><b>Proyección a ${proyeccion} períodos:</b> Se estima un valor de <b>${fmt(yFuturo,2)}</b> ${yFuturo>=meta?'✅ — Se alcanzaría la meta.':'⚠️ — La meta de '+fmt(meta,2)+' requeriría '+( semanasParaMeta?`~${semanasParaMeta} períodos adicionales.`:'ajustar el programa.')}</div></div>`;
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded',()=>{
+  // T-test
+  [{n:'Deportista 1',v1:'48.2',v2:'52.1'},{n:'Deportista 2',v1:'52.1',v2:'55.8'},{n:'Deportista 3',v1:'55.3',v2:'58.7'},{n:'Deportista 4',v1:'45.8',v2:'49.4'},{n:'Deportista 5',v1:'61.2',v2:'64.8'}].forEach(e=>agregarFila('tt',e));
+  // ANOVA
+  configurarGruposAnova();
+  // Tendencia
+  [{n:'Sem 1',v1:'48.2'},{n:'Sem 3',v1:'50.1'},{n:'Sem 5',v1:'51.8'},{n:'Sem 7',v1:'53.4'},{n:'Sem 9',v1:'55.2'},{n:'Sem 11',v1:'56.8'},{n:'Sem 13',v1:'58.1'}].forEach(e=>agregarFila('tl',e));
+});
+</script>
+</body>
+</html>
