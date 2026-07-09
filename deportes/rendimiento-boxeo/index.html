@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rendimiento Boxeo — HerramientasPro Colombia</title>
+  <meta name="description" content="Calculadora de rendimiento para boxeadores colombianos. Potencia de golpe, CMJ, Test de Wingate, índice de recuperación FC, relación peso/potencia. Análisis estadístico y recomendaciones."/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--azul:#1a3a5c;--rojo:#b71c1c;--rojo-medio:#c62828;--rojo-claro:#ffebee;--amarillo:#f5a623;--gris-bg:#f4f6f9;--card:#fff;--texto:#1e2d3d;--texto-suave:#5a6a7a;--borde:#dde3ea;--sombra:0 2px 12px rgba(26,58,92,0.09);--radio:12px}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gris-bg);color:var(--texto);font-size:16px;line-height:1.6}
+    nav{background:var(--azul);padding:0 1.2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.18)}
+    .nav-brand{color:#fff;font-weight:700;font-size:1.1rem;text-decoration:none}
+    .nav-brand span{color:var(--amarillo)}
+    .nav-links a{color:rgba(255,255,255,0.82);text-decoration:none;font-size:0.82rem;padding:4px 10px;border-radius:20px}
+    .nav-links a.active{background:var(--amarillo);color:var(--azul);font-weight:700}
+    .hero{background:linear-gradient(135deg,#1a3a5c 0%,#b71c1c 60%,#e53935 100%);padding:2.5rem 1.2rem 2rem;text-align:center;color:#fff}
+    .hero-badge{display:inline-block;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);border-radius:20px;padding:4px 14px;font-size:0.78rem;font-weight:600;margin-bottom:0.8rem;text-transform:uppercase}
+    .hero h1{font-size:clamp(1.4rem,4vw,2rem);font-weight:800;margin-bottom:0.5rem}
+    .hero p{font-size:0.95rem;opacity:0.92;max-width:580px;margin:0 auto 1rem}
+    .hero-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+    .hero-chip{background:rgba(255,255,255,0.2);border-radius:20px;padding:3px 12px;font-size:0.78rem;font-weight:600}
+    .container{max-width:960px;margin:0 auto;padding:1.5rem 1rem 3rem}
+    .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.4rem;background:var(--card);padding:6px;border-radius:var(--radio);box-shadow:var(--sombra)}
+    .tab-btn{flex:1;min-width:120px;padding:9px 10px;border:none;border-radius:8px;background:transparent;color:var(--texto-suave);font-size:0.83rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+    .tab-btn.active{background:var(--rojo-medio);color:#fff}
+    .tab-panel{display:none}.tab-panel.active{display:block}
+    .card{background:var(--card);border-radius:var(--radio);box-shadow:var(--sombra);padding:1.4rem;margin-bottom:1.2rem}
+    .card h2{font-size:1.05rem;font-weight:700;color:var(--azul);margin-bottom:1rem}
+    .card h3{font-size:0.88rem;font-weight:700;color:var(--rojo);margin:1rem 0 0.6rem;border-left:3px solid var(--rojo);padding-left:8px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem}
+    .form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.9rem}
+    @media(max-width:580px){.form-grid,.form-grid-3{grid-template-columns:1fr}}
+    .form-group{display:flex;flex-direction:column;gap:4px}
+    label{font-size:0.82rem;font-weight:600;color:var(--texto-suave)}
+    input,select{padding:9px 12px;border:1.5px solid var(--borde);border-radius:8px;font-size:0.92rem;color:var(--texto);background:var(--gris-bg);width:100%}
+    input:focus,select:focus{outline:none;border-color:var(--rojo);background:#fff}
+    .form-hint{font-size:0.75rem;color:var(--texto-suave);font-style:italic}
+    .btn{width:100%;padding:12px;background:var(--rojo-medio);color:#fff;border:none;border-radius:30px;font-size:1rem;font-weight:800;cursor:pointer;margin-top:1rem;transition:background 0.2s}
+    .btn:hover{background:var(--rojo)}
+    .info-box{background:var(--rojo-claro);border-left:4px solid var(--rojo);border-radius:8px;padding:0.9rem 1rem;font-size:0.85rem;margin-bottom:1rem}
+    .resultado-box{background:linear-gradient(135deg,#1a3a5c 0%,#b71c1c 100%);border-radius:var(--radio);padding:1.4rem;color:#fff;margin-top:1.2rem}
+    .resultado-titulo{font-size:0.78rem;font-weight:600;opacity:0.7;text-transform:uppercase;margin-bottom:0.8rem}
+    .resultado-grande{font-size:3rem;font-weight:900;color:#ffe082;line-height:1}
+    .resultado-sub{font-size:0.95rem;opacity:0.85;margin-top:0.3rem}
+    .resultado-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.8rem;margin-top:1rem}
+    .resultado-item{background:rgba(255,255,255,0.12);border-radius:8px;padding:0.8rem;text-align:center}
+    .resultado-valor{font-size:1.1rem;font-weight:800;color:#ffe082}
+    .resultado-label{font-size:0.72rem;opacity:0.85;margin-top:2px}
+    .resultado-detalle{margin-top:1rem;background:rgba(255,255,255,0.1);border-radius:8px;padding:0.9rem;font-size:0.83rem;line-height:2}
+    .resultado-detalle b{color:#ffe082}
+    .rec-card{background:rgba(255,255,255,0.1);border-radius:8px;padding:0.9rem;margin-top:0.8rem}
+    .rec-card h4{font-size:0.85rem;font-weight:700;color:#ffe082;margin-bottom:6px}
+    .rec-card p{font-size:0.82rem;line-height:1.6}
+    .ref-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+    .ref-table th{background:var(--azul);color:#fff;padding:8px 10px;text-align:left}
+    .ref-table td{padding:7px 10px;border-bottom:1px solid var(--borde)}
+    .ref-table tr:hover td{background:var(--rojo-claro)}
+    .disclaimer{background:#fff3cd;border:1px solid #ffc107;border-radius:var(--radio);padding:1rem 1.2rem;font-size:0.8rem;color:#5a4a00;margin-top:2rem;text-align:center}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="https://herramientaspro.com.co" class="nav-brand">🥊 <span>HerramientasPro</span></a>
+  <div class="nav-links"><a href="https://herramientaspro.com.co">← Inicio</a><a href="#" class="active">Rendimiento Boxeo</a></div>
+</nav>
+<div class="hero">
+  <div class="hero-badge">🥊 Entrenadores Deportivos — Boxeo</div>
+  <h1>Calculadora de Rendimiento — Boxeo</h1>
+  <p>Potencia de golpe, Test CMJ (salto), Test de Wingate anaeróbico, índice de recuperación de frecuencia cardíaca y relación peso/potencia. Análisis estadístico y recomendaciones para entrenadores.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🥊 Potencia de golpe</span>
+    <span class="hero-chip">⚡ Test Wingate</span>
+    <span class="hero-chip">🎯 Recomendaciones automáticas</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('evaluacion',this)">📊 Evaluación</button>
+    <button class="tab-btn" onclick="mostrarTab('estadistica',this)">🔬 Análisis Estadístico</button>
+    <button class="tab-btn" onclick="mostrarTab('recomendaciones',this)">🎯 Recomendaciones</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia',this)">📋 Tablas Referencia</button>
+  </div>
+
+  <!-- EVALUACIÓN -->
+  <div id="tab-evaluacion" class="tab-panel active">
+    <div class="card">
+      <h2>📊 Evaluación del Boxeador</h2>
+      <div class="info-box"><strong>¿Cómo usar?</strong> Ingresa los datos del boxeador y los resultados de las pruebas físicas. La calculadora determina la potencia de golpe estimada, el perfil anaeróbico y la capacidad de recuperación.</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Nombre del boxeador</label><input type="text" id="b-nombre" value="Boxeador 1"/></div>
+        <div class="form-group"><label>Sexo biológico</label><select id="b-sexo"><option value="M" selected>Masculino</option><option value="F">Femenino</option></select></div>
+        <div class="form-group"><label>Edad (años)</label><input type="number" id="b-edad" value="22" min="14" max="45"/></div>
+        <div class="form-group"><label>Peso de competencia (kg)</label><input type="number" id="b-peso" value="69" min="40" max="120" step="0.1"/></div>
+        <div class="form-group"><label>Talla (cm)</label><input type="number" id="b-talla" value="174" min="140" max="210"/></div>
+        <div class="form-group"><label>Categoría de peso (BoxAmateur/Profesional)</label>
+          <select id="b-categoria">
+            <option value="minimosmo">Mínimo (-49kg)</option>
+            <option value="mosca">Mosca (-52kg)</option>
+            <option value="gallo">Gallo (-56kg)</option>
+            <option value="pluma">Pluma (-60kg)</option>
+            <option value="ligero">Ligero (-64kg)</option>
+            <option value="welter">Welter (-69kg)</option>
+            <option value="medio">Medio (-75kg)</option>
+            <option value="semipesado">Semipesado (-81kg)</option>
+            <option value="pesado" selected>Pesado (-91kg)</option>
+            <option value="superpesado">Superpesado (+91kg)</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>🥊 Potencia de Golpe (Estimación)</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Velocidad del puño (m/s)</label><input type="number" id="b-vel-punio" value="8.5" min="3" max="15" step="0.1"/><span class="form-hint">Promedio élite: 8-12 m/s. Medido con sensor o app de velocidad.</span></div>
+        <div class="form-group"><label>Masa efectiva del puño (kg)</label><input type="number" id="b-masa-punio" value="4.2" min="1" max="10" step="0.1"/><span class="form-hint">Aprox. 5-8% del peso corporal. Default: 5% peso.</span></div>
+        <div class="form-group"><label>Golpe analizado</label>
+          <select id="b-tipo-golpe">
+            <option value="jab">Jab (golpe directo)</option>
+            <option value="cross" selected>Cross (directo de poder)</option>
+            <option value="hook">Hook (gancho)</option>
+            <option value="uppercut">Uppercut (golpe de abajo)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>FC en reposo (lpm)</label><input type="number" id="b-fc-rep" value="55" min="35" max="90"/></div>
+      </div>
+
+      <h3>🦵 Test CMJ — Salto con Contramovimiento</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Altura de salto (cm)</label><input type="number" id="b-cmj" value="42" min="10" max="80" step="0.5"/><span class="form-hint">Medida con alfombrilla de salto, app o cinta métrica. Promedio élite boxeo: 40-55cm.</span></div>
+        <div class="form-group"><label>Mejor de 3 intentos (cm)</label><input type="number" id="b-cmj-mejor" value="45" min="10" max="80" step="0.5"/></div>
+      </div>
+
+      <h3>⚡ Test de Wingate (30 segundos en bicicleta)</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Potencia pico (Watts)</label><input type="number" id="b-pico" value="820" min="200" max="2000"/><span class="form-hint">Potencia más alta en los primeros 5 segundos</span></div>
+        <div class="form-group"><label>Potencia media (Watts)</label><input type="number" id="b-media" value="620" min="100" max="1500"/><span class="form-hint">Potencia promedio en 30 segundos</span></div>
+        <div class="form-group"><label>Potencia mínima (Watts)</label><input type="number" id="b-minima" value="480" min="50" max="1200"/><span class="form-hint">Potencia más baja en los últimos 5 segundos</span></div>
+        <div class="form-group"><label>Carga aplicada en el test (kg)</label><input type="number" id="b-carga-w" value="6.2" min="2" max="15" step="0.1"/><span class="form-hint">Estándar: 7.5% del peso corporal</span></div>
+      </div>
+
+      <h3>❤️ Índice de Recuperación de FC</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>FC máxima alcanzada en combate/test (lpm)</label><input type="number" id="b-fc-max" value="188" min="140" max="220"/></div>
+        <div class="form-group"><label>FC al minuto 1 de recuperación (lpm)</label><input type="number" id="b-fc1" value="162" min="80" max="210"/></div>
+        <div class="form-group"><label>FC al minuto 2 de recuperación (lpm)</label><input type="number" id="b-fc2" value="140" min="60" max="200"/></div>
+        <div class="form-group"><label>FC al minuto 3 de recuperación (lpm)</label><input type="number" id="b-fc3" value="122" min="50" max="190"/></div>
+      </div>
+      <button class="btn" onclick="calcularBoxeo()">📊 Calcular Perfil del Boxeador</button>
+    </div>
+    <div id="resultado-boxeo" style="display:none;"></div>
+  </div>
+
+  <!-- ESTADÍSTICA -->
+  <div id="tab-estadistica" class="tab-panel">
+    <div class="card">
+      <h2>🔬 Análisis Estadístico — Progresión del Boxeador</h2>
+      <div class="info-box"><strong>¿Para qué sirve?</strong> Compara los resultados de un grupo de boxeadores en dos momentos del entrenamiento y determina si la mejora es estadísticamente significativa.</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Variable a comparar</label>
+          <select id="sb-variable">
+            <option value="potencia">Potencia de golpe (Newtons)</option>
+            <option value="cmj">CMJ — Altura de salto (cm)</option>
+            <option value="wingate">Potencia Wingate pico (W)</option>
+            <option value="recuperacion">Índice de recuperación FC (lpm/min)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Tipo de mejora esperada</label>
+          <select id="sb-tipo">
+            <option value="mayor" selected>Mayor es mejor (potencia, salto, Wingate)</option>
+            <option value="menor">Menor es mejor (FC recuperación)</option>
+          </select>
+        </div>
+      </div>
+      <h3>Resultados del grupo (mín. 3 boxeadores)</h3>
+      <div id="boxeadores-container"></div>
+      <button style="padding:8px 18px;border:none;border-radius:20px;background:var(--rojo-medio);color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:0.6rem;" onclick="agregarBoxeador()">+ Agregar boxeador</button>
+      <button class="btn" onclick="calcularEstBoxeo()">🔬 Analizar Progresión</button>
+    </div>
+    <div id="resultado-est-boxeo" style="display:none;"></div>
+  </div>
+
+  <!-- RECOMENDACIONES -->
+  <div id="tab-recomendaciones" class="tab-panel">
+    <div class="card">
+      <h2>🎯 Recomendaciones por Perfil del Boxeador</h2>
+      <div class="form-grid">
+        <div class="form-group"><label>Nivel de la potencia de golpe</label>
+          <select id="rb-potencia">
+            <option value="alta">Alta (>3500 N)</option>
+            <option value="media" selected>Media (2500-3500 N)</option>
+            <option value="baja">Baja (<2500 N)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Nivel CMJ (salto)</label>
+          <select id="rb-cmj">
+            <option value="alto">Alto (>50cm)</option>
+            <option value="medio" selected>Medio (35-50cm)</option>
+            <option value="bajo">Bajo (<35cm)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Nivel de recuperación FC</label>
+          <select id="rb-rec">
+            <option value="excelente">Excelente (>30 lpm/min)</option>
+            <option value="buena" selected>Buena (20-30 lpm/min)</option>
+            <option value="regular">Regular (10-20 lpm/min)</option>
+            <option value="baja">Baja (<10 lpm/min)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Índice de fatiga Wingate</label>
+          <select id="rb-fatiga">
+            <option value="bajo">Bajo (<25%) — buena resistencia anaeróbica</option>
+            <option value="medio" selected>Medio (25-40%)</option>
+            <option value="alto">Alto (>40%) — fatiga precoz</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Fase de preparación</label>
+          <select id="rb-fase">
+            <option value="general">Preparación general</option>
+            <option value="especial" selected>Preparación especial</option>
+            <option value="precompetencia">Pre-competencia</option>
+            <option value="competencia">Semana de combate</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Estilo de combate</label>
+          <select id="rb-estilo">
+            <option value="brawler">Brawler (boxeador de poder)</option>
+            <option value="outboxer" selected>Out-boxer (boxeador de distancia)</option>
+            <option value="swarmer">Swarmer (presión constante)</option>
+            <option value="counter">Counter-puncher (contragolpeador)</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="recomendarBoxeo()">🎯 Generar Recomendaciones</button>
+    </div>
+    <div id="resultado-rec-boxeo" style="display:none;"></div>
+  </div>
+
+  <!-- REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📋 Valores de Referencia — Boxeadores Amateur/Profesional</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Variable</th><th>Bajo</th><th>Promedio</th><th>Bueno</th><th>Élite</th></tr></thead>
+          <tbody>
+            <tr><td>Potencia de golpe (N)</td><td>&lt;2000</td><td>2000-2800</td><td>2800-3500</td><td>&gt;3500</td></tr>
+            <tr><td>CMJ altura (cm) — H</td><td>&lt;30</td><td>30-40</td><td>40-50</td><td>&gt;50</td></tr>
+            <tr><td>CMJ altura (cm) — M</td><td>&lt;22</td><td>22-32</td><td>32-42</td><td>&gt;42</td></tr>
+            <tr><td>Wingate pico relativo (W/kg)</td><td>&lt;8</td><td>8-11</td><td>11-14</td><td>&gt;14</td></tr>
+            <tr><td>Índice fatiga Wingate (%)</td><td>&gt;45</td><td>35-45</td><td>25-35</td><td>&lt;25</td></tr>
+            <tr><td>Recuperación FC 1min (lpm)</td><td>&lt;15</td><td>15-22</td><td>22-30</td><td>&gt;30</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Estructura energética del boxeo</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Sistema energético</th><th>% uso en combate</th><th>Duración</th><th>Implicación</th></tr></thead>
+          <tbody>
+            <tr><td>ATP-PC (fosfágenos)</td><td>~65%</td><td>0-10 seg</td><td>Golpes explosivos, desplazamientos rápidos</td></tr>
+            <tr><td>Glucolítico (anaeróbico)</td><td>~25%</td><td>10-60 seg</td><td>Combinaciones sostenidas, presión de rounds</td></tr>
+            <tr><td>Oxidativo (aeróbico)</td><td>~10%</td><td>>60 seg</td><td>Recuperación entre rounds, pelea larga</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Índice de Recuperación FC — Interpretación</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Caída FC en 1 min</th><th>Nivel</th><th>Interpretación</th></tr></thead>
+          <tbody>
+            <tr><td>&gt;30 lpm</td><td>Excelente</td><td>Sistema cardiovascular muy bien adaptado</td></tr>
+            <tr><td>20-30 lpm</td><td>Buena</td><td>Adecuada para competencia amateur/profesional</td></tr>
+            <tr><td>10-20 lpm</td><td>Regular</td><td>Trabajo cardiovascular prioritario</td></tr>
+            <tr><td>&lt;10 lpm</td><td>Baja</td><td>Capacidad de recuperación insuficiente para combate</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="disclaimer">⚠️ <strong>Herramienta orientativa.</strong> Los resultados deben ser interpretados por un <strong>entrenador de boxeo certificado o profesional en Ciencias del Deporte</strong>. Referencias: AIBA, Journal of Strength and Conditioning Research, NSCA.</div>
+</div>
+
+<script>
+function mostrarTab(id,btn){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');}
+function fmt(n,d=1){return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});}
+
+function calcularBoxeo(){
+  const nombre=document.getElementById('b-nombre').value;
+  const sexo=document.getElementById('b-sexo').value;
+  const peso=parseFloat(document.getElementById('b-peso').value);
+  const talla=parseFloat(document.getElementById('b-talla').value);
+  const velPunio=parseFloat(document.getElementById('b-vel-punio').value);
+  const masaPunio=parseFloat(document.getElementById('b-masa-punio').value)||peso*0.05;
+  const tipoGolpe=document.getElementById('b-tipo-golpe').value;
+  const fcRep=parseInt(document.getElementById('b-fc-rep').value);
+  const cmj=parseFloat(document.getElementById('b-cmj').value);
+  const cmjMejor=parseFloat(document.getElementById('b-cmj-mejor').value);
+  const wPico=parseFloat(document.getElementById('b-pico').value);
+  const wMedia=parseFloat(document.getElementById('b-media').value);
+  const wMinima=parseFloat(document.getElementById('b-minima').value);
+  const fcMax=parseInt(document.getElementById('b-fc-max').value);
+  const fc1=parseInt(document.getElementById('b-fc1').value);
+  const fc2=parseInt(document.getElementById('b-fc2').value);
+  const fc3=parseInt(document.getElementById('b-fc3').value);
+
+  // Potencia de golpe = 0.5 * masa * velocidad²
+  const potenciaGolpe=0.5*masaPunio*velPunio**2;
+  const fuerzaGolpe=masaPunio*velPunio**2/0.1; // F = m*a, tiempo contacto ~0.1s
+  const potenciaRelativa=wPico/peso;
+
+  // CMJ — potencia de salto (Sayers formula)
+  const potenciaSalto=60.7*(cmjMejor*10)+45.3*peso-2055;
+
+  // Wingate — índice de fatiga
+  const idxFatiga=((wPico-wMinima)/wPico)*100;
+  const eficienciaAnaerobica=wMedia/wPico*100;
+
+  // Recuperación FC
+  const rec1=fcMax-fc1; // lpm caída en 1 min
+  const rec2=fcMax-fc2;
+  const rec3=fcMax-fc3;
+
+  const nivelPotencia=fuerzaGolpe>3500?'🟢 Élite':fuerzaGolpe>2800?'🔵 Bueno':fuerzaGolpe>2000?'🟡 Promedio':'🔴 Bajo';
+  const nivelCMJ=cmjMejor>50?'🟢 Élite':cmjMejor>40?'🔵 Bueno':cmjMejor>30?'🟡 Promedio':'🔴 Bajo';
+  const nivelWingate=potenciaRelativa>14?'🟢 Élite':potenciaRelativa>11?'🔵 Bueno':potenciaRelativa>8?'🟡 Promedio':'🔴 Bajo';
+  const nivelRec=rec1>30?'🟢 Excelente':rec1>20?'🔵 Buena':rec1>10?'🟡 Regular':'🔴 Baja';
+  const nivelFatiga=idxFatiga<25?'🟢 Bajo':idxFatiga<35?'🔵 Medio':idxFatiga<45?'🟡 Alto':'🔴 Muy alto';
+
+  const golpesNombres={jab:'Jab',cross:'Cross',hook:'Hook (gancho)',uppercut:'Uppercut'};
+
+  document.getElementById('resultado-boxeo').style.display='block';
+  document.getElementById('resultado-boxeo').innerHTML=`
+  <div class="resultado-box">
+    <div class="resultado-titulo">Perfil — ${nombre} | ${peso}kg | ${golpesNombres[tipoGolpe]}</div>
+    <div class="resultado-grande">${fmt(fuerzaGolpe,0)} N</div>
+    <div class="resultado-sub">Fuerza de impacto estimada — ${golpesNombres[tipoGolpe]} | Nivel: ${nivelPotencia}</div>
+    <div class="resultado-grid">
+      <div class="resultado-item"><div class="resultado-valor">${fmt(fuerzaGolpe,0)} N</div><div class="resultado-label">Fuerza de golpe ${nivelPotencia}</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(potenciaGolpe,0)} W</div><div class="resultado-label">Potencia de golpe</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(velPunio,1)} m/s</div><div class="resultado-label">Velocidad del puño</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(cmjMejor,1)} cm</div><div class="resultado-label">CMJ mejor intento ${nivelCMJ}</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(potenciaSalto,0)} W</div><div class="resultado-label">Potencia de salto (Sayers)</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(wPico)} W</div><div class="resultado-label">Wingate pico ${nivelWingate}</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(potenciaRelativa,1)} W/kg</div><div class="resultado-label">Potencia relativa Wingate</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(idxFatiga,1)}%</div><div class="resultado-label">Índice fatiga ${nivelFatiga}</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${rec1} lpm</div><div class="resultado-label">Recup. FC 1min ${nivelRec}</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${rec2} lpm</div><div class="resultado-label">Recup. FC 2min</div></div>
+    </div>
+    <div class="resultado-detalle">
+      <b>Resumen del perfil físico:</b><br>
+      Potencia/fuerza de golpe: ${fmt(fuerzaGolpe,0)} N @ ${fmt(velPunio,1)} m/s → <b>${nivelPotencia}</b><br>
+      Potencia explosiva (CMJ): ${fmt(cmjMejor,1)} cm → <b>${nivelCMJ}</b><br>
+      Capacidad anaeróbica (Wingate): ${fmt(wPico)} W pico / ${fmt(potenciaRelativa,1)} W/kg → <b>${nivelWingate}</b><br>
+      Índice de fatiga: ${fmt(idxFatiga,1)}% → <b>${nivelFatiga}</b> (meta: &lt;25%)<br>
+      Recuperación FC 1min: ${rec1} lpm caída → <b>${nivelRec}</b><br>
+      FC en reposo: ${fcRep} lpm | IMC: ${fmt(peso/Math.pow(talla/100,2),1)} kg/m²
+    </div>
+  </div>`;
+}
+
+// ESTADÍSTICA
+let nBox=0;
+function agregarBoxeador(p){
+  nBox++;
+  const c=document.getElementById('boxeadores-container');
+  const d=document.createElement('div');
+  d.id=`box-${nBox}`;
+  d.style.cssText='display:grid;grid-template-columns:2fr 1fr 1fr 35px;gap:6px;align-items:center;margin-bottom:6px;';
+  const pr=p||{n:`Boxeador ${nBox}`,v1:'',v2:''};
+  d.innerHTML=`<input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="text" id="bn-${nBox}" value="${pr.n}"/><input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="number" id="b1-${nBox}" value="${pr.v1}" step="0.1" placeholder="Medición 1"/><input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="number" id="b2-${nBox}" value="${pr.v2}" step="0.1" placeholder="Medición 2"/><button style="background:none;border:none;cursor:pointer;color:#c62828;font-size:1.1rem;" onclick="document.getElementById('box-${nBox}').remove()">✕</button>`;
+  c.appendChild(d);
+}
+
+function calcularEstBoxeo(){
+  const tipo=document.getElementById('sb-tipo').value;
+  const rows=document.querySelectorAll('#boxeadores-container > div');
+  if(rows.length<3){alert('Ingresa al menos 3 boxeadores.');return;}
+  const datos=[];
+  rows.forEach(row=>{
+    const id=row.id.split('-')[1];
+    const v1=parseFloat(document.getElementById(`b1-${id}`)?.value);
+    const v2=parseFloat(document.getElementById(`b2-${id}`)?.value);
+    const n=document.getElementById(`bn-${id}`)?.value||'';
+    if(!isNaN(v1)&&!isNaN(v2))datos.push({n,v1,v2,diff:v2-v1});
+  });
+  if(datos.length<3){alert('Ingresa valores válidos para al menos 3 boxeadores.');return;}
+  const diffs=datos.map(d=>d.diff);
+  const n=datos.length;
+  const meanD=diffs.reduce((a,b)=>a+b,0)/n;
+  const sdD=Math.sqrt(diffs.map(d=>(d-meanD)**2).reduce((a,b)=>a+b,0)/(n-1));
+  const tStat=meanD/(sdD/Math.sqrt(n));
+  const mean1=datos.map(d=>d.v1).reduce((a,b)=>a+b,0)/n;
+  const mean2=datos.map(d=>d.v2).reduce((a,b)=>a+b,0)/n;
+  const sd1=Math.sqrt(datos.map(d=>d.v1).map(v=>(v-mean1)**2).reduce((a,b)=>a+b,0)/(n-1));
+  const sd2=Math.sqrt(datos.map(d=>d.v2).map(v=>(v-mean2)**2).reduce((a,b)=>a+b,0)/(n-1));
+  const pooled=Math.sqrt(((n-1)*sd1**2+(n-1)*sd2**2)/(2*n-2));
+  const cohenD=Math.abs(meanD)/pooled;
+  const tcrit=n>=10?2.228:n>=7?2.447:n>=5?2.776:3.182;
+  const sig=Math.abs(tStat)>tcrit;
+  const mejoró=tipo==='menor'?meanD<0:meanD>0;
+  const cohenI=cohenD<0.2?'Trivial':cohenD<0.5?'Pequeño':cohenD<0.8?'Moderado':'Grande';
+  const filasHTML=datos.map(d=>`<tr><td>${d.n}</td><td style="text-align:right">${fmt(d.v1,1)}</td><td style="text-align:right">${fmt(d.v2,1)}</td><td style="text-align:right;color:${(tipo==='menor'?d.diff<0:d.diff>0)?'#a5d6a7':'#ef9a9a'};font-weight:700;">${d.diff>0?'+':''}${fmt(d.diff,1)}</td></tr>`).join('');
+  document.getElementById('resultado-est-boxeo').style.display='block';
+  document.getElementById('resultado-est-boxeo').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">Análisis estadístico — n=${n} boxeadores</div><div class="resultado-grande">${sig?'✅ SÍ hay mejora':'⚠️ NO significativo'}</div><div class="resultado-sub">t(${n-1})=${fmt(Math.abs(tStat),3)} | p ${sig?'< 0.05':'> 0.05'} | Cohen's d=${fmt(cohenD,2)} (${cohenI}) | ${mejoró?'📈 Mejoró':'📉 Empeoró'}</div><div class="resultado-grid"><div class="resultado-item"><div class="resultado-valor">${fmt(mean1,1)}</div><div class="resultado-label">Media medición 1</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(mean2,1)}</div><div class="resultado-label">Media medición 2</div></div><div class="resultado-item"><div class="resultado-valor">${meanD>0?'+':''}${fmt(meanD,1)}</div><div class="resultado-label">Cambio promedio</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(cohenD,2)}</div><div class="resultado-label">Cohen's d (${cohenI})</div></div></div><div style="overflow-x:auto;margin-top:1rem;"><table style="width:100%;border-collapse:collapse;font-size:0.83rem;"><thead><tr style="background:rgba(255,255,255,0.15);"><th style="padding:8px;text-align:left;color:#fff;">Boxeador</th><th style="padding:8px;text-align:right;color:#fff;">Med. 1</th><th style="padding:8px;text-align:right;color:#fff;">Med. 2</th><th style="padding:8px;text-align:right;color:#fff;">Cambio</th></tr></thead><tbody style="color:#fff;">${filasHTML}</tbody></table></div><div class="resultado-detalle"><b>Interpretación:</b><br>${sig?'✅ La mejora ES estadísticamente significativa (p<0.05).':'⚠️ La mejora NO es estadísticamente significativa (p>0.05). Reevaluar en 4-6 semanas.'}<br><b>Cohen\'s d=${fmt(cohenD,2)} (${cohenI})</b></div></div>`;
+}
+
+// RECOMENDACIONES
+function recomendarBoxeo(){
+  const potencia=document.getElementById('rb-potencia').value;
+  const cmj=document.getElementById('rb-cmj').value;
+  const rec=document.getElementById('rb-rec').value;
+  const fatiga=document.getElementById('rb-fatiga').value;
+  const fase=document.getElementById('rb-fase').value;
+  const estilo=document.getElementById('rb-estilo').value;
+
+  const recPotencia={alta:'Mantener con trabajo de velocidad específica de boxeo: shadow boxing con resistencia ligera, saco explosivo (combinaciones cortas máximo poder). Trabajo de fuerza máxima 1 día/semana como mantenimiento.',medio:'Incrementar potencia: press de banca explosivo (40-60% 1RM máxima velocidad), medicine ball throws, lanzamiento de balón medicinal. Trabajo de cadena cinética: rotación de cadera y transferencia de fuerza.',baja:'Priorizar desarrollo de potencia antes de trabajo técnico intenso. Circuito de fuerza explosiva: saltos pliométricos, kettlebell swings, empuje de trineo. Técnica de golpe: verificar uso de cadera y rotación de tronco.'};
+  const recCMJ={alto:'Nivel de potencia explosiva de tren inferior excelente. Mantener con trabajo pliométrico 1-2 días/semana. El trabajo de cadera y desplazamiento en ring beneficiará directamente.',medio:'Mejorar con pliometría progresiva: box jumps, depth jumps, saltos con sentadilla. 3 series × 6-8 repeticiones, 2-3 días/semana. Descanso completo entre series.',bajo:'Déficit en potencia explosiva — puede comprometer movilidad en el ring. Priorizar pliometría básica: saltos al cajón, saltos de longitud, carrera de escalera. 8-10 semanas de trabajo base.'};
+  const recRec={excelente:'Sistema cardiovascular excelente. Mantener con trabajo aeróbico 2-3 días/semana (carrera suave 30-40 min). La recuperación entre rounds no será limitante en combate.',buena:'Adecuada para competencia. Mantener y mejorar con intervalos de baja intensidad post-entrenamiento principal (10-15 min rodaje suave). Trabajo de respiración consciente.',regular:'Trabajo cardiovascular prioritario: correr 30-45 min al 65-70% FC máx, 4-5 días/semana. Agregar salto a la cuerda (10-15 min continuos). Meta: mejorar 5 lpm en 6 semanas.',baja:'Déficit cardiovascular crítico para boxeo. La incapacidad de recuperar limita el rendimiento en rounds tardíos. Programa aeróbico específico: 45-60 min/día, 5 días/semana. Prioridad máxima antes de aumentar trabajo técnico.'};
+  const recFatiga={bajo:'Resistencia anaeróbica excelente. El boxeador mantiene potencia a lo largo del combate. Mantener con trabajo de rounds intensos (3 min/1 min descanso × 6-8 rounds).',medio:'Adecuado. Mejorar con intervalos de alta intensidad: 30 seg máximo esfuerzo / 30 seg descanso × 10-12 series. Circuitos de saco con combinaciones largas (20-30 golpes continuos).',alto:'Fatiga precoz: el boxeador pierde potencia rápidamente. Trabajar capacidad glucolítica: series de saco 20 seg explosivo / 10 seg descanso (Tabata). Reducir pausas entre combinaciones en entrenamiento.'};
+  const recFase={general:'Período general: base aeróbica (60-70% del trabajo), fuerza general, técnica sin presión de tiempo. Volumen alto, intensidad baja-media.',especial:'Preparación especial: integrar trabajo técnico con preparación física. Sparring técnico. Combinaciones largas. Acondicionamiento específico de boxeo (rounds, circuitos).',precompetencia:'Pre-competencia (4-8 semanas): reducir volumen, aumentar intensidad. Sparring de competencia. Simulación de rounds. Estrategia táctica según el rival.',competencia:'Semana de combate: reducir volumen al 40-50%. Activación 2-3 días antes (técnica ligera). Reposo 1 día antes. Hidratación y nutrición óptimas. Control del peso.'};
+  const recEstilo={brawler:'Brawler (poder): priorizar potencia de golpe y resistencia al daño. Trabajo de clinch, uppercut y hooks. Fuerza de cuello y protección.',outboxer:'Out-boxer (distancia): priorizar velocidad de pies, jab y combinaciones largas. Trabajo de movimiento en ring, lateralidad y control de distancia.',swarmer:'Swarmer (presión): resistencia aeróbica y anaeróbica críticas. Trabajo de alto volumen de golpes, presión constante y recuperación entre rounds.',counter:'Counter-puncher: priorizar velocidad de reacción, defensa y contraataque. Trabajo con mitones (pads), reflexología y anticipación de movimientos del rival.'};
+
+  document.getElementById('resultado-rec-boxeo').style.display='block';
+  document.getElementById('resultado-rec-boxeo').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">Recomendaciones — ${estilo} | Fase: ${fase}</div><div class="resultado-grande">🥊 Plan de Entrenamiento</div><div class="resultado-sub">Recomendaciones específicas por perfil físico y estilo de combate</div><div class="rec-card"><h4>🥊 Potencia de golpe — nivel ${potencia}</h4><p>${recPotencia[potencia]}</p></div><div class="rec-card"><h4>🦵 Potencia explosiva CMJ — nivel ${cmj}</h4><p>${recCMJ[cmj]}</p></div><div class="rec-card"><h4>❤️ Recuperación FC — ${rec}</h4><p>${recRec[rec]}</p></div><div class="rec-card"><h4>⚡ Índice de fatiga Wingate — ${fatiga}</h4><p>${recFatiga[fatiga]}</p></div><div class="rec-card"><h4>📅 Fase: ${fase}</h4><p>${recFase[fase]}</p></div><div class="rec-card"><h4>🎯 Estilo de combate: ${estilo}</h4><p>${recEstilo[estilo]}</p></div><div class="rec-card"><h4>🥗 Nutrición para boxeo</h4><p>Proteína: 1.6-2.0 g/kg/día. CHO: 5-7 g/kg en días de entrenamiento intenso. Hidratación: critical en combate — 500ml pre-entrenamiento, 200ml cada 15 min durante, 1.5L por kg perdido post. Pesaje: planificar estrategia con el entrenador y nutricionista con anticipación. Evitar deshidratación extrema para perder peso.</p></div></div>`;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  [{n:'Boxeador 1',v1:'38.5',v2:'42.0'},{n:'Boxeador 2',v1:'35.0',v2:'38.5'},{n:'Boxeador 3',v1:'42.0',v2:'45.5'},{n:'Boxeador 4',v1:'33.0',v2:'36.5'},{n:'Boxeador 5',v1:'40.0',v2:'43.0'}].forEach(e=>agregarBoxeador(e));
+});
+</script>
+</body>
+</html>
