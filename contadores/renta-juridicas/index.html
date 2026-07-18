@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador Renta Personas Jurídicas 2026 — HerramientasPro Colombia</title>
+  <meta name="description" content="Simulador de declaración de renta para personas jurídicas Colombia 2026. Calcula impuesto de renta, renta presuntiva, sobretasa y anticipo. DIAN 2026." />
+  <meta name="keywords" content="declaracion renta personas juridicas colombia 2026, impuesto renta empresas colombia, renta presuntiva, sobretasa renta colombia, DIAN 2026" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul-navbar: #1a3a5c;
+      --azul: #1565c0;
+      --azul-claro: #e3f2fd;
+      --azul-oscuro: #0d47a1;
+      --amarillo: #f5a623;
+      --gris-bg: #f4f6f9;
+      --gris-card: #ffffff;
+      --texto: #1e2d3d;
+      --texto-suave: #5a6a7a;
+      --borde: #dde3ea;
+      --sombra: 0 2px 12px rgba(26,58,92,0.09);
+      --radio: 12px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--gris-bg); color: var(--texto); font-size: 16px; line-height: 1.6; }
+
+    nav {
+      background: var(--azul-navbar); padding: 0 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .nav-brand { color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { color: var(--amarillo); }
+    .nav-links a {
+      color: rgba(255,255,255,0.82); text-decoration: none;
+      font-size: 0.82rem; padding: 4px 10px; border-radius: 20px; transition: background 0.2s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .nav-links a.active { background: var(--amarillo); color: var(--azul-navbar); font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #1565c0 60%, #42a5f5 100%);
+      padding: 2.5rem 1.2rem 2rem; text-align: center; color: #fff;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 20px;
+      padding: 4px 14px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 0.8rem; text-transform: uppercase;
+    }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+    .hero p { font-size: 0.95rem; opacity: 0.92; max-width: 560px; margin: 0 auto 1rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .hero-chip { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 600; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .tabs {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.4rem;
+      background: var(--gris-card); padding: 6px; border-radius: var(--radio); box-shadow: var(--sombra);
+    }
+    .tab-btn {
+      flex: 1; min-width: 120px; padding: 9px 10px; border: none;
+      border-radius: 8px; background: transparent; color: var(--texto-suave);
+      font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tab-btn:hover { background: var(--gris-bg); color: var(--texto); }
+    .tab-btn.active { background: var(--azul); color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card { background: var(--gris-card); border-radius: var(--radio); box-shadow: var(--sombra); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--azul-navbar); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--azul); margin: 1rem 0 0.6rem; border-left: 3px solid var(--azul); padding-left: 8px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media(max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
+    input, select {
+      padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.92rem; color: var(--texto); background: var(--gris-bg);
+      transition: border-color 0.2s; width: 100%;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--azul); background: #fff; }
+    .form-hint { font-size: 0.75rem; color: var(--texto-suave); font-style: italic; }
+
+    .btn {
+      width: 100%; padding: 12px; background: var(--azul); color: #fff;
+      border: none; border-radius: 30px; font-size: 1rem; font-weight: 800;
+      cursor: pointer; margin-top: 1rem; transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--azul-oscuro); }
+    .btn:active { transform: scale(0.98); }
+
+    .info-box { background: var(--azul-claro); border-left: 4px solid var(--azul); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; margin-bottom: 1rem; }
+    .info-box strong { color: var(--azul-oscuro); }
+
+    .resultado-box {
+      background: linear-gradient(135deg, #1a3a5c 0%, #1565c0 100%);
+      border-radius: var(--radio); padding: 1.2rem; color: #fff; margin-top: 1.2rem;
+    }
+    .resultado-titulo { font-size: 0.78rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.8rem; }
+    .resultado-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.8rem; }
+    .resultado-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.8rem; text-align: center; }
+    .resultado-valor { font-size: 1.2rem; font-weight: 800; color: #ffe082; }
+    .resultado-label { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
+    .resultado-detalle { margin-top: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 0.9rem; font-size: 0.83rem; line-height: 2; }
+    .resultado-detalle b { color: #ffe082; }
+
+    .liquidacion-tabla { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.8rem; }
+    .liquidacion-tabla td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .liquidacion-tabla td:last-child { text-align: right; font-weight: 700; }
+    .liquidacion-tabla tr.subtotal td { background: rgba(255,255,255,0.08); font-weight: 700; }
+    .liquidacion-tabla tr.total-final td { background: rgba(255,215,0,0.2); font-size: 1rem; font-weight: 800; color: #ffe082; }
+    .liquidacion-tabla tr.deduccion td:last-child { color: #ef9a9a; }
+    .liquidacion-tabla tr.suma td:last-child { color: #a5d6a7; }
+
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .ref-table th { background: var(--azul-navbar); color: #fff; padding: 8px 10px; text-align: left; }
+    .ref-table td { padding: 7px 10px; border-bottom: 1px solid var(--borde); }
+    .ref-table tr:hover td { background: var(--azul-claro); }
+
+    .sep { border: none; border-top: 1.5px solid var(--borde); margin: 1rem 0; }
+    .alerta { padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-top: 0.8rem; }
+    .alerta-ok   { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+    .alerta-warn { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+    .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--radio); padding: 1rem 1.2rem; font-size: 0.8rem; color: #5a4a00; margin-top: 2rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="https://datajuan1305-byte.github.io/herramientaspro/" class="nav-brand">🧮 <span>HerramientasPro</span></a>
+  <div class="nav-links">
+    <a href="https://datajuan1305-byte.github.io/herramientaspro/">← Inicio</a>
+    <a href="#" class="active">Renta Jurídicas</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🧮 Contadores Públicos — DIAN 2026</div>
+  <h1>Simulador Renta Personas Jurídicas 2026</h1>
+  <p>Calcula el impuesto de renta para sociedades colombianas: renta líquida, renta presuntiva, sobretasa financiera, descuentos y anticipo para el año siguiente.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇨🇴 DIAN 2026</span>
+    <span class="hero-chip">📋 Tarifa 35%</span>
+    <span class="hero-chip">🏦 Sobretasa sector financiero</span>
+    <span class="hero-chip">⚡ Sin registro</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mostrarTab('simulador', this)">📋 Simulador de Renta</button>
+    <button class="tab-btn" onclick="mostrarTab('presuntiva', this)">📊 Renta Presuntiva</button>
+    <button class="tab-btn" onclick="mostrarTab('referencia', this)">📚 Tarifas y Normas</button>
+  </div>
+
+  <!-- TAB 1: SIMULADOR -->
+  <div id="tab-simulador" class="tab-panel active">
+    <div class="card">
+      <h2>📋 Simulador Impuesto de Renta — Personas Jurídicas 2026</h2>
+      <div class="info-box">
+        <strong>Año gravable 2025 — Declaración 2026.</strong> Tarifa general: 35%. Sobretasa sector financiero: 3 puntos adicionales (total 38%). UVT 2026: $47.065. Basado en Ley 2277 de 2022 y decretos reglamentarios vigentes.
+      </div>
+
+      <h3>1. Tipo de sociedad</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tipo de contribuyente</label>
+          <select id="s-tipo" onchange="actualizarTipo()">
+            <option value="general" selected>Sociedad general (S.A.S., Ltda., S.A.)</option>
+            <option value="financiero">Entidad sector financiero (+3% sobretasa)</option>
+            <option value="especial">Entidad sin ánimo de lucro (ESAL) — 20%</option>
+            <option value="zomac">Empresa ZOMAC (tarifa progresiva)</option>
+            <option value="holding">Sociedad Holding Colombia — 5%</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Régimen tributario</label>
+          <select id="s-regimen">
+            <option value="ordinario" selected>Régimen ordinario</option>
+            <option value="simple">Régimen Simple de Tributación (SIMPLE)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>¿Es gran contribuyente?</label>
+          <select id="s-gran">
+            <option value="no" selected>No</option>
+            <option value="si">Sí</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Año gravable</label>
+          <select id="s-anio">
+            <option value="2025" selected>2025 (declaración 2026)</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>2. Estado de resultados</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Ingresos brutos ($ COP)</label>
+          <input type="number" id="s-ingresos" value="500000000" min="0" step="1000000" />
+        </div>
+        <div class="form-group">
+          <label>Devoluciones y descuentos ($ COP)</label>
+          <input type="number" id="s-devoluciones" value="5000000" min="0" step="1000000" />
+        </div>
+        <div class="form-group">
+          <label>Ingresos no constitutivos de renta ($ COP)</label>
+          <input type="number" id="s-ing-no-renta" value="0" min="0" step="1000000" />
+          <span class="form-hint">Dividendos no gravados, ganancias ocasionales exentas, etc.</span>
+        </div>
+        <div class="form-group">
+          <label>Costos y gastos deducibles ($ COP)</label>
+          <input type="number" id="s-costos" value="350000000" min="0" step="1000000" />
+          <span class="form-hint">Costos de ventas + gastos operacionales deducibles</span>
+        </div>
+        <div class="form-group">
+          <label>Deducciones especiales ($ COP)</label>
+          <input type="number" id="s-deducciones" value="0" min="0" step="1000000" />
+          <span class="form-hint">Inversión en I+D+I, donaciones, etc. — Art. 158-1 ET</span>
+        </div>
+        <div class="form-group">
+          <label>Rentas exentas ($ COP)</label>
+          <input type="number" id="s-exentas" value="0" min="0" step="1000000" />
+          <span class="form-hint">Rentas exentas aplicables según sector</span>
+        </div>
+      </div>
+
+      <h3>3. Descuentos y retenciones</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Descuentos tributarios ($ COP)</label>
+          <input type="number" id="s-descuentos" value="0" min="0" step="1000000" />
+          <span class="form-hint">IVA en bienes de capital, impuestos en el exterior, etc.</span>
+        </div>
+        <div class="form-group">
+          <label>Retenciones en la fuente practicadas ($ COP)</label>
+          <input type="number" id="s-retenciones" value="8000000" min="0" step="1000000" />
+        </div>
+        <div class="form-group">
+          <label>Autorretenciones ($ COP)</label>
+          <input type="number" id="s-autorret" value="0" min="0" step="1000000" />
+        </div>
+        <div class="form-group">
+          <label>Anticipo año anterior pagado ($ COP)</label>
+          <input type="number" id="s-anticipo-ant" value="5000000" min="0" step="1000000" />
+        </div>
+        <div class="form-group">
+          <label>Patrimonio líquido año anterior ($ COP)</label>
+          <input type="number" id="s-patrimonio" value="400000000" min="0" step="5000000" />
+          <span class="form-hint">Para cálculo de renta presuntiva (3.5% del patrimonio)</span>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcularRenta()">📋 Simular Declaración de Renta</button>
+    </div>
+
+    <div id="resultado-renta" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 2: RENTA PRESUNTIVA -->
+  <div id="tab-presuntiva" class="tab-panel">
+    <div class="card">
+      <h2>📊 Calculadora de Renta Presuntiva</h2>
+      <div class="info-box">
+        <strong>Renta presuntiva:</strong> Se presume que la renta líquida no puede ser inferior al 3.5% del patrimonio líquido del año anterior (Art. 188 ET). La empresa tributa sobre el mayor valor entre la renta líquida ordinaria y la renta presuntiva.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Patrimonio bruto año anterior ($ COP)</label>
+          <input type="number" id="p-patrimonio-bruto" value="600000000" min="0" step="5000000" />
+        </div>
+        <div class="form-group">
+          <label>Pasivos año anterior ($ COP)</label>
+          <input type="number" id="p-pasivos" value="200000000" min="0" step="5000000" />
+        </div>
+        <div class="form-group">
+          <label>Activos excluidos de renta presuntiva ($ COP)</label>
+          <input type="number" id="p-excluidos" value="0" min="0" step="5000000" />
+          <span class="form-hint">Activos afectados por fuerza mayor, en liquidación, etc. — Art. 189 ET</span>
+        </div>
+        <div class="form-group">
+          <label>Renta líquida ordinaria calculada ($ COP)</label>
+          <input type="number" id="p-renta-ord" value="100000000" min="0" step="5000000" />
+          <span class="form-hint">Para comparar con la presuntiva</span>
+        </div>
+      </div>
+      <button class="btn" onclick="calcularPresuntiva()">📊 Calcular Renta Presuntiva</button>
+    </div>
+    <div id="resultado-presuntiva" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: REFERENCIA -->
+  <div id="tab-referencia" class="tab-panel">
+    <div class="card">
+      <h2>📚 Tarifas de Renta — Personas Jurídicas Colombia 2026</h2>
+      <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Tipo de contribuyente</th><th>Tarifa</th><th>Base legal</th><th>Observaciones</th></tr></thead>
+          <tbody>
+            <tr><td><b>Sociedad general (S.A.S., Ltda., S.A.)</b></td><td style="font-weight:700; color:#1565c0;">35%</td><td>Art. 240 ET</td><td>Tarifa general vigente desde 2022</td></tr>
+            <tr><td><b>Sector financiero</b></td><td style="font-weight:700; color:#c62828;">38%</td><td>Art. 240 ET + Ley 2277/22</td><td>35% + 3% sobretasa permanente</td></tr>
+            <tr><td><b>ESAL (sin ánimo de lucro)</b></td><td style="font-weight:700; color:#2e7d32;">20%</td><td>Art. 356 ET</td><td>Solo sobre ingresos no exentos</td></tr>
+            <tr><td><b>Sociedad Holding Colombia</b></td><td style="font-weight:700; color:#e65100;">5%</td><td>Art. 894 ET</td><td>Solo sobre dividendos del exterior</td></tr>
+            <tr><td><b>ZOMAC año 1–5</b></td><td style="font-weight:700; color:#2e7d32;">0%</td><td>Ley 1819/16</td><td>Micro y pequeñas empresas</td></tr>
+            <tr><td><b>ZOMAC año 6–10</b></td><td style="font-weight:700; color:#f57c00;">25%</td><td>Ley 1819/16</td><td>50% de la tarifa general</td></tr>
+            <tr><td><b>ZOMAC año 11+</b></td><td style="font-weight:700; color:#1565c0;">35%</td><td>Ley 1819/16</td><td>Tarifa general</td></tr>
+            <tr><td><b>Zona Franca (usuario industrial)</b></td><td style="font-weight:700; color:#6a1b9a;">20%</td><td>Art. 240-1 ET</td><td>Régimen especial</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 Parámetros DIAN 2026</h2>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; font-size:0.85rem;">
+        <div style="background:var(--azul-claro); border-radius:8px; padding:0.9rem;">
+          <strong style="color:var(--azul-oscuro);">Valores UVT 2026</strong><br>
+          UVT: <b>$47.065</b><br>
+          Renta presuntiva: <b>3.5%</b> del patrimonio<br>
+          Anticipo renta: <b>75%</b> (declarantes) / <b>50%</b> (1er año)<br>
+          Tasa de interés mora: <b>~28% EA</b>
+        </div>
+        <div style="background:#e8f5e9; border-radius:8px; padding:0.9rem;">
+          <strong style="color:#1b5e20;">Descuentos tributarios</strong><br>
+          IVA bienes de capital: hasta 50% del impuesto<br>
+          Impuestos pagados exterior: hasta 35%<br>
+          Inversión I+D+I: hasta 25% adicional<br>
+          Donaciones: hasta 25% del impuesto
+        </div>
+        <div style="background:#fff3e0; border-radius:8px; padding:0.9rem;">
+          <strong style="color:#e65100;">Plazos declaración 2026</strong><br>
+          Grandes contribuyentes: abril 2026<br>
+          Demás declarantes: mayo–junio 2026<br>
+          Pago en cuotas: según calendario DIAN<br>
+          Verificar fechas exactas en DIAN.gov.co
+        </div>
+        <div style="background:#f3e5f5; border-radius:8px; padding:0.9rem;">
+          <strong style="color:#6a1b9a;">Deducciones especiales</strong><br>
+          Art. 107 ET: expensas necesarias<br>
+          Art. 158-1: I+D+I (125% deducción)<br>
+          Art. 126-2: donaciones (125%)<br>
+          Art. 108: pagos a trabajadores
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Este simulador es una aproximación al impuesto de renta para personas jurídicas. La declaración real debe ser elaborada y firmada por un <strong>Contador Público matriculado</strong>. Las cifras presentadas no constituyen concepto tributario. Consulte el Estatuto Tributario actualizado y los decretos DIAN vigentes para 2026. UVT 2026: $47.065.
+  </div>
+</div>
+
+<script>
+function mostrarTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+function fmtPct(n, dec=1) {
+  return Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + '%';
+}
+
+function actualizarTipo() { /* reservado para lógica adicional */ }
+
+function calcularRenta() {
+  const tipo        = document.getElementById('s-tipo').value;
+  const ingresos    = parseFloat(document.getElementById('s-ingresos').value) || 0;
+  const devoluc     = parseFloat(document.getElementById('s-devoluciones').value) || 0;
+  const ingNoRenta  = parseFloat(document.getElementById('s-ing-no-renta').value) || 0;
+  const costos      = parseFloat(document.getElementById('s-costos').value) || 0;
+  const dedEsp      = parseFloat(document.getElementById('s-deducciones').value) || 0;
+  const exentas     = parseFloat(document.getElementById('s-exentas').value) || 0;
+  const descuentos  = parseFloat(document.getElementById('s-descuentos').value) || 0;
+  const retenciones = parseFloat(document.getElementById('s-retenciones').value) || 0;
+  const autorret    = parseFloat(document.getElementById('s-autorret').value) || 0;
+  const anticipoAnt = parseFloat(document.getElementById('s-anticipo-ant').value) || 0;
+  const patrimonio  = parseFloat(document.getElementById('s-patrimonio').value) || 0;
+
+  // Tarifa según tipo
+  const tarifas = { general:0.35, financiero:0.38, especial:0.20, zomac:0.175, holding:0.05 };
+  const tarifa = tarifas[tipo] || 0.35;
+  const tarifaLabel = (tarifa * 100).toFixed(0) + '%';
+
+  // 1. Ingresos netos
+  const ingresosNetos = ingresos - devoluc;
+
+  // 2. Renta bruta
+  const rentaBruta = ingresosNetos - ingNoRenta - costos;
+
+  // 3. Renta líquida
+  const rentaLiquida = Math.max(0, rentaBruta - dedEsp);
+
+  // 4. Renta líquida gravable
+  const rentaGravable = Math.max(0, rentaLiquida - exentas);
+
+  // 5. Renta presuntiva (3.5% patrimonio)
+  const rentaPresuntiva = patrimonio * 0.035;
+
+  // 6. Base gravable: mayor entre renta ordinaria y presuntiva
+  const baseGravable = Math.max(rentaGravable, rentaPresuntiva);
+  const usaPresuntiva = rentaPresuntiva > rentaGravable;
+
+  // 7. Impuesto básico
+  const impuestoBruto = baseGravable * tarifa;
+
+  // 8. Descuentos (máx 75% del impuesto básico)
+  const descMax = impuestoBruto * 0.75;
+  const descReal = Math.min(descuentos, descMax);
+  const impuestoNeto = Math.max(0, impuestoBruto - descReal);
+
+  // 9. Total a pagar antes de anticipos
+  const totalAntesAnticipos = impuestoNeto;
+
+  // 10. Saldo a pagar / favor
+  const totalPagado = retenciones + autorret + anticipoAnt;
+  const saldo = totalAntesAnticipos - totalPagado;
+
+  // 11. Anticipo año siguiente (75% del impuesto neto - retenciones estimadas)
+  const anticipoSig = Math.max(0, impuestoNeto * 0.75 - retenciones);
+
+  document.getElementById('resultado-renta').style.display = 'block';
+  document.getElementById('resultado-renta').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Simulación Declaración de Renta — Persona Jurídica — Año Gravable 2025</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(baseGravable)}</div><div class="resultado-label">Base gravable${usaPresuntiva?' (presuntiva)':''}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${tarifaLabel}</div><div class="resultado-label">Tarifa aplicada</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(impuestoNeto)}</div><div class="resultado-label">Impuesto neto de renta</div></div>
+        <div class="resultado-item"><div class="resultado-valor" style="color:${saldo>0?'#ef9a9a':'#a5d6a7'}">$ ${fmt(Math.abs(saldo))}</div><div class="resultado-label">${saldo>0?'Saldo a PAGAR':'Saldo a FAVOR'}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(anticipoSig)}</div><div class="resultado-label">Anticipo año siguiente</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(saldo>0?saldo+anticipoSig:anticipoSig)}</div><div class="resultado-label">Total a pagar (con anticipo)</div></div>
+      </div>
+
+      <table class="liquidacion-tabla" style="margin-top:1rem; color:#fff;">
+        <tr><td>(+) Ingresos brutos</td><td>$ ${fmt(ingresos)}</td></tr>
+        <tr class="deduccion"><td>(−) Devoluciones y descuentos</td><td>$ ${fmt(devoluc)}</td></tr>
+        <tr class="subtotal"><td>= Ingresos netos</td><td>$ ${fmt(ingresosNetos)}</td></tr>
+        <tr class="deduccion"><td>(−) Ingresos no constitutivos de renta</td><td>$ ${fmt(ingNoRenta)}</td></tr>
+        <tr class="deduccion"><td>(−) Costos y gastos deducibles</td><td>$ ${fmt(costos)}</td></tr>
+        <tr class="subtotal"><td>= Renta bruta</td><td>$ ${fmt(rentaBruta)}</td></tr>
+        <tr class="deduccion"><td>(−) Deducciones especiales</td><td>$ ${fmt(dedEsp)}</td></tr>
+        <tr class="subtotal"><td>= Renta líquida ordinaria</td><td>$ ${fmt(rentaLiquida)}</td></tr>
+        <tr class="deduccion"><td>(−) Rentas exentas</td><td>$ ${fmt(exentas)}</td></tr>
+        <tr class="subtotal"><td>= Renta líquida gravable</td><td>$ ${fmt(rentaGravable)}</td></tr>
+        ${usaPresuntiva ? `<tr style="color:#ffe082;"><td>⚠️ Se aplica renta presuntiva (3.5% × $ ${fmt(patrimonio)})</td><td>$ ${fmt(rentaPresuntiva)}</td></tr>` : ''}
+        <tr class="subtotal"><td>= BASE GRAVABLE ${usaPresuntiva?'(presuntiva)':'(ordinaria)'}</td><td>$ ${fmt(baseGravable)}</td></tr>
+        <tr><td>(×) Tarifa impuesto de renta (${tarifaLabel})</td><td>$ ${fmt(impuestoBruto)}</td></tr>
+        <tr class="deduccion"><td>(−) Descuentos tributarios</td><td>$ ${fmt(descReal)}</td></tr>
+        <tr class="subtotal"><td>= Impuesto neto de renta</td><td>$ ${fmt(impuestoNeto)}</td></tr>
+        <tr class="deduccion"><td>(−) Retenciones en la fuente</td><td>$ ${fmt(retenciones)}</td></tr>
+        <tr class="deduccion"><td>(−) Autorretenciones</td><td>$ ${fmt(autorret)}</td></tr>
+        <tr class="deduccion"><td>(−) Anticipo año anterior</td><td>$ ${fmt(anticipoAnt)}</td></tr>
+        <tr class="total-final"><td>${saldo > 0 ? '💳 SALDO A PAGAR' : '✅ SALDO A FAVOR'}</td><td>$ ${fmt(Math.abs(saldo))}</td></tr>
+        <tr><td>(+) Anticipo año siguiente (75%)</td><td>$ ${fmt(anticipoSig)}</td></tr>
+        <tr class="total-final"><td>💳 TOTAL A PAGAR (incluye anticipo)</td><td>$ ${fmt(Math.max(0, saldo) + anticipoSig)}</td></tr>
+      </table>
+
+      ${usaPresuntiva ? '<div class="alerta alerta-warn" style="margin-top:0.8rem;">⚠️ <strong>Se aplica renta presuntiva</strong> porque es mayor que la renta líquida ordinaria. Verifique si aplican exclusiones del Art. 189 ET.</div>' : '<div class="alerta alerta-ok" style="margin-top:0.8rem;">✅ La renta líquida ordinaria supera la renta presuntiva. Se tributa sobre la renta ordinaria.</div>'}
+    </div>`;
+}
+
+function calcularPresuntiva() {
+  const bruto    = parseFloat(document.getElementById('p-patrimonio-bruto').value) || 0;
+  const pasivos  = parseFloat(document.getElementById('p-pasivos').value) || 0;
+  const excluidos= parseFloat(document.getElementById('p-excluidos').value) || 0;
+  const rentaOrd = parseFloat(document.getElementById('p-renta-ord').value) || 0;
+
+  const patrimonioLiq  = bruto - pasivos;
+  const basePresuntiva = Math.max(0, patrimonioLiq - excluidos);
+  const rentaPresuntiva= basePresuntiva * 0.035;
+  const usaPresuntiva  = rentaPresuntiva > rentaOrd;
+  const baseGravable   = Math.max(rentaOrd, rentaPresuntiva);
+  const impuesto35     = baseGravable * 0.35;
+
+  document.getElementById('resultado-presuntiva').style.display = 'block';
+  document.getElementById('resultado-presuntiva').innerHTML = `
+    <div class="resultado-box">
+      <div class="resultado-titulo">Resultado — Renta Presuntiva</div>
+      <div class="resultado-grid">
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(patrimonioLiq)}</div><div class="resultado-label">Patrimonio líquido</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(rentaPresuntiva)}</div><div class="resultado-label">Renta presuntiva (3.5%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(rentaOrd)}</div><div class="resultado-label">Renta líquida ordinaria</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(baseGravable)}</div><div class="resultado-label">Base gravable final</div></div>
+      </div>
+      <div class="resultado-detalle">
+        <b>Patrimonio líquido:</b> $ ${fmt(bruto)} − $ ${fmt(pasivos)} = $ ${fmt(patrimonioLiq)}<br>
+        ${excluidos > 0 ? `<b>Activos excluidos:</b> $ ${fmt(excluidos)}<br>` : ''}
+        <b>Base presuntiva:</b> $ ${fmt(basePresuntiva)} × 3.5% = <b>$ ${fmt(rentaPresuntiva)}</b><br>
+        <b>Renta líquida ordinaria:</b> $ ${fmt(rentaOrd)}<br>
+        <b>Base gravable:</b> Mayor valor entre ambas = <b>$ ${fmt(baseGravable)}</b> ${usaPresuntiva ? '(PRESUNTIVA)' : '(ORDINARIA)'}<br>
+        <b>Impuesto estimado (35%):</b> $ ${fmt(baseGravable)} × 35% = <b>$ ${fmt(impuesto35)}</b>
+      </div>
+    </div>
+    <div class="alerta ${usaPresuntiva ? 'alerta-warn' : 'alerta-ok'}" style="margin-top:0.8rem;">
+      ${usaPresuntiva
+        ? `⚠️ <strong>Aplica renta presuntiva.</strong> La presuntiva ($ ${fmt(rentaPresuntiva)}) supera la renta ordinaria ($ ${fmt(rentaOrd)}). La empresa tributa sobre $ ${fmt(rentaPresuntiva)}.`
+        : `✅ <strong>No aplica renta presuntiva.</strong> La renta ordinaria ($ ${fmt(rentaOrd)}) supera la presuntiva ($ ${fmt(rentaPresuntiva)}). Se tributa sobre la renta ordinaria.`}
+    </div>`;
+}
+</script>
+</body>
+</html>
