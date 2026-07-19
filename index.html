@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Herramientas digitales gratuitas para profesionales colombianos. Calculadoras y simuladores adaptados a la normativa colombiana 2026." />
+  <meta name="keywords" content="herramientas profesionales colombia, calculadora laboral, liquidacion colombia, fertilizacion NPK, nomina colombia, rendimiento deportivo colombia, entrenadores deportivos, vo2 max futbol, 1rm halterofilia, test cooper atletismo" />
+  <title>HerramientasPro Colombia — Herramientas digitales gratuitas</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BRHFQTZC5D"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BRHFQTZC5D');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986"
+     crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde: #1D9E75;
+      --verde-dark: #0F6E56;
+      --verde-light: #E1F5EE;
+      --azul: #1a3a5c;
+      --text: #1a1a1a;
+      --text-sec: #555;
+      --text-muted: #888;
+      --bg: #f7f7f5;
+      --card: #ffffff;
+      --border: #e0e0dc;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* HEADER */
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--verde);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .logo-text { font-size: 17px; font-weight: 600; color: var(--text); }
+    .logo-sub  { font-size: 11px; color: var(--text-muted); }
+    .header-badge {
+      font-size: 12px;
+      background: var(--verde-light);
+      color: var(--verde-dark);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    /* HERO */
+    .hero {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 28px; font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px; line-height: 1.3;
+    }
+    .hero h1 span { color: var(--verde); }
+    .hero p {
+      font-size: 16px; color: var(--text-sec);
+      max-width: 600px; margin: 0 auto 1.2rem;
+    }
+    .hero-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .badge { font-size: 12px; padding: 5px 12px; border-radius: 20px; font-weight: 500; }
+    .badge-green { background: var(--verde-light); color: var(--verde-dark); }
+    .badge-gray  { background: #f0f0ec; color: #555; }
+
+    /* STATS */
+    .stats {
+      display: flex; justify-content: center; gap: 2rem;
+      padding: 1.2rem 1.5rem;
+      background: var(--verde-dark);
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-n { font-size: 22px; font-weight: 700; color: #fff; }
+    .stat-l { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+
+    /* TABS */
+    .tabs-section {
+      max-width: 1100px;
+      margin: 2rem auto 0;
+      padding: 0 1.5rem;
+    }
+    .tabs-title {
+      font-size: 13px; color: var(--text-muted);
+      margin-bottom: 10px;
+      text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;
+    }
+    .tabs-scroll { overflow-x: auto; padding-bottom: 2px; }
+    .tabs {
+      display: flex; gap: 6px;
+      min-width: max-content;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+    .tab {
+      padding: 10px 16px; font-size: 13px; font-weight: 500;
+      border: none; background: transparent; cursor: pointer;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      border-radius: 6px 6px 0 0;
+      white-space: nowrap; transition: color 0.15s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tab:hover { color: var(--verde-dark); background: var(--verde-light); }
+    .tab.active { color: var(--verde-dark); border-bottom-color: var(--verde); font-weight: 600; }
+    .tab-emoji { font-size: 15px; }
+
+    /* CONTENT */
+    .content-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 3rem;
+    }
+    .section-header { margin-bottom: 1.2rem; }
+    .section-header h2 { font-size: 20px; font-weight: 700; color: var(--text); }
+    .section-header p  { font-size: 14px; color: var(--text-sec); margin-top: 4px; }
+
+    /* TOOLS GRID */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .tool-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      text-decoration: none;
+      color: var(--text);
+      display: flex; flex-direction: column; gap: 6px;
+      transition: box-shadow 0.15s, transform 0.15s;
+      cursor: pointer;
+    }
+    .tool-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    .tool-card.disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .tool-card.disabled:hover {
+      box-shadow: none;
+      transform: none;
+    }
+    .tool-card-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    .tool-card-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+    .tool-card-desc { font-size: 12px; color: var(--text-sec); line-height: 1.4; flex: 1; }
+    .tool-status {
+      font-size: 11px; font-weight: 500;
+      padding: 3px 8px; border-radius: 10px;
+      display: inline-block; width: fit-content; margin-top: 4px;
+    }
+    .status-ready { background: var(--verde-light); color: var(--verde-dark); }
+    .status-soon  { background: #f0f0ec; color: var(--text-muted); }
+
+    /* FOOTER */
+    footer {
+      background: var(--azul);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 1.8rem 1rem;
+      font-size: 13px;
+    }
+    footer a { color: #f5a623; text-decoration: none; }
+    .disclaimer {
+      background: #fff8e1; border: 1px solid #ffc107;
+      border-radius: 8px; padding: 0.8rem 1rem;
+      font-size: 12px; color: #5a4a00;
+      margin: 1.5rem auto 0; max-width: 1100px;
+      text-align: center;
+    }
+
+    @media(max-width: 600px) {
+      .tools-grid { grid-template-columns: 1fr 1fr; }
+      .hero h1 { font-size: 22px; }
+    }
+
+    /* SUGERENCIAS */
+    .sugerencias-box {
+      margin-top: 2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.3rem 1.4rem;
+    }
+    .sugerencias-box summary {
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--verde-dark);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sugerencias-box summary::-webkit-details-marker { display: none; }
+    .sugerencias-box summary::after {
+      content: '▾';
+      margin-left: auto;
+      transition: transform 0.2s;
+      color: var(--text-muted);
+    }
+    .sugerencias-box[open] summary::after { transform: rotate(180deg); }
+    .sugerencias-sub {
+      font-size: 13px;
+      color: var(--text-sec);
+      margin: 6px 0 1rem;
+    }
+    .sug-form { display: flex; flex-direction: column; gap: 10px; }
+    .sug-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media(max-width: 560px) { .sug-row { grid-template-columns: 1fr; } }
+    .sug-form label { font-size: 12px; font-weight: 600; color: var(--text-sec); margin-bottom: 3px; display: block; }
+    .sug-form select, .sug-form textarea, .sug-form input {
+      width: 100%;
+      padding: 9px 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      background: #fdfdfb;
+      color: var(--text);
+    }
+    .sug-form select:focus, .sug-form textarea:focus, .sug-form input:focus {
+      outline: none; border-color: var(--verde);
+    }
+    .sug-form textarea { resize: vertical; min-height: 80px; }
+    .sug-submit {
+      align-self: flex-start;
+      background: var(--verde);
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .sug-submit:hover { background: var(--verde-dark); }
+    .sug-submit:disabled { opacity: 0.6; cursor: default; }
+    .sug-msg { font-size: 13px; padding: 8px 12px; border-radius: 8px; display: none; }
+    .sug-msg.ok   { display: block; background: var(--verde-light); color: var(--verde-dark); }
+    .sug-msg.err  { display: block; background: #fde8e8; color: #b91c1c; }
+    .sug-honeypot { position: absolute; left: -9999px; opacity: 0; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">🔧</div>
+      <div>
+        <div class="logo-text">HerramientasPro Colombia</div>
+        <div class="logo-sub">Herramientas digitales para profesionales</div>
+      </div>
+    </a>
+    <span class="header-badge">✅ 100% Gratuito</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Herramientas digitales gratuitas<br>para <span>profesionales colombianos</span></h1>
+  <p>Calculadoras y simuladores adaptados a la normativa colombiana vigente. Sin registro, sin suscripción, sin límites.</p>
+  <div class="hero-badges">
+    <span class="badge badge-green">🔄 Actualizado 2026</span>
+    <span class="badge badge-gray">📱 Funciona en celular</span>
+    <span class="badge badge-green">⚡ Sin registro</span>
+    <span class="badge badge-gray">🇨🇴 Normativa colombiana</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-n" id="stat-herramientas">67</div><div class="stat-l">Herramientas</div></div>
+  <div class="stat"><div class="stat-n" id="stat-categorias">13</div><div class="stat-l">Categorías</div></div>
+  <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Gratuito</div></div>
+  <div class="stat"><div class="stat-n">2026</div><div class="stat-l">Normativa vigente</div></div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-section">
+  <div class="tabs-title">Selecciona tu profesión</div>
+  <div class="tabs-scroll">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab(this,'agro')"><span class="tab-emoji">🌱</span> Agrónomos</button>
+      <button class="tab" onclick="switchTab(this,'contadores')"><span class="tab-emoji">🧮</span> Contadores</button>
+      <button class="tab" onclick="switchTab(this,'admin')"><span class="tab-emoji">📊</span> Administradores</button>
+      <button class="tab" onclick="switchTab(this,'docentes')"><span class="tab-emoji">📚</span> Docentes</button>
+      <button class="tab" onclick="switchTab(this,'medicos')"><span class="tab-emoji">🩺</span> Médicos</button>
+      <button class="tab" onclick="switchTab(this,'veterinarios')"><span class="tab-emoji">🐄</span> Veterinarios</button>
+      <button class="tab" onclick="switchTab(this,'civiles')"><span class="tab-emoji">🏗️</span> Ing. Civil</button>
+      <button class="tab" onclick="switchTab(this,'electricos')"><span class="tab-emoji">⚡</span> Ing. Eléctricos</button>
+      <button class="tab" onclick="switchTab(this,'nutricion')"><span class="tab-emoji">🥗</span> Nutricionistas</button>
+      <button class="tab" onclick="switchTab(this,'abogados')"><span class="tab-emoji">⚖️</span> Abogados</button>
+      <button class="tab" onclick="switchTab(this,'psicologia')"><span class="tab-emoji">🧠</span> Psicólogos</button>
+      <button class="tab" onclick="switchTab(this,'alimentos')"><span class="tab-emoji">🧪</span> Ing. Alimentos</button>
+      <button class="tab" onclick="switchTab(this,'estadistica')"><span class="tab-emoji">📐</span> Estadística</button>
+      <button class="tab" onclick="switchTab(this,'deportes')" style="border:2px solid #e65100;color:#e65100;font-weight:700;"><span class="tab-emoji">🏅</span> Entrenadores</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content-section">
+  <div id="content"></div>
+  <div class="disclaimer">
+    ⚠️ <strong>Uso orientativo.</strong> Los resultados deben verificarse con un profesional idóneo. Parámetros 2026: SMMLV $1.423.500 · Aux. transporte $162.000 · UVT $47.065.
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong style="color:#fff;">HerramientasPro Colombia</strong> — Plataforma de herramientas digitales gratuitas<br>
+  Desarrollado para profesionales colombianos · <a href="mailto:datajuan1305@gmail.com">Contacto</a><br>
+  <a href="privacidad/">Política de Privacidad</a> · <a href="terminos/">Términos de Uso</a><br>
+  <a href="#" onclick="exportarSugerenciasCSV(); return false;" style="font-size:11px; opacity:0.7;">⬇️ Exportar sugerencias guardadas (<span id="admin-sug-count">0</span>)</a>
+</footer>
+
+<script>
+const profesiones = {
+  agro: {
+    titulo: 'Ingenieros Agrónomos y del Agro',
+    desc: 'Fertilización, riego, agroquímicos y análisis de suelo — adaptados a cultivos colombianos',
+    apps: [
+      { emoji: '🌿', bg: '#E1F5EE', name: 'Calculadora NPK', desc: 'Fertilización por cultivo según análisis de suelo', url: 'agro/fertilizacion-npk/', ready: true },
+      { emoji: '💧', bg: '#E6F1FB', name: 'Plan de riego goteo y aspersión', desc: 'Diseño de riego por cultivo y tipo de suelo', url: 'agro/plan-riego/', ready: true },
+      { emoji: '🐛', bg: '#FAEEDA', name: 'Dosis de agroquímicos por hectárea', desc: 'Cálculo según etiqueta del producto', url: 'agro/dosis-agroquimicos/', ready: true },
+      { emoji: '🌍', bg: '#EEEDFE', name: 'Interpretador análisis de suelo', desc: 'pH, materia orgánica, nutrientes y recomendaciones', url: 'agro/analisis-suelo/', ready: true },
+      { emoji: '🌾', bg: '#EAF3DE', name: 'Estimador de rendimiento por cultivo', desc: 'Proyección de producción por lote', url: 'agro/rendimiento-cultivos/', ready: true },
+      { emoji: '💰', bg: '#FAEEDA', name: 'Presupuesto de producción agrícola', desc: 'Costos por lote y ciclo productivo', url: 'agro/presupuesto-agricola/', ready: true },
+      { emoji: '🌿', bg: '#E1F5EE', name: 'Materia orgánica y enmiendas', desc: 'Cálculo de compost y enmiendas al suelo', url: '', ready: false },
+      { emoji: '📐', bg: '#E6F1FB', name: 'Índice de área foliar (IAF)', desc: 'Estimación de cobertura vegetal', url: '', ready: false },
+    ]
+  },
+  contadores: {
+    titulo: 'Contadores Públicos',
+    desc: 'Liquidaciones laborales, nómina y tributario — normativa colombiana 2026',
+    apps: [
+      { emoji: '📋', bg: '#E1F5EE', name: 'Liquidador laboral completo', desc: 'Prima, cesantías, vacaciones, indemnización', url: 'contadores/liquidacion-laboral/', ready: true },
+      { emoji: '👥', bg: '#E6F1FB', name: 'Calculadora de nómina mensual', desc: 'Con todos los descuentos y aportes', url: 'contadores/nomina-mensual/', ready: true },
+      { emoji: '🧾', bg: '#EEEDFE', name: 'Retención en la fuente', desc: 'Simulador por tipo de ingreso y UVT 2026', url: 'contadores/retencion-fuente/', ready: true },
+      { emoji: '💹', bg: '#FAEEDA', name: 'Calculadora de IVA y facturación', desc: 'Facturación electrónica incluida', url: 'contadores/calculadora-iva/', ready: true },
+      { emoji: '📉', bg: '#EAF3DE', name: 'Depreciación de activos', desc: 'Línea recta y reducción de saldos', url: 'contadores/depreciacion-activos/', ready: true },
+      { emoji: '⏰', bg: '#E6F1FB', name: 'Intereses de mora DIAN', desc: 'Cálculo por período vencido', url: 'contadores/intereses-mora-dian/', ready: true },
+      { emoji: '📊', bg: '#FCEBEB', name: 'Declaración de renta PN', desc: 'Simulador personas naturales 2026', url: 'contadores/declaracion-renta/', ready: true },
+      { emoji: '🏦', bg: '#E1F5EE', name: 'Conciliación bancaria', desc: 'Cuadre automático de saldos', url: 'contadores/conciliacion-bancaria/', ready: true },
+    ]
+  },
+  admin: {
+    titulo: 'Administradores de Empresas',
+    desc: 'Indicadores financieros y herramientas de gestión para PYME colombianas',
+    apps: [
+      { emoji: '📊', bg: '#E1F5EE', name: 'Punto de equilibrio básico', desc: 'En unidades y en pesos colombianos', url: 'admin/punto-equilibrio/', ready: true },
+      { emoji: '🏭', bg: '#E6F1FB', name: 'Punto de equilibrio PYME avanzado', desc: 'Multiproducto y escenarios de utilidad', url: 'admin/punto-equilibrio-pyme/', ready: true },
+      { emoji: '🏦', bg: '#FAEEDA', name: 'Simulador de crédito bancario', desc: 'Cuota, plazo y tabla de amortización', url: 'admin/credito-bancario/', ready: true },
+      { emoji: '💰', bg: '#EAF3DE', name: 'Flujo de caja PYME', desc: 'Proyección mensual de ingresos y egresos', url: 'admin/flujo-caja-pyme/', ready: true },
+      { emoji: '📈', bg: '#EEEDFE', name: 'Análisis financiero ROI/TIR/VPN', desc: 'Evaluación de proyectos de inversión', url: 'admin/analisis-financiero/', ready: true },
+      { emoji: '💼', bg: '#FCEBEB', name: 'Indicadores financieros', desc: 'Liquidez, endeudamiento, rentabilidad', url: 'admin/indicadores-financieros/', ready: true },
+      { emoji: '📋', bg: '#EAF3DE', name: 'Estado de resultados', desc: 'P&G automático para PYME', url: 'admin/estado-resultados/', ready: true },
+      { emoji: '👥', bg: '#E6F1FB', name: 'Nómina PYME completa', desc: 'Liquidación individual y múltiple', url: 'admin/nomina-pyme/', ready: true },
+    ]
+  },
+  docentes: {
+    titulo: 'Docentes y Educadores',
+    desc: 'Simuladores de FNA, pensión y escalafón para el magisterio colombiano',
+    apps: [
+      { emoji: '🏠', bg: '#E6F1FB', name: 'Simulador crédito FNA', desc: 'Cuota, plazo y tasa vigente 2026', url: 'docentes/credito-fna/', ready: true },
+      { emoji: '📈', bg: '#EAF3DE', name: 'Escalafón docente 2026', desc: 'Proyección salarial por grado y título', url: 'docentes/escalafon-docente/', ready: true },
+      { emoji: '🎓', bg: '#EEEDFE', name: 'Pensión docente', desc: 'Régimen especial del magisterio', url: 'docentes/pension-docente/', ready: true },
+      { emoji: '💵', bg: '#FAEEDA', name: 'Deducciones nómina docente', desc: 'Descuentos, aportes y neto a pagar', url: '', ready: false },
+      { emoji: '⭐', bg: '#E1F5EE', name: 'Promedio ponderado estudiantil', desc: 'Evaluación y desempeño escolar', url: '', ready: false },
+    ]
+  },
+  medicos: {
+    titulo: 'Médicos y Personal de Salud',
+    desc: 'Calculadoras clínicas validadas para el entorno médico colombiano',
+    apps: [
+      { emoji: '⚖️', bg: '#FCEBEB', name: 'IMC y dosis pediátricas', desc: 'Peso ideal, IMC y dosis por peso corporal', url: 'salud/imc-dosis-medicos/', ready: true },
+      { emoji: '❤️', bg: '#FCEBEB', name: 'Score Framingham cardiovascular', desc: 'Riesgo cardiovascular a 10 años', url: 'salud/framingham-cardiovascular/', ready: true },
+      { emoji: '💊', bg: '#E1F5EE', name: 'Dosis de medicamentos adulto', desc: 'Por peso y función renal', url: '', ready: false },
+      { emoji: '👶', bg: '#EEEDFE', name: 'Fecha probable de parto (FPP)', desc: 'Regla de Naegele + ecografía', url: 'salud/fecha-probable-parto/', ready: true },
+      { emoji: '💉', bg: '#FAEEDA', name: 'Calculadora de goteo IV', desc: 'Soluciones y velocidad de infusión', url: 'salud/goteo-iv/', ready: true },
+      { emoji: '🫁', bg: '#E6F1FB', name: 'Gases arteriales', desc: 'Interpretación de gasometría', url: 'salud/gases-arteriales/', ready: true },
+      { emoji: '🧪', bg: '#EAF3DE', name: 'Clearance de creatinina', desc: 'Fórmula Cockcroft-Gault', url: 'salud/clearance-creatinina/', ready: true },
+      { emoji: '🏥', bg: '#FCEBEB', name: 'Score APACHE II / SOFA', desc: 'Pronóstico en paciente crítico UCI', url: 'salud/apache-sofa/', ready: true },
+    ]
+  },
+  veterinarios: {
+    titulo: 'Veterinarios y Zootecnistas',
+    desc: 'Herramientas para el sector pecuario y de salud animal colombiano',
+    apps: [
+      { emoji: '🐄', bg: '#FAEEDA', name: 'Calculadora de raciones bovinas', desc: 'Ganancia de peso y conversión alimenticia', url: 'veterinaria/raciones-bovinas/', ready: true },
+      { emoji: '💉', bg: '#E1F5EE', name: 'Dosis de medicamentos veterinarios', desc: 'Por especie y peso corporal', url: 'veterinaria/dosis-veterinaria/', ready: true },
+      { emoji: '🌿', bg: '#EAF3DE', name: 'Capacidad de carga por hectárea', desc: 'Unidades animales por área de pastoreo', url: 'veterinaria/capacidad-carga/', ready: true },
+      { emoji: '📅', bg: '#FAEEDA', name: 'Calendario sanitario veterinario', desc: 'Vacunación por especie y edad', url: 'veterinaria/calendario-sanitario/', ready: true },
+      { emoji: '🐔', bg: '#EEEDFE', name: 'Densidad en galpones avícolas', desc: 'Aves por m² según normativa ICA', url: '', ready: false },
+      { emoji: '📊', bg: '#E6F1FB', name: 'Índice de conversión alimenticia (ICA)', desc: 'Eficiencia alimentaria por especie', url: 'veterinaria/conversion-alimenticia/', ready: true },
+    ]
+  },
+  civiles: {
+    titulo: 'Ingenieros Civiles y Constructores',
+    desc: 'Cálculos estructurales, presupuestos y materiales para obra colombiana',
+    apps: [
+      { emoji: '🏢', bg: '#E1F5EE', name: 'Presupuesto de construcción por m²', desc: 'Con análisis de precios unitarios (APU)', url: 'ing-civil/presupuesto-construccion/', ready: true },
+      { emoji: '🪨', bg: '#E6F1FB', name: 'Diseño de mezclas de concreto', desc: 'Proporciones fc, relación agua/cemento', url: 'ing-civil/mezclas-concreto/', ready: true },
+      { emoji: '📏', bg: '#EEEDFE', name: 'Cálculo de acero de refuerzo', desc: 'Varillas, traslapes y peso total', url: 'ing-civil/acero-refuerzo/', ready: true },
+      { emoji: '🧱', bg: '#FAEEDA', name: 'Mampostería', desc: 'Bloques, ladrillos y mortero por m²', url: 'ing-civil/mamposteria/', ready: true },
+      { emoji: '🧮', bg: '#E1F5EE', name: 'APU — Análisis de precios unitarios', desc: 'Materiales, mano de obra, equipos y AIU', url: 'ing-civil/apu-precios-unitarios/', ready: true },
+      { emoji: '⛏️', bg: '#EAF3DE', name: 'Excavaciones y rellenos', desc: 'Volumen de corte y terraplén', url: '', ready: false },
+      { emoji: '🚿', bg: '#E6F1FB', name: 'Instalaciones hidráulicas', desc: 'Tuberías, presión y caudal', url: '', ready: false },
+    ]
+  },
+  electricos: {
+    titulo: 'Ingenieros Eléctricos y Electrónicos',
+    desc: 'Cálculos bajo norma RETIE y NTC 2050 para instalaciones colombianas',
+    apps: [
+      { emoji: '⚡', bg: '#FAEEDA', name: 'Carga eléctrica residencial/industrial', desc: 'Demanda máxima y factor de demanda', url: 'ing-electrica/instalaciones-residenciales/', ready: true },
+      { emoji: '🔌', bg: '#E6F1FB', name: 'Dimensionamiento de conductores', desc: 'Calibre según NTC 2050', url: 'ing-electrica/iluminacion-conductores/', ready: true },
+      { emoji: '💡', bg: '#FAEEDA', name: 'Iluminación industrial (luxes)', desc: 'Número de luminarias por área', url: 'ing-electrica/iluminacion-conductores/', ready: true },
+      { emoji: '🔧', bg: '#EAF3DE', name: 'Calculadora RETIE', desc: 'Cumplimiento normativo de instalaciones', url: 'ing-electrica/calculadora-retie/', ready: true },
+      { emoji: '🔄', bg: '#EEEDFE', name: 'Transformadores kVA', desc: 'Capacidad, corriente y protecciones', url: 'ing-electrica/transformadores-kva/', ready: true },
+    ]
+  },
+  nutricion: {
+    titulo: 'Nutricionistas y Dietistas',
+    desc: 'Planificación nutricional y cálculo de requerimientos calóricos',
+    apps: [
+      { emoji: '🥗', bg: '#EAF3DE', name: 'Requerimiento calórico total (VCT)', desc: 'Por actividad física y composición corporal', url: 'nutricion/requerimiento-calorico/', ready: true },
+      { emoji: '🍗', bg: '#FAEEDA', name: 'Calculadora de macronutrientes', desc: 'Proteína, carbohidratos y grasas', url: 'nutricion/macronutrientes/', ready: true },
+      { emoji: '👶', bg: '#FCEBEB', name: 'IMC niños y adolescentes', desc: 'Percentiles OMS por edad y sexo', url: 'nutricion/imc-ninos-percentiles/', ready: true },
+      { emoji: '💧', bg: '#E6F1FB', name: 'Necesidades hídricas', desc: 'Agua recomendada por peso y actividad', url: 'nutricion/requerimiento-hidrico/', ready: true },
+      { emoji: '🩺', bg: '#FCEBEB', name: 'Dieta diabetes e hipertensión', desc: 'Plan nutricional DASH y control glicémico', url: 'nutricion/dieta-patologias/', ready: true },
+    ]
+  },
+  abogados: {
+    titulo: 'Abogados y Profesionales del Derecho',
+    desc: 'Calculadoras jurídicas adaptadas al ordenamiento colombiano',
+    apps: [
+      { emoji: '📅', bg: '#E6F1FB', name: 'Términos de prescripción y caducidad', desc: 'Civil, laboral, penal y administrativo', url: 'abogados/terminos-prescripcion/', ready: true },
+      { emoji: '⚖️', bg: '#EEEDFE', name: 'Indemnizaciones laborales', desc: 'Cálculo por tipo de despido', url: 'abogados/indemnizaciones-laborales/', ready: true },
+      { emoji: '👨‍👧', bg: '#EAF3DE', name: 'Simulador de alimentos', desc: 'Cuota alimentaria según ingresos', url: 'abogados/cuota-alimentaria/', ready: true },
+      { emoji: '💸', bg: '#FCEBEB', name: 'Multas y sanciones DIAN', desc: 'Cálculo en UVT vigentes 2026', url: '', ready: false },
+    ]
+  },
+  psicologia: {
+    titulo: 'Psicólogos y Trabajadores Sociales',
+    desc: 'Escalas de valoración clínica y herramientas de diagnóstico social',
+    apps: [
+      { emoji: '😔', bg: '#EEEDFE', name: 'Escala depresión PHQ-9 / ansiedad GAD-7', desc: 'Puntuación automática e interpretación', url: 'psicologia/phq9-gad7/', ready: true },
+      { emoji: '🍺', bg: '#FAEEDA', name: 'Test AUDIT', desc: 'Valoración de consumo de alcohol', url: 'psicologia/audit-alcohol/', ready: true },
+      { emoji: '👨‍👩‍👧', bg: '#E1F5EE', name: 'Vulnerabilidad familiar', desc: 'Índice DANE — línea de pobreza', url: 'psicologia/vulnerabilidad-familiar/', ready: true },
+      { emoji: '💼', bg: '#E6F1FB', name: 'Riesgo psicosocial laboral', desc: 'Tamizaje factores intralaborales SG-SST', url: 'psicologia/riesgo-psicosocial/', ready: true },
+    ]
+  },
+  alimentos: {
+    titulo: 'Ingenieros de Alimentos',
+    desc: 'Cálculos para la industria alimentaria colombiana — procesos y formulación',
+    apps: [
+      { emoji: '⏱️', bg: '#FAEEDA', name: 'Vida útil de alimentos (Arrhenius)', desc: 'Estimación por temperatura y actividad de agua', url: 'ing-alimentos/vida-util/', ready: true },
+      { emoji: '⚖️', bg: '#E1F5EE', name: 'Balance de masa en producción', desc: 'Entradas, salidas y mermas del proceso', url: 'ing-alimentos/balance-masa/', ready: true },
+      { emoji: '🧫', bg: '#EAF3DE', name: 'pH y acidez titulable', desc: 'Cálculos de control de calidad', url: 'ing-alimentos/ph-acidez-titulable/', ready: true },
+      { emoji: '🌡️', bg: '#FCEBEB', name: 'Pasteurización (tiempo-temperatura)', desc: 'Equivalencia de tratamiento térmico', url: '', ready: false },
+    ]
+  },
+  estadistica: {
+    titulo: 'Estadística',
+    desc: 'Probabilidad, inferencia estadística, regresión y diseño de experimentos — piloto académico para estudiantes universitarios',
+    apps: [
+      { emoji: '🎲', bg: '#EEEDFE', name: 'Distribuciones de Probabilidad', desc: 'Binomial, Poisson, Normal y otras 17 distribuciones, con gráfica y tabla de valores críticos', url: 'estadistica/distribuciones/', ready: true },
+      { emoji: '📐', bg: '#E1F5EE', name: 'Estadística descriptiva', desc: 'Media, mediana, moda, varianza, cuartiles, sesgo, curtosis y estadísticos robustos desde tus propios datos', url: 'estadistica/descriptiva/', ready: true },
+      { emoji: '🔬', bg: '#E6F1FB', name: 'Pruebas de hipótesis', desc: 'Z y t para medias, proporciones y varianza, con valor-p y conclusión automática', url: 'estadistica/pruebas-hipotesis/', ready: true },
+      { emoji: '📏', bg: '#FAEEDA', name: 'Intervalos de confianza', desc: 'Para media, proporción, varianza, y tamaño de muestra requerido', url: 'estadistica/intervalos-confianza/', ready: true },
+      { emoji: '🎯', bg: '#FCEBEB', name: 'Fundamentos de probabilidad', desc: 'Combinatoria, probabilidad condicional y Teorema de Bayes generalizado', url: 'estadistica/fundamentos-probabilidad/', ready: true },
+      { emoji: '🔔', bg: '#E1F5EE', name: 'Distribuciones muestrales', desc: 'Distribución muestral de la media y proporción, y simulador visual del Teorema del Límite Central', url: 'estadistica/distribuciones-muestrales/', ready: true },
+      { emoji: '📈', bg: '#E6F1FB', name: 'Correlación y regresión', desc: 'Pearson, Spearman, regresión simple y múltiple', url: '', ready: false },
+      { emoji: '📊', bg: '#FCEBEB', name: 'ANOVA y diseño de experimentos', desc: 'Análisis de varianza y diseños factoriales', url: '', ready: false },
+    ]
+  },
+  deportes: {
+    titulo: '🏅 Entrenadores Deportivos',
+    desc: 'Herramientas de evaluación del rendimiento físico, análisis estadístico inferencial y recomendaciones automáticas de entrenamiento y nutrición. Estándares internacionales FIFA, IAAF, IPF e IWF adaptadas al contexto deportivo colombiano.',
+    apps: [
+      { emoji: '⚽', bg: '#E8F5E9', name: 'Rendimiento Fútbol', desc: 'VO2 máx (Navette), Test Yo-Yo, RSA sprint repetido, carga RPE de Foster, VAM. T-test + Cohen\'s d + recomendaciones por posición', url: 'deportes/rendimiento-futbol/', ready: true },
+      { emoji: '🏃', bg: '#FFF3E0', name: 'Rendimiento Atletismo', desc: 'VDOT de Daniels, Test Cooper, puntos IAAF, velocidad crítica, zonas E/M/T/I/R. Análisis estadístico y recomendaciones por prueba', url: 'deportes/rendimiento-atletismo/', ready: true },
+      { emoji: '🏋️', bg: '#F3E5F5', name: 'Rendimiento Pesas / Halterofilia', desc: '1RM (Brzycki, Epley, O\'Connor, Lombardi), Wilks Score, Sinclair, velocidad de barra, déficit de fuerza. Periodización y recomendaciones', url: 'deportes/rendimiento-pesas/', ready: true },
+      { emoji: '🥊', bg: '#FFEBEE', name: 'Rendimiento Boxeo', desc: 'Potencia de golpe, CMJ (Sayers), Test Wingate 30s, índice de recuperación FC, relación peso/potencia. Recomendaciones por estilo de combate', url: 'deportes/rendimiento-boxeo/', ready: true },
+      { emoji: '📊', bg: '#E3F2FD', name: 'Análisis Estadístico Deportivo', desc: 'T-test pareado, ANOVA de una vía, Cohen\'s d, percentiles por grupo, tendencia lineal de rendimiento. Aplicable a todos los deportes', url: 'deportes/estadistica-deportiva/', ready: true },
+    ]
+  }
+};
+
+function switchTab(el, key) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderContent(key);
+}
+
+function renderContent(key) {
+  const d = profesiones[key];
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="section-header">
+      <h2>${d.titulo}</h2>
+      <p>${d.desc}</p>
+    </div>
+    <div class="tools-grid">
+      ${d.apps.map(app => `
+        <a class="tool-card ${!app.ready ? 'disabled' : ''}"
+           href="${app.ready && app.url ? app.url : '#'}"
+           ${!app.ready ? 'onclick="return false;"' : ''}>
+          <div class="tool-card-icon" style="background:${app.bg}">${app.emoji}</div>
+          <div class="tool-card-name">${app.name}</div>
+          <div class="tool-card-desc">${app.desc}</div>
+          <span class="tool-status ${app.ready ? 'status-ready' : 'status-soon'}">
+            ${app.ready ? '✅ Disponible' : '🔜 Próximamente'}
+          </span>
+        </a>
+      `).join('')}
+    </div>
+
+    <details class="sugerencias-box">
+      <summary>💬 ¿Encontraste un error o tienes una sugerencia para alguna herramienta de ${d.titulo}?</summary>
+      <p class="sugerencias-sub">Cuéntanos qué herramienta tiene un problema o qué te gustaría que mejoráramos. Tu reporte nos ayuda a ajustar cada calculadora a las necesidades reales de tu profesión.</p>
+      <form class="sug-form" id="sug-form-${key}" onsubmit="return enviarSugerencia(event, '${key}')">
+        <input type="text" name="_gotcha" class="sug-honeypot" tabindex="-1" autocomplete="off" />
+        <input type="hidden" name="profesion" value="${d.titulo}" />
+        <div class="sug-row">
+          <div>
+            <label>Herramienta relacionada</label>
+            <select name="herramienta" required>
+              <option value="" disabled selected>Selecciona una herramienta</option>
+              ${d.apps.map(app => `<option value="${app.name}">${app.name}</option>`).join('')}
+              <option value="General / Otra">General / Otra / No aplica a una sola</option>
+            </select>
+          </div>
+          <div>
+            <label>Tipo de reporte</label>
+            <select name="tipo" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="Error de cálculo">⚠️ Error de cálculo o resultado incorrecto</option>
+              <option value="Dato desactualizado">📅 Dato o normativa desactualizada</option>
+              <option value="Sugerencia de mejora">💡 Sugerencia de mejora / nueva función</option>
+              <option value="Problema visual">🖥️ Problema visual o de uso en celular</option>
+              <option value="Nueva herramienta">🆕 Solicitud de nueva herramienta</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label>Describe el inconveniente o la sugerencia</label>
+          <textarea name="mensaje" placeholder="Ej: En el liquidador laboral, el valor de las cesantías no coincide cuando el salario incluye auxilio de transporte..." required></textarea>
+        </div>
+        <div>
+          <label>Tu correo (opcional, solo si quieres que te respondamos)</label>
+          <input type="email" name="email" placeholder="tucorreo@ejemplo.com" />
+        </div>
+        <button type="submit" class="sug-submit">Enviar reporte</button>
+        <div class="sug-msg" id="sug-msg-${key}"></div>
+      </form>
+    </details>
+  `;
+}
+
+// ── ENVÍO DE SUGERENCIAS ──
+const FORM_ENDPOINT = 'https://formspree.io/f/maqgdlol';
+const FORM_ACTIVO = FORM_ENDPOINT.indexOf('TU_ID_DE_FORMSPREE') === -1;
+const LS_KEY = 'herramientaspro_sugerencias';
+
+function guardarSugerenciaLocal(data) {
+  const lista = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+  lista.push(data);
+  localStorage.setItem(LS_KEY, JSON.stringify(lista));
+}
+
+function enviarSugerencia(event, key) {
+  event.preventDefault();
+  const form = event.target;
+  const msgBox = document.getElementById(`sug-msg-${key}`);
+  const btn = form.querySelector('.sug-submit');
+
+  if (form._gotcha.value) return false;
+
+  const formData = new FormData(form);
+  const registro = {
+    fecha: new Date().toLocaleString('es-CO'),
+    profesion: formData.get('profesion'),
+    herramienta: formData.get('herramienta'),
+    tipo: formData.get('tipo'),
+    mensaje: formData.get('mensaje'),
+    email: formData.get('email') || '(no proporcionado)',
+    pagina: window.location.href,
+  };
+
+  guardarSugerenciaLocal(registro);
+  actualizarContadorSugerencias();
+
+  if (!FORM_ACTIVO) {
+    msgBox.className = 'sug-msg ok';
+    msgBox.textContent = '✅ ¡Gracias! Tu reporte fue registrado en este sitio. (Conexión a soporte por email aún en configuración — tu reporte ya quedó guardado).';
+    form.reset();
+    return false;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+  msgBox.className = 'sug-msg';
+  msgBox.textContent = '';
+
+  formData.append('pagina', registro.pagina);
+  formData.append('fecha', registro.fecha);
+
+  fetch(FORM_ENDPOINT, {
+    method: 'POST',
+    body: formData,
+    headers: { 'Accept': 'application/json' }
+  })
+  .then(res => {
+    if (res.ok) {
+      msgBox.className = 'sug-msg ok';
+      msgBox.textContent = '✅ ¡Gracias! Tu reporte fue enviado. Lo revisaremos para mejorar la herramienta.';
+      form.reset();
+    } else {
+      throw new Error('Error en el envío');
+    }
+  })
+  .catch(() => {
+    msgBox.className = 'sug-msg err';
+    msgBox.textContent = '⚠️ No se pudo enviar por email, pero tu reporte quedó guardado en este sitio. También puedes escribirnos a datajuan1305@gmail.com';
+  })
+  .finally(() => {
+    btn.disabled = false;
+    btn.textContent = 'Enviar reporte';
+  });
+
+  return false;
+}
+
+function exportarSugerenciasCSV() {
+  const lista = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+  if (lista.length === 0) { alert('Aún no hay sugerencias guardadas en este navegador.'); return; }
+  const headers = ['fecha','profesion','herramienta','tipo','mensaje','email','pagina'];
+  const filas = lista.map(r => headers.map(h => `"${String(r[h] || '').replace(/"/g,'""')}"`).join(','));
+  const csv = headers.join(',') + '\n' + filas.join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `sugerencias_herramientaspro_${new Date().toISOString().split('T')[0]}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function actualizarContadorSugerencias() {
+  const lista = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+  const el = document.getElementById('admin-sug-count');
+  if (el) el.textContent = lista.length;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  actualizarContadorSugerencias();
+  const totalHerramientas = Object.values(profesiones).reduce((acc, cat) => acc + cat.apps.filter(a => a.ready).length, 0);
+  const totalCategorias = Object.keys(profesiones).length;
+  const elH = document.getElementById('stat-herramientas');
+  const elC = document.getElementById('stat-categorias');
+  if (elH) elH.textContent = totalHerramientas;
+  if (elC) elC.textContent = totalCategorias;
+});
+
+renderContent('agro');
+</script>
+</body>
+</html>
