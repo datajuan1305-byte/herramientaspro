@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estadística — Herramientas Gratuitas | HerramientasPro Colombia</title>
+<meta name="description" content="Calculadoras gratuitas de probabilidad, inferencia estadística, regresión y diseño de experimentos: distribuciones, pruebas de hipótesis, intervalos de confianza, correlación, regresión, ANOVA y más. Sin registro.">
+<link rel="canonical" href="https://herramientaspro.com.co/estadistica/">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BRHFQTZC5D"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-BRHFQTZC5D');
+</script>
+
+<style>
+  :root {
+    --bg: #0a0e1a; --bg2: #0f1628; --bg3: #161e35;
+    --panel: #1a2340; --border: #2a3a5c;
+    --accent: #00d4ff; --accent2: #7b61ff;
+    --text: #e8edf8; --text2: #8a9bb8; --text3: #4a5a78;
+    --gold: #ffd700;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
+  }
+  header { position: relative; z-index: 10; padding: 1.6rem 2rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(0,212,255,0.05) 0%, transparent 100%); display: flex; align-items: center; gap: 1.2rem; }
+  .logo-icon { width: 50px; height: 50px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
+  .header-text h1 { font-size: 1.5rem; font-weight: 700; }
+  .header-text p { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+  nav.breadcrumb { position: relative; z-index: 10; padding: 12px 2rem 0; font-size: 0.8rem; color: var(--text3); }
+  nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+  main { position: relative; z-index: 1; max-width: 1050px; margin: 0 auto; padding: 1.8rem 2rem 4rem; }
+  .intro { font-size: 0.92rem; color: var(--text2); max-width: 720px; line-height: 1.6; margin-bottom: 2rem; }
+  .bloque { margin-bottom: 2.2rem; }
+  .bloque h2 { font-size: 1.05rem; color: var(--text); margin-bottom: 0.9rem; display: flex; align-items: center; gap: 0.5rem; }
+  .bloque h2 .tag { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; background: var(--bg3); padding: 3px 8px; border-radius: 10px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; text-decoration: none; display: block; transition: border-color 0.15s, transform 0.15s; }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card .icon { font-size: 1.6rem; margin-bottom: 0.6rem; display: block; }
+  .card h3 { font-size: 0.92rem; color: var(--text); margin-bottom: 0.3rem; }
+  .card p { font-size: 0.76rem; color: var(--text2); line-height: 1.5; }
+  .card .badge { display: inline-block; margin-top: 0.6rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 10px; background: rgba(0,255,157,0.12); color: #00ff9d; }
+  footer { position: relative; z-index: 1; text-align: center; padding: 1.5rem; font-size: 0.75rem; color: var(--text3); border-top: 1px solid var(--border); }
+  footer a { color: var(--text2); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">𝜎</div>
+  <div class="header-text">
+    <h1>Estadística</h1>
+    <p>HerramientasPro Colombia · Piloto académico</p>
+  </div>
+</header>
+
+<nav class="breadcrumb"><a href="/">Inicio</a> › Estadística</nav>
+
+<main>
+  <p class="intro">Calculadoras gratuitas de probabilidad, inferencia estadística, regresión y diseño de experimentos — pensadas para estudiantes universitarios. Sin registro, sin costo.</p>
+
+  <div class="bloque">
+    <h2>Probabilidad e inferencia estadística <span class="tag">curso 1</span></h2>
+    <div class="cards">
+      <a class="card" href="distribuciones/">
+        <span class="icon">🎲</span>
+        <h3>Distribuciones de Probabilidad</h3>
+        <p>Binomial, Poisson, Normal y otras 17 distribuciones, con gráfica y tabla de valores críticos.</p>
+        <span class="badge">Disponible</span>
+      </a>
+      <a class="card" href="descriptiva/">
+        <span class="icon">📐</span>
+        <h3>Estadística descriptiva</h3>
+        <p>Media, mediana, moda, varianza, cuartiles, sesgo, curtosis y estadísticos robustos.</p>
+        <span class="badge">Disponible</span>
+      </a>
+      <a class="card" href="fundamentos-probabilidad/">
+        <span class="icon">🎯</span>
+        <h3>Fundamentos de probabilidad</h3>
+        <p>Combinatoria, probabilidad condicional y Teorema de Bayes generalizado.</p>
+        <span class="badge">Disponible</span>
+      </a>
+      <a class="card" href="distribuciones-muestrales/">
+        <span class="icon">🔔</span>
+        <h3>Distribuciones muestrales</h3>
+        <p>Distribución muestral de la media/proporción, y simulador visual del Teorema del Límite Central.</p>
+        <span class="badge">Disponible</span>
+      </a>
+      <a class="card" href="intervalos-confianza/">
+        <span class="icon">📏</span>
+        <h3>Intervalos de confianza</h3>
+        <p>Para media, proporción, varianza, y tamaño de muestra requerido.</p>
+        <span class="badge">Disponible</span>
+      </a>
+      <a class="card" href="pruebas-hipotesis/">
+        <span class="icon">🔬</span>
+        <h3>Pruebas de hipótesis</h3>
+        <p>Z y t para medias, proporciones y varianza, con valor-p y conclusión automática.</p>
+        <span class="badge">Disponible</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="bloque">
+    <h2>Regresión lineal y diseño de experimentos <span class="tag">curso 2</span></h2>
+    <div class="cards">
+      <a class="card" href="correlacion/">
+        <span class="icon">🔗</span>
+        <h3>Correlación</h3>
+        <p>Pearson, Spearman y Kendall tau-b, con prueba de significancia y diagrama de dispersión.</p>
+        <span class="badge">Disponible</span>
+      </a>
+      <a class="card" href="regresion/">
+        <span class="icon">📈</span>
+        <h3>Regresión Lineal</h3>
+        <p>Simple y múltiple, con tabla ANOVA, coeficientes y predicción.</p>
+        <span class="badge">Disponible</span>
+      </a>
+      <a class="card" href="anova/">
+        <span class="icon">📊</span>
+        <h3>ANOVA de un factor</h3>
+        <p>Análisis de varianza con comparaciones múltiples por pares (Bonferroni).</p>
+        <span class="badge">Disponible</span>
+      </a>
+      <a class="card" href="diseno-factorial/">
+        <span class="icon">🧪</span>
+        <h3>Diseño Factorial 2ᵏ</h3>
+        <p>Efectos principales, interacciones y tabla ANOVA para diseños factoriales con réplicas.</p>
+        <span class="badge">Disponible</span>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  HerramientasPro Colombia — Herramientas orientativas de uso académico.<br>
+  <a href="/">Inicio</a>
+</footer>
+
+</body>
+</html>
