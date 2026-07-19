@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Correlación (Pearson, Spearman, Kendall) | HerramientasPro Colombia</title>
+<meta name="description" content="Calculadora de correlación: Pearson, Spearman y Kendall tau-b, con prueba de significancia, R² y diagrama de dispersión. Gratis, sin registro.">
+<link rel="canonical" href="https://herramientaspro.com.co/estadistica/correlacion/">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BRHFQTZC5D"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-BRHFQTZC5D');
+</script>
+
+<style>
+  :root {
+    --bg: #0a0e1a; --bg2: #0f1628; --bg3: #161e35;
+    --panel: #1a2340; --border: #2a3a5c;
+    --accent: #00d4ff; --accent2: #7b61ff; --accent4: #00ff9d; --accent3: #ff6b6b;
+    --text: #e8edf8; --text2: #8a9bb8; --text3: #4a5a78;
+    --gold: #ffd700;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
+  }
+  header { position: relative; z-index: 10; padding: 1.4rem 2rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(0,212,255,0.05) 0%, transparent 100%); display: flex; align-items: center; gap: 1.2rem; }
+  .logo-icon { width: 46px; height: 46px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+  .header-text h1 { font-size: 1.4rem; font-weight: 700; background: linear-gradient(135deg, #fff 30%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .header-text p { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+  nav.breadcrumb { position: relative; z-index: 10; padding: 10px 2rem 0; font-size: 0.78rem; color: var(--text3); }
+  nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+  main { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 1.4rem 2rem 3rem; display: flex; flex-direction: column; gap: 1.2rem; }
+  .disclaimer { background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.25); border-left: 3px solid var(--gold); border-radius: 8px; padding: 0.7rem 1rem; font-size: 0.78rem; color: #e8d98a; }
+
+  .layout { display: grid; grid-template-columns: 380px 1fr; gap: 1.2rem; align-items: start; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; }
+  .panel h3 { font-size: 0.72rem; font-family: 'Space Mono', monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text3); margin-bottom: 1rem; }
+
+  .archivo-drop { display: block; border: 1.5px dashed var(--border); border-radius: 10px; padding: 0.8rem 1rem; text-align: center; cursor: pointer; margin-bottom: 0.8rem; }
+  .archivo-drop:hover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .archivo-drop strong { display: block; font-size: 0.82rem; color: var(--text); margin: 0.15rem 0; }
+  .archivo-drop span { font-size: 0.68rem; color: var(--text3); }
+  .archivo-info { font-size: 0.72rem; color: var(--accent4); margin: -0.3rem 0 0.6rem; display: none; }
+  .archivo-info.visible { display: block; }
+  .query-separator { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); text-align: center; margin: 0.7rem 0 0.6rem; }
+
+  .campos-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+  .param-group { margin-bottom: 0.85rem; }
+  .param-group label { display: block; font-size: 0.78rem; color: var(--text2); margin-bottom: 0.35rem; }
+  .param-group input, .param-group textarea { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.75rem; color: var(--text); font-family: 'Space Mono', monospace; font-size: 0.82rem; outline: none; }
+  .param-group input:focus, .param-group textarea:focus { border-color: var(--accent); }
+  .param-group textarea { min-height: 90px; resize: vertical; }
+
+  .calc-btn { width: 100%; padding: 0.75rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 10px; color: white; font-size: 0.9rem; font-weight: 600; cursor: pointer; margin-top: 0.4rem; }
+  .error-box { background: rgba(255,77,109,0.1); border: 1px solid rgba(255,77,109,0.3); border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.78rem; color: #ff4d6d; margin-top: 0.6rem; display: none; }
+
+  .coef-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; margin-bottom: 1rem; }
+  .coef-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; }
+  .coef-card.principal { border-color: var(--accent); background: rgba(0,212,255,0.06); }
+  .coef-card .nombre { font-size: 0.68rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+  .coef-card .valor { font-family: 'Space Mono', monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+  .coef-card .pval { font-size: 0.65rem; color: var(--text3); margin-top: 0.3rem; }
+
+  .chart-container { position: relative; height: 260px; margin-bottom: 1rem; }
+  .conclusion-text { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
+  .sin-resultado { text-align: center; color: var(--text3); font-size: 0.85rem; padding: 2rem; }
+
+  .context-panel { grid-column: 1 / -1; }
+  .context-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 900px) { .context-grid { grid-template-columns: 1fr; } }
+  .pregunta-row { display: flex; gap: 0.6rem; margin-top: 0.6rem; }
+  .pregunta-row input { flex: 1; }
+  .pregunta-row button { width: auto; padding: 0.55rem 1.1rem; white-space: nowrap; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer; }
+  .sugerencias { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.6rem; }
+  .sugerencia-chip { font-size: 0.7rem; padding: 0.3rem 0.65rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 14px; color: var(--text2); cursor: pointer; }
+  .sugerencia-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .respuesta-box { margin-top: 0.9rem; background: var(--bg3); border: 1px solid var(--border); border-left: 3px solid var(--accent2); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; color: var(--text); line-height: 1.6; display: none; }
+  .respuesta-box.visible { display: block; }
+  .ia-note { font-size: 0.68rem; color: var(--text3); margin-top: 0.5rem; font-style: italic; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">⟳</div>
+  <div class="header-text">
+    <h1>Correlación</h1>
+    <p>HerramientasPro Colombia · Piloto académico</p>
+  </div>
+</header>
+
+<nav class="breadcrumb"><a href="/">Inicio</a> › Correlación</nav>
+
+<main>
+  <div class="disclaimer">⚠️ Herramienta orientativa de uso académico. Los resultados y las interpretaciones automáticas no reemplazan el criterio del docente ni un análisis estadístico formal.</div>
+
+  <div class="layout">
+    <div class="panel">
+      <h3>Datos pareados (X, Y)</h3>
+      <label class="archivo-drop" for="archivo-input">
+        📂 <strong>Subir archivo CSV o Excel (.xlsx)</strong>
+        <span>Primera columna = X, segunda columna = Y</span>
+      </label>
+      <input type="file" id="archivo-input" accept=".csv,.txt,.xlsx,.xls" onchange="handleArchivo(event)" style="display:none;">
+      <div id="archivo-info" class="archivo-info"></div>
+      <div class="query-separator">o pega los datos directamente</div>
+      <div class="param-group">
+        <label>Variable X</label>
+        <textarea id="datos-x" placeholder="Ej: 10, 8, 13, 9, 11, 14, 6, 4, 12, 7, 5"></textarea>
+      </div>
+      <div class="param-group">
+        <label>Variable Y (mismo orden y cantidad que X)</label>
+        <textarea id="datos-y" placeholder="Ej: 8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68"></textarea>
+      </div>
+      <button class="calc-btn" onclick="calcularTodo()">Calcular correlación</button>
+      <div class="error-box" id="error-box"></div>
+    </div>
+
+    <div class="panel" id="resultados-panel">
+      <div class="sin-resultado">Ingresa tus datos pareados y presiona <strong style="color:var(--text)">Calcular correlación</strong></div>
+    </div>
+  </div>
+
+  <div class="context-panel panel">
+    <h3>💬 Contexto de tu análisis y preguntas</h3>
+    <div class="context-grid">
+      <div class="param-group">
+        <label>Describe qué representan tus variables (opcional)</label>
+        <textarea id="contexto" rows="3" placeholder="Ej: X = horas de estudio, Y = nota final del curso."></textarea>
+      </div>
+      <div class="param-group">
+        <label>Pregunta sobre el resultado</label>
+        <div class="pregunta-row">
+          <input type="text" id="pregunta" placeholder="Ej: ¿esto significa causalidad?">
+          <button onclick="preguntar()">Preguntar</button>
+        </div>
+        <div class="sugerencias">
+          <span class="sugerencia-chip" onclick="usarSugerencia('¿esto significa causalidad?')">¿Es causal?</span>
+          <span class="sugerencia-chip" onclick="usarSugerencia('¿es significativa la correlación?')">Significancia</span>
+          <span class="sugerencia-chip" onclick="usarSugerencia('¿qué tan fuerte es?')">Fuerza</span>
+          <span class="sugerencia-chip" onclick="usarSugerencia('diferencia entre pearson y spearman')">Pearson vs Spearman</span>
+        </div>
+      </div>
+    </div>
+    <div class="respuesta-box" id="respuesta-box"></div>
+    <div class="ia-note">Hoy esta respuesta se genera con reglas locales, sin costo. En una fase futura se podrá conectar a IA para preguntas más abiertas.</div>
+  </div>
+</main>
+
+<script src="js/motor-correlacion.js"></script>
+<script src="js/interpretacion-correlacion.js"></script>
+<script>
+let currentX = null, currentY = null;
+let currentResultados = null;
+let chart = null;
+
+function mostrarErrorArchivo(msg) {
+  const errBox = document.getElementById('error-box');
+  errBox.textContent = '⚠ ' + msg;
+  errBox.style.display = 'block';
+  document.getElementById('archivo-info').classList.remove('visible');
+}
+
+function completarDesdeArchivoXY(colX, colY, nombreArchivo) {
+  if (colX.length === 0 || colY.length === 0 || colX.length !== colY.length) {
+    mostrarErrorArchivo(`No se pudieron extraer dos columnas numéricas del mismo tamaño desde "${nombreArchivo}".`);
+    return;
+  }
+  document.getElementById('datos-x').value = colX.join(', ');
+  document.getElementById('datos-y').value = colY.join(', ');
+  document.getElementById('error-box').style.display = 'none';
+  const info = document.getElementById('archivo-info');
+  info.textContent = `✓ ${colX.length} pares (X,Y) cargados desde "${nombreArchivo}". Revisa las casillas y presiona Calcular.`;
+  info.classList.add('visible');
+}
+
+function handleArchivo(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const nombre = file.name.toLowerCase();
+
+  if (nombre.endsWith('.csv') || nombre.endsWith('.txt')) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const lineas = e.target.result.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+      const colX = [], colY = [];
+      lineas.forEach(linea => {
+        const partes = linea.split(/[,;\t]+/).map(s => s.trim());
+        if (partes.length >= 2) {
+          const nx = parseFloat(partes[0].replace(',', '.'));
+          const ny = parseFloat(partes[1].replace(',', '.'));
+          if (!isNaN(nx) && !isNaN(ny)) { colX.push(nx); colY.push(ny); }
+        }
+      });
+      completarDesdeArchivoXY(colX, colY, file.name);
+    };
+    reader.readAsText(file);
+  } else if (nombre.endsWith('.xlsx') || nombre.endsWith('.xls')) {
+    if (typeof XLSX === 'undefined') { mostrarErrorArchivo('No se pudo cargar el lector de Excel. Revisa tu conexión a internet.'); return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const filas = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        const colX = [], colY = [];
+        filas.forEach(fila => {
+          if (!fila || fila.length < 2) return;
+          const nx = typeof fila[0] === 'number' ? fila[0] : parseFloat(String(fila[0]).replace(',', '.'));
+          const ny = typeof fila[1] === 'number' ? fila[1] : parseFloat(String(fila[1]).replace(',', '.'));
+          if (!isNaN(nx) && !isNaN(ny) && isFinite(nx) && isFinite(ny)) { colX.push(nx); colY.push(ny); }
+        });
+        completarDesdeArchivoXY(colX, colY, file.name);
+      } catch (err) {
+        mostrarErrorArchivo('No se pudo leer el archivo Excel. Verifica que no esté dañado ni protegido con contraseña.');
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  } else {
+    mostrarErrorArchivo('Formato no soportado. Sube un archivo .csv, .xlsx o .xls.');
+  }
+}
+
+function calcularTodo() {
+  const errBox = document.getElementById('error-box');
+  const textoX = document.getElementById('datos-x').value;
+  const textoY = document.getElementById('datos-y').value;
+  const parseado = parsearParejas(textoX, textoY);
+
+  if (!parseado) {
+    errBox.textContent = '⚠ Revisa que X e Y tengan la misma cantidad de valores numéricos válidos (mínimo 3 pares).';
+    errBox.style.display = 'block';
+    return;
+  }
+  errBox.style.display = 'none';
+
+  const { x, y } = parseado;
+  currentX = x; currentY = y;
+  const n = x.length;
+
+  const rPearson = correlacionPearson(x, y);
+  const rSpearman = correlacionSpearman(x, y);
+  const kendall = correlacionKendall(x, y);
+
+  const resultados = {
+    pearson: { coef: rPearson, r2: coeficienteDeterminacion(rPearson), significancia: pruebaSignificanciaR(rPearson, n) },
+    spearman: { coef: rSpearman, significancia: pruebaSignificanciaR(rSpearman, n) },
+    kendall: { tau: kendall.tau, detalles: kendall, significancia: pruebaSignificanciaKendall(kendall.tau, n) }
+  };
+  currentResultados = resultados;
+
+  renderResultados(resultados, x, y, n);
+  const rb = document.getElementById('respuesta-box'); if (rb) rb.classList.remove('visible');
+}
+
+function renderResultados(r, x, y, n) {
+  const panel = document.getElementById('resultados-panel');
+  panel.innerHTML = `
+    <h3>Resultado (n = ${n} pares)</h3>
+    <div class="coef-grid">
+      <div class="coef-card principal">
+        <div class="nombre">Pearson (r)</div>
+        <div class="valor">${r.pearson.coef.toFixed(4)}</div>
+        <div class="pval">p = ${r.pearson.significancia.pValor.toFixed(4)} · R² = ${r.pearson.r2.toFixed(4)}</div>
+      </div>
+      <div class="coef-card">
+        <div class="nombre">Spearman (ρ)</div>
+        <div class="valor">${r.spearman.coef.toFixed(4)}</div>
+        <div class="pval">p = ${r.spearman.significancia.pValor.toFixed(4)}</div>
+      </div>
+      <div class="coef-card">
+        <div class="nombre">Kendall (τ)</div>
+        <div class="valor">${r.kendall.tau.toFixed(4)}</div>
+        <div class="pval">p = ${r.kendall.significancia.pValor.toFixed(4)}</div>
+      </div>
+    </div>
+    <div class="chart-container"><canvas id="scatter-chart"></canvas></div>
+    <div class="conclusion-text">${generarResumenCorr(armarPayloadCorr('pearson', {}, r.pearson, '', ''))}</div>
+  `;
+  renderScatter(x, y);
+}
+
+function renderScatter(x, y) {
+  if (chart) { chart.destroy(); chart = null; }
+  const ctx = document.getElementById('scatter-chart');
+  if (!ctx) return;
+  const puntos = x.map((xi, i) => ({ x: xi, y: y[i] }));
+
+  chart = new Chart(ctx, {
+    type: 'scatter',
+    data: { datasets: [{ label: 'Datos (X,Y)', data: puntos, backgroundColor: '#00d4ffcc', borderColor: '#00d4ff', pointRadius: 5 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a2340', borderColor: '#2a3a5c', borderWidth: 1, titleColor: '#e8edf8', bodyColor: '#8a9bb8' } },
+      scales: {
+        x: { title: { display: true, text: 'X', color: '#8a9bb8' }, ticks: { color: '#4a5a78', font: { size: 9 } }, grid: { color: 'rgba(42,58,92,0.4)' } },
+        y: { title: { display: true, text: 'Y', color: '#8a9bb8' }, ticks: { color: '#4a5a78', font: { size: 9 } }, grid: { color: 'rgba(42,58,92,0.4)' } }
+      }
+    }
+  });
+}
+
+function usarSugerencia(texto) {
+  document.getElementById('pregunta').value = texto;
+  preguntar();
+}
+
+function preguntar() {
+  if (!currentResultados) return;
+  const contexto = document.getElementById('contexto')?.value || '';
+  const pregunta = document.getElementById('pregunta')?.value || '';
+  const payload = armarPayloadCorr('pearson', {}, currentResultados.pearson, contexto, pregunta);
+  const respuesta = generarRespuestaCorr(payload);
+  const box = document.getElementById('respuesta-box');
+  box.textContent = respuesta;
+  box.classList.add('visible');
+  if (window.gtag) { gtag('event', 'pregunta_correlacion', { herramienta: 'correlacion' }); }
+}
+</script>
+</body>
+</html>
