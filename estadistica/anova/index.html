@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANOVA de un Factor | HerramientasPro Colombia</title>
+<meta name="description" content="Calculadora de análisis de varianza (ANOVA) de un factor, con tabla ANOVA completa, tamaño del efecto y comparaciones múltiples por pares (Bonferroni). Gratis, sin registro.">
+<link rel="canonical" href="https://herramientaspro.com.co/estadistica/anova/">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,700;1,400&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BRHFQTZC5D"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-BRHFQTZC5D');
+</script>
+
+<style>
+  :root {
+    --bg: #0a0e1a; --bg2: #0f1628; --bg3: #161e35;
+    --panel: #1a2340; --border: #2a3a5c;
+    --accent: #00d4ff; --accent2: #7b61ff; --accent4: #00ff9d; --accent3: #ff6b6b;
+    --text: #e8edf8; --text2: #8a9bb8; --text3: #4a5a78;
+    --gold: #ffd700;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
+  }
+  header { position: relative; z-index: 10; padding: 1.4rem 2rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(0,212,255,0.05) 0%, transparent 100%); display: flex; align-items: center; gap: 1.2rem; }
+  .logo-icon { width: 46px; height: 46px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+  .header-text h1 { font-size: 1.4rem; font-weight: 700; background: linear-gradient(135deg, #fff 30%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .header-text p { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+  nav.breadcrumb { position: relative; z-index: 10; padding: 10px 2rem 0; font-size: 0.78rem; color: var(--text3); }
+  nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+  main { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 1.4rem 2rem 3rem; display: flex; flex-direction: column; gap: 1.2rem; }
+  .disclaimer { background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.25); border-left: 3px solid var(--gold); border-radius: 8px; padding: 0.7rem 1rem; font-size: 0.78rem; color: #e8d98a; }
+
+  .prueba-header { padding: 1.1rem 1.3rem; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; }
+  .prueba-header h2 { font-size: 1.15rem; margin-bottom: 4px; }
+  .prueba-header .formula { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--accent); background: rgba(0,212,255,0.08); padding: 3px 10px; border-radius: 4px; display: inline-block; }
+  .prueba-header p { font-size: 0.8rem; color: var(--text2); margin-top: 0.5rem; }
+
+  .layout { display: grid; grid-template-columns: 380px 1fr; gap: 1.2rem; align-items: start; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; }
+  .panel h3 { font-size: 0.72rem; font-family: 'Space Mono', monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text3); margin-bottom: 1rem; }
+
+  .grupo-box { border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem; margin-bottom: 0.6rem; background: var(--bg3); }
+  .grupo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+  .grupo-header input.nombre-grupo { background: transparent; border: none; color: var(--text); font-weight: 600; font-size: 0.82rem; font-family: 'Sora', sans-serif; padding: 0; width: 60%; }
+  .grupo-header input.nombre-grupo:focus { outline: none; border-bottom: 1px solid var(--accent); }
+  .btn-quitar-g { background: rgba(255,107,107,0.15); border: 1px solid rgba(255,107,107,0.3); color: var(--accent3); border-radius: 6px; padding: 3px 8px; cursor: pointer; font-size: 0.7rem; }
+  .grupo-box textarea { width: 100%; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.7rem; color: var(--text); font-family: 'Space Mono', monospace; font-size: 0.8rem; min-height: 60px; resize: vertical; outline: none; }
+  .btn-agregar { background: var(--bg3); border: 1px dashed var(--border); color: var(--text2); border-radius: 8px; padding: 0.5rem; width: 100%; cursor: pointer; font-size: 0.78rem; margin-bottom: 0.8rem; }
+  .btn-agregar:hover { border-color: var(--accent); color: var(--accent); }
+
+  .calc-btn { width: 100%; padding: 0.75rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 10px; color: white; font-size: 0.9rem; font-weight: 600; cursor: pointer; margin-top: 0.4rem; }
+  .error-box { background: rgba(255,77,109,0.1); border: 1px solid rgba(255,77,109,0.3); border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.78rem; color: #ff4d6d; margin-top: 0.6rem; display: none; }
+
+  .resultado-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; margin-bottom: 1rem; }
+  .resultado-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem; text-align: center; }
+  .resultado-card .lbl { font-size: 0.6rem; font-family: 'Space Mono', monospace; color: var(--text3); text-transform: uppercase; margin-bottom: 0.35rem; }
+  .resultado-card .val { font-family: 'Space Mono', monospace; font-size: 1.05rem; font-weight: 700; color: var(--accent); }
+
+  .decision-box { border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+  .decision-box.rechaza { background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.3); }
+  .decision-box.no-rechaza { background: rgba(0,255,157,0.1); border: 1px solid rgba(0,255,157,0.3); }
+  .decision-box .titulo { font-weight: 700; font-size: 0.9rem; }
+  .decision-box.rechaza .titulo { color: var(--accent3); }
+  .decision-box.no-rechaza .titulo { color: var(--accent4); }
+
+  table.tabla-an { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-bottom: 1rem; }
+  table.tabla-an th { font-size: 0.62rem; text-transform: uppercase; color: var(--text3); padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+  table.tabla-an td { padding: 6px 8px; border-bottom: 1px solid rgba(42,58,92,0.5); font-family: 'Space Mono', monospace; }
+  table.tabla-an tr.sig td:last-child { color: var(--accent4); font-weight: 600; }
+  table.tabla-an tr.no-sig td:last-child { color: var(--text3); }
+
+  .chart-container { position: relative; height: 260px; margin-bottom: 1rem; }
+  .conclusion-text { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
+  .sin-resultado { text-align: center; color: var(--text3); font-size: 0.85rem; padding: 2rem; }
+
+  .context-panel { grid-column: 1 / -1; }
+  .context-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 900px) { .context-grid { grid-template-columns: 1fr; } }
+  .param-group textarea { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.75rem; color: var(--text); font-family: 'Space Mono', monospace; font-size: 0.82rem; outline: none; }
+  .param-group { margin-bottom: 0.85rem; }
+  .param-group label { display: block; font-size: 0.78rem; color: var(--text2); margin-bottom: 0.35rem; }
+  .pregunta-row { display: flex; gap: 0.6rem; margin-top: 0.6rem; }
+  .pregunta-row input { flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.75rem; color: var(--text); font-family: 'Space Mono', monospace; font-size: 0.82rem; }
+  .pregunta-row button { width: auto; padding: 0.55rem 1.1rem; white-space: nowrap; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer; }
+  .sugerencias { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.6rem; }
+  .sugerencia-chip { font-size: 0.7rem; padding: 0.3rem 0.65rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 14px; color: var(--text2); cursor: pointer; }
+  .sugerencia-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .respuesta-box { margin-top: 0.9rem; background: var(--bg3); border: 1px solid var(--border); border-left: 3px solid var(--accent2); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.85rem; color: var(--text); line-height: 1.6; display: none; }
+  .respuesta-box.visible { display: block; }
+  .ia-note { font-size: 0.68rem; color: var(--text3); margin-top: 0.5rem; font-style: italic; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">F</div>
+  <div class="header-text">
+    <h1>ANOVA de un Factor</h1>
+    <p>HerramientasPro Colombia · Piloto académico</p>
+  </div>
+</header>
+
+<nav class="breadcrumb"><a href="/">Inicio</a> › ANOVA de un Factor</nav>
+
+<main>
+  <div class="disclaimer">⚠️ Herramienta orientativa de uso académico. Los resultados y las interpretaciones automáticas no reemplazan el criterio del docente ni un análisis estadístico formal.</div>
+
+  <div class="prueba-header">
+    <h2>ANOVA de un factor</h2>
+    <span class="formula">H₀: μ₁ = μ₂ = ... = μₖ</span>
+    <p>Compara las medias de 2 o más grupos independientes al mismo tiempo. Si el resultado es significativo, las comparaciones por pares (con corrección de Bonferroni) te dicen entre cuáles grupos está la diferencia.</p>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <h3>Grupos</h3>
+      <div id="grupos-cont"></div>
+      <button class="btn-agregar" onclick="agregarGrupo()">+ Agregar otro grupo</button>
+      <button class="calc-btn" onclick="calcularAnova()">Calcular ANOVA</button>
+      <div class="error-box" id="error-box"></div>
+    </div>
+
+    <div class="panel" id="resultados-panel">
+      <div class="sin-resultado">Completa al menos 2 grupos y presiona <strong style="color:var(--text)">Calcular ANOVA</strong></div>
+    </div>
+  </div>
+
+  <div class="context-panel panel">
+    <h3>💬 Contexto de tu análisis y preguntas</h3>
+    <div class="context-grid">
+      <div class="param-group">
+        <label>Describe qué comparan tus grupos (opcional)</label>
+        <textarea id="contexto" rows="3" placeholder="Ej: Rendimiento académico según 3 métodos de enseñanza distintos."></textarea>
+      </div>
+      <div class="param-group">
+        <label>Pregunta sobre el resultado</label>
+        <div class="pregunta-row">
+          <input type="text" id="pregunta" placeholder="Ej: ¿cuáles grupos son diferentes?">
+          <button onclick="preguntarAnova()">Preguntar</button>
+        </div>
+        <div class="sugerencias">
+          <span class="sugerencia-chip" onclick="usarSugerenciaAnova('¿cuáles grupos son diferentes?')">¿Cuáles grupos?</span>
+          <span class="sugerencia-chip" onclick="usarSugerenciaAnova('¿qué es la corrección de Bonferroni?')">Bonferroni</span>
+          <span class="sugerencia-chip" onclick="usarSugerenciaAnova('¿qué tan importante es el efecto?')">Tamaño del efecto</span>
+          <span class="sugerencia-chip" onclick="usarSugerenciaAnova('¿qué supuestos tiene el ANOVA?')">Supuestos</span>
+        </div>
+      </div>
+    </div>
+    <div class="respuesta-box" id="respuesta-box"></div>
+    <div class="ia-note">Hoy esta respuesta se genera con reglas locales, sin costo. En una fase futura se podrá conectar a IA para preguntas más abiertas.</div>
+  </div>
+</main>
+
+<script src="js/motor-anova.js"></script>
+<script src="js/interpretacion-anova.js"></script>
+<script>
+let numGrupos = 3;
+let currentResultadoAnova = null;
+let chartAnova = null;
+
+function renderGrupos() {
+  const cont = document.getElementById('grupos-cont');
+  const datosDefault = [
+    { nombre: 'Grupo 1', valores: '85, 90, 88, 92, 87' },
+    { nombre: 'Grupo 2', valores: '78, 82, 80, 75, 79' },
+    { nombre: 'Grupo 3', valores: '92, 95, 91, 89, 94' }
+  ];
+  let html = '';
+  for (let i = 0; i < numGrupos; i++) {
+    const d = datosDefault[i] || { nombre: `Grupo ${i+1}`, valores: '' };
+    html += `
+      <div class="grupo-box" data-idx="${i}">
+        <div class="grupo-header">
+          <input type="text" class="nombre-grupo" id="nombre-grupo-${i}" value="${d.nombre}">
+          ${numGrupos > 2 ? `<button class="btn-quitar-g" onclick="quitarGrupo(${i})">✕ Quitar</button>` : ''}
+        </div>
+        <textarea id="datos-grupo-${i}" placeholder="Datos separados por coma">${d.valores}</textarea>
+      </div>
+    `;
+  }
+  cont.innerHTML = html;
+}
+
+function agregarGrupo() { numGrupos++; renderGrupos(); }
+function quitarGrupo(idx) { numGrupos--; renderGrupos(); }
+
+renderGrupos();
+
+function calcularAnova() {
+  const errBox = document.getElementById('error-box');
+  const grupos = [];
+  const nombres = [];
+
+  for (let i = 0; i < numGrupos; i++) {
+    const nombre = document.getElementById(`nombre-grupo-${i}`).value || `Grupo ${i+1}`;
+    const datos = parsearGrupo(document.getElementById(`datos-grupo-${i}`).value);
+    if (!datos || datos.length < 2) {
+      errBox.textContent = `⚠ El grupo "${nombre}" necesita al menos 2 datos numéricos válidos.`;
+      errBox.style.display = 'block';
+      return;
+    }
+    grupos.push(datos);
+    nombres.push(nombre);
+  }
+  errBox.style.display = 'none';
+
+  const r = anovaUnFactor(grupos);
+  currentResultadoAnova = r;
+  window.__nombresGruposAnova = nombres;
+
+  renderResultadoAnova(r, nombres, grupos);
+  const rb = document.getElementById('respuesta-box'); if (rb) rb.classList.remove('visible');
+}
+
+function renderResultadoAnova(r, nombres, grupos) {
+  const panel = document.getElementById('resultados-panel');
+  const filasComparaciones = r.comparaciones.map(c => `
+    <tr class="${c.significativo ? 'sig' : 'no-sig'}">
+      <td>${nombres[c.i]} vs ${nombres[c.j]}</td>
+      <td>${c.diff.toFixed(3)}</td>
+      <td>${c.t.toFixed(3)}</td>
+      <td>${c.pAjustado.toFixed(4)}</td>
+      <td>${c.significativo ? '✓ Diferente' : '— No diferente'}</td>
+    </tr>
+  `).join('');
+
+  panel.innerHTML = `
+    <h3>Resultado</h3>
+    <div class="resultado-grid">
+      <div class="resultado-card"><div class="lbl">F</div><div class="val">${r.anova.f.toFixed(3)}</div></div>
+      <div class="resultado-card"><div class="lbl">Valor-p</div><div class="val">${r.anova.pF.toFixed(6)}</div></div>
+      <div class="resultado-card"><div class="lbl">η² (efecto)</div><div class="val">${r.eta2.toFixed(4)}</div></div>
+    </div>
+    <div class="decision-box ${r.anova.pF < 0.05 ? 'rechaza' : 'no-rechaza'}">
+      <div class="titulo">${r.anova.pF < 0.05 ? '❌ Se rechaza H₀ — al menos una media es diferente' : '✅ No se rechaza H₀ — no hay diferencia significativa entre las medias'}</div>
+    </div>
+    <table class="tabla-an">
+      <thead><tr><th>Fuente</th><th>SC</th><th>gl</th><th>CM</th><th>F</th><th>p</th></tr></thead>
+      <tbody>
+        <tr><td>Entre grupos</td><td>${r.anova.ssb.toFixed(3)}</td><td>${r.anova.dfB}</td><td>${r.anova.msb.toFixed(3)}</td><td>${r.anova.f.toFixed(3)}</td><td>${r.anova.pF.toFixed(6)}</td></tr>
+        <tr><td>Dentro de grupos</td><td>${r.anova.ssw.toFixed(3)}</td><td>${r.anova.dfW}</td><td>${r.anova.msw.toFixed(3)}</td><td></td><td></td></tr>
+        <tr><td>Total</td><td>${r.anova.sst.toFixed(3)}</td><td>${r.anova.dfB + r.anova.dfW}</td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    <div class="chart-container"><canvas id="anova-chart"></canvas></div>
+    <h3 style="margin-top:0.5rem;">Comparaciones múltiples por pares (Bonferroni)</h3>
+    <table class="tabla-an">
+      <thead><tr><th>Comparación</th><th>Diferencia</th><th>t</th><th>p ajustado</th><th>Conclusión</th></tr></thead>
+      <tbody>${filasComparaciones}</tbody>
+    </table>
+    <div class="conclusion-text">${generarResumenAnova(armarPayloadAnova({}, r, '', ''))}</div>
+  `;
+  renderChartAnova(nombres, grupos, r);
+}
+
+function renderChartAnova(nombres, grupos, r) {
+  if (chartAnova) { chartAnova.destroy(); chartAnova = null; }
+  const ctx = document.getElementById('anova-chart');
+  if (!ctx) return;
+
+  const colores = ['#00d4ff', '#7b61ff', '#00ff9d', '#ff6b6b', '#ffd700', '#ff8c42'];
+  chartAnova = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: nombres,
+      datasets: [{
+        label: 'Media del grupo',
+        data: r.mediaGrupo,
+        backgroundColor: nombres.map((_, i) => colores[i % colores.length] + '88'),
+        borderColor: nombres.map((_, i) => colores[i % colores.length]),
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a2340', borderColor: '#2a3a5c', borderWidth: 1, titleColor: '#e8edf8', bodyColor: '#8a9bb8' } },
+      scales: {
+        x: { ticks: { color: '#8a9bb8', font: { size: 10 } }, grid: { display: false } },
+        y: { title: { display: true, text: 'Media', color: '#8a9bb8' }, ticks: { color: '#4a5a78', font: { size: 9 } }, grid: { color: 'rgba(42,58,92,0.4)' } }
+      }
+    }
+  });
+}
+
+function usarSugerenciaAnova(texto) {
+  document.getElementById('pregunta').value = texto;
+  preguntarAnova();
+}
+
+function preguntarAnova() {
+  if (!currentResultadoAnova) return;
+  const contexto = document.getElementById('contexto')?.value || '';
+  const pregunta = document.getElementById('pregunta')?.value || '';
+  const payload = armarPayloadAnova({}, currentResultadoAnova, contexto, pregunta);
+  const respuesta = generarRespuestaAnova(payload);
+  const box = document.getElementById('respuesta-box');
+  box.textContent = respuesta;
+  box.classList.add('visible');
+  if (window.gtag) { gtag('event', 'pregunta_anova', { herramienta: 'anova' }); }
+}
+</script>
+</body>
+</html>
