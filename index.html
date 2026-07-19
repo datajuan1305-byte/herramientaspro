@@ -529,6 +529,7 @@ const profesiones = {
       { emoji: '📈', bg: '#FAEEDA', name: 'Regresión Lineal', desc: 'Simple y múltiple, con tabla ANOVA, coeficientes y predicción', url: 'estadistica/regresion/', ready: true },
       { emoji: '📊', bg: '#FCEBEB', name: 'ANOVA de un factor', desc: 'Análisis de varianza con comparaciones múltiples por pares (Bonferroni)', url: 'estadistica/anova/', ready: true },
       { emoji: '🧪', bg: '#EEEDFE', name: 'Diseño Factorial 2ᵏ', desc: 'Efectos principales, interacciones y tabla ANOVA para diseños factoriales con réplicas', url: 'estadistica/diseno-factorial/', ready: true },
+      { img: 'assets/r-logo.svg', bg: '#EDF2FB', name: 'R en línea', desc: 'Ejecuta código R real en tu navegador (webR) para comparar resultados con tu R/RStudio local', url: 'estadistica/r-online/', ready: true },
     ]
   },
   deportes: {
@@ -563,7 +564,7 @@ function renderContent(key) {
         <a class="tool-card ${!app.ready ? 'disabled' : ''}"
            href="${app.ready && app.url ? app.url : '#'}"
            ${!app.ready ? 'onclick="return false;"' : ''}>
-          <div class="tool-card-icon" style="background:${app.bg}">${app.emoji}</div>
+          <div class="tool-card-icon" style="background:${app.bg}">${app.img ? `<img src="${app.img}" alt="${app.name}" style="width:26px;height:26px;object-fit:contain;">` : app.emoji}</div>
           <div class="tool-card-name">${app.name}</div>
           <div class="tool-card-desc">${app.desc}</div>
           <span class="tool-status ${app.ready ? 'status-ready' : 'status-soon'}">
