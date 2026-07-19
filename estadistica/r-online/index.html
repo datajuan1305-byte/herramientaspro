@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R en línea (webR) | HerramientasPro Colombia</title>
+<meta name="description" content="Ejecuta código R directamente en tu navegador, sin instalar nada. Compara resultados de tus análisis estadísticos entre R, Excel, Python y Statgraphics. Gratis.">
+<link rel="canonical" href="https://herramientaspro.com.co/estadistica/r-online/">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BRHFQTZC5D"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-BRHFQTZC5D');
+</script>
+
+<style>
+  :root {
+    --bg: #0a0e1a; --bg2: #0f1628; --bg3: #161e35;
+    --panel: #1a2340; --border: #2a3a5c;
+    --accent: #00d4ff; --accent2: #7b61ff; --accent4: #00ff9d; --accent3: #ff6b6b;
+    --text: #e8edf8; --text2: #8a9bb8; --text3: #4a5a78;
+    --gold: #ffd700;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
+  }
+  header { position: relative; z-index: 10; padding: 1.4rem 2rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(0,212,255,0.05) 0%, transparent 100%); display: flex; align-items: center; gap: 1.2rem; }
+  .logo-icon { width: 46px; height: 46px; background: linear-gradient(135deg, #1a5276, #2874a6); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; font-weight: 700; }
+  .header-text h1 { font-size: 1.4rem; font-weight: 700; background: linear-gradient(135deg, #fff 30%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .header-text p { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+  nav.breadcrumb { position: relative; z-index: 10; padding: 10px 2rem 0; font-size: 0.78rem; color: var(--text3); }
+  nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+  main { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 1.4rem 2rem 3rem; display: flex; flex-direction: column; gap: 1.2rem; }
+  .disclaimer { background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.25); border-left: 3px solid var(--gold); border-radius: 8px; padding: 0.7rem 1rem; font-size: 0.78rem; color: #e8d98a; }
+  .info-box { background: rgba(0,212,255,0.06); border: 1px solid rgba(0,212,255,0.2); border-radius: 8px; padding: 0.7rem 1rem; font-size: 0.78rem; color: var(--text2); line-height: 1.6; }
+
+  .prueba-header { padding: 1.1rem 1.3rem; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; }
+  .prueba-header h2 { font-size: 1.15rem; margin-bottom: 4px; }
+  .prueba-header p { font-size: 0.82rem; color: var(--text2); margin-top: 0.5rem; line-height: 1.6; }
+
+  .layout { display: flex; flex-direction: column; gap: 1rem; }
+
+  .ejemplos-fila { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.2rem; }
+  .chip-ejemplo { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); border-radius: 16px; padding: 6px 14px; font-size: 0.75rem; cursor: pointer; white-space: nowrap; }
+  .chip-ejemplo:hover { border-color: var(--accent); color: var(--accent); }
+
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; }
+  .panel h3 { font-size: 0.72rem; font-family: 'Space Mono', monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text3); margin-bottom: 1rem; }
+
+  .r-console-panel { display: flex; flex-direction: column; gap: 0.8rem; }
+  .estado-r { display: flex; align-items: center; gap: 0.6rem; font-family: 'Space Mono', monospace; font-size: 0.78rem; padding: 0.6rem 0.9rem; border-radius: 8px; background: var(--bg3); border: 1px solid var(--border); }
+  .estado-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--gold); animation: pulso 1.2s infinite; flex-shrink: 0; }
+  .estado-dot.listo { background: var(--accent4); animation: none; }
+  .estado-dot.error { background: var(--accent3); animation: none; }
+  @keyframes pulso { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  textarea#editor-r {
+    width: 100%; min-height: 260px; background: #1e1e1e; border: 1px solid var(--border); border-radius: 10px;
+    padding: 1rem; color: #d4d4d4; font-family: 'Space Mono', monospace; font-size: 0.9rem; resize: vertical; outline: none; line-height: 1.5;
+  }
+  textarea#editor-r:focus { border-color: var(--accent); }
+
+  .botones-r { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .btn-ejecutar { flex: 1; min-width: 140px; padding: 0.7rem; background: linear-gradient(135deg, var(--accent4), #00cc7d); border: none; border-radius: 10px; color: #04140c; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
+  .btn-ejecutar:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-limpiar { padding: 0.7rem 1.2rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; color: var(--text2); font-size: 0.85rem; cursor: pointer; }
+  .btn-limpiar:hover { border-color: var(--accent3); color: var(--accent3); }
+
+  #consola-r {
+    background: #0d0d0d; border: 1px solid var(--border); border-radius: 10px; padding: 1rem;
+    font-family: 'Space Mono', monospace; font-size: 0.85rem; color: #d4d4d4; min-height: 320px; max-height: 560px;
+    overflow-y: auto; white-space: pre-wrap; word-break: break-word;
+  }
+  #consola-r .linea-entrada { color: var(--accent); }
+  #consola-r .linea-error { color: var(--accent3); }
+  #consola-r .placeholder { color: var(--text3); font-style: italic; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">R</div>
+  <div class="header-text">
+    <h1>R en línea (webR)</h1>
+    <p>HerramientasPro Colombia · Piloto académico</p>
+  </div>
+</header>
+
+<nav class="breadcrumb"><a href="/">Inicio</a> › R en línea</nav>
+
+<main>
+  <div class="disclaimer">⚠️ Este entorno de R corre íntegramente en tu navegador (proyecto de código abierto <strong>webR</strong>) — es una versión simplificada pensada para comparar resultados numéricos, sin panel de gráficos ni explorador de archivos. No reemplaza tu instalación de R/RStudio para trabajo completo.</div>
+  <div class="info-box">🔒 <strong>Privacidad:</strong> el código y los datos que escribas aquí se ejecutan localmente en tu navegador — no se envían a ningún servidor nuestro ni de terceros.</div>
+
+  <div class="prueba-header">
+    <h2>Consola de R</h2>
+    <p>Escribe o pega tu script abajo y presiona <strong>"▶ Ejecutar"</strong>. La primera vez, espera unos segundos mientras el navegador descarga el motor de R (verás el estado abajo).</p>
+  </div>
+
+  <div class="layout">
+    <div class="panel r-console-panel">
+      <h3>Consola de R</h3>
+      <div class="estado-r">
+        <span class="estado-dot" id="estado-dot"></span>
+        <span id="estado-texto">Cargando el motor de R en tu navegador… (puede tardar unos segundos)</span>
+      </div>
+      <textarea id="editor-r" spellcheck="false">x <- c(12, 15, 18, 14, 20, 9, 16, 15, 22, 13)
+summary(x)
+mean(x)
+sd(x)</textarea>
+      <div class="botones-r">
+        <button class="btn-ejecutar" id="btn-ejecutar" disabled>▶ Ejecutar (cargando R...)</button>
+        <button class="btn-limpiar" id="btn-limpiar-consola">🗑 Limpiar consola</button>
+        <button class="btn-limpiar" id="btn-reiniciar">♻️ Reiniciar entorno (rm todo)</button>
+      </div>
+      <div id="consola-r"><span class="placeholder">Los resultados de tu código aparecerán aquí...</span></div>
+      <p style="font-size:0.68rem;color:var(--text3);">Esta versión simplificada no incluye gráficos (plots). Si necesitas graficar, usa tu R/RStudio local o Posit Cloud.</p>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+  import { WebR } from 'https://webr.r-wasm.org/latest/webr.mjs';
+
+  const webR = new WebR();
+  const estadoDot = document.getElementById('estado-dot');
+  const estadoTexto = document.getElementById('estado-texto');
+  const btnEjecutar = document.getElementById('btn-ejecutar');
+  const consola = document.getElementById('consola-r');
+  const editor = document.getElementById('editor-r');
+
+  function escaparHTML(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function agregarALaConsola(entrada, salida, esError) {
+    const placeholder = consola.querySelector('.placeholder');
+    if (placeholder) placeholder.remove();
+    const bloque = document.createElement('div');
+    bloque.style.marginBottom = '0.8rem';
+    bloque.innerHTML = `<div class="linea-entrada">&gt; ${escaparHTML(entrada)}</div><div class="${esError ? 'linea-error' : ''}">${escaparHTML(salida)}</div>`;
+    consola.appendChild(bloque);
+    consola.scrollTop = consola.scrollHeight;
+  }
+
+  function limpiarConsola() {
+    consola.innerHTML = '<span class="placeholder">Los resultados de tu código aparecerán aquí...</span>';
+  }
+
+  async function reiniciarEntorno() {
+    try {
+      await webR.evalRString('rm(list=ls())');
+      agregarALaConsola('rm(list=ls())', '✓ Entorno reiniciado: todas las variables fueron eliminadas.', false);
+    } catch (e) {
+      agregarALaConsola('rm(list=ls())', 'No se pudo reiniciar: ' + e.message, true);
+    }
+  }
+
+  async function ejecutarR() {
+    const codigo = editor.value;
+    if (!codigo.trim()) return;
+    btnEjecutar.disabled = true;
+    btnEjecutar.textContent = '⏳ Ejecutando...';
+    try {
+      const resultado = await webR.evalRString(codigo);
+      agregarALaConsola(codigo, resultado || '(sin salida visible)', false);
+      if (window.gtag) gtag('event', 'ejecutar_r', { herramienta: 'r_online' });
+    } catch (e) {
+      agregarALaConsola(codigo, 'Error: ' + e.message, true);
+    } finally {
+      btnEjecutar.disabled = false;
+      btnEjecutar.textContent = '▶ Ejecutar';
+    }
+  }
+
+  document.getElementById('btn-ejecutar').addEventListener('click', ejecutarR);
+  document.getElementById('btn-limpiar-consola').addEventListener('click', limpiarConsola);
+  document.getElementById('btn-reiniciar').addEventListener('click', reiniciarEntorno);
+
+  (async () => {
+    try {
+      await webR.init();
+      estadoDot.classList.add('listo');
+      estadoTexto.textContent = '✓ R está listo para usar';
+      btnEjecutar.disabled = false;
+      btnEjecutar.textContent = '▶ Ejecutar';
+    } catch (e) {
+      estadoDot.classList.add('error');
+      estadoTexto.textContent = '⚠ No se pudo cargar R: ' + e.message + ' — revisa tu conexión e intenta recargar la página.';
+    }
+  })();
+</script>
+</body>
+</html>
