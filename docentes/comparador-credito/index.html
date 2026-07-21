@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BRHFQTZC5D"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-BRHFQTZC5D');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CréditoSmart — Comparador de Préstamos para Docentes Colombia</title>
+<meta name="description" content="Compara préstamos bancarios, calcula cuotas, amortización y encuentra la mejor opción de crédito para docentes colombianos.">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0f1923;--ink2:#1a2a3a;--muted:#64748b;--border:#e2e8f0;--bg2:#f8fafc;
+  --bg:#f0f4f8;--white:#fff;--cream:#fdfcf8;
+  --gold:#b45309;--gold-bg:#fffbeb;--gold-b:#fcd34d;
+  --green:#047857;--green-bg:#ecfdf5;--green-b:#6ee7b7;
+  --red:#b91c1c;--red-bg:#fef2f2;--red-b:#fca5a5;
+  --blue:#1d4ed8;--blue-bg:#eff6ff;--blue-b:#93c5fd;
+  --purple:#6d28d9;--purple-bg:#f5f3ff;--purple-b:#c4b5fd;
+  --r:14px;--rs:9px;
+  --sh:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.05);
+  --sh2:0 8px 32px rgba(0,0,0,.12);
+}
+[data-theme="dark"]{
+  --ink:#e2e8f0;--ink2:#1e293b;--muted:#64748b;--border:#334155;--bg2:#1e293b;
+  --bg:#0f172a;--white:#1e293b;--cream:#162032;
+  --gold:#fbbf24;--gold-bg:#1c1507;--gold-b:#854d0e;
+  --green:#34d399;--green-bg:#022c22;--green-b:#065f46;
+  --red:#f87171;--red-bg:#1c0808;--red-b:#7f1d1d;
+  --blue:#60a5fa;--blue-bg:#0c1a35;--blue-b:#1e3a5f;
+  --purple:#a78bfa;--purple-bg:#1a0f2e;--purple-b:#4c1d95;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;transition:background .25s,color .25s;}
+input,select,button{font-family:'DM Sans',sans-serif;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* ── HEADER ── */
+.hdr{background:var(--ink2);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:300;border-bottom:1px solid rgba(255,255,255,.05);}
+.brand{display:flex;align-items:center;gap:11px;}
+.brand-ico{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,#3b82f6,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.brand h1{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:#fff;letter-spacing:-.3px;}
+.brand p{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px;}
+.hdr-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.hdr-tag{background:rgba(99,102,241,.2);border:1px solid rgba(99,102,241,.35);color:#a5b4fc;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;}
+.dark-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);padding:5px 11px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;transition:all .2s;}
+.dark-btn:hover{background:rgba(255,255,255,.14);}
+
+/* ── TABS NAV ── */
+.nav-tabs{background:var(--white);border-bottom:2px solid var(--border);padding:0 20px;display:flex;gap:0;overflow-x:auto;position:sticky;top:64px;z-index:200;-ms-overflow-style:none;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nt{padding:13px 15px;border:none;border-bottom:2.5px solid transparent;background:transparent;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .18s;display:flex;align-items:center;gap:6px;margin-bottom:-2px;}
+.nt:hover{color:var(--ink);}
+.nt.on{color:var(--blue);border-bottom-color:var(--blue);}
+.nb{background:var(--blue);color:#fff;font-size:9px;padding:1px 5px;border-radius:10px;font-weight:700;}
+
+/* ── WRAP ── */
+.wrap{max-width:1200px;margin:0 auto;padding:22px 18px 80px;}
+.screen{display:none;} .screen.on{display:block;}
+
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--sh);overflow:hidden;margin-bottom:14px;}
+.card-h{padding:13px 17px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;}
+.ch-ico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.ch-t{font-family:'Fraunces',serif;font-size:14px;font-weight:600;color:var(--ink);}
+.ch-s{font-size:10px;color:var(--muted);margin-top:1px;}
+.card-b{padding:16px 17px;display:flex;flex-direction:column;gap:12px;}
+
+/* ── LAYOUT ── */
+.two{display:grid;grid-template-columns:350px 1fr;gap:20px;align-items:start;}
+@media(max-width:860px){.two{grid-template-columns:1fr;}}
+
+/* ── FORM ── */
+.fl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;display:block;}
+.fi{width:100%;border:1.5px solid var(--border);border-radius:var(--rs);padding:9px 12px;font-size:13px;color:var(--ink);background:var(--cream);outline:none;transition:border-color .18s,box-shadow .18s;}
+.fi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,78,216,.1);background:var(--white);}
+.fi::placeholder{color:#b0b8c4;}
+.fh{font-size:10px;color:var(--muted);margin-top:3px;font-style:italic;}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+/* ── BANCOS ── */
+.banco-item{display:grid;grid-template-columns:9px 1fr auto auto;align-items:center;gap:7px;background:var(--cream);border:1.5px solid var(--border);border-radius:var(--rs);padding:8px 11px;transition:border-color .15s;}
+.banco-item:focus-within{border-color:var(--blue);}
+.b-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.b-nm{border:none;background:transparent;font-size:12px;font-weight:600;color:var(--ink);outline:none;width:100%;min-width:0;}
+.b-nm::placeholder{color:#b0b8c4;font-weight:400;}
+.b-tw{display:flex;align-items:center;gap:3px;}
+.b-ta{border:none;background:transparent;font-size:12px;font-weight:700;color:var(--blue);outline:none;width:56px;text-align:right;}
+.b-ea{font-size:10px;color:var(--muted);white-space:nowrap;}
+.b-del{background:none;border:none;cursor:pointer;color:#cbd5e1;font-size:13px;padding:2px 4px;border-radius:4px;transition:color .15s;}
+.b-del:hover{color:var(--red);}
+.add-b{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px;border:1.5px dashed var(--border);border-radius:var(--rs);background:transparent;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;}
+.add-b:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-bg);}
+
+/* ── BUTTONS ── */
+.btn-main{width:100%;padding:12px;background:var(--ink);color:#fff;border:none;border-radius:var(--rs);font-family:'Fraunces',serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;margin-bottom:8px;}
+.btn-main:hover{background:var(--ink2);transform:translateY(-1px);box-shadow:var(--sh2);}
+.btn-sec{width:100%;padding:9px;background:transparent;color:var(--muted);border:1.5px solid var(--border);border-radius:var(--rs);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;}
+.btn-sec:hover{border-color:var(--ink);color:var(--ink);}
+.btn-sm{padding:6px 12px;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--white);font-size:11px;font-weight:600;cursor:pointer;color:var(--ink);display:flex;align-items:center;gap:4px;transition:all .15s;}
+.btn-sm:hover{border-color:var(--blue);color:var(--blue);}
+.btn-blue{background:var(--blue);color:#fff!important;border-color:var(--blue)!important;}
+.btn-blue:hover{background:#1e40af!important;}
+.btn-green{background:var(--green);color:#fff!important;border-color:var(--green)!important;}
+
+/* ── SEMÁFORO ── */
+.sem{display:flex;align-items:center;gap:14px;background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:14px 18px;box-shadow:var(--sh);margin-bottom:14px;}
+.sem-ico{font-size:44px;flex-shrink:0;}
+.sem-info{flex:1;}
+.sem-t{font-family:'Fraunces',serif;font-size:17px;font-weight:700;}
+.sem-d{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.5;}
+.sem-score{font-family:'Fraunces',serif;font-size:34px;font-weight:900;min-width:56px;text-align:right;}
+.sv{color:var(--green);} .sa{color:var(--gold);} .sr{color:var(--red);}
+
+/* ── WINNER ── */
+.winner{background:var(--ink2);border-radius:var(--r);padding:18px 22px;position:relative;overflow:hidden;margin-bottom:14px;}
+.winner::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(59,130,246,.1);}
+.win{position:relative;z-index:1;}
+.w-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:4px;}
+.w-nom{font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:#fff;letter-spacing:-.4px;}
+.w-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:3px;}
+.w-badge{background:rgba(16,185,129,.2);border:1px solid rgba(16,185,129,.3);color:#6ee7b7;padding:4px 11px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.4px;}
+.w-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+.w-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:7px;}
+.w-box{background:rgba(255,255,255,.07);border-radius:7px;padding:9px 11px;}
+.wv{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:#fff;}
+.ws{font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+.w-box.hi .wv{color:#6ee7b7;}
+.w-sav{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.18);border-radius:7px;padding:9px 13px;margin-top:9px;font-size:12px;color:rgba(255,255,255,.65);line-height:1.5;}
+.w-sav strong{color:#6ee7b7;}
+
+/* ── TABS INNER ── */
+.ti-wrap{display:flex;gap:3px;background:var(--bg2);border-radius:9px;padding:3px;margin-bottom:14px;flex-wrap:wrap;}
+.ti-btn{padding:7px 13px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .15s;}
+.ti-btn.on{background:var(--white);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.09);}
+.ti-p{display:none;} .ti-p.on{display:block;}
+
+/* ── TABLA ── */
+.tbl-box{background:var(--white);border-radius:var(--r);border:1px solid var(--border);overflow:hidden;box-shadow:var(--sh);}
+.tbl-h{padding:13px 17px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.tbl-t{font-family:'Fraunces',serif;font-size:14px;font-weight:600;}
+.tbl-s{font-size:10px;color:var(--muted);}
+.ovf{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{padding:8px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;background:var(--bg2);border-bottom:2px solid var(--border);white-space:nowrap;}
+th:first-child,th:nth-child(2){text-align:left;}
+td{padding:10px 12px;text-align:right;border-bottom:1px solid rgba(0,0,0,.04);color:var(--ink);}
+td:first-child,td:nth-child(2){text-align:left;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg2);}
+tr.w-row td{background:var(--green-bg);}
+.bc{display:flex;align-items:center;gap:8px;}
+.bdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.bn{font-weight:700;font-size:12px;}
+.btt{font-size:10px;color:var(--muted);margin-top:1px;}
+.cg{color:var(--green);font-weight:700;} .cr{color:var(--red);font-weight:600;}
+.ca{color:var(--gold);font-weight:600;} .cb{color:var(--blue);font-weight:600;}
+
+/* ── INDICADORES ── */
+.ind-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:14px;}
+.ind{background:var(--white);border-radius:var(--rs);border:1px solid var(--border);padding:12px 14px;box-shadow:var(--sh);}
+.ind.g{border-left:3px solid var(--green);} .ind.w{border-left:3px solid var(--gold);} .ind.b{border-left:3px solid var(--red);}
+.ii{font-size:19px;margin-bottom:4px;}
+.il{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.iv{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--ink);}
+.id{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.5;}
+
+/* ── PLAZO ── */
+.plazo-box{background:var(--gold-bg);border:1px solid var(--gold-b);border-radius:var(--r);padding:15px 17px;margin-bottom:14px;}
+.pb-h{display:flex;align-items:center;gap:9px;margin-bottom:11px;}
+.pb-ico{width:32px;height:32px;border-radius:8px;background:var(--gold-b);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.pb-t{font-family:'Fraunces',serif;font-size:14px;font-weight:600;color:var(--gold);}
+.pb-s{font-size:10px;color:var(--gold);opacity:.7;margin-top:1px;}
+.plazo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;}
+.p-op{background:var(--white);border:1.5px solid var(--border);border-radius:var(--rs);padding:10px;text-align:center;}
+.p-op.rec{border-color:var(--gold);}
+.pm{font-family:'Fraunces',serif;font-size:17px;font-weight:700;}
+.pa{font-size:10px;color:var(--muted);margin-bottom:4px;}
+.pc{font-size:12px;font-weight:600;}
+.pcg{font-size:10px;font-weight:600;margin-top:2px;}
+.ptag{display:inline-block;font-size:9px;padding:2px 7px;border-radius:10px;margin-top:4px;font-weight:700;letter-spacing:.3px;}
+.tag-r{background:var(--gold-b);color:var(--gold);}
+.tag-g{background:var(--green-bg);color:var(--green);}
+.tag-a{background:var(--red-bg);color:var(--red);}
+
+/* ── CHARTS ── */
+.ch-panel{background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:16px;box-shadow:var(--sh);margin-bottom:14px;}
+.ch-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:620px){.ch-grid{grid-template-columns:1fr;}}
+.ch-b h4{font-family:'Fraunces',serif;font-size:12px;font-weight:600;margin-bottom:2px;}
+.ch-b p{font-size:10px;color:var(--muted);margin-bottom:9px;}
+.ch-w{position:relative;height:190px;}
+
+/* ── AMORT ── */
+.amort-box{background:var(--white);border-radius:var(--r);border:1px solid var(--border);overflow:hidden;box-shadow:var(--sh);}
+.amort-tots{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;background:var(--border);}
+.at-it{background:var(--white);padding:11px 14px;text-align:center;}
+.at-v{font-family:'Fraunces',serif;font-size:17px;font-weight:700;}
+.at-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+.amort-ch{height:160px;position:relative;}
+.amort-scroll{overflow-x:auto;max-height:460px;overflow-y:auto;}
+.at2{width:100%;border-collapse:collapse;font-size:11.5px;}
+.at2 thead{position:sticky;top:0;z-index:5;}
+.at2 th{padding:8px 11px;text-align:right;font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;background:var(--bg2);border-bottom:2px solid var(--border);white-space:nowrap;}
+.at2 th:first-child,.at2 th:nth-child(2){text-align:left;}
+.at2 td{padding:7px 11px;text-align:right;border-bottom:1px solid rgba(0,0,0,.04);color:var(--ink);}
+.at2 td:first-child{text-align:left;font-weight:700;color:var(--muted);font-size:10px;}
+.at2 td:nth-child(2){text-align:left;}
+.at2 tr:hover td{background:var(--bg2);}
+.at2 tr.yr-end td{background:var(--gold-bg);border-bottom:2px solid var(--gold-b);}
+.at2 tr.last-row td{background:var(--green-bg);font-weight:700;}
+.mbar{height:5px;border-radius:3px;background:var(--border);overflow:hidden;flex:1;max-width:55px;}
+.mbar-f{height:100%;border-radius:3px;}
+.barcell{display:flex;align-items:center;gap:4px;}
+
+/* ── PREPAGO ── */
+.pp-res{background:var(--blue-bg);border:1px solid var(--blue-b);border-radius:var(--rs);padding:12px 16px;margin-top:12px;}
+.pr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:9px;}
+.pr-it{text-align:center;}
+.pr-v{font-family:'Fraunces',serif;font-size:19px;font-weight:700;color:var(--blue);}
+.pr-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+
+/* ── CAPACIDAD ── */
+.cap-res{background:var(--green-bg);border:1px solid var(--green-b);border-radius:var(--rs);padding:12px 16px;margin-top:11px;}
+.cap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin-top:7px;}
+.cap-it{background:var(--white);border-radius:var(--rs);padding:10px;text-align:center;border:1px solid var(--border);}
+.cap-v{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--green);}
+.cap-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+
+/* ── CONVERSOR ── */
+.conv-res{background:var(--purple-bg);border:1px solid var(--purple-b);border-radius:var(--rs);padding:11px 15px;margin-top:11px;}
+.conv-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05);}
+.conv-row:last-child{border-bottom:none;}
+.conv-l{font-size:12px;color:var(--muted);}
+.conv-v{font-size:13px;font-weight:700;color:var(--purple);}
+
+/* ── VS CARA A CARA ── */
+.vs-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:start;}
+.vs-mid{display:flex;align-items:center;justify-content:center;padding:0 8px;font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:var(--muted);margin-top:38px;}
+.vs-card{background:var(--white);border:2px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.vs-card.best{border-color:var(--green);} .vs-card.worst{border-color:var(--red-b);}
+.vs-head{padding:12px;text-align:center;border-bottom:1px solid var(--border);}
+.vh-n{font-family:'Fraunces',serif;font-size:15px;font-weight:700;}
+.vh-t{font-size:10px;color:var(--muted);margin-top:1px;}
+.vs-row{display:flex;justify-content:space-between;align-items:center;padding:8px 13px;border-bottom:1px solid rgba(0,0,0,.04);font-size:11px;}
+.vs-row:last-child{border-bottom:none;}
+.vr-l{color:var(--muted);}
+.vr-v{font-weight:600;}
+.vr-w{color:var(--green);} .vr-lo{color:var(--red);}
+
+/* ── REFINANCIACIÓN ── */
+.refin-res{background:var(--purple-bg);border:1px solid var(--purple-b);border-radius:var(--rs);padding:13px 16px;margin-top:12px;}
+
+/* ── CRUCE ── */
+.cruce-info{background:var(--purple-bg);border:1px solid var(--purple-b);border-radius:var(--rs);padding:11px 14px;margin-bottom:10px;}
+.ci-v{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--purple);}
+.ci-l{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* ── GLOSARIO ── */
+.glos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:11px;}
+.glos-it{background:var(--white);border-radius:var(--rs);border:1px solid var(--border);padding:13px;box-shadow:var(--sh);}
+.gi-t{font-family:'Fraunces',serif;font-size:13px;font-weight:600;color:var(--blue);margin-bottom:4px;}
+.gi-d{font-size:11px;color:var(--muted);line-height:1.6;}
+.gi-e{font-size:10px;color:var(--green);margin-top:4px;font-style:italic;}
+
+/* ── HISTORIAL ── */
+.hist-it{background:var(--white);border-radius:var(--rs);border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:all .15s;margin-bottom:9px;}
+.hist-it:hover{border-color:var(--blue);transform:translateX(3px);}
+.h-ico{font-size:22px;flex-shrink:0;}
+.h-info{flex:1;}
+.h-t{font-size:12px;font-weight:600;color:var(--ink);}
+.h-s{font-size:10px;color:var(--muted);margin-top:1px;}
+.h-del{background:none;border:none;cursor:pointer;color:#cbd5e1;font-size:13px;padding:3px;border-radius:3px;transition:color .15s;}
+.h-del:hover{color:var(--red);}
+
+/* ── PERFIL ── */
+.pav{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:25px;margin:0 auto 11px;}
+.p-nom{font-family:'Fraunces',serif;font-size:18px;font-weight:700;text-align:center;}
+.p-sub{font-size:11px;color:var(--muted);text-align:center;margin-top:2px;}
+.p-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:13px;}
+.ps-it{background:var(--bg2);border-radius:var(--rs);padding:9px;text-align:center;}
+.ps-v{font-family:'Fraunces',serif;font-size:17px;font-weight:700;}
+.ps-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+
+/* ── SHARE ── */
+.share-box{background:var(--bg2);border-radius:var(--rs);padding:11px 13px;font-family:monospace;font-size:11px;color:var(--muted);line-height:1.8;max-height:130px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;margin-top:9px;}
+
+/* ── ALERTA ── */
+.alerta{background:var(--red-bg);border:1px solid var(--red-b);border-radius:var(--rs);padding:10px 14px;font-size:11px;color:var(--red);line-height:1.6;margin-bottom:12px;}
+.alerta li{list-style:none;padding:2px 0;}
+.alerta li::before{content:'⚠ ';}
+
+/* ── SUCCESS BOX ── */
+.suc{background:var(--green-bg);border:1px solid var(--green-b);border-radius:var(--rs);padding:10px 14px;font-size:11px;color:var(--green);line-height:1.6;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:9px;font-size:12px;font-weight:600;z-index:999;animation:tIn .3s ease;box-shadow:var(--sh2);}
+@keyframes tIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── EMPTY ── */
+.empty{background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:46px 22px;text-align:center;box-shadow:var(--sh);}
+.empty .ei{font-size:44px;opacity:.3;margin-bottom:12px;}
+.empty p{font-size:12px;color:var(--muted);line-height:1.7;max-width:300px;margin:0 auto;}
+
+/* ── LINKS ── */
+.lk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:11px;}
+.lk{background:var(--white);border-radius:var(--rs);border:1px solid var(--border);padding:13px;text-decoration:none;color:var(--ink);transition:all .15s;display:flex;align-items:center;gap:11px;box-shadow:var(--sh);}
+.lk:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--sh2);}
+.lk-ico{font-size:26px;flex-shrink:0;}
+.lk-t{font-size:12px;font-weight:600;}
+.lk-s{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* ── INFO BOX ── */
+.info-box{background:var(--bg2);border-radius:var(--rs);padding:9px 12px;font-size:10px;color:var(--muted);line-height:1.6;border:1px solid var(--border);}
+
+/* ── ANIM ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fadeUp .3s cubic-bezier(.4,0,.2,1) both;}
+
+/* ── PRINT ── */
+@media print{
+  .nav-tabs,.hdr-r,.btn-main,.btn-sec,.add-b,.b-del,.btn-sm,.dark-btn{display:none!important;}
+  .hdr{position:relative;top:0;}
+  body{background:#fff;}
+  .two{grid-template-columns:1fr!important;}
+}
+@media(max-width:580px){
+  .r2,.r3{grid-template-columns:1fr;}
+  .ind-grid{grid-template-columns:1fr 1fr;}
+  .vs-grid{grid-template-columns:1fr;}
+  .vs-mid{display:none;}
+  .w-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- BREADCRUMB -->
+<nav style="max-width:1200px;margin:0 auto;padding:10px 18px 0;font-size:11px;color:var(--muted);">
+  <a href="/" style="color:#1d4ed8;text-decoration:none;">Inicio</a> › <a href="/docentes/" style="color:#1d4ed8;text-decoration:none;">Docentes</a> › Comparador de Créditos Bancarios
+</nav>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="brand">
+    <div class="brand-ico">💰</div>
+    <div><h1>CréditoSmart</h1><p>Comparador inteligente · Docentes Colombia 2025</p></div>
+  </div>
+  <div class="hdr-r">
+    <div class="hdr-tag">🇨🇴 Herramienta gratuita</div>
+    <button class="dark-btn" id="dark-btn" onclick="toggleDark()">🌙 Oscuro</button>
+  </div>
+</header>
+
+<!-- DISCLAIMER LEGAL -->
+<div style="max-width:1200px;margin:10px auto 0;padding:0 18px;">
+  <div style="background:#fff8e1;border:1px solid #ffc107;border-radius:8px;padding:10px 14px;font-size:11.5px;color:#5a4a00;">
+    ⚠️ <strong>Herramienta orientativa.</strong> Los cálculos son aproximados y no constituyen asesoría financiera profesional. Verifica siempre las tasas, condiciones y costos reales directamente con cada entidad antes de tomar una decisión de crédito.
+  </div>
+</div>
+
+<!-- TABS NAV -->
+<nav class="nav-tabs">
+  <button class="nt on"  onclick="goTab('comparador',this)">⚡ Comparador</button>
+  <button class="nt"     onclick="goTab('amort',this)">📋 Amortización</button>
+  <button class="nt"     onclick="goTab('prepago',this)">💡 Prepago</button>
+  <button class="nt"     onclick="goTab('capacidad',this)">🧮 Capacidad</button>
+  <button class="nt"     onclick="goTab('refin',this)">🔄 Refinanciación</button>
+  <button class="nt"     onclick="goTab('conversor',this)">↔️ Conversor tasas</button>
+  <button class="nt"     onclick="goTab('historial',this)" id="tab-hist">📂 Historial <span class="nb" id="hist-nb" style="display:none">0</span></button>
+  <button class="nt"     onclick="goTab('glosario',this)">📚 Glosario</button>
+  <button class="nt"     onclick="goTab('enlaces',this)">🔗 Enlaces</button>
+</nav>
+
+<div class="wrap">
+
+<!-- ═══ COMPARADOR ═══ -->
+<div id="screen-comparador" class="screen on">
+<div class="two">
+  <aside>
+    <!-- Perfil -->
+    <div class="card">
+      <div class="card-h"><div class="ch-ico" style="background:#f5f3ff">👤</div><div><div class="ch-t">Perfil del docente</div><div class="ch-s">Se guarda en tu navegador</div></div></div>
+      <div class="card-b">
+        <div class="r2">
+          <div><label class="fl">Nombre</label><input class="fi" id="p-nom" placeholder="Tu nombre" oninput="savePerfil()"></div>
+          <div><label class="fl">Entidad empleadora</label>
+            <select class="fi" id="p-ent" onchange="savePerfil()">
+              <option value="">Seleccionar...</option>
+              <option>MEN (oficial)</option><option>Secretaría departamental</option>
+              <option>Secretaría municipal</option><option>Institución privada</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Datos crédito -->
+    <div class="card">
+      <div class="card-h"><div class="ch-ico" style="background:#eff6ff">📋</div><div><div class="ch-t">Datos del crédito</div><div class="ch-s">Condiciones a comparar</div></div></div>
+      <div class="card-b">
+        <div><label class="fl">Monto a solicitar (COP $)</label><input class="fi" id="monto" type="number" placeholder="Ej: 20000000" min="100000" step="100000" oninput="fmtField('monto','monto-h')"><div class="fh" id="monto-h">Valor en pesos</div></div>
+        <div><label class="fl">Ingresos mensuales netos (COP $)</label><input class="fi" id="ingresos" type="number" placeholder="Ej: 4500000" min="100000" step="50000" oninput="fmtField('ingresos','ing-h')"><div class="fh" id="ing-h">Salario después de descuentos</div></div>
+        <div><label class="fl">Otras deudas mensuales (COP $)</label><input class="fi" id="deudas" type="number" placeholder="0 si no tiene" min="0" step="50000" value="0"></div>
+        <div class="r2">
+          <div><label class="fl">Plazo (meses)</label>
+            <select class="fi" id="plazo">
+              <option value="12">12 m — 1 año</option><option value="24">24 m — 2 años</option>
+              <option value="36">36 m — 3 años</option><option value="48">48 m — 4 años</option>
+              <option value="60" selected>60 m — 5 años</option><option value="72">72 m — 6 años</option>
+              <option value="84">84 m — 7 años</option><option value="96">96 m — 8 años</option>
+              <option value="120">120 m — 10 años</option><option value="180">180 m — 15 años</option>
+              <option value="240">240 m — 20 años</option>
+            </select>
+          </div>
+          <div><label class="fl">Seguro vida (%/mes)</label><input class="fi" id="seg" type="number" value="0.22" step="0.01" min="0" max="5"><div class="fh">% mensual sobre saldo</div></div>
+        </div>
+      </div>
+    </div>
+    <!-- Bancos -->
+    <div class="card">
+      <div class="card-h"><div class="ch-ico" style="background:#f0fdf4">🏦</div><div><div class="ch-t">Entidades financieras</div><div class="ch-s">Nombre + Tasa E.A. de cada banco</div></div></div>
+      <div class="card-b" id="bancos-wrap"></div>
+    </div>
+    <button class="btn-main" onclick="calcular()"><span style="font-size:17px">⚡</span> Generar reporte comparativo</button>
+    <button class="btn-sec"  onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+  </aside>
+  <section id="out">
+    <div class="empty"><div class="ei">📊</div><p>Completa los datos, agrega los bancos con sus tasas y pulsa <strong>Generar reporte</strong>.</p></div>
+  </section>
+</div>
+</div>
+
+<!-- ═══ AMORTIZACIÓN ═══ -->
+<div id="screen-amort" class="screen">
+  <div id="amort-msg" class="empty"><div class="ei">📋</div><p>Primero genera un reporte en el <strong>Comparador</strong>.</p></div>
+  <div id="amort-content" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:13px 17px;box-shadow:var(--sh);">
+      <div><div class="tbl-t">📋 Tabla de amortización — Cuotas mes a mes</div><div class="tbl-s">Evolución de capital, intereses y saldo desde la cuota 1 hasta la última</div></div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;">
+        <select class="fi" id="sel-amort" style="width:auto;padding:6px 11px;font-size:11px;" onchange="renderAmort()"></select>
+        <button class="btn-sm" onclick="exportAmortCSV()">⬇ CSV</button>
+      </div>
+    </div>
+    <div class="amort-box">
+      <div class="amort-tots" id="amort-tots"></div>
+      <div style="padding:13px 17px;border-bottom:1px solid var(--border);background:var(--bg2);">
+        <div style="font-family:'Fraunces',serif;font-size:12px;font-weight:600;margin-bottom:2px;">Evolución del saldo pendiente</div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:9px;">Cómo disminuye la deuda y crece el capital acumulado</div>
+        <div class="amort-ch"><canvas id="ch-saldo"></canvas></div>
+      </div>
+      <div style="padding:13px 17px;border-bottom:1px solid var(--border);">
+        <div class="cruce-info" id="cruce-info"></div>
+        <div style="height:150px;position:relative;"><canvas id="ch-cruce"></canvas></div>
+      </div>
+      <div class="amort-scroll">
+        <table class="at2"><thead><tr>
+          <th>Mes</th><th>Fecha</th><th>Cuota total</th><th>Interés</th>
+          <th>Capital</th><th>Seguro</th><th>Saldo</th><th>Capital acum.</th><th>Cap/Int</th>
+        </tr></thead><tbody id="amort-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PREPAGO ═══ -->
+<div id="screen-prepago" class="screen">
+<div class="two">
+  <div>
+    <div class="card">
+      <div class="card-h"><div class="ch-ico" style="background:#eff6ff">💡</div><div><div class="ch-t">Simulador de prepago</div><div class="ch-s">Abono extraordinario al capital</div></div></div>
+      <div class="card-b">
+        <div><label class="fl">Banco base</label><select class="fi" id="pp-banco"><option>— Primero genera un reporte —</option></select></div>
+        <div class="r2">
+          <div><label class="fl">Mes del abono</label><input class="fi" id="pp-mes" type="number" value="12" min="1"></div>
+          <div><label class="fl">Monto del abono (COP)</label><input class="fi" id="pp-monto" type="number" value="2000000"></div>
+        </div>
+        <div><label class="fl">¿Qué prefieres?</label>
+          <select class="fi" id="pp-tipo">
+            <option value="plazo">Reducir el plazo (misma cuota)</option>
+            <option value="cuota">Reducir la cuota (mismo plazo)</option>
+          </select>
+        </div>
+        <div class="info-box">📌 Ley 1555/2012: tienes derecho a prepagar sin penalidad después del primer año del crédito.</div>
+        <button class="btn-main" onclick="calcPrepago()"><span>💡</span> Simular prepago</button>
+      </div>
+    </div>
+  </div>
+  <div id="prepago-out"><div class="empty"><div class="ei">💡</div><p>Configura el abono y pulsa <strong>Simular prepago</strong>.</p></div></div>
+</div>
+</div>
+
+<!-- ═══ CAPACIDAD ═══ -->
+<div id="screen-capacidad" class="screen">
+<div class="two">
+  <div>
+    <div class="card">
+      <div class="card-h"><div class="ch-ico" style="background:#ecfdf5">🧮</div><div><div class="ch-t">Capacidad de endeudamiento</div><div class="ch-s">¿Cuánto puedes solicitar?</div></div></div>
+      <div class="card-b">
+        <div><label class="fl">Ingresos mensuales netos</label><input class="fi" id="cap-ing" type="number" placeholder="Ej: 4500000"></div>
+        <div><label class="fl">Deudas mensuales actuales</label><input class="fi" id="cap-deu" type="number" placeholder="Ej: 300000" value="0"></div>
+        <div><label class="fl">Tasa E.A. del banco (%)</label><input class="fi" id="cap-tasa" type="number" placeholder="Ej: 12.9" step="0.01"></div>
+        <div><label class="fl">Plazo deseado (meses)</label>
+          <select class="fi" id="cap-plazo">
+            <option value="12">12 m</option><option value="24">24 m</option><option value="36">36 m</option>
+            <option value="48">48 m</option><option value="60" selected>60 m</option><option value="72">72 m</option>
+            <option value="84">84 m</option><option value="96">96 m</option><option value="120">120 m</option>
+          </select>
+        </div>
+        <button class="btn-main" onclick="calcCapacidad()"><span>🧮</span> Calcular capacidad</button>
+      </div>
+    </div>
+  </div>
+  <div id="cap-out"><div class="empty"><div class="ei">🧮</div><p>Ingresa tus datos para saber cuánto puedes pedir prestado sin arriesgar tus finanzas.</p></div></div>
+</div>
+</div>
+
+<!-- ═══ REFINANCIACIÓN ═══ -->
+<div id="screen-refin" class="screen">
+<div class="two">
+  <div>
+    <div class="card">
+      <div class="card-h"><div class="ch-ico" style="background:#f5f3ff">🔄</div><div><div class="ch-t">Simulador de refinanciación</div><div class="ch-s">¿Conviene cambiar de banco?</div></div></div>
+      <div class="card-b">
+        <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding-bottom:6px;border-bottom:1px solid var(--border)">Crédito actual</div>
+        <div><label class="fl">Saldo pendiente actual (COP)</label><input class="fi" id="rf-saldo" type="number" placeholder="Ej: 15000000"></div>
+        <div class="r2">
+          <div><label class="fl">Tasa E.A. actual (%)</label><input class="fi" id="rf-tasa-act" type="number" placeholder="Ej: 22.4" step="0.01"></div>
+          <div><label class="fl">Meses restantes</label><input class="fi" id="rf-meses-act" type="number" placeholder="Ej: 48" min="1"></div>
+        </div>
+        <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding-bottom:6px;border-bottom:1px solid var(--border);margin-top:4px;">Nueva entidad</div>
+        <div class="r2">
+          <div><label class="fl">Tasa E.A. nueva (%)</label><input class="fi" id="rf-tasa-nva" type="number" placeholder="Ej: 14.5" step="0.01"></div>
+          <div><label class="fl">Nuevo plazo (meses)</label><input class="fi" id="rf-meses-nvo" type="number" placeholder="Ej: 60" min="1"></div>
+        </div>
+        <div><label class="fl">Costo de cancelación/penalidad (COP)</label><input class="fi" id="rf-costo" type="number" placeholder="Ej: 500000" value="0"></div>
+        <button class="btn-main" onclick="calcRefin()"><span>🔄</span> Analizar refinanciación</button>
+      </div>
+    </div>
+  </div>
+  <div id="refin-out"><div class="empty"><div class="ei">🔄</div><p>Ingresa los datos de tu crédito actual y la nueva oferta para saber si conviene refinanciar.</p></div></div>
+</div>
+</div>
+
+<!-- ═══ CONVERSOR ═══ -->
+<div id="screen-conversor" class="screen">
+<div class="two">
+  <div>
+    <div class="card">
+      <div class="card-h"><div class="ch-ico" style="background:#f5f3ff">↔️</div><div><div class="ch-t">Conversor de tasas</div><div class="ch-s">Convierte entre todos los formatos</div></div></div>
+      <div class="card-b">
+        <div><label class="fl">Tipo de tasa que conoces</label>
+          <select class="fi" id="conv-tipo">
+            <option value="ea">Tasa Efectiva Anual (E.A.)</option>
+            <option value="em">Tasa Efectiva Mensual (E.M.)</option>
+            <option value="nam">Nominal Anual Mes vencido (N.A.M.V.)</option>
+            <option value="nmv">Nominal Mensual Vencido (N.M.V.)</option>
+          </select>
+        </div>
+        <div><label class="fl">Valor (%)</label><input class="fi" id="conv-val" type="number" placeholder="Ej: 12.9" step="0.001"></div>
+        <button class="btn-main" onclick="convertirTasa()"><span>↔️</span> Convertir</button>
+        <div class="info-box">💡 Siempre pídele al banco la tasa <strong>E.A.</strong> — es la más transparente para comparar.</div>
+      </div>
+    </div>
+  </div>
+  <div id="conv-out"><div class="empty"><div class="ei">↔️</div><p>Ingresa la tasa que te dio el banco y obtén la equivalencia en todos los formatos.</p></div></div>
+</div>
+</div>
+
+<!-- ═══ HISTORIAL ═══ -->
+<div id="screen-historial" class="screen">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+    <div><div style="font-family:'Fraunces',serif;font-size:19px;font-weight:700">📂 Historial de simulaciones</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Últimas 5 consultas guardadas automáticamente</div></div>
+    <button class="btn-sm" onclick="clearHist()">🗑 Borrar todo</button>
+  </div>
+  <div id="hist-list"></div>
+</div>
+
+<!-- ═══ GLOSARIO ═══ -->
+<div id="screen-glosario" class="screen">
+  <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:700;margin-bottom:4px">📚 Glosario financiero</div>
+  <div style="font-size:11px;color:var(--muted);margin-bottom:18px">Términos clave para entender tu crédito</div>
+  <div class="glos-grid" id="glos-grid"></div>
+</div>
+
+<!-- ═══ ENLACES ═══ -->
+<div id="screen-enlaces" class="screen">
+  <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:700;margin-bottom:4px">🔗 Fuentes y simuladores oficiales</div>
+  <div style="font-size:11px;color:var(--muted);margin-bottom:18px">Verifica tasas y simula créditos directamente en los bancos</div>
+  <div class="lk-grid">
+    <a class="lk" href="https://www.fna.gov.co" target="_blank"><div class="lk-ico">🏛️</div><div><div class="lk-t">FNA — Fondo Nacional del Ahorro</div><div class="lk-s">Crédito oficial para docentes y servidores</div></div></a>
+    <a class="lk" href="https://www.superfinanciera.gov.co" target="_blank"><div class="lk-ico">⚖️</div><div><div class="lk-t">Superfinanciera</div><div class="lk-s">Tasas máximas y promedio del mercado</div></div></a>
+    <a class="lk" href="https://www.banrep.gov.co" target="_blank"><div class="lk-ico">🏦</div><div><div class="lk-t">Banco de la República</div><div class="lk-s">Tasas de referencia e indicadores</div></div></a>
+    <a class="lk" href="https://www.bancolombia.com" target="_blank"><div class="lk-ico">🟡</div><div><div class="lk-t">Bancolombia</div><div class="lk-s">Simulador de crédito libre inversión</div></div></a>
+    <a class="lk" href="https://www.davivienda.com" target="_blank"><div class="lk-ico">🔴</div><div><div class="lk-t">Davivienda</div><div class="lk-s">Crédito personal Davivienda</div></div></a>
+    <a class="lk" href="https://www.fomag.gov.co" target="_blank"><div class="lk-ico">🎓</div><div><div class="lk-t">FOMAG</div><div class="lk-s">Fondo de Prestaciones del Magisterio</div></div></a>
+    <a class="lk" href="https://www.bbva.com.co" target="_blank"><div class="lk-ico">🔵</div><div><div class="lk-t">BBVA Colombia</div><div class="lk-s">Crédito de libre inversión BBVA</div></div></a>
+    <a class="lk" href="https://www.confiar.coop" target="_blank"><div class="lk-ico">🤝</div><div><div class="lk-t">Confiar Cooperativa</div><div class="lk-s">Tasas preferenciales para docentes</div></div></a>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// ══════════════════════════════════════
+// CONSTANTES Y ESTADO GLOBAL
+// ══════════════════════════════════════
+const COLS = ['#1d4ed8','#059669','#dc2626','#d97706','#7c3aed','#0891b2','#be185d','#0f766e','#c2410c','#1e40af'];
+let bIdSeq=0, bancosState=[], resultados=[], charts={}, segGlobal=0;
+
+const fmt = v => '$'+Math.round(v).toLocaleString('es-CO');
+const pct = v => parseFloat(v).toFixed(2)+'%';
+
+// ── Tema oscuro
+function toggleDark(){
+  const html=document.documentElement, dark=html.getAttribute('data-theme')==='dark';
+  html.setAttribute('data-theme',dark?'light':'dark');
+  document.getElementById('dark-btn').textContent=dark?'🌙 Oscuro':'☀️ Claro';
+  localStorage.setItem('cs_dark',dark?'0':'1');
+  Object.values(charts).forEach(c=>{try{c.destroy();}catch(e){}});
+  charts={};
+}
+if(localStorage.getItem('cs_dark')==='1') toggleDark();
+
+// ── Toast
+function toast(m,t=2800){const el=document.createElement('div');el.className='toast';el.textContent=m;document.body.appendChild(el);setTimeout(()=>el.remove(),t);}
+
+// ── Formato campos
+function fmtField(id,hid){
+  const v=parseFloat(document.getElementById(id).value)||0;
+  document.getElementById(hid).textContent=v>0?'COP '+fmt(v):(id==='monto'?'Valor en pesos':'Salario después de descuentos');
+}
+
+// ── Tabs nav
+function goTab(id,btn){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nt').forEach(b=>b.classList.remove('on'));
+  document.getElementById('screen-'+id).classList.add('on'); btn.classList.add('on');
+  if(id==='amort'&&resultados.length) renderAmortScreen();
+  if(id==='historial') renderHist();
+  if(id==='glosario')  renderGlosario();
+}
+
+// ── Tabs internos
+function tiTab(id,btn){
+  document.querySelectorAll('.ti-p').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ti-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on'); btn.classList.add('on');
+  if(id==='ti-charts') setTimeout(()=>renderCharts(resultados[0],parseFloat(document.getElementById('ingresos').value)||0),60);
+}
+
+// ══════════════════════════════════════
+// BANCOS
+// ══════════════════════════════════════
+function addBanco(nom='',tasa=''){
+  const id=++bIdSeq, color=COLS[bancosState.length%COLS.length];
+  bancosState.push({id,color});
+  const wrap=document.getElementById('bancos-wrap');
+  const row=document.createElement('div');
+  row.className='banco-item'; row.id='brow-'+id;
+  row.innerHTML=`<div class="b-dot" style="background:${color}"></div>
+    <input class="b-nm" id="bn-${id}" type="text" placeholder="Nombre del banco" maxlength="24" value="${nom}">
+    <div class="b-tw"><input class="b-ta" id="bt-${id}" type="number" placeholder="0.0" step="0.01" min="0" max="100" value="${tasa}"><span class="b-ea">% E.A.</span></div>
+    <button class="b-del" onclick="delBanco(${id})" title="Eliminar">✕</button>`;
+  const btn=document.getElementById('add-b-btn');
+  if(btn) wrap.insertBefore(row,btn); else {wrap.appendChild(row); crearAddBtn(wrap);}
+}
+function crearAddBtn(wrap){
+  const btn=document.createElement('button');
+  btn.className='add-b'; btn.id='add-b-btn'; btn.innerHTML='＋ Agregar otro banco';
+  btn.onclick=()=>addBanco(); wrap.appendChild(btn);
+}
+function delBanco(id){
+  bancosState.splice(bancosState.findIndex(b=>b.id===id),1);
+  document.getElementById('brow-'+id)?.remove();
+}
+addBanco('FNA',12.9); addBanco('Bancolombia',22.4); addBanco('Davivienda',21.8); addBanco('BBVA',20.1);
+
+// ══════════════════════════════════════
+// PERFIL
+// ══════════════════════════════════════
+function savePerfil(){
+  localStorage.setItem('cs_p',JSON.stringify({nom:document.getElementById('p-nom').value,ent:document.getElementById('p-ent').value}));
+}
+(()=>{const p=JSON.parse(localStorage.getItem('cs_p')||'{}');
+  if(p.nom) document.getElementById('p-nom').value=p.nom;
+  if(p.ent) document.getElementById('p-ent').value=p.ent;
+})();
+
+// ══════════════════════════════════════
+// MOTOR FINANCIERO
+// ══════════════════════════════════════
+function eaAMes(ea){return Math.pow(1+ea/100,1/12)-1;}
+function cuotaNiv(PV,im,n){if(im===0)return PV/n;const f=Math.pow(1+im,n);return PV*(im*f)/(f-1);}
+
+function calcBanco(nom,tasaEA,monto,plazo,segPct,color){
+  const im=eaAMes(tasaEA), c=cuotaNiv(monto,im,plazo);
+  const segMes=(segPct/100/12)*monto;
+  const cCS=c+segMes, totInt=c*plazo-monto, totSeg=segMes*plazo, tot=cCS*plazo;
+  return {nom,nombre:nom,tasaEA,color,im,tmPct:im*100,cuota:c,segMes,cCS,totInt,totSeg,tot,plazo,monto};
+}
+
+function tablaAmort(r,segPct){
+  const im=r.im,n=r.plazo,segMes=(segPct/100/12)*r.monto;
+  const filas=[]; const hoy=new Date();
+  let saldo=r.monto,capAcum=0,intAcum=0;
+  for(let m=1;m<=n;m++){
+    const intM=saldo*im, capM=r.cuota-intM;
+    saldo=Math.max(0,saldo-capM); capAcum+=capM; intAcum+=intM;
+    const fecha=new Date(hoy.getFullYear(),hoy.getMonth()+m,1).toLocaleDateString('es-CO',{month:'short',year:'numeric'});
+    filas.push({m,fecha,cuotaT:r.cuota+segMes,int:intM,cap:capM,seg:segMes,saldo,capAcum,intAcum,pctCap:capM/r.cuota});
+  }
+  return filas;
+}
+
+// ══════════════════════════════════════
+// CALCULAR PRINCIPAL
+// ══════════════════════════════════════
+function calcular(){
+  const monto=parseFloat(document.getElementById('monto').value);
+  const ingresos=parseFloat(document.getElementById('ingresos').value);
+  const deudas=parseFloat(document.getElementById('deudas').value)||0;
+  const plazo=parseInt(document.getElementById('plazo').value);
+  const segPct=parseFloat(document.getElementById('seg').value)||0;
+  segGlobal=segPct;
+
+  if(!monto||monto<100000){showErr('⚠ Ingresa un monto válido (mínimo $100.000 COP).');return;}
+  if(!ingresos||ingresos<100000){showErr('⚠ Ingresa tus ingresos mensuales netos.');return;}
+
+  const datos=[];
+  for(const b of bancosState){
+    const nom=document.getElementById('bn-'+b.id)?.value?.trim();
+    const tasa=parseFloat(document.getElementById('bt-'+b.id)?.value);
+    if(!nom){showErr('⚠ Un banco no tiene nombre.');return;}
+    if(!tasa||tasa<=0){showErr(`⚠ "${nom}" no tiene tasa válida.`);return;}
+    const r=calcBanco(nom,tasa,monto,plazo,segPct,b.color);
+    r.carga=(r.cCS/ingresos)*100;
+    r.cargaTotal=((r.cCS+deudas)/ingresos)*100;
+    datos.push(r);
+  }
+  if(!datos.length){showErr('⚠ Agrega al menos un banco.');return;}
+  datos.sort((a,b)=>a.tot-b.tot);
+  resultados=datos;
+  saveHist(monto,ingresos,plazo,segPct,datos[0]);
+  updPrepagoBancos(); updAmortBancos();
+  renderResultados(monto,ingresos,plazo,segPct,deudas);
+}
+
+function showErr(msg){document.getElementById('out').innerHTML=`<div class="alerta" style="font-size:12px;padding:13px 17px;"><strong>${msg}</strong></div>`;}
+
+// ══════════════════════════════════════
+// RENDER RESULTADOS
+// ══════════════════════════════════════
+function renderResultados(monto,ingresos,plazo,segPct,deudas){
+  Object.values(charts).forEach(c=>{try{c.destroy();}catch(e){}});
+  charts={};
+  const mejor=resultados[0], peor=resultados[resultados.length-1], ahorro=peor.tot-mejor.tot;
+  const sem=calcSem(mejor,ingresos,monto,plazo);
+  const alertas=[];
+  if(mejor.carga>40) alertas.push(`Cuota (${fmt(mejor.cCS)}/mes) supera el 40% de tus ingresos. Considera mayor plazo.`);
+  if(mejor.cargaTotal>50) alertas.push(`Cuota+deudas supera el 50% de tu salario. Riesgo financiero alto.`);
+  if(monto>ingresos*24) alertas.push(`El monto equivale a más de 24 salarios. Verifica si realmente lo necesitas.`);
+  if(mejor.tasaEA>18) alertas.push(`La tasa más baja (${pct(mejor.tasaEA)}) es alta. Consulta FNA o cooperativas.`);
+
+  const PLAZOS=[12,24,36,48,60,72,84,96,120,180,240];
+  const plEval=[plazo,...PLAZOS.filter(p=>p!==plazo).slice(0,4)].sort((a,b)=>a-b);
+  let plRec=plEval[plEval.length-1];
+  for(const p of plEval){const c=cuotaNiv(monto,mejor.im,p),cCS=c+(segPct/100/12)*monto;if((cCS+deudas)/ingresos<=0.35){plRec=p;break;}}
+
+  const inds=getInds(mejor,monto,ingresos,plazo,deudas);
+  const med=['🥇','🥈','🥉'];
+  let html='';
+
+  // Semáforo
+  html+=`<div class="sem anim"><div class="sem-ico">${sem.ico}</div>
+    <div class="sem-info"><div class="sem-t s${sem.c}">${sem.t}</div><div class="sem-d">${sem.d}</div></div>
+    <div class="sem-score s${sem.c}">${sem.s}/10</div></div>`;
+
+  // Ganador
+  html+=`<div class="winner anim"><div class="win">
+    <div class="w-top">
+      <div><div class="w-tag">🏆 Mejor opción encontrada</div>
+        <div class="w-nom">${mejor.nombre}</div>
+        <div class="w-sub">Tasa E.A.: <strong style="color:#93c5fd">${pct(mejor.tasaEA)}</strong> · Mensual: ${pct(mejor.tmPct)}</div></div>
+      <div class="w-badge">✓ RECOMENDADO</div>
+    </div>
+    <div class="w-grid">
+      <div class="w-box hi"><div class="wv">${fmt(mejor.cCS)}</div><div class="ws">Cuota/mes+seguro</div></div>
+      <div class="w-box"><div class="wv">${fmt(mejor.cuota)}</div><div class="ws">Cuota base</div></div>
+      <div class="w-box"><div class="wv">${fmt(mejor.totInt)}</div><div class="ws">Total intereses</div></div>
+      <div class="w-box"><div class="wv">${fmt(mejor.tot)}</div><div class="ws">Total a pagar</div></div>
+    </div>
+    ${resultados.length>1?`<div class="w-sav">💡 Eligiendo <strong>${mejor.nombre}</strong> vs <strong>${peor.nombre}</strong> ahorras <strong>${fmt(ahorro)}</strong> en total.</div>`:''}
+  </div></div>`;
+
+  if(alertas.length) html+=`<div class="alerta anim"><ul>${alertas.map(a=>`<li>${a}</li>`).join('')}</ul></div>`;
+
+  // Tabs internos
+  html+=`<div class="ti-wrap">
+    <button class="ti-btn on" onclick="tiTab('ti-comp',this)">📊 Comparativo</button>
+    <button class="ti-btn" onclick="tiTab('ti-plazo',this)">📅 Plazo óptimo</button>
+    <button class="ti-btn" onclick="tiTab('ti-ind',this)">📌 Indicadores</button>
+    <button class="ti-btn" onclick="tiTab('ti-vs',this)">⚔️ Cara a cara</button>
+    <button class="ti-btn" onclick="tiTab('ti-charts',this)">📈 Gráficas</button>
+    <button class="ti-btn" onclick="tiTab('ti-share',this)">📤 Compartir</button>
+  </div>`;
+
+  // Tab: Comparativo
+  html+=`<div id="ti-comp" class="ti-p on">`;
+  if(resultados.length>1){
+    html+=`<div class="tbl-box"><div class="tbl-h"><div><div class="tbl-t">Tabla comparativa</div><div class="tbl-s">Menor costo total → mejor opción</div></div><button class="btn-sm" onclick="exportCSV()">⬇ CSV</button></div>
+      <div class="ovf"><table><thead><tr><th></th><th>Banco</th><th>Tasa E.A.</th><th>T.Mensual</th><th>Cuota base</th><th>Cuota+Seg.</th><th>Tot. int.</th><th>Total pagar</th><th>Carga sal.</th><th>Diferencia</th></tr></thead><tbody>`;
+    resultados.forEach((r,i)=>{
+      const dif=r.tot-mejor.tot;
+      const cgC=r.carga<=30?'cg':r.carga<=40?'ca':'cr';
+      html+=`<tr class="${i===0?'w-row':''}"><td style="font-size:13px">${med[i]||(i+1)}</td>
+        <td><div class="bc"><div class="bdot" style="background:${r.color}"></div><div><div class="bn">${r.nombre}</div><div class="btt">E.A. ${pct(r.tasaEA)}</div></div></div></td>
+        <td class="${i===0?'cg':i===resultados.length-1?'cr':''}">${pct(r.tasaEA)}</td>
+        <td>${pct(r.tmPct)}</td><td>${fmt(r.cuota)}</td>
+        <td style="font-weight:600">${fmt(r.cCS)}</td>
+        <td class="cr">${fmt(r.totInt)}</td>
+        <td style="font-weight:700">${fmt(r.tot)}</td>
+        <td class="${cgC}">${r.carga.toFixed(1)}%</td>
+        <td class="${dif===0?'cg':'cr'}">${dif===0?'— mejor':'+'+fmt(dif)}</td></tr>`;
+    });
+    html+=`</tbody></table></div></div>`;
+  } else html+=`<div style="font-size:12px;color:var(--muted);padding:18px;text-align:center">Agrega más bancos para ver la comparación.</div>`;
+  html+=`</div>`;
+
+  // Tab: Plazo
+  html+=`<div id="ti-plazo" class="ti-p"><div class="plazo-box">
+    <div class="pb-h"><div class="pb-ico">📅</div><div><div class="pb-t">Plazo óptimo según tus ingresos</div><div class="pb-s">Banco: ${mejor.nombre} · Regla: cuota+deudas ≤ 35% salario</div></div></div>
+    <div class="plazo-grid">`;
+  plEval.forEach(p=>{
+    const c=cuotaNiv(monto,mejor.im,p),cCS=c+(segPct/100/12)*monto;
+    const cg=((cCS+deudas)/ingresos)*100;
+    const isR=p===plRec,isA=p===plazo;
+    const tagCls=isR?'tag-r':cg<=35?'tag-g':'tag-a';
+    const tagTxt=isR?'⭐ Recomendado':cg<=30?'✓ Ideal':cg<=35?'✓ Adecuado':cg<=45?'Aceptable':'✗ Alto riesgo';
+    const cgColor=cg<=30?'var(--green)':cg<=40?'var(--gold)':'var(--red)';
+    html+=`<div class="p-op ${isR?'rec':''}">
+      <div class="pm">${p}<span style="font-size:11px;font-weight:400"> m</span></div>
+      <div class="pa">${(p/12).toFixed(1)} años${isA?' (actual)':''}</div>
+      <div class="pc">${fmt(cCS)}/mes</div>
+      <div class="pcg" style="color:${cgColor}">${cg.toFixed(1)}% salario</div>
+      <span class="ptag ${tagCls}">${tagTxt}</span></div>`;
+  });
+  html+=`</div></div></div>`;
+
+  // Tab: Indicadores
+  html+=`<div id="ti-ind" class="ti-p"><div class="ind-grid">`;
+  inds.forEach(i=>{ html+=`<div class="ind ${i.e}"><div class="ii">${i.ico}</div><div class="il">${i.lbl}</div><div class="iv">${i.val}</div><div class="id">${i.desc}</div></div>`; });
+  html+=`</div></div>`;
+
+  // Tab: Cara a cara
+  html+=`<div id="ti-vs" class="ti-p">`;
+  if(resultados.length>=2){
+    const r0=resultados[0],r1=resultados[1];
+    const campos=[
+      {l:'Tasa E.A.',v0:pct(r0.tasaEA),v1:pct(r1.tasaEA),f:v=>parseFloat(v)},
+      {l:'Tasa mensual',v0:pct(r0.tmPct),v1:pct(r1.tmPct),f:v=>parseFloat(v)},
+      {l:'Cuota base',v0:fmt(r0.cuota),v1:fmt(r1.cuota),f:v=>parseFloat(v.replace(/\D/g,''))},
+      {l:'Cuota+seguro',v0:fmt(r0.cCS),v1:fmt(r1.cCS),f:v=>parseFloat(v.replace(/\D/g,''))},
+      {l:'Total intereses',v0:fmt(r0.totInt),v1:fmt(r1.totInt),f:v=>parseFloat(v.replace(/\D/g,''))},
+      {l:'Total a pagar',v0:fmt(r0.tot),v1:fmt(r1.tot),f:v=>parseFloat(v.replace(/\D/g,''))},
+      {l:'Carga salarial',v0:r0.carga.toFixed(1)+'%',v1:r1.carga.toFixed(1)+'%',f:v=>parseFloat(v)},
+    ];
+    html+=`<div class="vs-grid">
+      <div class="vs-card best">
+        <div class="vs-head" style="background:var(--green-bg)"><div class="vh-n" style="color:var(--green)">🥇 ${r0.nombre}</div><div class="vh-t">Mejor opción</div></div>
+        ${campos.map(c=>{const w=c.f(c.v0)<=c.f(c.v1);return`<div class="vs-row"><span class="vr-l">${c.l}</span><span class="vr-v ${w?'vr-w':''}">${w?'✓ ':' '}${c.v0}</span></div>`;}).join('')}
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-card worst">
+        <div class="vs-head" style="background:var(--red-bg)"><div class="vh-n" style="color:var(--red)">🥈 ${r1.nombre}</div><div class="vh-t">Segunda opción</div></div>
+        ${campos.map(c=>{const w=c.f(c.v1)<c.f(c.v0);return`<div class="vs-row"><span class="vr-l">${c.l}</span><span class="vr-v ${w?'vr-w':'vr-lo'}">${c.v1}</span></div>`;}).join('')}
+      </div></div>`;
+  } else html+=`<div style="font-size:12px;color:var(--muted);padding:18px;text-align:center">Necesitas al menos 2 bancos para el cara a cara.</div>`;
+  html+=`</div>`;
+
+  // Tab: Gráficas
+  html+=`<div id="ti-charts" class="ti-p"><div class="ch-panel">
+    <div class="ch-grid">
+      <div class="ch-b"><h4>Total a pagar por banco</h4><p>Capital + intereses + seguro</p><div class="ch-w"><canvas id="ch1"></canvas></div></div>
+      <div class="ch-b"><h4>Cuota mensual base</h4><p>Sin seguro de vida</p><div class="ch-w"><canvas id="ch2"></canvas></div></div>
+      <div class="ch-b"><h4>Desglose · ${mejor.nombre}</h4><p>Distribución del costo total</p><div class="ch-w"><canvas id="ch3"></canvas></div></div>
+      <div class="ch-b"><h4>Carga salarial por banco</h4><p>% de ingresos que consume la cuota</p><div class="ch-w"><canvas id="ch4"></canvas></div></div>
+    </div></div></div>`;
+
+  // Tab: Compartir
+  const txt=genShare(mejor,ingresos,plazo);
+  html+=`<div id="ti-share" class="ti-p"><div class="card">
+    <div class="card-h"><div class="ch-ico" style="background:#f0fdf4">📤</div><div><div class="ch-t">Compartir resultado</div><div class="ch-s">Copia y envía por WhatsApp</div></div></div>
+    <div class="card-b">
+      <div class="share-box" id="share-box">${txt}</div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;">
+        <button class="btn-sm btn-blue" onclick="copiarShare()">📋 Copiar texto</button>
+        <button class="btn-sm" onclick="window.print()">🖨️ Imprimir</button>
+      </div>
+    </div></div></div>`;
+
+  document.getElementById('out').innerHTML=html;
+  setTimeout(()=>renderCharts(mejor,ingresos),80);
+}
+
+// ══════════════════════════════════════
+// SEMÁFORO
+// ══════════════════════════════════════
+function calcSem(r,ing,monto,plazo){
+  let s=10;
+  if(r.carga>40)s-=3; else if(r.carga>30)s-=1;
+  if(monto>ing*24)s-=2; else if(monto>ing*12)s-=1;
+  if(r.tasaEA>22)s-=2; else if(r.tasaEA>15)s-=1;
+  if(plazo>120)s-=1; s=Math.max(1,s);
+  if(s>=8)return{ico:'🟢',c:'v',t:'Crédito saludable',d:`Carga financiera del ${r.carga.toFixed(1)}%. Tu situación financiera es sólida.`,s};
+  if(s>=5)return{ico:'🟡',c:'a',t:'Crédito con precaución',d:`Viable pero con riesgos. Revisa los indicadores cuidadosamente.`,s};
+  return{ico:'🔴',c:'r',t:'Crédito de alto riesgo',d:`La carga financiera es peligrosa. Reduce el monto o aumenta el plazo.`,s};
+}
+
+// ══════════════════════════════════════
+// INDICADORES
+// ══════════════════════════════════════
+function getInds(r,monto,ingresos,plazo,deudas){
+  const carga=r.carga,costoPct=(r.tot-monto)/monto*100,endeud=monto/(ingresos*12);
+  const efic=(monto/r.tot*100).toFixed(1),libre=ingresos-r.cCS-deudas;
+  const fin=new Date(); fin.setMonth(fin.getMonth()+plazo);
+  const finFmt=fin.toLocaleDateString('es-CO',{month:'long',year:'numeric'});
+  return[
+    {ico:'💳',lbl:'Carga financiera',val:carga.toFixed(1)+'%',desc:`Cuota ${fmt(r.cCS)}/mes. Límite sano: 30% (${fmt(ingresos*.3)}).`,e:carga<=30?'g':carga<=40?'w':'b'},
+    {ico:'📈',lbl:'Costo real del crédito',val:costoPct.toFixed(1)+'%',desc:`Por $100 prestados pagas $${(1+costoPct/100).toFixed(2)} en total.`,e:costoPct<=60?'g':costoPct<=100?'w':'b'},
+    {ico:'⚖️',lbl:'Deuda / ingreso anual',val:endeud.toFixed(1)+' años',desc:`El préstamo equivale a ${endeud.toFixed(1)} años de salario.`,e:endeud<=2?'g':endeud<=3?'w':'b'},
+    {ico:'🏦',lbl:'Eficiencia del préstamo',val:efic+'%',desc:`El ${efic}% de lo que pagas es capital real.`,e:parseFloat(efic)>=55?'g':parseFloat(efic)>=40?'w':'b'},
+    {ico:'💰',lbl:'Dinero libre post-cuota',val:fmt(Math.max(0,libre)),desc:`Lo que queda disponible cada mes después de pagar.`,e:libre>=ingresos*.6?'g':libre>=ingresos*.4?'w':'b'},
+    {ico:'📅',lbl:'Fecha de terminación',val:finFmt,desc:`${(plazo/12).toFixed(1)} años de compromiso financiero.`,e:plazo<=60?'g':plazo<=96?'w':'b'},
+    {ico:'🔒',lbl:'Compromiso total/mes',val:((r.cCS+deudas)/ingresos*100).toFixed(1)+'%',desc:`Cuota+deudas actuales vs salario. Límite: 40%.`,e:(r.cCS+deudas)/ingresos<=.3?'g':(r.cCS+deudas)/ingresos<=.4?'w':'b'},
+    {ico:'📊',lbl:'Seguro de vida total',val:fmt(r.totSeg),desc:`Costo total del seguro durante toda la vida del crédito.`,e:r.totSeg/r.monto<=.1?'g':r.totSeg/r.monto<=.2?'w':'b'},
+  ];
+}
+
+// ══════════════════════════════════════
+// GRÁFICAS COMPARATIVAS
+// ══════════════════════════════════════
+function renderCharts(mejor,ingresos){
+  if(!resultados.length) return;
+  const labels=resultados.map(r=>r.nombre),cols=resultados.map(r=>r.color),colsA=resultados.map(r=>r.color+'aa');
+  const M=v=>'$'+(v/1e6).toFixed(1)+'M', P=v=>v+'%';
+  const baseOpts=cb=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{y:{ticks:{callback:cb,font:{size:9}},grid:{color:'rgba(128,128,128,.08)'}},x:{ticks:{font:{size:9}},grid:{display:false}}}});
+  ['ch1','ch2','ch3','ch4'].forEach(id=>{if(charts[id]){try{charts[id].destroy();}catch(e){}}});
+  const c1=document.getElementById('ch1'),c2=document.getElementById('ch2'),c3=document.getElementById('ch3'),c4=document.getElementById('ch4');
+  if(!c1||!c2||!c3||!c4) return;
+  charts.ch1=new Chart(c1,{type:'bar',data:{labels,datasets:[{data:resultados.map(r=>r.tot),backgroundColor:cols,borderRadius:6,borderSkipped:false}]},options:baseOpts(M)});
+  charts.ch2=new Chart(c2,{type:'bar',data:{labels,datasets:[{data:resultados.map(r=>r.cuota),backgroundColor:colsA,borderColor:cols,borderWidth:2,borderRadius:6,borderSkipped:false}]},options:baseOpts(M)});
+  charts.ch3=new Chart(c3,{type:'doughnut',data:{labels:['Capital','Intereses','Seguro'],datasets:[{data:[mejor.monto,mejor.totInt,mejor.totSeg],backgroundColor:['#059669','#dc2626','#d97706'],borderWidth:0,hoverOffset:7}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{boxWidth:9,font:{size:9}}}}}});
+  charts.ch4=new Chart(c4,{type:'bar',data:{labels,datasets:[
+    {data:resultados.map(r=>+r.carga.toFixed(1)),backgroundColor:resultados.map(r=>r.carga<=30?'#059669':r.carga<=40?'#d97706':'#dc2626'),borderRadius:6,borderSkipped:false,label:'Carga %'},
+    {type:'line',label:'Límite 30%',data:resultados.map(()=>30),borderColor:'#ef4444',borderDash:[5,5],borderWidth:1.5,pointRadius:0,fill:false}
+  ]},options:baseOpts(P)});
+}
+
+// ══════════════════════════════════════
+// AMORTIZACIÓN
+// ══════════════════════════════════════
+function updAmortBancos(){
+  const sel=document.getElementById('sel-amort'); if(!sel) return;
+  sel.innerHTML=resultados.map((r,i)=>`<option value="${i}">${r.nombre} — E.A. ${pct(r.tasaEA)}</option>`).join('');
+}
+function renderAmortScreen(){
+  if(!resultados.length) return;
+  document.getElementById('amort-msg').style.display='none';
+  document.getElementById('amort-content').style.display='block';
+  updAmortBancos(); renderAmort();
+}
+function renderAmort(){
+  const idx=parseInt(document.getElementById('sel-amort')?.value||'0');
+  const r=resultados[idx]||resultados[0]; if(!r) return;
+  const filas=tablaAmort(r,segGlobal);
+  const segMes=(segGlobal/100/12)*r.monto;
+  const totInt=filas.reduce((s,f)=>s+f.int,0),totSeg=segMes*r.plazo;
+
+  document.getElementById('amort-tots').innerHTML=`
+    <div class="at-it"><div class="at-v" style="color:var(--blue)">${fmt(r.monto)}</div><div class="at-l">Capital</div></div>
+    <div class="at-it"><div class="at-v" style="color:var(--red)">${fmt(totInt)}</div><div class="at-l">Total intereses</div></div>
+    <div class="at-it"><div class="at-v" style="color:var(--gold)">${fmt(totSeg)}</div><div class="at-l">Total seguro</div></div>
+    <div class="at-it"><div class="at-v" style="color:var(--green)">${fmt(r.cuota)}</div><div class="at-l">Cuota fija</div></div>
+    <div class="at-it"><div class="at-v">${fmt(r.monto+totInt+totSeg)}</div><div class="at-l">Total a pagar</div></div>`;
+
+  // Punto de cruce
+  const cruceMes=(filas.findIndex(f=>f.cap>f.int)+1)||r.plazo;
+  document.getElementById('cruce-info').innerHTML=`
+    <div class="ci-v">📍 Mes ${cruceMes}</div>
+    <div class="ci-l">Punto de cruce: a partir del mes <strong>${cruceMes}</strong> el capital supera a los intereses. Tu crédito trabaja a tu favor.</div>`;
+
+  // Destroy old charts
+  ['chSaldo','chCruce'].forEach(k=>{if(charts[k]){try{charts[k].destroy();}catch(e){}}});
+
+  const step=r.plazo<=36?1:r.plazo<=72?2:r.plazo<=120?3:6;
+  const pts=filas.filter(f=>f.m%step===0||f.m===1||f.m===r.plazo);
+  charts.chSaldo=new Chart(document.getElementById('ch-saldo'),{type:'line',
+    data:{labels:pts.map(f=>'M'+f.m),datasets:[
+      {label:'Saldo pendiente',data:pts.map(f=>f.saldo),borderColor:r.color,backgroundColor:r.color+'22',borderWidth:2.5,pointRadius:1,fill:true,tension:.3},
+      {label:'Capital acumulado',data:pts.map(f=>f.capAcum),borderColor:'#059669',backgroundColor:'rgba(5,150,105,.07)',borderWidth:2,pointRadius:0,fill:true,tension:.3,borderDash:[4,3]}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{boxWidth:9,font:{size:9}}}},
+      scales:{y:{ticks:{callback:v=>'$'+(v/1e6).toFixed(1)+'M',font:{size:9}},grid:{color:'rgba(128,128,128,.08)'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
+
+  const ap=filas.filter(f=>f.m%Math.max(1,Math.floor(r.plazo/20))===0||f.m===1||f.m===r.plazo);
+  charts.chCruce=new Chart(document.getElementById('ch-cruce'),{type:'line',
+    data:{labels:ap.map(f=>'M'+f.m),datasets:[
+      {label:'% Capital/cuota',data:ap.map(f=>+(f.pctCap*100).toFixed(1)),borderColor:'#059669',borderWidth:2,pointRadius:0,tension:.4,fill:false},
+      {label:'% Interés/cuota',data:ap.map(f=>+((1-f.pctCap)*100).toFixed(1)),borderColor:'#dc2626',borderWidth:2,pointRadius:0,tension:.4,fill:false}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:9,font:{size:9}}}},
+      scales:{y:{ticks:{callback:v=>v+'%',font:{size:9}},min:0,max:100},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
+
+  // Tabla
+  document.getElementById('amort-body').innerHTML=filas.map(f=>{
+    const isYE=f.m%12===0,isL=f.m===r.plazo,pB=Math.round(f.pctCap*100);
+    return`<tr class="${isL?'last-row':isYE?'yr-end':''}">
+      <td>${isYE?'📅 ':''}${f.m}</td><td>${f.fecha}</td>
+      <td style="font-weight:600">${fmt(f.cuotaT)}</td>
+      <td style="color:var(--red)">${fmt(f.int)}</td>
+      <td style="color:var(--green)">${fmt(f.cap)}</td>
+      <td style="color:var(--gold)">${fmt(f.seg)}</td>
+      <td style="font-weight:600">${isL?'<span style="color:var(--green)">$0 ✓</span>':fmt(f.saldo)}</td>
+      <td style="color:var(--blue)">${fmt(f.capAcum)}</td>
+      <td><div class="barcell"><span style="font-size:9px;color:var(--green);min-width:24px">${pB}%</span>
+        <div class="mbar"><div class="mbar-f" style="width:${pB}%;background:var(--green)"></div></div>
+      </div></td></tr>`;
+  }).join('');
+}
+function exportAmortCSV(){
+  const idx=parseInt(document.getElementById('sel-amort')?.value||'0');
+  const r=resultados[idx]||resultados[0]; if(!r) return;
+  const filas=tablaAmort(r,segGlobal);
+  let csv=`Amortización — ${r.nombre} — Tasa E.A. ${r.tasaEA.toFixed(2)}%\nMes,Fecha,Cuota Total,Interés,Capital,Seguro,Saldo,Capital Acumulado\n`;
+  filas.forEach(f=>{csv+=`${f.m},"${f.fecha}",${Math.round(f.cuotaT)},${Math.round(f.int)},${Math.round(f.cap)},${Math.round(f.seg)},${Math.round(f.saldo)},${Math.round(f.capAcum)}\n`;});
+  dlBlob(csv,'text/csv',`amortizacion_${r.nombre.replace(/ /g,'_')}.csv`);
+}
+
+// ══════════════════════════════════════
+// PREPAGO
+// ══════════════════════════════════════
+function updPrepagoBancos(){
+  const sel=document.getElementById('pp-banco'); if(!sel) return;
+  sel.innerHTML=resultados.map((r,i)=>`<option value="${i}">${r.nombre} — E.A. ${pct(r.tasaEA)}</option>`).join('');
+}
+function calcPrepago(){
+  const idx=parseInt(document.getElementById('pp-banco').value||'0');
+  const r=resultados[idx]||resultados[0];
+  if(!r){toast('⚠ Primero genera un reporte.');return;}
+  const mesAb=parseInt(document.getElementById('pp-mes').value)||12;
+  const abono=parseFloat(document.getElementById('pp-monto').value)||0;
+  if(!abono||abono<=0){toast('⚠ Ingresa un monto de abono válido.');return;}
+  if(mesAb<1||mesAb>r.plazo){toast(`⚠ El mes debe estar entre 1 y ${r.plazo}.`);return;}
+  const totalSin=r.cuota*r.plazo,im=r.im;
+  let saldo=r.monto,totalCon=0,mesesCon=0;
+  for(let m=1;m<=r.plazo*2;m++){
+    const intM=saldo*im,capM=r.cuota-intM;
+    saldo=Math.max(0,saldo-capM); totalCon+=r.cuota; mesesCon++;
+    if(m===mesAb&&saldo>0){saldo=Math.max(0,saldo-abono);totalCon+=abono;if(saldo<=0)break;}
+    if(saldo<=0)break;
+  }
+  const ahorro=totalSin-(totalCon-abono),mesesMenos=r.plazo-mesesCon;
+  document.getElementById('prepago-out').innerHTML=`
+    <div class="card anim">
+      <div class="card-h"><div class="ch-ico" style="background:#eff6ff">💡</div><div><div class="ch-t">Resultado del prepago · ${r.nombre}</div><div class="ch-s">Abono de ${fmt(abono)} en el mes ${mesAb}</div></div></div>
+      <div class="card-b">
+        <div class="pp-res">
+          <div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:7px">Impacto del abono extraordinario</div>
+          <div class="pr-grid">
+            <div class="pr-it"><div class="pr-v">${fmt(ahorro)}</div><div class="pr-l">Ahorro en intereses</div></div>
+            <div class="pr-it"><div class="pr-v">${Math.max(0,mesesMenos)} meses</div><div class="pr-l">Tiempo reducido</div></div>
+            <div class="pr-it"><div class="pr-v">${mesesCon}</div><div class="pr-l">Meses totales</div></div>
+          </div>
+        </div>
+        <div class="suc">✅ Con este abono terminas en <strong>${(mesesCon/12).toFixed(1)} años</strong> en lugar de <strong>${(r.plazo/12).toFixed(1)} años</strong>. Ahorras <strong>${fmt(ahorro)}</strong> en intereses.</div>
+        <div class="info-box">* Ley 1555/2012: derecho a prepago sin penalidad. La reducción puede ser de plazo o cuota según acuerdes con el banco.</div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════
+// CAPACIDAD DE ENDEUDAMIENTO
+// ══════════════════════════════════════
+function calcCapacidad(){
+  const ing=parseFloat(document.getElementById('cap-ing').value)||0;
+  const deu=parseFloat(document.getElementById('cap-deu').value)||0;
+  const tasa=parseFloat(document.getElementById('cap-tasa').value)||0;
+  const plazo=parseInt(document.getElementById('cap-plazo').value)||60;
+  if(!ing||ing<100000){toast('⚠ Ingresa tus ingresos.');return;}
+  if(!tasa||tasa<=0){toast('⚠ Ingresa la tasa E.A.');return;}
+  const im=eaAMes(tasa);
+  const f=Math.pow(1+im,plazo);
+  const factorPV=(f-1)/(im*f);
+  const libre30=Math.max(0,ing*0.30-deu),libre35=Math.max(0,ing*0.35-deu),libre40=Math.max(0,ing*0.40-deu);
+  const m30=libre30*factorPV,m35=libre35*factorPV,m40=libre40*factorPV;
+  document.getElementById('cap-out').innerHTML=`
+    <div class="card anim">
+      <div class="card-h"><div class="ch-ico" style="background:#ecfdf5">🧮</div><div><div class="ch-t">Tu capacidad de endeudamiento</div><div class="ch-s">Tasa ${pct(tasa)} E.A. · ${plazo} meses · Deudas actuales: ${fmt(deu)}/mes</div></div></div>
+      <div class="card-b">
+        <div class="cap-res">
+          <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:7px">Montos máximos según nivel de riesgo</div>
+          <div class="cap-grid">
+            <div class="cap-it"><div class="cap-v">${fmt(m30)}</div><div class="cap-l">30% — Ideal</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Cuota: ${fmt(libre30)}/mes</div></div>
+            <div class="cap-it" style="border-color:var(--gold-b)"><div class="cap-v" style="color:var(--gold)">${fmt(m35)}</div><div class="cap-l">35% — Aceptable</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Cuota: ${fmt(libre35)}/mes</div></div>
+            <div class="cap-it" style="border-color:var(--red-b)"><div class="cap-v" style="color:var(--red)">${fmt(m40)}</div><div class="cap-l">40% — Máximo</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Cuota: ${fmt(libre40)}/mes</div></div>
+          </div>
+        </div>
+        <div class="ind-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="ind g"><div class="ii">💵</div><div class="il">Ingresos netos</div><div class="iv">${fmt(ing)}</div><div class="id">Salario mensual disponible</div></div>
+          <div class="ind ${deu>0?'w':'g'}"><div class="ii">📉</div><div class="il">Deudas actuales</div><div class="iv">${fmt(deu)}</div><div class="id">Compromisos mensuales previos</div></div>
+        </div>
+        <div class="info-box">📌 Los bancos aprueban hasta el 40%, pero la Superfinanciera recomienda no superar el 30% para una salud financiera óptima.</div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════
+// REFINANCIACIÓN
+// ══════════════════════════════════════
+function calcRefin(){
+  const saldo=parseFloat(document.getElementById('rf-saldo').value)||0;
+  const tasaAct=parseFloat(document.getElementById('rf-tasa-act').value)||0;
+  const mesesAct=parseInt(document.getElementById('rf-meses-act').value)||0;
+  const tasaNva=parseFloat(document.getElementById('rf-tasa-nva').value)||0;
+  const mesesNvo=parseInt(document.getElementById('rf-meses-nvo').value)||0;
+  const costo=parseFloat(document.getElementById('rf-costo').value)||0;
+  if(!saldo||!tasaAct||!mesesAct||!tasaNva||!mesesNvo){toast('⚠ Completa todos los campos.');return;}
+  const imAct=eaAMes(tasaAct),imNva=eaAMes(tasaNva);
+  const cuotaAct=cuotaNiv(saldo,imAct,mesesAct);
+  const cuotaNva=cuotaNiv(saldo,imNva,mesesNvo);
+  const totalAct=cuotaAct*mesesAct;
+  const totalNva=cuotaNva*mesesNvo+costo;
+  const ahorro=totalAct-totalNva;
+  const conviene=ahorro>0;
+  const mesesRec=costo>0?Math.ceil(costo/(cuotaAct-cuotaNva)):0;
+  document.getElementById('refin-out').innerHTML=`
+    <div class="card anim">
+      <div class="card-h"><div class="ch-ico" style="background:${conviene?'#ecfdf5':'#fef2f2'}">🔄</div>
+        <div><div class="ch-t">Análisis de refinanciación</div><div class="ch-s">${conviene?'✅ SÍ conviene refinanciar':'❌ NO conviene refinanciar'}</div></div>
+      </div>
+      <div class="card-b">
+        <div class="${conviene?'suc':'alerta'}" style="font-size:13px;padding:12px 14px;">
+          ${conviene?`✅ Refinanciar te ahorra <strong>${fmt(ahorro)}</strong> en total.`:`❌ Refinanciar te costaría <strong>${fmt(Math.abs(ahorro))}</strong> más. No conviene.`}
+        </div>
+        <div class="ind-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="ind ${conviene?'g':'b'}"><div class="ii">🏦</div><div class="il">Cuota actual</div><div class="iv">${fmt(cuotaAct)}</div><div class="id">${tasaAct.toFixed(2)}% E.A. · ${mesesAct} meses</div></div>
+          <div class="ind ${conviene?'g':'w'}"><div class="ii">🏦</div><div class="il">Cuota nueva</div><div class="iv">${fmt(cuotaNva)}</div><div class="id">${tasaNva.toFixed(2)}% E.A. · ${mesesNvo} meses</div></div>
+          <div class="ind ${conviene?'g':'b'}"><div class="ii">💰</div><div class="il">Total actual restante</div><div class="iv">${fmt(totalAct)}</div><div class="id">Lo que pagarías sin refinanciar</div></div>
+          <div class="ind ${conviene?'g':'b'}"><div class="ii">💰</div><div class="il">Total con refinanciación</div><div class="iv">${fmt(totalNva)}</div><div class="id">Incluye costos de cancelación</div></div>
+          <div class="ind ${ahorro>0?'g':'b'}"><div class="ii">📊</div><div class="il">Ahorro / Sobrecosto</div><div class="iv" style="color:${ahorro>0?'var(--green)':'var(--red)'}">${ahorro>0?'+':'-'}${fmt(Math.abs(ahorro))}</div><div class="id">Diferencia total del crédito</div></div>
+          ${mesesRec>0?`<div class="ind w"><div class="ii">⏱</div><div class="il">Punto de recuperación</div><div class="iv">${mesesRec} meses</div><div class="id">Meses para recuperar el costo de cancelación</div></div>`:''}
+        </div>
+        <div class="info-box">📌 Refinanciar vale la pena si la diferencia de tasas es mayor a 2-3 puntos y tienes más de 2 años de crédito pendientes.</div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════
+// CONVERSOR DE TASAS
+// ══════════════════════════════════════
+function convertirTasa(){
+  const tipo=document.getElementById('conv-tipo').value;
+  const val=parseFloat(document.getElementById('conv-val').value);
+  if(!val||val<=0){toast('⚠ Ingresa una tasa válida.');return;}
+  let em;
+  if(tipo==='ea')  em=Math.pow(1+val/100,1/12)-1;
+  if(tipo==='em')  em=val/100;
+  if(tipo==='nam') em=val/100/12;
+  if(tipo==='nmv') em=val/100;
+  const EA=(Math.pow(1+em,12)-1)*100,EM=em*100,NAMV=em*12*100;
+  const ED=(em/30)*100, NAS=em*2*100;
+  document.getElementById('conv-out').innerHTML=`
+    <div class="card anim">
+      <div class="card-h"><div class="ch-ico" style="background:#f5f3ff">↔️</div><div><div class="ch-t">Equivalencias de tasa</div><div class="ch-s">Entrada: ${val.toFixed(3)}%</div></div></div>
+      <div class="card-b">
+        <div class="conv-res">
+          <div class="conv-row"><span class="conv-l">✅ Tasa Efectiva Anual (E.A.) — Usa esta para comparar</span><span class="conv-v">${EA.toFixed(4)}%</span></div>
+          <div class="conv-row"><span class="conv-l">Tasa Efectiva Mensual (E.M.)</span><span class="conv-v">${EM.toFixed(4)}%</span></div>
+          <div class="conv-row"><span class="conv-l">Nominal Anual Mes Vencido (N.A.M.V.)</span><span class="conv-v">${NAMV.toFixed(4)}%</span></div>
+          <div class="conv-row"><span class="conv-l">Nominal Anual Semestral</span><span class="conv-v">${NAS.toFixed(4)}%</span></div>
+          <div class="conv-row"><span class="conv-l">Tasa Efectiva Diaria (aprox.)</span><span class="conv-v">${ED.toFixed(6)}%</span></div>
+        </div>
+        <div class="info-box">💡 La E.A. es la tasa más transparente. Si el banco te da otra, usa este conversor para comparar entre entidades correctamente.</div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════
+// HISTORIAL
+// ══════════════════════════════════════
+function saveHist(monto,ingresos,plazo,segPct,mejor){
+  let h=JSON.parse(localStorage.getItem('cs_h')||'[]');
+  h.unshift({fecha:new Date().toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}),monto,ingresos,plazo,segPct,banco:mejor.nombre,tasa:mejor.tasaEA,cuota:mejor.cCS,total:mejor.tot});
+  h=h.slice(0,5); localStorage.setItem('cs_h',JSON.stringify(h));
+  const nb=document.getElementById('hist-nb');
+  nb.style.display='inline'; nb.textContent=h.length;
+}
+function renderHist(){
+  const h=JSON.parse(localStorage.getItem('cs_h')||'[]');
+  const el=document.getElementById('hist-list');
+  if(!h.length){el.innerHTML='<div class="empty"><div class="ei">📂</div><p>Aún no tienes simulaciones guardadas. Genera tu primer reporte.</p></div>';return;}
+  el.innerHTML=h.map((it,i)=>`
+    <div class="hist-it" onclick="loadHist(${i})">
+      <div class="h-ico">💾</div>
+      <div class="h-info">
+        <div class="h-t">${fmt(it.monto)} · ${it.plazo} meses · ${it.banco} (${pct(it.tasa)} E.A.)</div>
+        <div class="h-s">Cuota: ${fmt(it.cuota)}/mes · Total: ${fmt(it.total)} · ${it.fecha}</div>
+      </div>
+      <button class="h-del" onclick="event.stopPropagation();delHist(${i})">✕</button>
+    </div>`).join('');
+}
+function loadHist(i){
+  const h=JSON.parse(localStorage.getItem('cs_h')||'[]'),it=h[i]; if(!it) return;
+  document.getElementById('monto').value=it.monto; document.getElementById('ingresos').value=it.ingresos;
+  document.getElementById('plazo').value=it.plazo; document.getElementById('seg').value=it.segPct;
+  fmtField('monto','monto-h'); fmtField('ingresos','ing-h');
+  goTab('comparador',document.querySelector('.nt'));
+  toast('✅ Datos cargados del historial. Ajusta los bancos y recalcula.');
+}
+function delHist(i){let h=JSON.parse(localStorage.getItem('cs_h')||'[]');h.splice(i,1);localStorage.setItem('cs_h',JSON.stringify(h));renderHist();const nb=document.getElementById('hist-nb');nb.textContent=h.length;if(!h.length)nb.style.display='none';}
+function clearHist(){localStorage.removeItem('cs_h');renderHist();document.getElementById('hist-nb').style.display='none';toast('🗑 Historial borrado.');}
+
+// ══════════════════════════════════════
+// GLOSARIO
+// ══════════════════════════════════════
+const GLOS=[
+  {t:'Tasa Efectiva Anual (E.A.)',d:'La tasa más importante. Representa el costo real anual del crédito incluyendo la capitalización de intereses. Siempre pídela al banco para comparar correctamente.',e:'12.9% E.A. significa que por $100 prestados pagas $12.90 de interés anual real.'},
+  {t:'Tasa Nominal',d:'Tasa anunciada sin incluir el efecto de capitalización. Puede ser mensual, trimestral o anual. Siempre conviértela a E.A. antes de comparar.',e:'Una tasa nominal 12% mensual NO equivale a 12% E.A. — en realidad es mucho mayor.'},
+  {t:'Sistema Francés (cuota nivelada)',d:'El método más común en Colombia. La cuota mensual es fija durante todo el crédito, pero la proporción de capital e intereses cambia cada mes.',e:'Al inicio pagas más intereses; al final pagas más capital. La cuota siempre es la misma.'},
+  {t:'Amortización',d:'El proceso de pagar gradualmente el capital de un préstamo. Cada cuota reduce el saldo pendiente.',e:'Si debes $10M y pagas $200k de capital/mes, en mes 1 tu saldo es $9.8M.'},
+  {t:'Punto de cruce',d:'El mes en que la parte de capital de la cuota supera a la parte de intereses. Antes de ese punto el banco gana más; después tú ganas más.',e:'En un crédito a 60 meses al 20% E.A., el cruce suele ocurrir alrededor del mes 38-42.'},
+  {t:'GMF (4×1000)',d:'Gravamen a los Movimientos Financieros. Impuesto del 0.4% sobre retiros bancarios que algunos bancos cobran sobre el desembolso del crédito.',e:'En un crédito de $10M el GMF sería aproximadamente $40.000.'},
+  {t:'Seguro de vida deudor',d:'Seguro obligatorio que cubre el saldo del crédito en caso de muerte o incapacidad. Se cobra mensualmente. Puedes buscarlo por fuera del banco y ahorrar hasta 60%.',e:'Con tasa 0.22%/mes y saldo $10M: $22.000/mes de seguro.'},
+  {t:'Carga financiera',d:'Porcentaje del salario destinado a deudas. La Superfinanciera recomienda no superar el 30%. Los bancos aprueban hasta el 40%.',e:'Si ganas $4.5M y tu cuota es $1.35M, tu carga es exactamente el 30%.'},
+  {t:'Prepago o abono extraordinario',d:'Pago adicional al capital del crédito. Según la Ley 1555/2012, los colombianos tienen derecho a prepagar sin penalidad después del primer año.',e:'Abonar $2M en el mes 12 puede reducir el plazo en 8-10 meses y ahorrar millones en intereses.'},
+  {t:'Refinanciación',d:'Proceso de cancelar un crédito con otro de mejores condiciones. Conviene cuando la nueva tasa es al menos 2-3 puntos menor y quedan más de 2 años de crédito.',e:'Si tienes un crédito al 22% E.A. y encuentras uno al 14%, refinanciar puede ahorrarte millones.'},
+  {t:'FNA',d:'Fondo Nacional del Ahorro. Entidad del Estado colombiano que ofrece créditos a servidores públicos y docentes con tasas significativamente menores a las del mercado.',e:'Tasa FNA libre inversión: aproximadamente 12-14% E.A. en 2025 vs 20-24% de banca comercial.'},
+  {t:'FOMAG',d:'Fondo de Prestaciones del Magisterio. Administra las prestaciones económicas y sociales de los docentes oficiales colombianos.',e:'Los docentes oficiales tienen acceso a créditos FOMAG con condiciones especiales y tasas preferenciales.'},
+];
+function renderGlosario(){
+  document.getElementById('glos-grid').innerHTML=GLOS.map(g=>`
+    <div class="glos-it"><div class="gi-t">${g.t}</div><div class="gi-d">${g.d}</div><div class="gi-e">📌 ${g.e}</div></div>`).join('');
+}
+
+// ══════════════════════════════════════
+// COMPARTIR
+// ══════════════════════════════════════
+function genShare(mejor,ingresos,plazo){
+  const nom=document.getElementById('p-nom').value||'Docente';
+  return`💰 CRÉDITOSMART — Reporte de simulación
+──────────────────────────────
+👤 ${nom}  ·  📅 ${new Date().toLocaleDateString('es-CO')}
+
+🏆 MEJOR OPCIÓN: ${mejor.nombre}
+   Tasa E.A.: ${pct(mejor.tasaEA)}
+   Cuota mensual (con seguro): ${fmt(mejor.cCS)}
+   Total a pagar: ${fmt(mejor.tot)}
+   Total intereses: ${fmt(mejor.totInt)}
+   Plazo: ${plazo} meses (${(plazo/12).toFixed(1)} años)
+   Carga salarial: ${mejor.carga.toFixed(1)}%
+──────────────────────────────
+🔗 Calculado con CréditoSmart
+   Herramienta gratuita para docentes colombianos`;
+}
+function copiarShare(){
+  const txt=document.getElementById('share-box')?.textContent||'';
+  navigator.clipboard.writeText(txt).then(()=>toast('✅ Texto copiado al portapapeles!')).catch(()=>toast('⚠ Selecciona el texto y cópialo manualmente.'));
+}
+
+// ══════════════════════════════════════
+// EXPORTAR CSV
+// ══════════════════════════════════════
+function exportCSV(){
+  if(!resultados.length) return;
+  let csv='Pos,Banco,Tasa EA%,T.Mensual%,Cuota Base,Cuota+Seg,Tot.Intereses,Total Pagar,Carga%,Dif vs Mejor\n';
+  resultados.forEach((r,i)=>{const dif=r.tot-resultados[0].tot;csv+=`${i+1},"${r.nombre}",${r.tasaEA.toFixed(2)},${r.tmPct.toFixed(4)},${Math.round(r.cuota)},${Math.round(r.cCS)},${Math.round(r.totInt)},${Math.round(r.tot)},${r.carga.toFixed(2)},${Math.round(dif)}\n`;});
+  dlBlob(csv,'text/csv','comparativo_credito.csv');
+}
+function dlBlob(c,t,n){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:t}));a.download=n;a.click();}
+
+// ── Init historial badge
+(()=>{const h=JSON.parse(localStorage.getItem('cs_h')||'[]');if(h.length){const nb=document.getElementById('hist-nb');nb.style.display='inline';nb.textContent=h.length;}})();
+</script>
+
+<footer style="text-align:center;padding:18px 16px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);margin-top:20px;">
+  HerramientasPro Colombia — Herramienta orientativa, no constituye asesoría financiera.<br>
+  <a href="/" style="color:var(--muted);">Inicio</a> · <a href="/docentes/" style="color:var(--muted);">Docentes</a>
+</footer>
+</body>
+</html>
