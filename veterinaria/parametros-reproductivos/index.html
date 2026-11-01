@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parámetros Reproductivos Bovinos: Calculadora para Hatos de Leche y Carne | HerramientasPro</title>
+<meta name="description" content="Calcula y evalúa parámetros reproductivos del hato bovino: % de concepción, intervalo entre partos, días abiertos, edad al primer parto, calendario reproductivo y evaluación de toros, con intervalos de confianza y pruebas estadísticas. Gratis.">
+<link rel="canonical" href="https://herramientaspro.com.co/veterinaria/parametros-reproductivos/">
+<meta property="og:title" content="Parámetros Reproductivos Bovinos – Calculadora para veterinarios y ganaderos">
+<meta property="og:description" content="Indicadores reproductivos con semáforo estadístico, calendario de servicio y evaluación de toros. Gratis y sin registro.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://herramientaspro.com.co/veterinaria/parametros-reproductivos/">
+<meta property="og:locale" content="es_CO">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BRHFQTZC5D"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-BRHFQTZC5D');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"¿Cuál es un buen intervalo entre partos en bovinos?","acceptedAnswer":{"@type":"Answer","text":"La meta ideal es de 12 a 13 meses (365 a 400 días). En sistemas tropicales de doble propósito es frecuente ver 14 a 16 meses; cada mes adicional representa menos terneros y menos leche por vaca por año."}},
+{"@type":"Question","name":"¿Qué son los días abiertos?","acceptedAnswer":{"@type":"Answer","text":"Son los días entre el parto y la nueva concepción. Una meta común en ganado lechero es de 85 a 120 días; en doble propósito tropical suele aceptarse hasta 150."}},
+{"@type":"Question","name":"¿Cuántos animales necesito para evaluar el porcentaje de concepción?","acceptedAnswer":{"@type":"Answer","text":"Con pocos servicios el porcentaje es muy inestable. Con 20 servicios, un 50% observado puede corresponder a un valor real entre 30% y 70%. Por eso la herramienta muestra intervalos de confianza."}},
+{"@type":"Question","name":"¿Cuánto dura la gestación de la vaca?","acceptedAnswer":{"@type":"Answer","text":"En promedio 283 días (rango 275 a 290), con variaciones según raza, sexo de la cría y número de partos."}}
+]}
+</script>
+
+<style>
+:root{--verde:#1D9E75;--verde-os:#0f6e52;--verde-cl:#e6f6f0;--ink:#1c2a26;--gris:#5b6b66;--linea:#dbe5e1;--bg:#f6faf8;--rojo:#b3382c;--amar:#b8860b;--blanco:#fff;--r:10px}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+header.site{background:var(--verde-os);color:#fff;padding:14px 16px}
+header.site .wrap{max-width:1000px;margin:0 auto}
+header.site a{color:#fff;text-decoration:none;font-weight:700}
+nav.breadcrumb{max-width:1000px;margin:10px auto 0;padding:0 16px;font-size:.85rem;color:var(--gris)}
+nav.breadcrumb a{color:var(--verde-os);text-decoration:none}
+main{max-width:1000px;margin:0 auto;padding:12px 16px 60px}
+h1{font-size:1.55rem;color:var(--verde-os);margin:12px 0 6px}
+p.lead{color:var(--gris);margin:0 0 14px}
+.disclaimer{background:#fff8e6;border:1px solid #ecd9a0;border-left:4px solid var(--amar);border-radius:var(--r);padding:10px 14px;font-size:.85rem;color:#5a4a1f;margin:12px 0 18px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.tab{border:1px solid var(--linea);background:#fff;padding:9px 14px;border-radius:999px;cursor:pointer;font-size:.9rem;color:var(--ink)}
+.tab.on{background:var(--verde);color:#fff;border-color:var(--verde)}
+.panel{display:none}.panel.on{display:block}
+.card{background:#fff;border:1px solid var(--linea);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.card h2{font-size:1.05rem;color:var(--verde-os);margin:0 0 10px;padding-bottom:6px;border-bottom:2px solid var(--verde-cl)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:10px}
+label{font-size:.82rem;color:var(--gris);display:block;margin-bottom:3px}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--linea);border-radius:8px;font:inherit;background:#fff}
+textarea{min-height:70px;resize:vertical}
+button.go{background:var(--verde);color:#fff;border:0;padding:10px 18px;border-radius:8px;font-weight:600;cursor:pointer}
+button.go:hover{background:var(--verde-os)}
+button.sec{background:#fff;border:1px solid var(--verde);color:var(--verde-os);padding:8px 14px;border-radius:8px;cursor:pointer}
+.res{margin-top:12px;overflow-x:auto}
+.sema{border:1px solid var(--linea);border-left:6px solid var(--gris);border-radius:var(--r);padding:12px 14px;margin-bottom:10px;background:#fff}
+.sema.cumple{border-left-color:var(--verde)}.sema.incumple{border-left-color:var(--rojo)}.sema.no_concluyente{border-left-color:var(--amar)}
+.sema h3{margin:0 0 4px;font-size:1rem}
+.sema .big{font-size:1.4rem;font-weight:700}
+.sema p{margin:6px 0 0;font-size:.9rem}
+.barra{position:relative;height:14px;background:#edf3f0;border-radius:7px;margin:8px 0 2px}
+.barra .ic{position:absolute;top:2px;bottom:2px;background:#9ad6c0;border-radius:5px}
+.barra .pt{position:absolute;top:-2px;width:4px;height:18px;background:var(--verde-os);border-radius:2px}
+.barra .mt{position:absolute;top:-4px;width:2px;height:22px;background:var(--rojo)}
+.leyenda{font-size:.75rem;color:var(--gris)}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{border:1px solid var(--linea);padding:7px 9px;text-align:left}th{background:var(--verde-cl)}
+.cal td:first-child{font-weight:600;white-space:nowrap}
+.hint{font-size:.8rem;color:var(--gris)}
+.aviso{background:#fdecea;border:1px solid #efb4ad;border-radius:8px;padding:8px 12px;color:#7a251c;font-size:.88rem;margin-top:8px}
+.edu h2{margin-top:22px;color:var(--verde-os);font-size:1.2rem}
+.edu h3{color:var(--ink);font-size:1rem;margin:16px 0 4px}
+details{background:#fff;border:1px solid var(--linea);border-radius:8px;padding:10px 14px;margin-bottom:8px}
+summary{cursor:pointer;font-weight:600}
+footer{max-width:1000px;margin:0 auto;padding:0 16px 40px;font-size:.8rem;color:var(--gris)}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap"><a href="/">Herramientas<span style="color:#9fe7cf">Pro</span> Colombia</a></div></header>
+<nav class="breadcrumb"><a href="/">Inicio</a> › Veterinarios › Parámetros reproductivos bovinos</nav>
+
+<main>
+<h1>🐄 Parámetros Reproductivos Bovinos</h1>
+<p class="lead">Evalúa la eficiencia reproductiva de tu hato: calcula indicadores, compáralos con metas, genera el calendario reproductivo y valora toros. Con respaldo estadístico para saber si una diferencia es real o producto del azar.</p>
+
+<div class="disclaimer"><strong>Importante:</strong> Los valores de referencia son orientativos y varían según raza, sistema productivo (leche, carne, doble propósito), clima y manejo; puedes modificarlos en cada cálculo. Esta herramienta apoya, pero no reemplaza, el criterio del médico veterinario zootecnista.</div>
+
+<div class="card"><h2>⚙️ Perfil de referencia</h2><div id="perfiles"></div></div>
+
+<div class="tabs" id="tabs">
+  <button class="tab on" data-p="p1">📊 Indicadores del hato</button>
+  <button class="tab" data-p="p2">📏 Variables en días / meses</button>
+  <button class="tab" data-p="p3">📅 Calendario reproductivo</button>
+  <button class="tab" data-p="p4">🐂 Evaluación del macho</button>
+  <button class="tab" data-p="p5">⚖️ Comparar grupos</button>
+  <button class="tab" data-p="p6">🤖 Asistente IA</button>
+</div>
+
+<!-- ═══ 1. PROPORCIONES ═══ -->
+<section class="panel on" id="p1">
+  <div class="card">
+    <h2>Indicadores expresados como porcentaje</h2>
+    <div class="row">
+      <div><label>Indicador</label>
+        <select id="p1ind"></select></div>
+      <div><label id="p1lx">Animales con el evento (x)</label><input id="p1x" type="number" min="0" step="1" value="18"></div>
+      <div><label id="p1ln">Animales evaluados (n)</label><input id="p1n" type="number" min="1" step="1" value="40"></div>
+      <div><label>Meta (%)</label><input id="p1meta" type="number" min="0" max="100" step="1" value="50"></div>
+      <div><label>Confianza</label><select id="p1conf"><option value="0.90">90%</option><option value="0.95" selected>95%</option><option value="0.99">99%</option></select></div>
+    </div>
+    <p class="hint" id="p1desc"></p>
+    <button class="go" id="p1go">Evaluar</button>
+    <div class="res" id="p1res"></div>
+  </div>
+</section>
+
+<!-- ═══ 2. CONTINUAS ═══ -->
+<section class="panel" id="p2">
+  <div class="card">
+    <h2>Indicadores medidos por animal (días, meses, servicios)</h2>
+    <div class="row">
+      <div><label>Indicador</label><select id="p2ind"></select></div>
+      <div><label>Referencia (<span id="p2u"></span>)</label><input id="p2ref" type="number" step="any"></div>
+      <div><label>Sentido</label><select id="p2dir"><option value="menor">Menor es mejor</option><option value="mayor">Mayor es mejor</option></select></div>
+    </div>
+    <label>Datos por animal (separados por espacio, coma o salto de línea)</label>
+    <textarea id="p2datos" placeholder="Ej: 385 410 402 450 398 520 377 415"></textarea>
+    <p class="hint" id="p2desc"></p>
+    <button class="sec" id="p2ej">Cargar ejemplo</button> <button class="go" id="p2go">Analizar</button>
+    <div class="res" id="p2res"></div>
+  </div>
+</section>
+
+<!-- ═══ 3. CALENDARIO ═══ -->
+<section class="panel" id="p3">
+  <div class="card">
+    <h2>Calendario tras un servicio (monta o inseminación)</h2>
+    <div class="row">
+      <div><label>Fecha del servicio</label><input id="p3f" type="date"></div>
+      <div><label>Gestación (días)</label><input id="p3g" type="number" value="283" min="260" max="300"></div>
+      <div><label>Período de espera voluntario (días)</label><input id="p3v" type="number" value="60" min="30" max="120"></div>
+    </div>
+    <button class="go" id="p3go">Generar calendario</button>
+    <div class="res" id="p3res"></div>
+  </div>
+  <div class="card">
+    <h2>Plan para novillas</h2>
+    <div class="row">
+      <div><label>Fecha de nacimiento</label><input id="p3n" type="date"></div>
+      <div><label>Edad al primer servicio (meses)</label><input id="p3e" type="number" value="24" min="12" max="36"></div>
+    </div>
+    <button class="go" id="p3ngo">Calcular plan</button>
+    <div class="res" id="p3nres"></div>
+  </div>
+</section>
+
+<!-- ═══ 4. MACHO ═══ -->
+<section class="panel" id="p4">
+  <div class="card">
+    <h2>Toro: circunferencia escrotal y calidad seminal</h2>
+    <div class="row">
+      <div><label>Tipo de ganado</label><select id="p4t"><option value="taurino">Bos taurus (taurino)</option><option value="cebu">Bos indicus (cebú / cruces)</option></select></div>
+      <div><label>Edad (meses)</label><input id="p4e" type="number" min="6" step="1"></div>
+      <div><label>Circunferencia escrotal (cm)</label><input id="p4ce" type="number" step="0.1"></div>
+    </div>
+    <div class="row">
+      <div><label>Motilidad (%)</label><input id="p4mo" type="number" min="0" max="100"></div>
+      <div><label>Morfología normal (%)</label><input id="p4mf" type="number" min="0" max="100"></div>
+      <div><label>Concentración (×10⁶/mL)</label><input id="p4co" type="number" min="0"></div>
+    </div>
+    <p class="hint">Deja en blanco lo que no hayas medido. Los umbrales son orientativos (tipo examen de aptitud reproductiva); el diagnóstico definitivo lo hace el veterinario.</p>
+    <button class="go" id="p4go">Evaluar toro</button>
+    <div class="res" id="p4res"></div>
+  </div>
+</section>
+
+<!-- ═══ 5. COMPARAR ═══ -->
+<section class="panel" id="p5">
+  <div class="card">
+    <h2>Comparar dos grupos de porcentajes (ej. IA vs. monta, lote A vs. B)</h2>
+    <div class="row">
+      <div><label>Nombre grupo 1</label><input id="p5a" value="Grupo A"></div>
+      <div><label>Éxitos 1</label><input id="p5x1" type="number" min="0" value="22"></div>
+      <div><label>Total 1</label><input id="p5n1" type="number" min="1" value="40"></div>
+      <div><label>Nombre grupo 2</label><input id="p5b" value="Grupo B"></div>
+      <div><label>Éxitos 2</label><input id="p5x2" type="number" min="0" value="12"></div>
+      <div><label>Total 2</label><input id="p5n2" type="number" min="1" value="40"></div>
+    </div>
+    <button class="go" id="p5go">Comparar porcentajes</button>
+    <div class="res" id="p5res"></div>
+  </div>
+  <div class="card">
+    <h2>Comparar dos grupos de valores (ej. días abiertos de dos lotes)</h2>
+    <div class="row">
+      <div><label>Nombre grupo 1</label><input id="p5ma" value="Lote 1"></div>
+      <div><label>Nombre grupo 2</label><input id="p5mb" value="Lote 2"></div>
+      <div><label>Unidad</label><input id="p5mu" value="días"></div>
+    </div>
+    <div class="row">
+      <div><label>Datos grupo 1</label><textarea id="p5d1"></textarea></div>
+      <div><label>Datos grupo 2</label><textarea id="p5d2"></textarea></div>
+    </div>
+    <button class="go" id="p5mgo">Comparar promedios</button>
+    <div class="res" id="p5mres"></div>
+  </div>
+</section>
+
+<section class="panel" id="p6">
+  <div class="card"><h2>🤖 Pregunta a la IA sobre tus resultados</h2><div id="ia"></div></div>
+</section>
+
+<ins class="adsbygoogle" style="display:block;margin:20px 0" data-ad-client="ca-pub-4565099814624986" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+<!-- ═══ CONTENIDO EDUCATIVO ═══ -->
+<article class="edu">
+<h2>¿Por qué medir la eficiencia reproductiva del hato?</h2>
+<p>La reproducción es el motor económico de cualquier ganadería bovina. Una vaca produce ingresos cuando pare un ternero vivo y, en sistemas lecheros, cuando inicia una nueva lactancia. Cada día que una vaca permanece vacía después del tiempo óptimo representa alimento consumido sin producto a cambio. Medir con regularidad los parámetros reproductivos permite detectar a tiempo problemas de nutrición, sanidad, detección de celos, manejo de la inseminación o fertilidad de los toros, antes de que se conviertan en pérdidas importantes.</p>
+
+<h3>Los indicadores más usados</h3>
+<p><strong>Porcentaje de concepción</strong>: proporción de servicios que terminan en preñez confirmada. <strong>Intervalo entre partos (IEP)</strong>: días entre dos partos consecutivos; el ideal es cercano a 12–13 meses. <strong>Días abiertos</strong>: días entre el parto y la nueva concepción. <strong>Servicios por concepción</strong>: número promedio de servicios que necesita una vaca para preñarse. <strong>Edad al primer parto</strong>: en novillas bien manejadas ronda los 24 a 30 meses según raza y sistema. <strong>Natalidad</strong>: terneros nacidos vivos sobre vacas en edad reproductiva. <strong>Pérdidas fetales</strong>: abortos y muertes embrionarias tardías.</p>
+
+<h3>¿Por qué usamos intervalos de confianza?</h3>
+<p>En un hato pequeño, los porcentajes saltan mucho de un mes a otro. Si en 20 servicios se logran 10 preñeces (50%), el valor real de fertilidad del hato podría estar fácilmente entre 30% y 70%. El intervalo de confianza muestra ese rango de incertidumbre y el semáforo indica si la meta se cumple con evidencia (verde), claramente no se cumple (rojo) o <em>todavía no se puede concluir</em> (amarillo). Así se evita celebrar o alarmarse por variaciones normales del azar.</p>
+
+<h3>Cómo usar los resultados</h3>
+<p>Un valor fuera de la meta no es un diagnóstico: es una señal para investigar. Revisa la condición corporal al parto, la detección de celos, el momento de la inseminación, la técnica y almacenamiento del semen, el estado sanitario (brucelosis, leptospirosis, IBR, DVB) y la fertilidad del toro de repaso. Registrar los datos de cada animal de forma ordenada, mes a mes, es la mejor inversión para tomar decisiones con fundamento.</p>
+
+<h2>Valores de referencia orientativos</h2>
+<table>
+<tr><th>Parámetro</th><th>Meta orientativa</th><th>Observación</th></tr>
+<tr><td>Edad a la pubertad (novilla)</td><td>12–18 meses</td><td>Depende de peso (≈ 60–65% del adulto) y raza; cebú es más tardía</td></tr>
+<tr><td>Edad al primer servicio</td><td>18–26 meses</td><td>Por peso y condición, más que por edad</td></tr>
+<tr><td>Edad al primer parto</td><td>24–36 meses</td><td>Trópico doble propósito: 30–36 es frecuente</td></tr>
+<tr><td>Gestación</td><td>≈ 283 días (275–290)</td><td>Varía por raza y sexo de la cría</td></tr>
+<tr><td>Período seco</td><td>45–60 días</td><td>Vacas lecheras</td></tr>
+<tr><td>Intervalo entre partos</td><td>12–13 meses (≤ 400 d)</td><td>Trópico: 13–15 meses</td></tr>
+<tr><td>Días abiertos</td><td>85–120 días</td><td>Doble propósito: hasta ≈ 150 d</td></tr>
+<tr><td>Servicios por concepción</td><td>≤ 2,0</td><td>Mayor a 2,5 requiere revisión</td></tr>
+<tr><td>% concepción al servicio</td><td>≥ 50–60% (leche); 45–55% trópico</td><td>Depende de IA vs. monta</td></tr>
+<tr><td>Natalidad anual</td><td>≥ 80%</td><td>Carne extensiva: 60–75% es común</td></tr>
+<tr><td>Pérdidas fetales</td><td>≤ 5%</td><td>Abortos sobre preñeces</td></tr>
+<tr><td>Circunferencia escrotal (toro 24 m)</td><td>≥ 32–34 cm</td><td>Cebú: 1–2 cm menos</td></tr>
+</table>
+
+<h2>Preguntas frecuentes</h2>
+<details><summary>¿Cuál es un buen intervalo entre partos en bovinos?</summary><p>La meta ideal es de 12 a 13 meses. En sistemas tropicales de doble propósito es común 14 a 16 meses; cada mes adicional reduce el número de terneros y la leche por vaca al año.</p></details>
+<details><summary>¿Qué son los días abiertos?</summary><p>Los días entre el parto y la nueva concepción. En leche se busca 85–120 días; en doble propósito tropical se acepta hasta ≈ 150.</p></details>
+<details><summary>¿Cuántos animales necesito para sacar conclusiones?</summary><p>Mientras más, mejor. Con menos de 20 animales los resultados son muy inciertos; la herramienta lo advierte y por eso muestra intervalos de confianza.</p></details>
+<details><summary>¿Cuánto dura la gestación de la vaca?</summary><p>Alrededor de 283 días (275–290), con variación por raza, sexo de la cría y número de partos.</p></details>
+<details><summary>¿Son válidos los valores de referencia para mi finca?</summary><p>Son guías generales. Cada sistema productivo tiene metas distintas; edítalas libremente y consulta con tu médico veterinario.</p></details>
+</article>
+</main>
+<footer><p>HerramientasPro Colombia · Herramienta informativa y educativa. Los resultados no constituyen diagnóstico veterinario.</p></footer>
+
+<script src="js/motor-reproductivo.js"></script>
+<script src="js/interpretacion-reproductivo.js"></script>
+<script src="js/perfiles.js"></script>
+<script src="js/asistente-ia.js"></script>
+<script src="js/perfiles-reproductivo.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+// Tabs
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('on')); b.classList.add('on');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on')); $(b.dataset.p).classList.add('on');
+  if (window.gtag) gtag('event', 'repro_tab', { tab: b.dataset.p });
+});
+
+// ── Catálogo de indicadores ──
+const PROP = [
+  { id: 'conc', k: 'meta_conc', n: 'Concepción (preñez por servicio)', lx: 'Servicios que resultaron en preñez', ln: 'Servicios realizados', meta: 50, dir: 'mayor', d: 'Servicios con diagnóstico de gestación positivo / servicios totales.' },
+  { id: 'conc1', k: 'meta_conc1', n: 'Concepción al primer servicio', lx: 'Vacas preñadas al 1.er servicio', ln: 'Vacas servidas por primera vez', meta: 55, dir: 'mayor', d: 'Mide la fertilidad inicial luego del período de espera voluntario.' },
+  { id: 'nat', k: 'meta_nat', n: 'Natalidad (terneros vivos / vacas)', lx: 'Terneros nacidos vivos', ln: 'Vacas en edad reproductiva', meta: 80, dir: 'mayor', d: 'Indicador anual del hato. Vacas expuestas a servicio durante el período.' },
+  { id: 'estro', k: 'meta_estro', n: 'Eficiencia de detección de estros', lx: 'Vacas detectadas en celo', ln: 'Vacas aptas para ser detectadas', meta: 50, dir: 'mayor', d: 'Proporción de vacas elegibles en celo detectadas en un ciclo de 21 días.' },
+  { id: 'perd', k: 'meta_perd', n: 'Pérdidas fetales (abortos)', lx: 'Abortos / pérdidas', ln: 'Preñeces confirmadas', meta: 5, dir: 'menor', d: 'Proporción de preñeces que no llegan a término. Menos es mejor.' },
+  { id: 'prenez', k: 'meta_prenez', n: 'Tasa de preñez del lote', lx: 'Vacas gestantes', ln: 'Vacas del lote expuestas', meta: 70, dir: 'mayor', d: 'Vacas gestantes en la temporada de servicio sobre las expuestas.' }
+];
+const CONT = [
+  { id: 'iep', k: 'ref_iep', n: 'Intervalo entre partos', u: 'días', ref: 400, dir: 'menor', d: 'Días entre dos partos consecutivos de cada vaca.', ej: '385 410 402 450 398 520 377 415 430 392' },
+  { id: 'ab', k: 'ref_ab', n: 'Días abiertos', u: 'días', ref: 120, dir: 'menor', d: 'Días entre el parto y la concepción.', ej: '95 110 140 85 160 105 125 230 98 118' },
+  { id: 'sc', k: 'ref_sc', n: 'Servicios por concepción', u: 'servicios', ref: 2, dir: 'menor', d: 'Servicios que necesitó cada vaca preñada.', ej: '1 2 1 3 1 2 4 1 2 1' },
+  { id: 'epp', k: 'ref_epp', n: 'Edad al primer parto', u: 'meses', ref: 30, dir: 'menor', d: 'Edad de las novillas al primer parto.', ej: '28 31 33 29 36 30 27 32' },
+  { id: 'eps', k: 'ref_eps', n: 'Edad al primer servicio', u: 'meses', ref: 24, dir: 'menor', d: 'Edad de la novilla al primer servicio.', ej: '20 22 25 24 27 21 23 26' },
+  { id: 'pub', k: 'ref_pub', n: 'Edad a la pubertad', u: 'meses', ref: 16, dir: 'menor', d: 'Edad al primer celo o primera ovulación.', ej: '14 15 17 16 18 15 14 19' },
+  { id: 'ges', k: 'ref_ges', n: 'Duración de la gestación', u: 'días', ref: 283, dir: 'mayor', d: 'Días entre servicio fértil y parto (referencia ≈ 283).', ej: '281 285 279 288 283 290 282 284' },
+  { id: 'seco', k: 'ref_seco', n: 'Período seco', u: 'días', ref: 55, dir: 'mayor', d: 'Días entre secado y parto (referencia 45–60).', ej: '50 62 45 58 70 52 48 55' }
+];
+let PR;
+$('p1ind').innerHTML = PROP.map((p, i) => `<option value="${i}">${p.n}</option>`).join('');
+$('p2ind').innerHTML = CONT.map((p, i) => `<option value="${i}">${p.n}</option>`).join('');
+function setP1() { const p = PROP[$('p1ind').value]; $('p1lx').textContent = p.lx; $('p1ln').textContent = p.ln; $('p1meta').value = PR.get(p.k); $('p1desc').textContent = p.d + ' Meta ' + (p.dir === 'mayor' ? '(mayor es mejor).' : '(menor es mejor).'); }
+function setP2() { const p = CONT[$('p2ind').value]; $('p2u').textContent = p.u; $('p2ref').value = PR.get(p.k); $('p2dir').value = p.dir; $('p2desc').textContent = p.d; }
+$('p1ind').onchange = setP1; $('p2ind').onchange = setP2;
+PR = Perfiles.crear({ storageKey: 'hp_perfil_repro_bovino', catalogo: CATALOGO_REPRO, campos: CAMPOS_REPRO, porDefecto: 'general',
+  onChange: () => { setP1(); setP2(); } });
+PR.montar($('perfiles')); setP1(); setP2();
+$('p2ej').onclick = () => { $('p2datos').value = CONT[$('p2ind').value].ej; };
+
+function barra(r) {
+  const lo = Math.max(0, Math.min(r.wilson.inf, r.meta) - .05), hi = Math.min(1, Math.max(r.wilson.sup, r.meta) + .05), w = hi - lo;
+  const pos = v => ((v - lo) / w * 100).toFixed(1) + '%';
+  return `<div class="barra"><div class="ic" style="left:${pos(r.wilson.inf)};width:${((r.wilson.sup - r.wilson.inf) / w * 100).toFixed(1)}%"></div><div class="pt" style="left:${pos(r.p)}"></div><div class="mt" style="left:${pos(r.meta)}"></div></div><div class="leyenda">Barra verde: intervalo de confianza · Marca oscura: valor observado · Línea roja: meta</div>`;
+}
+function fechaFmt(iso) { const d = new Date(iso + 'T12:00:00'); return d.toLocaleDateString('es-CO', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }); }
+const CTX = {};
+const aviso = t => `<div class="aviso">${t}</div>`;
+
+// ── 1 ──
+$('p1go').onclick = () => {
+  const p = PROP[$('p1ind').value], x = +$('p1x').value, n = +$('p1n').value, meta = +$('p1meta').value / 100, conf = +$('p1conf').value;
+  if ($('p1x').value === '' || $('p1n').value === '' || !Number.isInteger(x) || !Number.isInteger(n) || n < 1 || x < 0 || x > n) { $('p1res').innerHTML = aviso('Revisa los datos: el número de animales con el evento debe ser entero y no puede superar el total.'); return; }
+  const r = MR.evaluarProporcion({ x, n, meta, direccion: p.dir, conf });
+  const e = ESTADOS[r.estado];
+  $('p1res').innerHTML = `<div class="sema ${r.estado}"><h3>${esc(p.n)} — ${e.icono} ${e.etiqueta}</h3><div class="big">${pct(r.p)}</div>
+  <div class="hint">IC ${Math.round(conf * 100)}% (Wilson): ${pct(r.wilson.inf)} – ${pct(r.wilson.sup)} · Exacto (Clopper-Pearson): ${pct(r.cp.inf)} – ${pct(r.cp.sup)}</div>${barra(r)}<p>${esc(interpretarProporcion(p.n, r))}</p></div><p class="hint">Perfil: ${esc(PR.nombre())}. ${DESCARGO}</p>`;
+  CTX.p1 = interpretarProporcion(p.n, r) + ' [Perfil de referencia: ' + PR.nombre() + ']';
+  if (window.gtag) gtag('event', 'repro_calc', { tipo: 'proporcion' });
+};
+
+// ── 2 ──
+$('p2go').onclick = () => {
+  const p = CONT[$('p2ind').value], d = MR.parsearLista($('p2datos').value);
+  if (!d || d.length < 3) { $('p2res').innerHTML = aviso('Ingresa al menos 3 valores numéricos.'); return; }
+  const ref = parseFloat($('p2ref').value), dir = $('p2dir').value;
+  const r = MR.evaluarContinuo(d, isFinite(ref) ? ref : d[0]);
+  $('p2res').innerHTML = `<table><tr><th>n</th><th>Media</th><th>Mediana</th><th>DE</th><th>CV</th><th>Mín–Máx</th><th>IC 95% media</th></tr>
+  <tr><td>${r.n}</td><td>${fR(r.media)}</td><td>${fR(r.mediana)}</td><td>${fR(r.sd)}</td><td>${fR(r.cv, 0)}%</td><td>${fR(r.min)}–${fR(r.max)}</td><td>${fR(r.ic[0])} – ${fR(r.ic[1])}</td></tr></table>
+  <div class="sema" style="margin-top:10px"><p>${esc(interpretarContinuo(p.n, p.u, r, dir, isFinite(ref) ? ref : null))}</p></div><p class="hint">${DESCARGO}</p>`;
+  CTX.p2 = interpretarContinuo(p.n, p.u, r, dir, isFinite(ref) ? ref : null) + ' [Perfil de referencia: ' + PR.nombre() + ']';
+  if (window.gtag) gtag('event', 'repro_calc', { tipo: 'continuo' });
+};
+
+// ── 3 ──
+$('p3go').onclick = () => {
+  const f = $('p3f').value; if (!f) { $('p3res').innerHTML = aviso('Selecciona la fecha del servicio.'); return; }
+  const c = MR.calendarioServicio(f, +$('p3g').value || 283, +$('p3v').value || 60);
+  const filas = [['Servicio (día 0)', c.servicio, 'Registrar toro/pajilla y condición de la vaca'], ['Diagnóstico por ecografía', c.diagnosticoEco, 'Desde el día 28–35'], ['Diagnóstico por palpación', c.diagnosticoPalpacion, 'Desde el día 45–60'], ['Repaso de gestación', c.repaso, 'Confirmar preñez / detectar pérdidas'], ['Secado (si es lechera)', c.secado, '≈ 60 días antes del parto'], ['Parto esperado', c.partoEsperado, 'Preparar lote de maternidad'], ['Primer celo posparto', c.primerCeloPosparto, 'Aproximado; vigilar involución uterina'], ['Reinicio de servicios', c.reinicioServicios, 'Fin del período de espera voluntario'], ['Meta de nueva preñez (≈ 85 d)', c.metaNuevaPrenez, 'Objetivo de IEP ≈ 12–13 meses']];
+  $('p3res').innerHTML = `<table class="cal"><tr><th>Evento</th><th>Fecha</th><th>Nota</th></tr>${filas.map(r => `<tr><td>${r[0]}</td><td>${fechaFmt(r[1])}</td><td>${r[2]}</td></tr>`).join('')}</table><p class="hint">Fechas aproximadas con gestación de ${+$('p3g').value || 283} días.</p>`;
+  CTX.p3 = 'Calendario reproductivo calculado desde el servicio del ' + f + ' con gestación de ' + (+$('p3g').value || 283) + ' días: parto esperado ' + c.partoEsperado + '; reinicio de servicios ' + c.reinicioServicios + '; meta de nueva preñez ' + c.metaNuevaPrenez + '.';
+  if (window.gtag) gtag('event', 'repro_calc', { tipo: 'calendario' });
+};
+$('p3ngo').onclick = () => {
+  const f = $('p3n').value; if (!f) { $('p3nres').innerHTML = aviso('Selecciona la fecha de nacimiento.'); return; }
+  const c = MR.calendarioNovilla(f, { edadServicioMeses: +$('p3e').value || 24 });
+  $('p3nres').innerHTML = `<table class="cal"><tr><th>Evento</th><th>Fecha</th></tr><tr><td>Pubertad (aprox. 14 meses)</td><td>${fechaFmt(c.pubertadAprox)}</td></tr><tr><td>Primer servicio</td><td>${fechaFmt(c.primerServicio)}</td></tr><tr><td>Diagnóstico de gestación</td><td>${fechaFmt(c.diagnosticoPalpacion)}</td></tr><tr><td>Primer parto esperado</td><td>${fechaFmt(c.partoEsperado)}</td></tr><tr><td>Edad al primer parto</td><td>${fR(c.edadPrimerPartoMeses)} meses</td></tr></table><p class="hint">En novillas se decide el servicio por peso (≈ 60–65% del adulto) y condición corporal, no solo por edad.</p>`;
+};
+
+// ── 4 ──
+$('p4go').onclick = () => {
+  const n = id => $(id).value === '' ? null : +$(id).value;
+  const ce = n('p4ce'), ed = n('p4e'); let m = null, s = null;
+  if (ce != null && ed != null) m = MR.evaluarMacho({ ce, edadMeses: ed, tipo: $('p4t').value, ceMin24: PR.get('ce_min24'), ceCebu: PR.get('ce_cebu') });
+  if (n('p4mo') != null || n('p4mf') != null || n('p4co') != null) s = MR.evaluarSeminal({ motilidad: n('p4mo'), morfNormal: n('p4mf'), conc: n('p4co'), limMot: PR.get('sem_mot'), limMorf: PR.get('sem_morf'), limConc: PR.get('sem_conc') });
+  if (!m && !s) { $('p4res').innerHTML = aviso('Ingresa edad y circunferencia escrotal y/o datos seminales.'); return; }
+  $('p4res').innerHTML = `<div class="sema"><p>${esc(interpretarMacho(m, s))}</p></div>`;
+  CTX.p4 = interpretarMacho(m, s) + ' [Perfil de referencia: ' + PR.nombre() + ']';
+  if (window.gtag) gtag('event', 'repro_calc', { tipo: 'macho' });
+};
+
+// ── 5 ──
+$('p5go').onclick = () => {
+  const x1 = +$('p5x1').value, n1 = +$('p5n1').value, x2 = +$('p5x2').value, n2 = +$('p5n2').value;
+  if (['p5x1','p5n1','p5x2','p5n2'].some(i => $(i).value === '') || [x1, n1, x2, n2].some(v => !Number.isInteger(v) || v < 0) || n1 < 1 || n2 < 1 || x1 > n1 || x2 > n2) { $('p5res').innerHTML = aviso('Revisa los datos: enteros, y los éxitos no pueden superar el total.'); return; }
+  const c = MR.compararProporciones(x1, n1, x2, n2);
+  $('p5res').innerHTML = `<div class="sema"><p>${esc(interpretarComparacionProp('Comparación de porcentajes', $('p5a').value, $('p5b').value, c))}</p></div>`;
+  CTX.p5a = interpretarComparacionProp('Comparación de porcentajes', $('p5a').value, $('p5b').value, c);
+  if (window.gtag) gtag('event', 'repro_calc', { tipo: 'comparar_prop' });
+};
+$('p5mgo').onclick = () => {
+  const a = MR.parsearLista($('p5d1').value), b = MR.parsearLista($('p5d2').value);
+  if (!a || !b || a.length < 3 || b.length < 3) { $('p5mres').innerHTML = aviso('Cada grupo necesita al menos 3 valores numéricos.'); return; }
+  const w = MR.welch(a, b);
+  $('p5mres').innerHTML = `<div class="sema"><p>${esc(interpretarComparacionMedias('Comparación de promedios', $('p5ma').value, $('p5mb').value, w, $('p5mu').value))}</p></div>`;
+  CTX.p5b = interpretarComparacionMedias('Comparación de promedios', $('p5ma').value, $('p5mb').value, w, $('p5mu').value);
+  if (window.gtag) gtag('event', 'repro_calc', { tipo: 'comparar_medias' });
+};
+
+// ── 6. Asistente IA ──
+const CAUSAS = {
+  conc: 'Revisa: momento de la inseminación respecto al celo, técnica y manejo del semen (cadena de frío, descongelación), condición corporal al servicio (ideal 2,75–3,25 de 5), balance energético y proteico, estrés térmico, y enfermedades reproductivas (brucelosis, leptospirosis, IBR, DVB, campylobacteriosis, tricomonosis). Compara por inseminador, toro y lote.',
+  nat: 'Revisa: porcentaje de vacas servidas y preñadas, pérdidas fetales, intervalo entre partos, mortalidad perinatal y registro de nacimientos.',
+  estro: 'Revisa: frecuencia y horas de observación (mínimo 2–3 veces al día, 20–30 min), uso de ayudas (pintura de cola, podómetros, celo sincronizado), identificación de animales y condición corporal.',
+  perd: 'Revisa: causas infecciosas (brucelosis, neosporosis, leptospirosis, IBR/DVB), micotoxinas, estrés térmico, traumatismos y momento en que ocurren las pérdidas. Conviene enviar muestras a laboratorio.',
+  dias: 'Revisa: involución uterina y metritis, balance energético negativo posparto, condición corporal, detección de celos, período de espera voluntario y salud de pezuñas/enfermedades metabólicas.',
+  edad: 'Revisa: crecimiento de las novillas (peso objetivo ≈ 60–65% del adulto al servicio), nutrición en recría, sanidad, manejo en grupos y raza (el cebú es más tardío).',
+  macho: 'Recuerda que la circunferencia escrotal se asocia con la fertilidad del toro y la precocidad de sus hijas. Un valor bajo o una calidad seminal dudosa amerita un examen andrológico completo y repetir el seminal pasadas unas semanas.',
+  comp: 'Una diferencia entre grupos puede deberse a otros factores (época, lote, inseminador, tipo de vaca). Con grupos pequeños es normal no encontrar significancia aunque la diferencia sea relevante; registra más animales.'
+};
+function reglasRepro(q, ctx) {
+  const t = q.toLowerCase(), partes = [];
+  if (/d[ií]as abiertos|iep|intervalo/.test(t)) partes.push(CAUSAS.dias);
+  else if (/concepci|pre[nñ]ez|servicio|insemin/.test(t)) partes.push(CAUSAS.conc);
+  else if (/celo|estro/.test(t)) partes.push(CAUSAS.estro);
+  else if (/aborto|p[eé]rdida/.test(t)) partes.push(CAUSAS.perd);
+  else if (/natalidad|terneros/.test(t)) partes.push(CAUSAS.nat);
+  else if (/edad|novilla|pubertad|primer parto/.test(t)) partes.push(CAUSAS.edad);
+  else if (/toro|macho|escrotal|seminal|semen/.test(t)) partes.push(CAUSAS.macho);
+  else if (/compar|diferenc|grupo|lote/.test(t)) partes.push(CAUSAS.comp);
+  else partes.push('Tus resultados más recientes, resumidos:\n' + ctx.split('\n\n').map(x => '• ' + x).join('\n'));
+  partes.push('Muestras pequeñas (menos de 20–30 animales) dan resultados inciertos: apóyate en el intervalo de confianza y no solo en el porcentaje. Este es un modo básico sin IA; consulta con tu médico veterinario.');
+  return partes.join('\n\n');
+}
+const SISTEMA_IA = 'Eres un asistente de apoyo para médicos veterinarios y ganaderos colombianos, especializado en reproducción bovina. Responde en español claro y breve (máx. 250 palabras). REGLAS: (1) Basa tus respuestas SOLO en los resultados que te entrega la herramienta; no inventes cifras ni recalcules estadísticos. (2) Explica qué significan los intervalos de confianza y el semáforo cuando sea útil, y advierte si la muestra es pequeña. (3) Ofrece hipótesis de manejo y qué revisar, sin emitir diagnósticos ni recetar tratamientos o dosis. (4) Si falta información para responder, dilo y pregunta qué dato se necesita. (5) Recuerda que las metas son orientativas según el perfil elegido y que la decisión clínica es del médico veterinario.';
+const IA = AsistenteIA.crear({
+  contenedor: $('ia'), storageKey: 'hp_ia_repro', endpoint: '', cupoDiario: 5, sistema: SISTEMA_IA,
+  obtenerContexto: () => Object.values(CTX).join('\n\n'),
+  sugerencias: ['¿Qué debería revisar primero?', '¿Qué significan estos intervalos?', '¿Mi muestra es suficiente?', '¿Qué podría explicar estos resultados?'],
+  reglas: reglasRepro
+});
+IA.montar();
+document.querySelector('[data-p=p6]').addEventListener('click', () => IA.refrescar());
+</script>
+</body>
+</html>
