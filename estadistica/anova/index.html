@@ -128,6 +128,7 @@
   .pmat td, .pmat th { text-align:center; } .pmat td.s { background:rgba(255,107,107,.18); color:var(--accent3); } .pmat td.n { color:var(--text3); }
   .layout > *, .context-grid > * { min-width:0; } main { min-width:0; }
   @media (max-width:700px){ header{padding:1rem} main{padding:1rem} nav.breadcrumb{padding:10px 1rem 0} .resultado-grid.c4{grid-template-columns:1fr 1fr} }
+  .paso { background:var(--bg3); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:8px; padding:.8rem 1rem; margin-bottom:.7rem; font-size:.82rem; color:var(--text2); line-height:1.75; } .paso b { color:var(--text); } .paso .tabla-an { margin-bottom:.4rem; }
 </style>
 <style id="edu-pro-css">
 .edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
@@ -482,27 +483,47 @@ function postPot(solo) {
 // ── No paramétrico / robusto ──
 
 function procKW() {
-  const kw = R.kw, A = R.A, N = A.N, todos = [].concat(...R.grupos), rk = MV.rankAvg(todos).r;
-  let pos = 0; const rangos = R.grupos.map(g => g.map(() => rk[pos++]));
-  const filas = R.grupos.map((g, i) => `<tr><td class="l">${esc(R.nombres[i])}</td><td class="l" style="font-family:'Space Mono',monospace">${g.map((v, j) => `${tn(v, 2)}<sub>(${tn(rangos[i][j], 1)})</sub>`).join(' · ')}</td><td>${A.n[i]}</td><td>${tn(kw.sumaRangos[i], 1)}</td><td>${tn(kw.rangosMedios[i], 2)}</td></tr>`).join('');
-  const sumaTerm = kw.sumaRangos.map((Ri, i) => `${tn(Ri, 1)}²/${A.n[i]}`).join(' + ');
-  const Hs = 12 / (N * (N + 1)) * kw.sumaRangos.reduce((s, Ri, i) => s + Ri * Ri / A.n[i], 0) - 3 * (N + 1);
-  const tc = kw.ties.reduce((s, t) => s + t * t * t - t, 0), C = 1 - tc / (N * N * N - N);
-  return `<h3 style="margin-top:1.4rem">Procedimiento paso a paso de Kruskal-Wallis</h3>
-    <ol class="proc" style="margin:.4rem 0 .8rem 1.2rem;font-size:.82rem;color:var(--text2);line-height:1.7">
-      <li><strong>Hipótesis.</strong> H₀: todos los tratamientos tienen la misma distribución (no hay tendencia a valores mayores en ninguno). H₁: al menos uno tiende a dar valores distintos.</li>
-      <li><strong>Ordenar y asignar rangos.</strong> Se juntan los N = ${N} datos, se ordenan de menor a mayor y se asigna rango 1, 2, …, N. Si hay empates se usa el promedio de los rangos (${kw.ties.length ? 'en tus datos hay ' + kw.ties.length + ' grupo(s) de empates' : 'en tus datos no hay empates'}). Abajo, cada dato con su rango entre paréntesis.</li>
-      <li><strong>Sumar los rangos de cada tratamiento</strong> (Rᵢ) y calcular su rango medio.</li>
-      <li><strong>Calcular el estadístico H:</strong> H = 12 / [N(N+1)] · Σ(Rᵢ²/nᵢ) − 3(N+1).<br>
-        <span style="font-family:'Space Mono',monospace;font-size:.76rem;color:var(--text)">H = 12 / (${N}·${N + 1}) · (${sumaTerm}) − 3·${N + 1} = ${tn(Hs, 4)}</span></li>
-      <li><strong>Corrección por empates:</strong> C = 1 − Σ(t³ − t) / (N³ − N) = ${tn(C, 4)}${kw.ties.length ? '' : ' (sin empates, C = 1)'}; H corregido = H / C = <strong>${tn(kw.H, 4)}</strong>.</li>
-      <li><strong>Valor p.</strong> H se compara con una distribución χ² con k − 1 = ${kw.df} grados de libertad: p = <strong>${tp(kw.p)}</strong>.</li>
-      <li><strong>Decisión (α = ${tn(R.alpha, 2)}).</strong> ${kw.p < R.alpha ? 'Como p < α se rechaza H₀: al menos un tratamiento difiere.' : 'Como p ≥ α no se rechaza H₀: no hay evidencia de diferencias.'} Tamaño del efecto: ε² = ${tn(kw.epsilon2, 3)} (proporción de variación en los rangos explicada por el tratamiento).</li>
-      <li><strong>Comparaciones por pares (Dunn).</strong> Solo si H₀ se rechaza: z = (R̄ᵢ − R̄ⱼ) / √[σ²(1/nᵢ + 1/nⱼ)], con σ² = N(N+1)/12 − Σ(t³−t)/[12(N−1)]; los p se ajustan con Holm para controlar el error global. Resultados en la tabla de Dunn de arriba.</li>
-    </ol>
-    <div class="tw"><table class="tabla-an"><thead><tr><th class="l">Tratamiento</th><th class="l">Datos (rango)</th><th>nᵢ</th><th>Suma de rangos Rᵢ</th><th>Rango medio</th></tr></thead><tbody>${filas}
-      <tr><td class="l"><strong>Total</strong></td><td></td><td>${N}</td><td>${tn(N * (N + 1) / 2, 1)}</td><td></td></tr></tbody></table></div>
-    <p class="nota">Comprobación: la suma de todos los rangos debe ser N(N+1)/2 = ${tn(N * (N + 1) / 2, 1)}.</p>`;
+  const kw = R.kw, A = R.A, N = A.N, k = A.k, a = R.alpha, nom = R.nombres;
+  const todos = [], etq = []; R.grupos.forEach((g, i) => g.forEach(v => { todos.push(v); etq.push(i); }));
+  const rk = MV.rankAvg(todos).r;
+  const orden = todos.map((v, i) => i).sort((x, y) => todos[x] - todos[y] || x - y);
+  const filasOrd = orden.map((ix, pos) => `<tr><td>${pos + 1}</td><td>${tn(todos[ix], 2)}</td><td class="l">${esc(nom[etq[ix]])}</td><td><strong>${tn(rk[ix], 1)}</strong></td></tr>`).join('');
+  const rangosG = R.grupos.map(() => []); todos.forEach((v, i) => rangosG[etq[i]].push(rk[i]));
+  const sumas = rangosG.map(r => r.reduce((x, y) => x + y, 0));
+  const filasR = nom.map((n, i) => `<tr><td class="l">${esc(n)}</td><td class="l" style="font-family:'Space Mono',monospace;font-size:.74rem">${rangosG[i].map(v => tn(v, 1)).join(' + ')}</td><td>${A.n[i]}</td><td><strong>${tn(sumas[i], 1)}</strong></td><td>${tn(sumas[i] / A.n[i], 2)}</td></tr>`).join('');
+  const total = N * (N + 1) / 2, sumaTerm = sumas.map((Ri, i) => `${tn(Ri, 1)}²/${A.n[i]}`).join(' + '), sumaVal = sumas.map((Ri, i) => tn(Ri * Ri / A.n[i], 3)).join(' + ');
+  const sumaNum = sumas.reduce((s2, Ri, i) => s2 + Ri * Ri / A.n[i], 0), Hs = 12 / (N * (N + 1)) * sumaNum - 3 * (N + 1);
+  const tc = kw.ties.reduce((s2, t) => s2 + t * t * t - t, 0), C = 1 - tc / (N * N * N - N);
+  let lo = 0, hi = 500; for (let t = 0; t < 100; t++) { const m = (lo + hi) / 2; if (MV.chi2SF(m, kw.df) > a) lo = m; else hi = m; } const crit = (lo + hi) / 2;
+  const rech = kw.H > crit, ties = kw.ties.length ? kw.ties.map(t => `${t} datos empatados`).join(', ') : 'no hay empates';
+  const tcTxt = kw.ties.length ? kw.ties.map(t => `(${t}³ − ${t})`).join(' + ') + ' = ' + tc : '0';
+  let h = `<h3 style="margin-top:1.2rem">Solución manual paso a paso — Kruskal-Wallis</h3>
+    <p class="nota">Así se resolvería a mano el ejercicio con tus datos (k = ${k} tratamientos, N = ${N} observaciones, α = ${tn(a, 2)}).</p>
+    <div class="paso"><b>Paso 1. Planteamiento de hipótesis</b><br>H₀: las ${k} poblaciones tienen la misma distribución (las medianas son iguales).<br>H₁: al menos un tratamiento tiene una distribución desplazada (mediana distinta).</div>
+    <div class="paso"><b>Paso 2. Ordenar todos los datos juntos y asignar rangos</b><br>Se mezclan los ${N} datos y se ordenan de menor a mayor. Al menor le corresponde el rango 1. En empates se promedian los rangos (${ties}).
+      <div class="tw" style="max-height:280px;overflow-y:auto;margin-top:.5rem"><table class="tabla-an"><thead><tr><th>Posición</th><th>Dato</th><th class="l">Tratamiento</th><th>Rango</th></tr></thead><tbody>${filasOrd}</tbody></table></div></div>
+    <div class="paso"><b>Paso 3. Sumar los rangos de cada tratamiento (Rᵢ)</b>
+      <div class="tw" style="margin-top:.5rem"><table class="tabla-an"><thead><tr><th class="l">Tratamiento</th><th class="l">Rangos</th><th>nᵢ</th><th>Rᵢ</th><th>R̄ᵢ = Rᵢ/nᵢ</th></tr></thead><tbody>${filasR}<tr><td class="l"><strong>Total</strong></td><td></td><td>${N}</td><td><strong>${tn(sumas.reduce((x, y) => x + y, 0), 1)}</strong></td><td></td></tr></tbody></table></div>
+      Comprobación: N(N+1)/2 = ${N}·${N + 1}/2 = ${tn(total, 1)} ✓</div>
+    <div class="paso"><b>Paso 4. Calcular el estadístico H</b><br>H = [12 / (N(N+1))] · Σ(Rᵢ²/nᵢ) − 3(N+1)<br>
+      Σ(Rᵢ²/nᵢ) = ${sumaTerm}<br>Σ(Rᵢ²/nᵢ) = ${sumaVal} = ${tn(sumaNum, 3)}<br>
+      H = [12 / (${N}·${N + 1})] · ${tn(sumaNum, 3)} − 3·${N + 1} = ${tn(12 / (N * (N + 1)), 5)} · ${tn(sumaNum, 3)} − ${3 * (N + 1)} = <strong>${tn(Hs, 4)}</strong></div>
+    <div class="paso"><b>Paso 5. Corrección por empates</b><br>C = 1 − Σ(t³ − t) / (N³ − N) = 1 − (${tcTxt}) / (${N}³ − ${N}) = ${tn(C, 5)}<br>H corregido = H / C = ${tn(Hs, 4)} / ${tn(C, 5)} = <strong>${tn(kw.H, 4)}</strong>${kw.ties.length ? '' : ' (sin empates la corrección no cambia H)'}</div>
+    <div class="paso"><b>Paso 6. Valor crítico y valor p</b><br>Con k − 1 = ${kw.df} grados de libertad, la distribución χ² da un valor crítico χ²(${tn(1 - a, 2)}; ${kw.df}) = <strong>${tn(crit, 3)}</strong>.<br>Valor p = P(χ²₍${kw.df}₎ ≥ ${tn(kw.H, 4)}) = <strong>${tp(kw.p)}</strong></div>
+    <div class="paso"><b>Paso 7. Decisión</b><br>Regla: se rechaza H₀ si H ≥ χ² crítico (o si p &lt; α).<br>${tn(kw.H, 3)} ${rech ? '≥' : '&lt;'} ${tn(crit, 3)} y p ${rech ? '&lt;' : '≥'} ${tn(a, 2)} → <strong style="color:${rech ? 'var(--accent3)' : 'var(--accent4)'}">${rech ? 'SE RECHAZA H₀' : 'NO SE RECHAZA H₀'}</strong>.</div>
+    <div class="paso"><b>Paso 8. Conclusión</b><br>${rech ? 'Con un nivel de significancia de ' + tn(a, 2) + ' hay evidencia de que al menos un tratamiento tiene una distribución distinta de los demás. Para saber cuáles, se aplican las comparaciones por pares de Dunn (siguiente paso).' : 'Con un nivel de significancia de ' + tn(a, 2) + ' no hay evidencia suficiente para afirmar que los tratamientos difieren; no se hacen comparaciones por pares.'} Tamaño del efecto ε² = H/((N²−1)/(N+1)) = ${tn(kw.epsilon2, 3)}.</div>`;
+  if (rech) {
+    const d = R.dunn, sigma2 = N * (N + 1) / 12 - tc / (12 * (N - 1)), m = d.pares.length;
+    const ord = d.pares.map((c, ix) => ix).sort((x, y) => d.pares[x].pCrudo - d.pares[y].pCrudo);
+    const filasD = d.pares.map(c => { const se = Math.sqrt(sigma2 * (1 / A.n[c.i] + 1 / A.n[c.j])); return `<tr><td class="l">${esc(nom[c.i])} − ${esc(nom[c.j])}</td><td>${tn(sumas[c.i] / A.n[c.i], 2)} − ${tn(sumas[c.j] / A.n[c.j], 2)} = ${tn(c.diff, 2)}</td><td>${tn(se, 3)}</td><td>${tn(c.z, 3)}</td><td>${tp(c.pCrudo)}</td></tr>`; }).join('');
+    const filasH = ord.map((ix, r) => { const c = d.pares[ix], u = a / (m - r); return `<tr class="${c.sig ? 'sig' : 'no-sig'}"><td>${r + 1}</td><td class="l">${esc(nom[c.i])} − ${esc(nom[c.j])}</td><td>${tp(c.pCrudo)}</td><td>${tp(Math.min(1, u))}</td><td>${tp(c.p)}</td><td>${sigTxt(c.sig)}</td></tr>`; }).join('');
+    h += `<div class="paso"><b>Paso 9. Comparaciones por pares (prueba de Dunn con ajuste de Holm)</b><br>Varianza de los rangos: σ² = N(N+1)/12 − Σ(t³−t)/[12(N−1)] = ${N}·${N + 1}/12 − ${tc}/(12·${N - 1}) = ${tn(sigma2, 4)}<br>Para cada par: z = (R̄ᵢ − R̄ⱼ) / √[σ²·(1/nᵢ + 1/nⱼ)]
+      <div class="tw" style="margin-top:.5rem"><table class="tabla-an"><thead><tr><th class="l">Par</th><th>R̄ᵢ − R̄ⱼ</th><th>Error estándar</th><th>z</th><th>p (2 colas)</th></tr></thead><tbody>${filasD}</tbody></table></div>
+      Ajuste de Holm: se ordenan los ${m} valores p de menor a mayor y el de posición r se compara con α/(${m} − r + 1):
+      <div class="tw" style="margin-top:.5rem"><table class="tabla-an"><thead><tr><th>r</th><th class="l">Par</th><th>p crudo</th><th>α/(m−r+1)</th><th>p ajustado</th><th>Conclusión</th></tr></thead><tbody>${filasH}</tbody></table></div>
+      Los tratamientos que comparten letra no difieren: ${nom.map((n, i) => esc(n) + ' = <span class="letra">' + d.letras[i] + '</span>').join(' &nbsp; ')}</div>`;
+  }
+  return h;
 }
 
 function tabNP() {
@@ -515,7 +536,8 @@ function tabNP() {
     <div class="chart-titulo">¿Coinciden los tres enfoques?</div>
     <div class="tw"><table class="tabla-an"><thead><tr><th class="l">Prueba global</th><th>p</th><th>Conclusión (α = ${tn(a, 2)})</th></tr></thead><tbody>${conc}</tbody></table></div>
     <p class="nota">Si las tres pruebas coinciden, la conclusión es sólida sin importar los supuestos. Si discrepan, guíate por la ruta recomendada arriba.</p>
-    <h3 style="margin-top:1rem">Kruskal-Wallis (basado en rangos)</h3>
+    ${procKW()}
+    <h3 style="margin-top:1.4rem">Resumen de Kruskal-Wallis (resultado del software)</h3>
     <div class="resultado-grid"><div class="resultado-card"><div class="lbl">H (con corrección por empates)</div><div class="val">${tn(kw.H)}</div></div><div class="resultado-card"><div class="lbl">gl</div><div class="val">${kw.df}</div></div><div class="resultado-card"><div class="lbl">Valor-p</div><div class="val">${tp(kw.p)}</div></div></div>
     <div class="tw"><table class="tabla-an"><thead><tr><th class="l">Tratamiento</th><th>n</th><th>Mediana</th><th>Rango medio</th><th>Grupo (Dunn)</th></tr></thead><tbody>${rm}</tbody></table></div>
     <div class="chart-titulo">Comparaciones de Dunn (ajuste de Holm)</div>
@@ -525,7 +547,6 @@ function tabNP() {
     <div class="chart-titulo">Comparaciones de Games-Howell (no asumen varianzas iguales)</div>
     <div class="tw"><table class="tabla-an"><thead><tr><th class="l">Par</th><th>Diferencia</th><th>EE</th><th>gl</th><th>p</th><th>Conclusión</th></tr></thead><tbody>${rg}</tbody></table></div>
     <p class="nota">Letras Games-Howell: ${R.nombres.map((n, i) => esc(n) + ' = <span class="letra">' + g.letras[i] + '</span>').join(' &nbsp; ')}</p>` : '<p class="nota aviso">Welch y Games-Howell requieren variabilidad dentro de cada tratamiento.</p>'}
-    ${procKW()}
     <p class="nota">Kruskal-Wallis contrasta si los tratamientos tienen distribuciones desplazadas; asume formas parecidas. No es una prueba de medias sino de rangos (tendencia a valores mayores).</p>`;
 }
 
