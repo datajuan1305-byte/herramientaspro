@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Parámetros Reproductivos Bovinos: Calculadora para Hatos de Leche y Carne | HerramientasPro</title>
-<meta name="description" content="Calcula y evalúa parámetros reproductivos del hato bovino: % de concepción, intervalo entre partos, días abiertos, edad al primer parto, calendario reproductivo y evaluación de toros, con intervalos de confianza y pruebas estadísticas. Gratis.">
+<meta name="description" content="Gestiona y analiza la reproducción de tu hato bovino: importa Excel, calcula % de concepción, días abiertos e intervalo entre partos con intervalos de confianza, gráficas, alertas por vaca y comparación entre lotes y toros. Gratis, sin registro.">
 <link rel="canonical" href="https://herramientaspro.com.co/veterinaria/parametros-reproductivos/">
 <meta property="og:title" content="Parámetros Reproductivos Bovinos – Calculadora para veterinarios y ganaderos">
 <meta property="og:description" content="Indicadores reproductivos con semáforo estadístico, calendario de servicio y evaluación de toros. Gratis y sin registro.">
@@ -71,6 +71,13 @@ table{border-collapse:collapse;width:100%;font-size:.88rem}
 th,td{border:1px solid var(--linea);padding:7px 9px;text-align:left}th{background:var(--verde-cl)}
 .cal td:first-child{font-weight:600;white-space:nowrap}
 .hint{font-size:.8rem;color:var(--gris)}
+.chart-box{position:relative;height:400px;background:#fff}
+.sep-tab{align-self:center;font-size:.78rem;color:var(--gris);padding:0 4px}
+button:disabled{opacity:.4;cursor:not-allowed}
+.sub{font-size:.95rem;color:var(--verde-os);margin:14px 0 6px}
+.btn-file{display:inline-block;background:var(--verde);color:#fff;padding:10px 18px;border-radius:8px;font-weight:600;cursor:pointer}
+.btn-file:hover{background:var(--verde-os)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
 .aviso{background:#fdecea;border:1px solid #efb4ad;border-radius:8px;padding:8px 12px;color:#7a251c;font-size:.88rem;margin-top:8px}
 .edu h2{margin-top:22px;color:var(--verde-os);font-size:1.2rem}
 .edu h3{color:var(--ink);font-size:1rem;margin:16px 0 4px}
@@ -85,23 +92,112 @@ footer{max-width:1000px;margin:0 auto;padding:0 16px 40px;font-size:.8rem;color:
 
 <main>
 <h1>🐄 Parámetros Reproductivos Bovinos</h1>
-<p class="lead">Evalúa la eficiencia reproductiva de tu hato: calcula indicadores, compáralos con metas, genera el calendario reproductivo y valora toros. Con respaldo estadístico para saber si una diferencia es real o producto del azar.</p>
+<p class="lead">Registra o importa los partos, servicios y diagnósticos de tu hato y obtén al instante indicadores con semáforo estadístico, gráficas, alertas por animal y comparaciones entre lotes, razas o toros. También incluye calculadoras rápidas, calendario reproductivo y evaluación de toros.</p>
 
 <div class="disclaimer"><strong>Importante:</strong> Los valores de referencia son orientativos y varían según raza, sistema productivo (leche, carne, doble propósito), clima y manejo; puedes modificarlos en cada cálculo. Esta herramienta apoya, pero no reemplaza, el criterio del médico veterinario zootecnista.</div>
 
-<div class="card"><h2>⚙️ Perfil de referencia</h2><div id="perfiles"></div></div>
+<details class="card" id="perfil-det"><summary style="cursor:pointer;font-weight:700;color:var(--verde-os)">⚙️ Perfil de referencia: metas y valores de comparación <span class="hint" style="font-weight:400">(clic para cambiar según tu sistema productivo)</span></summary><div id="perfiles" style="margin-top:12px"></div></details>
 
 <div class="tabs" id="tabs">
-  <button class="tab on" data-p="p1">📊 Indicadores del hato</button>
-  <button class="tab" data-p="p2">📏 Variables en días / meses</button>
-  <button class="tab" data-p="p3">📅 Calendario reproductivo</button>
-  <button class="tab" data-p="p4">🐂 Evaluación del macho</button>
-  <button class="tab" data-p="p5">⚖️ Comparar grupos</button>
+  <button class="tab on" data-p="p7">🗂 Mi hato</button>
+  <button class="tab" data-p="p8">📊 Resumen del hato</button>
+  <button class="tab" data-p="p9">📈 Gráficas</button>
+  <button class="tab" data-p="p10">🔔 Alertas</button>
+  <span class="sep-tab">| Cálculos rápidos:</span>
+  <button class="tab" data-p="p1">Indicadores</button>
+  <button class="tab" data-p="p2">Variables</button>
+  <button class="tab" data-p="p3">📅 Calendario</button>
+  <button class="tab" data-p="p4">🐂 Macho</button>
+  <button class="tab" data-p="p5">⚖️ Comparar</button>
+  <span class="sep-tab">|</span>
   <button class="tab" data-p="p6">🤖 Asistente IA</button>
 </div>
 
+
+<!-- ═══ 7. MI HATO ═══ -->
+<section class="panel on" id="p7">
+  <div class="card">
+    <h2>🗂 Mi hato</h2>
+    <div class="row" style="align-items:end">
+      <div><label>Hato / finca</label><select id="h_sel"></select></div>
+      <div><button class="sec" id="h_nuevo">➕ Nuevo hato</button></div>
+      <div><button class="sec" id="h_del">🗑 Eliminar / vaciar hato</button></div>
+    </div>
+    <p class="hint" id="h_info"></p>
+    <div class="aviso" id="h_aviso" style="display:none"></div>
+    <div id="h_vacio" style="background:#eef7f3;border:1px dashed var(--verde);border-radius:10px;padding:14px;margin:8px 0">
+      <strong>Empieza aquí.</strong> Para analizar un hato completo carga una tabla con tus animales y sus eventos reproductivos (partos, servicios, diagnósticos). Puedes importar un Excel/CSV, registrar animal por animal, o probar con un hato de ejemplo simulado.
+    </div>
+    <div class="chips">
+      <label class="btn-file" for="h_file">📂 Importar Excel / CSV</label><input type="file" id="h_file" accept=".xlsx,.xls,.csv,.txt" style="display:none">
+      <button class="sec" id="h_plantilla">📄 Descargar plantilla Excel</button>
+      <button class="sec" id="h_ejemplo">🧪 Cargar hato de ejemplo (simulado)</button>
+      <button class="sec" id="h_xls">⬇ Exportar hato (Excel)</button>
+      <button class="sec" id="h_csv">⬇ Exportar eventos (CSV)</button>
+    </div>
+    <div id="h_import"></div>
+    <p class="hint">🔒 Privacidad: los datos de tus animales se guardan <strong>solo en este navegador</strong>; no se envían a ningún servidor (salvo lo que tú decidas preguntar al asistente de IA). Si limpias el navegador o cambias de equipo se pierden: usa «Exportar hato» para tener tu respaldo.</p>
+  </div>
+
+  <div class="card">
+    <h2>➕ Registrar animales y eventos</h2>
+    <h3 class="sub">Nuevo animal</h3>
+    <div class="row">
+      <div><label>Identificación*</label><input id="a_id" placeholder="Ej: V025"></div>
+      <div><label>Raza</label><input id="a_raza"></div>
+      <div><label>Lote</label><input id="a_lote" placeholder="Ej: Lote A"></div>
+      <div><label>Fecha de nacimiento</label><input id="a_nac" type="date"></div>
+    </div>
+    <button class="go" id="a_add">Agregar animal</button> <span class="hint" id="a_msg"></span>
+    <h3 class="sub">Nuevo evento reproductivo</h3>
+    <div class="row">
+      <div><label>Animal*</label><input id="e_animal" list="h_dl" placeholder="Id del animal"><datalist id="h_dl"></datalist></div>
+      <div><label>Fecha*</label><input id="e_fecha" type="date"></div>
+      <div><label>Evento</label><select id="e_tipo"><option value="servicio">Servicio (monta / IA)</option><option value="dx_pos">Diagnóstico de gestación positivo</option><option value="dx_neg">Diagnóstico negativo (vacía)</option><option value="parto">Parto</option><option value="aborto">Aborto</option><option value="secado">Secado</option><option value="celo">Celo</option><option value="baja">Baja (venta / muerte)</option></select></div>
+      <div><label>Toro / pajilla (servicio)</label><input id="e_toro"></div>
+      <div><label>Tipo de servicio</label><select id="e_ts"><option value="">—</option><option>IA</option><option>Monta</option><option>Transferencia de embriones</option></select></div>
+    </div>
+    <button class="go" id="e_add">Registrar evento</button> <span class="hint" id="e_msg"></span>
+  </div>
+
+  <div class="card">
+    <h2>🐄 Animales del hato</h2>
+    <div class="row" style="grid-template-columns:2fr 1fr"><div><label>Buscar (id, lote, raza)</label><input id="h_q"></div><div><label>Estado</label><select id="h_est"></select></div></div>
+    <div id="h_tabla"></div>
+  </div>
+  <div id="h_detalle"></div>
+</section>
+
+<!-- ═══ 8. RESUMEN ═══ -->
+<section class="panel" id="p8">
+  <div class="card"><h2>📊 Resumen de indicadores del hato</h2>
+    <div class="filtros-hato"></div>
+    <div id="r_cuerpo"></div>
+  </div>
+</section>
+
+<!-- ═══ 9. GRÁFICAS ═══ -->
+<section class="panel" id="p9">
+  <div class="card"><h2>📈 Gráficas de indicadores</h2>
+    <div class="filtros-hato"></div>
+    <div class="row" style="grid-template-columns:2fr 1fr;align-items:end"><div><label>Gráfica</label><select id="g_sel"></select></div><div><button class="sec" id="g_png">⬇ Descargar imagen (PNG)</button></div></div>
+    <div class="row" id="g_grupos" style="display:none"><div><label>Indicador</label><select id="g_ind"></select></div><div><label>Agrupar por</label><select id="g_por"></select></div></div>
+    <div id="g_msg"></div>
+    <div class="chart-box" id="g_caja"><canvas id="g_canvas"></canvas></div>
+    <div class="sema" id="g_nota" style="margin-top:12px;border-left-color:var(--verde)"></div>
+  </div>
+</section>
+
+<!-- ═══ 10. ALERTAS ═══ -->
+<section class="panel" id="p10">
+  <div class="card"><h2>🔔 Alertas y lista de trabajo</h2>
+    <div class="filtros-hato"></div>
+    <div id="al_cuerpo"></div>
+  </div>
+</section>
+
 <!-- ═══ 1. PROPORCIONES ═══ -->
-<section class="panel on" id="p1">
+<section class="panel" id="p1">
   <div class="card">
     <h2>Indicadores expresados como porcentaje</h2>
     <div class="row">
@@ -113,7 +209,7 @@ footer{max-width:1000px;margin:0 auto;padding:0 16px 40px;font-size:.8rem;color:
       <div><label>Confianza</label><select id="p1conf"><option value="0.90">90%</option><option value="0.95" selected>95%</option><option value="0.99">99%</option></select></div>
     </div>
     <p class="hint" id="p1desc"></p>
-    <button class="go" id="p1go">Evaluar</button>
+    <button class="go" id="p1go">Evaluar</button> <button class="sec" id="p1hato">📥 Tomar del hato</button> <span class="hint" id="p1hmsg"></span>
     <div class="res" id="p1res"></div>
   </div>
 </section>
@@ -130,7 +226,7 @@ footer{max-width:1000px;margin:0 auto;padding:0 16px 40px;font-size:.8rem;color:
     <label>Datos por animal (separados por espacio, coma o salto de línea)</label>
     <textarea id="p2datos" placeholder="Ej: 385 410 402 450 398 520 377 415"></textarea>
     <p class="hint" id="p2desc"></p>
-    <button class="sec" id="p2ej">Cargar ejemplo</button> <button class="go" id="p2go">Analizar</button>
+    <button class="sec" id="p2hato">📥 Tomar del hato</button> <span class="hint" id="p2hmsg"></span> <button class="sec" id="p2ej">Cargar ejemplo</button> <button class="go" id="p2go">Analizar</button>
     <div class="res" id="p2res"></div>
   </div>
 </section>
@@ -230,6 +326,12 @@ footer{max-width:1000px;margin:0 auto;padding:0 16px 40px;font-size:.8rem;color:
 <h3>Cómo usar los resultados</h3>
 <p>Un valor fuera de la meta no es un diagnóstico: es una señal para investigar. Revisa la condición corporal al parto, la detección de celos, el momento de la inseminación, la técnica y almacenamiento del semen, el estado sanitario (brucelosis, leptospirosis, IBR, DVB) y la fertilidad del toro de repaso. Registrar los datos de cada animal de forma ordenada, mes a mes, es la mejor inversión para tomar decisiones con fundamento.</p>
 
+<h2>Cómo llevar el registro reproductivo de un hato</h2>
+<p>La base de todo análisis es una tabla con <strong>una fila por evento</strong>: el animal, la fecha y qué ocurrió (servicio, diagnóstico de gestación positivo o negativo, parto, aborto, secado, baja). Con esos pocos datos se calculan solos los días abiertos, el intervalo entre partos, los servicios por concepción, la edad al primer parto y el porcentaje de concepción. Si además anotas el toro o la pajilla, el tipo de servicio, el lote y la raza, puedes comparar grupos y encontrar dónde está el problema.</p>
+<h3>Cómo leer las gráficas</h3>
+<p>El <strong>histograma de días abiertos</strong> muestra si el problema está en todo el hato o en unas pocas vacas muy rezagadas. La <strong>curva de preñez posparto</strong> indica qué porcentaje de las vacas queda gestante a los 100, 150 o 200 días; una curva que se aplana temprano revela un grupo que no concibe. El <strong>porcentaje de concepción por mes</strong> se acompaña de su intervalo de confianza: con pocos servicios por mes, la variación es normal y solo importan las tendencias sostenidas. Al <strong>comparar lotes, razas o toros</strong>, las pruebas estadísticas indican si la diferencia observada es probablemente real o puede deberse al azar.</p>
+<h3>Tus datos son tuyos</h3>
+<p>El hato se guarda únicamente en tu navegador y puedes exportarlo en Excel cuando quieras. Si limpias el navegador o cambias de computador, importa de nuevo tu archivo.</p>
 <h2>Valores de referencia orientativos</h2>
 <table>
 <tr><th>Parámetro</th><th>Meta orientativa</th><th>Observación</th></tr>
@@ -257,10 +359,15 @@ footer{max-width:1000px;margin:0 auto;padding:0 16px 40px;font-size:.8rem;color:
 </main>
 <footer><p>HerramientasPro Colombia · Herramienta informativa y educativa. Los resultados no constituyen diagnóstico veterinario.</p></footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="js/motor-reproductivo.js"></script>
 <script src="js/interpretacion-reproductivo.js"></script>
 <script src="js/perfiles.js"></script>
 <script src="js/asistente-ia.js"></script>
+<script src="js/motor-hato.js"></script>
+<script src="js/hato-ui.js"></script>
+<script src="js/hato-graficas.js"></script>
 <script src="js/perfiles-reproductivo.js"></script>
 <script>
 const $ = id => document.getElementById(id);
@@ -299,8 +406,9 @@ function setP1() { const p = PROP[$('p1ind').value]; $('p1lx').textContent = p.l
 function setP2() { const p = CONT[$('p2ind').value]; $('p2u').textContent = p.u; $('p2ref').value = PR.get(p.k); $('p2dir').value = p.dir; $('p2desc').textContent = p.d; }
 $('p1ind').onchange = setP1; $('p2ind').onchange = setP2;
 PR = Perfiles.crear({ storageKey: 'hp_perfil_repro_bovino', catalogo: CATALOGO_REPRO, campos: CAMPOS_REPRO, porDefecto: 'general',
-  onChange: () => { setP1(); setP2(); } });
+  onChange: () => { setP1(); setP2(); if (typeof HATO !== 'undefined' && HATO.recalcular) HATO.recalcular(); } });
 PR.montar($('perfiles')); setP1(); setP2();
+const CTX = {};
 $('p2ej').onclick = () => { $('p2datos').value = CONT[$('p2ind').value].ej; };
 
 function barra(r) {
@@ -309,7 +417,6 @@ function barra(r) {
   return `<div class="barra"><div class="ic" style="left:${pos(r.wilson.inf)};width:${((r.wilson.sup - r.wilson.inf) / w * 100).toFixed(1)}%"></div><div class="pt" style="left:${pos(r.p)}"></div><div class="mt" style="left:${pos(r.meta)}"></div></div><div class="leyenda">Barra verde: intervalo de confianza · Marca oscura: valor observado · Línea roja: meta</div>`;
 }
 function fechaFmt(iso) { const d = new Date(iso + 'T12:00:00'); return d.toLocaleDateString('es-CO', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }); }
-const CTX = {};
 const aviso = t => `<div class="aviso">${t}</div>`;
 
 // ── 1 ──
@@ -416,6 +523,24 @@ const IA = AsistenteIA.crear({
 });
 IA.montar();
 document.querySelector('[data-p=p6]').addEventListener('click', () => IA.refrescar());
+
+// ── Fase 2: hato ──
+HATO.iniciar(); GRAF.iniciar(); HATO.repintar();
+document.querySelector('[data-p=p9]').addEventListener('click', () => GRAF.pintar());
+$('p1hato').onclick = () => {
+  const m = $('p1hmsg'), p = PROP[$('p1ind').value];
+  if (!HATO.hayDatos()) { m.textContent = 'Primero carga datos en «Mi hato».'; return; }
+  const o = HATO.valoresParaRapido().prop[p.id];
+  if (!o || !o.n) { m.textContent = 'Este indicador no se puede calcular desde los eventos registrados (o no hay datos suficientes).'; return; }
+  $('p1x').value = o.x; $('p1n').value = o.n; m.textContent = `✔ Tomado del hato «${HATO.nombre()}»: ${o.x} de ${o.n}.`; $('p1go').click();
+};
+$('p2hato').onclick = () => {
+  const m = $('p2hmsg'), p = CONT[$('p2ind').value];
+  if (!HATO.hayDatos()) { m.textContent = 'Primero carga datos en «Mi hato».'; return; }
+  const v = HATO.valoresParaRapido().cont[p.id];
+  if (!v || !v.length) { m.textContent = 'Este indicador no se puede calcular desde los eventos registrados (o no hay datos suficientes).'; return; }
+  $('p2datos').value = v.map(x => Math.round(x * 10) / 10).join(' '); m.textContent = `✔ ${v.length} valores tomados del hato «${HATO.nombre()}».`; $('p2go').click();
+};
 </script>
 </body>
 </html>
