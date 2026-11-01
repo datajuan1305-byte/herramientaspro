@@ -480,6 +480,31 @@ function postPot(solo) {
 }
 
 // ── No paramétrico / robusto ──
+
+function procKW() {
+  const kw = R.kw, A = R.A, N = A.N, todos = [].concat(...R.grupos), rk = MV.rankAvg(todos).r;
+  let pos = 0; const rangos = R.grupos.map(g => g.map(() => rk[pos++]));
+  const filas = R.grupos.map((g, i) => `<tr><td class="l">${esc(R.nombres[i])}</td><td class="l" style="font-family:'Space Mono',monospace">${g.map((v, j) => `${tn(v, 2)}<sub>(${tn(rangos[i][j], 1)})</sub>`).join(' · ')}</td><td>${A.n[i]}</td><td>${tn(kw.sumaRangos[i], 1)}</td><td>${tn(kw.rangosMedios[i], 2)}</td></tr>`).join('');
+  const sumaTerm = kw.sumaRangos.map((Ri, i) => `${tn(Ri, 1)}²/${A.n[i]}`).join(' + ');
+  const Hs = 12 / (N * (N + 1)) * kw.sumaRangos.reduce((s, Ri, i) => s + Ri * Ri / A.n[i], 0) - 3 * (N + 1);
+  const tc = kw.ties.reduce((s, t) => s + t * t * t - t, 0), C = 1 - tc / (N * N * N - N);
+  return `<h3 style="margin-top:1.4rem">Procedimiento paso a paso de Kruskal-Wallis</h3>
+    <ol class="proc" style="margin:.4rem 0 .8rem 1.2rem;font-size:.82rem;color:var(--text2);line-height:1.7">
+      <li><strong>Hipótesis.</strong> H₀: todos los tratamientos tienen la misma distribución (no hay tendencia a valores mayores en ninguno). H₁: al menos uno tiende a dar valores distintos.</li>
+      <li><strong>Ordenar y asignar rangos.</strong> Se juntan los N = ${N} datos, se ordenan de menor a mayor y se asigna rango 1, 2, …, N. Si hay empates se usa el promedio de los rangos (${kw.ties.length ? 'en tus datos hay ' + kw.ties.length + ' grupo(s) de empates' : 'en tus datos no hay empates'}). Abajo, cada dato con su rango entre paréntesis.</li>
+      <li><strong>Sumar los rangos de cada tratamiento</strong> (Rᵢ) y calcular su rango medio.</li>
+      <li><strong>Calcular el estadístico H:</strong> H = 12 / [N(N+1)] · Σ(Rᵢ²/nᵢ) − 3(N+1).<br>
+        <span style="font-family:'Space Mono',monospace;font-size:.76rem;color:var(--text)">H = 12 / (${N}·${N + 1}) · (${sumaTerm}) − 3·${N + 1} = ${tn(Hs, 4)}</span></li>
+      <li><strong>Corrección por empates:</strong> C = 1 − Σ(t³ − t) / (N³ − N) = ${tn(C, 4)}${kw.ties.length ? '' : ' (sin empates, C = 1)'}; H corregido = H / C = <strong>${tn(kw.H, 4)}</strong>.</li>
+      <li><strong>Valor p.</strong> H se compara con una distribución χ² con k − 1 = ${kw.df} grados de libertad: p = <strong>${tp(kw.p)}</strong>.</li>
+      <li><strong>Decisión (α = ${tn(R.alpha, 2)}).</strong> ${kw.p < R.alpha ? 'Como p < α se rechaza H₀: al menos un tratamiento difiere.' : 'Como p ≥ α no se rechaza H₀: no hay evidencia de diferencias.'} Tamaño del efecto: ε² = ${tn(kw.epsilon2, 3)} (proporción de variación en los rangos explicada por el tratamiento).</li>
+      <li><strong>Comparaciones por pares (Dunn).</strong> Solo si H₀ se rechaza: z = (R̄ᵢ − R̄ⱼ) / √[σ²(1/nᵢ + 1/nⱼ)], con σ² = N(N+1)/12 − Σ(t³−t)/[12(N−1)]; los p se ajustan con Holm para controlar el error global. Resultados en la tabla de Dunn de arriba.</li>
+    </ol>
+    <div class="tw"><table class="tabla-an"><thead><tr><th class="l">Tratamiento</th><th class="l">Datos (rango)</th><th>nᵢ</th><th>Suma de rangos Rᵢ</th><th>Rango medio</th></tr></thead><tbody>${filas}
+      <tr><td class="l"><strong>Total</strong></td><td></td><td>${N}</td><td>${tn(N * (N + 1) / 2, 1)}</td><td></td></tr></tbody></table></div>
+    <p class="nota">Comprobación: la suma de todos los rangos debe ser N(N+1)/2 = ${tn(N * (N + 1) / 2, 1)}.</p>`;
+}
+
 function tabNP() {
   const A = R.A, a = R.alpha, kw = R.kw, d = R.dunn, w = R.welch, g = R.gh;
   const conc = [['ANOVA clásico (F)', A.p], ['Welch', w ? w.p : null], ['Kruskal-Wallis', kw.p]].map(x => `<tr><td class="l">${x[0]}</td><td>${tp(x[1])}</td><td style="color:${x[1] === null ? 'var(--text3)' : x[1] < a ? 'var(--accent3)' : 'var(--accent4)'}">${x[1] === null ? '— no calculable' : x[1] < a ? 'Hay diferencias' : 'Sin diferencias'}</td></tr>`).join('');
@@ -500,6 +525,7 @@ function tabNP() {
     <div class="chart-titulo">Comparaciones de Games-Howell (no asumen varianzas iguales)</div>
     <div class="tw"><table class="tabla-an"><thead><tr><th class="l">Par</th><th>Diferencia</th><th>EE</th><th>gl</th><th>p</th><th>Conclusión</th></tr></thead><tbody>${rg}</tbody></table></div>
     <p class="nota">Letras Games-Howell: ${R.nombres.map((n, i) => esc(n) + ' = <span class="letra">' + g.letras[i] + '</span>').join(' &nbsp; ')}</p>` : '<p class="nota aviso">Welch y Games-Howell requieren variabilidad dentro de cada tratamiento.</p>'}
+    ${procKW()}
     <p class="nota">Kruskal-Wallis contrasta si los tratamientos tienen distribuciones desplazadas; asume formas parecidas. No es una prueba de medias sino de rangos (tendencia a valores mayores).</p>`;
 }
 
