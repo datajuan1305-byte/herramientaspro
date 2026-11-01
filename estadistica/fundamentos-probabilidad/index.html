@@ -109,6 +109,19 @@
   .welcome h2 { font-size: 1.3rem; color: var(--text2); font-weight: 400; }
   .welcome p { font-size: 13.5px; color: var(--text3); max-width: 420px; }
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuál es la diferencia entre permutación y combinación?", "acceptedAnswer": {"@type": "Answer", "text": "En la permutación importa el orden (podios, claves); en la combinación no (comités, manos de cartas)."}}, {"@type": "Question", "name": "¿Qué significa que dos eventos sean independientes?", "acceptedAnswer": {"@type": "Answer", "text": "Que P(A∩B) = P(A)·P(B); la ocurrencia de uno no modifica la probabilidad del otro."}}, {"@type": "Question", "name": "¿Eventos mutuamente excluyentes son independientes?", "acceptedAnswer": {"@type": "Answer", "text": "No. Si son excluyentes y tienen probabilidad positiva, saber que uno ocurrió implica que el otro no, así que son dependientes."}}, {"@type": "Question", "name": "¿Para qué sirve Bayes en la práctica?", "acceptedAnswer": {"@type": "Answer", "text": "Para calcular, por ejemplo, la probabilidad de tener una enfermedad dado un resultado positivo, combinando la prevalencia con la sensibilidad y especificidad de la prueba."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -512,5 +525,22 @@ function preguntar() {
   if (window.gtag) { gtag('event', 'pregunta_fundamentos_prob', { herramienta: 'fundamentos_probabilidad' }); }
 }
 </script>
+<article class="edu-pro" id="guia-educativa">
+<h2>Fundamentos de probabilidad y combinatoria</h2>
+<h3>La probabilidad como medida de incertidumbre</h3>
+<p>La probabilidad de un evento es un número entre 0 y 1 que mide qué tan posible es que ocurra. Si todos los resultados son igualmente probables, se calcula como casos favorables ÷ casos posibles. Sus reglas básicas: la probabilidad del espacio muestral es 1, y la de la unión de eventos disjuntos es la suma de sus probabilidades.</p>
+<h3>Combinatoria: contar sin enumerar</h3>
+<ul><li><strong>Factorial (n!):</strong> formas de ordenar n elementos distintos.</li><li><strong>Permutaciones:</strong> arreglos donde el orden importa, nPr = n!/(n−r)!.</li><li><strong>Combinaciones:</strong> selecciones donde el orden no importa, nCr = n!/(r!(n−r)!).</li></ul><p>La pregunta clave: ¿cambia el resultado si cambio el orden? Si sí, permutación; si no, combinación.</p>
+<h3>Probabilidad condicional y teorema de Bayes</h3>
+<p>P(A|B) es la probabilidad de A sabiendo que B ocurrió: P(A∩B)/P(B). Dos eventos son <strong>independientes</strong> si saber que uno ocurrió no cambia la probabilidad del otro. El <strong>teorema de Bayes</strong> permite invertir condicionales y actualizar creencias con nueva evidencia: es la base de pruebas diagnósticas, filtros de correo y muchos modelos de decisión.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Selecciona el módulo (combinatoria, probabilidad de eventos, condicional o Bayes), ingresa los datos y obtén el resultado con el procedimiento. Recomendamos resolver primero a mano y usar la calculadora para verificar.</p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>De un grupo de 10 personas se elige un comité de 3: hay C(10,3) = 120 comités posibles (el orden no importa); pero si se asignan presidente, secretario y tesorero, hay P(10,3) = 720 formas. Con Bayes: una enfermedad tiene prevalencia de 1 %, la prueba detecta al 95 % de los enfermos (sensibilidad) y da negativo en el 90 % de los sanos (especificidad). Si el resultado es positivo, la probabilidad de estar enfermo es 0,0095/(0,0095 + 0,099) ≈ 8,8 %: con una enfermedad poco frecuente, la mayoría de los positivos son falsos positivos.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuál es la diferencia entre permutación y combinación?</summary><p>En la permutación importa el orden (podios, claves); en la combinación no (comités, manos de cartas).</p></details>
+<details><summary>¿Qué significa que dos eventos sean independientes?</summary><p>Que P(A∩B) = P(A)·P(B); la ocurrencia de uno no modifica la probabilidad del otro.</p></details>
+<details><summary>¿Eventos mutuamente excluyentes son independientes?</summary><p>No. Si son excluyentes y tienen probabilidad positiva, saber que uno ocurrió implica que el otro no, así que son dependientes.</p></details>
+<details><summary>¿Para qué sirve Bayes en la práctica?</summary><p>Para calcular, por ejemplo, la probabilidad de tener una enfermedad dado un resultado positivo, combinando la prevalencia con la sensibilidad y especificidad de la prueba.</p></details>
+</article>
 </body>
 </html>

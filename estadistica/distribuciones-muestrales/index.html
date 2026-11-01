@@ -111,6 +111,19 @@
   .welcome h2 { font-size: 1.3rem; color: var(--text2); font-weight: 400; }
   .welcome p { font-size: 13.5px; color: var(--text3); max-width: 420px; }
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuál es la diferencia entre desviación estándar y error estándar?", "acceptedAnswer": {"@type": "Answer", "text": "La desviación estándar describe la variabilidad de los datos individuales; el error estándar describe la variabilidad del estadístico (por ejemplo, la media) entre muestras."}}, {"@type": "Question", "name": "¿Qué pasa si la población no es normal?", "acceptedAnswer": {"@type": "Answer", "text": "Con n grande, la media muestral sigue siendo aproximadamente normal por el teorema del límite central. Con n pequeño, la forma de la población sí importa."}}, {"@type": "Question", "name": "¿Por qué n ≥ 30?", "acceptedAnswer": {"@type": "Answer", "text": "Es una regla práctica, no una ley: con poblaciones casi simétricas bastan menos datos, con muy asimétricas se necesitan más."}}, {"@type": "Question", "name": "¿La distribución muestral es la de mi muestra?", "acceptedAnswer": {"@type": "Answer", "text": "No. Tu muestra es una sola realización; la distribución muestral es el comportamiento teórico de todas las muestras posibles."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -460,5 +473,22 @@ function preguntarM() {
   if (window.gtag) { gtag('event', 'pregunta_dist_muestrales', { herramienta: 'distribuciones_muestrales' }); }
 }
 </script>
+<article class="edu-pro" id="guia-educativa">
+<h2>Distribuciones muestrales y teorema del límite central</h2>
+<h3>¿Qué es una distribución muestral?</h3>
+<p>Si tomaras muchas muestras del mismo tamaño de una población y calcularas la media de cada una, esas medias formarían una distribución: la <strong>distribución muestral de la media</strong>. Lo mismo ocurre con la proporción u otros estadísticos. Es la idea que conecta una muestra con la población y fundamenta los intervalos de confianza y las pruebas de hipótesis.</p>
+<h3>Error estándar: cuánto varía el promedio</h3>
+<p>La desviación estándar de la distribución muestral se llama <strong>error estándar</strong>. Para la media es σ/√n; para una proporción, √(p(1−p)/n). Observa que crece la precisión con la raíz del tamaño de muestra: para reducir el error a la mitad se necesita cuadruplicar n.</p>
+<h3>Teorema del límite central</h3>
+<p>Para muestras suficientemente grandes, la distribución de la media muestral es aproximadamente <strong>normal</strong>, sin importar la forma de la población (siempre que tenga varianza finita). Una guía habitual es n ≥ 30, aunque poblaciones muy asimétricas pueden requerir más. Por eso la distribución normal es tan central en la inferencia.</p>
+<h3>Simulador interactivo</h3>
+<p>Además de calcular probabilidades sobre la media o la proporción muestral, la herramienta incluye un simulador: cambia la población y el tamaño de muestra y observa cómo el histograma de las medias se vuelve más angosto y más parecido a una campana a medida que n aumenta.</p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>Una población tiene media 100 y desviación estándar 15. Con muestras de n = 36, el error estándar de la media es 15/√36 = 2,5. La probabilidad de que una media muestral supere 105 es P(Z &gt; (105 − 100)/2,5) = P(Z &gt; 2) = 0,0228, es decir, cerca de 2,3 %. Con n = 144 el error estándar baja a 1,25 y esa probabilidad se vuelve prácticamente despreciable.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuál es la diferencia entre desviación estándar y error estándar?</summary><p>La desviación estándar describe la variabilidad de los datos individuales; el error estándar describe la variabilidad del estadístico (por ejemplo, la media) entre muestras.</p></details>
+<details><summary>¿Qué pasa si la población no es normal?</summary><p>Con n grande, la media muestral sigue siendo aproximadamente normal por el teorema del límite central. Con n pequeño, la forma de la población sí importa.</p></details>
+<details><summary>¿Por qué n ≥ 30?</summary><p>Es una regla práctica, no una ley: con poblaciones casi simétricas bastan menos datos, con muy asimétricas se necesitan más.</p></details>
+<details><summary>¿La distribución muestral es la de mi muestra?</summary><p>No. Tu muestra es una sola realización; la distribución muestral es el comportamiento teórico de todas las muestras posibles.</p></details>
+</article>
 </body>
 </html>

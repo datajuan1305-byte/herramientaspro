@@ -94,6 +94,19 @@
   .respuesta-box.visible { display: block; }
   .ia-note { font-size: 0.68rem; color: var(--text3); margin-top: 0.5rem; font-style: italic; }
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuántas corridas necesito?", "acceptedAnswer": {"@type": "Answer", "text": "2ᵏ por réplica. Con k = 3 son 8 corridas; con dos réplicas, 16."}}, {"@type": "Question", "name": "¿Qué pasa si hay interacción significativa?", "acceptedAnswer": {"@type": "Answer", "text": "Interpreta los efectos principales con cautela: el efecto de un factor cambia según el nivel del otro."}}, {"@type": "Question", "name": "¿Por qué aleatorizar?", "acceptedAnswer": {"@type": "Answer", "text": "Para evitar que factores externos (tiempo, operario) se confundan con los efectos estudiados."}}, {"@type": "Question", "name": "¿Y si necesito más de dos niveles?", "acceptedAnswer": {"@type": "Answer", "text": "Se requieren diseños factoriales generales o de superficie de respuesta, que no cubre esta herramienta."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -293,5 +306,22 @@ function preguntarFactorial() {
   if (window.gtag) { gtag('event', 'pregunta_diseno_factorial', { herramienta: 'diseno_factorial' }); }
 }
 </script>
+<article class="edu-pro" id="guia-educativa">
+<h2>Diseño factorial 2ᵏ: experimentar con varios factores a la vez</h2>
+<h3>¿Qué es un diseño factorial 2ᵏ?</h3>
+<p>Es un experimento donde se estudian <em>k</em> factores, cada uno en dos niveles (bajo y alto), probando todas las combinaciones: 2ᵏ corridas. Con dos factores son 4 combinaciones; con tres, 8. Permite medir el efecto de cada factor y, sobre todo, sus <strong>interacciones</strong>.</p>
+<h3>Efectos principales e interacciones</h3>
+<p>El <strong>efecto principal</strong> de un factor es el cambio promedio en la respuesta al pasar de su nivel bajo al alto. Hay <strong>interacción</strong> cuando el efecto de un factor depende del nivel de otro. Probar un factor a la vez oculta las interacciones; el diseño factorial las revela y usa los datos de forma más eficiente.</p>
+<h3>Qué entrega la herramienta</h3>
+<p>Efectos de cada factor e interacción, sumas de cuadrados, contribución porcentual y análisis de varianza cuando hay réplicas. Con réplicas se estima el error experimental y se pueden probar los efectos; sin ellas, se recomienda apoyarse en gráficos de efectos y en el principio de dispersión de efectos.</p>
+<h3>Buenas prácticas</h3>
+<p>Aleatoriza el orden de las corridas, incluye réplicas siempre que puedas y define niveles lo bastante separados como para producir un cambio medible. Los efectos grandes sobre la respuesta señalan los factores a controlar.</p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>Un diseño 2² mide el rendimiento con las combinaciones (1) = 20, a = 30, b = 25 y ab = 45. El efecto del factor A es (a + ab − b − (1))/2 = (30 + 45 − 25 − 20)/2 = 15; el de B, (b + ab − a − (1))/2 = 10; y la interacción AB, (ab + (1) − a − b)/2 = 5. Ambos factores aumentan el rendimiento y, además, su efecto combinado es mayor que la suma de los individuales (hay una interacción positiva).</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuántas corridas necesito?</summary><p>2ᵏ por réplica. Con k = 3 son 8 corridas; con dos réplicas, 16.</p></details>
+<details><summary>¿Qué pasa si hay interacción significativa?</summary><p>Interpreta los efectos principales con cautela: el efecto de un factor cambia según el nivel del otro.</p></details>
+<details><summary>¿Por qué aleatorizar?</summary><p>Para evitar que factores externos (tiempo, operario) se confundan con los efectos estudiados.</p></details>
+<details><summary>¿Y si necesito más de dos niveles?</summary><p>Se requieren diseños factoriales generales o de superficie de respuesta, que no cubre esta herramienta.</p></details>
+</article>
 </body>
 </html>

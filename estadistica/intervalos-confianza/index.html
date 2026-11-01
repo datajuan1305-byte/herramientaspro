@@ -102,6 +102,19 @@
   .welcome h2 { font-size: 1.3rem; color: var(--text2); font-weight: 400; }
   .welcome p { font-size: 13.5px; color: var(--text3); max-width: 420px; }
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Z o t?", "acceptedAnswer": {"@type": "Answer", "text": "Si conoces la desviación estándar poblacional, usa Z. Si solo tienes la de la muestra (lo habitual), usa t de Student."}}, {"@type": "Question", "name": "¿Qué nivel de confianza elijo?", "acceptedAnswer": {"@type": "Answer", "text": "95 % es el estándar. Sube a 99 % si el error es costoso; baja a 90 % si aceptas más riesgo a cambio de un intervalo más angosto."}}, {"@type": "Question", "name": "¿Por qué el intervalo de la varianza no es simétrico?", "acceptedAnswer": {"@type": "Answer", "text": "Porque se basa en la distribución ji-cuadrado, que es asimétrica."}}, {"@type": "Question", "name": "¿Cuántos datos necesito para un margen de error dado?", "acceptedAnswer": {"@type": "Answer", "text": "Usa el módulo de tamaño de muestra: depende del margen deseado, la confianza y la variabilidad esperada."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -416,5 +429,22 @@ function preguntar() {
   if (window.gtag) { gtag('event', 'pregunta_intervalo_confianza', { herramienta: 'intervalos_confianza' }); }
 }
 </script>
+<article class="edu-pro" id="guia-educativa">
+<h2>Intervalos de confianza: estimar con un margen de error</h2>
+<h3>¿Qué es un intervalo de confianza?</h3>
+<p>Una muestra da una estimación puntual (por ejemplo, un promedio de 52), pero el valor real de la población es desconocido. El intervalo de confianza entrega un <strong>rango de valores plausibles</strong> para el parámetro, construido con un método que, repetido muchas veces, captura el valor verdadero en el nivel de confianza indicado (90 %, 95 % o 99 %).</p>
+<h3>Interpretación correcta</h3>
+<p>Con 95 % de confianza <em>no</em> se afirma que hay 95 % de probabilidad de que el parámetro esté en este intervalo específico: el parámetro es fijo, lo aleatorio es el intervalo. Lo correcto es decir que el método produce intervalos que contienen el valor real en el 95 % de las repeticiones.</p>
+<h3>Qué hace más ancho o más angosto un intervalo</h3>
+<ul><li><strong>Mayor confianza</strong> → intervalo más ancho.</li><li><strong>Mayor tamaño de muestra</strong> → intervalo más angosto.</li><li><strong>Mayor variabilidad</strong> de los datos → intervalo más ancho.</li></ul>
+<h3>Tipos incluidos</h3>
+<p>La herramienta calcula intervalos para la media con σ conocida (Z) y desconocida (t de Student), para proporciones, para la varianza (ji-cuadrado, asimétrico) y el <strong>tamaño de muestra</strong> necesario para lograr un margen de error dado.</p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>En una muestra de n = 25 se obtiene media 50 y desviación estándar 10. Con σ desconocida se usa t con 24 grados de libertad: t = 2,064 para 95 %. El margen de error es 2,064 × 10/√25 = 4,13, por lo que el intervalo de confianza del 95 % es (45,87; 54,13). Si quisieras un margen de error de 2 con la misma variabilidad, necesitarías aproximadamente n = (1,96 × 10/2)² ≈ 97 observaciones.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Z o t?</summary><p>Si conoces la desviación estándar poblacional, usa Z. Si solo tienes la de la muestra (lo habitual), usa t de Student.</p></details>
+<details><summary>¿Qué nivel de confianza elijo?</summary><p>95 % es el estándar. Sube a 99 % si el error es costoso; baja a 90 % si aceptas más riesgo a cambio de un intervalo más angosto.</p></details>
+<details><summary>¿Por qué el intervalo de la varianza no es simétrico?</summary><p>Porque se basa en la distribución ji-cuadrado, que es asimétrica.</p></details>
+<details><summary>¿Cuántos datos necesito para un margen de error dado?</summary><p>Usa el módulo de tamaño de muestra: depende del margen deseado, la confianza y la variabilidad esperada.</p></details>
+</article>
 </body>
 </html>

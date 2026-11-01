@@ -102,6 +102,19 @@
   .welcome h2 { font-size: 1.3rem; color: var(--text2); font-weight: 400; }
   .welcome p { font-size: 13.5px; color: var(--text3); max-width: 420px; }
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué es el valor p?", "acceptedAnswer": {"@type": "Answer", "text": "La probabilidad, si H₀ fuera cierta, de obtener un resultado al menos tan extremo como el observado. No es la probabilidad de que H₀ sea cierta."}}, {"@type": "Question", "name": "¿Prueba de una cola o de dos colas?", "acceptedAnswer": {"@type": "Answer", "text": "Dos colas si buscas cualquier diferencia; una cola solo si, antes de ver los datos, tienes una razón para esperar una dirección específica."}}, {"@type": "Question", "name": "¿Qué pasa si mi valor p es 0,06?", "acceptedAnswer": {"@type": "Answer", "text": "Con α = 0,05 no se rechaza H₀, pero 0,05 es una convención; informa el valor p exacto y el tamaño del efecto."}}, {"@type": "Question", "name": "¿Cuándo uso datos pareados?", "acceptedAnswer": {"@type": "Answer", "text": "Cuando las dos mediciones provienen de las mismas unidades (antes y después en el mismo sujeto)."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -438,5 +451,22 @@ function preguntar() {
   if (window.gtag) { gtag('event', 'pregunta_prueba_hipotesis', { herramienta: 'pruebas_hipotesis' }); }
 }
 </script>
+<article class="edu-pro" id="guia-educativa">
+<h2>Pruebas de hipótesis: decidir con evidencia</h2>
+<h3>La lógica de una prueba de hipótesis</h3>
+<p>Se plantea una <strong>hipótesis nula (H₀)</strong>, que representa "no hay efecto" o "no hay diferencia", y una <strong>alternativa (H₁)</strong>. Con los datos se calcula un estadístico de prueba y su <strong>valor p</strong>: la probabilidad de observar un resultado tan extremo como el obtenido si H₀ fuera cierta. Si el valor p es menor que el nivel de significancia α (usualmente 0,05), se rechaza H₀.</p>
+<h3>Errores y potencia</h3>
+<p>El <strong>error tipo I</strong> es rechazar una H₀ verdadera (su probabilidad es α); el <strong>error tipo II</strong> es no rechazar una H₀ falsa (probabilidad β). La <strong>potencia</strong> (1 − β) es la capacidad de detectar un efecto real y crece con el tamaño de muestra y con la magnitud del efecto.</p>
+<h3>Qué prueba usar</h3>
+<ul><li><strong>Z y t para la media:</strong> una muestra, dos muestras independientes o datos pareados.</li><li><strong>Proporciones:</strong> una o dos poblaciones.</li><li><strong>Varianza (ji-cuadrado) y razón de varianzas (F).</strong></li></ul><p>Verifica los supuestos: independencia, normalidad aproximada y, en dos muestras, si las varianzas pueden suponerse iguales.</p>
+<h3>Cómo interpretar el resultado</h3>
+<p>"No rechazar H₀" no demuestra que sea cierta: solo indica que no hay evidencia suficiente en contra. Y un valor p pequeño no mide la importancia práctica; acompáñalo del tamaño del efecto y de un intervalo de confianza.</p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>Se quiere probar H₀: μ = 50 contra H₁: μ ≠ 50. Con n = 25, media muestral 53 y desviación estándar 10, el estadístico es t = (53 − 50)/(10/√25) = 1,5, con 24 grados de libertad. El valor p de dos colas es 0,147, mayor que 0,05, así que no se rechaza H₀: con estos datos no hay evidencia suficiente de que la media sea distinta de 50. Nota que el intervalo de confianza al 95 % (48,87; 57,13) contiene el 50, lo que es coherente con la decisión.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué es el valor p?</summary><p>La probabilidad, si H₀ fuera cierta, de obtener un resultado al menos tan extremo como el observado. No es la probabilidad de que H₀ sea cierta.</p></details>
+<details><summary>¿Prueba de una cola o de dos colas?</summary><p>Dos colas si buscas cualquier diferencia; una cola solo si, antes de ver los datos, tienes una razón para esperar una dirección específica.</p></details>
+<details><summary>¿Qué pasa si mi valor p es 0,06?</summary><p>Con α = 0,05 no se rechaza H₀, pero 0,05 es una convención; informa el valor p exacto y el tamaño del efecto.</p></details>
+<details><summary>¿Cuándo uso datos pareados?</summary><p>Cuando las dos mediciones provienen de las mismas unidades (antes y después en el mismo sujeto).</p></details>
+</article>
 </body>
 </html>

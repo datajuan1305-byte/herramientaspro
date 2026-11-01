@@ -89,6 +89,19 @@
   .respuesta-box.visible { display: block; }
   .ia-note { font-size: 0.68rem; color: var(--text3); margin-top: 0.5rem; font-style: italic; }
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué valor de r se considera fuerte?", "acceptedAnswer": {"@type": "Answer", "text": "Como guía: |r| < 0,3 débil, 0,3 a 0,7 moderada, > 0,7 fuerte. Depende de la disciplina."}}, {"@type": "Question", "name": "¿Cuándo uso Spearman en lugar de Pearson?", "acceptedAnswer": {"@type": "Answer", "text": "Cuando los datos son ordinales, hay atípicos marcados o la relación es monótona pero no lineal."}}, {"@type": "Question", "name": "¿Qué es r²?", "acceptedAnswer": {"@type": "Answer", "text": "En la correlación de Pearson, r² es la proporción de variabilidad de una variable asociada linealmente a la otra."}}, {"@type": "Question", "name": "¿Puedo correlacionar variables categóricas?", "acceptedAnswer": {"@type": "Answer", "text": "No con estos coeficientes; para categorías se usan tablas de contingencia y pruebas como ji-cuadrado."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -329,5 +342,22 @@ function preguntar() {
   if (window.gtag) { gtag('event', 'pregunta_correlacion', { herramienta: 'correlacion' }); }
 }
 </script>
+<article class="edu-pro" id="guia-educativa">
+<h2>Correlación: medir la relación entre dos variables</h2>
+<h3>¿Qué mide la correlación?</h3>
+<p>El coeficiente de correlación resume en un número entre −1 y 1 la <strong>fuerza y la dirección</strong> de la relación entre dos variables. Cerca de 1, ambas aumentan juntas; cerca de −1, una sube cuando la otra baja; cerca de 0, no hay relación del tipo medido.</p>
+<h3>Pearson, Spearman y Kendall</h3>
+<ul><li><strong>Pearson:</strong> relación lineal entre variables numéricas aproximadamente normales; sensible a atípicos.</li><li><strong>Spearman:</strong> usa rangos; detecta relaciones monótonas y resiste atípicos.</li><li><strong>Kendall (tau-b):</strong> también por rangos, útil con muestras pequeñas y empates.</li></ul>
+<h3>Correlación no es causalidad</h3>
+<p>Que dos variables se muevan juntas no significa que una cause la otra: puede haber una tercera variable o una coincidencia. Además, un coeficiente cercano a 0 no descarta una relación <em>no lineal</em>: siempre conviene mirar el diagrama de dispersión.</p>
+<h3>Significancia y tamaño</h3>
+<p>La herramienta entrega el coeficiente y la prueba de significancia (valor p). Con muestras grandes, correlaciones pequeñas pueden ser significativas sin ser relevantes en la práctica; valora el tamaño del coeficiente, no solo el valor p.</p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>Con X = (1, 2, 3, 4, 5) y Y = (2, 4, 5, 4, 5) el coeficiente de Pearson es r = 0,775, una correlación positiva fuerte; r² = 0,60. Sin embargo, con solo 5 pares el valor p es 0,124, de modo que la correlación no es significativa al 5 %: muestras pequeñas dejan mucha incertidumbre. Spearman da 0,738 con p = 0,155. Verifica en la calculadora y observa el diagrama de dispersión.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué valor de r se considera fuerte?</summary><p>Como guía: |r| < 0,3 débil, 0,3 a 0,7 moderada, > 0,7 fuerte. Depende de la disciplina.</p></details>
+<details><summary>¿Cuándo uso Spearman en lugar de Pearson?</summary><p>Cuando los datos son ordinales, hay atípicos marcados o la relación es monótona pero no lineal.</p></details>
+<details><summary>¿Qué es r²?</summary><p>En la correlación de Pearson, r² es la proporción de variabilidad de una variable asociada linealmente a la otra.</p></details>
+<details><summary>¿Puedo correlacionar variables categóricas?</summary><p>No con estos coeficientes; para categorías se usan tablas de contingencia y pruebas como ji-cuadrado.</p></details>
+</article>
 </body>
 </html>

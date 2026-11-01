@@ -101,6 +101,19 @@
   .respuesta-box.visible { display: block; }
   .ia-note { font-size: 0.68rem; color: var(--text3); margin-top: 0.5rem; font-style: italic; }
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Por qué no usar varias pruebas t?", "acceptedAnswer": {"@type": "Answer", "text": "Porque cada prueba adicional aumenta la probabilidad total de cometer error tipo I."}}, {"@type": "Question", "name": "¿Qué significa un F grande?", "acceptedAnswer": {"@type": "Answer", "text": "Que la variación entre grupos es grande comparada con la variación dentro de ellos."}}, {"@type": "Question", "name": "¿Qué hago si no se cumple la homogeneidad de varianzas?", "acceptedAnswer": {"@type": "Answer", "text": "Considera una transformación de los datos, la prueba de Welch o alternativas no paramétricas como Kruskal-Wallis."}}, {"@type": "Question", "name": "¿Un ANOVA significativo prueba causalidad?", "acceptedAnswer": {"@type": "Answer", "text": "Solo si el diseño fue experimental con asignación aleatoria; en datos observacionales indica asociación."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -311,5 +324,22 @@ function preguntarAnova() {
   if (window.gtag) { gtag('event', 'pregunta_anova', { herramienta: 'anova' }); }
 }
 </script>
+<article class="edu-pro" id="guia-educativa">
+<h2>ANOVA de un factor: comparar tres o más grupos</h2>
+<h3>¿Para qué sirve el ANOVA?</h3>
+<p>El análisis de varianza compara las <strong>medias de tres o más grupos</strong> con una sola prueba. Hacer muchas pruebas t por pares aumentaría la probabilidad de encontrar diferencias falsas; el ANOVA controla ese riesgo evaluando todos los grupos a la vez.</p>
+<h3>La idea: variación entre y dentro de los grupos</h3>
+<p>La variabilidad total se descompone en la <strong>variación entre grupos</strong> (qué tanto difieren las medias) y la <strong>variación dentro de los grupos</strong> (el ruido o error). El estadístico F es su cociente: si las medias difieren mucho más de lo que se esperaría por el azar, F es grande y el valor p pequeño.</p>
+<h3>Supuestos</h3>
+<ul><li>Observaciones independientes.</li><li>Residuos aproximadamente normales en cada grupo.</li><li>Varianzas similares entre grupos (homogeneidad).</li></ul><p>Con grupos de tamaño parecido el ANOVA es bastante robusto, pero con tamaños muy desiguales o varianzas muy distintas conviene revisar alternativas.</p>
+<h3>Después del ANOVA</h3>
+<p>Un F significativo dice que <em>al menos una</em> media es distinta, pero no cuál. Para identificarlo se usan comparaciones múltiples (por ejemplo, Tukey). Además, el tamaño del efecto (η²) indica qué parte de la variabilidad explica el factor.</p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>Tres grupos con tres observaciones cada uno: A = (5, 6, 7), B = (8, 9, 10), C = (11, 12, 13). Las medias son 6, 9 y 12 y la media global, 9. La suma de cuadrados entre grupos es 54 (2 grados de libertad) y dentro de grupos, 6 (6 grados de libertad). Los cuadrados medios son 27 y 1, así que F = 27 con valor p ≈ 0,001: se rechaza que las tres medias sean iguales. Luego se aplicarían comparaciones múltiples para saber qué grupos difieren.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Por qué no usar varias pruebas t?</summary><p>Porque cada prueba adicional aumenta la probabilidad total de cometer error tipo I.</p></details>
+<details><summary>¿Qué significa un F grande?</summary><p>Que la variación entre grupos es grande comparada con la variación dentro de ellos.</p></details>
+<details><summary>¿Qué hago si no se cumple la homogeneidad de varianzas?</summary><p>Considera una transformación de los datos, la prueba de Welch o alternativas no paramétricas como Kruskal-Wallis.</p></details>
+<details><summary>¿Un ANOVA significativo prueba causalidad?</summary><p>Solo si el diseño fue experimental con asignación aleatoria; en datos observacionales indica asociación.</p></details>
+</article>
 </body>
 </html>

@@ -63,6 +63,19 @@
   .tip-box { font-size: 0.72rem; color: var(--text3); line-height: 1.6; margin-top: 0.8rem; }
   .tip-box strong { color: var(--text2); }
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Necesito instalar algo?", "acceptedAnswer": {"@type": "Answer", "text": "No. Solo un navegador moderno y conexión a internet para la primera carga."}}, {"@type": "Question", "name": "¿Se guardan mis datos?", "acceptedAnswer": {"@type": "Answer", "text": "El código se ejecuta en tu navegador; no se envían a nuestros servidores. Guarda tu script por tu cuenta si quieres conservarlo."}}, {"@type": "Question", "name": "¿Puedo usar cualquier paquete de R?", "acceptedAnswer": {"@type": "Answer", "text": "No todos; WebR ofrece un conjunto de paquetes compatibles con el navegador."}}, {"@type": "Question", "name": "¿Sirve para aprender?", "acceptedAnswer": {"@type": "Answer", "text": "Sí: es ideal para practicar lo visto en clase y contrastar resultados con las calculadoras."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -99,5 +112,22 @@ function copiarScript(id) {
   });
 }
 </script>
+<article class="edu-pro" id="guia-educativa">
+<h2>R en línea: programar estadística sin instalar nada</h2>
+<h3>¿Qué es R y por qué se usa?</h3>
+<p>R es un lenguaje de programación gratuito y de código abierto, creado para el análisis estadístico y la visualización de datos. Es estándar en universidades, investigación y ciencia de datos. Esta herramienta lo ejecuta directamente en tu navegador gracias a <strong>WebR</strong>, una versión de R compilada para la web.</p>
+<h3>Ventajas de usarlo en el navegador</h3>
+<ul><li>No requiere instalar R ni RStudio.</li><li>Funciona desde cualquier computador, también en aulas con restricciones.</li><li>Tus datos se procesan en tu propio equipo, no en un servidor.</li></ul>
+<h3>Ideas para empezar</h3>
+<p>Prueba <code>x &lt;- c(12, 15, 18, 14, 20)</code> y luego <code>summary(x)</code>, <code>mean(x)</code> o <code>sd(x)</code>. Para comparar con las calculadoras de este sitio, ejecuta <code>t.test()</code>, <code>cor.test()</code> o <code>lm()</code> con los mismos datos y verifica que los resultados coinciden. Es una buena manera de aprender la sintaxis a partir de ejercicios que ya conoces.</p>
+<h3>Limitaciones</h3>
+<p>La primera carga puede tardar unos segundos y algunos paquetes no están disponibles en WebR. Para proyectos grandes conviene instalar R y RStudio en tu equipo.</p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejercicio sugerido</h3><p>Reproduce el ANOVA del ejemplo de la calculadora: <code>grupo &lt;- factor(rep(c("A","B","C"), each = 3))</code>, <code>y &lt;- c(5,6,7,8,9,10,11,12,13)</code> y luego <code>summary(aov(y ~ grupo))</code>. Debes obtener F = 27 con 2 y 6 grados de libertad. Prueba también <code>cor.test(c(1,2,3,4,5), c(2,4,5,4,5))</code> y compara con r = 0,775.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Necesito instalar algo?</summary><p>No. Solo un navegador moderno y conexión a internet para la primera carga.</p></details>
+<details><summary>¿Se guardan mis datos?</summary><p>El código se ejecuta en tu navegador; no se envían a nuestros servidores. Guarda tu script por tu cuenta si quieres conservarlo.</p></details>
+<details><summary>¿Puedo usar cualquier paquete de R?</summary><p>No todos; WebR ofrece un conjunto de paquetes compatibles con el navegador.</p></details>
+<details><summary>¿Sirve para aprender?</summary><p>Sí: es ideal para practicar lo visto en clase y contrastar resultados con las calculadoras.</p></details>
+</article>
 </body>
 </html>

@@ -3,19 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Estadística — Herramientas Gratuitas | HerramientasPro Colombia</title>
-<meta name="description" content="Calculadoras gratuitas de probabilidad, inferencia estadística, regresión y diseño de experimentos: distribuciones, pruebas de hipótesis, intervalos de confianza, correlación, regresión, ANOVA y más. Sin registro.">
+<title>Herramientas de Estadística Gratis | HerramientasPro Colombia</title>
+<meta name="description" content="Calculadoras gratuitas de estadística: distribuciones de probabilidad, estadística descriptiva, inferencia, pruebas de hipótesis, correlación, regresión y diseño de experimentos. Sin registro.">
 <link rel="canonical" href="https://herramientaspro.com.co/estadistica/">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BRHFQTZC5D"></script>
+<script src="https://www.googletagmanager.com/gtag/js?id=G-BRHFQTZC5D" async></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-BRHFQTZC5D');
 </script>
-
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0e1a; --bg2: #0f1628; --bg3: #161e35;
@@ -37,21 +35,38 @@
   .header-text p { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
   nav.breadcrumb { position: relative; z-index: 10; padding: 12px 2rem 0; font-size: 0.8rem; color: var(--text3); }
   nav.breadcrumb a { color: var(--accent); text-decoration: none; }
-  main { position: relative; z-index: 1; max-width: 1050px; margin: 0 auto; padding: 1.8rem 2rem 4rem; }
+  main { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 1.8rem 2rem 4rem; }
   .intro { font-size: 0.92rem; color: var(--text2); max-width: 720px; line-height: 1.6; margin-bottom: 2rem; }
   .bloque { margin-bottom: 2.2rem; }
   .bloque h2 { font-size: 1.05rem; color: var(--text); margin-bottom: 0.9rem; display: flex; align-items: center; gap: 0.5rem; }
   .bloque h2 .tag { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; background: var(--bg3); padding: 3px 8px; border-radius: 10px; }
-  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
   .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; text-decoration: none; display: block; transition: border-color 0.15s, transform 0.15s; }
   .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card.disabled { opacity: 0.5; cursor: default; }
+  .card.disabled:hover { border-color: var(--border); transform: none; }
   .card .icon { font-size: 1.6rem; margin-bottom: 0.6rem; display: block; }
   .card h3 { font-size: 0.92rem; color: var(--text); margin-bottom: 0.3rem; }
   .card p { font-size: 0.76rem; color: var(--text2); line-height: 1.5; }
-  .card .badge { display: inline-block; margin-top: 0.6rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 10px; background: rgba(0,255,157,0.12); color: #00ff9d; }
+  .card .badge { display: inline-block; margin-top: 0.6rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 10px; }
+  .badge.activa { background: rgba(0,255,157,0.12); color: #00ff9d; }
+  .badge.proximamente { background: rgba(255,215,0,0.1); color: var(--gold); }
   footer { position: relative; z-index: 1; text-align: center; padding: 1.5rem; font-size: 0.75rem; color: var(--text3); border-top: 1px solid var(--border); }
   footer a { color: var(--text2); }
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Es gratis?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, y no requiere registro."}}, {"@type": "Question", "name": "¿Los datos que pego se guardan?", "acceptedAnswer": {"@type": "Answer", "text": "No se almacenan en servidores; el procesamiento ocurre en tu navegador."}}, {"@type": "Question", "name": "¿Por dónde empiezo?", "acceptedAnswer": {"@type": "Answer", "text": "Si estás empezando, por Estadística descriptiva; luego probabilidad y distribuciones; después inferencia."}}, {"@type": "Question", "name": "¿Sirve para tareas y exámenes?", "acceptedAnswer": {"@type": "Answer", "text": "Sirve para verificar tus ejercicios y entender los resultados; el procedimiento y la interpretación deben ser tuyos."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -59,84 +74,78 @@
   <div class="logo-icon">𝜎</div>
   <div class="header-text">
     <h1>Estadística</h1>
-    <p>HerramientasPro Colombia · Piloto académico</p>
+    <p>HerramientasPro Colombia · Calculadoras académicas gratuitas</p>
   </div>
 </header>
 
 <nav class="breadcrumb"><a href="/">Inicio</a> › Estadística</nav>
 
 <main>
-  <p class="intro">Calculadoras gratuitas de probabilidad, inferencia estadística, regresión y diseño de experimentos — pensadas para estudiantes universitarios. Sin registro, sin costo.</p>
+  <p class="intro">Calculadoras gratuitas de probabilidad, inferencia estadística, regresión y diseño de experimentos — pensadas para estudiantes universitarios y para cualquiera que necesite verificar un cálculo rápido. Sin registro, sin costo.</p>
 
   <div class="bloque">
     <h2>Probabilidad e inferencia estadística <span class="tag">curso 1</span></h2>
     <div class="cards">
       <a class="card" href="distribuciones/">
         <span class="icon">🎲</span>
-        <h3>Distribuciones de Probabilidad</h3>
-        <p>Binomial, Poisson, Normal y otras 17 distribuciones, con gráfica y tabla de valores críticos.</p>
-        <span class="badge">Disponible</span>
+        <h3>Distribuciones de probabilidad</h3>
+        <p>Binomial, Poisson, Normal, Exponencial y otras 16 distribuciones discretas y continuas, con gráfica, tabla de valores críticos y panel de preguntas.</p>
+        <span class="badge activa">Activa</span>
       </a>
-      <a class="card" href="descriptiva/">
+      <div class="card disabled">
         <span class="icon">📐</span>
         <h3>Estadística descriptiva</h3>
-        <p>Media, mediana, moda, varianza, cuartiles, sesgo, curtosis y estadísticos robustos.</p>
-        <span class="badge">Disponible</span>
-      </a>
-      <a class="card" href="fundamentos-probabilidad/">
+        <p>Media, mediana, moda, varianza, percentiles y medidas de forma a partir de tus propios datos.</p>
+        <span class="badge proximamente">Próximamente</span>
+      </div>
+      <div class="card disabled">
         <span class="icon">🎯</span>
         <h3>Fundamentos de probabilidad</h3>
-        <p>Combinatoria, probabilidad condicional y Teorema de Bayes generalizado.</p>
-        <span class="badge">Disponible</span>
-      </a>
-      <a class="card" href="distribuciones-muestrales/">
-        <span class="icon">🔔</span>
-        <h3>Distribuciones muestrales</h3>
-        <p>Distribución muestral de la media/proporción, y simulador visual del Teorema del Límite Central.</p>
-        <span class="badge">Disponible</span>
-      </a>
-      <a class="card" href="intervalos-confianza/">
+        <p>Probabilidad condicional, Teorema de Bayes y combinatoria.</p>
+        <span class="badge proximamente">Próximamente</span>
+      </div>
+      <div class="card disabled">
         <span class="icon">📏</span>
         <h3>Intervalos de confianza</h3>
-        <p>Para media, proporción, varianza, y tamaño de muestra requerido.</p>
-        <span class="badge">Disponible</span>
-      </a>
-      <a class="card" href="pruebas-hipotesis/">
+        <p>Para media, proporción y varianza, con tamaño de muestra requerido.</p>
+        <span class="badge proximamente">Próximamente</span>
+      </div>
+      <div class="card disabled">
         <span class="icon">🔬</span>
         <h3>Pruebas de hipótesis</h3>
-        <p>Z y t para medias, proporciones y varianza, con valor-p y conclusión automática.</p>
-        <span class="badge">Disponible</span>
-      </a>
+        <p>Z, t-Student, proporciones, varianza y Chi-cuadrado.</p>
+        <span class="badge proximamente">Próximamente</span>
+      </div>
     </div>
   </div>
 
   <div class="bloque">
     <h2>Regresión lineal y diseño de experimentos <span class="tag">curso 2</span></h2>
     <div class="cards">
-      <a class="card" href="correlacion/">
+      <div class="card disabled">
         <span class="icon">🔗</span>
         <h3>Correlación</h3>
-        <p>Pearson, Spearman y Kendall tau-b, con prueba de significancia y diagrama de dispersión.</p>
-        <span class="badge">Disponible</span>
-      </a>
-      <a class="card" href="regresion/">
+        <p>Pearson, Spearman y Kendall.</p>
+        <span class="badge proximamente">Próximamente</span>
+      </div>
+      <div class="card disabled">
         <span class="icon">📈</span>
-        <h3>Regresión Lineal</h3>
-        <p>Simple y múltiple, con tabla ANOVA, coeficientes y predicción.</p>
-        <span class="badge">Disponible</span>
-      </a>
-      <a class="card" href="anova/">
+        <h3>Regresión lineal</h3>
+        <p>Simple y múltiple, con R² y pruebas de significancia.</p>
+        <span class="badge proximamente">Próximamente</span>
+      </div>
+      <div class="card disabled">
         <span class="icon">📊</span>
-        <h3>ANOVA de un factor</h3>
-        <p>Análisis de varianza con comparaciones múltiples por pares (Bonferroni).</p>
-        <span class="badge">Disponible</span>
-      </a>
-      <a class="card" href="diseno-factorial/">
+        <h3>ANOVA</h3>
+        <p>Análisis de varianza de uno y dos factores.</p>
+        <span class="badge proximamente">Próximamente</span>
+      </div>
+      <div class="card disabled">
         <span class="icon">🧪</span>
-        <h3>Diseño Factorial 2ᵏ</h3>
-        <p>Efectos principales, interacciones y tabla ANOVA para diseños factoriales con réplicas.</p>
-        <span class="badge">Disponible</span>
-      </a>
+        <h3>Diseño factorial</h3>
+        <p>Diseños factoriales 2ᵏ, efectos principales e interacciones.</p>
+        <span class="badge proximamente">Próximamente</span>
+      </div>
     </div>
   </div>
 </main>
@@ -146,5 +155,20 @@
   <a href="/">Inicio</a>
 </footer>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Estadística gratuita en español para estudiantes y docentes</h2>
+<h3>Un laboratorio para entender, no solo calcular</h3>
+<p>Este módulo reúne calculadoras que muestran el procedimiento y explican el resultado en lenguaje sencillo. Cubre el recorrido de un curso de probabilidad e inferencia: estadística descriptiva, fundamentos de probabilidad, distribuciones, distribuciones muestrales, intervalos de confianza y pruebas de hipótesis; y de un curso de regresión y diseño de experimentos: correlación, regresión, ANOVA y diseño factorial 2ᵏ.</p>
+<h3>Cómo sacarle provecho</h3>
+<p>Resuelve primero el ejercicio a mano, calcula luego con la herramienta y compara. Describe el contexto de tus datos y pregunta por el resultado para practicar la interpretación, que es la parte que más se evalúa. Si quieres programar, el entorno de R en línea permite reproducir los mismos análisis sin instalar nada.</p>
+<h3>Aviso</h3>
+<p>Son herramientas de apoyo académico: no reemplazan el criterio del docente ni un análisis formal con todos los supuestos verificados.</p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ruta de estudio sugerida</h3><p>1) Estadística descriptiva; 2) Fundamentos de probabilidad; 3) Distribuciones de probabilidad; 4) Distribuciones muestrales; 5) Intervalos de confianza; 6) Pruebas de hipótesis; 7) Correlación y regresión; 8) ANOVA y diseño factorial. Cada calculadora incluye explicaciones, un ejemplo resuelto y preguntas frecuentes para reforzar el concepto.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Es gratis?</summary><p>Sí, y no requiere registro.</p></details>
+<details><summary>¿Los datos que pego se guardan?</summary><p>No se almacenan en servidores; el procesamiento ocurre en tu navegador.</p></details>
+<details><summary>¿Por dónde empiezo?</summary><p>Si estás empezando, por Estadística descriptiva; luego probabilidad y distribuciones; después inferencia.</p></details>
+<details><summary>¿Sirve para tareas y exámenes?</summary><p>Sirve para verificar tus ejercicios y entender los resultados; el procedimiento y la interpretación deben ser tuyos.</p></details>
+</article>
 </body>
 </html>

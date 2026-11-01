@@ -122,6 +122,19 @@
   .welcome h2 { font-size: 1.3rem; color: var(--text2); font-weight: 400; }
   .welcome p { font-size: 13.5px; color: var(--text3); max-width: 420px; }
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué significa R² = 0,80?", "acceptedAnswer": {"@type": "Answer", "text": "Que el modelo explica aproximadamente el 80 % de la variabilidad de la respuesta en la muestra."}}, {"@type": "Question", "name": "¿Cuándo usar regresión múltiple?", "acceptedAnswer": {"@type": "Answer", "text": "Cuando varias variables pueden influir en la respuesta y quieres estimar el efecto de cada una controlando las demás."}}, {"@type": "Question", "name": "¿Qué indica un coeficiente con valor p alto?", "acceptedAnswer": {"@type": "Answer", "text": "Que no hay evidencia suficiente de que esa variable aporte al modelo, dado el resto."}}, {"@type": "Question", "name": "¿Puedo usar variables categóricas?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, codificándolas como variables indicadoras (0/1)."}}]}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -576,5 +589,22 @@ function preguntarR() {
   if (window.gtag) { gtag('event', 'pregunta_regresion', { herramienta: 'regresion' }); }
 }
 </script>
+<article class="edu-pro" id="guia-educativa">
+<h2>Regresión lineal: modelar y predecir</h2>
+<h3>¿Qué hace la regresión lineal?</h3>
+<p>Ajusta una recta (o un plano, en regresión múltiple) que relaciona una variable respuesta Y con una o más variables explicativas X. Permite <strong>cuantificar el efecto</strong> de cada variable (coeficientes), <strong>predecir</strong> valores de Y y evaluar qué tan bien el modelo explica los datos.</p>
+<h3>Cómo leer los resultados</h3>
+<ul><li><strong>Coeficientes:</strong> cambio esperado en Y por cada unidad de X, manteniendo las demás constantes.</li><li><strong>R² y R² ajustado:</strong> proporción de variabilidad explicada; el ajustado penaliza variables innecesarias.</li><li><strong>Prueba t de cada coeficiente:</strong> evalúa si su efecto es distinto de cero.</li><li><strong>Prueba F global:</strong> evalúa si el modelo en conjunto explica algo.</li></ul>
+<h3>Supuestos y diagnóstico</h3>
+<p>El modelo asume relación lineal, errores independientes, varianza constante (homocedasticidad) y residuos aproximadamente normales. Revisar los gráficos de residuos ayuda a detectar curvatura, heterocedasticidad y puntos influyentes. En regresión múltiple, la <strong>multicolinealidad</strong> (variables explicativas muy correlacionadas) vuelve inestables los coeficientes.</p>
+<h3>Precauciones</h3>
+<p>Un R² alto no garantiza un buen modelo, y extrapolar fuera del rango de los datos es riesgoso. Recuerda también que asociación no implica causalidad.</p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>Con los mismos datos, X = (1, 2, 3, 4, 5) y Y = (2, 4, 5, 4, 5), la recta ajustada es Ŷ = 2,2 + 0,6·X: por cada unidad que aumenta X, Y aumenta en promedio 0,6. El R² es 0,60 y el error estándar de la pendiente es 0,283 (t = 2,12, valor p = 0,124). Para X = 6 el modelo predice 5,8, pero eso extrapola fuera del rango observado (1 a 5), por lo que debe tomarse con cautela.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué significa R² = 0,80?</summary><p>Que el modelo explica aproximadamente el 80 % de la variabilidad de la respuesta en la muestra.</p></details>
+<details><summary>¿Cuándo usar regresión múltiple?</summary><p>Cuando varias variables pueden influir en la respuesta y quieres estimar el efecto de cada una controlando las demás.</p></details>
+<details><summary>¿Qué indica un coeficiente con valor p alto?</summary><p>Que no hay evidencia suficiente de que esa variable aporte al modelo, dado el resto.</p></details>
+<details><summary>¿Puedo usar variables categóricas?</summary><p>Sí, codificándolas como variables indicadoras (0/1).</p></details>
+</article>
 </body>
 </html>
