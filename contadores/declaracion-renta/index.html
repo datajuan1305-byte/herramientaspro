@@ -136,7 +136,7 @@
   <p>Determina si debes declarar renta por el año gravable 2025, calcula tu impuesto estimado, aplica deducciones y rentas exentas según el Estatuto Tributario colombiano.</p>
   <div class="chips">
     <span class="chip">📅 Año gravable 2025</span>
-    <span class="chip">💰 UVT 2026: $47.065</span>
+    <span class="chip">💰 UVT 2025 (AG 2025): $49.799</span>
     <span class="chip">✅ E.T. actualizado</span>
     <span class="chip">📊 Tabla de tarifas incluida</span>
   </div>
@@ -207,17 +207,17 @@
         <div class="field">
           <label>Intereses crédito de vivienda / leasing habitacional (COP)</label>
           <input type="number" id="ded-vivienda" placeholder="0" min="0" />
-          <span class="hint">Máximo 1.200 UVT/año ($56.478.000 para 2026). Art. 119 E.T.</span>
+          <span class="hint">Máximo 1.200 UVT/año ($59.758.800 para AG 2025). Art. 119 E.T.</span>
         </div>
         <div class="field">
           <label>Medicina prepagada / seguros de salud (COP)</label>
           <input type="number" id="ded-medicina" placeholder="0" min="0" />
-          <span class="hint">Máximo 192 UVT/año ($9.036.480). Art. 387 E.T.</span>
+          <span class="hint">Máximo 16 UVT/mes, 192 UVT/año ($9.561.408). Art. 387 E.T.</span>
         </div>
         <div class="field">
           <label>Dependientes económicos (COP equivalente)</label>
           <input type="number" id="ded-dependientes" placeholder="0" min="0" />
-          <span class="hint">Hasta 10% del ingreso bruto laboral, máximo 32 UVT/mes (384 UVT/año = $18.072.960). Art. 387 E.T.</span>
+          <span class="hint">Hasta 10% del ingreso bruto laboral, máximo 32 UVT/mes (384 UVT/año = $19.122.816). Art. 387 E.T. No incluye la deducción adicional de 72 UVT por dependiente (Art. 336 num. 3).</span>
         </div>
         <div class="field">
           <label>Costos y gastos independiente (COP)</label>
@@ -234,12 +234,7 @@
         <div class="field">
           <label>Cesantías e intereses sobre cesantías (COP)</label>
           <input type="number" id="rex-cesantias" placeholder="0" min="0" />
-          <span class="hint">Exentas hasta 350 UVT/año ($16.472.750). Art. 206 num. 4 E.T.</span>
-        </div>
-        <div class="field">
-          <label>Prima de servicios (COP)</label>
-          <input type="number" id="rex-prima" placeholder="0" min="0" />
-          <span class="hint">Exenta hasta 350 UVT/año. Art. 206 E.T.</span>
+          <span class="hint">Exentas si el salario mensual promedio de los últimos 6 meses es ≤ 350 UVT ($17.429.650). Art. 206 num. 4 E.T.</span>
         </div>
         <div class="field">
           <label>Indemnizaciones laborales (COP)</label>
@@ -249,12 +244,12 @@
         <div class="field">
           <label>Aportes voluntarios AFC / pensión voluntaria (COP)</label>
           <input type="number" id="rex-afc" placeholder="0" min="0" />
-          <span class="hint">Exentos hasta el 30% del ingreso anual, máx. 3.800 UVT ($178.847.000). Art. 126-1 y 126-4 E.T.</span>
+          <span class="hint">Exentos hasta el 30% del ingreso laboral, máx. 3.800 UVT ($189.236.200). Art. 126-1 y 126-4 E.T.</span>
         </div>
         <div class="field">
-          <label>Exención del 25% renta laboral (COP — calcular abajo)</label>
+          <label>Exención del 25% renta laboral (COP) — déjelo vacío para calcularla automáticamente</label>
           <input type="number" id="rex-25pct" placeholder="0" min="0" />
-          <span class="hint">25% sobre el ingreso laboral depurado, máx. 240 UVT/mes (2.880 UVT/año = $135.547.200). Art. 206 num. 10 E.T.</span>
+          <span class="hint">25% sobre el ingreso laboral depurado, máx. 790 UVT/año ($39.341.210). Art. 206 num. 10 E.T.</span>
         </div>
         <div class="field">
           <label>Otras rentas exentas (COP)</label>
@@ -263,7 +258,7 @@
         </div>
       </div>
       <div class="alert alert-info" style="margin-top:14px;">
-        💡 <strong>Límite combinado de deducciones y rentas exentas:</strong> No puede superar el 40% del ingreso neto ni 5.040 UVT/año ($237.207.600) — Art. 336 E.T.
+        💡 <strong>Límite combinado de deducciones y rentas exentas:</strong> No puede superar el 40% del ingreso neto ni 1.340 UVT/año ($66.730.660) — Art. 336 E.T. (Ley 2277/2022).
       </div>
     </div>
 
@@ -274,7 +269,7 @@
         <div class="field">
           <label>Patrimonio bruto al 31 dic 2025 (COP)</label>
           <input type="number" id="patrimonio-bruto" placeholder="0" min="0" />
-          <span class="hint">Valor de todos sus bienes: inmuebles, vehículos, cuentas, inversiones, etc. Declarar si supera 4.500 UVT ($211.792.500).</span>
+          <span class="hint">Valor de todos sus bienes: inmuebles, vehículos, cuentas, inversiones, etc. Declarar si supera 4.500 UVT ($224.095.500).</span>
         </div>
         <div class="field">
           <label>Deudas / pasivos al 31 dic 2025 (COP)</label>
@@ -322,7 +317,7 @@
         <div class="res-card">
           <div class="rlbl">Renta gravable en UVT</div>
           <div class="rval" id="r-renta-uvt">0 UVT</div>
-          <div class="rsub">UVT 2026: $47.065</div>
+          <div class="rsub">UVT 2025: $49.799</div>
         </div>
         <div class="res-card">
           <div class="rlbl">Patrimonio líquido</div>
@@ -355,7 +350,7 @@
             <span class="wval" id="wf-renta-bruta">$0</span>
           </div>
           <div class="wf-row">
-            <span class="wlbl">(-) Rentas exentas (con límite 40% / 5.040 UVT)</span>
+            <span class="wlbl">(-) Deducciones y rentas exentas sujetas al límite (40% / 1.340 UVT)</span>
             <span class="wval negativo" id="wf-exentas">$0</span>
           </div>
           <div class="wf-row subtotal">
@@ -396,7 +391,7 @@
     <div class="card">
       <h2>📊 Tabla de tarifas de renta — Personas Naturales año gravable 2025</h2>
       <div class="alert alert-info" style="margin-bottom:16px;">
-        ℹ️ Las tarifas son progresivas: cada tramo se aplica solo sobre el exceso de la base anterior, no sobre el total del ingreso. UVT 2026 para declaración AG 2025: <strong>$47.065 COP</strong>.
+        ℹ️ Las tarifas son progresivas: cada tramo se aplica solo sobre el exceso de la base anterior, no sobre el total del ingreso. UVT 2025 (aplica a la declaración del año gravable 2025): <strong>$49.799 COP</strong>.
       </div>
       <table class="tarifa-table">
         <thead>
@@ -411,12 +406,12 @@
         </thead>
         <tbody>
           <tr><td>Tramo 1</td><td>0</td><td>1.090</td><td>$0</td><td>0%</td><td>0</td></tr>
-          <tr><td>Tramo 2</td><td>1.090</td><td>1.700</td><td>$51.300.850</td><td>19%</td><td>(RLG en UVT - 1.090) × 19%</td></tr>
-          <tr><td>Tramo 3</td><td>1.700</td><td>4.100</td><td>$80.010.500</td><td>28%</td><td>116 UVT + (RLG - 1.700) × 28%</td></tr>
-          <tr><td>Tramo 4</td><td>4.100</td><td>8.670</td><td>$192.966.500</td><td>33%</td><td>788 UVT + (RLG - 4.100) × 33%</td></tr>
-          <tr><td>Tramo 5</td><td>8.670</td><td>18.970</td><td>$408.014.550</td><td>35%</td><td>2.296 UVT + (RLG - 8.670) × 35%</td></tr>
-          <tr><td>Tramo 6</td><td>18.970</td><td>31.000</td><td>$893.112.550</td><td>37%</td><td>5.901 UVT + (RLG - 18.970) × 37%</td></tr>
-          <tr><td>Tramo 7 (más alto)</td><td>31.000</td><td>En adelante</td><td>$1.459.015.000</td><td>39%</td><td>10.352 UVT + (RLG - 31.000) × 39%</td></tr>
+          <tr><td>Tramo 2</td><td>1.090</td><td>1.700</td><td>$54.280.910</td><td>19%</td><td>(RLG en UVT - 1.090) × 19%</td></tr>
+          <tr><td>Tramo 3</td><td>1.700</td><td>4.100</td><td>$84.658.300</td><td>28%</td><td>116 UVT + (RLG - 1.700) × 28%</td></tr>
+          <tr><td>Tramo 4</td><td>4.100</td><td>8.670</td><td>$204.175.900</td><td>33%</td><td>788 UVT + (RLG - 4.100) × 33%</td></tr>
+          <tr><td>Tramo 5</td><td>8.670</td><td>18.970</td><td>$431.757.330</td><td>35%</td><td>2.296 UVT + (RLG - 8.670) × 35%</td></tr>
+          <tr><td>Tramo 6</td><td>18.970</td><td>31.000</td><td>$944.687.030</td><td>37%</td><td>5.901 UVT + (RLG - 18.970) × 37%</td></tr>
+          <tr><td>Tramo 7 (más alto)</td><td>31.000</td><td>En adelante</td><td>$1.543.769.000</td><td>39%</td><td>10.352 UVT + (RLG - 31.000) × 39%</td></tr>
         </tbody>
       </table>
       <div class="alert alert-warn" style="margin-top:14px;">
@@ -425,22 +420,21 @@
     </div>
 
     <div class="card">
-      <h2>📌 Límites de deducciones y exenciones clave 2026</h2>
+      <h2>📌 Límites de deducciones y exenciones clave — año gravable 2025</h2>
       <table class="uvt-table">
         <thead>
-          <tr><th>Concepto</th><th>Límite en UVT</th><th>Límite en COP (2026)</th><th>Artículo E.T.</th></tr>
+          <tr><th>Concepto</th><th>Límite en UVT</th><th>Límite en COP (UVT $49.799)</th><th>Artículo E.T.</th></tr>
         </thead>
         <tbody>
-          <tr class="resalta"><td>Exención 25% renta laboral</td><td>2.880 UVT/año</td><td>$135.547.200</td><td>Art. 206 num. 10</td></tr>
-          <tr><td>Intereses crédito hipotecario</td><td>1.200 UVT/año</td><td>$56.478.000</td><td>Art. 119</td></tr>
-          <tr><td>Medicina prepagada / seguros</td><td>192 UVT/año</td><td>$9.036.480</td><td>Art. 387</td></tr>
-          <tr><td>Dependientes económicos</td><td>384 UVT/año</td><td>$18.072.960</td><td>Art. 387</td></tr>
-          <tr class="resalta"><td>Aportes voluntarios AFC + pensión voluntaria</td><td>3.800 UVT/año</td><td>$178.847.000</td><td>Art. 126-1 y 126-4</td></tr>
-          <tr><td>Cesantías exentas</td><td>350 UVT/año</td><td>$16.472.750</td><td>Art. 206 num. 4</td></tr>
-          <tr><td>Prima de servicios exenta</td><td>350 UVT/año</td><td>$16.472.750</td><td>Art. 206</td></tr>
-          <tr class="resalta"><td><strong>Límite combinado ded. + exenciones</strong></td><td><strong>5.040 UVT/año</strong></td><td><strong>$237.207.600</strong></td><td>Art. 336</td></tr>
-          <tr><td>Umbral patrimonio bruto para declarar</td><td>4.500 UVT</td><td>$211.792.500</td><td>Art. 592</td></tr>
-          <tr><td>Umbral ingresos brutos para declarar</td><td>1.400 UVT</td><td>$65.891.000</td><td>Art. 592</td></tr>
+          <tr class="resalta"><td>Exención 25% renta laboral</td><td>790 UVT/año</td><td>$39.341.210</td><td>Art. 206 num. 10</td></tr>
+          <tr><td>Intereses crédito hipotecario</td><td>1.200 UVT/año</td><td>$59.758.800</td><td>Art. 119</td></tr>
+          <tr><td>Medicina prepagada / seguros</td><td>192 UVT/año</td><td>$9.561.408</td><td>Art. 387</td></tr>
+          <tr><td>Dependientes económicos (10% del ingreso)</td><td>384 UVT/año</td><td>$19.122.816</td><td>Art. 387</td></tr>
+          <tr class="resalta"><td>Aportes voluntarios AFC + pensión voluntaria</td><td>3.800 UVT/año</td><td>$189.236.200</td><td>Art. 126-1 y 126-4</td></tr>
+          <tr><td>Cesantías exentas (salario promedio ≤ 350 UVT/mes)</td><td>350 UVT/mes</td><td>$17.429.650</td><td>Art. 206 num. 4</td></tr>
+          <tr class="resalta"><td><strong>Límite combinado ded. + exenciones</strong></td><td><strong>1.340 UVT/año</strong></td><td><strong>$66.730.660</strong></td><td>Art. 336</td></tr>
+          <tr><td>Umbral patrimonio bruto para declarar</td><td>4.500 UVT</td><td>$224.095.500</td><td>Art. 592</td></tr>
+          <tr><td>Umbral ingresos brutos para declarar</td><td>1.400 UVT</td><td>$69.718.600</td><td>Art. 592</td></tr>
         </tbody>
       </table>
     </div>
@@ -460,11 +454,11 @@
           <tr><th>Condición</th><th>Umbral en UVT (AG 2025)</th><th>Umbral en COP</th></tr>
         </thead>
         <tbody>
-          <tr><td>Ingresos brutos totales superiores a</td><td>1.400 UVT</td><td>$65.891.000</td></tr>
-          <tr><td>Patrimonio bruto superior a</td><td>4.500 UVT</td><td>$211.792.500</td></tr>
-          <tr><td>Consumos con tarjetas de crédito superiores a</td><td>1.400 UVT</td><td>$65.891.000</td></tr>
-          <tr><td>Compras y consumos totales superiores a</td><td>1.400 UVT</td><td>$65.891.000</td></tr>
-          <tr><td>Consignaciones bancarias superiores a</td><td>1.400 UVT</td><td>$65.891.000</td></tr>
+          <tr><td>Ingresos brutos totales superiores a</td><td>1.400 UVT</td><td>$69.718.600</td></tr>
+          <tr><td>Patrimonio bruto superior a</td><td>4.500 UVT</td><td>$224.095.500</td></tr>
+          <tr><td>Consumos con tarjetas de crédito superiores a</td><td>1.400 UVT</td><td>$69.718.600</td></tr>
+          <tr><td>Compras y consumos totales superiores a</td><td>1.400 UVT</td><td>$69.718.600</td></tr>
+          <tr><td>Consignaciones bancarias superiores a</td><td>1.400 UVT</td><td>$69.718.600</td></tr>
           <tr><td>Ser responsable del IVA (régimen común)</td><td colspan="2">Obligatorio independiente de ingresos</td></tr>
           <tr><td>Tener saldo a favor y querer devolución</td><td colspan="2">Obligatorio para solicitar devolución o compensación</td></tr>
         </tbody>
@@ -487,7 +481,7 @@
         </tbody>
       </table>
       <div class="alert alert-warn" style="margin-top:14px;">
-        ⚠️ Las fechas exactas se publican en el Decreto de plazos de la DIAN cada año. Consulte el Decreto vigente en <strong>dian.gov.co</strong> para los vencimientos exactos del AG 2025.
+        ⚠️ Los plazos ordinarios del AG 2025 ya vencieron (agosto–octubre de 2026): quien no declaró a tiempo debe presentar la declaración extemporánea con sanción e intereses. Las fechas exactas se publican en el Decreto de plazos de la DIAN cada año. Consulte el Decreto vigente en <strong>dian.gov.co</strong> para los vencimientos exactos del AG 2025.
       </div>
     </div>
   </div>
@@ -495,13 +489,13 @@
   <div class="disclaimer">
     <strong>⚠️ Herramienta orientativa.</strong> Este simulador aplica las reglas generales del Estatuto Tributario colombiano para la cédula general de personas naturales (asalariados e independientes). No contempla todas las situaciones especiales: dividendos con tarifas diferenciadas, ganancias ocasionales, rentas de pensiones, regímenes especiales, ni situaciones de residente fiscal en el exterior. <strong>Consulte siempre con un contador público certificado para su declaración oficial en el portal MUISCA de la DIAN.</strong>
     <br><br>
-    🗓️ <em>Última actualización: Enero 2026 — UVT 2026: $47.065 | SMMLV 2026: $1.423.500 | Parámetros E.T. Ley 2277 de 2022</em>
+    🗓️ <em>Última actualización: noviembre de 2026 — UVT 2025 (AG 2025): $49.799 | UVT 2026: $52.374 | SMMLV 2026: $1.750.905 | Parámetros E.T. Ley 2277 de 2022</em>
   </div>
 
 </div>
 
 <script>
-  const UVT = 47065;
+  const UVT = 49799;   // UVT 2025 (Res. DIAN 000187/2024): se usa para el año gravable 2025
   const fmt = v => new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',minimumFractionDigits:0,maximumFractionDigits:0}).format(v);
   const v = id => parseFloat(document.getElementById(id).value) || 0;
 
@@ -569,32 +563,35 @@
 
     if (ingresosBrutos === 0) { alert('Ingrese al menos un ingreso para simular.'); return; }
 
-    // 2. Deducciones
+    // 2. Deducciones y rentas exentas (reglas Ley 2277/2022, AG 2025, UVT $49.799)
+    const ingresosNetos = Math.max(0, ingresosBrutos - incr);
+    // Aportes obligatorios y costos: no están sujetos al límite del Art. 336
     const dedPension    = Math.min(v('ded-pension'), ingSalario * 0.04 * 1.1);
     const dedSalud      = Math.min(v('ded-salud'), ingSalario * 0.04 * 1.1);
+    const dedCostosInd  = v('ded-costos-ind');
+    // Deducciones sujetas al límite
     const dedVivienda   = Math.min(v('ded-vivienda'), 1200 * UVT);
     const dedMedicina   = Math.min(v('ded-medicina'), 192 * UVT);
-    const dedDependientes = Math.min(v('ded-dependientes'), 384 * UVT);
-    const dedCostosInd  = v('ded-costos-ind');
-    const totalDeducciones = dedPension + dedSalud + dedVivienda + dedMedicina + dedDependientes + dedCostosInd;
+    const dedDependientes = Math.min(v('ded-dependientes'), Math.min(0.10 * ingSalario, 384 * UVT));
+    const totalDeducciones = dedPension + dedSalud + dedCostosInd;   // no sujetas al límite
 
-    // 3. Rentas exentas
-    const rexCesantias = Math.min(v('rex-cesantias'), 350 * UVT);
-    const rexPrima     = Math.min(v('rex-prima'), 350 * UVT);
+    // Rentas exentas
+    const rexCesantias = v('rex-cesantias');                 // exentas si el salario mensual promedio ≤ 350 UVT (Art. 206 num. 4)
     const rexIndemn    = v('rex-indemn');
-    const rexAfc       = Math.min(v('rex-afc'), 3800 * UVT);
-    const rex25        = Math.min(v('rex-25pct'), 2880 * UVT);
+    const rexAfc       = Math.min(v('rex-afc'), 0.30 * ingSalario, 3800 * UVT);
     const rexOtras     = v('rex-otras');
-    let totalExentas   = rexCesantias + rexPrima + rexIndemn + rexAfc + rex25 + rexOtras;
+    // Exención 25% (Art. 206 num. 10): 25% del ingreso laboral depurado, tope 790 UVT/año.
+    const baseLaboral  = Math.max(0, ingSalario - incr - dedPension - dedSalud - dedVivienda - dedMedicina - dedDependientes - rexCesantias - rexIndemn - rexAfc - rexOtras);
+    const rex25auto    = Math.min(0.25 * baseLaboral, 790 * UVT);
+    const rex25        = v('rex-25pct') > 0 ? Math.min(v('rex-25pct'), 790 * UVT) : rex25auto;
+    const sujetoLimite = dedVivienda + dedMedicina + dedDependientes + rexCesantias + rexIndemn + rexAfc + rex25 + rexOtras;
 
-    // 4. Calcular renta bruta
-    const ingresosNetos = Math.max(0, ingresosBrutos - incr);
+    // 3. Límite Art. 336: 40% del ingreso neto, máximo 1.340 UVT/año
+    const limiteExentas = Math.min(ingresosNetos * 0.40, 1340 * UVT);
+    const totalExentas  = Math.min(sujetoLimite, limiteExentas);
+
+    // 4. Renta líquida gravable
     const rentaBruta    = Math.max(0, ingresosNetos - totalDeducciones);
-
-    // Aplicar límite 40% / 5.040 UVT
-    const limiteExentas = Math.min(rentaBruta * 0.40, 5040 * UVT);
-    totalExentas = Math.min(totalExentas, limiteExentas);
-
     const rentaGravable = Math.max(0, rentaBruta - totalExentas);
 
     // 5. Impuesto
@@ -655,8 +652,7 @@
 
     // Consejo
     let consejo = '';
-    if (totalExentas >= limiteExentas * 0.95) consejo = `⚠️ <strong>Límite de deducciones y exenciones alcanzado:</strong> Se aplicó el tope del 40% sobre renta bruta (${fmt(limiteExentas)}). Considera espaciar los aportes voluntarios AFC para optimizar tu carga tributaria.`;
-    else if (rex25 === 0 && ingSalario > 0) consejo = `💡 <strong>Tip:</strong> No ingresaste la exención del 25% de renta laboral (Art. 206 num. 10). Si eres asalariado, puedes deducir el 25% de tu ingreso laboral depurado hasta 2.880 UVT/año. ¡Esto puede reducir significativamente tu impuesto!`;
+    if (totalExentas >= limiteExentas * 0.95) consejo = `⚠️ <strong>Límite de deducciones y exenciones alcanzado:</strong> Se aplicó el tope del 40% del ingreso neto / 1.340 UVT (${fmt(limiteExentas)}). Considera espaciar los aportes voluntarios AFC para optimizar tu carga tributaria.`;
     else if (rexAfc === 0) consejo = `💡 <strong>Tip de planeación tributaria:</strong> Los aportes voluntarios a AFC y fondo de pensiones voluntario son exentos de renta hasta 3.800 UVT/año. Si aún no los usas, puedes reducir tu base gravable significativamente.`;
     else consejo = `💡 <strong>Recomendación:</strong> Guarda todos los soportes de deducciones (recibos de salud, certificado bancario de intereses hipotecarios, certificados de AFC) para adjuntarlos si la DIAN requiere verificación.`;
     document.getElementById('consejo-msg').innerHTML = consejo;
@@ -668,7 +664,7 @@
   function resetSim() {
     ['ing-salario','ing-honorarios','ing-arrend','ing-dividendos','ing-otros','ing-ncrni',
      'ded-pension','ded-salud','ded-vivienda','ded-medicina','ded-dependientes','ded-costos-ind',
-     'rex-cesantias','rex-prima','rex-indemn','rex-afc','rex-25pct','rex-otras',
+     'rex-cesantias','rex-indemn','rex-afc','rex-25pct','rex-otras',
      'patrimonio-bruto','pasivos','retenciones','anticipo-ant']
       .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
     document.getElementById('resultado').style.display = 'none';

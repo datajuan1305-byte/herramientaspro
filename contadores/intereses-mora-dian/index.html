@@ -141,7 +141,7 @@
   <!-- TABS -->
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('calc')">Calculadora de Mora</button>
-    <button class="tab-btn" onclick="showTab('tasas')">Tasas Vigentes 2025–2026</button>
+    <button class="tab-btn" onclick="showTab('tasas')">Tasas vigentes 2026</button>
     <button class="tab-btn" onclick="showTab('guia')">Guía de Sanciones</button>
   </div>
 
@@ -177,12 +177,20 @@
         <div class="field">
           <label>Fecha de pago (o fecha de consulta)</label>
           <input type="date" id="fecha-pago" />
-          <span class="hint">Dejar vacío para usar hoy (27/06/2026)</span>
+          <span class="hint">Dejar vacío para usar la fecha de hoy</span>
         </div>
         <div class="field">
           <label>Tasa de interés moratorio anual (%)</label>
-          <input type="number" id="tasa-mora" value="31.17" step="0.01" />
-          <span class="hint">Tasa vigente 2026: 31.17% EA (SuperFinanciera). Se actualiza cada trimestre.</span>
+          <input type="number" id="tasa-mora" value="26.59" step="0.01" />
+          <span class="hint">Octubre de 2026: 26,59% EA (usura 28,59% − 2 puntos, Res. SuperFinanciera 1472/2026). Se certifica cada mes: verifique la tasa de noviembre.</span>
+        </div>
+        <div class="field">
+          <label>Método de aplicación de la tasa</label>
+          <select id="metodo-tasa">
+            <option value="tramos">Por tramos mensuales (usa la tabla 2026; fuera de 2026 usa la tasa ingresada)</option>
+            <option value="unica">Una sola tasa para todo el periodo</option>
+          </select>
+          <span class="hint">Interés simple: capital × tasa EA ÷ 365 × días (Art. 634–635 E.T.).</span>
         </div>
         <div class="field">
           <label>¿Incluir sanción por extemporaneidad?</label>
@@ -216,10 +224,10 @@
         </div>
         <div class="res-fila">
           <span class="lbl">📈 Tasa de mora aplicada (anual)</span>
-          <span class="val" id="res-tasa">31.17% EA</span>
+          <span class="val" id="res-tasa">26.59% EA</span>
         </div>
         <div class="res-fila">
-          <span class="lbl">📊 Tasa diaria equivalente</span>
+          <span class="lbl">📊 Tasa diaria promedio</span>
           <span class="val" id="res-tasa-diaria">0.0754%</span>
         </div>
         <div class="res-fila">
@@ -236,7 +244,7 @@
         </div>
       </div>
       <div class="alert alert-warn" style="margin: 16px 20px 0;">
-        ⚠️ <strong>Nota:</strong> Esta calculadora estima los intereses moratorios según el Art. 635 del Estatuto Tributario. La tasa se actualiza cada trimestre por la Superintendencia Financiera. Verifique siempre la tasa vigente en la resolución más reciente de la DIAN.
+        ⚠️ <strong>Nota:</strong> Esta calculadora estima los intereses moratorios según el Art. 635 del Estatuto Tributario. La tasa se certifica cada mes con base en la Superintendencia Financiera. Verifique siempre la tasa vigente en la resolución más reciente de la DIAN.
       </div>
 
       <div style="padding: 16px 20px 20px;">
@@ -249,35 +257,29 @@
   <!-- TAB 2: TASAS -->
   <div id="tab-tasas" style="display:none">
     <div class="card">
-      <h2>📊 Tasas de interés moratorio DIAN — Histórico reciente</h2>
+      <h2>📊 Tasas de interés moratorio DIAN — 2026 (mensuales)</h2>
       <div class="alert alert-info" style="margin-bottom:16px;">
-        ℹ️ La tasa de interés moratorio equivale a la tasa de usura certificada por la Superintendencia Financiera para operaciones de crédito de consumo, vigente para cada período (Art. 635 E.T.). Se actualiza cada trimestre.
+        ℹ️ La tasa de interés moratorio equivale a la tasa de usura certificada por la Superintendencia Financiera para operaciones de crédito de consumo, vigente para cada período (Art. 635 E.T.). Se certifica cada mes (desde 2026 la tabla es mensual, no trimestral). Mora DIAN = tasa de usura − 2 puntos.
       </div>
       <table class="tasas-table">
         <thead>
-          <tr>
-            <th>Período</th>
-            <th>Tasa Anual (E.A.)</th>
-            <th>Tasa Mensual</th>
-            <th>Tasa Diaria (aprox.)</th>
-            <th>Fuente</th>
-          </tr>
+          <tr><th>Mes</th><th>Tasa de usura (consumo)</th><th>Tasa de mora DIAN (E.A.)</th><th>Resolución SuperFinanciera</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>Ene – Mar 2026</strong></td><td><strong>31.17%</strong></td><td>2.30%</td><td>0.0754%</td><td>Res. SuperFinanciera</td></tr>
-          <tr><td>Oct – Dic 2025</td><td>30.54%</td><td>2.26%</td><td>0.0740%</td><td>Res. SuperFinanciera</td></tr>
-          <tr><td>Jul – Sep 2025</td><td>29.83%</td><td>2.21%</td><td>0.0722%</td><td>Res. SuperFinanciera</td></tr>
-          <tr><td>Abr – Jun 2025</td><td>29.24%</td><td>2.17%</td><td>0.0708%</td><td>Res. SuperFinanciera</td></tr>
-          <tr><td>Ene – Mar 2025</td><td>29.51%</td><td>2.19%</td><td>0.0715%</td><td>Res. SuperFinanciera</td></tr>
-          <tr><td>Oct – Dic 2024</td><td>31.42%</td><td>2.32%</td><td>0.0761%</td><td>Res. SuperFinanciera</td></tr>
-          <tr><td>Jul – Sep 2024</td><td>33.05%</td><td>2.43%</td><td>0.0800%</td><td>Res. SuperFinanciera</td></tr>
-          <tr><td>Abr – Jun 2024</td><td>35.76%</td><td>2.60%</td><td>0.0861%</td><td>Res. SuperFinanciera</td></tr>
-          <tr><td>Ene – Mar 2024</td><td>37.32%</td><td>2.70%</td><td>0.0902%</td><td>Res. SuperFinanciera</td></tr>
-          <tr><td>Oct – Dic 2023</td><td>38.29%</td><td>2.76%</td><td>0.0925%</td><td>Res. SuperFinanciera</td></tr>
+          <tr><td>Octubre 2026</td><td>28,59%</td><td><strong>26,59%</strong></td><td>1472/2026</td></tr>
+          <tr><td>Septiembre 2026</td><td>29,24%</td><td><strong>27,24%</strong></td><td>1260/2026</td></tr>
+          <tr><td>Agosto 2026</td><td>29,66%</td><td><strong>27,66%</strong></td><td>1139/2026</td></tr>
+          <tr><td>Julio 2026</td><td>28,79%</td><td><strong>26,79%</strong></td><td>965/2026</td></tr>
+          <tr><td>Junio 2026</td><td>28,79%</td><td><strong>26,79%</strong></td><td>823/2026</td></tr>
+          <tr><td>Mayo 2026</td><td>28,17%</td><td><strong>26,17%</strong></td><td>662/2026</td></tr>
+          <tr><td>Abril 2026</td><td>26,76%</td><td><strong>24,76%</strong></td><td>517/2026</td></tr>
+          <tr><td>Marzo 2026</td><td>26,13%</td><td><strong>24,13%</strong></td><td>252/2026</td></tr>
+          <tr><td>Febrero 2026</td><td>26,13%</td><td><strong>24,13%</strong></td><td>106/2026</td></tr>
+          <tr><td>Enero 2026</td><td>25,86%</td><td><strong>23,86%</strong></td><td>0027/2025</td></tr>
         </tbody>
       </table>
       <div class="alert alert-warn" style="margin-top:16px;">
-        ⚠️ <strong>Importante:</strong> Para períodos de mora que cruzan varios trimestres, la tasa aplicable puede variar. En cálculos exactos, se debe aplicar la tasa vigente en cada trimestre. Esta calculadora aplica la tasa ingresada de forma uniforme al período completo.
+        ⚠️ <strong>Importante:</strong> La tasa cambia cada mes. Esta calculadora aplica por defecto la tasa de cada mes (método por tramos). La DIAN, según el concepto que se adopte, puede liquidar con la tasa vigente al momento del pago; use «una sola tasa» para ese escenario. Confirme siempre con el liquidador oficial de la DIAN.
       </div>
     </div>
   </div>
@@ -335,7 +337,7 @@
           <tr>
             <td><strong>Sanción mínima DIAN</strong></td>
             <td>Art. 639 E.T.</td>
-            <td>10 UVT ($471.710 para 2026)</td>
+            <td>10 UVT ($523.740 para 2026)</td>
             <td>Aplica cuando la sanción calculada es inferior</td>
           </tr>
         </tbody>
@@ -364,11 +366,11 @@
           <tr><th>Concepto</th><th>Valor 2026</th></tr>
         </thead>
         <tbody>
-          <tr><td>UVT (Unidad de Valor Tributario)</td><td>$47.065 COP</td></tr>
-          <tr><td>Sanción mínima (10 UVT)</td><td>$470.650 COP</td></tr>
-          <tr><td>Tasa de usura / mora (Q1 2026)</td><td>31.17% EA</td></tr>
-          <tr><td>SMMLV 2026</td><td>$1.423.500 COP</td></tr>
-          <tr><td>Auxilio de transporte 2026</td><td>$162.000 COP</td></tr>
+          <tr><td>UVT (Unidad de Valor Tributario)</td><td>$52.374 COP</td></tr>
+          <tr><td>Sanción mínima (10 UVT)</td><td>$523.740 COP</td></tr>
+          <tr><td>Tasa de mora DIAN (octubre 2026)</td><td>26,59% EA</td></tr>
+          <tr><td>SMMLV 2026</td><td>$1.750.905 COP</td></tr>
+          <tr><td>Auxilio de transporte 2026</td><td>$249.095 COP</td></tr>
         </tbody>
       </table>
     </div>
@@ -377,7 +379,7 @@
   <div class="disclaimer">
     <strong>⚠️ Herramienta orientativa.</strong> Los cálculos de esta aplicación se basan en el Estatuto Tributario colombiano (Art. 635 y ss.) y las tasas certificadas por la Superintendencia Financiera para los períodos indicados. La tasa de mora se actualiza trimestralmente. Para cálculos definitivos, liquide su obligación directamente en el portal MUISCA de la DIAN o consulte con un contador público idóneo. <strong>HerramientasPro no asume responsabilidad sobre decisiones tomadas con base en esta herramienta.</strong>
     <br><br>
-    🗓️ <em>Última actualización normativa: Enero 2026 — Parámetros: UVT 2026 $47.065 | Tasa mora Q1 2026: 31.17% EA | SMMLV 2026: $1.423.500</em>
+    🗓️ <em>Última actualización normativa: noviembre de 2026 — Parámetros: UVT 2026 $52.374 | Tasa mora octubre 2026: 26,59% EA | SMMLV 2026: $1.750.905</em>
   </div>
 
 </div>
@@ -397,6 +399,14 @@
   }
 
   // ─── CALCULADORA ──────────────────────────────────────────────
+  // Tasa de interés moratorio DIAN (E.A.) por mes de 2026 = usura de consumo − 2 puntos
+  // Fuente: resoluciones mensuales de la Superintendencia Financiera (0027/2025, 0106, 0252, 0517, 0662, 0823, 0965, 1139, 1260 y 1472 de 2026)
+  const TASAS_MORA = {
+    '2026-1': 0.2386, '2026-2': 0.2413, '2026-3': 0.2413, '2026-4': 0.2476, '2026-5': 0.2617,
+    '2026-6': 0.2679, '2026-7': 0.2679, '2026-8': 0.2766, '2026-9': 0.2724, '2026-10': 0.2659
+  };
+  const UVT_2026 = 52374;
+
   function calcularMora() {
     const tipoImp = document.getElementById('tipo-imp').value;
     const valorImp = parseFloat(document.getElementById('valor-imp').value);
@@ -410,18 +420,27 @@
     if (!fechaVencStr) { alert('Ingrese la fecha de vencimiento.'); return; }
 
     const fechaVenc = new Date(fechaVencStr + 'T00:00:00');
-    const fechaPago = fechaPagoStr ? new Date(fechaPagoStr + 'T00:00:00') : new Date('2026-06-27T00:00:00');
+    const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+    const fechaPago = fechaPagoStr ? new Date(fechaPagoStr + 'T00:00:00') : hoy;
 
     if (fechaPago <= fechaVenc) {
       alert('La fecha de pago debe ser posterior a la fecha de vencimiento.');
       return;
     }
 
-    const dias = Math.ceil((fechaPago - fechaVenc) / (1000 * 60 * 60 * 24));
-    // Tasa diaria equivalente: (1 + tasa_anual)^(1/365) - 1
-    const tasaDiaria = Math.pow(1 + tasaAnual, 1 / 365) - 1;
-    // Interés compuesto diario
-    const intereses = valorImp * (Math.pow(1 + tasaDiaria, dias) - 1);
+    const dias = Math.round((fechaPago - fechaVenc) / (1000 * 60 * 60 * 24));
+    const metodo = document.getElementById('metodo-tasa').value;
+    // Interés simple (no se capitaliza): suma diaria de tasaEA / 365 (366 en año bisiesto)
+    let factor = 0; // suma de tasas diarias
+    for (let d = 1; d <= dias; d++) {
+      const f = new Date(fechaVenc.getTime()); f.setDate(f.getDate() + d);
+      const y = f.getFullYear(), m = f.getMonth() + 1;
+      const tasa = (metodo === 'tramos' && TASAS_MORA[y + '-' + m] !== undefined) ? TASAS_MORA[y + '-' + m] : tasaAnual;
+      const diasAnio = ((y % 4 === 0 && y % 100 !== 0) || y % 400 === 0) ? 366 : 365;
+      factor += tasa / diasAnio;
+    }
+    const intereses = valorImp * factor;
+    const tasaDiaria = dias > 0 ? factor / dias : 0;   // tasa diaria promedio
 
     // Sanción por extemporaneidad Art. 641 E.T.: 5% por mes o fracción, máx 100%
     let sancion = 0;
@@ -429,8 +448,8 @@
       const meses = Math.ceil(dias / 30);
       const pctSancion = Math.min(meses * 0.05, 1.0); // máx 100%
       sancion = valorImp * pctSancion;
-      // Aplicar sanción mínima DIAN: 10 UVT = $470.650
-      if (sancion > 0 && sancion < 470650) sancion = 470650;
+      // Sanción mínima (Art. 639 E.T.): 10 UVT
+      if (sancion > 0 && sancion < 10 * UVT_2026) sancion = 10 * UVT_2026;
     }
 
     const totalMora = intereses + sancion;
@@ -473,7 +492,7 @@
 
     for (let m = 1; m <= mostrar; m++) {
       const diasMes = Math.min(m * 30, totalDias);
-      const intAcumulado = capital * (Math.pow(1 + tasaDiaria, diasMes) - 1);
+      const intAcumulado = capital * tasaDiaria * diasMes;
       const totalAcum = capital + intAcumulado;
 
       const fecha = new Date(fechaVenc.getTime() + diasMes * 24 * 60 * 60 * 1000);
@@ -504,7 +523,7 @@
     document.getElementById('valor-imp').value = '';
     document.getElementById('fecha-venc').value = '';
     document.getElementById('fecha-pago').value = '';
-    document.getElementById('tasa-mora').value = '31.17';
+    document.getElementById('tasa-mora').value = '26.59';
     document.getElementById('incluir-sancion').value = 'no';
     document.getElementById('resultado').style.display = 'none';
   }

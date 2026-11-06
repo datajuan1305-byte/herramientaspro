@@ -157,7 +157,7 @@
   <h1>Escalafón Docente y Nómina 2026</h1>
   <p>Calcula tu salario según grado de escalafón, deducciones de nómina, prestaciones sociales y proyección de ascenso. Decreto 2277/1979 y Decreto 1278/2002.</p>
   <div class="hero-chips">
-    <span class="hero-chip">🇨🇴 SMMLV 2026 $1.423.500</span>
+    <span class="hero-chip">🇨🇴 SMMLV 2026 $1.750.905</span>
     <span class="hero-chip">📋 Dec. 2277 y 1278</span>
     <span class="hero-chip">💰 Nómina completa</span>
     <span class="hero-chip">📈 Proyección ascenso</span>
@@ -176,7 +176,7 @@
     <div class="card">
       <h2>💰 Liquidación de Nómina Mensual Docente</h2>
       <div class="info-box">
-        <strong>Parámetros 2026:</strong> SMMLV $1.423.500 | Aux. transporte $162.000 (si salario ≤ 2 SMMLV) | Salud empleado 4% | Pensión empleado 4% | Fondo solidaridad 1% (si &gt; 4 SMMLV)
+        <strong>Parámetros 2026:</strong> SMMLV $1.750.905 | Aux. transporte $249.095 (si salario ≤ 2 SMMLV) | Salud empleado 4% | Pensión empleado 4% | Fondo solidaridad 1% (si &gt; 4 SMMLV)
       </div>
 
       <h3>Datos del docente</h3>
@@ -194,7 +194,7 @@
         </div>
         <div class="form-group">
           <label>Salario básico mensual ($ COP)</label>
-          <input type="number" id="n-salario" value="3200000" min="1423500" step="50000" />
+          <input type="number" id="n-salario" value="3200000" min="1750905" step="50000" />
           <span class="form-hint">Se actualiza automáticamente con el grado</span>
         </div>
         <div class="form-group">
@@ -281,36 +281,66 @@
   <!-- TAB 3: ESCALAFÓN -->
   <div id="tab-escalafon" class="tab-panel">
     <div class="card">
-      <h2>📋 Tabla Escalafón Decreto 2277/1979 — Salarios 2026</h2>
+      <h2>📋 Tabla Escalafón Decreto 2277/1979 — Asignación básica 2026</h2>
+      <p style="font-size:0.82rem;color:var(--texto-suave);margin-bottom:0.6rem;">Fuente: Decreto 299 del 25 de marzo de 2026 (incremento del 7%, con efecto retroactivo desde el 10 de enero de 2026).</p>
       <div style="overflow-x:auto;">
         <table class="ref-table">
-          <thead><tr><th>Grado</th><th>Salario mensual 2026</th><th>Requisitos principales</th><th>Tiempo mínimo</th></tr></thead>
+          <thead><tr><th>Grado</th><th>Asignación básica mensual 2026</th></tr></thead>
           <tbody>
-            <tr><td><b>Grado 1</b></td><td>$1.423.500 – $1.600.000</td><td>Sin título — auxiliar docente</td><td>—</td></tr>
-            <tr><td><b>Grado 2A</b></td><td>$1.650.000 – $1.850.000</td><td>Bachiller pedagógico</td><td>—</td></tr>
-            <tr><td><b>Grado 4</b></td><td>$1.900.000 – $2.100.000</td><td>Normalista superior</td><td>2 años en grado 2</td></tr>
-            <tr><td><b>Grado 6</b></td><td>$2.150.000 – $2.350.000</td><td>Tecnólogo en educación</td><td>3 años en grado 4</td></tr>
-            <tr><td><b>Grado 8</b></td><td>$2.400.000 – $2.700.000</td><td>Licenciado / Profesional universitario</td><td>3 años en grado 6</td></tr>
-            <tr><td><b>Grado 10</b></td><td>$2.800.000 – $3.200.000</td><td>Lic. + 2 años experiencia en grado 8</td><td>4 años en grado 8</td></tr>
-            <tr><td><b>Grado 12</b></td><td>$3.300.000 – $3.800.000</td><td>Especialización</td><td>4 años en grado 10</td></tr>
-            <tr><td><b>Grado 14</b></td><td>$4.000.000 – $4.900.000</td><td>Maestría o Doctorado</td><td>4 años en grado 12</td></tr>
+            <tr><td><b>Grado 1</b></td><td>$2.235.742</td></tr>
+            <tr><td><b>Grado 2</b></td><td>$2.317.496</td></tr>
+            <tr><td><b>Grado 3</b></td><td>$2.459.305</td></tr>
+            <tr><td><b>Grado 4</b></td><td>$2.556.387</td></tr>
+            <tr><td><b>Grado 5</b></td><td>$2.717.624</td></tr>
+            <tr><td><b>Grado 6</b></td><td>$2.874.688</td></tr>
+            <tr><td><b>Grado 7</b></td><td>$3.217.125</td></tr>
+            <tr><td><b>Grado 8</b></td><td>$3.533.807</td></tr>
+            <tr><td><b>Grado 9</b></td><td>$3.914.723</td></tr>
+            <tr><td><b>Grado 10</b></td><td>$4.286.335</td></tr>
+            <tr><td><b>Grado 11</b></td><td>$4.894.390</td></tr>
+            <tr><td><b>Grado 12</b></td><td>$5.822.164</td></tr>
+            <tr><td><b>Grado 13</b></td><td>$6.444.689</td></tr>
+            <tr><td><b>Grado 14</b></td><td>$7.339.832</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
     <div class="card">
-      <h2>📋 Tabla Escalafón Decreto 1278/2002 — Salarios 2026</h2>
+      <h2>📋 Tabla Escalafón Decreto 1278/2002 — Asignación básica 2026</h2>
+      <p style="font-size:0.82rem;color:var(--texto-suave);margin-bottom:0.6rem;">Fuente: Decreto 299 de 2026. Los títulos exigidos para cada grado y nivel se deben verificar en el decreto; el nivel salarial (A–D) depende de la evaluación de competencias.</p>
       <div style="overflow-x:auto;">
         <table class="ref-table">
-          <thead><tr><th>Nivel/Cat.</th><th>Salario mensual 2026</th><th>Título requerido</th><th>Evaluación</th></tr></thead>
+          <thead><tr><th>Grado / Nivel</th><th>Perfil</th><th>Asignación básica mensual 2026</th></tr></thead>
           <tbody>
-            <tr><td><b>Nivel 1 — Cat. A</b></td><td>$2.200.000 – $2.500.000</td><td>Normalista superior / Tecnólogo</td><td>Ingreso (concurso)</td></tr>
-            <tr><td><b>Nivel 1 — Cat. B</b></td><td>$2.600.000 – $2.900.000</td><td>Licenciado / Profesional</td><td>Concurso + eval. anual</td></tr>
-            <tr><td><b>Nivel 1 — Cat. C</b></td><td>$3.000.000 – $3.400.000</td><td>Especialización + eval. sobresaliente</td><td>Eval. acumulada</td></tr>
-            <tr><td><b>Nivel 2 — Cat. A</b></td><td>$3.500.000 – $4.000.000</td><td>Maestría + 3 años nivel 1</td><td>Eval. acumulada + prueba</td></tr>
-            <tr><td><b>Nivel 2 — Cat. B</b></td><td>$4.100.000 – $4.800.000</td><td>Maestría avanzada + 3 años nivel 2A</td><td>Eval. sobresaliente</td></tr>
-            <tr><td><b>Nivel 3 — Cat. A</b></td><td>$5.000.000 – $6.200.000</td><td>Doctorado + 3 años nivel 2</td><td>Eval. sobresaliente + prueba</td></tr>
+            <tr><td><b>Grado 1 — Nivel A</b></td><td>Normalista superior / Tecnólogo en educación</td><td>$3.036.203</td></tr>
+            <tr><td><b>Grado 1 — Nivel B</b></td><td>Normalista superior / Tecnólogo en educación</td><td>$3.870.303</td></tr>
+            <tr><td><b>Grado 1 — Nivel C</b></td><td>Normalista superior / Tecnólogo en educación</td><td>$4.989.102</td></tr>
+            <tr><td><b>Grado 1 — Nivel D</b></td><td>Normalista superior / Tecnólogo en educación</td><td>$6.184.872</td></tr>
+            <tr><td><b>Grado 2 — Nivel A</b></td><td>Licenciado o profesional (Sin especialización)</td><td>$3.821.274</td></tr>
+            <tr><td><b>Grado 2 — Nivel B</b></td><td>Licenciado o profesional (Sin especialización)</td><td>$4.992.967</td></tr>
+            <tr><td><b>Grado 2 — Nivel C</b></td><td>Licenciado o profesional (Sin especialización)</td><td>$5.831.713</td></tr>
+            <tr><td><b>Grado 2 — Nivel D</b></td><td>Licenciado o profesional (Sin especialización)</td><td>$6.968.892</td></tr>
+            <tr><td><b>Grado 2 — Nivel A</b></td><td>Licenciado o profesional (Con especialización)</td><td>$4.153.464</td></tr>
+            <tr><td><b>Grado 2 — Nivel B</b></td><td>Licenciado o profesional (Con especialización)</td><td>$5.306.670</td></tr>
+            <tr><td><b>Grado 2 — Nivel C</b></td><td>Licenciado o profesional (Con especialización)</td><td>$6.574.267</td></tr>
+            <tr><td><b>Grado 2 — Nivel D</b></td><td>Licenciado o profesional (Con especialización)</td><td>$7.780.202</td></tr>
+            <tr><td><b>Grado 2 — Nivel A</b></td><td>Licenciado o profesional (Maestría)</td><td>$4.394.463</td></tr>
+            <tr><td><b>Grado 2 — Nivel B</b></td><td>Licenciado o profesional (Maestría)</td><td>$5.741.913</td></tr>
+            <tr><td><b>Grado 2 — Nivel C</b></td><td>Licenciado o profesional (Maestría)</td><td>$6.706.468</td></tr>
+            <tr><td><b>Grado 2 — Nivel D</b></td><td>Licenciado o profesional (Maestría)</td><td>$8.014.215</td></tr>
+            <tr><td><b>Grado 2 — Nivel A</b></td><td>Licenciado o profesional (Doctorado)</td><td>$4.967.653</td></tr>
+            <tr><td><b>Grado 2 — Nivel B</b></td><td>Licenciado o profesional (Doctorado)</td><td>$6.490.858</td></tr>
+            <tr><td><b>Grado 2 — Nivel C</b></td><td>Licenciado o profesional (Doctorado)</td><td>$7.581.222</td></tr>
+            <tr><td><b>Grado 2 — Nivel D</b></td><td>Licenciado o profesional (Doctorado)</td><td>$9.059.548</td></tr>
+            <tr><td><b>Grado 3 — Nivel A</b></td><td>Licenciado con Maestría</td><td>$6.395.544</td></tr>
+            <tr><td><b>Grado 3 — Nivel B</b></td><td>Licenciado con Maestría</td><td>$7.572.568</td></tr>
+            <tr><td><b>Grado 3 — Nivel C</b></td><td>Licenciado con Maestría</td><td>$9.365.412</td></tr>
+            <tr><td><b>Grado 3 — Nivel D</b></td><td>Licenciado con Maestría</td><td>$10.851.730</td></tr>
+            <tr><td><b>Grado 3 — Nivel A</b></td><td>Licenciado con Doctorado</td><td>$8.484.182</td></tr>
+            <tr><td><b>Grado 3 — Nivel B</b></td><td>Licenciado con Doctorado</td><td>$9.959.374</td></tr>
+            <tr><td><b>Grado 3 — Nivel C</b></td><td>Licenciado con Doctorado</td><td>$12.576.133</td></tr>
+            <tr><td><b>Grado 3 — Nivel D</b></td><td>Licenciado con Doctorado</td><td>$14.436.985</td></tr>
           </tbody>
         </table>
       </div>
@@ -336,13 +366,13 @@
   </div>
 
   <div class="disclaimer">
-    ⚠️ <strong>Herramienta de uso orientativo.</strong> Los salarios y deducciones son estimaciones basadas en la normativa vigente. La nómina definitiva la liquida la Secretaría de Educación departamental. Para reclamaciones o consultas sobre su nómina, diríjase al Departamento de Nómina de su Secretaría de Educación o a su sindicato (FECODE). Parámetros 2026: SMMLV $1.423.500 | Aux. transporte $162.000.
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Las asignaciones básicas provienen del Decreto 299 de 2026. Los descuentos (aportes a salud, pensión y FOMAG), la bonificación de zona y las asignaciones de cargo directivo son estimaciones de referencia: verifique su desprendible de pago. La nómina definitiva la liquida la Secretaría de Educación departamental. Para reclamaciones o consultas sobre su nómina, diríjase al Departamento de Nómina de su Secretaría de Educación o a su sindicato (FECODE). Parámetros 2026: SMMLV $1.750.905 | Aux. transporte $249.095.
   </div>
 </div>
 
 <script>
-const SMMLV = 1423500;
-const AUX_TRANSP = 162000;
+const SMMLV = 1750905;
+const AUX_TRANSP = 249095;
 
 function mostrarTab(id, btn) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -356,23 +386,51 @@ function fmtD(n,d=1) { return Number(n).toLocaleString('es-CO',{minimumFractionD
 
 // ── ESCALAFONES ──
 const escalafon2277 = [
-  { grado:'Grado 1',  salario:1480000, titulo:'Auxiliar docente (sin título)' },
-  { grado:'Grado 2A', salario:1720000, titulo:'Bachiller pedagógico' },
-  { grado:'Grado 4',  salario:1960000, titulo:'Normalista superior' },
-  { grado:'Grado 6',  salario:2240000, titulo:'Tecnólogo en educación' },
-  { grado:'Grado 8',  salario:2550000, titulo:'Licenciado / Profesional' },
-  { grado:'Grado 10', salario:3000000, titulo:'Lic. + experiencia' },
-  { grado:'Grado 12', salario:3550000, titulo:'Especialización' },
-  { grado:'Grado 14', salario:4450000, titulo:'Maestría / Doctorado' },
+  { grado:'Grado 1', salario:2235742, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 2', salario:2317496, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 3', salario:2459305, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 4', salario:2556387, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 5', salario:2717624, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 6', salario:2874688, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 7', salario:3217125, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 8', salario:3533807, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 9', salario:3914723, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 10', salario:4286335, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 11', salario:4894390, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 12', salario:5822164, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 13', salario:6444689, titulo:'Decreto 2277/1979' },
+  { grado:'Grado 14', salario:7339832, titulo:'Decreto 2277/1979' },
 ];
 
 const escalafon1278 = [
-  { grado:'Nivel 1 — Cat. A', salario:2350000, titulo:'Normalista / Tecnólogo' },
-  { grado:'Nivel 1 — Cat. B', salario:2750000, titulo:'Licenciado / Profesional' },
-  { grado:'Nivel 1 — Cat. C', salario:3200000, titulo:'Especialización' },
-  { grado:'Nivel 2 — Cat. A', salario:3750000, titulo:'Maestría' },
-  { grado:'Nivel 2 — Cat. B', salario:4450000, titulo:'Maestría avanzada' },
-  { grado:'Nivel 3 — Cat. A', salario:5600000, titulo:'Doctorado' },
+  { grado:'Grado 1 — Nivel A', salario:3036203, titulo:'Normalista superior / Tecnólogo en educación' },
+  { grado:'Grado 1 — Nivel B', salario:3870303, titulo:'Normalista superior / Tecnólogo en educación' },
+  { grado:'Grado 1 — Nivel C', salario:4989102, titulo:'Normalista superior / Tecnólogo en educación' },
+  { grado:'Grado 1 — Nivel D', salario:6184872, titulo:'Normalista superior / Tecnólogo en educación' },
+  { grado:'Grado 2 — Nivel A', salario:3821274, titulo:'Licenciado o profesional (Sin especialización)' },
+  { grado:'Grado 2 — Nivel B', salario:4992967, titulo:'Licenciado o profesional (Sin especialización)' },
+  { grado:'Grado 2 — Nivel C', salario:5831713, titulo:'Licenciado o profesional (Sin especialización)' },
+  { grado:'Grado 2 — Nivel D', salario:6968892, titulo:'Licenciado o profesional (Sin especialización)' },
+  { grado:'Grado 2 — Nivel A', salario:4153464, titulo:'Licenciado o profesional (Con especialización)' },
+  { grado:'Grado 2 — Nivel B', salario:5306670, titulo:'Licenciado o profesional (Con especialización)' },
+  { grado:'Grado 2 — Nivel C', salario:6574267, titulo:'Licenciado o profesional (Con especialización)' },
+  { grado:'Grado 2 — Nivel D', salario:7780202, titulo:'Licenciado o profesional (Con especialización)' },
+  { grado:'Grado 2 — Nivel A', salario:4394463, titulo:'Licenciado o profesional (Maestría)' },
+  { grado:'Grado 2 — Nivel B', salario:5741913, titulo:'Licenciado o profesional (Maestría)' },
+  { grado:'Grado 2 — Nivel C', salario:6706468, titulo:'Licenciado o profesional (Maestría)' },
+  { grado:'Grado 2 — Nivel D', salario:8014215, titulo:'Licenciado o profesional (Maestría)' },
+  { grado:'Grado 2 — Nivel A', salario:4967653, titulo:'Licenciado o profesional (Doctorado)' },
+  { grado:'Grado 2 — Nivel B', salario:6490858, titulo:'Licenciado o profesional (Doctorado)' },
+  { grado:'Grado 2 — Nivel C', salario:7581222, titulo:'Licenciado o profesional (Doctorado)' },
+  { grado:'Grado 2 — Nivel D', salario:9059548, titulo:'Licenciado o profesional (Doctorado)' },
+  { grado:'Grado 3 — Nivel A', salario:6395544, titulo:'Licenciado con Maestría' },
+  { grado:'Grado 3 — Nivel B', salario:7572568, titulo:'Licenciado con Maestría' },
+  { grado:'Grado 3 — Nivel C', salario:9365412, titulo:'Licenciado con Maestría' },
+  { grado:'Grado 3 — Nivel D', salario:10851730, titulo:'Licenciado con Maestría' },
+  { grado:'Grado 3 — Nivel A', salario:8484182, titulo:'Licenciado con Doctorado' },
+  { grado:'Grado 3 — Nivel B', salario:9959374, titulo:'Licenciado con Doctorado' },
+  { grado:'Grado 3 — Nivel C', salario:12576133, titulo:'Licenciado con Doctorado' },
+  { grado:'Grado 3 — Nivel D', salario:14436985, titulo:'Licenciado con Doctorado' },
 ];
 
 function getEscalafon(decreto) {

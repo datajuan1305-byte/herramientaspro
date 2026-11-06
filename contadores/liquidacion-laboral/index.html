@@ -154,9 +154,9 @@
   <h1>Liquidador Laboral Colombia 2026</h1>
   <p>Calcula prima de servicios, cesantías, intereses, vacaciones e indemnización por despido. Actualizado con los parámetros legales vigentes 2026.</p>
   <div class="hero-params">
-    <span class="hero-param">SMMLV 2026: $1.423.500</span>
-    <span class="hero-param">Auxilio transporte: $200.000</span>
-    <span class="hero-param">UVT 2026: $49.799</span>
+    <span class="hero-param">SMMLV 2026: $1.750.905</span>
+    <span class="hero-param">Auxilio transporte: $249.095</span>
+    <span class="hero-param">UVT 2026: $52.374</span>
   </div>
 </div>
 
@@ -171,13 +171,13 @@
       </div>
       <div class="form-group">
         <label for="salario">Salario mensual (COP)</label>
-        <input type="number" id="salario" placeholder="Ej: 1423500" min="1423500" step="1000" />
-        <span class="hint">Mínimo SMMLV 2026: $1.423.500</span>
+        <input type="number" id="salario" placeholder="Ej: 1750905" min="1750905" step="1000" />
+        <span class="hint">Mínimo SMMLV 2026: $1.750.905</span>
       </div>
       <div class="form-group">
         <label for="auxilio">¿Devenga auxilio de transporte?</label>
         <select id="auxilio">
-          <option value="si">Sí — salario ≤ 2 SMMLV ($2.847.000)</option>
+          <option value="si">Sí — salario ≤ 2 SMMLV ($3.501.810)</option>
           <option value="no">No — salario > 2 SMMLV</option>
         </select>
       </div>
@@ -291,7 +291,7 @@
     </div>
 
     <div class="disclaimer">
-      ⚠️ <strong>Herramienta orientativa.</strong> Esta liquidación se calcula con base en el Código Sustantivo del Trabajo (CST) y los parámetros vigentes para 2026 (SMMLV $1.423.500 — Auxilio de transporte $200.000). Los resultados deben ser verificados por un contador público o abogado laboral. No incluye deducciones de nómina (salud, pensión, retención). Parámetros actualizados enero 2026.
+      ⚠️ <strong>Herramienta orientativa.</strong> Prima y cesantías se calculan sobre el periodo en curso (semestre / año calendario), suponiendo que lo anterior ya fue pagado o consignado. Esta liquidación se calcula con base en el Código Sustantivo del Trabajo (CST) y los parámetros vigentes para 2026 (SMMLV $1.750.905 — Auxilio de transporte $249.095). Los resultados deben ser verificados por un contador público o abogado laboral. No incluye deducciones de nómina (salud, pensión, retención). Parámetros actualizados enero 2026.
     </div>
 
     <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
@@ -301,8 +301,8 @@
 
 <script>
   // Parámetros 2026
-  const SMMLV = 1423500;
-  const AUX_TRANSPORTE = 200000;
+  const SMMLV = 1750905;
+  const AUX_TRANSPORTE = 249095;
   const DIAS_ANO = 360;
 
   function toggleIndemnizacion() {
@@ -315,14 +315,21 @@
     }
   }
 
+  function parseF(s) { const [y, m, d] = s.split('-').map(Number); return { y, m, d }; }
   function diasEntre(f1, f2) {
-    // Método 30/360 (comercial colombiano)
-    let d1 = new Date(f1), d2 = new Date(f2);
-    let y1 = d1.getFullYear(), m1 = d1.getMonth() + 1, dia1 = d1.getDate();
-    let y2 = d2.getFullYear(), m2 = d2.getMonth() + 1, dia2 = d2.getDate();
+    // Método 30/360 (comercial colombiano), sin depender de la zona horaria
+    const a = parseF(f1), b = parseF(f2);
+    let dia1 = a.d, dia2 = b.d;
     if (dia1 === 31) dia1 = 30;
     if (dia2 === 31) dia2 = 30;
-    return (y2 - y1) * 360 + (m2 - m1) * 30 + (dia2 - dia1);
+    return (b.y - a.y) * 360 + (b.m - a.m) * 30 + (dia2 - dia1);
+  }
+  // Primer día del periodo en curso: semestre (prima) o año (cesantías), nunca antes del ingreso
+  function inicioPeriodo(ingreso, retiro, tipo) {
+    const r = parseF(retiro);
+    const mes = tipo === 'semestre' ? (r.m <= 6 ? 1 : 7) : 1;
+    const ini = `${r.y}-${String(mes).padStart(2, '0')}-01`;
+    return ini > ingreso ? ini : ingreso;
   }
 
   function fmt(n) {
@@ -338,7 +345,7 @@
     const tipoRetiro = document.getElementById('tipo_retiro').value;
     const tipoContrato = document.getElementById('tipo_contrato').value;
 
-    if (!salario || salario < SMMLV) { alert('Ingrese un salario válido (mínimo SMMLV 2026: $1.423.500)'); return; }
+    if (!salario || salario < SMMLV) { alert('Ingrese un salario válido (mínimo SMMLV 2026: $1.750.905)'); return; }
     if (!fechaIngreso || !fechaRetiro) { alert('Ingrese las fechas de ingreso y retiro.'); return; }
     if (fechaRetiro <= fechaIngreso) { alert('La fecha de retiro debe ser posterior al ingreso.'); return; }
 
@@ -347,9 +354,12 @@
     const basePrima = salario + auxilio; // prima incluye auxilio de transporte
     const baseCesantias = salario + auxilio;
 
-    const diasTotales = diasEntre(fechaIngreso, fechaRetiro);
+    // Días del contrato (se cuenta el día de retiro) y de los periodos en curso
+    const diasTotales = diasEntre(fechaIngreso, fechaRetiro) + 1;
     const anos = Math.floor(diasTotales / 360);
     const diasRestantes = diasTotales % 360;
+    const diasSemestre = diasEntre(inicioPeriodo(fechaIngreso, fechaRetiro, 'semestre'), fechaRetiro) + 1;
+    const diasAnioCes = diasEntre(inicioPeriodo(fechaIngreso, fechaRetiro, 'anio'), fechaRetiro) + 1;
 
     // CÁLCULOS
     let prima = 0, cesantias = 0, intereses = 0, vacaciones = 0, salariosPend = 0, indemnizacion = 0;
@@ -359,34 +369,34 @@
 
     // PRIMA DE SERVICIOS (Art. 306 CST)
     if (document.getElementById('cb_prima').checked) {
-      prima = (basePrima * diasTotales) / DIAS_ANO;
+      prima = (basePrima * diasSemestre) / DIAS_ANO;
       cards.push({
-        clase: 'prima', titulo: 'Prima de servicios', valor: prima,
-        dias: diasTotales, formula: `(${fmt(basePrima)} × ${diasTotales} días) ÷ 360`
+        clase: 'prima', titulo: 'Prima de servicios (semestre en curso)', valor: prima,
+        dias: diasSemestre, formula: `(${fmt(basePrima)} × ${diasSemestre} días) ÷ 360`
       });
-      filas.push({ concepto: 'Prima de servicios', base: fmt(basePrima) + '/mes', dias: diasTotales, valor: prima });
+      filas.push({ concepto: 'Prima de servicios (semestre en curso)', base: fmt(basePrima) + '/mes', dias: diasSemestre, valor: prima });
       total += prima;
     }
 
     // CESANTÍAS (Art. 249 CST)
     if (document.getElementById('cb_cesantias').checked) {
-      cesantias = (baseCesantias * diasTotales) / DIAS_ANO;
+      cesantias = (baseCesantias * diasAnioCes) / DIAS_ANO;
       cards.push({
-        clase: 'cesantias', titulo: 'Cesantías', valor: cesantias,
-        dias: diasTotales, formula: `(${fmt(baseCesantias)} × ${diasTotales} días) ÷ 360`
+        clase: 'cesantias', titulo: 'Cesantías (año en curso)', valor: cesantias,
+        dias: diasAnioCes, formula: `(${fmt(baseCesantias)} × ${diasAnioCes} días) ÷ 360`
       });
-      filas.push({ concepto: 'Cesantías', base: fmt(baseCesantias) + '/mes', dias: diasTotales, valor: cesantias });
+      filas.push({ concepto: 'Cesantías (año en curso)', base: fmt(baseCesantias) + '/mes', dias: diasAnioCes, valor: cesantias });
       total += cesantias;
     }
 
     // INTERESES SOBRE CESANTÍAS (Art. 99 Ley 50/1990 — 12% anual)
     if (document.getElementById('cb_intereses').checked) {
-      intereses = cesantias * 0.12 * (diasTotales / DIAS_ANO);
+      intereses = cesantias * 0.12 * (diasAnioCes / DIAS_ANO);
       cards.push({
         clase: 'intereses', titulo: 'Intereses cesantías', valor: intereses,
-        dias: diasTotales, formula: `Cesantías × 12% × (${diasTotales} ÷ 360)`
+        dias: diasAnioCes, formula: `Cesantías × 12% × (${diasAnioCes} ÷ 360)`
       });
-      filas.push({ concepto: 'Intereses sobre cesantías (12% anual)', base: fmt(cesantias), dias: diasTotales, valor: intereses });
+      filas.push({ concepto: 'Intereses sobre cesantías (12% anual)', base: fmt(cesantias), dias: diasAnioCes, valor: intereses });
       total += intereses;
     }
 
@@ -394,8 +404,8 @@
     if (document.getElementById('cb_vacaciones').checked) {
       vacaciones = (salario * diasTotales) / (DIAS_ANO * 2);
       cards.push({
-        clase: 'vacaciones', titulo: 'Vacaciones', valor: vacaciones,
-        dias: diasTotales, formula: `(${fmt(salario)} × ${diasTotales} días) ÷ 720`
+        clase: 'vacaciones', titulo: 'Vacaciones (sin disfrutar)', valor: vacaciones,
+        dias: diasTotales, formula: `(${fmt(salario)} × ${diasTotales} días) ÷ 720 — descuente las ya disfrutadas`
       });
       filas.push({ concepto: 'Vacaciones (15 días × año)', base: fmt(salario) + '/mes', dias: diasTotales, valor: vacaciones });
       total += vacaciones;
@@ -403,10 +413,7 @@
 
     // SALARIOS PENDIENTES
     if (document.getElementById('cb_salarios').checked) {
-      const diasMes = diasEntre(
-        new Date(fechaRetiro).toISOString().slice(0,8) + '01',
-        fechaRetiro
-      );
+      const diasMes = Math.min(30, parseF(fechaRetiro).d); // días del mes de retiro (base 30)
       salariosPend = (salario / 30) * diasMes;
       if (salariosPend > 0) {
         cards.push({
@@ -421,22 +428,16 @@
     // INDEMNIZACIÓN POR DESPIDO SIN JUSTA CAUSA (Art. 64 CST)
     if (document.getElementById('cb_indemnizacion').checked && tipoRetiro === 'injusta') {
       if (tipoContrato === 'indefinido') {
-        if (salario <= 10 * SMMLV) {
-          // Primer año: 30 días; adicionales: 20 días por año
-          indemnizacion = (salario / 30) * 30; // primer año
-          if (anos > 1) {
-            indemnizacion += (salario / 30) * 20 * (anos - 1);
-            if (diasRestantes > 0) indemnizacion += (salario / 30) * 20 * (diasRestantes / 360);
-          }
-        } else {
-          // Salario > 10 SMMLV: 20 días por año
-          indemnizacion = (salario / 30) * 20 * anos;
-          if (diasRestantes > 0) indemnizacion += (salario / 30) * 20 * (diasRestantes / 360);
-          if (indemnizacion < salario * 15 / 30) indemnizacion = salario * 15 / 30;
-        }
+        // Art. 64 CST (modif. Ley 789/2002): contrato indefinido
+        // < 10 SMMLV: 30 días el primer año + 20 días por cada año siguiente (proporcional por fracción)
+        // ≥ 10 SMMLV: 20 días el primer año + 15 días por cada año siguiente (proporcional por fracción)
+        const diasPrimero = salario < 10 * SMMLV ? 30 : 20;
+        const diasAdic = salario < 10 * SMMLV ? 20 : 15;
+        const aniosAdic = Math.max(0, (diasTotales - 360) / 360);
+        indemnizacion = (salario / 30) * (diasPrimero + diasAdic * aniosAdic);
         cards.push({
           clase: 'indemnizacion', titulo: 'Indemnización (sin justa causa)', valor: indemnizacion,
-          dias: diasTotales, formula: `${anos} año(s) × 20 días + proporcional. Art. 64 CST`
+          dias: diasTotales, formula: `Art. 64 CST: ${salario < 10 * SMMLV ? '30 días 1.er año + 20 por año adicional' : '20 días 1.er año + 15 por año adicional'} (proporcional)`
         });
         filas.push({ concepto: 'Indemnización por despido sin justa causa', base: fmt(salario) + '/mes', dias: diasTotales, valor: indemnizacion });
         total += indemnizacion;
@@ -477,9 +478,9 @@
     document.getElementById('total-pagar').textContent = fmt(total);
 
     document.getElementById('base-calculo-detalle').innerHTML = `
-      <strong>SMMLV 2026:</strong> $1.423.500 &nbsp;|&nbsp;
-      <strong>Auxilio de transporte 2026:</strong> $200.000 &nbsp;|&nbsp;
-      <strong>UVT 2026:</strong> $49.799<br>
+      <strong>SMMLV 2026:</strong> $1.750.905 &nbsp;|&nbsp;
+      <strong>Auxilio de transporte 2026:</strong> $249.095 &nbsp;|&nbsp;
+      <strong>UVT 2026:</strong> $52.374<br>
       <strong>Salario del trabajador:</strong> ${fmt(salario)} &nbsp;|&nbsp;
       <strong>Auxilio incluido:</strong> ${auxilio > 0 ? fmt(auxilio) : 'No aplica'}<br>
       <strong>Base prima y cesantías:</strong> ${fmt(baseCesantias)} (salario + auxilio de transporte)<br>

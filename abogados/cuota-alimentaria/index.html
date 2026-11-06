@@ -325,7 +325,7 @@
             <tr><td><b>Ley 1098/06 (CIAA)</b></td><td>Código de Infancia y Adolescencia. Interés superior del menor en materia de alimentos.</td></tr>
             <tr><td><b>Art. 129 Ley 1098</b></td><td>Inasistencia alimentaria: delito penado con prisión de 16–54 meses.</td></tr>
             <tr><td><b>CSJ STC 2019</b></td><td>Criterios jurisprudenciales: proporcionalidad, necesidad real, capacidad probada del alimentante.</td></tr>
-            <tr><td><b>Decreto 49/2025</b></td><td>SMMLV 2025: $1.423.500. Aux. transporte: $162.000. Base para cuotas indexadas.</td></tr>
+            <tr><td><b>Decretos 1469 y 1470 de 2025</b></td><td>SMMLV 2026: $1.750.905. Aux. transporte: $249.095. Base para cuotas fijadas en salarios mínimos.</td></tr>
           </tbody>
         </table>
       </div>
@@ -340,14 +340,13 @@
         <table class="ref-table">
           <thead><tr><th>Ingreso del alimentante</th><th>1 hijo menor</th><th>2 hijos menores</th><th>3+ hijos</th></tr></thead>
           <tbody>
-            <tr><td>1 SMMLV ($1.423.500)</td><td>$280.000–$380.000 (20–27%)</td><td>$420.000–$560.000 (30–39%)</td><td>$500.000–$650.000 (35–46%)</td></tr>
-            <tr><td>2 SMMLV ($2.847.000)</td><td>$500.000–$700.000 (18–25%)</td><td>$800.000–$1.100.000 (28–39%)</td><td>$1.000.000–$1.400.000 (35–49%)</td></tr>
-            <tr><td>3 SMMLV ($4.270.500)</td><td>$700.000–$1.000.000</td><td>$1.100.000–$1.500.000</td><td>$1.500.000–$2.000.000</td></tr>
-            <tr><td>5+ SMMLV ($7.117.500+)</td><td>$1.200.000–$2.000.000+</td><td>$2.000.000–$3.000.000+</td><td>Según necesidades reales</td></tr>
+            <tr><td>1 SMMLV ($1.750.905)</td><td>20–27% del ingreso</td><td>30–39% del ingreso</td><td>35–46% del ingreso</td></tr>
+            <tr><td>2 SMMLV ($3.501.810)</td><td>18–25% del ingreso</td><td>28–39% del ingreso</td><td>35–49% del ingreso</td></tr>
+            <tr><td>3 SMMLV ($5.252.715) o más</td><td colspan="3">Se fija según las necesidades probadas del alimentario y la capacidad económica del alimentante; no existe tarifa.</td></tr>
           </tbody>
         </table>
       </div>
-      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.8rem;">SMMLV 2026: $1.423.500 | Aux. transporte: $162.000. Los porcentajes son del ingreso neto del alimentante.</p>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.8rem;">SMMLV 2026: $1.750.905 | Aux. transporte: $249.095. Los porcentajes son del ingreso neto del alimentante y son solo una referencia aproximada, no una norma.</p>
     </div>
   </div>
 
@@ -364,7 +363,7 @@ function mostrarTab(id, btn) {
   btn.classList.add('active');
 }
 
-const SMMLV = 1423500;
+const SMMLV = 1750905;
 
 function fmt(n) {
   return Number(n).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
@@ -482,7 +481,7 @@ function calcularIndexacion() {
     explicacion = `Cuota original: $ ${fmt(cuota)} (año ${anio})<br>IPC acumulado: ${ipc}%<br>Cuota actualizada: $ ${fmt(cuota)} × (1 + ${ipc}%) = <b>$ ${fmt(cuotaActual)}</b>`;
   } else {
     // En porcentaje de SMMLV
-    const smmlvAnios = { 2020:877803, 2021:908526, 2022:1000000, 2023:1160000, 2024:1300000, 2025:1423500, 2026:1423500 };
+    const smmlvAnios = { 2020:877803, 2021:908526, 2022:1000000, 2023:1160000, 2024:1300000, 2025:1423500, 2026:1750905 };
     const smmlvOrigen = smmlvAnios[anio] || 1000000;
     cuotaOriginalPesos = smmlvOrigen * (cuota / 100);
     cuotaActual = SMMLV * (cuota / 100);

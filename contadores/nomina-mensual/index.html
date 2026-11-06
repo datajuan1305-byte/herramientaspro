@@ -154,10 +154,10 @@
   <h1>Calculadora de Nómina Mensual Colombia 2026</h1>
   <p>Calcula el salario neto del empleado, todas las deducciones y el costo total para la empresa. Incluye salud, pensión, parafiscales y retención en la fuente.</p>
   <div class="hero-params">
-    <span class="hero-param">SMMLV 2026: $1.423.500</span>
+    <span class="hero-param">SMMLV 2026: $1.750.905</span>
     <span class="hero-param">Salud empleado: 4%</span>
     <span class="hero-param">Pensión empleado: 4%</span>
-    <span class="hero-param">Aux. transporte: $200.000</span>
+    <span class="hero-param">Aux. transporte: $249.095</span>
   </div>
 </div>
 
@@ -172,8 +172,8 @@
       </div>
       <div class="form-group">
         <label for="salario">Salario básico mensual (COP)</label>
-        <input type="number" id="salario" placeholder="1423500" min="1423500" step="1000" oninput="autoAuxilio()" />
-        <span class="hint">Mínimo SMMLV 2026: $1.423.500</span>
+        <input type="number" id="salario" placeholder="1750905" min="1750905" step="1000" oninput="autoAuxilio()" />
+        <span class="hint">Mínimo SMMLV 2026: $1.750.905</span>
       </div>
       <div class="form-group">
         <label for="dias">Días trabajados en el mes</label>
@@ -217,7 +217,7 @@
         </div>
       </div>
       <div class="extra-item">
-        <div class="extra-label">Horas dominicales / festivos (100%)</div>
+        <div class="extra-label">Horas ordinarias en domingo / festivo (recargo 90%)</div>
         <div class="extra-input">
           <input type="number" id="he_dominicales" placeholder="0" min="0" />
           <span style="font-size:12px;color:var(--text-muted);">horas</span>
@@ -276,7 +276,7 @@
     <div style="margin-top:10px;">
       <div class="checkbox-group">
         <input type="checkbox" id="cb_retencion" />
-        <label for="cb_retencion">Aplicar retención en la fuente (procedimiento 1 — estimación)</label>
+        <label for="cb_retencion">Aplicar retención en la fuente (Art. 383 ET, procedimiento 1 — estimación sin deducciones adicionales)</label>
       </div>
     </div>
   </div>
@@ -332,9 +332,14 @@
 </div>
 
 <script>
-  const SMMLV = 1423500;
-  const AUX_TRANSPORTE = 200000;
-  const HORA_ORDINARIA = SMMLV / 240; // 30 días × 8 horas
+  // Parámetros 2026 (Decretos 1469 y 1470 de 2025; Res. DIAN 000238/2025; Ley 2466/2025)
+  const SMMLV = 1750905;
+  const AUX_TRANSPORTE = 249095;
+  const UVT = 52374;
+  // Jornada máxima: 42 h/semana desde el 15-jul-2026 (Ley 2466/2025) → 210 horas/mes
+  const HORAS_MES = 210;
+  // Recargo dominical/festivo: 90% desde el 1-jul-2026 (100% desde jul-2027)
+  const RECARGO_DOMINICAL = 0.90;
 
   function autoAuxilio() {
     const s = parseFloat(document.getElementById('salario').value) || 0;
@@ -358,7 +363,7 @@
     const tipoContrato = document.getElementById('tipo_contrato').value;
     const auxilioSel = document.getElementById('auxilio').value;
 
-    if (salarioBasico < SMMLV) { alert('El salario mínimo para 2026 es $1.423.500'); return; }
+    if (salarioBasico < SMMLV) { alert('El salario mínimo para 2026 es $1.750.905'); return; }
 
     const auxilio = auxilioSel === 'si' ? AUX_TRANSPORTE : 0;
     const salarioProporcional = (salarioBasico / 30) * dias;
@@ -372,9 +377,11 @@
     const recargoNoc   = parseFloat(document.getElementById('recargo_nocturno').value) || 0;
     const otrosIng     = parseFloat(document.getElementById('otros_ingresos').value) || 0;
 
+    const HORA_ORDINARIA = salarioBasico / HORAS_MES;
     const valorHED  = heDiurnas    * HORA_ORDINARIA * 1.25;
     const valorHEN  = heNocturnas  * HORA_ORDINARIA * 1.75;
-    const valorHEDom= heDominicales* HORA_ORDINARIA * 2.00;
+    // Hora ordinaria trabajada en domingo/festivo: 100% + recargo del 90%
+    const valorHEDom= heDominicales* HORA_ORDINARIA * (1 + RECARGO_DOMINICAL);
     const valorRN   = recargoNoc   * HORA_ORDINARIA * 0.35;
 
     // Deducciones adicionales
@@ -395,13 +402,21 @@
     const pensionEmpleado = ibc * 0.04;
     let retencion = 0;
     if (cbRetencion) {
-      // Procedimiento 1 simplificado — estimación
-      const uvt = 49799;
-      const ingresosUVT = ibc / uvt;
-      if (ingresosUVT > 128) retencion = ibc * 0.19;
-      else if (ingresosUVT > 95) retencion = ibc * 0.15;
-      else if (ingresosUVT > 69) retencion = ibc * 0.12;
-      else if (ingresosUVT > 40) retencion = ibc * 0.07;
+      // Procedimiento 1 (Art. 383 ET), simplificado: ingreso laboral mensual
+      // − aportes obligatorios salud y pensión (INCRNGO) − renta exenta 25% (tope 790 UVT/año)
+      // No incluye deducciones por dependientes, vivienda ni medicina prepagada.
+      const ingresoLab = devengado;
+      const subtotal = ingresoLab - saludEmpleado - pensionEmpleado;
+      const exenta25 = Math.min(subtotal * 0.25, (790 / 12) * UVT);
+      const baseUVT = Math.max(0, (subtotal - exenta25) / UVT);
+      let rUVT = 0;
+      if (baseUVT > 2300) rUVT = (baseUVT - 2300) * 0.39 + 770;
+      else if (baseUVT > 945) rUVT = (baseUVT - 945) * 0.37 + 268;
+      else if (baseUVT > 640) rUVT = (baseUVT - 640) * 0.35 + 162;
+      else if (baseUVT > 360) rUVT = (baseUVT - 360) * 0.33 + 69;
+      else if (baseUVT > 150) rUVT = (baseUVT - 150) * 0.28 + 10;
+      else if (baseUVT > 95)  rUVT = (baseUVT - 95) * 0.19;
+      retencion = Math.round(rUVT * UVT / 1000) * 1000;
     }
 
     const totalDeducciones = saludEmpleado + pensionEmpleado + retencion + prestamo + embargo + fondoEmpl + otrasDed;
@@ -423,7 +438,7 @@
     if (auxilioProporcional > 0) htmlDev += filaHTML('Auxilio de transporte', auxilioProporcional, false, 'verde');
     if (valorHED  > 0) htmlDev += filaHTML(`H.E. diurnas (${heDiurnas}h × 125%)`, valorHED, false, 'verde');
     if (valorHEN  > 0) htmlDev += filaHTML(`H.E. nocturnas (${heNocturnas}h × 175%)`, valorHEN, false, 'verde');
-    if (valorHEDom> 0) htmlDev += filaHTML(`Dominicales/festivos (${heDominicales}h × 200%)`, valorHEDom, false, 'verde');
+    if (valorHEDom> 0) htmlDev += filaHTML(`Dominicales/festivos (${heDominicales}h × 190%)`, valorHEDom, false, 'verde');
     if (valorRN   > 0) htmlDev += filaHTML(`Recargo nocturno (${recargoNoc}h × 35%)`, valorRN, false, 'verde');
     if (comisiones> 0) htmlDev += filaHTML('Comisiones / bonificaciones', comisiones, false, 'verde');
     if (otrosIng  > 0) htmlDev += filaHTML('Otros ingresos', otrosIng, false, 'verde');
@@ -468,8 +483,8 @@
     document.getElementById('costo-empresa').textContent = fmt(costoEmpresa);
 
     document.getElementById('base-box').innerHTML = `
-      <strong>SMMLV 2026:</strong> $1.423.500 &nbsp;|&nbsp; <strong>Aux. transporte:</strong> $200.000 &nbsp;|&nbsp; <strong>UVT 2026:</strong> $49.799<br>
-      <strong>IBC (base de cotización):</strong> ${fmt(ibc)} &nbsp;|&nbsp; <strong>Hora ordinaria:</strong> ${fmt(HORA_ORDINARIA)}<br>
+      <strong>SMMLV 2026:</strong> $1.750.905 &nbsp;|&nbsp; <strong>Aux. transporte:</strong> $249.095 &nbsp;|&nbsp; <strong>UVT 2026:</strong> $52.374<br>
+      <strong>IBC (base de cotización):</strong> ${fmt(ibc)} &nbsp;|&nbsp; <strong>Hora ordinaria (salario ÷ 210 h):</strong> ${fmt(HORA_ORDINARIA)}<br>
       <strong>Salud empleado:</strong> 4% &nbsp;|&nbsp; <strong>Pensión empleado:</strong> 4% &nbsp;|&nbsp; <strong>Salud empleador:</strong> 8.5% &nbsp;|&nbsp; <strong>Pensión empleador:</strong> 12%<br>
       <strong>Parafiscales:</strong> Caja 4% + ICBF 3% + SENA 2% = 9% sobre IBC (exentos contratos aprendizaje)
     `;

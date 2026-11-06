@@ -140,10 +140,10 @@
 <div class="hero">
   <div class="hero-icon">🧾</div>
   <h1>Simulador Retención en la Fuente Colombia 2026</h1>
-  <p>Calcula la retención en la fuente por concepto de pagos a terceros: salarios, honorarios, servicios, compras, arrendamientos y más. Actualizado UVT 2026: $49.799.</p>
+  <p>Calcula la retención en la fuente por concepto de pagos a terceros: salarios, honorarios, servicios, compras, arrendamientos y más. Actualizado UVT 2026: $52.374.</p>
   <div class="hero-params">
-    <span class="hero-param">UVT 2026: $49.799</span>
-    <span class="hero-param">SMMLV 2026: $1.423.500</span>
+    <span class="hero-param">UVT 2026: $52.374</span>
+    <span class="hero-param">SMMLV 2026: $1.750.905</span>
     <span class="hero-param">Decreto 2229 de 2023</span>
   </div>
 </div>
@@ -250,42 +250,42 @@
     <div class="norma-box" id="norma-box"></div>
 
     <div class="disclaimer">
-      ⚠️ <strong>Herramienta orientativa.</strong> Las tarifas corresponden a la normativa vigente 2026 (Estatuto Tributario, Decreto 2229/2023, resoluciones DIAN). Las tarifas pueden variar según convenios de doble tributación, calidad del contribuyente y acuerdos contractuales. Verifique siempre con su contador o con la DIAN. UVT 2026: $49.799.
+      ⚠️ <strong>Herramienta orientativa.</strong> Las tarifas corresponden a la normativa vigente 2026 (Estatuto Tributario, Decreto 572/2025 —vigente de nuevo desde el 1-jul-2026 tras la decisión del Consejo de Estado—, UVT según Res. DIAN 000238/2025). Estas bases y tarifas dependen de un proceso judicial abierto y pueden cambiar. Las tarifas pueden variar según convenios de doble tributación, calidad del contribuyente y acuerdos contractuales. Verifique siempre con su contador o con la DIAN. UVT 2026: $52.374.
     </div>
     <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
   </div>
 </div>
 
 <script>
-  const UVT = 49799;
-  const SMMLV = 1423500;
+  const UVT = 52374;   // Res. DIAN 000238/2025
+  const SMMLV = 1750905;
 
   const conceptos = [
     {
       id: 'salarios', nombre: 'Salarios', emoji: '👤',
       tarifa_display: 'Tabla progresiva',
-      info: 'Retención sobre pagos laborales: salarios, primas, bonificaciones, comisiones salariales. Se calcula por la tabla de rangos del Art. 383 ET.',
+      info: 'Retención sobre pagos laborales: salarios, primas, bonificaciones, comisiones salariales. Se calcula por la tabla de rangos del Art. 383 ET sobre el ingreso laboral ya depurado (ingreso − aportes obligatorios − rentas exentas y deducciones). Use «base gravable diferente» para ingresar la base depurada.',
       norma: 'Art. 383, 385 y 386 del Estatuto Tributario. Procedimiento 1 y 2.',
       minima_uvt: 0,
       tarifas: [
         { desde: 0, hasta: 95, tarifa: 0, desc: '< 95 UVT/mes', tipo: 'Todos', obs: 'No hay retención' },
         { desde: 95, hasta: 150, tarifa: 19, desc: '95–150 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 95 UVT) × 19%' },
-        { desde: 150, hasta: 360, tarifa: 28, desc: '150–360 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 150 UVT) × 28% + 10.71 UVT' },
-        { desde: 360, hasta: 640, tarifa: 33, desc: '360–640 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 360 UVT) × 33% + 69.51 UVT' },
-        { desde: 640, hasta: 945, tarifa: 35, desc: '640–945 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 640 UVT) × 35% + 162.51 UVT' },
-        { desde: 945, hasta: 2300, tarifa: 37, desc: '945–2300 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 945 UVT) × 37% + 269.26 UVT' },
-        { desde: 2300, hasta: 9999, tarifa: 39, desc: '> 2300 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 2300 UVT) × 39% + 770.26 UVT' },
+        { desde: 150, hasta: 360, tarifa: 28, desc: '150–360 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 150 UVT) × 28% + 10 UVT' },
+        { desde: 360, hasta: 640, tarifa: 33, desc: '360–640 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 360 UVT) × 33% + 69 UVT' },
+        { desde: 640, hasta: 945, tarifa: 35, desc: '640–945 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 640 UVT) × 35% + 162 UVT' },
+        { desde: 945, hasta: 2300, tarifa: 37, desc: '945–2300 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 945 UVT) × 37% + 268 UVT' },
+        { desde: 2300, hasta: 9999, tarifa: 39, desc: '> 2300 UVT/mes', tipo: 'Todos', obs: '(Ingreso - 2300 UVT) × 39% + 770 UVT' },
       ],
       calcular: (pago, tipo) => {
         const ingresoUVT = pago / UVT;
         if (ingresoUVT <= 95) return { retencion: 0, tarifa: 0, aplica: false };
         let retencion = 0;
         if (ingresoUVT <= 150) retencion = ((ingresoUVT - 95) * 0.19) * UVT;
-        else if (ingresoUVT <= 360) retencion = ((ingresoUVT - 150) * 0.28 + 10.71) * UVT;
-        else if (ingresoUVT <= 640) retencion = ((ingresoUVT - 360) * 0.33 + 69.51) * UVT;
-        else if (ingresoUVT <= 945) retencion = ((ingresoUVT - 640) * 0.35 + 162.51) * UVT;
-        else if (ingresoUVT <= 2300) retencion = ((ingresoUVT - 945) * 0.37 + 269.26) * UVT;
-        else retencion = ((ingresoUVT - 2300) * 0.39 + 770.26) * UVT;
+        else if (ingresoUVT <= 360) retencion = ((ingresoUVT - 150) * 0.28 + 10) * UVT;
+        else if (ingresoUVT <= 640) retencion = ((ingresoUVT - 360) * 0.33 + 69) * UVT;
+        else if (ingresoUVT <= 945) retencion = ((ingresoUVT - 640) * 0.35 + 162) * UVT;
+        else if (ingresoUVT <= 2300) retencion = ((ingresoUVT - 945) * 0.37 + 268) * UVT;
+        else retencion = ((ingresoUVT - 2300) * 0.39 + 770) * UVT;
         const tarifahEfectiva = (retencion / pago) * 100;
         return { retencion, tarifa: tarifahEfectiva.toFixed(1) + '%', aplica: true };
       }
@@ -294,15 +294,14 @@
       id: 'honorarios', nombre: 'Honorarios', emoji: '💼',
       tarifa_display: '10% / 11%',
       info: 'Retención sobre pagos por servicios profesionales, consultoría, asesoría y similares. Incluye honorarios a médicos, abogados, ingenieros, contadores.',
-      norma: 'Art. 392 ET. Decreto 260/2001. Cuantía mínima: 1 UVT ($49.799)',
-      minima_uvt: 1,
+      norma: 'Art. 392 ET. Decreto 260/2001. Sin cuantía mínima ($52.374)',
+      minima_uvt: 0,
       tarifas: [
-        { desde: 1, hasta: 9999, tarifa: 10, desc: '≥ 1 UVT', tipo: 'Declarante / Jurídica', obs: '10% del valor del honorario' },
-        { desde: 1, hasta: 9999, tarifa: 11, desc: '≥ 1 UVT', tipo: 'No declarante', obs: '11% del valor del honorario' },
+        { desde: 0, hasta: 9999, tarifa: 11, desc: 'Sin base mínima', tipo: 'Persona jurídica', obs: '11% del valor del honorario' },
+        { desde: 0, hasta: 9999, tarifa: 10, desc: 'Sin base mínima', tipo: 'Persona natural', obs: '10% (11% si los contratos del año superan 3.300 UVT)' },
       ],
       calcular: (pago, tipo) => {
-        if (pago < UVT) return { retencion: 0, tarifa: 0, aplica: false };
-        const tarifa = tipo === 'no_declarante' ? 0.11 : 0.10;
+        const tarifa = (tipo === 'juridica' || tipo === 'gran_contribuyente') ? 0.11 : 0.10;
         return { retencion: pago * tarifa, tarifa: (tarifa*100) + '%', aplica: true };
       }
     },
@@ -310,14 +309,14 @@
       id: 'servicios', nombre: 'Servicios', emoji: '🔧',
       tarifa_display: '4% / 6%',
       info: 'Retención sobre pagos por contratos de servicios en general (aseo, vigilancia, transporte, mantenimiento, etc.) y contratos de obra.',
-      norma: 'Art. 392 ET. Cuantía mínima: 4 UVT ($199.196)',
-      minima_uvt: 4,
+      norma: 'Art. 392 ET. Cuantía mínima: 2 UVT ($104.748), Decreto 572/2025 vigente desde el 1-jul-2026',
+      minima_uvt: 2,
       tarifas: [
-        { desde: 4, hasta: 9999, tarifa: 4, desc: '≥ 4 UVT', tipo: 'Declarante / Jurídica', obs: '4% del valor del servicio' },
-        { desde: 4, hasta: 9999, tarifa: 6, desc: '≥ 4 UVT', tipo: 'No declarante', obs: '6% del valor del servicio' },
+        { desde: 2, hasta: 9999, tarifa: 4, desc: '≥ 2 UVT', tipo: 'Declarante / Jurídica', obs: '4% del valor del servicio' },
+        { desde: 2, hasta: 9999, tarifa: 6, desc: '≥ 2 UVT', tipo: 'No declarante', obs: '6% del valor del servicio' },
       ],
       calcular: (pago, tipo) => {
-        if (pago < UVT * 4) return { retencion: 0, tarifa: 0, aplica: false };
+        if (pago < UVT * 2) return { retencion: 0, tarifa: 0, aplica: false };
         const tarifa = tipo === 'no_declarante' ? 0.06 : 0.04;
         return { retencion: pago * tarifa, tarifa: (tarifa*100) + '%', aplica: true };
       }
@@ -326,14 +325,14 @@
       id: 'compras', nombre: 'Compras', emoji: '🛒',
       tarifa_display: '2.5% / 3.5%',
       info: 'Retención sobre pagos por compra de bienes raíces, vehículos, combustibles y otros bienes muebles. Uno de los conceptos más frecuentes en empresas.',
-      norma: 'Art. 401 ET. Cuantía mínima: 27 UVT ($1.344.573)',
-      minima_uvt: 27,
+      norma: 'Art. 401 ET. Cuantía mínima: 10 UVT ($523.740), Decreto 572/2025 vigente desde el 1-jul-2026',
+      minima_uvt: 10,
       tarifas: [
-        { desde: 27, hasta: 9999, tarifa: 2.5, desc: '≥ 27 UVT', tipo: 'Declarante / Jurídica', obs: '2.5% del valor de la compra' },
-        { desde: 27, hasta: 9999, tarifa: 3.5, desc: '≥ 27 UVT', tipo: 'No declarante', obs: '3.5% del valor de la compra' },
+        { desde: 10, hasta: 9999, tarifa: 2.5, desc: '≥ 10 UVT', tipo: 'Declarante / Jurídica', obs: '2.5% del valor de la compra' },
+        { desde: 10, hasta: 9999, tarifa: 3.5, desc: '≥ 10 UVT', tipo: 'No declarante', obs: '3.5% del valor de la compra' },
       ],
       calcular: (pago, tipo) => {
-        if (pago < UVT * 27) return { retencion: 0, tarifa: 0, aplica: false };
+        if (pago < UVT * 10) return { retencion: 0, tarifa: 0, aplica: false };
         const tarifa = tipo === 'no_declarante' ? 0.035 : 0.025;
         return { retencion: pago * tarifa, tarifa: (tarifa*100) + '%', aplica: true };
       }
@@ -342,33 +341,34 @@
       id: 'arrendamiento', nombre: 'Arrendamiento', emoji: '🏢',
       tarifa_display: '3.5% / 4%',
       info: 'Retención sobre pagos de arrendamiento de bienes inmuebles (locales, oficinas, bodegas, fincas) y bienes muebles.',
-      norma: 'Art. 401 ET. Cuantía mínima: 27 UVT ($1.344.573) para inmuebles.',
-      minima_uvt: 27,
+      norma: 'Art. 401 ET; Decreto 572/2025. Inmuebles: 3,5% desde 10 UVT ($523.740). Bienes muebles: 4% sin base mínima.',
+      minima_uvt: 10,
       tarifas: [
-        { desde: 27, hasta: 9999, tarifa: 3.5, desc: '≥ 27 UVT — Inmueble', tipo: 'Persona natural', obs: '3.5% para persona natural declarante' },
-        { desde: 27, hasta: 9999, tarifa: 4, desc: '≥ 27 UVT — Inmueble', tipo: 'No declarante', obs: '4% para no declarante' },
-        { desde: 1, hasta: 9999, tarifa: 4, desc: '≥ 1 UVT — Muebles', tipo: 'Todos', obs: '4% para bienes muebles' },
+        { desde: 10, hasta: 9999, tarifa: 3.5, desc: '≥ 10 UVT — Inmueble', tipo: 'Todos', obs: '3,5% sobre el canon de inmuebles' },
+        { desde: 0, hasta: 9999, tarifa: 4, desc: 'Sin base — Bienes muebles', tipo: 'Todos', obs: '4% para bienes muebles, sin base mínima (este cálculo aplica la tarifa de inmuebles)' },
       ],
       calcular: (pago, tipo) => {
-        if (pago < UVT * 27) return { retencion: 0, tarifa: 0, aplica: false };
-        const tarifa = tipo === 'no_declarante' ? 0.04 : 0.035;
-        return { retencion: pago * tarifa, tarifa: (tarifa*100) + '%', aplica: true };
+        if (pago < UVT * 10) return { retencion: 0, tarifa: 0, aplica: false };
+        return { retencion: pago * 0.035, tarifa: '3.5%', aplica: true };
       }
     },
     {
       id: 'dividendos', nombre: 'Dividendos', emoji: '📈',
       tarifa_display: '10% / 20%',
       info: 'Retención sobre distribución de dividendos y participaciones a socios o accionistas. Aplica según si son gravados o no gravados.',
-      norma: 'Art. 242 ET. Reforma tributaria Ley 2277/2022.',
+      norma: 'Art. 242 y 245 ET (Ley 2277/2022). Verifique si el dividendo es gravado o no gravado.',
       minima_uvt: 0,
       tarifas: [
-        { desde: 0, hasta: 9999, tarifa: 0, desc: 'Dividendos no gravados', tipo: 'Residente Colombia', obs: 'Sin retención sobre utilidades ya gravadas en la sociedad (tarifa general corporativa)' },
-        { desde: 0, hasta: 9999, tarifa: 10, desc: 'Dividendos no gravados (Ley 2277)', tipo: 'Residente Colombia', obs: '10% sobre dividendos no gravados' },
-        { desde: 0, hasta: 9999, tarifa: 20, desc: 'Dividendos gravados', tipo: 'No residente', obs: '20% sobre dividendos para no residentes' },
+        { desde: 1090, hasta: 9999, tarifa: 15, desc: 'Dividendos no gravados — persona natural residente', tipo: 'Persona natural residente', obs: '15% sobre el exceso de 1.090 UVT' },
+        { desde: 0, hasta: 9999, tarifa: 10, desc: 'Dividendos no gravados — sociedad nacional', tipo: 'Persona jurídica', obs: '10% sobre dividendos no gravados' },
+        { desde: 0, hasta: 9999, tarifa: 20, desc: 'Dividendos a no residentes', tipo: 'No residente', obs: '20% (puede reducirse por convenio de doble tributación)' },
       ],
       calcular: (pago, tipo, residente) => {
-        const tarifa = residente === 'no' ? 0.20 : 0.10;
-        return { retencion: pago * tarifa, tarifa: (tarifa*100) + '%', aplica: true };
+        if (residente === 'no') return { retencion: pago * 0.20, tarifa: '20%', aplica: true };
+        if (tipo === 'juridica' || tipo === 'gran_contribuyente') return { retencion: pago * 0.10, tarifa: '10%', aplica: true };
+        const exceso = pago - 1090 * UVT;
+        if (exceso <= 0) return { retencion: 0, tarifa: 0, aplica: false };
+        return { retencion: exceso * 0.15, tarifa: '15% s/ exceso 1.090 UVT', aplica: true };
       }
     },
     {
@@ -376,10 +376,10 @@
       tarifa_display: '7% / 35%',
       info: 'Retención sobre pagos de intereses bancarios, rendimientos financieros, CDT y similares.',
       norma: 'Art. 395 ET. Para rendimientos financieros: 7% general.',
-      minima_uvt: 1,
+      minima_uvt: 0,
       tarifas: [
-        { desde: 1, hasta: 9999, tarifa: 7, desc: '≥ 1 UVT', tipo: 'Residente Colombia', obs: '7% sobre intereses y rendimientos financieros' },
-        { desde: 1, hasta: 9999, tarifa: 35, desc: '≥ 1 UVT', tipo: 'No residente', obs: '35% para no residentes (puede reducirse por convenio)' },
+        { desde: 0, hasta: 9999, tarifa: 7, desc: 'Sin base mínima', tipo: 'Residente Colombia', obs: '7% sobre intereses y rendimientos financieros' },
+        { desde: 0, hasta: 9999, tarifa: 35, desc: 'Sin base mínima', tipo: 'No residente', obs: '35% para no residentes (puede reducirse por convenio)' },
       ],
       calcular: (pago, tipo, residente) => {
         const tarifa = residente === 'no' ? 0.35 : 0.07;
@@ -390,7 +390,7 @@
       id: 'loterias', nombre: 'Loterías / Rifas', emoji: '🎰',
       tarifa_display: '20%',
       info: 'Retención sobre premios de loterías, rifas, apuestas y similares. Aplica sobre el valor bruto del premio.',
-      norma: 'Art. 402 ET. Cuantía mínima: 48 UVT ($2.390.352).',
+      norma: 'Art. 402 ET. Cuantía mínima: 48 UVT ($2.513.952).',
       minima_uvt: 48,
       tarifas: [
         { desde: 48, hasta: 9999, tarifa: 20, desc: '≥ 48 UVT', tipo: 'Todos', obs: '20% sobre el valor del premio' },

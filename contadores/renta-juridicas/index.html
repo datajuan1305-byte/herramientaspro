@@ -177,7 +177,7 @@
     <div class="card">
       <h2>📋 Simulador Impuesto de Renta — Personas Jurídicas 2026</h2>
       <div class="info-box">
-        <strong>Año gravable 2025 — Declaración 2026.</strong> Tarifa general: 35%. Sobretasa sector financiero: 3 puntos adicionales (total 38%). UVT 2026: $47.065. Basado en Ley 2277 de 2022 y decretos reglamentarios vigentes.
+        <strong>Año gravable 2025 — Declaración 2026.</strong> Tarifa general: 35%. Sobretasa sector financiero: 5 puntos adicionales (total 40%) para 2023–2027, si la renta gravable es de 120.000 UVT o más. UVT 2025 (AG 2025): $49.799. Basado en Ley 2277 de 2022 y decretos reglamentarios vigentes.
       </div>
 
       <h3>1. Tipo de sociedad</h3>
@@ -186,10 +186,9 @@
           <label>Tipo de contribuyente</label>
           <select id="s-tipo" onchange="actualizarTipo()">
             <option value="general" selected>Sociedad general (S.A.S., Ltda., S.A.)</option>
-            <option value="financiero">Entidad sector financiero (+3% sobretasa)</option>
+            <option value="financiero">Entidad sector financiero (+5 puntos, 40%)</option>
             <option value="especial">Entidad sin ánimo de lucro (ESAL) — 20%</option>
-            <option value="zomac">Empresa ZOMAC (tarifa progresiva)</option>
-            <option value="holding">Sociedad Holding Colombia — 5%</option>
+            <option value="zomac">Empresa ZOMAC micro/pequeña (17,5% en AG 2025)</option>
           </select>
         </div>
         <div class="form-group">
@@ -268,7 +267,7 @@
         <div class="form-group">
           <label>Patrimonio líquido año anterior ($ COP)</label>
           <input type="number" id="s-patrimonio" value="400000000" min="0" step="5000000" />
-          <span class="form-hint">Para cálculo de renta presuntiva (3.5% del patrimonio)</span>
+          <span class="form-hint">Referencia: la renta presuntiva es 0% desde el año gravable 2021</span>
         </div>
       </div>
 
@@ -283,7 +282,7 @@
     <div class="card">
       <h2>📊 Calculadora de Renta Presuntiva</h2>
       <div class="info-box">
-        <strong>Renta presuntiva:</strong> Se presume que la renta líquida no puede ser inferior al 3.5% del patrimonio líquido del año anterior (Art. 188 ET). La empresa tributa sobre el mayor valor entre la renta líquida ordinaria y la renta presuntiva.
+        <strong>Renta presuntiva:</strong> Se presume que la renta líquida no puede ser inferior a un porcentaje del patrimonio líquido del año anterior (Art. 188 ET). <strong>Esa tarifa es 0% desde el año gravable 2021</strong>, por lo que hoy la renta presuntiva no genera base gravable adicional; la herramienta se mantiene para fines didácticos y para revisar históricos.
       </div>
       <div class="form-grid">
         <div class="form-group">
@@ -319,12 +318,13 @@
           <thead><tr><th>Tipo de contribuyente</th><th>Tarifa</th><th>Base legal</th><th>Observaciones</th></tr></thead>
           <tbody>
             <tr><td><b>Sociedad general (S.A.S., Ltda., S.A.)</b></td><td style="font-weight:700; color:#1565c0;">35%</td><td>Art. 240 ET</td><td>Tarifa general vigente desde 2022</td></tr>
-            <tr><td><b>Sector financiero</b></td><td style="font-weight:700; color:#c62828;">38%</td><td>Art. 240 ET + Ley 2277/22</td><td>35% + 3% sobretasa permanente</td></tr>
+            <tr><td><b>Sector financiero</b></td><td style="font-weight:700; color:#c62828;">40%</td><td>Art. 240 par. 2 ET + Ley 2277/22</td><td>35% + 5 puntos de sobretasa (2023–2027) si la renta gravable es ≥ 120.000 UVT</td></tr>
             <tr><td><b>ESAL (sin ánimo de lucro)</b></td><td style="font-weight:700; color:#2e7d32;">20%</td><td>Art. 356 ET</td><td>Solo sobre ingresos no exentos</td></tr>
-            <tr><td><b>Sociedad Holding Colombia</b></td><td style="font-weight:700; color:#e65100;">5%</td><td>Art. 894 ET</td><td>Solo sobre dividendos del exterior</td></tr>
-            <tr><td><b>ZOMAC año 1–5</b></td><td style="font-weight:700; color:#2e7d32;">0%</td><td>Ley 1819/16</td><td>Micro y pequeñas empresas</td></tr>
-            <tr><td><b>ZOMAC año 6–10</b></td><td style="font-weight:700; color:#f57c00;">25%</td><td>Ley 1819/16</td><td>50% de la tarifa general</td></tr>
-            <tr><td><b>ZOMAC año 11+</b></td><td style="font-weight:700; color:#1565c0;">35%</td><td>Ley 1819/16</td><td>Tarifa general</td></tr>
+            <tr><td><b>ZOMAC micro y pequeñas — 2017 a 2021</b></td><td style="font-weight:700; color:#2e7d32;">0%</td><td>Art. 237 Ley 1819/16</td><td>0% de la tarifa general</td></tr>
+            <tr><td><b>ZOMAC micro y pequeñas — 2022 a 2024</b></td><td style="font-weight:700; color:#f57c00;">8,75%</td><td>Art. 237 Ley 1819/16</td><td>25% de la tarifa general</td></tr>
+            <tr><td><b>ZOMAC micro y pequeñas — 2025 a 2027</b></td><td style="font-weight:700; color:#f57c00;">17,5%</td><td>Art. 237 Ley 1819/16</td><td>50% de la tarifa general (AG 2025)</td></tr>
+            <tr><td><b>ZOMAC medianas y grandes — 2022 a 2027</b></td><td style="font-weight:700; color:#f57c00;">26,25%</td><td>Art. 237 Ley 1819/16</td><td>75% de la tarifa general</td></tr>
+            <tr><td><b>ZOMAC desde 2028</b></td><td style="font-weight:700; color:#1565c0;">35%</td><td>Art. 237 Ley 1819/16</td><td>Tarifa general</td></tr>
             <tr><td><b>Zona Franca (usuario industrial)</b></td><td style="font-weight:700; color:#6a1b9a;">20%</td><td>Art. 240-1 ET</td><td>Régimen especial</td></tr>
           </tbody>
         </table>
@@ -336,10 +336,10 @@
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; font-size:0.85rem;">
         <div style="background:var(--azul-claro); border-radius:8px; padding:0.9rem;">
           <strong style="color:var(--azul-oscuro);">Valores UVT 2026</strong><br>
-          UVT: <b>$47.065</b><br>
-          Renta presuntiva: <b>3.5%</b> del patrimonio<br>
+          UVT AG 2025: <b>$49.799</b> · UVT 2026: <b>$52.374</b><br>
+          Renta presuntiva: <b>0%</b> (desde AG 2021)<br>
           Anticipo renta: <b>75%</b> (declarantes) / <b>50%</b> (1er año)<br>
-          Tasa de interés mora: <b>~28% EA</b>
+          Tasa de interés mora (oct. 2026): <b>26,59% EA</b>
         </div>
         <div style="background:#e8f5e9; border-radius:8px; padding:0.9rem;">
           <strong style="color:#1b5e20;">Descuentos tributarios</strong><br>
@@ -367,7 +367,7 @@
   </div>
 
   <div class="disclaimer">
-    ⚠️ <strong>Herramienta de uso orientativo.</strong> Este simulador es una aproximación al impuesto de renta para personas jurídicas. La declaración real debe ser elaborada y firmada por un <strong>Contador Público matriculado</strong>. Las cifras presentadas no constituyen concepto tributario. Consulte el Estatuto Tributario actualizado y los decretos DIAN vigentes para 2026. UVT 2026: $47.065.
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> Este simulador es una aproximación al impuesto de renta para personas jurídicas. La declaración real debe ser elaborada y firmada por un <strong>Contador Público matriculado</strong>. Las cifras presentadas no constituyen concepto tributario. Consulte el Estatuto Tributario actualizado y los decretos DIAN vigentes para 2026. UVT 2026: $49.799 (UVT 2025, AG 2025) y $52.374 (UVT 2026).
   </div>
 </div>
 
@@ -403,7 +403,9 @@ function calcularRenta() {
   const patrimonio  = parseFloat(document.getElementById('s-patrimonio').value) || 0;
 
   // Tarifa según tipo
-  const tarifas = { general:0.35, financiero:0.38, especial:0.20, zomac:0.175, holding:0.05 };
+  // Renta presuntiva: 0% desde el año gravable 2021 (Art. 188 ET)
+const TASA_PRESUNTIVA = 0;
+const tarifas = { general:0.35, financiero:0.40, especial:0.20, zomac:0.175 };
   const tarifa = tarifas[tipo] || 0.35;
   const tarifaLabel = (tarifa * 100).toFixed(0) + '%';
 
@@ -419,8 +421,8 @@ function calcularRenta() {
   // 4. Renta líquida gravable
   const rentaGravable = Math.max(0, rentaLiquida - exentas);
 
-  // 5. Renta presuntiva (3.5% patrimonio)
-  const rentaPresuntiva = patrimonio * 0.035;
+  // 5. Renta presuntiva (0% desde AG 2021)
+  const rentaPresuntiva = patrimonio * TASA_PRESUNTIVA;
 
   // 6. Base gravable: mayor entre renta ordinaria y presuntiva
   const baseGravable = Math.max(rentaGravable, rentaPresuntiva);
@@ -468,7 +470,7 @@ function calcularRenta() {
         <tr class="subtotal"><td>= Renta líquida ordinaria</td><td>$ ${fmt(rentaLiquida)}</td></tr>
         <tr class="deduccion"><td>(−) Rentas exentas</td><td>$ ${fmt(exentas)}</td></tr>
         <tr class="subtotal"><td>= Renta líquida gravable</td><td>$ ${fmt(rentaGravable)}</td></tr>
-        ${usaPresuntiva ? `<tr style="color:#ffe082;"><td>⚠️ Se aplica renta presuntiva (3.5% × $ ${fmt(patrimonio)})</td><td>$ ${fmt(rentaPresuntiva)}</td></tr>` : ''}
+        ${usaPresuntiva ? `<tr style="color:#ffe082;"><td>⚠️ Se aplica renta presuntiva (0% × $ ${fmt(patrimonio)})</td><td>$ ${fmt(rentaPresuntiva)}</td></tr>` : ''}
         <tr class="subtotal"><td>= BASE GRAVABLE ${usaPresuntiva?'(presuntiva)':'(ordinaria)'}</td><td>$ ${fmt(baseGravable)}</td></tr>
         <tr><td>(×) Tarifa impuesto de renta (${tarifaLabel})</td><td>$ ${fmt(impuestoBruto)}</td></tr>
         <tr class="deduccion"><td>(−) Descuentos tributarios</td><td>$ ${fmt(descReal)}</td></tr>
@@ -493,7 +495,7 @@ function calcularPresuntiva() {
 
   const patrimonioLiq  = bruto - pasivos;
   const basePresuntiva = Math.max(0, patrimonioLiq - excluidos);
-  const rentaPresuntiva= basePresuntiva * 0.035;
+  const rentaPresuntiva= basePresuntiva * TASA_PRESUNTIVA;
   const usaPresuntiva  = rentaPresuntiva > rentaOrd;
   const baseGravable   = Math.max(rentaOrd, rentaPresuntiva);
   const impuesto35     = baseGravable * 0.35;
@@ -504,14 +506,14 @@ function calcularPresuntiva() {
       <div class="resultado-titulo">Resultado — Renta Presuntiva</div>
       <div class="resultado-grid">
         <div class="resultado-item"><div class="resultado-valor">$ ${fmt(patrimonioLiq)}</div><div class="resultado-label">Patrimonio líquido</div></div>
-        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(rentaPresuntiva)}</div><div class="resultado-label">Renta presuntiva (3.5%)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">$ ${fmt(rentaPresuntiva)}</div><div class="resultado-label">Renta presuntiva (0%)</div></div>
         <div class="resultado-item"><div class="resultado-valor">$ ${fmt(rentaOrd)}</div><div class="resultado-label">Renta líquida ordinaria</div></div>
         <div class="resultado-item"><div class="resultado-valor">$ ${fmt(baseGravable)}</div><div class="resultado-label">Base gravable final</div></div>
       </div>
       <div class="resultado-detalle">
         <b>Patrimonio líquido:</b> $ ${fmt(bruto)} − $ ${fmt(pasivos)} = $ ${fmt(patrimonioLiq)}<br>
         ${excluidos > 0 ? `<b>Activos excluidos:</b> $ ${fmt(excluidos)}<br>` : ''}
-        <b>Base presuntiva:</b> $ ${fmt(basePresuntiva)} × 3.5% = <b>$ ${fmt(rentaPresuntiva)}</b><br>
+        <b>Base presuntiva:</b> $ ${fmt(basePresuntiva)} × 0% = <b>$ ${fmt(rentaPresuntiva)}</b><br>
         <b>Renta líquida ordinaria:</b> $ ${fmt(rentaOrd)}<br>
         <b>Base gravable:</b> Mayor valor entre ambas = <b>$ ${fmt(baseGravable)}</b> ${usaPresuntiva ? '(PRESUNTIVA)' : '(ORDINARIA)'}<br>
         <b>Impuesto estimado (35%):</b> $ ${fmt(baseGravable)} × 35% = <b>$ ${fmt(impuesto35)}</b>
