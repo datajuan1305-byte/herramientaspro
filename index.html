@@ -293,6 +293,17 @@
     .sug-msg.ok   { display: block; background: var(--verde-light); color: var(--verde-dark); }
     .sug-msg.err  { display: block; background: #fde8e8; color: #b91c1c; }
     .sug-honeypot { position: absolute; left: -9999px; opacity: 0; }
+    .about-strip { background:#fff; border-top:1px solid var(--border); margin-top:2rem; padding:2rem 1.2rem; }
+    .about-inner { max-width:1100px; margin:0 auto; }
+    .about-strip h2 { font-size:19px; color:var(--verde-dark); margin-bottom:.6rem; }
+    .about-strip p { font-size:14px; color:var(--text-sec); margin-bottom:.6rem; line-height:1.7; }
+    .about-strip a { color:var(--verde-dark); }
+    .dir-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:1rem 1.4rem; margin-top:.6rem; }
+    .dir-cat h3 { font-size:13.5px; color:var(--text); margin-bottom:.3rem; }
+    .dir-cat ul { list-style:none; padding:0; }
+    .dir-cat li { font-size:12.5px; line-height:1.6; }
+    .dir-cat a { color:var(--text-sec); text-decoration:none; }
+    .dir-cat a:hover { color:var(--verde-dark); text-decoration:underline; }
   </style>
 </head>
 <body>
@@ -358,15 +369,28 @@
 <div class="content-section">
   <div id="content"></div>
   <div class="disclaimer">
-    ⚠️ <strong>Uso orientativo.</strong> Los resultados deben verificarse con un profesional idóneo. Parámetros 2026: SMMLV $1.423.500 · Aux. transporte $162.000 · UVT $47.065.
+    ⚠️ <strong>Uso orientativo.</strong> Los resultados deben verificarse con un profesional idóneo. Parámetros 2026: SMMLV $1.750.905 · Aux. transporte $249.095 · UVT $52.374.
   </div>
 </div>
 
+
+<!-- SOBRE EL SITIO + DIRECTORIO -->
+<section class="about-strip">
+  <div class="about-inner">
+    <h2>Calculadoras gratuitas hechas para Colombia</h2>
+    <p>HerramientasPro Colombia reúne más de 75 calculadoras y simuladores para profesionales y estudiantes: liquidación laboral y nómina, retención en la fuente y renta, créditos, dosis y fertilización, evaluación nutricional y deportiva, diseño eléctrico y civil, y análisis estadístico. Funcionan en el celular, sin registro y sin costo, y muestran el procedimiento para que se entienda el cálculo.</p>
+    <p>El sitio lo desarrolla <a href="/acerca-de/">Juan Carlos Gaviria Chaverra</a>, docente de la Universidad de Antioquia con más de 10 años de experiencia en probabilidad, estadística, regresión y diseño de experimentos. Las herramientas son orientativas y no reemplazan a un profesional idóneo. Para reportar un error o sugerir una herramienta, escribe desde <a href="/contacto/">Contacto</a>.</p>
+    <h2 style="margin-top:1.4rem">Directorio de herramientas</h2>
+    <div class="dir-grid"><div class="dir-cat"><h3>Agronomía</h3><ul><li><a href="/agro/fertilizacion-npk/">Calculadora NPK</a></li><li><a href="/agro/plan-riego/">Plan de riego goteo y aspersión</a></li><li><a href="/agro/dosis-agroquimicos/">Dosis de agroquímicos por hectárea</a></li><li><a href="/agro/analisis-suelo/">Interpretador análisis de suelo</a></li><li><a href="/agro/rendimiento-cultivos/">Estimador de rendimiento por cultivo</a></li><li><a href="/agro/presupuesto-agricola/">Presupuesto de producción agrícola</a></li></ul></div><div class="dir-cat"><h3>Contadores</h3><ul><li><a href="/contadores/liquidacion-laboral/">Liquidador laboral completo</a></li><li><a href="/contadores/nomina-mensual/">Calculadora de nómina mensual</a></li><li><a href="/contadores/retencion-fuente/">Retención en la fuente</a></li><li><a href="/contadores/calculadora-iva/">Calculadora de IVA y facturación</a></li><li><a href="/contadores/depreciacion-activos/">Depreciación de activos</a></li><li><a href="/contadores/intereses-mora-dian/">Intereses de mora DIAN</a></li><li><a href="/contadores/declaracion-renta/">Declaración de renta PN</a></li><li><a href="/contadores/renta-juridicas/">Renta personas jurídicas</a></li><li><a href="/contadores/conciliacion-bancaria/">Conciliación bancaria</a></li></ul></div><div class="dir-cat"><h3>Administración</h3><ul><li><a href="/admin/punto-equilibrio/">Punto de equilibrio básico</a></li><li><a href="/admin/punto-equilibrio-pyme/">Punto de equilibrio PYME avanzado</a></li><li><a href="/admin/credito-bancario/">Simulador de crédito bancario</a></li><li><a href="/admin/flujo-caja-pyme/">Flujo de caja PYME</a></li><li><a href="/admin/analisis-financiero/">Análisis financiero ROI/TIR/VPN</a></li><li><a href="/admin/indicadores-financieros/">Indicadores financieros</a></li><li><a href="/admin/estado-resultados/">Estado de resultados</a></li><li><a href="/admin/nomina-pyme/">Nómina PYME completa</a></li></ul></div><div class="dir-cat"><h3>Docentes</h3><ul><li><a href="/docentes/credito-fna/">Simulador crédito FNA</a></li><li><a href="/docentes/comparador-credito/">Comparador de Créditos Bancarios</a></li><li><a href="/docentes/escalafon-docente/">Escalafón docente 2026</a></li><li><a href="/docentes/pension-docente/">Pensión docente</a></li></ul></div><div class="dir-cat"><h3>Salud y medicina</h3><ul><li><a href="/salud/imc-dosis-medicos/">IMC y dosis pediátricas</a></li><li><a href="/salud/framingham-cardiovascular/">Score Framingham cardiovascular</a></li><li><a href="/salud/fecha-probable-parto/">Fecha probable de parto (FPP)</a></li><li><a href="/salud/goteo-iv/">Calculadora de goteo IV</a></li><li><a href="/salud/gases-arteriales/">Gases arteriales</a></li><li><a href="/salud/clearance-creatinina/">Clearance de creatinina</a></li><li><a href="/salud/apache-sofa/">Score APACHE II / SOFA</a></li></ul></div><div class="dir-cat"><h3>Veterinaria</h3><ul><li><a href="/veterinaria/raciones-bovinas/">Calculadora de raciones bovinas</a></li><li><a href="/veterinaria/dosis-veterinaria/">Dosis de medicamentos veterinarios</a></li><li><a href="/veterinaria/capacidad-carga/">Capacidad de carga por hectárea</a></li><li><a href="/veterinaria/calendario-sanitario/">Calendario sanitario veterinario</a></li><li><a href="/veterinaria/parametros-reproductivos/">Parámetros reproductivos bovinos</a></li><li><a href="/veterinaria/conversion-alimenticia/">Índice de conversión alimenticia (ICA)</a></li></ul></div><div class="dir-cat"><h3>Ingeniería civil</h3><ul><li><a href="/ing-civil/presupuesto-construccion/">Presupuesto de construcción por m²</a></li><li><a href="/ing-civil/mezclas-concreto/">Diseño de mezclas de concreto</a></li><li><a href="/ing-civil/acero-refuerzo/">Cálculo de acero de refuerzo</a></li><li><a href="/ing-civil/mamposteria/">Mampostería</a></li><li><a href="/ing-civil/apu-precios-unitarios/">APU — Análisis de precios unitarios</a></li></ul></div><div class="dir-cat"><h3>Ingeniería eléctrica</h3><ul><li><a href="/ing-electrica/instalaciones-residenciales/">Carga eléctrica residencial/industrial</a></li><li><a href="/ing-electrica/iluminacion-conductores/">Dimensionamiento de conductores</a></li><li><a href="/ing-electrica/iluminacion-conductores/">Iluminación industrial (luxes)</a></li><li><a href="/ing-electrica/calculadora-retie/">Calculadora RETIE</a></li><li><a href="/ing-electrica/transformadores-kva/">Transformadores kVA</a></li></ul></div><div class="dir-cat"><h3>Nutrición</h3><ul><li><a href="/nutricion/requerimiento-calorico/">Requerimiento calórico total (VCT)</a></li><li><a href="/nutricion/macronutrientes/">Calculadora de macronutrientes</a></li><li><a href="/nutricion/imc-ninos-percentiles/">IMC niños y adolescentes</a></li><li><a href="/nutricion/requerimiento-hidrico/">Necesidades hídricas</a></li><li><a href="/nutricion/dieta-patologias/">Dieta diabetes e hipertensión</a></li></ul></div><div class="dir-cat"><h3>Abogados</h3><ul><li><a href="/abogados/terminos-prescripcion/">Términos de prescripción y caducidad</a></li><li><a href="/abogados/indemnizaciones-laborales/">Indemnizaciones laborales</a></li><li><a href="/abogados/cuota-alimentaria/">Simulador de alimentos</a></li></ul></div><div class="dir-cat"><h3>Psicología</h3><ul><li><a href="/psicologia/phq9-gad7/">Escala depresión PHQ-9 / ansiedad GAD-7</a></li><li><a href="/psicologia/audit-alcohol/">Test AUDIT</a></li><li><a href="/psicologia/vulnerabilidad-familiar/">Vulnerabilidad familiar</a></li><li><a href="/psicologia/riesgo-psicosocial/">Riesgo psicosocial laboral</a></li></ul></div><div class="dir-cat"><h3>Ingeniería de alimentos</h3><ul><li><a href="/ing-alimentos/vida-util/">Vida útil de alimentos (Arrhenius)</a></li><li><a href="/ing-alimentos/balance-masa/">Balance de masa en producción</a></li><li><a href="/ing-alimentos/ph-acidez-titulable/">pH y acidez titulable</a></li></ul></div><div class="dir-cat"><h3>Estadística</h3><ul><li><a href="/estadistica/distribuciones/">Distribuciones de Probabilidad</a></li><li><a href="/estadistica/descriptiva/">Estadística descriptiva</a></li><li><a href="/estadistica/pruebas-hipotesis/">Pruebas de hipótesis</a></li><li><a href="/estadistica/intervalos-confianza/">Intervalos de confianza</a></li><li><a href="/estadistica/fundamentos-probabilidad/">Fundamentos de probabilidad</a></li><li><a href="/estadistica/distribuciones-muestrales/">Distribuciones muestrales</a></li><li><a href="/estadistica/correlacion/">Correlación</a></li><li><a href="/estadistica/regresion/">Regresión Lineal</a></li><li><a href="/estadistica/anova/">ANOVA de un factor</a></li><li><a href="/estadistica/diseno-factorial/">Diseño Factorial 2ᵏ</a></li><li><a href="/estadistica/r-online/">R en línea</a></li></ul></div><div class="dir-cat"><h3>Entrenamiento deportivo</h3><ul><li><a href="/deportes/rendimiento-futbol/">Rendimiento Fútbol</a></li><li><a href="/deportes/rendimiento-atletismo/">Rendimiento Atletismo</a></li><li><a href="/deportes/rendimiento-pesas/">Rendimiento Pesas / Halterofilia</a></li><li><a href="/deportes/rendimiento-boxeo/">Rendimiento Boxeo</a></li><li><a href="/deportes/estadistica-deportiva/">Análisis Estadístico Deportivo</a></li></ul></div></div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
-  <strong style="color:#fff;">HerramientasPro Colombia</strong> — Plataforma de herramientas digitales gratuitas<br>
-  Desarrollado para profesionales colombianos · <a href="mailto:datajuan1305@gmail.com">Contacto</a><br>
-  <a href="privacidad/">Política de Privacidad</a> · <a href="terminos/">Términos de Uso</a><br>
+  <strong style="color:#fff;">HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos<br>
+  Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia<br>
+  <a href="/">Inicio</a> · <a href="/acerca-de/">Acerca de</a> · <a href="/contacto/">Contacto</a> · <a href="/privacidad/">Política de Privacidad</a> · <a href="/terminos/">Términos de Uso</a><br>
+  <span style="font-size:11px;opacity:.7">Herramientas de uso orientativo · Última revisión del sitio: noviembre de 2026</span>
   <a href="#" onclick="exportarSugerenciasCSV(); return false;" style="font-size:11px; opacity:0.7;">⬇️ Exportar sugerencias guardadas (<span id="admin-sug-count">0</span>)</a>
 </footer>
 
@@ -397,6 +421,7 @@ const profesiones = {
       { emoji: '📉', bg: '#EAF3DE', name: 'Depreciación de activos', desc: 'Línea recta y reducción de saldos', url: 'contadores/depreciacion-activos/', ready: true },
       { emoji: '⏰', bg: '#E6F1FB', name: 'Intereses de mora DIAN', desc: 'Cálculo por período vencido', url: 'contadores/intereses-mora-dian/', ready: true },
       { emoji: '📊', bg: '#FCEBEB', name: 'Declaración de renta PN', desc: 'Simulador personas naturales 2026', url: 'contadores/declaracion-renta/', ready: true },
+      { emoji: '🏢', bg: '#E6F1FB', name: 'Renta personas jurídicas', desc: 'Impuesto de renta, renta presuntiva, sobretasa y anticipo', url: 'contadores/renta-juridicas/', ready: true },
       { emoji: '🏦', bg: '#E1F5EE', name: 'Conciliación bancaria', desc: 'Cuadre automático de saldos', url: 'contadores/conciliacion-bancaria/', ready: true },
     ]
   },
@@ -494,7 +519,7 @@ const profesiones = {
     apps: [
       { emoji: '📅', bg: '#E6F1FB', name: 'Términos de prescripción y caducidad', desc: 'Civil, laboral, penal y administrativo', url: 'abogados/terminos-prescripcion/', ready: true },
       { emoji: '⚖️', bg: '#EEEDFE', name: 'Indemnizaciones laborales', desc: 'Cálculo por tipo de despido', url: 'abogados/indemnizaciones-laborales/', ready: true },
-      { emoji: '👨‍👧', bg: '#EAF3DE', name: 'Simulador de alimentos', desc: 'Cuota alimentaria según ingresos', url: 'abogados/cuota-alimentaria/', ready: true },
+      { emoji: '👨‍👧', bg: '#EAF3DE', name: 'Calculadora de cuota alimentaria', desc: 'Cuota alimentaria según ingresos', url: 'abogados/cuota-alimentaria/', ready: true },
       { emoji: '💸', bg: '#FCEBEB', name: 'Multas y sanciones DIAN', desc: 'Cálculo en UVT vigentes 2026', url: '', ready: false },
     ]
   },
@@ -530,7 +555,7 @@ const profesiones = {
       { emoji: '🔔', bg: '#E1F5EE', name: 'Distribuciones muestrales', desc: 'Distribución muestral de la media y proporción, y simulador visual del Teorema del Límite Central', url: 'estadistica/distribuciones-muestrales/', ready: true },
       { emoji: '🔗', bg: '#E6F1FB', name: 'Correlación', desc: 'Pearson, Spearman y Kendall tau-b, con prueba de significancia y diagrama de dispersión', url: 'estadistica/correlacion/', ready: true },
       { emoji: '📈', bg: '#FAEEDA', name: 'Regresión Lineal', desc: 'Simple y múltiple, con tabla ANOVA, coeficientes y predicción', url: 'estadistica/regresion/', ready: true },
-      { emoji: '📊', bg: '#FCEBEB', name: 'ANOVA de un factor', desc: 'Análisis de varianza con comparaciones múltiples por pares (Bonferroni)', url: 'estadistica/anova/', ready: true },
+      { emoji: '📊', bg: '#FCEBEB', name: 'ANOVA de un factor', desc: 'Análisis de varianza con Tukey, Duncan y otras comparaciones múltiples, supuestos, Kruskal-Wallis y potencia', url: 'estadistica/anova/', ready: true },
       { emoji: '🧪', bg: '#EEEDFE', name: 'Diseño Factorial 2ᵏ', desc: 'Efectos principales, interacciones y tabla ANOVA para diseños factoriales con réplicas', url: 'estadistica/diseno-factorial/', ready: true },
       { img: 'r-logo.svg', bg: '#EDF2FB', name: 'R en línea', desc: 'Ejecuta código R real en tu navegador (webR) para comparar resultados con tu R/RStudio local', url: 'estadistica/r-online/', ready: true },
     ]
@@ -556,6 +581,7 @@ function switchTab(el, key) {
 
 function renderContent(key) {
   const d = profesiones[key];
+  const appsListas = d.apps.filter(a => a.ready);
   const content = document.getElementById('content');
   content.innerHTML = `
     <div class="section-header">
@@ -563,7 +589,7 @@ function renderContent(key) {
       <p>${d.desc}</p>
     </div>
     <div class="tools-grid">
-      ${d.apps.map(app => `
+      ${appsListas.map(app => `
         <a class="tool-card ${!app.ready ? 'disabled' : ''}"
            href="${app.ready && app.url ? app.url : '#'}"
            ${!app.ready ? 'onclick="return false;"' : ''}>
@@ -719,7 +745,7 @@ function actualizarContadorSugerencias() {
 
 document.addEventListener('DOMContentLoaded', () => {
   actualizarContadorSugerencias();
-  const totalHerramientas = Object.values(profesiones).reduce((acc, cat) => acc + cat.apps.filter(a => a.ready).length, 0);
+  const totalHerramientas = new Set(Object.values(profesiones).flatMap(cat => cat.apps.filter(a => a.ready).map(a => a.url))).size;
   const totalCategorias = Object.keys(profesiones).length;
   const elH = document.getElementById('stat-herramientas');
   const elC = document.getElementById('stat-categorias');

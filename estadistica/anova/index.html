@@ -143,6 +143,11 @@
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Por qué no usar varias pruebas t?", "acceptedAnswer": {"@type": "Answer", "text": "Porque cada prueba adicional aumenta la probabilidad total de cometer error tipo I."}}, {"@type": "Question", "name": "¿Qué significa un F grande?", "acceptedAnswer": {"@type": "Answer", "text": "Que la variación entre grupos es grande comparada con la variación dentro de ellos."}}, {"@type": "Question", "name": "¿Qué hago si no se cumple la homogeneidad de varianzas?", "acceptedAnswer": {"@type": "Answer", "text": "Considera una transformación de los datos, la prueba de Welch o alternativas no paramétricas como Kruskal-Wallis."}}, {"@type": "Question", "name": "¿Un ANOVA significativo prueba causalidad?", "acceptedAnswer": {"@type": "Answer", "text": "Solo si el diseño fue experimental con asignación aleatoria; en datos observacionales indica asociación."}}, {"@type": "Question", "name": "¿Cómo sé cuáles tratamientos son diferentes después del ANOVA?", "acceptedAnswer": {"@type": "Answer", "text": "Con una prueba de comparaciones múltiples como Tukey HSD, Duncan, SNK o Bonferroni. La calculadora muestra letras compactas: los tratamientos que comparten letra no difieren significativamente."}}, {"@type": "Question", "name": "¿Cuántas repeticiones necesito en mi experimento?", "acceptedAnswer": {"@type": "Answer", "text": "Depende de la diferencia mínima que quieres detectar, la variabilidad esperada, el nivel de significancia y la potencia deseada (típicamente 0,80). La pestaña Potencia calcula las repeticiones por tratamiento y el costo total."}}, {"@type": "Question", "name": "¿Cómo verifico los supuestos del ANOVA?", "acceptedAnswer": {"@type": "Answer", "text": "Normalidad de los residuos con Shapiro-Wilk y el gráfico Q-Q, homogeneidad de varianzas con Levene o Bartlett e independencia con Durbin-Watson si se conoce el orden de ejecución."}}, {"@type": "Question", "name": "¿Cuándo usar Kruskal-Wallis en lugar de ANOVA?", "acceptedAnswer": {"@type": "Answer", "text": "Cuando los residuos no son normales y las muestras son pequeñas, o hay valores atípicos que no puedes justificar eliminar. Si solo fallan las varianzas, usa Welch con Games-Howell."}}]}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4565099814624986" crossorigin="anonymous"></script>
+  <style id="hp-footer-css">
+.hp-footer{margin:2.5rem 0 0;padding:1.5rem 1rem 2rem;border-top:1px solid rgba(128,128,128,.35);text-align:center;font:13px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:inherit;opacity:.9}
+.hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
+.hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
+</style>
 </head>
 <body>
 
@@ -582,5 +587,12 @@ function preguntarAnova() {
 <details><summary>¿Qué hago si no se cumple la homogeneidad de varianzas?</summary><p>Considera una transformación de los datos, la prueba de Welch o alternativas no paramétricas como Kruskal-Wallis.</p></details>
 <details><summary>¿Un ANOVA significativo prueba causalidad?</summary><p>Solo si el diseño fue experimental con asignación aleatoria; en datos observacionales indica asociación.</p></details>
 </article>
+
+<div class="hp-footer" role="contentinfo">
+  <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
+  Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>
+  <a href="/">Inicio</a> · <a href="/acerca-de/">Acerca de</a> · <a href="/contacto/">Contacto</a> · <a href="/privacidad/">Política de Privacidad</a> · <a href="/terminos/">Términos de Uso</a>
+  <small>Herramientas de uso orientativo; no reemplazan el criterio de un profesional idóneo. Última revisión del sitio: noviembre de 2026.</small>
+</div>
 </body>
 </html>

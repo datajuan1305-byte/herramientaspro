@@ -2,499 +2,529 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://herramientaspro.com.co/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://herramientaspro.com.co/estadistica/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://herramientaspro.com.co/docentes/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-alimentos/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/acerca-de/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/contacto/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://herramientaspro.com.co/privacidad/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://herramientaspro.com.co/terminos/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/agro/fertilizacion-npk/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/agro/plan-riego/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/agro/dosis-agroquimicos/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/agro/analisis-suelo/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/agro/rendimiento-cultivos/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/agro/presupuesto-agricola/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/contadores/liquidacion-laboral/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/contadores/nomina-mensual/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/contadores/retencion-fuente/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/contadores/calculadora-iva/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/contadores/depreciacion-activos/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/contadores/intereses-mora-dian/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/contadores/declaracion-renta/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/contadores/conciliacion-bancaria/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/admin/punto-equilibrio/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/admin/punto-equilibrio-pyme/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/admin/credito-bancario/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/admin/flujo-caja-pyme/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/admin/analisis-financiero/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/admin/indicadores-financieros/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/admin/estado-resultados/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/admin/nomina-pyme/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/docentes/credito-fna/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/docentes/comparador-credito/</loc>
-    <lastmod>2026-10-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/docentes/escalafon-docente/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/docentes/pension-docente/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/salud/imc-dosis-medicos/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/salud/framingham-cardiovascular/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/salud/fecha-probable-parto/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/salud/goteo-iv/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/salud/gases-arteriales/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/salud/clearance-creatinina/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/salud/apache-sofa/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/veterinaria/raciones-bovinas/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/veterinaria/dosis-veterinaria/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/veterinaria/capacidad-carga/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/veterinaria/calendario-sanitario/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/veterinaria/conversion-alimenticia/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/ing-civil/presupuesto-construccion/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/ing-civil/mezclas-concreto/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/ing-civil/acero-refuerzo/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/ing-civil/mamposteria/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/ing-civil/apu-precios-unitarios/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/ing-electrica/instalaciones-residenciales/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/ing-electrica/iluminacion-conductores/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/ing-electrica/calculadora-retie/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/ing-electrica/transformadores-kva/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/nutricion/requerimiento-calorico/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/nutricion/macronutrientes/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/nutricion/imc-ninos-percentiles/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/nutricion/requerimiento-hidrico/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/nutricion/dieta-patologias/</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://herramientaspro.com.co/abogados/terminos-prescripcion/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/abogados/cuota-alimentaria/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://herramientaspro.com.co/abogados/indemnizaciones-laborales/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/abogados/cuota-alimentaria/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/abogados/terminos-prescripcion/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/psicologia/phq9-gad7/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/admin/analisis-financiero/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/psicologia/audit-alcohol/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/admin/credito-bancario/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/psicologia/vulnerabilidad-familiar/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/admin/estado-resultados/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/psicologia/riesgo-psicosocial/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/admin/flujo-caja-pyme/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/ing-alimentos/vida-util/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/admin/indicadores-financieros/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/ing-alimentos/balance-masa/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/admin/nomina-pyme/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/ing-alimentos/ph-acidez-titulable/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/admin/punto-equilibrio-pyme/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/estadistica/distribuciones/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <loc>https://herramientaspro.com.co/admin/punto-equilibrio/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/estadistica/descriptiva/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <loc>https://herramientaspro.com.co/agro/analisis-suelo/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/estadistica/pruebas-hipotesis/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <loc>https://herramientaspro.com.co/agro/dosis-agroquimicos/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/estadistica/intervalos-confianza/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <loc>https://herramientaspro.com.co/agro/fertilizacion-npk/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/estadistica/fundamentos-probabilidad/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <loc>https://herramientaspro.com.co/agro/plan-riego/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/estadistica/distribuciones-muestrales/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <loc>https://herramientaspro.com.co/agro/presupuesto-agricola/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/estadistica/correlacion/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <loc>https://herramientaspro.com.co/agro/rendimiento-cultivos/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/estadistica/regresion/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <loc>https://herramientaspro.com.co/contadores/calculadora-iva/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/estadistica/anova/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <loc>https://herramientaspro.com.co/contadores/conciliacion-bancaria/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/estadistica/diseno-factorial/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <loc>https://herramientaspro.com.co/contadores/declaracion-renta/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/estadistica/r-online/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <loc>https://herramientaspro.com.co/contadores/depreciacion-activos/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/deportes/rendimiento-futbol/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/contadores/intereses-mora-dian/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/deportes/rendimiento-atletismo/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/contadores/liquidacion-laboral/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/deportes/rendimiento-pesas/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/contadores/nomina-mensual/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://herramientaspro.com.co/deportes/rendimiento-boxeo/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://herramientaspro.com.co/contadores/renta-juridicas/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/contadores/retencion-fuente/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://herramientaspro.com.co/deportes/estadistica-deportiva/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/deportes/rendimiento-atletismo/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/deportes/rendimiento-boxeo/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/deportes/rendimiento-futbol/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/deportes/rendimiento-pesas/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/docentes/comparador-credito/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/docentes/credito-fna/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/docentes/escalafon-docente/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/docentes/pension-docente/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/estadistica/anova/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/estadistica/correlacion/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/estadistica/descriptiva/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/estadistica/diseno-factorial/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/estadistica/distribuciones-muestrales/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/estadistica/distribuciones/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/estadistica/fundamentos-probabilidad/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/estadistica/intervalos-confianza/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/estadistica/pruebas-hipotesis/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/estadistica/r-online/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/estadistica/regresion/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-alimentos/balance-masa/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-alimentos/ph-acidez-titulable/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-alimentos/vida-util/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-civil/acero-refuerzo/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-civil/apu-precios-unitarios/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-civil/mamposteria/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-civil/mezclas-concreto/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-civil/presupuesto-construccion/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-electrica/calculadora-retie/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-electrica/iluminacion-conductores/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-electrica/instalaciones-residenciales/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/ing-electrica/transformadores-kva/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/nutricion/dieta-patologias/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/nutricion/imc-ninos-percentiles/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/nutricion/macronutrientes/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/nutricion/requerimiento-calorico/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/nutricion/requerimiento-hidrico/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/psicologia/audit-alcohol/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/psicologia/phq9-gad7/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/psicologia/riesgo-psicosocial/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/psicologia/vulnerabilidad-familiar/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/salud/apache-sofa/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/salud/clearance-creatinina/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/salud/fecha-probable-parto/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/salud/framingham-cardiovascular/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/salud/gases-arteriales/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/salud/goteo-iv/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/salud/imc-dosis-medicos/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/veterinaria/calendario-sanitario/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/veterinaria/capacidad-carga/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/veterinaria/conversion-alimenticia/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/veterinaria/dosis-veterinaria/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://herramientaspro.com.co/veterinaria/parametros-reproductivos/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://herramientaspro.com.co/veterinaria/raciones-bovinas/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
