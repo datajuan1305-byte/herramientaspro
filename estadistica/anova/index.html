@@ -129,6 +129,15 @@
   .layout > *, .context-grid > * { min-width:0; } main { min-width:0; }
   @media (max-width:700px){ header{padding:1rem} main{padding:1rem} nav.breadcrumb{padding:10px 1rem 0} .resultado-grid.c4{grid-template-columns:1fr 1fr} }
   .paso { background:var(--bg3); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:8px; padding:.8rem 1rem; margin-bottom:.7rem; font-size:.82rem; color:var(--text2); line-height:1.75; } .paso b { color:var(--text); } .paso .tabla-an { margin-bottom:.4rem; }
+
+  .code-box { background:#070b16; border:1px solid var(--border); border-radius:8px; padding:.8rem 1rem; max-height:420px; overflow:auto; font-family:'Space Mono',monospace; font-size:.72rem; line-height:1.55; color:#cfe3ff; white-space:pre; margin:.4rem 0 .8rem; }
+  .opt-grupo { display:flex; flex-wrap:wrap; gap:.4rem 1rem; align-items:center; } .opt-chk { display:flex !important; align-items:center; gap:.35rem; font-size:.74rem !important; color:var(--text2) !important; cursor:pointer; text-transform:none !important; letter-spacing:0 !important; }
+  .ctl button:disabled { opacity:.5; cursor:wait; }
+
+  .tabs { flex-wrap:wrap !important; row-gap:.2rem; }
+  .nota a, .ctl a { color:var(--accent); }
+  .opt-chk input { width:auto !important; padding:0 !important; margin:0; }
+  .opt-grupo { gap:.4rem 1.2rem; }
 </style>
 <style id="edu-pro-css">
 .edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
@@ -220,6 +229,8 @@
 
 <script src="js/motor-anova-avanzado.js"></script>
 <script src="js/interpretacion-anova.js"></script>
+<script src="js/codigo-anova.js"></script>
+<script src="js/reporte-anova.js"></script>
 <script>
 const COLORES = ['#00d4ff', '#7b61ff', '#00ff9d', '#ff6b6b', '#ffd700', '#ff8c42', '#4dd0e1', '#c792ea', '#9be564', '#f78fb3'];
 const EJEMPLO = [
@@ -305,7 +316,7 @@ function calcularAnova() {
 }
 
 // ── Renderizado ──
-const TABS = [['resumen', '📋 Resumen'], ['comp', '🔍 Comparaciones'], ['graf', '📊 Gráficas'], ['sup', '🧪 Supuestos'], ['pot', '⚡ Potencia'], ['np', '🔀 No paramétrico']];
+const TABS = [['resumen', '📋 Resumen'], ['comp', '🔍 Comparaciones'], ['graf', '📊 Gráficas'], ['sup', '🧪 Supuestos'], ['pot', '⚡ Potencia'], ['np', '🔀 No paramétrico'], ['cod', '💻 Código y reporte']];
 function renderResultado() {
   const panel = document.getElementById('resultados-panel');
   panel.innerHTML = `<h3>Resultado</h3><div class="tabs" role="tablist">${TABS.map(t => `<button class="tab${t[0] === tabActual ? ' on' : ''}" data-t="${t[0]}" role="tab" onclick="irTab('${t[0]}')">${t[1]}</button>`).join('')}</div>` +
@@ -318,7 +329,7 @@ function irTab(t) {
 function destruirCharts() { Object.values(charts).forEach(c => { try { c.destroy(); } catch (e) { } }); charts = {}; }
 function renderTab(t) {
   destruirCharts(); if (!R) return;
-  const f = { resumen: tabResumen, comp: tabComp, graf: tabGraf, sup: tabSup, pot: tabPot, np: tabNP }[t]; const el = document.getElementById('tp-' + t); el.innerHTML = f(); const post = { comp: postComp, graf: postGraf, sup: postSup, pot: postPot }[t]; if (post) post();
+  const f = { resumen: tabResumen, comp: tabComp, graf: tabGraf, sup: tabSup, pot: tabPot, np: tabNP, cod: tabCod }[t]; const el = document.getElementById('tp-' + t); el.innerHTML = f(); const post = { comp: postComp, graf: postGraf, sup: postSup, pot: postPot, cod: postCod }[t]; if (post) post();
 }
 function sigTxt(s) { return s ? '✓ Diferentes' : '— Iguales'; }
 function rutaBox() { const ru = R.ruta; return `<div class="ruta ${ru.color}"><div class="titulo">🧭 ${esc(ru.titulo)}</div><p>${esc(ru.texto)}</p><ol>${ru.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol></div>`; }
@@ -555,6 +566,35 @@ function tabNP() {
     <p class="nota">Kruskal-Wallis contrasta si los tratamientos tienen distribuciones desplazadas; asume formas parecidas. No es una prueba de medias sino de rangos (tendencia a valores mayores).</p>`;
 }
 
+
+// ── Código reproducible y reporte ──
+let codLang = 'r', codOp = { supuestos: true, alternativas: true, potencia: true, grafico: true };
+function codigoActual() { return codLang === 'r' ? CodigoANOVA.codigoR(R, codOp) : CodigoANOVA.codigoPython(R, codOp); }
+function tabCod() {
+  const chk = (k, t) => `<label class="opt-chk"><input type="checkbox" ${codOp[k] ? 'checked' : ''} onchange="codOp.${k} = this.checked; actCodigo()"> ${t}</label>`;
+  return `<div class="chart-titulo">📄 Reporte del análisis</div>
+    <p class="nota">Descarga el informe completo (modelo, fórmulas, tablas, gráfico, supuestos y conclusión) con los resultados actuales y el método de comparación elegido (${esc(NOMBRE_METODO[R.comp.metodo])}). El texto de “Describe qué comparan tus tratamientos” se incluye como contexto.</p>
+    <div class="ctl"><button class="btn-sec" onclick="repPDF()">🖨️ PDF (imprimir)</button><button class="btn-sec" onclick="repWord()" id="btn-word">📝 Word (.docx)</button><button class="btn-sec" onclick="repTex()">🧮 LaTeX (.tex)</button><button class="btn-sec" onclick="repTexCopiar()">📋 Copiar LaTeX</button></div>
+    <p class="nota" id="rep-msg"></p>
+    <div class="chart-titulo" style="margin-top:1.2rem">💻 Código reproducible con tus datos</div>
+    <p class="nota">Tus datos ya van incrustados en el código: pégalo en <a href="https://webr.r-wasm.org/latest/" target="_blank" rel="noopener">webR</a> o RStudio (R), o en <a href="https://colab.research.google.com/#create=true" target="_blank" rel="noopener">Google Colab</a> (Python) y ejecútalo para reproducir y verificar estos resultados.</p>
+    <div class="ctl"><div><label>Lenguaje</label><select id="cod-lang" onchange="codLang = this.value; actCodigo()"><option value="r"${codLang === 'r' ? ' selected' : ''}>R</option><option value="py"${codLang === 'py' ? ' selected' : ''}>Python</option></select></div>
+      <div class="opt-grupo">${chk('supuestos', 'Supuestos')}${chk('alternativas', 'Welch / Kruskal-Wallis')}${chk('potencia', 'Potencia')}${chk('grafico', 'Gráfico')}</div></div>
+    <pre class="code-box" id="cod-box"></pre>
+    <div class="ctl"><button class="btn-sec" onclick="copiarCodigo()">📋 Copiar código</button><button class="btn-sec" onclick="descargarCodigo()">⬇️ Descargar archivo</button></div>
+    <p class="nota aviso">El código usa los mismos datos y el método seleccionado; los resultados deben coincidir con los de la calculadora (las pruebas de Duncan y SNK en Python usan una función auxiliar incluida en el código).</p>`;
+}
+function actCodigo() { const el = document.getElementById('cod-box'); if (el) el.textContent = codigoActual(); }
+function postCod() { actCodigo(); }
+function copiarCodigo() { const t = codigoActual(); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => msgRep('Código copiado al portapapeles.'), () => { const r = document.createRange(); r.selectNodeContents(document.getElementById('cod-box')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); msgRep('Selecciona y copia con Ctrl+C.'); }); if (window.gtag) gtag('event', 'copiar_codigo_anova', { lenguaje: codLang }); }
+function descargarCodigo() { ReporteANOVA.descargar(codigoActual(), codLang === 'r' ? 'anova_un_factor.R' : 'anova_un_factor.py', 'text/plain;charset=utf-8'); if (window.gtag) gtag('event', 'descargar_codigo_anova', { lenguaje: codLang }); }
+function msgRep(t) { const m = document.getElementById('rep-msg'); if (m) m.textContent = t; }
+function repCtx() { return document.getElementById('contexto') ? document.getElementById('contexto').value : ''; }
+function repPDF() { ReporteANOVA.imprimir(R, repCtx()); msgRep('En la ventana de impresión elige “Guardar como PDF”.'); if (window.gtag) gtag('event', 'reporte_anova', { formato: 'pdf' }); }
+async function repWord() { const b = document.getElementById('btn-word'); try { b.disabled = true; msgRep('Generando el documento de Word…'); const blob = await ReporteANOVA.docx(R, repCtx()); ReporteANOVA.descargar(blob, 'informe_anova.docx'); msgRep('Listo: se descargó informe_anova.docx.'); if (window.gtag) gtag('event', 'reporte_anova', { formato: 'docx' }); } catch (e) { msgRep('No se pudo generar el Word: ' + e.message); } b.disabled = false; }
+function repTex() { ReporteANOVA.descargar(ReporteANOVA.latex(R, repCtx()), 'informe_anova.tex', 'application/x-tex;charset=utf-8'); msgRep('Listo: se descargó informe_anova.tex (compílalo con pdflatex o súbelo a Overleaf).'); if (window.gtag) gtag('event', 'reporte_anova', { formato: 'tex' }); }
+function repTexCopiar() { const t = ReporteANOVA.latex(R, repCtx()); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => msgRep('Código LaTeX copiado.'), () => msgRep('No se pudo copiar; usa la descarga.')); }
+
 function usarSugerenciaAnova(texto) { document.getElementById('pregunta').value = texto; preguntarAnova(); }
 function preguntarAnova() {
   if (!currentResultadoAnova) return;
@@ -587,7 +627,6 @@ function preguntarAnova() {
 <details><summary>¿Qué hago si no se cumple la homogeneidad de varianzas?</summary><p>Considera una transformación de los datos, la prueba de Welch o alternativas no paramétricas como Kruskal-Wallis.</p></details>
 <details><summary>¿Un ANOVA significativo prueba causalidad?</summary><p>Solo si el diseño fue experimental con asignación aleatoria; en datos observacionales indica asociación.</p></details>
 </article>
-
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>
