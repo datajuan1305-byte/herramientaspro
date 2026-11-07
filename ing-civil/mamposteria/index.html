@@ -140,6 +140,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué espesor de junta se recomienda?", "acceptedAnswer": {"@type": "Answer", "text": "Entre 1,0 y 1,5 cm en la mayoría de muros no estructurales; para mampostería estructural, siga las especificaciones del Título D de la NSR-10."}}, {"@type": "Question", "name": "¿Por qué el mismo muro necesita menos mortero con bloque que con ladrillo?", "acceptedAnswer": {"@type": "Answer", "text": "Porque el bloque es más grande y tiene menos juntas por metro cuadrado."}}, {"@type": "Question", "name": "¿Cuánto desperdicio debo asumir?", "acceptedAnswer": {"@type": "Answer", "text": "Entre 3 % y 5 % en unidades; el mortero pierde más, por derrames y adherencia a herramientas."}}, {"@type": "Question", "name": "¿La herramienta descuenta los vanos?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, con medidas estándar: 0,90 × 2,10 m para puertas y 1,20 × 1,20 m para ventanas. Si las suyas son distintas, ajuste el área."}}]}</script>
 </head>
 <body>
 
@@ -262,7 +274,7 @@
       <div class="form-grid">
         <div class="form-group">
           <label>Área total a pañetar (m²)</label>
-          <input type="number" id="p-area" value="50" min="1" step="1" />
+          <input type="number" id="p-area" value="50" min="1" step="0.1" />
           <span class="form-hint">O calcular automáticamente desde el muro</span>
         </div>
         <div class="form-group">
@@ -489,7 +501,7 @@ function calcularMuro() {
     </div>`;
 
   // Pasar área al pañete
-  document.getElementById('p-area').value = fmt(areaNeta*cantidad,1);
+  document.getElementById('p-area').value = (areaNeta*cantidad).toFixed(1);
 }
 
 function calcularPanete() {
@@ -551,6 +563,25 @@ function calcularPanete() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Mampostería: cuántas unidades, mortero y pañete necesita un muro</h2>
+<h3>Del área del muro a las unidades</h3>
+<p>El cálculo parte del área neta: largo por alto menos los vanos de puertas y ventanas. Las unidades por metro cuadrado salen de dividir 1 entre el área de una unidad más su junta: <code>1 ÷ [(largo + junta) × (alto + junta)]</code>. Con juntas de 1,0 a 1,5 cm, un bloque de 40 × 20 cm rinde unas 12 unidades/m² y un ladrillo tolete asentado a soga ronda las 50, según su tamaño. A la cifra se le suma un porcentaje por roturas y recortes, normalmente 3 % a 5 %.</p>
+<h3>El mortero de pega</h3>
+<p>El volumen de mortero es la diferencia entre el volumen del muro y el de las unidades, más un desperdicio. Su proporción define la cantidad de cemento y arena por metro cúbico: una mezcla 1:4 usa en promedio cerca de 350 kg de cemento y 0,98 m³ de arena por m³ de mortero, mientras que una 1:3 sube a unos 440 kg de cemento. Estos valores son referenciales y varían con la humedad y la granulometría de la arena.</p>
+<h3>El pañete</h3>
+<p>El pañete es el revoque que regulariza la superficie. Su volumen es el área por el espesor (1,0 a 1,5 cm en acabado liso; 2,0 a 2,5 cm en rústico) más el desperdicio, y se multiplica por las caras que se pañetan. Para muros que reciben agua o están expuestos se usa una proporción más rica, como 1:2 o 1:3, con aditivo impermeabilizante.</p>
+<h3>Mano de obra y costos</h3>
+<p>La mano de obra se cotiza por metro cuadrado e incluye la pega, el replanteo y la limpieza, y depende de la ciudad, del tipo de unidad y de la altura del muro. La herramienta usa valores de referencia que debe reemplazar por la cotización de su contratista. Los precios de cemento, arena y unidades cambian con frecuencia y por región.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese longitud, altura, número de muros, puertas y ventanas, tipo de unidad y proporción del mortero. Obtendrá unidades, mortero, bultos de cemento y arena, y costo. El área neta pasa a la pestaña de pañete. Para mampostería estructural, consulte el Título D de la NSR-10 y los planos.</p><p><em>Esta guía es informativa y los resultados de la herramienta son estimaciones orientativas: los precios, rendimientos y parámetros deben ajustarse a su proyecto. El diseño y la ejecución definitivos deben ser validados y firmados por un profesional con matrícula vigente ante el COPNIA y ajustarse a la normativa que aplique.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: muro de 10 × 2,5 m con una puerta y una ventana</h3><ul><li>Área bruta 25 m²; vanos 0,90 × 2,10 + 1,20 × 1,20 = 3,33 m²; área neta <strong>21,67 m²</strong>.</li><li>Ladrillo farol de 25 × 12 × 8 cm con junta de 1,5 cm: 39,7 unidades/m², es decir 861 unidades netas y <strong>904 con 5 % de desperdicio</strong>.</li><li>Mortero de pega 1:4: <strong>0,56 m³</strong>, equivalente a 4 bultos de cemento de 50 kg y 0,55 m³ de arena.</li><li>Pañete liso 1:3 en ambas caras: 43,4 m² de pañete requieren unos <strong>0,72 m³</strong> de mortero y 7 bultos de cemento.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué espesor de junta se recomienda?</summary><p>Entre 1,0 y 1,5 cm en la mayoría de muros no estructurales; para mampostería estructural, siga las especificaciones del Título D de la NSR-10.</p></details>
+<details><summary>¿Por qué el mismo muro necesita menos mortero con bloque que con ladrillo?</summary><p>Porque el bloque es más grande y tiene menos juntas por metro cuadrado.</p></details>
+<details><summary>¿Cuánto desperdicio debo asumir?</summary><p>Entre 3 % y 5 % en unidades; el mortero pierde más, por derrames y adherencia a herramientas.</p></details>
+<details><summary>¿La herramienta descuenta los vanos?</summary><p>Sí, con medidas estándar: 0,90 × 2,10 m para puertas y 1,20 × 1,20 m para ventanas. Si las suyas son distintas, ajuste el área.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

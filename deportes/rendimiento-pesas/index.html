@@ -72,6 +72,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué fórmula de 1RM es mejor?", "acceptedAnswer": {"@type": "Answer", "text": "Ninguna es superior en todos los casos. Por eso la herramienta muestra varias y su promedio."}}, {"@type": "Question", "name": "¿Por qué Sinclair se actualiza?", "acceptedAnswer": {"@type": "Answer", "text": "Porque los coeficientes se recalculan con los récords mundiales de cada ciclo olímpico."}}, {"@type": "Question", "name": "¿Wilks sirve para halterofilia?", "acceptedAnswer": {"@type": "Answer", "text": "No es lo habitual: se usa en powerlifting; en halterofilia se emplea Sinclair."}}, {"@type": "Question", "name": "¿Puedo estimar el 1RM con 15 repeticiones?", "acceptedAnswer": {"@type": "Answer", "text": "Con poca fiabilidad. Las fórmulas son más precisas con series de 10 repeticiones o menos."}}]}</script>
 </head>
 <body>
 <nav>
@@ -144,9 +156,9 @@
 
       <h3>🏆 Marcas de competencia (Powerlifting / Halterofilia)</h3>
       <div class="form-grid-3">
-        <div class="form-group"><label>Sentadilla / Arranque (kg)</label><input type="number" id="p-m1" value="160" min="0" max="500" step="0.5"/></div>
-        <div class="form-group"><label>Press banca / Envión (kg)</label><input type="number" id="p-m2" value="110" min="0" max="500" step="0.5"/></div>
-        <div class="form-group"><label>Peso muerto / Total (kg)</label><input type="number" id="p-m3" value="200" min="0" max="500" step="0.5"/></div>
+        <div class="form-group"><label>Sentadilla (powerlifting) / Arranque (halterofilia) (kg)</label><input type="number" id="p-m1" value="160" min="0" max="500" step="0.5"/></div>
+        <div class="form-group"><label>Press banca (powerlifting) / Envión (halterofilia) (kg)</label><input type="number" id="p-m2" value="110" min="0" max="500" step="0.5"/></div>
+        <div class="form-group"><label>Peso muerto (solo powerlifting) (kg)</label><input type="number" id="p-m3" value="200" min="0" max="500" step="0.5"/></div>
       </div>
 
       <h3>⚡ Velocidad de la Barra (Perfil Fuerza-Velocidad)</h3>
@@ -318,12 +330,14 @@ function calcularPesas(){
   const a=sexo==='M'?[-216.0475144,16.2606339,-0.002388645,-0.00113732,7.01863E-06,-1.291E-08]:
                      [594.31747775582,-27.23842536447,0.82112226871,-0.00930733913,4.731582E-05,-9.054E-08];
   const denom=a[0]+a[1]*peso+a[2]*peso**2+a[3]*peso**3+a[4]*peso**4+a[5]*peso**5;
-  const total=m1+m2+m3;
+  const total=m1+m2+m3;   // powerlifting: sentadilla + banca + peso muerto
   const wilks=total*(500/denom);
 
   // Sinclair (simplificado para halterofilia)
-  const b=sexo==='M'?[0.784780654,174.393]:[ 0.897260740,148.026];
-  const sinclair=total*Math.pow(10,b[0]*Math.log10(peso/b[1])**2);
+  // Coeficientes IWF ciclo 2017–2020 (la IWF los actualiza cada ciclo olímpico); coeficiente = 1 si el peso corporal ≥ b
+  const b=sexo==='M'?[0.751945030,175.508]:[0.783497476,153.655];
+  const totalHalt=m1+m2;   // arranque + envión
+  const sinclair=totalHalt*(peso>=b[1]?1:Math.pow(10,b[0]*Math.pow(Math.log10(peso/b[1]),2)));
 
   // Porcentajes de trabajo
   const p70=fmt(rm1Prom*0.70);
@@ -349,8 +363,8 @@ function calcularPesas(){
       <div class="resultado-item"><div class="resultado-valor">${fmt(oconnor)} kg</div><div class="resultado-label">1RM O'Connor</div></div>
       <div class="resultado-item"><div class="resultado-valor">${fmt(lombardi)} kg</div><div class="resultado-label">1RM Lombardi</div></div>
       <div class="resultado-item"><div class="resultado-valor">${fmt(wilks,1)}</div><div class="resultado-label">Wilks Score ${nivelWilks}</div></div>
-      <div class="resultado-item"><div class="resultado-valor">${fmt(sinclair,1)}</div><div class="resultado-label">Índice Sinclair</div></div>
-      <div class="resultado-item"><div class="resultado-valor">${total} kg</div><div class="resultado-label">Total competencia</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(sinclair,1)}</div><div class="resultado-label">Sinclair (arranque + envión = ${fmt(totalHalt)} kg)</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${total} kg</div><div class="resultado-label">Total powerlifting (sentadilla + banca + peso muerto)</div></div>
       <div class="resultado-item"><div class="resultado-valor">${fmt(total/peso,2)}</div><div class="resultado-label">Relación total/peso corporal</div></div>
     </div>
     <div class="resultado-detalle">
@@ -358,8 +372,8 @@ function calcularPesas(){
       70% = ${p70} kg | 80% = ${p80} kg | 85% = ${p85} kg | 90% = ${p90} kg<br>
       <b>Perfil de velocidad:</b><br>
       60% → ${fmt(v60,2)} m/s | 80% → ${fmt(v80,2)} m/s | 90% → ${fmt(v90,2)} m/s<br>
-      <b>Zona de falla técnica:</b> velocidades &lt;${fmt(vmin,2)} m/s (≈${fmt(rm1Prom*0.95)} kg)<br>
-      <b>Wilks Score = ${fmt(wilks,1)} → ${nivelWilks}</b> (permite comparar entre categorías de peso)
+      <b>Velocidad mínima (umbral al 1RM):</b> ${fmt(vmin,2)} m/s ≈ ${fmt(rm1Prom)} kg. Velocidad estimada al 90 %: ${fmt(vm90est,2)} m/s<br>
+      <b>Wilks Score = ${fmt(wilks,1)} → ${nivelWilks}</b> (powerlifting; permite comparar entre categorías de peso. Sinclair solo aplica a halterofilia olímpica y la IPF usa hoy los puntos IPF GL.)
     </div>
   </div>`;
 }
@@ -376,6 +390,12 @@ function agregarPesista(p){
   d.innerHTML=`<input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="text" id="pn-${nPesistas}" value="${pr.n}"/><input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="number" id="p1-${nPesistas}" value="${pr.v1}" step="0.5" placeholder="Med. 1 (kg)"/><input style="padding:7px 10px;border:1.5px solid var(--borde);border-radius:7px;font-size:0.85rem;background:var(--gris-bg);width:100%;" type="number" id="p2-${nPesistas}" value="${pr.v2}" step="0.5" placeholder="Med. 2 (kg)"/><button style="background:none;border:none;cursor:pointer;color:#c62828;font-size:1.1rem;" onclick="document.getElementById('pes-${nPesistas}').remove()">✕</button>`;
   c.appendChild(d);
 }
+
+// Distribución t de Student: p bilateral mediante beta incompleta regularizada
+function lgam(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];let y=x,t=x+5.5;t-=(x+0.5)*Math.log(t);let s=1.000000000190015;for(let j=0;j<6;j++)s+=c[j]/++y;return -t+Math.log(2.5066282746310005*s/x);}
+function betacf(a,b,x){let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<1e-30)d=1e-30;d=1/d;let h=d;for(let m=1;m<=200;m++){const m2=2*m;let aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;h*=d*c;aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-12)break;}return h;}
+function betai(a,b,x){if(x<=0)return 0;if(x>=1)return 1;const bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b;}
+function pT(t,df){return betai(df/2,0.5,df/(df+t*t));}
 
 function calcularEstPesas(){
   const rows=document.querySelectorAll('#pesistas-container > div');
@@ -399,13 +419,13 @@ function calcularEstPesas(){
   const sd1=Math.sqrt(datos.map(d=>d.v1).map(v=>(v-mean1)**2).reduce((a,b)=>a+b,0)/(n-1));
   const sd2=Math.sqrt(datos.map(d=>d.v2).map(v=>(v-mean2)**2).reduce((a,b)=>a+b,0)/(n-1));
   const pooled=Math.sqrt(((n-1)*sd1**2+(n-1)*sd2**2)/(2*n-2));
-  const cohenD=Math.abs(meanD)/pooled;
-  const tcrit=n>=10?2.228:n>=7?2.447:n>=5?2.776:3.182;
-  const sig=Math.abs(tStat)>tcrit;
+  const cohenD=pooled>0?Math.abs(meanD)/pooled:0;
+  const pv=(sdD===0)?(meanD===0?1:0):pT(tStat,n-1);
+  const sig=pv<0.05;
   const cohenI=cohenD<0.2?'Trivial':cohenD<0.5?'Pequeño':cohenD<0.8?'Moderado':'Grande';
   const filasHTML=datos.map(d=>`<tr><td>${d.n}</td><td style="text-align:right">${fmt(d.v1)} kg</td><td style="text-align:right">${fmt(d.v2)} kg</td><td style="text-align:right;color:${d.diff>0?'#a5d6a7':'#ef9a9a'};font-weight:700;">${d.diff>0?'+':''}${fmt(d.diff)} kg</td></tr>`).join('');
   document.getElementById('resultado-est-pesas').style.display='block';
-  document.getElementById('resultado-est-pesas').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">Análisis estadístico progresión de fuerza — n=${n} atletas</div><div class="resultado-grande">${sig?'✅ SÍ hay progresión':'⚠️ NO significativo'}</div><div class="resultado-sub">t(${n-1})=${fmt(Math.abs(tStat),3)} | p ${sig?'< 0.05':'> 0.05'} | Cohen's d=${fmt(cohenD,2)} (${cohenI})</div><div class="resultado-grid"><div class="resultado-item"><div class="resultado-valor">${fmt(mean1)} kg</div><div class="resultado-label">Media medición 1</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(mean2)} kg</div><div class="resultado-label">Media medición 2</div></div><div class="resultado-item"><div class="resultado-valor">+${fmt(meanD)} kg</div><div class="resultado-label">Ganancia promedio</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(cohenD,2)}</div><div class="resultado-label">Cohen's d (${cohenI})</div></div></div><div style="overflow-x:auto;margin-top:1rem;"><table style="width:100%;border-collapse:collapse;font-size:0.83rem;"><thead><tr style="background:rgba(255,255,255,0.15);"><th style="padding:8px;text-align:left;color:#fff;">Atleta</th><th style="padding:8px;text-align:right;color:#fff;">Med. 1</th><th style="padding:8px;text-align:right;color:#fff;">Med. 2</th><th style="padding:8px;text-align:right;color:#fff;">Ganancia</th></tr></thead><tbody style="color:#fff;">${filasHTML}</tbody></table></div><div class="resultado-detalle"><b>Interpretación:</b><br>${sig?'✅ La progresión de fuerza ES estadísticamente significativa (p<0.05). El programa de entrenamiento fue efectivo.':'⚠️ La progresión NO es significativa (p>0.05). Revisar programa: posible estancamiento o período insuficiente.'}<br><b>Cohen\'s d=${fmt(cohenD,2)} (${cohenI}):</b> ${cohenD<0.2?'Cambio trivial — revisar metodología.':cohenD<0.5?'Ganancia pequeña pero real.':cohenD<0.8?'Ganancia moderada — buen progreso.':'Ganancia grande — programa muy efectivo.'}</div></div>`;
+  document.getElementById('resultado-est-pesas').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">Análisis estadístico progresión de fuerza — n=${n} atletas</div><div class="resultado-grande">${sig?'✅ SÍ hay progresión':'⚠️ NO significativo'}</div><div class="resultado-sub">t(${n-1})=${fmt(Math.abs(tStat),3)} | p ${pv<0.001?'< 0.001':'= '+fmt(pv,3)} | Cohen's d=${fmt(cohenD,2)} (${cohenI})</div><div class="resultado-grid"><div class="resultado-item"><div class="resultado-valor">${fmt(mean1)} kg</div><div class="resultado-label">Media medición 1</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(mean2)} kg</div><div class="resultado-label">Media medición 2</div></div><div class="resultado-item"><div class="resultado-valor">${meanD>0?'+':''}${fmt(meanD)} kg</div><div class="resultado-label">Ganancia promedio</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(cohenD,2)}</div><div class="resultado-label">Cohen's d (${cohenI})</div></div></div><div style="overflow-x:auto;margin-top:1rem;"><table style="width:100%;border-collapse:collapse;font-size:0.83rem;"><thead><tr style="background:rgba(255,255,255,0.15);"><th style="padding:8px;text-align:left;color:#fff;">Atleta</th><th style="padding:8px;text-align:right;color:#fff;">Med. 1</th><th style="padding:8px;text-align:right;color:#fff;">Med. 2</th><th style="padding:8px;text-align:right;color:#fff;">Ganancia</th></tr></thead><tbody style="color:#fff;">${filasHTML}</tbody></table></div><div class="resultado-detalle"><b>Interpretación:</b><br>${sig?'✅ La progresión de fuerza ES estadísticamente significativa (p<0.05). Hay progresión significativa entre las dos mediciones (diseño pre-post sin grupo control: no prueba por sí solo que el programa sea la causa).':'⚠️ La progresión NO es significativa (p>0.05). Revisar programa: posible estancamiento o período insuficiente.'}<br><b>Cohen\'s d=${fmt(cohenD,2)} (${cohenI}):</b> ${cohenD<0.2?'Cambio trivial — revisar metodología.':cohenD<0.5?'Ganancia pequeña pero real.':cohenD<0.8?'Ganancia moderada — buen progreso.':'Ganancia grande — programa muy efectivo.'}</div></div>`;
 }
 
 // RECOMENDACIONES
@@ -461,6 +481,25 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Rendimiento en pesas: 1RM estimado, Wilks, Sinclair y velocidad de la barra</h2>
+<h3>Estimar el 1RM sin llegar al máximo</h3>
+<p>El 1RM es el peso máximo que se puede levantar una vez. Probarlo directamente es exigente y riesgoso, por eso se estima con fórmulas a partir de series submáximas: Brzycki, Epley, O'Connor y Lombardi. Son precisas con pocas repeticiones (hasta unas 10) y pierden fiabilidad con series largas. Promediar varias fórmulas atenúa el sesgo de cada una; los resultados son estimaciones.</p>
+<h3>Comparar levantadores de distinto peso: Wilks</h3>
+<p>El coeficiente Wilks permite comparar el total de powerlifting (sentadilla, press de banca y peso muerto) entre atletas de diferente masa corporal y sexo. Se calcula multiplicando el total por un coeficiente polinómico que depende de la masa. La herramienta usa la versión original; las federaciones han adoptado otras fórmulas más recientes, así que úselo como referencia de comparación.</p>
+<h3>Sinclair en halterofilia</h3>
+<p>El coeficiente Sinclair cumple una función equivalente para la halterofilia, con el total de arranque más envión. Se calcula con la expresión 10^[A·log₁₀(m/b)²], donde m es la masa corporal y A y b son constantes por sexo del ciclo olímpico 2017–2020 (hombres A = 0,751945030 y b = 175,508; mujeres A = 0,783497476 y b = 153,655). Si la masa corporal es igual o superior a b, el coeficiente es 1. Las constantes se actualizan cada ciclo, por lo que debe verificar las vigentes de la federación.</p>
+<h3>Velocidad de la barra y análisis de cambios</h3>
+<p>La velocidad media de la barra permite estimar la carga relativa y la fatiga: cargas más altas se mueven más lento, y una caída marcada de velocidad dentro de la serie indica fatiga. Las zonas de velocidad son orientativas y varían según el ejercicio. Para evaluar un cambio entre dos mediciones se aplica la prueba t con valor p exacto, junto con el tamaño del efecto.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese el peso y las repeticiones efectivas para el 1RM; la masa y el total para Wilks o Sinclair; y las mediciones para el análisis estadístico. Aumente cargas de forma progresiva y con supervisión técnica.</p><p><em>Esta guía es informativa y las estimaciones de la herramienta no sustituyen la valoración de un entrenador titulado ni de un médico del deporte. Si tiene antecedentes cardiovasculares, dolor o síntomas durante el esfuerzo, consulte a un profesional de la salud antes de realizar pruebas máximas.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplos</h3><ul><li><strong>1RM:</strong> 120 kg × 5 repeticiones: Brzycki 135, Epley 140, O'Connor 135 y Lombardi 141 kg, con promedio de <strong>137,7 kg</strong>.</li><li><strong>Wilks:</strong> hombre de 80 kg con total de 470 kg → <strong>320,9</strong> puntos.</li><li><strong>Sinclair:</strong> total de 270 kg con 80 kg de masa corporal: coeficiente 1,223 → <strong>330,3</strong> puntos.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué fórmula de 1RM es mejor?</summary><p>Ninguna es superior en todos los casos. Por eso la herramienta muestra varias y su promedio.</p></details>
+<details><summary>¿Por qué Sinclair se actualiza?</summary><p>Porque los coeficientes se recalculan con los récords mundiales de cada ciclo olímpico.</p></details>
+<details><summary>¿Wilks sirve para halterofilia?</summary><p>No es lo habitual: se usa en powerlifting; en halterofilia se emplea Sinclair.</p></details>
+<details><summary>¿Puedo estimar el 1RM con 15 repeticiones?</summary><p>Con poca fiabilidad. Las fórmulas son más precisas con series de 10 repeticiones o menos.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

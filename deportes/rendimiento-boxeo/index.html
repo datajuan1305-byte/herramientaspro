@@ -72,6 +72,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué es un buen índice de fatiga en Wingate?", "acceptedAnswer": {"@type": "Answer", "text": "Depende del deporte y del nivel; compare con sus propias mediciones y con las referencias de su disciplina."}}, {"@type": "Question", "name": "¿Por qué el tiempo de contacto es 12 ms?", "acceptedAnswer": {"@type": "Answer", "text": "Es un valor supuesto para obtener un orden de magnitud. No debe usarse como medida real de fuerza de impacto."}}, {"@type": "Question", "name": "¿La ecuación de Sayers sirve para menores de edad?", "acceptedAnswer": {"@type": "Answer", "text": "Fue validada en adultos jóvenes; en menores, úsela solo para seguimiento individual."}}, {"@type": "Question", "name": "¿Cada cuánto debo repetir los tests?", "acceptedAnswer": {"@type": "Answer", "text": "Cada 4 a 8 semanas es lo habitual, con condiciones de prueba idénticas."}}]}</script>
 </head>
 <body>
 <nav>
@@ -300,6 +312,14 @@
 </div>
 
 <script>
+// Distribución t de Student: p bilateral mediante beta incompleta regularizada
+function lgam(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];let y=x,t=x+5.5;t-=(x+0.5)*Math.log(t);let s=1.000000000190015;for(let j=0;j<6;j++)s+=c[j]/++y;return -t+Math.log(2.5066282746310005*s/x);}
+function betacf(a,b,x){let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<1e-30)d=1e-30;d=1/d;let h=d;for(let m=1;m<=200;m++){const m2=2*m;let aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;h*=d*c;aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-12)break;}return h;}
+function betai(a,b,x){if(x<=0)return 0;if(x>=1)return 1;const bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b;}
+function pT(t,df){return betai(df/2,0.5,df/(df+t*t));}
+
+function tCrit(df){let lo=0,hi=50;for(let k=0;k<80;k++){const m=(lo+hi)/2;if(pT(m,df)>0.05)lo=m;else hi=m;}return (lo+hi)/2;}
+
 function mostrarTab(id,btn){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');}
 function fmt(n,d=1){return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});}
 
@@ -322,13 +342,13 @@ function calcularBoxeo(){
   const fc2=parseInt(document.getElementById('b-fc2').value);
   const fc3=parseInt(document.getElementById('b-fc3').value);
 
-  // Potencia de golpe = 0.5 * masa * velocidad²
+  // Energía cinética del golpe (J) = ½·m·v²; fuerza media de impacto = cambio de momento ÷ tiempo de contacto (supuesto 12 ms)
   const potenciaGolpe=0.5*masaPunio*velPunio**2;
-  const fuerzaGolpe=masaPunio*velPunio**2/0.1; // F = m*a, tiempo contacto ~0.1s
+  const fuerzaGolpe=masaPunio*velPunio/0.012;
   const potenciaRelativa=wPico/peso;
 
   // CMJ — potencia de salto (Sayers formula)
-  const potenciaSalto=60.7*(cmjMejor*10)+45.3*peso-2055;
+  const potenciaSalto=60.7*cmjMejor+45.3*peso-2055; // Sayers (1999): altura en cm, masa en kg
 
   // Wingate — índice de fatiga
   const idxFatiga=((wPico-wMinima)/wPico)*100;
@@ -352,10 +372,10 @@ function calcularBoxeo(){
   <div class="resultado-box">
     <div class="resultado-titulo">Perfil — ${nombre} | ${peso}kg | ${golpesNombres[tipoGolpe]}</div>
     <div class="resultado-grande">${fmt(fuerzaGolpe,0)} N</div>
-    <div class="resultado-sub">Fuerza de impacto estimada — ${golpesNombres[tipoGolpe]} | Nivel: ${nivelPotencia}</div>
+    <div class="resultado-sub">Fuerza media de impacto estimada (m·v ÷ 12 ms supuesto) — ${golpesNombres[tipoGolpe]} | Nivel: ${nivelPotencia}</div>
     <div class="resultado-grid">
       <div class="resultado-item"><div class="resultado-valor">${fmt(fuerzaGolpe,0)} N</div><div class="resultado-label">Fuerza de golpe ${nivelPotencia}</div></div>
-      <div class="resultado-item"><div class="resultado-valor">${fmt(potenciaGolpe,0)} W</div><div class="resultado-label">Potencia de golpe</div></div>
+      <div class="resultado-item"><div class="resultado-valor">${fmt(potenciaGolpe,0)} J</div><div class="resultado-label">Energía cinética del golpe</div></div>
       <div class="resultado-item"><div class="resultado-valor">${fmt(velPunio,1)} m/s</div><div class="resultado-label">Velocidad del puño</div></div>
       <div class="resultado-item"><div class="resultado-valor">${fmt(cmjMejor,1)} cm</div><div class="resultado-label">CMJ mejor intento ${nivelCMJ}</div></div>
       <div class="resultado-item"><div class="resultado-valor">${fmt(potenciaSalto,0)} W</div><div class="resultado-label">Potencia de salto (Sayers)</div></div>
@@ -367,7 +387,7 @@ function calcularBoxeo(){
     </div>
     <div class="resultado-detalle">
       <b>Resumen del perfil físico:</b><br>
-      Potencia/fuerza de golpe: ${fmt(fuerzaGolpe,0)} N @ ${fmt(velPunio,1)} m/s → <b>${nivelPotencia}</b><br>
+      Fuerza media de impacto (estimación, niveles orientativos): ${fmt(fuerzaGolpe,0)} N @ ${fmt(velPunio,1)} m/s → <b>${nivelPotencia}</b><br>
       Potencia explosiva (CMJ): ${fmt(cmjMejor,1)} cm → <b>${nivelCMJ}</b><br>
       Capacidad anaeróbica (Wingate): ${fmt(wPico)} W pico / ${fmt(potenciaRelativa,1)} W/kg → <b>${nivelWingate}</b><br>
       Índice de fatiga: ${fmt(idxFatiga,1)}% → <b>${nivelFatiga}</b> (meta: &lt;25%)<br>
@@ -413,14 +433,14 @@ function calcularEstBoxeo(){
   const sd1=Math.sqrt(datos.map(d=>d.v1).map(v=>(v-mean1)**2).reduce((a,b)=>a+b,0)/(n-1));
   const sd2=Math.sqrt(datos.map(d=>d.v2).map(v=>(v-mean2)**2).reduce((a,b)=>a+b,0)/(n-1));
   const pooled=Math.sqrt(((n-1)*sd1**2+(n-1)*sd2**2)/(2*n-2));
-  const cohenD=Math.abs(meanD)/pooled;
-  const tcrit=n>=10?2.228:n>=7?2.447:n>=5?2.776:3.182;
-  const sig=Math.abs(tStat)>tcrit;
+  const cohenD=pooled>0?Math.abs(meanD)/pooled:0;
+  const pv=(sdD===0)?(meanD===0?1:0):pT(tStat,n-1);
+  const sig=pv<0.05;
   const mejoró=tipo==='menor'?meanD<0:meanD>0;
   const cohenI=cohenD<0.2?'Trivial':cohenD<0.5?'Pequeño':cohenD<0.8?'Moderado':'Grande';
   const filasHTML=datos.map(d=>`<tr><td>${d.n}</td><td style="text-align:right">${fmt(d.v1,1)}</td><td style="text-align:right">${fmt(d.v2,1)}</td><td style="text-align:right;color:${(tipo==='menor'?d.diff<0:d.diff>0)?'#a5d6a7':'#ef9a9a'};font-weight:700;">${d.diff>0?'+':''}${fmt(d.diff,1)}</td></tr>`).join('');
   document.getElementById('resultado-est-boxeo').style.display='block';
-  document.getElementById('resultado-est-boxeo').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">Análisis estadístico — n=${n} boxeadores</div><div class="resultado-grande">${sig?'✅ SÍ hay mejora':'⚠️ NO significativo'}</div><div class="resultado-sub">t(${n-1})=${fmt(Math.abs(tStat),3)} | p ${sig?'< 0.05':'> 0.05'} | Cohen's d=${fmt(cohenD,2)} (${cohenI}) | ${mejoró?'📈 Mejoró':'📉 Empeoró'}</div><div class="resultado-grid"><div class="resultado-item"><div class="resultado-valor">${fmt(mean1,1)}</div><div class="resultado-label">Media medición 1</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(mean2,1)}</div><div class="resultado-label">Media medición 2</div></div><div class="resultado-item"><div class="resultado-valor">${meanD>0?'+':''}${fmt(meanD,1)}</div><div class="resultado-label">Cambio promedio</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(cohenD,2)}</div><div class="resultado-label">Cohen's d (${cohenI})</div></div></div><div style="overflow-x:auto;margin-top:1rem;"><table style="width:100%;border-collapse:collapse;font-size:0.83rem;"><thead><tr style="background:rgba(255,255,255,0.15);"><th style="padding:8px;text-align:left;color:#fff;">Boxeador</th><th style="padding:8px;text-align:right;color:#fff;">Med. 1</th><th style="padding:8px;text-align:right;color:#fff;">Med. 2</th><th style="padding:8px;text-align:right;color:#fff;">Cambio</th></tr></thead><tbody style="color:#fff;">${filasHTML}</tbody></table></div><div class="resultado-detalle"><b>Interpretación:</b><br>${sig?'✅ La mejora ES estadísticamente significativa (p<0.05).':'⚠️ La mejora NO es estadísticamente significativa (p>0.05). Reevaluar en 4-6 semanas.'}<br><b>Cohen\'s d=${fmt(cohenD,2)} (${cohenI})</b></div></div>`;
+  document.getElementById('resultado-est-boxeo').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">Análisis estadístico — n=${n} boxeadores</div><div class="resultado-grande">${sig?'✅ SÍ hay mejora':'⚠️ NO significativo'}</div><div class="resultado-sub">t(${n-1})=${fmt(Math.abs(tStat),3)} | p ${pv<0.001?'< 0.001':'= '+fmt(pv,3)} | Cohen's d=${fmt(cohenD,2)} (${cohenI}) | ${mejoró?'📈 Mejoró':'📉 Empeoró'}</div><div class="resultado-grid"><div class="resultado-item"><div class="resultado-valor">${fmt(mean1,1)}</div><div class="resultado-label">Media medición 1</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(mean2,1)}</div><div class="resultado-label">Media medición 2</div></div><div class="resultado-item"><div class="resultado-valor">${meanD>0?'+':''}${fmt(meanD,1)}</div><div class="resultado-label">Cambio promedio</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(cohenD,2)}</div><div class="resultado-label">Cohen's d (${cohenI})</div></div></div><div style="overflow-x:auto;margin-top:1rem;"><table style="width:100%;border-collapse:collapse;font-size:0.83rem;"><thead><tr style="background:rgba(255,255,255,0.15);"><th style="padding:8px;text-align:left;color:#fff;">Boxeador</th><th style="padding:8px;text-align:right;color:#fff;">Med. 1</th><th style="padding:8px;text-align:right;color:#fff;">Med. 2</th><th style="padding:8px;text-align:right;color:#fff;">Cambio</th></tr></thead><tbody style="color:#fff;">${filasHTML}</tbody></table></div><div class="resultado-detalle"><b>Interpretación:</b><br>${sig?'✅ La mejora ES estadísticamente significativa (p<0.05).':'⚠️ La mejora NO es estadísticamente significativa (p>0.05). Reevaluar en 4-6 semanas.'}<br><b>Cohen\'s d=${fmt(cohenD,2)} (${cohenI})</b></div></div>`;
 }
 
 // RECOMENDACIONES
@@ -448,6 +468,25 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Rendimiento en boxeo: potencia de salto, test de Wingate y carga de golpeo</h2>
+<h3>Qué se mide y por qué</h3>
+<p>El boxeo combina potencia explosiva del tren inferior, capacidad anaeróbica y resistencia. Medirlas permite detectar fortalezas, seguir la evolución de la preparación y comparar al atleta consigo mismo. Ninguna prueba predice por sí sola el resultado en el ring.</p>
+<h3>Potencia en salto con contramovimiento (CMJ)</h3>
+<p>La altura del salto CMJ se relaciona con la potencia pico del tren inferior. La ecuación de Sayers estima la potencia pico en vatios como 60,7 × altura (cm) + 45,3 × masa (kg) − 2.055. Es una estimación válida para población adulta activa, útil para comparar a un mismo deportista en el tiempo.</p>
+<h3>Test de Wingate</h3>
+<p>El Wingate es una prueba de 30 segundos a máximo esfuerzo en cicloergómetro. Entrega la potencia pico, la media y el índice de fatiga, que es el porcentaje de caída de potencia entre el mejor y el peor tramo. Expresar la potencia por kilo de masa corporal permite comparar entre atletas. Es una prueba muy exigente que requiere calentamiento y supervisión.</p>
+<h3>Golpeo: energía y fuerza estimada</h3>
+<p>La herramienta calcula la energía cinética del puño con ½ m v², con masa efectiva y velocidad medida, y una fuerza media aproximada como m·v/Δt con un tiempo de contacto supuesto de 12 ms. Son estimaciones simplificadas: la masa efectiva y el tiempo de contacto reales varían con la técnica y no se miden aquí. Para medir impactos se necesitan sensores específicos.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Registre las pruebas con el mismo protocolo, hora y calentamiento. Para comparar dos fases de entrenamiento, use las pestañas estadísticas, que calculan la prueba t con valor p exacto y el tamaño del efecto (d de Cohen).</p><p><em>Esta guía es informativa y las estimaciones de la herramienta no sustituyen la valoración de un entrenador titulado ni de un médico del deporte. Si tiene antecedentes cardiovasculares, dolor o síntomas durante el esfuerzo, consulte a un profesional de la salud antes de realizar pruebas máximas.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplos</h3><ul><li><strong>Golpeo:</strong> masa efectiva de 4,2 kg a 8,5 m/s → energía cinética de <strong>152 J</strong>; fuerza media supuesta de unos <strong>2.975 N</strong>.</li><li><strong>CMJ:</strong> salto de 45 cm con 69 kg → potencia de <strong>3.802 W</strong> (60,7 × 45 + 45,3 × 69 − 2.055).</li><li><strong>Wingate:</strong> potencia pico de 820 W con 69 kg → <strong>11,9 W/kg</strong>; índice de fatiga de <strong>41,5 %</strong>.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué es un buen índice de fatiga en Wingate?</summary><p>Depende del deporte y del nivel; compare con sus propias mediciones y con las referencias de su disciplina.</p></details>
+<details><summary>¿Por qué el tiempo de contacto es 12 ms?</summary><p>Es un valor supuesto para obtener un orden de magnitud. No debe usarse como medida real de fuerza de impacto.</p></details>
+<details><summary>¿La ecuación de Sayers sirve para menores de edad?</summary><p>Fue validada en adultos jóvenes; en menores, úsela solo para seguimiento individual.</p></details>
+<details><summary>¿Cada cuánto debo repetir los tests?</summary><p>Cada 4 a 8 semanas es lo habitual, con condiciones de prueba idénticas.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

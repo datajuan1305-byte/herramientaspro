@@ -108,6 +108,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué es el índice del local K?", "acceptedAnswer": {"@type": "Answer", "text": "Es una medida de la forma del recinto, K = (largo × ancho) ÷ [(largo + ancho) × altura de montaje sobre el plano de trabajo]. Sirve para escoger el CU en las tablas del fabricante."}}, {"@type": "Question", "name": "¿Por qué el aluminio necesita un calibre mayor?", "acceptedAnswer": {"@type": "Answer", "text": "Tiene mayor resistividad y menor ampacidad que el cobre, por lo que para la misma corriente se requiere una sección mayor."}}, {"@type": "Question", "name": "¿Qué factor de mantenimiento uso en un taller?", "acceptedAnswer": {"@type": "Answer", "text": "En ambientes con polvo suele ser más bajo (0,7 o menos) que en oficinas limpias (0,8 o más)."}}, {"@type": "Question", "name": "¿Los LED sustituyen el cálculo?", "acceptedAnswer": {"@type": "Answer", "text": "No. Los LED cambian los lúmenes y la potencia por luminaria, pero el cálculo del número de luminarias se hace igual."}}]}</script>
 </head>
 <body>
 
@@ -296,9 +308,9 @@
         <div class="form-group">
           <label>Método de instalación</label>
           <select id="c-instalacion">
-            <option value="conduit" selected>En conduit (tubería) — Factor 0.80</option>
-            <option value="bandeja">Bandeja portacables — Factor 0.70</option>
-            <option value="libre">Al aire libre — Factor 1.0</option>
+            <option value="1.0" selected>En canalización (conduit) — sin factor adicional (Tabla 310.16)</option>
+            <option value="0.90">Bandeja portacables — factor conservador 0.90 (verifique el Artículo 392 de la NTC 2050)</option>
+            <option value="1.0">Al aire libre — 1.0 (conservador, sin bonificación)</option>
           </select>
         </div>
         <div class="form-group">
@@ -426,7 +438,7 @@ const conductores = [
   { cal:'#4 AWG',  area:21.2,  cap90:95,  cap75:85,  res:0.829, uso:'Tableros pequeños' },
   { cal:'#3 AWG',  area:26.7,  cap90:115, cap75:100, res:0.657, uso:'Motores medianos' },
   { cal:'#2 AWG',  area:33.6,  cap90:130, cap75:115, res:0.521, uso:'Motores 15–25 HP' },
-  { cal:'#1 AWG',  area:42.4,  cap90:150, cap75:130, res:0.413, uso:'Motores 25–40 HP' },
+  { cal:'#1 AWG',  area:42.4,  cap90:145, cap75:130, res:0.413, uso:'Motores 25–40 HP' },
   { cal:'#1/0 AWG',area:53.5,  cap90:170, cap75:150, res:0.327, uso:'Acometidas pequeñas' },
   { cal:'#2/0 AWG',area:67.4,  cap90:195, cap75:175, res:0.260, uso:'Acometidas medianas' },
   { cal:'#3/0 AWG',area:85.0,  cap90:225, cap75:200, res:0.206, uso:'Transformadores' },
@@ -435,6 +447,11 @@ const conductores = [
   { cal:'350 MCM', area:177.0, cap90:350, cap75:310, res:0.0990,uso:'Industria pesada' },
   { cal:'500 MCM', area:253.0, cap90:430, cap75:380, res:0.0691,uso:'Subestaciones' },
 ];
+
+// Ampacidad del aluminio (NTC 2050 Tabla 310.15(B)(16)); #14 no se fabrica en Al
+const alAmp = [[0,0],[25,20],[35,30],[45,40],[60,50],[75,65],[85,75],[100,90],[115,100],[135,120],[150,135],[175,155],[205,180],[230,205],[280,250],[350,310]];
+conductores.forEach((c,i)=>{ c.al90 = alAmp[i][0]; c.al75 = alAmp[i][1]; });
+const F_TEMP_R = 1.21; // resistencia a 75 °C ≈ 1,21 × valor a 20 °C
 
 // Llenar tabla referencia
 document.addEventListener('DOMContentLoaded', () => {
@@ -561,8 +578,9 @@ function calcularConductores() {
   // ── CRITERIO 1: Por capacidad de corriente ──
   const iRequerida = I125 / factTotal;
   let idxCapacidad = 0;
-  const tabCap = conductores.map((c, i) => ({ ...c, capAdj: c.cap90 * factTotal, i }));
-  idxCapacidad = tabCap.findIndex(c => c.capAdj >= iRequerida);
+  const capAdjDe = c => Math.min((material === 'Al' ? c.al90 : c.cap90) * factTotal, material === 'Al' ? c.al75 : c.cap75); // límite 75 °C por terminales (NTC 2050 110.14(C))
+  const tabCap = conductores.map((c, i) => ({ ...c, capAdj: capAdjDe(c), i }));
+  idxCapacidad = tabCap.findIndex(c => c.capAdj >= I125); // capAdj ya incluye los factores de corrección
   if (idxCapacidad < 0) idxCapacidad = conductores.length - 1;
 
   // ── CRITERIO 2: Por caída de tensión ──
@@ -572,9 +590,7 @@ function calcularConductores() {
   // Despejamos R necesaria: R = (ΔV% × V × 1000) / (factor × L × I)
   const factorSistema = esTrifasico ? Math.sqrt(3) : 2;
   const R_necesaria = (caidaMax * V * 1000) / (factorSistema * longitud * I);
-  // Convertir a resistividad por calibre (ajustar por Al)
-  const R_cu = R_necesaria * factAl; // si Al, necesitamos menos resistencia → calibre mayor
-  let idxCaida = conductores.findIndex(c => c.res <= R_cu);
+  let idxCaida = conductores.findIndex(c => c.res * factAl * F_TEMP_R <= R_necesaria);
   if (idxCaida < 0) idxCaida = conductores.length - 1;
   if (idxCaida < 0) idxCaida = 0;
 
@@ -583,14 +599,14 @@ function calcularConductores() {
   const condFinal = conductores[idxFinal];
 
   // Caída de tensión con el conductor seleccionado
-  const caidaReal = (factorSistema * longitud * I * condFinal.res * factAl) / (V * 1000) * 100;
+  const caidaReal = (factorSistema * longitud * I * condFinal.res * factAl * F_TEMP_R) / (V * 1000) * 100;
 
   // Tabla comparativa
   const idxMostrar = [Math.max(0, idxFinal-2), Math.max(0, idxFinal-1), idxFinal, Math.min(conductores.length-1, idxFinal+1)];
   const filasHTML = [...new Set(idxMostrar)].map(i => {
     const c   = conductores[i];
-    const cd  = (factorSistema * longitud * I * c.res * factAl) / (V * 1000) * 100;
-    const cap = c.cap90 * factTotal;
+    const cd  = (factorSistema * longitud * I * c.res * factAl * F_TEMP_R) / (V * 1000) * 100;
+    const cap = capAdjDe(c);
     const ok  = cap >= I125 && cd <= caidaMax * 100;
     return `<tr class="${i === idxFinal ? 'recomendado' : ''}">
       <td>${c.cal}${i === idxFinal ? ' ← RECOMENDADO' : ''}</td>
@@ -612,7 +628,7 @@ function calcularConductores() {
       <div class="resultado-grid">
         <div class="resultado-item"><div class="resultado-valor">${fmt(I,1)} A</div><div class="resultado-label">Corriente nominal</div></div>
         <div class="resultado-item"><div class="resultado-valor">${fmt(I125,1)} A</div><div class="resultado-label">Corriente diseño (×1.25)</div></div>
-        <div class="resultado-item"><div class="resultado-valor">${fmt(condFinal.cap90 * factTotal,1)} A</div><div class="resultado-label">Capacidad ajustada</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(capAdjDe(condFinal),1)} A</div><div class="resultado-label">Capacidad ajustada</div></div>
         <div class="resultado-item"><div class="resultado-valor">${fmt(caidaReal,2)}%</div><div class="resultado-label">Caída de tensión real</div></div>
         <div class="resultado-item"><div class="resultado-valor">${condFinal.cal}</div><div class="resultado-label">Calibre recomendado</div></div>
         <div class="resultado-item"><div class="resultado-valor">${fmt(caidaReal * V / 100,1)} V</div><div class="resultado-label">Caída en voltios</div></div>
@@ -656,8 +672,7 @@ function calcularFP() {
 
   // Pérdidas en conductores (estimado)
   const reducPerdidas = (1 - Math.pow(fpActual/fpObj, 2)) * 100;
-  const ahorroMes     = kw * horas * (1 - fpActual/fpObj) * kwh / 1000 * 0.03; // estimado 3%
-
+  
   // Capacitor en µF (monofásico / trifásico según V)
   const esTrifasico = V > 1000 ? false : true;
   const capuF = esTrifasico
@@ -676,7 +691,7 @@ function calcularFP() {
         <div class="resultado-item"><div class="resultado-valor">${fmt(kvaObj,1)} kVA</div><div class="resultado-label">kVA con corrección</div></div>
         <div class="resultado-item"><div class="resultado-valor">${fmt(reducI,1)}%</div><div class="resultado-label">Reducción corriente</div></div>
         <div class="resultado-item"><div class="resultado-valor">${fmt(reducPerdidas,1)}%</div><div class="resultado-label">Reducción pérdidas</div></div>
-        <div class="resultado-item"><div class="resultado-valor">$ ${fmtInt(ahorroMes)}</div><div class="resultado-label">Ahorro estimado/mes</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(kvaActual-kvaObj,1)} kVA</div><div class="resultado-label">Capacidad liberada</div></div>
       </div>
       <div class="resultado-detalle">
         <b>Cálculo:</b><br>
@@ -685,12 +700,31 @@ function calcularFP() {
         Reducción de corriente: ${fmt(iActual,1)} A → ${fmt(iObj,1)} A (<b>−${fmt(reducI,1)}%</b>)<br>
         Reducción de pérdidas en conductores: <b>−${fmt(reducPerdidas,1)}%</b><br>
         <b>Capacidad del banco de condensadores: ${fmt(kvar,1)} kVAr a ${V} V</b><br>
-        ${fpActual < 0.9 ? `⚠️ FP actual (${fpActual}) es menor a 0.90. La CREG Colombia aplica penalizaciones a usuarios industriales con FP &lt; 0.90.` : `✅ Con la corrección se alcanza FP ${fpObj}, por encima del mínimo CREG (0.90).`}
+        ${fpActual < 0.9 ? `⚠️ FP actual (${fpActual}) es menor a 0.90. La regulación de la CREG factura la energía reactiva que excede el 50 % de la activa (equivale a un FP cercano a 0,90): confirme las condiciones con su comercializador.` : `✅ Con la corrección se alcanza FP ${fpObj}, por encima de la referencia de 0,90 (reactiva ≤ 50 % de la activa).`}
       </div>
     </div>`;
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Iluminación industrial y selección de conductores: método de los lúmenes y caída de tensión</h2>
+<h3>Iluminancia requerida</h3>
+<p>La iluminancia se mide en lux (lúmenes por metro cuadrado) y varía según la tarea visual: en una bodega bastan unos 100 lux, mientras que un taller de precisión puede requerir 500 lux o más. En Colombia, el RETILAP fija los niveles de referencia por tipo de recinto y actividad; la herramienta usa valores usuales que debe verificar con el reglamento vigente.</p>
+<h3>El método de los lúmenes</h3>
+<p>El número de luminarias es N = (E × A) ÷ (Φ × CU × FM), donde E es la iluminancia requerida, A el área, Φ los lúmenes de cada luminaria, CU el coeficiente de utilización y FM el factor de mantenimiento. El CU depende de la geometría del local (índice K), de la reflectancia de techo, paredes y piso y de la luminaria. El FM, normalmente 0,7 a 0,85, considera suciedad y depreciación del flujo. El método da un promedio: no reemplaza una simulación fotométrica.</p>
+<h3>Conductores por ampacidad y caída</h3>
+<p>La corriente se obtiene de la potencia, el factor de potencia y la tensión. Para cargas continuas se diseña al 125 %. La capacidad del conductor se corrige por temperatura ambiente y por el número de conductores en la canalización, y no debe exceder la ampacidad de la columna de 75 °C. Después se verifica que la caída de tensión sea menor al límite. Se adopta el mayor calibre que resulte de los dos criterios.</p>
+<h3>Corrección del factor de potencia</h3>
+<p>Con un factor de potencia bajo, la instalación consume más corriente para la misma potencia útil, lo que exige conductores y transformadores mayores y aumenta las pérdidas. La regulación de la CREG factura la energía reactiva que excede cierto porcentaje de la activa; confirme las condiciones con su comercializador. Un banco de condensadores dimensionado con la fórmula Q = P (tan φ₁ − tan φ₂) corrige el problema.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>En iluminación ingrese dimensiones, altura, luminaria, CU, FM y costos de energía. En conductores, el sistema, la potencia, la longitud y los factores de corrección. En factor de potencia, los kW y los factores antes y después. Verifique siempre con el diseñador.</p><p><em>Esta guía es informativa y los resultados de la herramienta son estimaciones orientativas: los precios, rendimientos y parámetros deben ajustarse a su proyecto. El diseño y la ejecución definitivos deben ser validados y firmados por un profesional con matrícula vigente ante el COPNIA o el organismo que corresponda y ajustarse a la normativa que aplique.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplos</h3><ul><li><strong>Taller de 30 × 20 m (600 m²) a 500 lux</strong> con luminarias de 26.000 lm y 200 W, CU = 0,6 y FM = 0,8: N = 500 × 600 ÷ (26.000 × 0,6 × 0,8) = <strong>25 luminarias</strong>, con 520 lux reales, 5,0 kW y 8,3 W/m².</li><li><strong>Conductor para 15 kW a 220 V monofásico, FP 0,9 y 80 m:</strong> I = 75,8 A, diseño 94,7 A. Con los factores de corrección de la herramienta, el calibre por ampacidad y caída resulta <strong>#1 AWG de cobre</strong> (capacidad ajustada 116 A, caída 2,75 %).</li><li><strong>Factor de potencia:</strong> 100 kW de FP 0,75 a 0,95 requieren <strong>55,3 kVAr</strong>; la potencia aparente baja de 133,3 a 105,3 kVA y la corriente un 21,1 %.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué es el índice del local K?</summary><p>Es una medida de la forma del recinto, K = (largo × ancho) ÷ [(largo + ancho) × altura de montaje sobre el plano de trabajo]. Sirve para escoger el CU en las tablas del fabricante.</p></details>
+<details><summary>¿Por qué el aluminio necesita un calibre mayor?</summary><p>Tiene mayor resistividad y menor ampacidad que el cobre, por lo que para la misma corriente se requiere una sección mayor.</p></details>
+<details><summary>¿Qué factor de mantenimiento uso en un taller?</summary><p>En ambientes con polvo suele ser más bajo (0,7 o menos) que en oficinas limpias (0,8 o más).</p></details>
+<details><summary>¿Los LED sustituyen el cálculo?</summary><p>No. Los LED cambian los lúmenes y la potencia por luminaria, pero el cálculo del número de luminarias se hace igual.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

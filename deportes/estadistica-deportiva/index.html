@@ -68,6 +68,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué significa p = 0,05?", "acceptedAnswer": {"@type": "Answer", "text": "Que, si no hubiera efecto real, un resultado tan extremo ocurriría cerca del 5 % de las veces. No es la probabilidad de que la hipótesis sea cierta."}}, {"@type": "Question", "name": "¿Cuántos datos necesito?", "acceptedAnswer": {"@type": "Answer", "text": "Cuantos más, mejor. Con muestras muy pequeñas, los resultados son inestables y los intervalos amplios."}}, {"@type": "Question", "name": "¿Qué hago si no se cumple la normalidad?", "acceptedAnswer": {"@type": "Answer", "text": "Considere pruebas no paramétricas o consulte a un estadístico."}}, {"@type": "Question", "name": "¿R² alto implica causalidad?", "acceptedAnswer": {"@type": "Answer", "text": "No. Indica que la recta se ajusta bien a los datos, no por qué cambian."}}]}</script>
 </head>
 <body>
 <nav>
@@ -231,6 +243,14 @@
 </div>
 
 <script>
+// Distribución t de Student: p bilateral mediante beta incompleta regularizada
+function lgam(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];let y=x,t=x+5.5;t-=(x+0.5)*Math.log(t);let s=1.000000000190015;for(let j=0;j<6;j++)s+=c[j]/++y;return -t+Math.log(2.5066282746310005*s/x);}
+function betacf(a,b,x){let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<1e-30)d=1e-30;d=1/d;let h=d;for(let m=1;m<=200;m++){const m2=2*m;let aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;h*=d*c;aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-12)break;}return h;}
+function betai(a,b,x){if(x<=0)return 0;if(x>=1)return 1;const bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b;}
+function pT(t,df){return betai(df/2,0.5,df/(df+t*t));}
+
+function tCrit(df){let lo=0,hi=50;for(let k=0;k<80;k++){const m=(lo+hi)/2;if(pT(m,df)>0.05)lo=m;else hi=m;}return (lo+hi)/2;}
+
 function mostrarTab(id,btn){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');}
 function fmt(n,d=2){return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});}
 
@@ -279,16 +299,16 @@ function calcularTTest(){
   const sd1=Math.sqrt(datos.map(d=>d.v1).map(v=>(v-mean1)**2).reduce((a,b)=>a+b,0)/(n-1));
   const sd2=Math.sqrt(datos.map(d=>d.v2).map(v=>(v-mean2)**2).reduce((a,b)=>a+b,0)/(n-1));
   const pooled=Math.sqrt(((n-1)*sd1**2+(n-1)*sd2**2)/(2*n-2));
-  const cohenD=Math.abs(meanD)/pooled;
-  const tcrit=n>=30?2.042:n>=20?2.086:n>=15?2.131:n>=10?2.228:n>=7?2.447:n>=5?2.776:3.182;
-  const sig=Math.abs(tStat)>tcrit;
+  const cohenD=pooled>0?Math.abs(meanD)/pooled:0;
+  const pv=(sdD===0)?(meanD===0?1:0):pT(tStat,n-1);
+  const sig=pv<0.05;
   const mejoró=tipo==='menor'?meanD<0:meanD>0;
   const cohenI=cohenD<0.2?'Trivial':cohenD<0.5?'Pequeño':cohenD<0.8?'Moderado':'Grande';
-  const ic95=1.96*sdD/Math.sqrt(n);
+  const ic95=tCrit(n-1)*sdD/Math.sqrt(n);
   const filasHTML=datos.map(d=>`<tr><td>${d.n}</td><td style="text-align:right">${fmt(d.v1,2)}</td><td style="text-align:right">${fmt(d.v2,2)}</td><td style="text-align:right;color:${(tipo==='menor'?d.diff<0:d.diff>0)?'#a5d6a7':'#ef9a9a'};font-weight:700;">${d.diff>0?'+':''}${fmt(d.diff,2)}</td></tr>`).join('');
   const cambPct=Math.abs(meanD/mean1*100);
   document.getElementById('resultado-ttest').style.display='block';
-  document.getElementById('resultado-ttest').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">T-test Pareado — ${nombre} | n=${n} deportistas</div><div class="resultado-grande">${sig?'✅ SIGNIFICATIVO':'⚠️ NO significativo'}</div><div class="resultado-sub">t(${n-1}) = ${fmt(Math.abs(tStat),3)} | p ${sig?'< 0.05':'> 0.05'} | IC95%: [${fmt(meanD-ic95,2)}, ${fmt(meanD+ic95,2)}]</div><div class="resultado-grid"><div class="resultado-item"><div class="resultado-valor">${fmt(mean1,2)}</div><div class="resultado-label">Media Pre</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(mean2,2)}</div><div class="resultado-label">Media Post</div></div><div class="resultado-item"><div class="resultado-valor">${meanD>0?'+':''}${fmt(meanD,2)}</div><div class="resultado-label">Cambio promedio</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(cambPct,1)}%</div><div class="resultado-label">Cambio porcentual</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(cohenD,2)}</div><div class="resultado-label">Cohen's d (${cohenI})</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(sdD,2)}</div><div class="resultado-label">DE diferencias</div></div></div><div style="overflow-x:auto;margin-top:1rem;"><table style="width:100%;border-collapse:collapse;font-size:0.83rem;"><thead><tr style="background:rgba(255,255,255,0.15);"><th style="padding:8px;text-align:left;color:#fff;">Deportista</th><th style="padding:8px;text-align:right;color:#fff;">Pre</th><th style="padding:8px;text-align:right;color:#fff;">Post</th><th style="padding:8px;text-align:right;color:#fff;">Cambio</th></tr></thead><tbody style="color:#fff;">${filasHTML}</tbody></table></div><div class="resultado-detalle"><b>Interpretación completa:</b><br>${sig?`✅ El cambio ES estadísticamente significativo (p<0.05, t=${fmt(Math.abs(tStat),3)} > t_crit=${tcrit}). La mejora de ${fmt(Math.abs(meanD),2)} unidades (${fmt(cambPct,1)}%) NO se debe al azar.`:`⚠️ El cambio NO es estadísticamente significativo (p>0.05). El cambio observado podría deberse al azar o al tamaño de muestra insuficiente. Se recomienda: (1) ampliar el período de intervención, (2) aumentar el tamaño del grupo, (3) revisar la intensidad del programa.`}<br><b>Magnitud del efecto (Cohen's d = ${fmt(cohenD,2)}):</b> ${cohenI} — ${cohenD<0.2?'El cambio es trivial en la práctica.':cohenD<0.5?'Cambio pequeño pero real.':cohenD<0.8?'Cambio de magnitud moderada — el programa está funcionando.':'Cambio de gran magnitud — programa muy efectivo.'}<br><b>Intervalo de confianza 95%:</b> El cambio verdadero está entre ${fmt(meanD-ic95,2)} y ${fmt(meanD+ic95,2)} unidades con 95% de certeza.</div></div>`;
+  document.getElementById('resultado-ttest').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">T-test Pareado — ${nombre} | n=${n} deportistas</div><div class="resultado-grande">${sig?'✅ SIGNIFICATIVO':'⚠️ NO significativo'}</div><div class="resultado-sub">t(${n-1}) = ${fmt(Math.abs(tStat),3)} | p ${pv<0.001?'< 0.001':'= '+fmt(pv,3)} | IC95%: [${fmt(meanD-ic95,2)}, ${fmt(meanD+ic95,2)}]</div><div class="resultado-grid"><div class="resultado-item"><div class="resultado-valor">${fmt(mean1,2)}</div><div class="resultado-label">Media Pre</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(mean2,2)}</div><div class="resultado-label">Media Post</div></div><div class="resultado-item"><div class="resultado-valor">${meanD>0?'+':''}${fmt(meanD,2)}</div><div class="resultado-label">Cambio promedio</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(cambPct,1)}%</div><div class="resultado-label">Cambio porcentual</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(cohenD,2)}</div><div class="resultado-label">Cohen's d (${cohenI})</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(sdD,2)}</div><div class="resultado-label">DE diferencias</div></div></div><div style="overflow-x:auto;margin-top:1rem;"><table style="width:100%;border-collapse:collapse;font-size:0.83rem;"><thead><tr style="background:rgba(255,255,255,0.15);"><th style="padding:8px;text-align:left;color:#fff;">Deportista</th><th style="padding:8px;text-align:right;color:#fff;">Pre</th><th style="padding:8px;text-align:right;color:#fff;">Post</th><th style="padding:8px;text-align:right;color:#fff;">Cambio</th></tr></thead><tbody style="color:#fff;">${filasHTML}</tbody></table></div><div class="resultado-detalle"><b>Interpretación completa:</b><br>${sig?`✅ El cambio ES estadísticamente significativo (p=${pv<0.001?'<0.001':fmt(pv,3)} < 0.05, t=${fmt(Math.abs(tStat),3)}). La mejora de ${fmt(Math.abs(meanD),2)} unidades (${fmt(cambPct,1)}%) NO se debe al azar.`:`⚠️ El cambio NO es estadísticamente significativo (p>0.05). El cambio observado podría deberse al azar o al tamaño de muestra insuficiente. Se recomienda: (1) ampliar el período de intervención, (2) aumentar el tamaño del grupo, (3) revisar la intensidad del programa.`}<br><b>Magnitud del efecto (Cohen's d = ${fmt(cohenD,2)}):</b> ${cohenI} — ${cohenD<0.2?'El cambio es trivial en la práctica.':cohenD<0.5?'Cambio pequeño pero real.':cohenD<0.8?'Cambio de magnitud moderada — el programa está funcionando.':'Cambio de gran magnitud — programa muy efectivo.'}<br><b>Intervalo de confianza 95%:</b> El cambio verdadero está entre ${fmt(meanD-ic95,2)} y ${fmt(meanD+ic95,2)} unidades con 95% de certeza.</div></div>`;
 }
 
 // ── ANOVA ──
@@ -324,8 +344,9 @@ function calcularAnova(){
   const dfB=k-1,dfW=N-k;
   const MSB=SSB/dfB,MSW=SSW/dfW;
   const F=MSB/MSW;
-  const Fcrit=dfB===2&&dfW>=20?3.49:dfB===2&&dfW>=10?4.26:dfB===3&&dfW>=20?3.10:dfB===3&&dfW>=10?3.71:dfB===4&&dfW>=20?2.87:3.48;
-  const sig=F>Fcrit;
+  // p exacto de la distribución F mediante la beta incompleta regularizada
+  const pv=(MSW===0)?(MSB===0?1:0):betai(dfW/2,dfB/2,dfW/(dfW+dfB*F));
+  const sig=pv<0.05;
   const etaCuadrado=SSB/(SSB+SSW);
 
   const gruposHTML=grupos.map((g,i)=>{
@@ -335,7 +356,7 @@ function calcularAnova(){
   }).join('');
 
   document.getElementById('resultado-anova').style.display='block';
-  document.getElementById('resultado-anova').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">ANOVA — ${variable} | ${k} grupos | N total=${N}</div><div class="resultado-grande">${sig?'✅ SÍ hay diferencias':'⚠️ Sin diferencias'}</div><div class="resultado-sub">F(${dfB},${dfW}) = ${fmt(F,3)} | p ${sig?'< 0.05':'> 0.05'} | η² = ${fmt(etaCuadrado,3)}</div><div class="resultado-grid">${gruposHTML}<div class="resultado-item"><div class="resultado-valor">F = ${fmt(F,3)}</div><div class="resultado-label">F estadístico</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(etaCuadrado,3)}</div><div class="resultado-label">η² (eta cuadrado)</div></div></div><div class="resultado-detalle"><b>Interpretación:</b><br>${sig?`✅ ANOVA SIGNIFICATIVO (p<0.05, F=${fmt(F,3)} > F_crit≈${Fcrit}). Existe al menos una diferencia significativa entre los ${k} grupos. Se recomienda aplicar prueba post-hoc (Tukey HSD) para identificar qué grupos difieren entre sí.`:`⚠️ ANOVA NO significativo. No hay evidencia suficiente de diferencias entre los grupos (p>0.05). Los grupos pueden considerarse equivalentes en ${variable}.`}<br><b>Eta cuadrado (η² = ${fmt(etaCuadrado,3)}):</b> El factor grupo explica el <b>${fmt(etaCuadrado*100,1)}%</b> de la varianza total. ${etaCuadrado<0.01?'Efecto trivial.':etaCuadrado<0.06?'Efecto pequeño.':etaCuadrado<0.14?'Efecto moderado.':'Efecto grande.'}</div></div>`;
+  document.getElementById('resultado-anova').innerHTML=`<div class="resultado-box"><div class="resultado-titulo">ANOVA — ${variable} | ${k} grupos | N total=${N}</div><div class="resultado-grande">${sig?'✅ SÍ hay diferencias':'⚠️ Sin diferencias'}</div><div class="resultado-sub">F(${dfB},${dfW}) = ${fmt(F,3)} | p ${pv<0.001?'< 0.001':'= '+fmt(pv,3)} | η² = ${fmt(etaCuadrado,3)}</div><div class="resultado-grid">${gruposHTML}<div class="resultado-item"><div class="resultado-valor">F = ${fmt(F,3)}</div><div class="resultado-label">F estadístico</div></div><div class="resultado-item"><div class="resultado-valor">${fmt(etaCuadrado,3)}</div><div class="resultado-label">η² (eta cuadrado)</div></div></div><div class="resultado-detalle"><b>Interpretación:</b><br>${sig?`✅ ANOVA SIGNIFICATIVO (p=${pv<0.001?'<0.001':fmt(pv,3)} < 0.05, F=${fmt(F,3)}). Existe al menos una diferencia significativa entre los ${k} grupos. Se recomienda aplicar prueba post-hoc (Tukey HSD) para identificar qué grupos difieren entre sí.`:`⚠️ ANOVA NO significativo. No hay evidencia suficiente de diferencias entre los grupos (p>0.05). Los grupos pueden considerarse equivalentes en ${variable}.`}<br><b>Eta cuadrado (η² = ${fmt(etaCuadrado,3)}):</b> El factor grupo explica el <b>${fmt(etaCuadrado*100,1)}%</b> de la varianza total. ${etaCuadrado<0.01?'Efecto trivial.':etaCuadrado<0.06?'Efecto pequeño.':etaCuadrado<0.14?'Efecto moderado.':'Efecto grande.'}</div></div>`;
 }
 
 // ── PERCENTILES ──
@@ -387,7 +408,7 @@ function calcularTendencia(){
   const meanY=sumY/n;
   const ss_res=datos.map((d,i)=>(d.y-yPred[i])**2).reduce((a,b)=>a+b,0);
   const ss_tot=datos.map(d=>(d.y-meanY)**2).reduce((a,b)=>a+b,0);
-  const r2=1-(ss_res/ss_tot);
+  const r2=ss_tot>0?1-(ss_res/ss_tot):1;
   const r=Math.sqrt(r2)*(slope>0?1:-1);
   const xFuturo=n+proyeccion;
   const yFuturo=intercept+slope*xFuturo;
@@ -411,6 +432,25 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Estadística aplicada al deporte: prueba t, ANOVA, tamaño del efecto y tendencias</h2>
+<h3>Por qué usar estadística</h3>
+<p>Un cambio en una marca puede deberse a la preparación o al azar. La estadística cuantifica la evidencia: indica si una diferencia es mayor de lo esperable por variación aleatoria y qué tan grande es en términos prácticos. Con muestras pequeñas, comunes en el deporte, esta cautela es especialmente importante.</p>
+<h3>Prueba t</h3>
+<p>La prueba t pareada compara dos mediciones del mismo grupo (antes y después). El estadístico t = media de diferencias ÷ (desviación estándar de diferencias ÷ √n), con n − 1 grados de libertad. El valor p exacto se obtiene de la distribución t, y el intervalo de confianza usa el valor crítico correspondiente a esos grados de libertad, no el 1,96 de la normal, que sería incorrecto con muestras pequeñas. Para grupos independientes se usa la variante correspondiente.</p>
+<h3>ANOVA</h3>
+<p>El ANOVA de una vía compara las medias de tres o más grupos. Divide la variabilidad entre la de entre grupos y la de dentro de grupos, y el cociente F tiene gl₁ = k − 1 y gl₂ = N − k grados de libertad. Si p es pequeño, al menos un grupo difiere. No indica cuáles: para eso se necesitan comparaciones posteriores. Supone observaciones independientes, distribución aproximadamente normal y varianzas similares.</p>
+<h3>Tamaño del efecto y significancia</h3>
+<p>Un valor p pequeño no implica que el cambio sea relevante, ni uno grande que no lo sea. El d de Cohen expresa la diferencia en desviaciones estándar: por convención, 0,2 es pequeño, 0,5 moderado y 0,8 grande. Se interpreta siempre junto con el intervalo de confianza y con el sentido práctico en el deporte.</p>
+<h3>Regresión y tendencias</h3>
+<p>La regresión lineal simple ajusta una recta a una serie de datos y entrega la pendiente (cambio por unidad de tiempo), el R² (proporción de variación explicada) y una proyección. Extrapolar fuera del rango observado es arriesgado: úsela como orientación y no como garantía.</p><p><em>Esta guía es informativa y las estimaciones de la herramienta no sustituyen la valoración de un entrenador titulado ni de un médico del deporte. Si tiene antecedentes cardiovasculares, dolor o síntomas durante el esfuerzo, consulte a un profesional de la salud antes de realizar pruebas máximas.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplos</h3><ul><li><strong>t pareado:</strong> diferencias de 3,9; 3,7; 3,4; 3,6 y 3,6 → media 3,64, desviación 0,1817, t(4) = 44,81, p ≈ 1,5 × 10⁻⁶ e IC 95 % de <strong>[3,41; 3,87]</strong>.</li><li><strong>ANOVA</strong> con tres grupos de cinco: F(2, 12) = 6,733 y <strong>p = 0,0109</strong>.</li><li><strong>Tendencia</strong> de siete puntos (48,2 … 58,1): pendiente de 1,661 por periodo, R² = 0,998 y proyección a x = 10 de <strong>63,3</strong>.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué significa p = 0,05?</summary><p>Que, si no hubiera efecto real, un resultado tan extremo ocurriría cerca del 5 % de las veces. No es la probabilidad de que la hipótesis sea cierta.</p></details>
+<details><summary>¿Cuántos datos necesito?</summary><p>Cuantos más, mejor. Con muestras muy pequeñas, los resultados son inestables y los intervalos amplios.</p></details>
+<details><summary>¿Qué hago si no se cumple la normalidad?</summary><p>Considere pruebas no paramétricas o consulte a un estadístico.</p></details>
+<details><summary>¿R² alto implica causalidad?</summary><p>No. Indica que la recta se ajusta bien a los datos, no por qué cambian.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

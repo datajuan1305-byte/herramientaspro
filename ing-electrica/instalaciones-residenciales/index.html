@@ -157,6 +157,19 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="fix-ovf">.resultado-box{max-width:100%;overflow-x:auto}.resultado-box table{min-width:0}</style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Por qué circuitos exclusivos para ducha y cocina?", "acceptedAnswer": {"@type": "Answer", "text": "Por su alta potencia: comparten conductor y protección con otros usos solo si la suma lo permite, y por seguridad se separan."}}, {"@type": "Question", "name": "¿Qué es el factor de demanda?", "acceptedAnswer": {"@type": "Answer", "text": "Es la fracción de la carga conectada que se espera usar simultáneamente; evita sobredimensionar el servicio."}}, {"@type": "Question", "name": "¿Cuántos espacios debe tener el tablero?", "acceptedAnswer": {"@type": "Answer", "text": "Los circuitos calculados más reserva. La herramienta sugiere espacios libres para ampliaciones."}}, {"@type": "Question", "name": "¿Cuándo se usa GFCI?", "acceptedAnswer": {"@type": "Answer", "text": "En zonas con presencia de agua, como baños, cocinas y exteriores, según la normativa aplicable."}}]}</script>
 </head>
 <body>
 
@@ -647,13 +660,15 @@ function calcularTablero() {
   const iTotal     = cargaTotal / tension;
   const bkrPrinc   = [40,50,60,70,80,100,110,125,150].find(b=>b>=iTotal*1.25) || '>150A';
   const totalEsp   = circuitos.reduce((s,c)=>s+c.cant,0);
+  // Calibre de acometida por ampacidad col. 75 °C (Cu THHN, terminales): #8 50 A, #6 65 A, #4 85 A, #3 100 A, #2 115 A, #1 130 A, 1/0 150 A
+  const calAcom = (A => A<=50?'#8':A<=65?'#6':A<=85?'#4':A<=100?'#3':A<=115?'#2':A<=130?'#1':'1/0')(typeof bkrPrinc==='number'?bkrPrinc:150);
 
   document.getElementById('resultado-tablero').style.display = 'block';
   document.getElementById('resultado-tablero').innerHTML = `
     <div class="resultado-box">
       <div class="resultado-titulo">Tablero de Distribución Residencial — ${tension}V | ${area} m²</div>
       <div class="resultado-grid">
-        <div class="resultado-item"><div class="resultado-valor">${fmt(cargaTotal,0)} VA</div><div class="resultado-label">Carga total (85% FD)</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${fmt(cargaTotal,0)} VA</div><div class="resultado-label">Carga total (FD supuesto 85 %)</div></div>
         <div class="resultado-item"><div class="resultado-valor">${fmt(iTotal,1)} A</div><div class="resultado-label">Corriente total</div></div>
         <div class="resultado-item"><div class="resultado-valor">${bkrPrinc} A</div><div class="resultado-label">Breaker principal</div></div>
         <div class="resultado-item"><div class="resultado-valor">${totalEsp}</div><div class="resultado-label">Circuitos totales</div></div>
@@ -668,13 +683,13 @@ function calcularTablero() {
             <td>${fmtInt(c.carga)}</td>
             <td>${c.A<=15?'#14 AWG':c.A<=20?'#12 AWG':c.A<=30?'#10 AWG':'#8 AWG'}</td>
           </tr>`).join('')}
-          <tr class="total"><td>BREAKER PRINCIPAL</td><td><b>${bkrPrinc} A</b></td><td>${totalEsp}</td><td>${fmt(cargaTotal,0)} VA</td><td>#${bkrPrinc<=60?'8':bkrPrinc<=100?'4':'2'} AWG</td></tr>
+          <tr class="total"><td>BREAKER PRINCIPAL</td><td><b>${bkrPrinc} A</b></td><td>${totalEsp}</td><td>${fmt(cargaTotal,0)} VA</td><td>${calAcom} AWG</td></tr>
         </tbody>
       </table>
       <div class="resultado-detalle">
         <b>Tablero recomendado:</b> ${totalEsp + 4} espacios (${totalEsp} circuitos + 4 de reserva)<br>
-        <b>Breaker principal:</b> ${bkrPrinc} A (calibre conductor acometida: #${bkrPrinc<=60?'8':bkrPrinc<=100?'4':'2'} AWG Cu THHN)<br>
-        <b>Obligatorio según RETIE:</b> Polo a tierra en todos los circuitos | GFCI en baños y cocina | Identificación de todos los circuitos
+        <b>Breaker principal:</b> ${bkrPrinc} A (calibre mínimo de acometida por ampacidad a 75 °C: ${calAcom} AWG Cu THHN; verifique caída de tensión y reglas del operador de red)<br>
+        <b>Buenas prácticas y exigencias habituales (verifique en el RETIE y la NTC 2050 vigentes):</b> conductor de puesta a tierra en todos los circuitos | protección GFCI en baños y zonas húmedas | identificación de todos los circuitos
       </div>
     </div>`;
 }
@@ -686,6 +701,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Instalaciones eléctricas residenciales: circuitos, iluminación y tablero</h2>
+<h3>División en circuitos</h3>
+<p>Una vivienda se divide en circuitos independientes para limitar la carga de cada uno y facilitar el mantenimiento. Los circuitos de uso general de 15 o 20 A se cargan hasta el 80 % de su capacidad en cargas continuas. Se suelen separar el alumbrado, los tomacorrientes por zonas y las cargas especiales, como ducha eléctrica, lavadora, secadora, cocina eléctrica y aire acondicionado, cada una con circuito exclusivo.</p>
+<h3>Carga por ambiente</h3>
+<p>La carga de cada ambiente combina el alumbrado general (33 VA/m²), los tomacorrientes (180 VA por salida en la herramienta) y las cargas especiales. La suma se corrige con un factor de demanda para obtener la carga de diseño, la corriente y la protección general. Un tablero debe dejar espacios de reserva para ampliaciones futuras.</p>
+<h3>Iluminación residencial</h3>
+<p>El método de los lúmenes también aplica a viviendas, con iluminancias menores: unos 150 lux en dormitorios, 200 en salas, 250 en baños y 300 en cocinas, valores que debe contrastar con el RETILAP. Las luminarias LED reducen la potencia necesaria frente a incandescentes y halógenas para el mismo flujo luminoso.</p>
+<h3>Conductores y protecciones</h3>
+<p>Los calibres usuales son #14 AWG para circuitos de 15 A, #12 para 20 A, #10 para 30 A y #8 para 40 A, en cobre con aislamiento adecuado. La protección general se selecciona al 125 % de la corriente de diseño, y el conductor de acometida debe tener ampacidad suficiente a 75 °C, además de limitar la caída de tensión. Se exigen puesta a tierra en todos los circuitos y, en zonas húmedas, protección por falla a tierra; confirme los requisitos con el RETIE y la NTC 2050 vigentes.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>En la pestaña de circuitos agregue cada ambiente con su área, tomas, luminarias y carga especial. En iluminación, calcule luminarias por local. En tablero, indique área, habitaciones y equipos, y obtendrá los circuitos, la protección general y el calibre mínimo de acometida. El diseño final lo realiza un profesional competente.</p><p><em>Esta guía es informativa y los resultados de la herramienta son estimaciones orientativas: los precios, rendimientos y parámetros deben ajustarse a su proyecto. El diseño y la ejecución definitivos deben ser validados y firmados por un profesional con matrícula vigente ante el COPNIA o el organismo que corresponda y ajustarse a la normativa que aplique.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: sala-comedor de 20 m² con 6 tomas y 4 luminarias</h3><ul><li>Alumbrado: 20 m² × 33 VA = 660 VA. Tomacorrientes: 6 × 180 = 1.080 VA. Carga: <strong>1.740 VA</strong>.</li><li>A 120 V la corriente es de <strong>14,5 A</strong>; con circuitos de 15 A cargados al 80 % (1.440 VA cada uno), se requieren <strong>2 circuitos</strong>.</li><li>Repita el cálculo por cada ambiente y sume los circuitos para dimensionar el tablero, dejando espacios de reserva.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Por qué circuitos exclusivos para ducha y cocina?</summary><p>Por su alta potencia: comparten conductor y protección con otros usos solo si la suma lo permite, y por seguridad se separan.</p></details>
+<details><summary>¿Qué es el factor de demanda?</summary><p>Es la fracción de la carga conectada que se espera usar simultáneamente; evita sobredimensionar el servicio.</p></details>
+<details><summary>¿Cuántos espacios debe tener el tablero?</summary><p>Los circuitos calculados más reserva. La herramienta sugiere espacios libres para ampliaciones.</p></details>
+<details><summary>¿Cuándo se usa GFCI?</summary><p>En zonas con presencia de agua, como baños, cocinas y exteriores, según la normativa aplicable.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

@@ -158,6 +158,19 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="fix-ovf">.resultado-box{max-width:100%;overflow-x:auto}.resultado-box table{min-width:0}</style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué tan exacto es un presupuesto por metro cuadrado?", "acceptedAnswer": {"@type": "Answer", "text": "Es una aproximación inicial; el error puede ser considerable y por eso no debe usarse para contratar."}}, {"@type": "Question", "name": "¿Qué incluye el costo por metro cuadrado?", "acceptedAnswer": {"@type": "Answer", "text": "Solo los costos directos de construcción. No incluye lote, diseños, licencias, interventoría ni financiación."}}, {"@type": "Question", "name": "¿Cómo afectan los pisos al costo?", "acceptedAnswer": {"@type": "Answer", "text": "Aumentan la estructura y los costos de transporte vertical, pero reducen cimentación y cubierta por metro cuadrado. El factor de complejidad ayuda a reflejarlo."}}, {"@type": "Question", "name": "¿Cuánto debe ser la contingencia?", "acceptedAnswer": {"@type": "Answer", "text": "Depende del grado de definición del proyecto; a menor definición, mayor contingencia. Debe acordarse con el cliente."}}]}</script>
 </head>
 <body>
 
@@ -492,7 +505,8 @@ function calcularEstimacion() {
   const costoDirecto = costoM2Adj * area;
   const costoAIU     = costoDirecto * indirectos;
   const subtotal     = costoDirecto + costoAIU;
-  const ivaValor     = subtotal * iva * 0.1; // IVA solo sobre utilidad (~10% del total)
+  const utilSup      = Math.min(indirectos, 0.05); // utilidad supuesta: 5 % del costo directo (o el AIU si es menor)
+  const ivaValor     = costoDirecto * utilSup * iva; // IVA solo sobre la utilidad (Art. 462-1 ET)
   const costoTotal   = subtotal + ivaValor;
   const costoM2Total = costoTotal / area;
 
@@ -529,7 +543,7 @@ function calcularEstimacion() {
           ${filasCapitulos}
           <tr class="subtotal"><td>SUBTOTAL COSTOS DIRECTOS</td><td>100%</td><td>$ ${fmt(costoDirecto)}</td><td>$ ${fmt(costoM2Adj)}</td></tr>
           <tr><td>AIU — Administración, Imprevistos, Utilidad (${(indirectos*100).toFixed(0)}%)</td><td></td><td>$ ${fmt(costoAIU)}</td><td>$ ${fmt(costoAIU/area)}</td></tr>
-          <tr><td>IVA sobre utilidad (aprox.)</td><td></td><td>$ ${fmt(ivaValor)}</td><td>$ ${fmt(ivaValor/area)}</td></tr>
+          <tr><td>IVA sobre utilidad (utilidad supuesta 5 % del costo directo)</td><td></td><td>$ ${fmt(ivaValor)}</td><td>$ ${fmt(ivaValor/area)}</td></tr>
           <tr class="total-final"><td>PRESUPUESTO TOTAL</td><td></td><td>$ ${fmt(costoTotal)}</td><td>$ ${fmt(costoM2Total)}</td></tr>
         </tbody>
       </table>
@@ -622,9 +636,9 @@ function calcularAPU() {
       <table class="tabla-presupuesto" style="margin-top:1rem;">
         <thead><tr><th>Componente</th><th>%</th><th>Valor ($/${unidad})</th></tr></thead>
         <tbody>
-          <tr class="capitulo"><td>Materiales</td><td>${fmt(totalMat/costoDir*100,1)}%</td><td>$ ${fmt(totalMat)}</td></tr>
-          <tr class="capitulo"><td>Mano de obra</td><td>${fmt(totalMo/costoDir*100,1)}%</td><td>$ ${fmt(totalMo)}</td></tr>
-          <tr class="capitulo"><td>Equipos y herramientas</td><td>${fmt(totalEq/costoDir*100,1)}%</td><td>$ ${fmt(totalEq)}</td></tr>
+          <tr class="capitulo"><td>Materiales</td><td>${fmt(totalMat/(costoDir||1)*100,1)}%</td><td>$ ${fmt(totalMat)}</td></tr>
+          <tr class="capitulo"><td>Mano de obra</td><td>${fmt(totalMo/(costoDir||1)*100,1)}%</td><td>$ ${fmt(totalMo)}</td></tr>
+          <tr class="capitulo"><td>Equipos y herramientas</td><td>${fmt(totalEq/(costoDir||1)*100,1)}%</td><td>$ ${fmt(totalEq)}</td></tr>
           <tr class="subtotal"><td>COSTO DIRECTO</td><td>100%</td><td>$ ${fmt(costoDir)}</td></tr>
           <tr><td>Administración (${(admin*100).toFixed(0)}%)</td><td></td><td>$ ${fmt(valAdmin)}</td></tr>
           <tr><td>Imprevistos (${(imprevis*100).toFixed(0)}%)</td><td></td><td>$ ${fmt(valImprev)}</td></tr>
@@ -680,6 +694,25 @@ document.getElementById('eq-1-precio').value = 22000;
 document.getElementById('eq-1-subtotal').value = 66000;
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Presupuesto de construcción por metro cuadrado: cómo estimar y qué considerar</h2>
+<h3>Estimación paramétrica</h3>
+<p>Cuando aún no hay planos detallados, el costo se estima por metro cuadrado construido según el tipo de obra. Se multiplica el costo directo por metro cuadrado, ajustado por ciudad y complejidad, por el área. Es una cifra de prefactibilidad: sirve para decidir si un proyecto es viable, no para contratar. Cuando existan planos y especificaciones debe reemplazarse por un presupuesto detallado por capítulos y actividades con APU.</p>
+<h3>Capítulos y distribución</h3>
+<p>Un presupuesto típico se organiza en capítulos: preliminares, cimentación, estructura, mampostería, cubierta, instalaciones hidrosanitarias y eléctricas, acabados y urbanismo. La distribución porcentual de cada capítulo cambia con el tipo de proyecto: en vivienda media la estructura suele ser la cuarta parte del costo directo y los acabados un porcentaje similar o mayor. Estas proporciones ayudan a detectar presupuestos desbalanceados.</p>
+<h3>Costos indirectos, impuestos y contingencias</h3>
+<p>Sobre el costo directo se aplican administración, imprevistos y utilidad, y los impuestos que correspondan. Además de ellos, un proyecto real incluye diseños, licencias, interventoría, conexión de servicios y financiación, que muchas veces están fuera de un presupuesto de obra. Conviene mantener una contingencia explícita según la incertidumbre del proyecto.</p>
+<h3>Actualización de costos</h3>
+<p>Los costos de construcción cambian con el precio de insumos como acero, cemento y combustibles, y varían entre ciudades. Los valores por metro cuadrado de la herramienta son referencias orientativas y deben contrastarse con cotizaciones, presupuestos de obras recientes y los índices que publica el DANE.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Escoja tipo de obra, ciudad, área, pisos, factor de complejidad y porcentajes de indirectos. Obtendrá el presupuesto estimado por capítulos y un APU básico en la segunda pestaña. El IVA se estima solo sobre una utilidad supuesta del 5 % del costo directo; ajuste según su contrato.</p><p><em>Esta guía es informativa y los resultados de la herramienta son estimaciones orientativas: los precios, rendimientos y parámetros deben ajustarse a su proyecto. El diseño y la ejecución definitivos deben ser validados y firmados por un profesional con matrícula vigente ante el COPNIA y ajustarse a la normativa que aplique.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: vivienda media de 120 m² y dos pisos</h3><ul><li>Costo directo de referencia: $1.800.000/m² × 120 m² = <strong>$216.000.000</strong>.</li><li>AIU del 25 %: <strong>$54.000.000</strong>.</li><li>IVA sobre una utilidad supuesta del 5 % del costo directo: $216.000.000 × 5 % × 19 % = <strong>$2.052.000</strong>.</li><li>Presupuesto total estimado: <strong>$272.052.000</strong>.</li></ul><p>Las cifras son de referencia y no una cotización.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué tan exacto es un presupuesto por metro cuadrado?</summary><p>Es una aproximación inicial; el error puede ser considerable y por eso no debe usarse para contratar.</p></details>
+<details><summary>¿Qué incluye el costo por metro cuadrado?</summary><p>Solo los costos directos de construcción. No incluye lote, diseños, licencias, interventoría ni financiación.</p></details>
+<details><summary>¿Cómo afectan los pisos al costo?</summary><p>Aumentan la estructura y los costos de transporte vertical, pero reducen cimentación y cubierta por metro cuadrado. El factor de complejidad ayuda a reflejarlo.</p></details>
+<details><summary>¿Cuánto debe ser la contingencia?</summary><p>Depende del grado de definición del proyecto; a menor definición, mayor contingencia. Debe acordarse con el cliente.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

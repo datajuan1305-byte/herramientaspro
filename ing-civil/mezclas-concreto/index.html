@@ -150,6 +150,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué es el asentamiento o slump?", "acceptedAnswer": {"@type": "Answer", "text": "Es la medida de trabajabilidad del concreto fresco con el cono de Abrams, en pulgadas o milímetros. A mayor asentamiento, más fluida la mezcla."}}, {"@type": "Question", "name": "¿Por qué agregar agua en obra es un error?", "acceptedAnswer": {"@type": "Answer", "text": "Aumenta la relación a/c y reduce la resistencia y la durabilidad. Si necesita más fluidez, use aditivo plastificante y no agua."}}, {"@type": "Question", "name": "¿Qué diferencia hay entre f'c y f'cr?", "acceptedAnswer": {"@type": "Answer", "text": "f'c es la resistencia especificada en los planos y f'cr es la resistencia promedio a la que debe dosificarse la mezcla para que la de obra no baje de f'c con la confianza exigida."}}, {"@type": "Question", "name": "¿Sirve para concreto con aire incluido?", "acceptedAnswer": {"@type": "Answer", "text": "No: la herramienta usa las tablas de concreto sin aire incluido. En ambientes con ciclos de hielo-deshielo se requieren otros valores."}}]}</script>
 </head>
 <body>
 
@@ -208,8 +220,8 @@
           <select id="m-slump" onchange="autoAgua()">
             <option value="5">1–2" (25–50 mm) — Concreto seco, pavimentos</option>
             <option value="3" selected>3–4" (75–100 mm) — Vigas, columnas (normal)</option>
-            <option value="2">5–6" (125–150 mm) — Muros, losas con refuerzo denso</option>
-            <option value="1.5">7–8" (175–200 mm) — Bombeable, prefabricados</option>
+            <option value="2">6–7" (150–175 mm) — Muros, losas con refuerzo denso</option>
+            <option value="1.5">7–8" (175–200 mm) — Bombeable (valor extrapolado; mejor con aditivo)</option>
           </select>
         </div>
         <div class="form-group">
@@ -242,7 +254,7 @@
         </div>
         <div class="form-group">
           <label>Módulo de finura de la arena</label>
-          <input type="number" id="m-mf" value="2.75" min="2.3" max="3.1" step="0.05" />
+          <input type="number" id="m-mf" value="2.75" min="2.4" max="3.0" step="0.05" />
           <span class="form-hint">Arena fina: 2.3–2.6 | Arena media: 2.6–2.9 | Arena gruesa: 2.9–3.1</span>
         </div>
         <div class="form-group">
@@ -426,7 +438,8 @@ function fmtInt(n) {
 }
 
 // Relación a/c según f'c (ACI 211 Tabla 6.3.4)
-const tablaAC = { 14:0.65, 17.5:0.60, 21:0.50, 24:0.45, 28:0.40, 32:0.38, 35:0.35, 42:0.32 };
+// ACI 211.1 Tabla 6.3.4(a), interpolada con f'cr = f'c + 8,3 MPa (f'c < 21: + 7 MPa). Concreto sin aire incluido.
+const tablaAC = { 14:0.68, 17.5:0.62, 21:0.55, 24:0.51, 28:0.46, 32:0.42, 35:0.39, 42:0.33 };
 
 // Agua de mezcla según TMA y slump (ACI 211, Tabla 6.3.3, L/m³)
 const tablaAgua = {
@@ -434,20 +447,20 @@ const tablaAgua = {
   12.5: { 5:199, 3:216, 2:228, 1.5:240 },
   19:   { 5:190, 3:205, 2:216, 1.5:226 },
   25:   { 5:179, 3:193, 2:202, 1.5:211 },
-  38:   { 5:166, 3:178, 2:187, 1.5:197 },
+  38:   { 5:166, 3:181, 2:190, 1.5:200 },
 };
 
 // Volumen de agregado grueso por unidad de volumen de concreto (ACI 211, Tabla 6.3.6)
 const tablaB = {
-  9.5:  { 2.3:0.50, 2.6:0.48, 2.75:0.46, 2.9:0.44, 3.1:0.42 },
-  12.5: { 2.3:0.59, 2.6:0.57, 2.75:0.55, 2.9:0.53, 3.1:0.51 },
-  19:   { 2.3:0.66, 2.6:0.64, 2.75:0.62, 2.9:0.60, 3.1:0.58 },
-  25:   { 2.3:0.71, 2.6:0.69, 2.75:0.67, 2.9:0.65, 3.1:0.63 },
-  38:   { 2.3:0.75, 2.6:0.73, 2.75:0.71, 2.9:0.69, 3.1:0.67 },
+  9.5:  { 2.4:0.50, 2.6:0.48, 2.8:0.46, 3.0:0.44 },
+  12.5: { 2.4:0.59, 2.6:0.57, 2.8:0.55, 3.0:0.53 },
+  19:   { 2.4:0.66, 2.6:0.64, 2.8:0.62, 3.0:0.60 },
+  25:   { 2.4:0.71, 2.6:0.69, 2.8:0.67, 3.0:0.65 },
+  38:   { 2.4:0.75, 2.6:0.73, 2.8:0.71, 3.0:0.69 },
 };
 
 function getMF(mf) {
-  const keys = [2.3, 2.6, 2.75, 2.9, 3.1];
+  const keys = [2.4, 2.6, 2.8, 3.0];
   return keys.reduce((prev, curr) => Math.abs(curr - mf) < Math.abs(prev - mf) ? curr : prev);
 }
 
@@ -456,14 +469,17 @@ function autoRelacionAC() {
   document.getElementById('m-ac').value = tablaAC[fc] || 0.50;
 }
 
+document.addEventListener('DOMContentLoaded', autoRelacionAC);
+
 function autoAgua() { /* auto-actualización visual */ }
 
 function ajustarExposicion() {
   const exp = document.getElementById('m-exposicion').value;
-  const ajustes = { normal:0, moderada:-0.05, severa:-0.10, marina:-0.15 };
+  // Relación a/c máxima por durabilidad (referencia NSR-10 C.4.3 / ACI 318 cap. 4)
+  const topes = { normal:1, moderada:0.50, severa:0.45, marina:0.40 };
   const fc = parseFloat(document.getElementById('m-fc').value);
   const base = tablaAC[fc] || 0.50;
-  document.getElementById('m-ac').value = Math.max(0.32, base + ajustes[exp]).toFixed(2);
+  document.getElementById('m-ac').value = Math.min(base, topes[exp]).toFixed(2);
 }
 
 function calcularMezcla() {
@@ -542,7 +558,7 @@ function calcularMezcla() {
       </div>
       <div class="resultado-detalle">
         <b>Proporción en masa:</b> 1 : ${fmt(propAre,2)} : ${fmt(propGra,2)} : ${fmt(propW,2)} (Cemento : Arena : Grava : Agua)<br>
-        <b>TMA:</b> ${tma} mm | <b>Módulo de finura:</b> ${mf} | <b>Slump:</b> ${slumpKey === 5 ? '25–50' : slumpKey === 3 ? '75–100' : slumpKey === 2 ? '125–150' : '175–200'} mm<br>
+        <b>TMA:</b> ${tma} mm | <b>Módulo de finura:</b> ${mf} | <b>Slump:</b> ${slumpKey === 5 ? '25–50' : slumpKey === 3 ? '75–100' : slumpKey === 2 ? '150–175' : '175–200'} mm<br>
         ${aditivo === 'si' ? '✅ Con plastificante: agua reducida 10%<br>' : ''}
         <b>Volúmenes absolutos por m³:</b> Cemento ${fmt(volCem*1000,1)} L | Agua ${fmt(agua,0)} L | Grava ${fmt(volGravaAbs*1000,1)} L | Arena ${fmt(volArena*1000,1)} L | Aire ${fmt(airePorc*10,0)} L
       </div>
@@ -635,6 +651,25 @@ function calcularCantidades() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Diseño de mezclas de concreto por el método ACI 211: pasos y variables</h2>
+<h3>Qué busca el diseño de mezcla</h3>
+<p>Un diseño de mezcla determina las cantidades de cemento, agua, arena y grava por metro cúbico para lograr una resistencia, una trabajabilidad y una durabilidad dadas con el menor costo. El método ACI 211.1 es el más usado y trabaja con volúmenes absolutos: los materiales deben sumar un metro cúbico de concreto compactado.</p>
+<h3>Resistencia requerida y relación agua/cemento</h3>
+<p>Como la resistencia real varía de una mezcla a otra, el diseño apunta a una resistencia promedio mayor que la de proyecto (f'cr). En la NSR-10, sin datos de desviación estándar, f'cr es f'c + 7 MPa si f'c < 21 y f'c + 8,3 MPa entre 21 y 35 MPa. La relación agua/cemento (a/c) se toma de tablas según f'cr y se limita por durabilidad cuando hay sulfatos, cloruros o ciclos de humedad. A menor a/c, mayor resistencia y durabilidad.</p>
+<h3>Agua, cemento y agregados</h3>
+<p>La cantidad de agua depende del asentamiento (slump) deseado y del tamaño máximo del agregado: más asentamiento o menor tamaño exigen más agua; un aditivo reductor permite bajarla. El cemento sale de dividir el agua entre la relación a/c. El volumen de agregado grueso se toma de tablas según el tamaño máximo y el módulo de finura de la arena, y se multiplica por el peso unitario compactado de la grava. La arena se calcula por diferencia de volumen.</p>
+<h3>Correcciones y ensayo de prueba</h3>
+<p>Los cálculos suponen agregados saturados y superficialmente secos. En obra hay que corregir por humedad y absorción, que modifican el agua efectiva y los pesos a dosificar. El diseño final se valida con mezclas de prueba y cilindros ensayados a 28 días, y se ajusta. Esta herramienta no sustituye ese procedimiento ni la verificación del laboratorio.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Escoja f'c, asentamiento, tamaño máximo, exposición, módulo de finura, peso unitario y pesos específicos de los materiales. La herramienta entrega kilos por metro cúbico, bolsas de cemento, proporción en masa y volúmenes absolutos. La pestaña de cantidades usa proporciones típicas para calcular rápidamente materiales y costos de un volumen dado.</p><p><em>Esta guía es informativa y los resultados de la herramienta son estimaciones orientativas: los precios, rendimientos y parámetros deben ajustarse a su proyecto. El diseño y la ejecución definitivos deben ser validados y firmados por un profesional con matrícula vigente ante el COPNIA y ajustarse a la normativa que aplique.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: concreto de f'c = 21 MPa, TMA 19 mm y asentamiento de 75–100 mm</h3><ul><li>Relación a/c de referencia para f'cr ≈ 29,3 MPa: <strong>0,55</strong>.</li><li>Agua: <strong>205 L/m³</strong>. Cemento: 205 ÷ 0,55 = <strong>372,7 kg</strong> (7,5 bolsas de 50 kg).</li><li>Grava: 0,62 × 1.600 kg/m³ de peso unitario ≈ <strong>992 kg</strong>. Arena por diferencia de volumen: <strong>≈ 748 kg</strong>.</li><li>Proporción en masa aproximada: 1 : 2,0 : 2,7 : 0,55 (cemento : arena : grava : agua). Es un punto de partida para la mezcla de prueba.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué es el asentamiento o slump?</summary><p>Es la medida de trabajabilidad del concreto fresco con el cono de Abrams, en pulgadas o milímetros. A mayor asentamiento, más fluida la mezcla.</p></details>
+<details><summary>¿Por qué agregar agua en obra es un error?</summary><p>Aumenta la relación a/c y reduce la resistencia y la durabilidad. Si necesita más fluidez, use aditivo plastificante y no agua.</p></details>
+<details><summary>¿Qué diferencia hay entre f'c y f'cr?</summary><p>f'c es la resistencia especificada en los planos y f'cr es la resistencia promedio a la que debe dosificarse la mezcla para que la de obra no baje de f'c con la confianza exigida.</p></details>
+<details><summary>¿Sirve para concreto con aire incluido?</summary><p>No: la herramienta usa las tablas de concreto sin aire incluido. En ambientes con ciclos de hielo-deshielo se requieren otros valores.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

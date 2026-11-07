@@ -103,6 +103,19 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="fix-ovf">.resultado-box{max-width:100%;overflow-x:auto}.resultado-box table{min-width:0}</style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Por qué la demanda es menor que la suma de las cargas?", "acceptedAnswer": {"@type": "Answer", "text": "Porque no todas las cargas operan al mismo tiempo ni a plena potencia."}}, {"@type": "Question", "name": "¿Cuánto crecimiento debo prever?", "acceptedAnswer": {"@type": "Answer", "text": "Según el proyecto; 15 % a 25 % es un rango habitual. Defínalo con el cliente."}}, {"@type": "Question", "name": "¿Se puede cargar un transformador por encima de su capacidad?", "acceptedAnswer": {"@type": "Answer", "text": "Solo temporalmente y según las curvas de sobrecarga del fabricante; la vida útil se reduce."}}, {"@type": "Question", "name": "¿Qué pasa con el factor de potencia?", "acceptedAnswer": {"@type": "Answer", "text": "Un FP bajo aumenta los kVA para los mismos kW. Corregirlo puede permitir un transformador menor."}}]}</script>
 </head>
 <body>
 <nav>
@@ -137,7 +150,7 @@
     <div class="card">
       <h2>⚡ Cálculo de Capacidad del Transformador (kVA)</h2>
       <div class="info-box">
-        <strong>¿Cómo funciona?</strong> Suma todas las cargas conectadas, aplica el factor de demanda y el factor de crecimiento futuro, y selecciona el transformador comercial inmediatamente superior según norma ICONTEC NTC 819.
+        <strong>¿Cómo funciona?</strong> Suma todas las cargas conectadas, aplica el factor de demanda y el factor de crecimiento futuro, y selecciona el transformador comercial inmediatamente superior según las capacidades comerciales usuales (confirme con el fabricante y el operador de red).
       </div>
 
       <h3>Cargas a conectar</h3>
@@ -236,7 +249,7 @@
   <!-- TAB 3: REFERENCIA -->
   <div id="tab-referencia" class="tab-panel">
     <div class="card">
-      <h2>📋 Capacidades Comerciales de Transformadores — NTC 819</h2>
+      <h2>📋 Capacidades Comerciales de Transformadores</h2>
       <div style="overflow-x:auto;">
         <table class="ref-table">
           <thead><tr><th>kVA</th><th>I secundario 220V trifásico (A)</th><th>I secundario 440V trifásico (A)</th><th>Uso típico</th></tr></thead>
@@ -266,19 +279,19 @@
       <h2>📋 Protección de Transformadores — NTC 2050 Tabla 450-3(b)</h2>
       <div style="overflow-x:auto;">
         <table class="ref-table">
-          <thead><tr><th>Tensión primaria</th><th>Protección primaria (% In)</th><th>Protección secundaria con sec. (% In)</th><th>Protección secundaria sin sec. (% In)</th></tr></thead>
+          <thead><tr><th>Tensión primaria</th><th>Primario solo (% In)</th><th>Primario con protección secundaria (% In)</th><th>Secundario (% In)</th></tr></thead>
           <tbody>
-            <tr><td>≥ 1000 V</td><td>300% (máx. 600% si &lt;6A)</td><td>250%</td><td>125%</td></tr>
-            <tr><td>&lt; 1000 V</td><td>125% (250% si protección térmica)</td><td>—</td><td>—</td></tr>
+            <tr><td>≥ 1000 V (fusible, Z ≤ 6 %)</td><td>300 %</td><td>250 %</td><td>Secundario ≤ 1000 V: 125 %</td></tr>
+            <tr><td>&lt; 1000 V</td><td>125 % (167 % si &lt; 9 A; 300 % si &lt; 2 A)</td><td>250 %</td><td>Secundario: 125 %</td></tr>
           </tbody>
         </table>
       </div>
-      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">In = Corriente nominal del transformador. Valores según NTC 2050 (equivalente NEC 450).</p>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">In = Corriente nominal del transformador. Valores de referencia NTC 2050 450.3 (≈ NEC 450.3): se admite el siguiente valor comercial. Interruptores de primario en M.T. y transformadores con Z &gt; 6 % usan otros porcentajes; verifique en la norma.</p>
     </div>
   </div>
 
   <div class="disclaimer">
-    ⚠️ <strong>Herramienta de uso orientativo.</strong> El diseño definitivo del sistema de transformación debe ser elaborado y firmado por un <strong>Ingeniero Eléctrico matriculado ante el COPNIA</strong>, con certificado de conformidad RETIE. Coordinar con el operador de red (OR) local para nivel de tensión y punto de conexión. Normativa: RETIE, NTC 2050, NTC 819.
+    ⚠️ <strong>Herramienta de uso orientativo.</strong> El diseño definitivo del sistema de transformación debe ser elaborado y firmado por un <strong>Ingeniero Eléctrico matriculado ante el COPNIA</strong>, con certificado de conformidad RETIE. Coordinar con el operador de red (OR) local para nivel de tensión y punto de conexión. Normativa de referencia: RETIE y NTC 2050; confirme las normas técnicas de producto aplicables.
   </div>
 </div>
 
@@ -292,7 +305,7 @@ function mostrarTab(id, btn) {
 function fmt(n, dec=2) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
 function fmtInt(n) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:0,maximumFractionDigits:0}); }
 
-// Capacidades comerciales NTC 819 (kVA)
+// Capacidades comerciales usuales (kVA)
 const capacidadesTransf = [10, 15, 25, 30, 37.5, 45, 50, 75, 100, 112.5, 150, 160, 200, 225, 250, 300, 315, 400, 500, 630, 750, 800, 1000, 1250, 1500, 2000];
 
 function llenarTablaTransf() {
@@ -410,7 +423,7 @@ function calcularTransformador() {
         Demanda con factor de demanda: Σ(kW × FD) = <b>${fmt(totalKW,2)} kW</b><br>
         Demanda aparente: Σ(kW dem. ÷ FP) = <b>${fmt(totalKVA,2)} kVA</b><br>
         Con crecimiento futuro (+${(crecimiento*100).toFixed(0)}%): ${fmt(totalKVA,2)} × ${(1+crecimiento).toFixed(2)} = <b>${fmt(kvaConCrecimiento,2)} kVA</b><br>
-        <b>Transformador comercial seleccionado: ${transfRecomendado} kVA</b> (siguiente capacidad NTC 819 ≥ demanda)<br>
+        <b>Transformador comercial seleccionado: ${transfRecomendado} kVA</b> (siguiente capacidad comercial ≥ demanda)<br>
         Corriente en el secundario (${Vsec}V ${esTrifasico?'trifásico':'monofásico'}): <b>${fmt(Isec,1)} A</b>
       </div>
     </div>`;
@@ -429,14 +442,17 @@ function calcularProtecciones() {
   const Isec  = esTrifasico ? (kva*1000)/(Math.sqrt(3)*Vsec)  : (kva*1000)/Vsec;
 
   // NTC 2050 Tabla 450-3
-  let pctPrim, pctSec;
+  // NTC 2050 450.3 (≈ NEC 450.3(A) y (B)) — fusible primario, transformador con Z ≤ 6 %
+  const conSec = protSec === 'si';
+  let pctPrim;
   if (Vprim >= 1000) {
-    pctPrim = Iprim < 9 ? 6.0 : Iprim < 6 ? 6.0 : 3.0; // >1000V: 300% (600% si <6A según tabla simplificada)
-    pctSec  = protSec === 'si' ? 2.5 : 1.25;
+    pctPrim = conSec ? 2.5 : 3.0;          // >1000 V: 250 % con protección secundaria; 300 % solo primaria
+  } else if (conSec) {
+    pctPrim = 2.5;                           // ≤1000 V con protección secundaria: máx. 250 %
   } else {
-    pctPrim = 1.25;
-    pctSec  = 1.0;
+    pctPrim = Iprim >= 9 ? 1.25 : (Iprim >= 2 ? 1.67 : 3.0);  // solo primaria: 125 % (≥9 A), 167 % (<9 A), 300 % (<2 A)
   }
+  const pctSec = 1.25;                       // secundario ≤1000 V: máx. 125 % de In (se admite el siguiente valor comercial)
 
   const protPrimA = Iprim * pctPrim;
   const protSecA  = Isec * pctSec;
@@ -460,9 +476,9 @@ function calcularProtecciones() {
       </div>
       <div class="resultado-detalle">
         <b>Cálculo corriente primaria:</b> ${fmtInt(kva)}.000 ÷ (${esTrifasico?'√3 × ':''}${fmtInt(Vprim)}) = <b>${fmt(Iprim,2)} A</b><br>
-        <b>Protección primaria (${Vprim>=1000?'≥1000V':'<1000V'}):</b> ${fmt(Iprim,2)} × ${pctPrim*100}% = ${fmt(protPrimA,1)} A → comercial: <b>${fusiblePrim} A</b><br>
+        <b>Protección primaria (${Vprim>=1000?'≥1000V':'<1000V'}):</b> ${fmt(Iprim,2)} × ${Math.round(pctPrim*100)}% = ${fmt(protPrimA,1)} A → comercial: <b>${fusiblePrim} A</b><br>
         <b>Cálculo corriente secundaria:</b> ${fmtInt(kva)}.000 ÷ (${esTrifasico?'√3 × ':''}${fmtInt(Vsec)}) = <b>${fmt(Isec,1)} A</b><br>
-        <b>Protección secundaria (${protSec==='si'?'con protección secundaria':'sin protección secundaria'}):</b> ${fmt(Isec,1)} × ${pctSec*100}% = ${fmt(protSecA,1)} A → comercial: <b>${breakerSec} A</b><br>
+        <b>Interruptor secundario (${conSec?'protección del transformador, máx. 125 %':'referencia como interruptor principal; no es la protección del transformador'}):</b> ${fmt(Isec,1)} × ${Math.round(pctSec*100)}% = ${fmt(protSecA,1)} A → comercial: <b>${breakerSec} A</b><br>
         <i>Referencia: NTC 2050 Tabla 450-3(b), equivalente a NEC Art. 450.</i>
       </div>
     </div>`;
@@ -471,6 +487,25 @@ function calcularProtecciones() {
 document.addEventListener('DOMContentLoaded', () => { cargarEjemplo(); });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Selección de transformadores: demanda, capacidad comercial y protecciones</h2>
+<h3>Estimación de la demanda</h3>
+<p>La capacidad de un transformador se define a partir de la demanda máxima, no de la potencia instalada. Cada carga se multiplica por su factor de demanda (probabilidad de operar simultáneamente), y las potencias activas se convierten a aparentes dividiendo entre el factor de potencia de cada carga. La suma de kVA demandados, más un margen de crecimiento, da la capacidad requerida.</p>
+<h3>Capacidad comercial y corriente</h3>
+<p>Los transformadores se fabrican en capacidades normalizadas (por ejemplo 150, 225, 300 y 400 kVA, según el fabricante). Se escoge la inmediatamente superior a la demanda con crecimiento. La corriente nominal es I = kVA × 1.000 ÷ (√3 × V) en un sistema trifásico. Con ella se dimensionan la protección y los conductores del secundario.</p>
+<h3>Protección de sobrecorriente</h3>
+<p>La NTC 2050 (artículo 450, equivalente al NEC) limita la protección en función del lado y de la tensión. Como referencia en transformadores de impedancia hasta 6 %: con tensión primaria mayor de 1.000 V, el fusible primario puede llegar hasta el 300 % de la corriente nominal si no hay protección secundaria y hasta el 250 % si la hay; el secundario en baja tensión, hasta el 125 %. Para primarios menores de 1.000 V, 125 % y hasta 250 % con protección secundaria. Se admite el siguiente valor comercial. Los interruptores de M.T. y otras impedancias tienen otros valores.</p>
+<h3>Tipos de transformador</h3>
+<p>Los transformadores secos son aptos para interiores y edificios, por su bajo riesgo de incendio; los sumergidos en aceite se instalan en exteriores o en pedestal y requieren contención del aceite. La elección depende del lugar, el costo y las exigencias del operador de red.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Agregue cada carga con kW, factor de potencia y factor de demanda, defina el crecimiento y el sistema, y obtenga la capacidad comercial y la corriente del secundario. En protecciones ingrese kVA, tensiones y si hay protección secundaria. Coordine siempre con el operador de red.</p><p><em>Esta guía es informativa y los resultados de la herramienta son estimaciones orientativas: los precios, rendimientos y parámetros deben ajustarse a su proyecto. El diseño y la ejecución definitivos deben ser validados y firmados por un profesional con matrícula vigente ante el COPNIA o el organismo que corresponda y ajustarse a la normativa que aplique.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: edificio con seis grupos de carga</h3><ul><li>Seis grupos de carga (iluminación, tomas, aires, ascensores, cocina y bombas) con sus factores de demanda: demanda activa <strong>157,5 kW</strong> y aparente <strong>176,8 kVA</strong> (FP medio 0,89).</li><li>Con 20 % de crecimiento: 212,1 kVA → transformador comercial de <strong>225 kVA</strong>; corriente del secundario a 220 V: <strong>590,5 A</strong>.</li><li>Protecciones para 225 kVA con primario de 13.200 V: I<sub>p</sub> = 9,84 A; con protección secundaria, fusible primario al 250 % = 24,6 A → <strong>25 A</strong>; secundario al 125 % = 738 A → siguiente valor comercial, <strong>800 A</strong>.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Por qué la demanda es menor que la suma de las cargas?</summary><p>Porque no todas las cargas operan al mismo tiempo ni a plena potencia.</p></details>
+<details><summary>¿Cuánto crecimiento debo prever?</summary><p>Según el proyecto; 15 % a 25 % es un rango habitual. Defínalo con el cliente.</p></details>
+<details><summary>¿Se puede cargar un transformador por encima de su capacidad?</summary><p>Solo temporalmente y según las curvas de sobrecarga del fabricante; la vida útil se reduce.</p></details>
+<details><summary>¿Qué pasa con el factor de potencia?</summary><p>Un FP bajo aumenta los kVA para los mismos kW. Corregirlo puede permitir un transformador menor.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

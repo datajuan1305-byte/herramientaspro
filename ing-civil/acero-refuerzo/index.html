@@ -151,6 +151,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué significa grado 60?", "acceptedAnswer": {"@type": "Answer", "text": "Es un acero con esfuerzo de fluencia nominal de 60.000 psi, es decir unos 420 MPa."}}, {"@type": "Question", "name": "¿El desperdicio se suma al peso teórico?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. El peso teórico es el de las barras necesarias; el desperdicio es el porcentaje adicional que se compra por recortes y pérdidas."}}, {"@type": "Question", "name": "¿Cuándo uso traslape clase B?", "acceptedAnswer": {"@type": "Answer", "text": "Cuando se traslapa más de la mitad del refuerzo en una misma sección, o cuando el acero colocado es menor que el doble del requerido. Es la condición más común y por eso es la opción por defecto."}}, {"@type": "Question", "name": "¿Los traslapes se calculan igual en compresión?", "acceptedAnswer": {"@type": "Answer", "text": "No. En compresión la longitud requerida es distinta, y las columnas tienen requisitos propios. Siga la norma y los planos."}}]}</script>
 </head>
 <body>
 
@@ -353,7 +365,7 @@
           <tbody id="tabla-traslapes-body"></tbody>
         </table>
       </div>
-      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">Ld = longitud de desarrollo básica. Clase A = 1.0×Ld | Clase B = 1.3×Ld. Mínimo 30 cm siempre.</p>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">Ld simplificada de NSR-10 C.12.2.2 (barras inferiores sin recubrimiento epóxico, ψt = ψe = 1; fy/(2,1√f'c)·db hasta #6 y fy/(1,7√f'c)·db desde #7). Clase A = 1.0×Ld | Clase B = 1.3×Ld. Mínimo 30 cm siempre.</p>
     </div>
   </div>
 
@@ -406,11 +418,11 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   // Tabla traslapes NSR-10 (Grado 60, f'c 21 MPa)
-  // Ld ≈ (fy/(1.1√f'c)) × db × factor
+  // NSR-10 C.12.2.2: ld = fy/(2.1·λ·√f'c)·db (≤ #6) ; fy/(1.7·λ·√f'c)·db (≥ #7); ψt=ψe=1
   const tbodyTr = document.getElementById('tabla-traslapes-body');
   varillas.forEach(v => {
     const fy = 420, fc = 21;
-    const Ld = Math.max(30, Math.ceil((fy * v.db / (10 * 1.1 * Math.sqrt(fc))) * 1.0));
+    const Ld = Math.max(30, Math.ceil((fy / ((v.num <= 6 ? 2.1 : 1.7) * Math.sqrt(fc))) * v.db / 10));
     const trA = Math.max(30, Math.ceil(1.0 * Ld));
     const trB = Math.max(30, Math.ceil(1.3 * Ld));
     tbodyTr.innerHTML += `<tr>
@@ -444,7 +456,7 @@ const elementosConfig = {
       { id:'el-l', label:'Altura libre (m)', val:3.0 },
       { id:'el-nlong', label:'N° varillas longitudinales', val:8 },
       { id:'el-vlong', label:'Diámetro longitudinal', tipo:'select-var', val:5 },
-      { id:'el-nestr', label:'N° estribos por varilla 6m', val:14, hint:'Separación est. zona confinada ≈ 10–15 cm' },
+      { id:'el-nestr', label:'N° estribos totales en la columna', val:14, hint:'≈ altura libre ÷ separación (confinada 10–15 cm, resto según diseño)' },
       { id:'el-vestr', label:'Diámetro estribo', tipo:'select-var', val:3 },
     ]
   },
@@ -496,24 +508,24 @@ function actualizarElemento() {
   const tipo = document.getElementById('el-tipo').value;
   const cfg  = elementosConfig[tipo];
   const cont = document.getElementById('el-parametros');
-  cont.innerHTML = `<div class="form-grid" style="margin-top:0.8rem;">`;
+  let gridHTML = '';
   cfg.campos.forEach(c => {
     if (c.tipo === 'select-var') {
-      cont.innerHTML += `<div class="form-group">
+      gridHTML += `<div class="form-group">
         <label>${c.label}</label>
         <select id="${c.id}">
           ${varillas.map(v => `<option value="${v.num}" ${v.num===c.val?'selected':''}>#${v.num} — ${v.db}mm (${v.peso} kg/m)</option>`).join('')}
         </select>
       </div>`;
     } else {
-      cont.innerHTML += `<div class="form-group">
+      gridHTML += `<div class="form-group">
         <label>${c.label}</label>
         <input type="number" id="${c.id}" value="${c.val}" min="0" step="0.01" />
         ${c.hint ? `<span class="form-hint">${c.hint}</span>` : ''}
       </div>`;
     }
   });
-  cont.innerHTML += `</div>`;
+  cont.innerHTML = `<div class="form-grid" style="margin-top:0.8rem;">${gridHTML}</div>`;
 }
 
 function getVal(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
@@ -696,7 +708,7 @@ function agregarVarilla() {
     </select>
     <input class="varilla-input" type="number" id="lst-v${nVarillas}-cant"   value="10" min="1" step="1" oninput="calcPesoFila(${nVarillas})" />
     <input class="varilla-input" type="number" id="lst-v${nVarillas}-long"   value="3.0" min="0.1" step="0.1" oninput="calcPesoFila(${nVarillas})" />
-    <input class="varilla-input" type="number" id="lst-v${nVarillas}-peso"   value="${fmt(10*3.0*0.994,2)}" readonly style="background:#e8f5e9; font-weight:700;" />
+    <input class="varilla-input" type="number" id="lst-v${nVarillas}-peso"   value="${(10*3.0*0.994).toFixed(2)}" readonly style="background:#e8f5e9; font-weight:700;" />
     <button class="varilla-delete" onclick="document.getElementById('lst-v${nVarillas}').remove()">✕</button>`;
   c.appendChild(div);
 }
@@ -708,7 +720,7 @@ function calcPesoFila(n) {
   const v    = getVarilla(num);
   const peso = cant * long * v.peso;
   const el   = document.getElementById(`lst-v${n}-peso`);
-  if (el) el.value = fmt(peso, 2);
+  if (el) el.value = peso.toFixed(2);
 }
 
 function recalcularListado() {
@@ -785,8 +797,8 @@ function calcularTraslapes() {
   // Ld = (fy/(1.1*λ*√f'c)) * (db/10) * factores
   // Simplificado para λ=1 (concreto normal), barras en condición A
   const lambda = 1.0;
-  const factor = (recub >= v.db*0.1*1.5) ? 1.0 : 1.5; // factor posición
-  const Ld = Math.max(30, Math.ceil((fy * v.db/10) / (1.1 * lambda * Math.sqrt(fc) * 10) * factor * 10));
+  const denom = (num <= 6 ? 2.1 : 1.7) * lambda * Math.sqrt(fc);
+  const Ld = Math.max(30, Math.ceil((fy / denom) * (v.db / 10)));
 
   const trA = Math.max(30, Math.ceil(1.0 * Ld));
   const trB = Math.max(30, Math.ceil(1.3 * Ld));
@@ -813,7 +825,8 @@ function calcularTraslapes() {
       <div class="resultado-detalle">
         <b>Varilla #${num}</b> | db = ${v.db} mm | Peso = ${v.peso} kg/m | Área = ${v.area} cm²<br>
         f'c = ${fc} MPa | fy = ${fy} MPa | Recubrimiento = ${recub} cm<br>
-        Ld = (${fy} × ${v.db/10}) ÷ (1.1 × √${fc} × 10) × factor = <b>${Ld} cm</b><br>
+        Ld = fy ÷ (${num <= 6 ? '2,1' : '1,7'} × λ × √f'c) × db = ${fy} ÷ (${num <= 6 ? '2,1' : '1,7'} × √${fc}) × ${v.db/10} cm = <b>${Ld} cm</b> (mín. 30 cm)<br>
+        <i>Simplificado (NSR-10 C.12.2.2): ψt = ψe = 1, λ = 1, espaciamiento y recubrimiento mínimos. Barras superiores, epóxicas o concreto liviano aumentan Ld: verifique con el diseñador.</i><br>
         Traslape Clase A = 1.0 × ${Ld} = <b>${trA} cm</b><br>
         Traslape Clase B = 1.3 × ${Ld} = <b>${trB} cm</b><br>
         Para ${cant} traslapes Clase ${clase}: ${cant} × ${tr} cm = <b>${fmt(longAdicional*100,0)} cm = ${fmt(longAdicional,2)} m adicionales</b>
@@ -822,6 +835,25 @@ function calcularTraslapes() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Acero de refuerzo: pesos por varilla, despiece y traslapes</h2>
+<h3>Las varillas corrugadas</h3>
+<p>En Colombia el acero de refuerzo suele ser de barras corrugadas de grado 60 (fy = 420 MPa). El número de la varilla indica su diámetro en octavos de pulgada: la #3 mide 3/8" (9,53 mm), la #4 mide 1/2" (12,7 mm), la #5 mide 5/8" (15,88 mm) y así sucesivamente. Cada diámetro tiene un peso por metro conocido, por ejemplo 0,560 kg/m para la #3, 0,994 kg/m para la #4 y 1,552 kg/m para la #5. El peso total se obtiene multiplicando longitud por peso unitario.</p>
+<h3>Cómo se calcula el acero de un elemento</h3>
+<p>Para una columna o viga se suman las barras longitudinales (cantidad × longitud × peso unitario) y los estribos (cantidad × perímetro × peso unitario). La longitud de cada barra incluye un adicional por traslapes y anclajes. El perímetro de un estribo es el de la sección menos el recubrimiento en ambos lados más el aporte de los ganchos. En losas y zapatas se cuenta cuántas barras caben por la separación en cada dirección y se multiplican por su longitud.</p>
+<h3>Longitud de desarrollo y traslapes</h3>
+<p>Una barra transmite su esfuerzo al concreto a lo largo de una longitud mínima, la longitud de desarrollo. La NSR-10, en el capítulo C.12, la define con expresiones que dependen de fy, f'c y el diámetro. En su forma simplificada, con condiciones ordinarias de recubrimiento y espaciamiento, ld = fy ÷ (2,1·√f'c) · db para barras hasta la #6 y fy ÷ (1,7·√f'c) · db desde la #7, con un mínimo de 30 cm. El traslape en tracción es de 1,0 ld (clase A) o 1,3 ld (clase B), según el porcentaje de barras traslapadas y la relación entre el acero colocado y el requerido.</p>
+<h3>Desperdicio y compra</h3>
+<p>Las varillas se compran en longitudes comerciales de 6 y 12 m, por lo que el despiece debe optimizar los cortes para reducir sobrantes. Un desperdicio de 5 % a 8 % es frecuente en obra; los elementos con muchos dobleces o cortes cortos pueden superarlo. Considere además que el costo por kilo varía con el diámetro, el proveedor y la ciudad.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Escoja el elemento (columna, viga, losa, zapata o viga de cimentación), ingrese dimensiones y refuerzo, y obtenga kilos y costo. En el listado puede sumar varias barras de la obra y en la pestaña de traslapes calcular ld y la longitud de traslape para su f'c y fy. Verifique siempre contra los planos estructurales.</p><p><em>Esta guía es informativa y los resultados de la herramienta son estimaciones orientativas: los precios, rendimientos y parámetros deben ajustarse a su proyecto. El diseño y la ejecución definitivos deben ser validados y firmados por un profesional con matrícula vigente ante el COPNIA y ajustarse a la normativa que aplique.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: columna de 30 × 30 cm y 3 m de altura</h3><ul><li>Longitudinal: 8 barras #5 de 3,60 m (3,0 m más 0,60 m por traslape): 8 × 3,60 × 1,552 = <strong>44,70 kg</strong>.</li><li>Estribos: 14 estribos #3 con perímetro de 1,12 m: 14 × 1,12 × 0,560 = <strong>8,78 kg</strong>.</li><li>Total por columna: <strong>53,48 kg</strong>; para 4 columnas, 213,9 kg y, con 5 % de desperdicio, <strong>224,6 kg</strong>.</li><li>Traslape de una barra #5 con f'c = 21 MPa y fy = 420 MPa: ld ≈ <strong>70 cm</strong>; traslape clase B ≈ <strong>91 cm</strong>.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué significa grado 60?</summary><p>Es un acero con esfuerzo de fluencia nominal de 60.000 psi, es decir unos 420 MPa.</p></details>
+<details><summary>¿El desperdicio se suma al peso teórico?</summary><p>Sí. El peso teórico es el de las barras necesarias; el desperdicio es el porcentaje adicional que se compra por recortes y pérdidas.</p></details>
+<details><summary>¿Cuándo uso traslape clase B?</summary><p>Cuando se traslapa más de la mitad del refuerzo en una misma sección, o cuando el acero colocado es menor que el doble del requerido. Es la condición más común y por eso es la opción por defecto.</p></details>
+<details><summary>¿Los traslapes se calculan igual en compresión?</summary><p>No. En compresión la longitud requerida es distinta, y las columnas tienen requisitos propios. Siga la norma y los planos.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

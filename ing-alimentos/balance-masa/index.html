@@ -171,6 +171,19 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="fix-ovf">.resultado-box{max-width:100%;overflow-x:auto}.resultado-box table{min-width:0}</style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué diferencia hay entre rendimiento y merma?", "acceptedAnswer": {"@type": "Answer", "text": "El rendimiento mide cuánto producto principal se obtiene por cada cien de entrada; la merma mide la masa no contabilizada en las salidas. Se complementan, pero no suman cien si hay subproductos."}}, {"@type": "Question", "name": "¿Por qué las pérdidas por etapa no se suman?", "acceptedAnswer": {"@type": "Answer", "text": "Porque cada etapa pierde un porcentaje de lo que recibe. Con 1 %, 1,5 % y 2 % de pérdida no se pierde 4,5 % exacto: se multiplican los factores 0,99 × 0,985 × 0,98."}}, {"@type": "Question", "name": "¿Cómo trato el agua que se agrega al proceso?", "acceptedAnswer": {"@type": "Answer", "text": "Debe aparecer como una entrada, porque aporta masa. Si no se incluye, el balance mostrará salidas mayores que las entradas."}}, {"@type": "Question", "name": "¿Qué merma es aceptable?", "acceptedAnswer": {"@type": "Answer", "text": "Depende del producto y del proceso; compare con su propio histórico y con referencias técnicas del sector. Lo importante es medirla y verificar que no crezca."}}]}</script>
 </head>
 <body>
 
@@ -447,7 +460,7 @@ function calcularBalanceSimple() {
   const prodPrincipal = salidas.filter(s => s.tipo === 'producto').reduce((s, e) => s + e.cantidad, 0);
   const rendimiento   = (prodPrincipal / totalEntradas) * 100;
   const balance       = Math.abs(mermaTotal / totalEntradas) * 100;
-  const equilibrado   = balance < 2;
+  const equilibrado   = mermaTotal >= 0 && balance < 2;
 
   const costoTotalMP  = entradas.reduce((s, e) => s + e.cantidad * e.costo, 0);
   const ingresoVta    = prodPrincipal * precioVta;
@@ -463,7 +476,7 @@ function calcularBalanceSimple() {
         <div class="resultado-item"><div class="resultado-valor">${fmt(rendimiento,1)}%</div><div class="resultado-label">Rendimiento proceso</div></div>
         <div class="resultado-item"><div class="resultado-valor">${fmt(mermaTotal,1)} ${unidad}</div><div class="resultado-label">Merma total</div></div>
         <div class="resultado-item"><div class="resultado-valor">${fmt(mermaPct,1)}%</div><div class="resultado-label">% Merma</div></div>
-        <div class="resultado-item"><div class="resultado-valor">${equilibrado ? '✅' : '⚠️'}</div><div class="resultado-label">Balance ${equilibrado ? 'equilibrado' : 'revisar'}</div></div>
+        <div class="resultado-item"><div class="resultado-valor">${equilibrado ? '✅' : '⚠️'}</div><div class="resultado-label">${mermaTotal < 0 ? 'Salidas > entradas: revisar' : (equilibrado ? 'Pérdidas < 2 %' : 'Pérdidas a verificar')}</div></div>
       </div>
       <table class="sankey-table" style="margin-top:1rem;">
         <thead><tr><th>Corriente</th><th>Material</th><th>Cantidad (${unidad})</th><th>%</th></tr></thead>
@@ -478,9 +491,9 @@ function calcularBalanceSimple() {
       <div class="resultado-detalle">
         <b>Rendimiento del proceso:</b> ${fmt(prodPrincipal,2)} ${unidad} producto ÷ ${fmt(totalEntradas,2)} ${unidad} entrada = <b>${fmt(rendimiento,2)}%</b><br>
         <b>Merma total:</b> ${fmt(totalEntradas,2)} − ${fmt(totalSalidas,2)} = <b>${fmt(mermaTotal,2)} ${unidad} (${fmt(mermaPct,1)}%)</b><br>
-        ${costoMP > 0 ? `<b>Costo materia prima:</b> $ ${fmtInt(costoTotalMP)} COP<br>` : ''}
+        ${costoTotalMP > 0 ? `<b>Costo materia prima:</b> $ ${fmtInt(costoTotalMP)} COP<br>` : ''}
         ${precioVta > 0 ? `<b>Ingreso por venta:</b> $ ${fmtInt(ingresoVta)} COP | <b>Margen bruto:</b> $ ${fmtInt(margenBruto)} COP<br>` : ''}
-        ${!equilibrado ? `⚠️ Diferencia entre entradas y salidas: ${fmt(balance,1)}%. Revise los datos ingresados.` : '✅ Balance cerrado correctamente (error < 2%).'}
+        ${mermaTotal < 0 ? '⚠️ Las salidas superan a las entradas: revise las cantidades (la masa no se crea).' : (!equilibrado ? `ℹ️ Hay ${fmt(balance,1)}% de masa no contabilizada en las salidas (agua evaporada, pérdidas de proceso, etc.). Si no corresponde a una merma esperada, revise los datos o mida las corrientes que falten.` : '✅ La masa de salida cierra con la de entrada (diferencia < 2 %).')}
       </div>
     </div>`;
 }
@@ -587,6 +600,25 @@ document.getElementById('et-merma-5').value = '1';
 document.getElementById('et-tipo-5').value = 'calidad';
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Balance de masa en la industria de alimentos: rendimiento, merma y control de costos</h2>
+<h3>Qué dice el balance de masa</h3>
+<p>El balance de masa aplica la ley de conservación: lo que entra a un proceso es igual a lo que sale más lo que se acumula. En una planta de alimentos esto permite saber cuánto producto se obtiene de cada kilo de materia prima, dónde se pierde masa y cuánto cuesta esa pérdida. Si al sumar las salidas faltan kilos, no desaparecieron: se evaporaron, quedaron en equipos y tuberías, se descartaron o se midieron mal.</p>
+<h3>Entradas, salidas y subproductos</h3>
+<p>Un buen balance identifica todas las corrientes: materias primas, ingredientes, agua de proceso y aditivos que entran; producto principal, subproductos (por ejemplo, el lactosuero en quesería o el bagazo en jugos) y residuos que salen. Los subproductos tienen valor o costo de disposición, por eso conviene separarlos del producto principal y de la merma. Use siempre la misma unidad (kilogramos) y la misma base de tiempo o de lote.</p>
+<h3>Rendimiento y merma</h3>
+<p>El <strong>rendimiento</strong> es la masa de producto principal dividida entre la masa total de entradas, por cien. La <strong>merma</strong> es la diferencia entre entradas y salidas contabilizadas. Una merma pequeña no es necesariamente un error: la evaporación de agua en un horno o los residuos de limpieza son pérdidas reales. Lo que debe alarmar es una merma mayor a la histórica del proceso, o salidas que superan a las entradas, algo físicamente imposible que indica un error de medición.</p>
+<h3>Balance por etapas</h3>
+<p>Cuando un proceso tiene varias operaciones, la pérdida de cada etapa se aplica sobre la masa que entra a esa etapa, no sobre la masa inicial. Por eso los porcentajes no se suman: se multiplican los factores de rendimiento. Este balance permite localizar la etapa crítica (la de mayor pérdida absoluta) y priorizar mejoras, como cambiar un filtro, ajustar un tiempo de escurrido o reducir rechazos de calidad.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>En la pestaña simple, agregue las entradas con su cantidad y costo por kilo, y las salidas clasificadas como producto, subproducto o residuo; la herramienta calcula rendimiento, merma, costo de materia prima y margen bruto. En la pestaña de etapas, ingrese la masa inicial y el porcentaje de merma de cada operación. Contraste los resultados con mediciones reales de planta.</p><p><em>Esta guía es informativa y las cifras son estimaciones. Para declaraciones de calidad, vida útil o rotulado ante INVIMA, valide con un ingeniero de alimentos y con ensayos de laboratorio.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: quesería con 100 kg de leche y proceso en cinco etapas</h3><ul><li><strong>Balance simple:</strong> entran 100 kg de leche (a $1.800/kg, $180.000); salen 12 kg de queso fresco y 85 kg de lactosuero. Las salidas suman 97 kg: la masa no contabilizada es de <strong>3 kg (3 %)</strong> y el rendimiento del producto principal es de <strong>12 %</strong>.</li><li><strong>Por etapas, con 1.000 kg iniciales:</strong> filtración 1 %, pasteurización 1,5 %, coagulación y desuerado 84 %, moldeado 2 % y empaque 1 %. La masa final es de <strong>151,4 kg</strong> (rendimiento global de 15,1 %) y la etapa de mayor pérdida es el desuerado, con 819,1 kg.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué diferencia hay entre rendimiento y merma?</summary><p>El rendimiento mide cuánto producto principal se obtiene por cada cien de entrada; la merma mide la masa no contabilizada en las salidas. Se complementan, pero no suman cien si hay subproductos.</p></details>
+<details><summary>¿Por qué las pérdidas por etapa no se suman?</summary><p>Porque cada etapa pierde un porcentaje de lo que recibe. Con 1 %, 1,5 % y 2 % de pérdida no se pierde 4,5 % exacto: se multiplican los factores 0,99 × 0,985 × 0,98.</p></details>
+<details><summary>¿Cómo trato el agua que se agrega al proceso?</summary><p>Debe aparecer como una entrada, porque aporta masa. Si no se incluye, el balance mostrará salidas mayores que las entradas.</p></details>
+<details><summary>¿Qué merma es aceptable?</summary><p>Depende del producto y del proceso; compare con su propio histórico y con referencias técnicas del sector. Lo importante es medirla y verificar que no crezca.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

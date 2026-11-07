@@ -100,6 +100,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué es un grado Dornic?", "acceptedAnswer": {"@type": "Answer", "text": "Es una unidad usada en lácteos: 1 °D equivale a 0,1 g de ácido láctico por litro, es decir 0,01 %. Una leche de 15 °D tiene 0,15 % de acidez expresada como ácido láctico."}}, {"@type": "Question", "name": "¿Por qué la leche fresca tiene acidez si no está fermentada?", "acceptedAnswer": {"@type": "Answer", "text": "Porque la caseína, los fosfatos y el dióxido de carbono disuelto reaccionan con la base. Es una acidez natural; su aumento sobre el rango sí indica actividad microbiana."}}, {"@type": "Question", "name": "¿Hay que calibrar el pH-metro?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, antes de cada uso con al menos dos soluciones tampón que rodeen el pH esperado, y compensando por temperatura."}}, {"@type": "Question", "name": "¿El pH 7 es siempre neutro?", "acceptedAnswer": {"@type": "Answer", "text": "A 25 °C sí. A otras temperaturas el pH de neutralidad cambia ligeramente, porque el producto iónico del agua varía."}}]}</script>
 </head>
 <body>
 <nav>
@@ -281,12 +293,12 @@ function fmt(n, dec=3) { return Number(n).toLocaleString('es-CO',{minimumFractio
 function fmtD(n,d=2) { return Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d}); }
 
 const productosData = {
-  leche:        { acido:'lactico', vol:1.7, norm:0.1111, muestra:9,  rango:[0.13,0.17], nombre:'Leche', meq:0.090 },
-  yogur:        { acido:'lactico', vol:8.5, norm:0.1,    muestra:9,  rango:[0.6,1.2],   nombre:'Yogur', meq:0.090 },
+  leche:        { acido:'lactico', vol:1.5, norm:0.1111, muestra:10,  rango:[0.13,0.17], nombre:'Leche', meq:0.090 },
+  yogur:        { acido:'lactico', vol:8.5, norm:0.1,    muestra:10,  rango:[0.6,1.2],   nombre:'Yogur', meq:0.090 },
   queso:        { acido:'lactico', vol:5.5, norm:0.1,    muestra:10, rango:[0.4,0.8],   nombre:'Queso fresco', meq:0.090 },
-  'jugo-citrico':{ acido:'citrico', vol:9.4, norm:0.1,   muestra:10, rango:[0.6,1.5],   nombre:'Jugo cítrico', meq:0.064 },
+  'jugo-citrico':{ acido:'citrico', vol:12.0, norm:0.1,   muestra:10, rango:[0.6,1.5],   nombre:'Jugo cítrico', meq:0.064 },
   'jugo-otros': { acido:'malico',  vol:6.0, norm:0.1,    muestra:10, rango:[0.3,0.8],   nombre:'Jugo de frutas', meq:0.067 },
-  vinagre:      { acido:'acetico', vol:66.7,norm:0.1,    muestra:10, rango:[4.0,8.0],   nombre:'Vinagre', meq:0.060 },
+  vinagre:      { acido:'acetico', vol:8.3, norm:1.0,    muestra:10, rango:[4.0,8.0],   nombre:'Vinagre', meq:0.060 },
   vino:         { acido:'tartarico',vol:8.0,norm:0.1,    muestra:10, rango:[0.4,0.9],   nombre:'Vino', meq:0.075 },
   miel:         { acido:'lactico', vol:2.0, norm:0.1,    muestra:10, rango:[0.1,0.5],   nombre:'Miel', meq:0.090 },
   custom:       { acido:'lactico', vol:5.0, norm:0.1,    muestra:10, rango:[0,100],     nombre:'Personalizado', meq:0.090 },
@@ -354,6 +366,8 @@ function calcularAcidez() {
     </div>
     <div class="alerta-${colorEstado}">${colorEstado==='ok'?'✅':colorEstado==='mal'?'🔴':'⚠️'} <strong>${estado}</strong></div>`;
 }
+
+document.addEventListener('DOMContentLoaded', autoProducto);
 
 function actualizarModoPH() {
   const modo = document.getElementById('ph-modo').value;
@@ -428,6 +442,25 @@ function calcularPH() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>pH y acidez titulable en alimentos: qué miden y cómo se calculan</h2>
+<h3>pH y acidez titulable no son lo mismo</h3>
+<p>El <strong>pH</strong> mide la concentración de iones hidrógeno libres en un instante y se expresa en una escala logarítmica. La <strong>acidez titulable</strong> mide la cantidad total de ácido presente, libre y sin disociar, por la cantidad de base necesaria para neutralizarlo. Un alimento puede tener el mismo pH que otro y mucha más acidez titulable, porque contiene ácidos débiles que amortiguan el cambio. Por eso ambos análisis se usan juntos.</p>
+<h3>Cómo se calcula la acidez titulable</h3>
+<p>Se titula una muestra con hidróxido de sodio de normalidad conocida hasta el punto final, que suele detectarse con fenolftaleína (rosa tenue persistente) o con un pH-metro. El resultado se expresa como porcentaje del ácido predominante: <code>% acidez = (V × N × meq × 100) ÷ M</code>, donde V es el volumen de NaOH gastado en mL, N su normalidad, meq el miliequivalente del ácido en g/meq y M la masa o volumen de muestra. Los valores de meq más usados son 0,090 para el ácido láctico, 0,064 para el cítrico, 0,060 para el acético, 0,075 para el tartárico y 0,067 para el málico.</p>
+<h3>Por qué importa el ácido de referencia</h3>
+<p>Cada alimento se expresa con el ácido que domina: láctico en lácteos, cítrico en cítricos, málico en manzana, tartárico en uva y acético en vinagre. Cambiar el ácido cambia el resultado numérico aunque se haya gastado la misma cantidad de base, así que debe reportarse siempre junto con el valor. Compare su resultado con el rango del producto, que depende de la norma técnica o de la especificación de su empresa.</p>
+<h3>El pH y la inocuidad</h3>
+<p>El pH de 4,6 es un punto de referencia clave en la inocuidad de alimentos envasados. Por debajo de ese valor se inhibe el crecimiento de <em>Clostridium botulinum</em> y se habla de alimentos ácidos; por encima, en alimentos de baja acidez con alta actividad de agua, se requiere esterilización comercial y no basta la pasteurización. Un pH-metro bien calibrado con soluciones tampón es indispensable para estas decisiones.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Seleccione el producto o ingrese los datos de su titulación y obtenga el porcentaje de acidez y su comparación con el rango de referencia. En la pestaña de pH puede convertir entre pH, concentración de H⁺, pOH y [OH⁻]. Registre siempre la temperatura y el método.</p><p><em>Esta guía es informativa y las cifras son estimaciones. Para declaraciones de calidad, vida útil o rotulado ante INVIMA, valide con un ingeniero de alimentos y con ensayos de laboratorio.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: acidez de una leche y pH 4,6</h3><ul><li><strong>Leche:</strong> se titulan 10 mL de muestra y se gastan 1,5 mL de NaOH 0,1111 N. Acidez = (1,5 × 0,1111 × 0,090 × 100) ÷ 10 = <strong>0,150 %</strong> expresada como ácido láctico, equivalente a 15 °D y dentro del rango de 0,13 a 0,17 % que usa la herramienta como referencia.</li><li><strong>pH 4,6:</strong> [H⁺] = 10<sup>−4,6</sup> ≈ <strong>2,5 × 10⁻⁵ mol/L</strong>; el pOH es 9,4.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué es un grado Dornic?</summary><p>Es una unidad usada en lácteos: 1 °D equivale a 0,1 g de ácido láctico por litro, es decir 0,01 %. Una leche de 15 °D tiene 0,15 % de acidez expresada como ácido láctico.</p></details>
+<details><summary>¿Por qué la leche fresca tiene acidez si no está fermentada?</summary><p>Porque la caseína, los fosfatos y el dióxido de carbono disuelto reaccionan con la base. Es una acidez natural; su aumento sobre el rango sí indica actividad microbiana.</p></details>
+<details><summary>¿Hay que calibrar el pH-metro?</summary><p>Sí, antes de cada uso con al menos dos soluciones tampón que rodeen el pH esperado, y compensando por temperatura.</p></details>
+<details><summary>¿El pH 7 es siempre neutro?</summary><p>A 25 °C sí. A otras temperaturas el pH de neutralidad cambia ligeramente, porque el producto iónico del agua varía.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

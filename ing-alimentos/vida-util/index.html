@@ -143,6 +143,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuál es el valor típico de Q10?", "acceptedAnswer": {"@type": "Answer", "text": "Varía según la reacción: muchas reacciones químicas tienen Q10 de 2 a 3 y los procesos microbianos pueden superar ese rango. Use datos del producto."}}, {"@type": "Question", "name": "¿Puedo declarar la vida útil solo con un estudio acelerado?", "acceptedAnswer": {"@type": "Answer", "text": "Como respaldo técnico es útil, pero lo recomendable es validar con un estudio en tiempo real; confirme el requisito vigente con INVIMA."}}, {"@type": "Question", "name": "¿Qué parámetro debo medir?", "acceptedAnswer": {"@type": "Answer", "text": "El que limita la vida del producto: microbiológico en lácteos y carnes, oxidación en grasas, sensorial y fisicoquímico en panificados y bebidas."}}, {"@type": "Question", "name": "¿Sirve el modelo para productos congelados?", "acceptedAnswer": {"@type": "Answer", "text": "No de forma directa: el cambio de fase y la cristalización alteran el mecanismo de deterioro. Se requieren modelos específicos."}}]}</script>
 </head>
 <body>
 
@@ -438,7 +450,7 @@ function calcularArrhenius() {
         <div class="resultado-item"><div class="resultado-valor">${vidaRef} ${label}</div><div class="resultado-label">Vida útil referencia (${parseFloat(document.getElementById('a-temp-ref').value)}°C)</div></div>
       </div>
       <div class="resultado-detalle">
-        <b>Ecuación de Arrhenius aplicada:</b><br>
+        <b>Ecuación de Arrhenius aplicada</b> (válida mientras no haya cambios de fase ni de mecanismo de deterioro; no la extrapole a congelación):<br>
         k(T) = A × exp(−Ea/RT)<br>
         Factor = exp(Ea/R × (1/T₂ − 1/T₁))<br>
         Factor = exp(${ea/1000}×1000/8.314 × (1/${fmt(tempObj,2)} − 1/${fmt(tempRef,2)})) = <b>${fmt(factor,4)}</b><br>
@@ -576,7 +588,7 @@ function calcularASLT() {
       </div>
     </div>
     <div style="background:rgba(255,255,255,0.12); border-radius:8px; padding:1rem; margin-top:0.8rem; color:#fff; font-size:0.83rem;">
-      <b style="color:#ffe082;">📋 Documentos requeridos por INVIMA:</b><br>
+      <b style="color:#ffe082;">📋 Documentación que suele respaldar una vida útil (confirme los requisitos vigentes con INVIMA):</b><br>
       • Protocolo del estudio con fundamento científico<br>
       • Resultados de análisis en puntos de muestreo definidos<br>
       • Concepto de un profesional competente (Ing. de Alimentos o similar)<br>
@@ -585,6 +597,25 @@ function calcularASLT() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Vida útil de alimentos: modelos de Arrhenius, Q10 y estudios acelerados</h2>
+<h3>Qué es la vida útil</h3>
+<p>La vida útil es el tiempo durante el cual un alimento almacenado en condiciones definidas conserva su inocuidad y sus características sensoriales y nutricionales aceptables. Se determina con el parámetro que primero falle: crecimiento microbiano, oxidación de grasas, cambio de color, pérdida de vitaminas o textura. La temperatura es la variable que más acelera casi todas esas reacciones.</p>
+<h3>Modelo de Arrhenius</h3>
+<p>La ecuación de Arrhenius relaciona la velocidad de deterioro con la temperatura absoluta mediante la energía de activación (Ea). Conociendo la vida útil a una temperatura de referencia, la vida a otra temperatura es <code>vida₂ = vida₁ × exp[(Ea/R) × (1/T₂ − 1/T₁)]</code>, con temperaturas en kelvin y R = 8,314 J/mol·K. Una Ea alta significa que el producto es muy sensible a la temperatura. El modelo supone que el mecanismo de deterioro no cambia en el rango y que no hay cambios de fase, por lo que no debe extrapolarse a congelación.</p>
+<h3>Factor Q10</h3>
+<p>El Q10 indica cuántas veces se acelera el deterioro por cada 10 °C de aumento. La vida útil a la temperatura 2 es <code>vida₁ ÷ Q10^((T₂ − T₁)/10)</code>. Es una versión simplificada de Arrhenius, útil para estimaciones rápidas. Su valor debe provenir de datos experimentales del producto o de literatura comparable, no de un supuesto.</p>
+<h3>Estudios acelerados (ASLT)</h3>
+<p>En un estudio de vida útil acelerada se almacena el producto a una temperatura mayor para obtener la falla en menos tiempo y luego se proyecta a la temperatura real. El diseño define temperaturas, puntos de muestreo, parámetros de control y criterio de rechazo. Los resultados acelerados son una estimación: deben confirmarse con un estudio en tiempo real en condiciones normales de almacenamiento.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>En Arrhenius ingrese temperatura y vida de referencia, Ea y la temperatura objetivo; en Q10, el factor y las temperaturas; en ASLT, la vida esperada, la temperatura normal y la acelerada, y el parámetro a monitorear. La herramienta proyecta la vida a distintas temperaturas y sugiere un cronograma de muestreo.</p><p><em>Esta guía es informativa y las cifras son estimaciones. Para declaraciones de calidad, vida útil o rotulado ante INVIMA, valide con un ingeniero de alimentos y con ensayos de laboratorio.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplos con valores de referencia</h3><ul><li><strong>Arrhenius:</strong> un producto dura 12 días a 25 °C y tiene Ea = 80 kJ/mol. A 4 °C el factor es de 11,54, por lo que la vida estimada es de <strong>138,4 días</strong>.</li><li><strong>Q10 = 2:</strong> un producto con 30 días a 25 °C duraría 15 días a 35 °C y unos <strong>129 días</strong> a 4 °C (30 × 2<sup>2,1</sup>).</li><li><strong>ASLT:</strong> para sustentar 12 meses a 25 °C con almacenamiento acelerado a 40 °C, el factor de aceleración Q10 = 2 es de 2,83×, y el estudio duraría unos <strong>127 días</strong> (77 días con Ea = 80 kJ/mol).</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuál es el valor típico de Q10?</summary><p>Varía según la reacción: muchas reacciones químicas tienen Q10 de 2 a 3 y los procesos microbianos pueden superar ese rango. Use datos del producto.</p></details>
+<details><summary>¿Puedo declarar la vida útil solo con un estudio acelerado?</summary><p>Como respaldo técnico es útil, pero lo recomendable es validar con un estudio en tiempo real; confirme el requisito vigente con INVIMA.</p></details>
+<details><summary>¿Qué parámetro debo medir?</summary><p>El que limita la vida del producto: microbiológico en lácteos y carnes, oxidación en grasas, sensorial y fisicoquímico en panificados y bebidas.</p></details>
+<details><summary>¿Sirve el modelo para productos congelados?</summary><p>No de forma directa: el cambio de fase y la cristalización alteran el mecanismo de deterioro. Se requieren modelos específicos.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

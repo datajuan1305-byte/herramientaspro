@@ -48,7 +48,6 @@
     .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--cafe-medio); margin: 1rem 0 0.6rem; border-left: 3px solid var(--cafe-medio); padding-left: 8px; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
     .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.9rem; }
-    @media(max-width:700px) { .card { overflow-x: auto; -webkit-overflow-scrolling: touch; } .apu-header, .apu-row { min-width: 640px; } }
     @media(max-width:600px) { .form-grid { grid-template-columns: 1fr; } .form-grid-3 { grid-template-columns: 1fr 1fr; } }
     .form-group { display: flex; flex-direction: column; gap: 4px; }
     label { font-size: 0.82rem; font-weight: 600; color: var(--texto-suave); }
@@ -118,6 +117,19 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="fix-ovf">.resultado-box{max-width:100%;overflow-x:auto}.apu-header{overflow:hidden}.resultado-box table{min-width:0}</style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuál es un AIU razonable?", "acceptedAnswer": {"@type": "Answer", "text": "No hay un valor único: depende del tipo de obra y del contrato. La herramienta muestra rangos de referencia, pero cada caso debe sustentarse."}}, {"@type": "Question", "name": "¿Qué es el rendimiento?", "acceptedAnswer": {"@type": "Answer", "text": "Es la cantidad de obra que produce una cuadrilla en una jornada. Un rendimiento realista es clave porque define el costo de mano de obra por unidad."}}, {"@type": "Question", "name": "¿Por qué el IVA se calcula solo sobre la utilidad?", "acceptedAnswer": {"@type": "Answer", "text": "Porque en los contratos de obra con AIU expreso la base gravable es la utilidad. Confirme su caso con un contador."}}, {"@type": "Question", "name": "¿Cada cuánto actualizo los precios?", "acceptedAnswer": {"@type": "Answer", "text": "Siempre que cotice una obra. Como referencia de variación, puede consultar el Índice de Costos de la Construcción de Vivienda (ICCV) del DANE."}}]}</script>
 </head>
 <body>
 <nav>
@@ -238,7 +250,8 @@
         <div class="form-group"><label>Nombre del proyecto</label><input type="text" id="pr-nombre" value="Construcción vivienda unifamiliar" /></div>
         <div class="form-group"><label>Ubicación</label><input type="text" id="pr-ubicacion" value="Bogotá D.C." /></div>
         <div class="form-group"><label>% AIU total del proyecto</label><input type="number" id="pr-aiu" value="18" min="0" max="40" step="0.5" /><span class="form-hint">A+I+U: Administración + Imprevistos + Utilidad</span></div>
-        <div class="form-group"><label>% IVA sobre utilidad (si aplica)</label><input type="number" id="pr-iva" value="0" min="0" max="19" step="1" /><span class="form-hint">Obra pública: IVA sobre utilidad. Privada: generalmente 0%</span></div>
+        <div class="form-group"><label>% Utilidad (U) dentro del AIU</label><input type="number" id="pr-util" value="5" min="0" max="40" step="0.5" /><span class="form-hint">Parte del AIU que corresponde a la utilidad (base del IVA)</span></div>
+        <div class="form-group"><label>% IVA sobre la utilidad (si aplica)</label><input type="number" id="pr-iva" value="0" min="0" max="19" step="1" /><span class="form-hint">Contrato de obra con AIU expreso (Art. 462-1 ET): IVA 19 % solo sobre la utilidad. Confirme su caso con un contador.</span></div>
       </div>
 
       <h3>Ítems del Presupuesto</h3>
@@ -473,6 +486,7 @@ function calcularPresupuesto() {
   const ubicac = document.getElementById('pr-ubicacion').value || '';
   const pctAIU = parseFloat(document.getElementById('pr-aiu').value) / 100;
   const pctIVA = parseFloat(document.getElementById('pr-iva').value) / 100;
+  const pctUtilP = Math.min(pctAIU, (parseFloat(document.getElementById('pr-util').value) || 0) / 100);
 
   const rows = [];
   document.querySelectorAll('#presup-container .apu-row').forEach(row => {
@@ -489,7 +503,8 @@ function calcularPresupuesto() {
   const totalCD  = rows.reduce((a,r) => a+r.tot, 0);
   const valorAIU = totalCD * pctAIU;
   const subtotal = totalCD + valorAIU;
-  const iva      = subtotal * pctIVA * (pctIVA > 0 ? 1 : 0);
+  const baseIVA  = totalCD * pctUtilP;      // IVA solo sobre la utilidad
+  const iva      = baseIVA * pctIVA;
   const total    = subtotal + iva;
 
   const filasHTML = rows.map((r,i) => `
@@ -513,7 +528,7 @@ function calcularPresupuesto() {
         <div class="resultado-item"><div class="resultado-valor">${rows.length}</div><div class="resultado-label">Ítems</div></div>
         <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(totalCD))}</div><div class="resultado-label">Costo directo</div></div>
         <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(valorAIU))}</div><div class="resultado-label">AIU (${fmtD(pctAIU*100)}%)</div></div>
-        ${pctIVA > 0 ? `<div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(iva))}</div><div class="resultado-label">IVA (${fmtD(pctIVA*100)}%)</div></div>` : ''}
+        ${pctIVA > 0 ? `<div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(iva))}</div><div class="resultado-label">IVA ${fmtD(pctIVA*100)}% s/utilidad</div></div>` : ''}
         <div class="resultado-item"><div class="resultado-valor">$ ${fmt(Math.round(total))}</div><div class="resultado-label">TOTAL PROYECTO</div></div>
       </div>
       <div style="overflow-x:auto; margin-top:1rem;">
@@ -523,7 +538,7 @@ function calcularPresupuesto() {
             ${filasHTML}
             <tr class="subtotal"><td colspan="5">Costo directo total</td><td>$ ${fmt(Math.round(totalCD))}</td><td>100%</td></tr>
             <tr class="indirecto"><td colspan="5">AIU (${fmtD(pctAIU*100)}%)</td><td>$ ${fmt(Math.round(valorAIU))}</td><td></td></tr>
-            ${pctIVA>0?`<tr class="indirecto"><td colspan="5">IVA (${fmtD(pctIVA*100)}%)</td><td>$ ${fmt(Math.round(iva))}</td><td></td></tr>`:''}
+            ${pctIVA>0?`<tr class="indirecto"><td colspan="5">IVA (${fmtD(pctIVA*100)}% sobre utilidad de $ ${fmt(Math.round(baseIVA))})</td><td>$ ${fmt(Math.round(iva))}</td><td></td></tr>`:''}
             <tr class="total-apu"><td colspan="5">💰 VALOR TOTAL DEL PROYECTO</td><td>$ ${fmt(Math.round(total))}</td><td></td></tr>
           </tbody>
         </table>
@@ -567,7 +582,7 @@ function cargarEjemploPresup() {
     { desc:'Localización y replanteo', und:'m2', cant:80, pu:4500 },
     { desc:'Excavación manual para cimientos', und:'m3', cant:35, pu:45000 },
     { desc:'Concreto ciclópeo cimientos', und:'m3', cant:18, pu:380000 },
-    { desc:'Mamposterìa bloque 15 cm', und:'m2', cant:120, pu:68000 },
+    { desc:'Mampostería bloque 15 cm', und:'m2', cant:120, pu:68000 },
     { desc:'Concreto 21 MPa columnas/vigas', und:'m3', cant:12, pu:540000 },
     { desc:'Acero de refuerzo fy=420 MPa', und:'kg', cant:1200, pu:5000 },
     { desc:'Cubierta teja fibrocemento', und:'m2', cant:95, pu:85000 },
@@ -580,6 +595,25 @@ function cargarEjemploPresup() {
 document.addEventListener('DOMContentLoaded', () => { cargarEjemplo(); });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Análisis de precios unitarios (APU) y presupuesto de obra en Colombia</h2>
+<h3>Qué es un APU</h3>
+<p>Un análisis de precios unitarios descompone el costo de una actividad (por ejemplo, un metro cúbico de concreto o un metro cuadrado de muro) en materiales, mano de obra y equipos, cada uno con su cantidad por unidad de obra y su precio. La suma es el costo directo. Es la base de cualquier presupuesto, de las cantidades de obra y de las actas de cobro.</p>
+<h3>Materiales, mano de obra y equipos</h3>
+<p>Los materiales se calculan con su consumo por unidad y su desperdicio. La mano de obra se expresa en jornales o en horas por unidad, a partir del rendimiento de la cuadrilla (unidades que produce en una jornada) y del costo del jornal con prestaciones. Los equipos se valoran por tiempo de uso y rendimiento; la herramienta menor suele estimarse como un porcentaje de la mano de obra.</p>
+<h3>El AIU</h3>
+<p>Al costo directo se le suman los costos indirectos: Administración, Imprevistos y Utilidad (AIU), expresados como porcentajes del costo directo. Sus valores dependen del contrato, del riesgo y del tamaño de la obra, y deben justificarse. El precio unitario es el costo directo más el AIU.</p>
+<h3>IVA en contratos de obra</h3>
+<p>Cuando un contrato de obra pactado con AIU lo indica expresamente, el IVA se calcula únicamente sobre la utilidad (artículo 462-1 del Estatuto Tributario) y no sobre el total. Por eso la herramienta separa el porcentaje de utilidad dentro del AIU. Las condiciones de cada contrato y su tratamiento tributario deben confirmarse con un contador.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>En la pestaña APU ingrese cada insumo con unidad, cantidad y precio; obtendrá el costo directo, el AIU y el precio unitario. En la de presupuesto, liste los ítems con su cantidad y precio unitario para obtener el valor total, con AIU e IVA sobre utilidad si aplica. Los precios de las plantillas son ejemplos que debe reemplazar por cotizaciones vigentes.</p><p><em>Esta guía es informativa y los resultados de la herramienta son estimaciones orientativas: los precios, rendimientos y parámetros deben ajustarse a su proyecto. El diseño y la ejecución definitivos deben ser validados y firmados por un profesional con matrícula vigente ante el COPNIA y ajustarse a la normativa que aplique.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: APU de un metro cúbico de concreto de 21 MPa fundido en sitio</h3><ul><li>Materiales (cemento, arena, grava y agua): <strong>$332.900</strong>.</li><li>Mano de obra: <strong>$70.000</strong>. Equipos y herramienta menor: <strong>$37.400</strong>.</li><li>Costo directo: <strong>$440.300</strong>. Con un AIU de 18 %, el precio unitario es de <strong>$519.554</strong> por m³.</li></ul><p>Los precios son ilustrativos y deben reemplazarse por cotizaciones vigentes.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuál es un AIU razonable?</summary><p>No hay un valor único: depende del tipo de obra y del contrato. La herramienta muestra rangos de referencia, pero cada caso debe sustentarse.</p></details>
+<details><summary>¿Qué es el rendimiento?</summary><p>Es la cantidad de obra que produce una cuadrilla en una jornada. Un rendimiento realista es clave porque define el costo de mano de obra por unidad.</p></details>
+<details><summary>¿Por qué el IVA se calcula solo sobre la utilidad?</summary><p>Porque en los contratos de obra con AIU expreso la base gravable es la utilidad. Confirme su caso con un contador.</p></details>
+<details><summary>¿Cada cuánto actualizo los precios?</summary><p>Siempre que cotice una obra. Como referencia de variación, puede consultar el Índice de Costos de la Construcción de Vivienda (ICCV) del DANE.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>
