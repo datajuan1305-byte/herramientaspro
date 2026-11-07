@@ -114,6 +114,10 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="hp-mobile-fix">
+/* Móvil: evita que tablas y resultados ensanchen la página (min-width:auto de los ítems de grid) */
+@media (max-width: 900px){.app>*,.layout>*,.main-content,.calc-grid>*,.panel{min-width:0;max-width:100%}.panel table,.main-content table{display:block;overflow-x:auto;max-width:100%}}
+</style>
 </head>
 <body>
 

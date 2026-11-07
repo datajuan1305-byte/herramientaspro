@@ -6,10 +6,17 @@
 
 const MM = {
   normCDF: function(x) {
-    const t = 1 / (1 + 0.2316419 * Math.abs(x));
-    const d = 0.3989422820 * Math.exp(-x * x / 2);
-    const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.7814779 + t * (-1.8212560 + t * 1.3302744))));
-    return x > 0 ? 1 - p : p;
+    // Cola superior Q(|x|) con precisión ~1e-15 (serie de erf para |x|<3, fracción continua en la cola)
+    const ax = Math.abs(x); let Q;
+    if (ax < 3) {
+      const z = ax / Math.SQRT2; let term = z, sum = z;
+      for (let n = 1; n < 300; n++) { term *= 2 * z * z / (2 * n + 1); sum += term; if (term < 1e-17 * sum) break; }
+      Q = 0.5 - 0.5 * (2 / Math.sqrt(Math.PI)) * Math.exp(-z * z) * sum;
+    } else {
+      let fc = ax; for (let k = 80; k >= 1; k--) fc = ax + k / fc;
+      Q = Math.exp(-ax * ax / 2) / Math.sqrt(2 * Math.PI) / fc;
+    }
+    return x >= 0 ? 1 - Q : Q;
   },
   normPDF: function(x) { return Math.exp(-x * x / 2) / Math.sqrt(2 * Math.PI); }
 };
