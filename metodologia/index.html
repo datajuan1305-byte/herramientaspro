@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Cómo se construyen, revisan y corrigen las calculadoras de HerramientasPro Colombia: fuentes, validación, vigencia de parámetros y limitaciones de cada tipo de herramienta." />
+  <meta name="robots" content="index, follow" />
+  <title>Metodología — Cómo se construyen y revisan las herramientas | HerramientasPro Colombia</title>
+  <link rel="canonical" href="https://herramientaspro.com.co/metodologia/">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde: #1D9E75;
+      --verde-dark: #0F6E56;
+      --verde-light: #E1F5EE;
+      --azul: #1a3a5c;
+      --text: #1a1a1a;
+      --text-sec: #444;
+      --text-muted: #888;
+      --bg: #f7f7f5;
+      --card: #ffffff;
+      --border: #e0e0dc;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 880px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--verde);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .logo-text { font-size: 17px; font-weight: 600; color: var(--text); }
+    .logo-sub  { font-size: 11px; color: var(--text-muted); }
+
+    .breadcrumb {
+      max-width: 880px;
+      margin: 1.2rem auto 0;
+      padding: 0 1.5rem;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .breadcrumb a { color: var(--verde-dark); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .doc-wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 4rem;
+    }
+
+    .doc-header { margin-bottom: 2rem; }
+    .doc-header h1 { font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .doc-header .updated { font-size: 13px; color: var(--text-muted); }
+
+    .doc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.8rem;
+    }
+
+    .doc-card h2 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--verde-dark);
+      margin: 1.6rem 0 0.7rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--border);
+    }
+    .doc-card h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+    .doc-card p { font-size: 14.5px; color: var(--text-sec); margin-bottom: 0.7rem; }
+    .doc-card ul { padding-left: 1.3rem; margin-bottom: 0.7rem; }
+    .doc-card li { font-size: 14.5px; color: var(--text-sec); margin-bottom: 5px; }
+    .doc-card strong { color: var(--text); }
+    .doc-card a { color: var(--verde-dark); }
+
+    .info-box {
+      background: var(--verde-light);
+      border-left: 4px solid var(--verde);
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      font-size: 13.5px;
+      color: var(--verde-dark);
+      margin: 1rem 0;
+    }
+
+    .contact-box {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      margin-top: 1.5rem;
+      font-size: 14px;
+      text-align: center;
+    }
+    .contact-box a { color: var(--verde-dark); font-weight: 600; }
+
+    footer {
+      background: var(--azul);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 1.8rem 1rem;
+      font-size: 13px;
+    }
+    footer a { color: #f5a623; text-decoration: none; }
+  </style>
+  <style>.doc-card table{width:100%;border-collapse:collapse;font-size:13.5px;margin:.6rem 0 1rem}.doc-card th,.doc-card td{border:1px solid var(--border);padding:7px 9px;text-align:left;vertical-align:top}.doc-card th{background:var(--verde-light);color:var(--verde-dark)}.doc-card .tw{overflow-x:auto}.doc-card h3{font-size:15px;margin:1rem 0 .4rem;color:var(--text)}</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <div class="logo-icon">🔧</div>
+      <div>
+        <div class="logo-text">HerramientasPro Colombia</div>
+        <div class="logo-sub">Herramientas digitales para profesionales</div>
+      </div>
+    </a>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <a href="/">← Volver al inicio</a>
+</div>
+
+<div class="doc-wrap">
+  <div class="doc-header">
+    <h1>Metodología de las herramientas</h1>
+    <p class="updated">Última actualización: noviembre de 2026</p>
+  </div>
+  <div class="doc-card">
+
+    <p>Esta página explica cómo se construyen, se revisan y se corrigen las calculadoras de HerramientasPro Colombia, y qué límites tienen. Está escrita para que cualquier usuario pueda evaluar cuánta confianza darle a un resultado.</p>
+
+    <h2>1. Cómo se construye una herramienta</h2>
+    <ul>
+      <li><strong>Fórmula y fuente.</strong> Cada cálculo parte de una fórmula publicada (norma, decreto, texto técnico o artículo científico). Cuando la fuente es una norma colombiana, se usa el valor del año vigente.</li>
+      <li><strong>Ejemplo resuelto.</strong> Antes de publicar, el resultado se contrasta a mano o con una segunda implementación en un caso de prueba con respuesta conocida.</li>
+      <li><strong>Procedimiento visible.</strong> Las herramientas muestran los pasos o las fórmulas, de modo que el usuario pueda verificar el cálculo y no solo recibir un número.</li>
+      <li><strong>Procesamiento local.</strong> Los datos que escribe el usuario se calculan en su navegador; no se envían a un servidor (ver <a href="/privacidad/">Política de Privacidad</a>).</li>
+    </ul>
+
+    <h2>2. Cómo se revisan</h2>
+    <ul>
+      <li><strong>Auditoría técnica.</strong> En 2026 se revisaron las fórmulas, los parámetros y los valores de ejemplo de las herramientas, herramienta por herramienta. En esa revisión se corrigieron errores reales (por ejemplo, ecuaciones mal aplicadas, tablas con columnas mal rotuladas y bases gravables incorrectas) y se retiraron afirmaciones que no se pudieron verificar con una fuente.</li>
+      <li><strong>Estadística.</strong> Las calculadoras estadísticas (distribuciones, pruebas de hipótesis, regresión, ANOVA y otras) se contrastan con implementaciones de referencia en R y Python (SciPy).</li>
+      <li><strong>Pruebas de interfaz.</strong> Se verifica que cada página cargue sin errores, no devuelva valores no numéricos y se vea correctamente en pantallas de celular.</li>
+    </ul>
+
+    <h2>3. Parámetros normativos y vigencia</h2>
+    <p>Parámetros como el salario mínimo, el auxilio de transporte, la UVT, las tarifas y las tablas de retención se actualizan en enero y cada vez que hay un cambio normativo. Algunos valores cambian durante el año (por ejemplo, las tasas de interés que certifica periódicamente la Superintendencia Financiera) y pueden no estar al día entre revisiones: en esos casos, verifique el valor vigente en la fuente oficial antes de usar el resultado en una decisión.</p>
+    <div class="info-box">Valores de referencia 2026 usados en el sitio: salario mínimo mensual $1.750.905, auxilio de transporte $249.095 y UVT $52.374.</div>
+
+    <h2>4. Qué calcula cada tipo de herramienta (y qué no)</h2>
+    <div class="tw"><table>
+      <tr><th>Tipo</th><th>Qué hace</th><th>Límite principal</th></tr>
+      <tr><td>Laboral, tributaria y financiera</td><td>Aplica fórmulas y tarifas vigentes a los datos ingresados.</td><td>No evalúa la situación particular, convenios ni jurisprudencia; no reemplaza al contador o al abogado.</td></tr>
+      <tr><td>Salud, nutrición y psicología</td><td>Calcula índices y puntajes de escalas publicadas.</td><td>No diagnostica ni prescribe. Un puntaje no es un diagnóstico y debe interpretarlo un profesional de la salud.</td></tr>
+      <tr><td>Veterinaria y agronomía</td><td>Estima raciones, dosis, áreas y requerimientos con parámetros de referencia.</td><td>Las dosis y los planes deben ajustarse al producto (etiqueta), la especie y las condiciones de campo, bajo criterio de un profesional.</td></tr>
+      <tr><td>Ingeniería</td><td>Predimensiona con fórmulas y tablas de referencia.</td><td>No es un diseño: los planos y cálculos definitivos deben ser firmados por un profesional con matrícula y ajustarse a la norma vigente.</td></tr>
+      <tr><td>Deporte</td><td>Estima índices de rendimiento y carga con ecuaciones publicadas.</td><td>Son estimaciones de campo, no mediciones de laboratorio; no sustituyen al entrenador ni al médico del deporte.</td></tr>
+      <tr><td>Estadística</td><td>Calcula estadísticos, valores p e intervalos.</td><td>El resultado es válido si se cumplen los supuestos del método; su interpretación es responsabilidad del usuario.</td></tr>
+    </table></div>
+
+    <h2>5. Limitaciones que debe tener presentes</h2>
+    <ul>
+      <li>Una herramienta automática no conoce el contexto completo de su caso.</li>
+      <li>Los resultados dependen de la calidad de los datos ingresados.</li>
+      <li>La normativa cambia; la fecha de la última revisión aparece en esta página y en las guías de cada herramienta.</li>
+      <li>El sitio no cuenta, por ahora, con un revisor profesional independiente por cada área (contable, jurídica, de salud, nutrición o psicología). Por eso, en esos temas recomendamos siempre confirmar el resultado con un profesional idóneo.</li>
+    </ul>
+
+    <h2>6. Cómo reportar un error</h2>
+    <p>Si encuentra un error de cálculo, un parámetro desactualizado o una afirmación incorrecta, escriba desde la página de <a href="/contacto/">Contacto</a> indicando la herramienta, los datos ingresados y el resultado esperado. Los errores de cálculo se revisan con prioridad y los cambios relevantes quedan en el <a href="/politica-editorial/#historial">historial de cambios</a>.</p>
+
+    <h2>Páginas relacionadas</h2>
+    <p><a href="/fuentes/">Fuentes de referencia por área</a> · <a href="/politica-editorial/">Política editorial</a> · <a href="/acerca-de/">Acerca de</a></p>
+
+  </div>
+</div>
+
+<footer>
+  <strong style="color:#fff;">HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos<br>
+  Proyecto independiente de Juan Carlos Gaviria Chaverra, docente ocasional de la Universidad de Antioquia<br>
+  <a href="/">Inicio</a> · <a href="/acerca-de/">Acerca de</a> · <a href="/metodologia/">Metodología</a> · <a href="/fuentes/">Fuentes</a> · <a href="/politica-editorial/">Política editorial</a> · <a href="/contacto/">Contacto</a> · <a href="/privacidad/">Política de Privacidad</a> · <a href="/terminos/">Términos de Uso</a><br>
+  <span style="font-size:11px;opacity:.7">Herramientas de uso orientativo · Última revisión del sitio: noviembre de 2026</span>
+</footer>
+</body>
+</html>
