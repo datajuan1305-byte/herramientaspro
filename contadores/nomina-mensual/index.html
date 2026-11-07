@@ -135,6 +135,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Quién paga el 4 % de salud y pensión del trabajador?", "acceptedAnswer": {"@type": "Answer", "text": "Lo paga el trabajador, pero el empleador lo descuenta de la nómina y lo consigna junto con su aporte."}}, {"@type": "Question", "name": "¿Por qué el costo para la empresa es mucho mayor que el salario?", "acceptedAnswer": {"@type": "Answer", "text": "Por los aportes, el auxilio de transporte y las provisiones de prestaciones, que suman un porcentaje importante sobre el salario."}}, {"@type": "Question", "name": "¿El auxilio de transporte se incluye en el IBC?", "acceptedAnswer": {"@type": "Answer", "text": "No. El auxilio de transporte no hace parte del ingreso base de cotización de salud y pensión."}}, {"@type": "Question", "name": "¿Los contratos de aprendizaje pagan igual?", "acceptedAnswer": {"@type": "Answer", "text": "No. El aprendiz recibe apoyo de sostenimiento y tiene reglas distintas en aportes y prestaciones."}}]}</script>
 </head>
 <body>
 
@@ -187,6 +199,13 @@
           <option value="fijo">Término fijo</option>
           <option value="obra">Obra o labor</option>
           <option value="aprendizaje">Contrato de aprendizaje (SENA)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exonerado">Exoneración de aportes (Art. 114-1 ET)</label>
+        <select id="exonerado">
+          <option value="no">No aplica (paga salud 8,5 %, SENA e ICBF)</option>
+          <option value="si">Sí — empleador exonerado y salario &lt; 10 SMMLV</option>
         </select>
       </div>
       <div class="form-group">
@@ -325,7 +344,7 @@
     </div>
 
     <div class="disclaimer">
-      ⚠️ <strong>Herramienta orientativa.</strong> Calculado con base en la normativa laboral colombiana vigente 2026 (CST, Ley 100/1993, Ley 789/2002). La retención en la fuente es una estimación por procedimiento 1 — el valor exacto debe calcularse con el procedimiento oficial de la DIAN. Los porcentajes de aportes parafiscales aplican para empresas con más de 10 trabajadores. Verifique con su contador.
+      ⚠️ <strong>Herramienta orientativa.</strong> Calculado con base en la normativa laboral colombiana vigente 2026 (CST, Ley 100/1993, Ley 789/2002). La retención en la fuente es una estimación por procedimiento 1 — el valor exacto debe calcularse con el procedimiento oficial de la DIAN. La exoneración del Art. 114-1 ET (salud del empleador, SENA e ICBF) solo aplica a los empleadores que la ley indica y a trabajadores con salario inferior a 10 SMMLV; actívela en el formulario si le corresponde. Verifique con su contador.
     </div>
     <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
   </div>
@@ -423,12 +442,14 @@
     const neto = devengado - totalDeducciones;
 
     // APORTES EMPLEADOR
-    const saludEmpleador     = ibc * 0.085;
+    // Art. 114-1 ET: sociedades y personas jurídicas contribuyentes de renta (y personas naturales con 2 o más trabajadores) quedan exoneradas de salud 8,5 %, SENA e ICBF por trabajadores que devenguen menos de 10 SMMLV
+    const exonerado          = document.getElementById('exonerado').value === 'si' && ibc < 10 * SMMLV;
+    const saludEmpleador     = exonerado ? 0 : ibc * 0.085;
     const pensionEmpleador   = ibc * 0.12;
     const arlEmpleador       = ibc * 0.00522; // riesgo I (promedio bajo)
     const cajaCompensacion   = ibc * 0.04;
-    const icbf               = tipoContrato === 'aprendizaje' ? 0 : ibc * 0.03;
-    const sena               = tipoContrato === 'aprendizaje' ? 0 : ibc * 0.02;
+    const icbf               = (tipoContrato === 'aprendizaje' || exonerado) ? 0 : ibc * 0.03;
+    const sena               = (tipoContrato === 'aprendizaje' || exonerado) ? 0 : ibc * 0.02;
     const totalEmpleador     = saludEmpleador + pensionEmpleador + arlEmpleador + cajaCompensacion + icbf + sena;
     const costoEmpresa       = salarioProporcional + auxilioProporcional + totalEmpleador;
 
@@ -459,12 +480,12 @@
 
     // APORTES EMPLEADOR
     const aportes = [
-      { nombre: 'Salud empleador', pct: '8.5%', valor: saludEmpleador },
+      { nombre: 'Salud empleador', pct: exonerado ? 'Exonerado' : '8.5%', valor: saludEmpleador },
       { nombre: 'Pensión empleador', pct: '12%', valor: pensionEmpleador },
       { nombre: 'ARL (riesgo I)', pct: '0.52%', valor: arlEmpleador },
       { nombre: 'Caja compensación', pct: '4%', valor: cajaCompensacion },
-      { nombre: 'ICBF', pct: tipoContrato === 'aprendizaje' ? 'Exento' : '3%', valor: icbf },
-      { nombre: 'SENA', pct: tipoContrato === 'aprendizaje' ? 'Exento' : '2%', valor: sena },
+      { nombre: 'ICBF', pct: (tipoContrato === 'aprendizaje' || exonerado) ? 'Exento' : '3%', valor: icbf },
+      { nombre: 'SENA', pct: (tipoContrato === 'aprendizaje' || exonerado) ? 'Exento' : '2%', valor: sena },
     ];
     document.getElementById('aportes-grid').innerHTML = aportes.map(a => `
       <div class="aporte-card">
@@ -506,6 +527,25 @@
   }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Nómina mensual en Colombia: devengado, deducciones y costo para la empresa</h2>
+<h3>Lo que recibe el trabajador</h3>
+<p>El <strong>devengado</strong> incluye el salario, el auxilio de transporte (si el salario no supera 2 SMMLV) y los pagos adicionales como horas extra o comisiones. De él se descuenta <strong>4 % para salud y 4 % para pensión</strong> sobre el ingreso base de cotización (IBC), más otras deducciones: retención en la fuente, préstamos o embargos. El resultado es el <strong>neto a pagar</strong>.</p>
+<h3>Lo que paga el empleador además del salario</h3>
+<p>El empleador asume aportes de <strong>pensión (12 %)</strong>, <strong>ARL</strong> según el nivel de riesgo, y <strong>caja de compensación (4 %)</strong>. También puede deber <strong>salud (8,5 %)</strong>, <strong>SENA (2 %)</strong> e <strong>ICBF (3 %)</strong>, salvo que esté exonerado. Además debe provisionar prima, cesantías, intereses y vacaciones, que no aparecen en el aporte mensual pero sí son costo.</p>
+<h3>La exoneración del artículo 114-1</h3>
+<p>Las sociedades y personas jurídicas contribuyentes del impuesto de renta, y las personas naturales empleadoras de dos o más trabajadores, están <strong>exoneradas de salud del empleador, SENA e ICBF</strong> respecto de los trabajadores que devenguen <strong>menos de 10 SMMLV</strong>. Quien la tenga puede activarla en la herramienta y ver cómo baja el costo mensual.</p>
+<h3>Jornada, horas extra y recargos</h3>
+<p>El valor de la hora ordinaria se obtiene dividiendo el salario entre las horas mensuales de la jornada vigente (210 h con la jornada de 42 horas semanales vigente desde el 15 de julio de 2026). Sobre ese valor se aplican los recargos por trabajo nocturno, dominical y horas extra según la Ley 2466 de 2025.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese el salario, el tipo de contrato y la exoneración; la herramienta detalla devengado, deducciones, aportes del empleador y costo total. Use el resultado como referencia y compárelo con su planilla integrada (PILA).</p><p><em>Esta guía es informativa y la herramienta entrega estimaciones. Antes de presentar declaraciones o tomar decisiones, confirme los valores con un contador público o con la norma vigente.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: salario de $3.000.000</h3><ul><li>Devengado: $3.000.000 + auxilio $249.095 = <strong>$3.249.095</strong>.</li><li>Deducciones: salud $120.000 + pensión $120.000 = $240.000 → neto <strong>$3.009.095</strong>.</li><li>Aportes del empleador sin exoneración: salud $255.000, pensión $360.000, ARL $15.660, caja $120.000, ICBF $90.000, SENA $60.000 → costo mensual <strong>$4.149.755</strong>.</li><li>Con exoneración del artículo 114-1 (sin salud, ICBF ni SENA): costo mensual <strong>$3.744.755</strong>, $405.000 menos.</li></ul><p>No incluye provisiones de prestaciones.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Quién paga el 4 % de salud y pensión del trabajador?</summary><p>Lo paga el trabajador, pero el empleador lo descuenta de la nómina y lo consigna junto con su aporte.</p></details>
+<details><summary>¿Por qué el costo para la empresa es mucho mayor que el salario?</summary><p>Por los aportes, el auxilio de transporte y las provisiones de prestaciones, que suman un porcentaje importante sobre el salario.</p></details>
+<details><summary>¿El auxilio de transporte se incluye en el IBC?</summary><p>No. El auxilio de transporte no hace parte del ingreso base de cotización de salud y pensión.</p></details>
+<details><summary>¿Los contratos de aprendizaje pagan igual?</summary><p>No. El aprendiz recibe apoyo de sostenimiento y tiene reglas distintas en aportes y prestaciones.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

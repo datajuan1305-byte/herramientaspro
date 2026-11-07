@@ -348,6 +348,18 @@ tr.w-row td{background:var(--green-bg);}
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué es mejor, un plazo corto o largo?", "acceptedAnswer": {"@type": "Answer", "text": "El corto tiene cuota más alta pero menos intereses totales. El largo alivia el flujo mensual pero cuesta más. Elija el plazo más corto que su presupuesto soporte."}}, {"@type": "Question", "name": "¿Qué diferencia hay entre abonar a capital y reducir cuota?", "acceptedAnswer": {"@type": "Answer", "text": "Reducir plazo ahorra más intereses; reducir cuota alivia el flujo mensual. Pregunte a la entidad qué opciones ofrece."}}, {"@type": "Question", "name": "¿La tasa de usura es un límite?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, es el máximo que una entidad puede cobrar y la certifica la Superintendencia Financiera cada mes. Una tasa por encima de ese tope es ilegal."}}, {"@type": "Question", "name": "¿Los seguros son obligatorios?", "acceptedAnswer": {"@type": "Answer", "text": "El seguro de vida deudores suele exigirse en créditos de vivienda y libranza, pero usted puede cotizarlo con otras aseguradoras en los términos que permita la entidad."}}]}</script>
 </head>
 <body>
 
@@ -1306,6 +1318,25 @@ function dlBlob(c,t,n){const a=document.createElement('a');a.href=URL.createObje
   <a href="/" style="color:var(--muted);">Inicio</a> · <a href="/docentes/" style="color:var(--muted);">Docentes</a>
 </footer>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Cómo comparar créditos: tasa, cuota, plazo y costo total</h2>
+<h3>Mire el costo total, no solo la cuota</h3>
+<p>Una cuota baja puede esconder un crédito caro. Al extender el plazo la cuota disminuye, pero se pagan intereses durante más meses. Para comparar ofertas use tres cifras: la <strong>cuota mensual</strong>, el <strong>total pagado</strong> (cuota × meses) y los <strong>intereses totales</strong> (total pagado menos el capital).</p>
+<h3>Tasa mensual, nominal y efectiva anual</h3>
+<p>Los bancos expresan la tasa de varias formas. La <strong>efectiva anual (EA)</strong> es la que permite comparar entre entidades: <code>EA = (1 + tasa mensual)<sup>12</sup> − 1</code>. Una tasa de 1,6 % mensual equivale a cerca de 21 % EA. Compare siempre tasas expresadas en la misma base.</p>
+<h3>Cuota fija y amortización</h3>
+<p>En el sistema de cuota fija (amortización francesa) la cuota es constante. Al comienzo la mayor parte paga intereses y poco capital; con el tiempo la proporción se invierte. La fórmula es <code>cuota = capital × i ÷ (1 − (1 + i)<sup>−n</sup>)</code>, donde <em>i</em> es la tasa mensual y <em>n</em> el número de cuotas.</p>
+<h3>Seguros, comisiones y capacidad de pago</h3>
+<p>Revise seguros de vida y de deudores, cuotas de manejo y comisiones, que se suman a la cuota. Como referencia general, evite que el total de sus cuotas mensuales supere cerca de un tercio de sus ingresos, y verifique si la entidad permite <strong>abonos extra</strong> a capital sin penalidad: reducen intereses o plazo.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese monto, ingresos, deudas y plazo y compare las ofertas cargadas; revise la tabla de amortización y simule un prepago. Las tasas de cada entidad cambian con frecuencia: confirme la vigente con el banco antes de decidir.</p><p><em>Esta guía es informativa y la herramienta entrega estimaciones. Antes de presentar declaraciones o tomar decisiones, confirme los valores con un contador público o con la norma vigente.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: crédito de $30.000.000 al 1,6 % mensual (≈ 21 % EA)</h3><ul><li>36 meses: cuota <strong>$1.102.717</strong>, intereses totales <strong>$9.697.796</strong>.</li><li>48 meses: cuota <strong>$900.173</strong>, intereses <strong>$13.208.292</strong>.</li><li>60 meses: cuota <strong>$781.522</strong>, intereses <strong>$16.891.301</strong>.</li></ul><p>Pasar de 36 a 60 meses reduce la cuota en $321.195, pero cuesta $7.193.505 más en intereses. Valores calculados con la fórmula de cuota fija, sin seguros ni comisiones.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué es mejor, un plazo corto o largo?</summary><p>El corto tiene cuota más alta pero menos intereses totales. El largo alivia el flujo mensual pero cuesta más. Elija el plazo más corto que su presupuesto soporte.</p></details>
+<details><summary>¿Qué diferencia hay entre abonar a capital y reducir cuota?</summary><p>Reducir plazo ahorra más intereses; reducir cuota alivia el flujo mensual. Pregunte a la entidad qué opciones ofrece.</p></details>
+<details><summary>¿La tasa de usura es un límite?</summary><p>Sí, es el máximo que una entidad puede cobrar y la certifica la Superintendencia Financiera cada mes. Una tasa por encima de ese tope es ilegal.</p></details>
+<details><summary>¿Los seguros son obligatorios?</summary><p>El seguro de vida deudores suele exigirse en créditos de vivienda y libranza, pero usted puede cotizarlo con otras aseguradoras en los términos que permita la entidad.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

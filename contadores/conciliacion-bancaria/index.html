@@ -112,6 +112,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cada cuánto se concilia?", "acceptedAnswer": {"@type": "Answer", "text": "Como mínimo una vez al mes y por cada cuenta bancaria. Empresas con alto volumen de movimientos concilian semanal o diariamente."}}, {"@type": "Question", "name": "¿Qué hago con un cheque que lleva meses sin cobrarse?", "acceptedAnswer": {"@type": "Answer", "text": "Los cheques tienen un plazo de presentación al banco; pasado ese tiempo conviene anularlo o reexpedirlo según la política de la empresa y registrar el tratamiento acordado con su contador."}}, {"@type": "Question", "name": "¿El 4×1000 se contabiliza?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Es un gasto (o costo) generado por la cuenta y se registra cuando el banco lo debita. Aparece como partida a ajustar en libros."}}, {"@type": "Question", "name": "¿Quién debe firmar la conciliación?", "acceptedAnswer": {"@type": "Answer", "text": "La elabora quien lleva la contabilidad y la revisa una persona distinta, por control interno. Guarde el soporte junto al extracto."}}]}</script>
 </head>
 <body>
 <nav>
@@ -317,6 +329,8 @@ function sumarPartidas(tipo) {
 
 function cargarEjemplo() {
   limpiarTodo();
+  document.getElementById('c-saldo-libros').value = 45800000;
+  document.getElementById('c-saldo-banco').value = 44348920;   // concilia: 44.348.920 + 3.500.000 − 1.200.000 − 850.000 = 45.798.920
   addPartida('aumenta-libros', { concepto:'Intereses ganados cuenta de ahorros', tipo:'Intereses ganados', valor:85000, fecha:'2026-06-28' });
   addPartida('disminuye-libros', { concepto:'Comisión cuota de manejo', tipo:'Cuota de manejo', valor:32000, fecha:'2026-06-15' });
   addPartida('disminuye-libros', { concepto:'4×1000 sobre transferencias', tipo:'4×1000 (GMF)', valor:48000, fecha:'2026-06-20' });
@@ -405,6 +419,25 @@ function calcularConciliacion() {
 document.addEventListener('DOMContentLoaded', () => { cargarEjemplo(); });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Conciliación bancaria: cómo cuadrar libros y extracto</h2>
+<h3>Para qué sirve conciliar</h3>
+<p>La <strong>conciliación bancaria</strong> compara el saldo que muestra la contabilidad de la empresa con el saldo del extracto del banco. Casi nunca coinciden el último día del mes, y no necesariamente por un error: hay operaciones que una de las dos partes registró y la otra todavía no. Conciliar permite detectar errores, cobros no autorizados y partidas olvidadas, y es un control interno básico que revisan los auditores.</p>
+<h3>Partidas que ajustan el saldo de libros</h3>
+<p>Son hechos que el banco ya registró y la empresa aún no: <strong>intereses ganados</strong>, <strong>comisiones y cuotas de manejo</strong>, el <strong>4×1000</strong> (GMF), el IVA sobre comisiones, notas débito por cheques devueltos y consignaciones directas de clientes que no se habían identificado. Se contabilizan con su respectivo asiento y modifican el saldo de libros.</p>
+<h3>Partidas que ajustan el saldo del banco</h3>
+<p>Son hechos que la empresa ya registró y el banco aún no: <strong>depósitos en tránsito</strong> (consignaciones hechas al cierre que el banco acredita después), <strong>cheques girados y no cobrados</strong> y, en ocasiones, errores del banco. Estas partidas <em>no</em> se contabilizan, solo se listan en la conciliación y desaparecen cuando el banco las procesa.</p>
+<h3>La fórmula de verificación</h3>
+<p>El saldo de libros ajustado debe ser igual al saldo del banco ajustado: <code>libros + partidas a favor − partidas en contra = banco + depósitos en tránsito − cheques pendientes</code>. Si las dos cifras no coinciden, queda una diferencia sin explicar que se debe investigar: valores transpuestos, partidas repetidas o movimientos omitidos.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Cargue los saldos de libros y de extracto, agregue las partidas de conciliación y revise si la herramienta muestra <em>conciliado</em>. El botón de ejemplo carga un caso completo que cuadra para que vea la mecánica.</p><p><em>Esta guía es informativa y la herramienta entrega estimaciones. Antes de presentar declaraciones o tomar decisiones, confirme los valores con un contador público o con la norma vigente.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: conciliación de junio de 2026</h3><p>Saldo en libros: <strong>$45.800.000</strong>. Saldo del extracto: <strong>$44.348.920</strong>.</p><ul><li>Ajustes a libros: intereses +$85.000, cuota de manejo −$32.000, 4×1000 −$48.000, IVA sobre comisión −$6.080 → saldo ajustado <strong>$45.798.920</strong>.</li><li>Ajustes al banco: depósito en tránsito +$3.500.000, cheques pendientes −$1.200.000 y −$850.000 → <strong>$44.348.920 + 3.500.000 − 2.050.000 = $45.798.920</strong>.</li></ul><p>Los dos saldos ajustados coinciden: la cuenta está conciliada.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cada cuánto se concilia?</summary><p>Como mínimo una vez al mes y por cada cuenta bancaria. Empresas con alto volumen de movimientos concilian semanal o diariamente.</p></details>
+<details><summary>¿Qué hago con un cheque que lleva meses sin cobrarse?</summary><p>Los cheques tienen un plazo de presentación al banco; pasado ese tiempo conviene anularlo o reexpedirlo según la política de la empresa y registrar el tratamiento acordado con su contador.</p></details>
+<details><summary>¿El 4×1000 se contabiliza?</summary><p>Sí. Es un gasto (o costo) generado por la cuenta y se registra cuando el banco lo debita. Aparece como partida a ajustar en libros.</p></details>
+<details><summary>¿Quién debe firmar la conciliación?</summary><p>La elabora quien lleva la contabilidad y la revisa una persona distinta, por control interno. Guarde el soporte junto al extracto.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

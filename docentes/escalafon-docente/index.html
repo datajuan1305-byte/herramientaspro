@@ -141,6 +141,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cómo sé si estoy en el 2277 o en el 1278?", "acceptedAnswer": {"@type": "Answer", "text": "Por la fecha de vinculación: antes de la vigencia del Decreto 1278 de 2002 corresponde al 2277; las vinculaciones posteriores corresponden al 1278, salvo reglas de transición."}}, {"@type": "Question", "name": "¿Puedo pasar del 1278 al 2277?", "acceptedAnswer": {"@type": "Answer", "text": "No. Los docentes del 1278 permanecen en ese estatuto."}}, {"@type": "Question", "name": "¿Los posgrados suben el salario automáticamente?", "acceptedAnswer": {"@type": "Answer", "text": "No. Se debe cumplir el procedimiento y los requisitos de cada régimen y solicitar el ascenso a la entidad nominadora."}}, {"@type": "Question", "name": "¿Por qué mi salario difiere de la herramienta?", "acceptedAnswer": {"@type": "Answer", "text": "Pueden influir bonificaciones, descuentos, el decreto salarial aplicable o el nivel exacto. El desprendible de pago es la fuente oficial."}}]}</script>
 </head>
 <body>
 
@@ -632,6 +644,23 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Escalafón docente en Colombia: cómo se organiza el salario</h2>
+<h3>Dos estatutos, dos escalafones</h3>
+<p>En el sector público conviven dos regímenes. El <strong>Decreto 2277 de 1979</strong> cobija a los docentes vinculados antes de 2002 y los clasifica en <strong>14 grados</strong>. El <strong>Decreto 1278 de 2002</strong> aplica a los vinculados desde entonces y los clasifica en <strong>tres grados</strong> (1, 2 y 3), cada uno con niveles salariales A, B, C y D. Para saber el suyo revise el acto administrativo de su vinculación y su última resolución de ascenso.</p>
+<h3>Cómo se asciende</h3>
+<p>En el régimen 2277 el ascenso depende del tiempo de servicio y de requisitos de formación (cursos de actualización o estudios). En el régimen 1278 se asciende mediante la <strong>evaluación de competencias</strong> y la formación, con título de posgrado para llegar a los grados superiores. El cambio de nivel salarial dentro del grado (A, B, C, D) también se logra por evaluación.</p>
+<h3>Qué más afecta el salario</h3>
+<p>Además de la asignación básica, el salario puede incluir bonificaciones por zona de difícil acceso, por cargo directivo o por responsabilidad, y varía según la jornada y el nivel educativo. Las tablas salariales se actualizan cada año por decreto, según la negociación entre el Gobierno y Fecode.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Elija el decreto, el grado o nivel, la jornada y las bonificaciones que aplican para estimar su asignación mensual. Cuando cambie el decreto anual, confirme el valor con su secretaría de educación o con su desprendible de pago.</p><p><em>Esta guía es informativa y la herramienta entrega estimaciones. Antes de presentar declaraciones o tomar decisiones, confirme los valores con un contador público o con la norma vigente.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Cómo leer el resultado</h3><p>Suponga un docente del Decreto 1278, grado 2, nivel A, jornada completa. Seleccione esas opciones, agregue la bonificación de zona si trabaja en una sede rural de difícil acceso y la herramienta suma la asignación básica y las bonificaciones. Compare el resultado con su desprendible: si el valor básico coincide, la diferencia suele estar en bonificaciones o descuentos de ley.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cómo sé si estoy en el 2277 o en el 1278?</summary><p>Por la fecha de vinculación: antes de la vigencia del Decreto 1278 de 2002 corresponde al 2277; las vinculaciones posteriores corresponden al 1278, salvo reglas de transición.</p></details>
+<details><summary>¿Puedo pasar del 1278 al 2277?</summary><p>No. Los docentes del 1278 permanecen en ese estatuto.</p></details>
+<details><summary>¿Los posgrados suben el salario automáticamente?</summary><p>No. Se debe cumplir el procedimiento y los requisitos de cada régimen y solicitar el ascenso a la entidad nominadora.</p></details>
+<details><summary>¿Por qué mi salario difiere de la herramienta?</summary><p>Pueden influir bonificaciones, descuentos, el decreto salarial aplicable o el nivel exacto. El desprendible de pago es la fuente oficial.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

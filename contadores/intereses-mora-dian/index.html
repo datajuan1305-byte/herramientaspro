@@ -114,6 +114,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Los intereses se capitalizan?", "acceptedAnswer": {"@type": "Answer", "text": "No, en Colombia los intereses de mora tributarios son simples: no generan intereses sobre intereses."}}, {"@type": "Question", "name": "¿Qué hago si pagué un impuesto menor al que debía?", "acceptedAnswer": {"@type": "Answer", "text": "Puede corregir la declaración y pagar la diferencia más los intereses por los días de mora sobre ese valor, con la sanción por corrección que corresponda."}}, {"@type": "Question", "name": "¿Hay intereses de mora en un acuerdo de pago?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Durante la vigencia del acuerdo siguen causándose intereses, y la DIAN define las condiciones al aprobarlo."}}, {"@type": "Question", "name": "¿La fecha de pago es la del banco?", "acceptedAnswer": {"@type": "Answer", "text": "Se toma la fecha en que se realiza el pago efectivo. Consérvela con el comprobante."}}]}</script>
 </head>
 <body>
 
@@ -529,6 +541,25 @@
   }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Intereses de mora DIAN: cómo se calculan</h2>
+<h3>Qué son los intereses moratorios</h3>
+<p>Cuando un impuesto no se paga en la fecha de vencimiento, la DIAN cobra <strong>intereses de mora</strong> por cada día de retraso, además de las sanciones que correspondan. Se aplican a impuestos como IVA, renta, retención en la fuente y demás administrados por la entidad (artículos 634 y 635 del Estatuto Tributario).</p>
+<h3>Cómo se determina la tasa</h3>
+<p>La tasa de mora es la <strong>tasa de usura certificada por la Superintendencia Financiera menos dos puntos porcentuales</strong>. Como la usura se certifica cada mes, la tasa cambia mensualmente; por eso es necesario verificarla en el mes en que se paga. En octubre de 2026 fue de 26,59 % efectivo anual.</p>
+<h3>Interés simple y días en mora</h3>
+<p>El interés es <strong>simple</strong>: <code>capital × tasa EA ÷ 365 × días de mora</code>. Los días se cuentan desde el día siguiente al vencimiento hasta la fecha de pago. Cuando la mora cruza varios meses, el cálculo se hace tramo a tramo con la tasa de cada periodo.</p>
+<h3>Intereses y sanciones son cosas distintas</h3>
+<p>Los intereses compensan el uso del dinero. La <strong>sanción por extemporaneidad</strong> (artículo 641) castiga presentar tarde la declaración: es el 5 % del impuesto a cargo por cada mes o fracción de retraso, con un tope del 100 %, y existe una sanción mínima. Las dos se cobran de forma independiente; la herramienta permite estimar los intereses con o sin sanción.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Seleccione el impuesto, ingrese el valor en mora, la fecha de vencimiento y la de pago. La herramienta muestra días, tasa aplicada, intereses y total, con el desglose mes a mes. Verifique siempre la tasa vigente publicada para el mes de pago.</p><p><em>Esta guía es informativa y la herramienta entrega estimaciones. Antes de presentar declaraciones o tomar decisiones, confirme los valores con un contador público o con la norma vigente.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: IVA de $10.000.000 pagado con 183 días de mora</h3><p>Vencimiento 20 de abril de 2026 y pago el 20 de octubre de 2026: <strong>183 días</strong>.</p><ul><li>Con la tasa de octubre (26,59 % EA) como única tasa: $10.000.000 × 0,2659 ÷ 365 × 183 ≈ <strong>$1.333.000</strong>.</li><li>Aplicando la tabla mensual de tasas de 2026 tramo a tramo, la herramienta calcula <strong>$1.342.334</strong>, para un total de $11.342.334.</li></ul><p>La diferencia surge porque la tasa cambió durante esos meses.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Los intereses se capitalizan?</summary><p>No, en Colombia los intereses de mora tributarios son simples: no generan intereses sobre intereses.</p></details>
+<details><summary>¿Qué hago si pagué un impuesto menor al que debía?</summary><p>Puede corregir la declaración y pagar la diferencia más los intereses por los días de mora sobre ese valor, con la sanción por corrección que corresponda.</p></details>
+<details><summary>¿Hay intereses de mora en un acuerdo de pago?</summary><p>Sí. Durante la vigencia del acuerdo siguen causándose intereses, y la DIAN define las condiciones al aprobarlo.</p></details>
+<details><summary>¿La fecha de pago es la del banco?</summary><p>Se toma la fecha en que se realiza el pago efectivo. Consérvela con el comprobante.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

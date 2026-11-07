@@ -142,6 +142,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuándo se declara el IVA?", "acceptedAnswer": {"@type": "Answer", "text": "Depende de los ingresos brutos del año anterior: quienes alcanzaron o superaron 92.000 UVT declaran de forma bimestral y los demás cada cuatro meses. Confirme su periodo en el RUT y en el calendario tributario."}}, {"@type": "Question", "name": "¿La retención de IVA es un costo adicional?", "acceptedAnswer": {"@type": "Answer", "text": "No. Es un anticipo: el valor retenido lo consigna el comprador a la DIAN a nombre del vendedor, quien lo toma como pago en su declaración de IVA."}}, {"@type": "Question", "name": "¿Puedo descontar el IVA de todas mis compras?", "acceptedAnswer": {"@type": "Answer", "text": "Solo el IVA de bienes y servicios que se relacionan con operaciones gravadas o exentas y que cumplan los requisitos de la factura electrónica y de causalidad. El IVA de compras para operaciones excluidas no es descontable."}}, {"@type": "Question", "name": "¿El 19 % aplica a todo?", "acceptedAnswer": {"@type": "Answer", "text": "No. Existen tarifas del 5 %, bienes excluidos y exentos. Verifique la partida o la descripción del producto antes de aplicar la tarifa general."}}]}</script>
 </head>
 <body>
 
@@ -208,8 +220,8 @@
           <label for="r-retencion">¿Aplica retención de IVA?</label>
           <select id="r-retencion" onchange="calcRapido()">
             <option value="no">No aplica</option>
-            <option value="50">Sí — 50% del IVA (régimen simple)</option>
-            <option value="100">Sí — 100% del IVA (gran contribuyente)</option>
+            <option value="15">Sí — 15% del IVA (regla general)</option>
+            <option value="100">Sí — 100% del IVA (servicios de no residentes y casos especiales)</option>
           </select>
         </div>
         <div class="form-group">
@@ -293,8 +305,8 @@
           <label for="f-ret-iva">Retención de IVA</label>
           <select id="f-ret-iva" onchange="calcFactura()">
             <option value="0">No aplica</option>
-            <option value="50">50% del IVA</option>
-            <option value="100">100% del IVA</option>
+            <option value="15">15% del IVA (regla general)</option>
+            <option value="100">100% del IVA (no residentes y casos especiales)</option>
           </select>
         </div>
         <div class="form-group">
@@ -348,11 +360,10 @@
           <tr><th>Agente retenedor</th><th>Tarifa ReteIVA</th><th>Cuándo aplica</th></tr>
         </thead>
         <tbody>
-          <tr><td>Gran contribuyente</td><td class="td-pct">50%</td><td>Compras a personas naturales no responsables del régimen simple</td></tr>
-          <tr><td>Gran contribuyente</td><td class="td-pct">100%</td><td>Cuando el proveedor pertenece al régimen simple de tributación</td></tr>
-          <tr><td>Entidades del Estado</td><td class="td-pct">50%</td><td>Pagos a responsables del IVA por compras y servicios</td></tr>
-          <tr><td>Personas jurídicas</td><td class="td-pct">15%</td><td>Servicios gravados prestados por personas naturales independientes</td></tr>
-        </tbody>
+          <tr><td>Agentes de retención (grandes contribuyentes, entidades del Estado y demás señalados en el Art. 437-2 E.T.)</td><td class="td-pct">15%</td><td>Compra de bienes o servicios gravados con IVA, cuando se supera la cuantía mínima (bienes: 10 UVT; servicios: 2 UVT, según el decreto vigente)</td></tr>
+          <tr><td>Quien paga a un no residente</td><td class="td-pct">100%</td><td>Servicios gravados prestados desde el exterior; no se aplican cuantías mínimas</td></tr>
+          <tr><td>Casos especiales (Decreto 1625 de 2016)</td><td class="td-pct">100%</td><td>Por ejemplo, ciertas ventas de chatarra, aerodinos o papel y cartón para reciclar</td></tr>
+          </tbody>
       </table>
     </div>
 
@@ -526,6 +537,25 @@
   }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Cómo calcular el IVA en Colombia: base, tarifa y retención</h2>
+<h3>Qué es el IVA y quién lo cobra</h3>
+<p>El <strong>impuesto sobre las ventas (IVA)</strong> grava la venta de bienes, la prestación de servicios y las importaciones. Lo cobra el responsable al comprador y lo traslada a la DIAN, descontando el IVA que él mismo pagó en sus compras. La tarifa general es <strong>19 %</strong>; algunos bienes y servicios tienen tarifa diferencial del <strong>5 %</strong>, y otros son <strong>excluidos</strong> o <strong>exentos</strong> (con tarifa 0 %).</p>
+<h3>Excluido, exento y tarifa 0 %: no son lo mismo</h3>
+<p>Un bien <strong>excluido</strong> no causa IVA y quien lo vende no puede descontar el IVA de sus compras. Un bien <strong>exento</strong> tiene tarifa 0 %: el vendedor no cobra IVA, pero sí puede descontar el de sus insumos y pedir devolución del saldo a favor. Esta diferencia cambia el costo real de un negocio, así que identifique primero en cuál categoría cae su producto antes de aplicar una tarifa.</p>
+<h3>Calcular el IVA sobre la base gravable</h3>
+<p>Si conoce el valor <strong>sin IVA</strong>, multiplique por la tarifa: <code>IVA = base × 19 %</code> y <code>total = base × 1,19</code>. Si conoce el valor <strong>con IVA incluido</strong>, la base es <code>total ÷ 1,19</code> y el IVA es la diferencia. Confundir estos dos sentidos es el error más común: restar el 19 % del total no devuelve la base correcta.</p>
+<h3>La retención de IVA (ReteIVA)</h3>
+<p>Ciertos compradores, llamados <strong>agentes de retención</strong>, no pagan al proveedor todo el IVA: retienen una parte y la consignan a la DIAN. La regla general es retener el <strong>15 % del valor del IVA</strong>, no del valor de la factura. En operaciones con prestadores de servicios del exterior sin residencia en Colombia y en otros casos especiales la retención es del <strong>100 % del IVA</strong>. Además, para compras de bienes y servicios opera una cuantía mínima definida en UVT; consulte la que corresponda a su operación.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese el valor, elija la tarifa y si el comprador practica retención. La calculadora entrega la base, el IVA, el total y el valor neto a pagar tras la retención. Úsela para cotizar, revisar facturas o verificar la retención antes de contabilizar.</p><p><em>Esta guía es informativa y la herramienta entrega estimaciones. Antes de presentar declaraciones o tomar decisiones, confirme los valores con un contador público o con la norma vigente.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: venta de $1.000.000 con retención del 15 %</h3><p>Un proveedor factura <strong>$1.000.000</strong> sin IVA a un agente de retención.</p><ul><li>IVA 19 %: $1.000.000 × 0,19 = <strong>$190.000</strong></li><li>Total facturado: <strong>$1.190.000</strong></li><li>ReteIVA 15 % del IVA: $190.000 × 0,15 = <strong>$28.500</strong></li><li>Valor que el comprador paga al proveedor: <strong>$1.161.500</strong>, y $28.500 van a la DIAN.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuándo se declara el IVA?</summary><p>Depende de los ingresos brutos del año anterior: quienes alcanzaron o superaron 92.000 UVT declaran de forma bimestral y los demás cada cuatro meses. Confirme su periodo en el RUT y en el calendario tributario.</p></details>
+<details><summary>¿La retención de IVA es un costo adicional?</summary><p>No. Es un anticipo: el valor retenido lo consigna el comprador a la DIAN a nombre del vendedor, quien lo toma como pago en su declaración de IVA.</p></details>
+<details><summary>¿Puedo descontar el IVA de todas mis compras?</summary><p>Solo el IVA de bienes y servicios que se relacionan con operaciones gravadas o exentas y que cumplan los requisitos de la factura electrónica y de causalidad. El IVA de compras para operaciones excluidas no es descontable.</p></details>
+<details><summary>¿El 19 % aplica a todo?</summary><p>No. Existen tarifas del 5 %, bienes excluidos y exentos. Verifique la partida o la descripción del producto antes de aplicar la tarifa general.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

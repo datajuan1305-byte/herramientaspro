@@ -142,6 +142,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuándo se presenta?", "acceptedAnswer": {"@type": "Answer", "text": "En las fechas del calendario tributario, que dependen del último dígito del NIT y suelen ubicarse en abril y mayo."}}, {"@type": "Question", "name": "¿Qué gastos son deducibles?", "acceptedAnswer": {"@type": "Answer", "text": "Los que tengan relación de causalidad, necesidad y proporcionalidad con la actividad, y cumplan los requisitos formales como factura electrónica y pagos de seguridad social."}}, {"@type": "Question", "name": "¿Qué es el anticipo?", "acceptedAnswer": {"@type": "Answer", "text": "Un pago adelantado del impuesto del año siguiente. Se descuenta de la declaración del año que sigue."}}, {"@type": "Question", "name": "¿Una empresa con pérdidas debe declarar?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, debe presentar la declaración aunque no tenga impuesto a pagar, y puede compensar pérdidas fiscales en los términos de la ley."}}]}</script>
 </head>
 <body>
 
@@ -527,6 +539,25 @@ function calcularPresuntiva() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Renta de personas jurídicas: del ingreso al impuesto a pagar</h2>
+<h3>La tarifa general</h3>
+<p>Las sociedades y demás personas jurídicas contribuyentes del impuesto de renta pagan una tarifa general del <strong>35 %</strong> sobre la renta líquida gravable. Algunos sectores, como el financiero, tienen puntos adicionales de sobretasa, y existen regímenes especiales; confirme el que aplica a su entidad.</p>
+<h3>De los ingresos a la renta líquida</h3>
+<p>Se parte de los <strong>ingresos brutos</strong>, se restan devoluciones y descuentos para llegar a ingresos netos, se restan los ingresos no constitutivos de renta y se restan <strong>costos y gastos deducibles</strong>. El resultado es la renta bruta y, tras las deducciones especiales y las rentas exentas, la renta líquida gravable.</p>
+<h3>Retenciones, anticipos y saldo</h3>
+<p>Al impuesto se le restan los descuentos tributarios, las retenciones y autorretenciones practicadas y el anticipo del año anterior. El resultado es el <strong>saldo a pagar</strong>. Después se calcula el <strong>anticipo del año siguiente</strong> (75 % del impuesto, menos retenciones, en la modalidad más usada), que se paga junto con el saldo.</p>
+<h3>Tasa mínima de tributación</h3>
+<p>Desde la reforma de 2022, las personas jurídicas deben revisar la <strong>tasa mínima de tributación del 15 %</strong> sobre la utilidad contable depurada. Si la tasa efectiva es menor, hay un impuesto a adicionar. Es un cálculo adicional que el contador debe hacer aparte de este simulador.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese ingresos, devoluciones, costos y gastos, retenciones y anticipos. El simulador calcula la base, el impuesto y el total a pagar con anticipo. Úselo para planear caja antes del vencimiento.</p><p><em>Esta guía es informativa y la herramienta entrega estimaciones. Antes de presentar declaraciones o tomar decisiones, confirme los valores con un contador público o con la norma vigente.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: ingresos de $500.000.000</h3><ul><li>Ingresos brutos $500.000.000 − devoluciones $5.000.000 = $495.000.000.</li><li>Costos y gastos deducibles $350.000.000 → renta líquida <strong>$145.000.000</strong>.</li><li>Impuesto al 35 %: <strong>$50.750.000</strong>.</li><li>Retenciones $8.000.000 y anticipo del año anterior $5.000.000 → saldo a pagar <strong>$37.750.000</strong>.</li><li>Anticipo del año siguiente: 75 % × $50.750.000 − $8.000.000 = <strong>$30.062.500</strong>. Total a pagar: <strong>$67.812.500</strong>.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuándo se presenta?</summary><p>En las fechas del calendario tributario, que dependen del último dígito del NIT y suelen ubicarse en abril y mayo.</p></details>
+<details><summary>¿Qué gastos son deducibles?</summary><p>Los que tengan relación de causalidad, necesidad y proporcionalidad con la actividad, y cumplan los requisitos formales como factura electrónica y pagos de seguridad social.</p></details>
+<details><summary>¿Qué es el anticipo?</summary><p>Un pago adelantado del impuesto del año siguiente. Se descuenta de la declaración del año que sigue.</p></details>
+<details><summary>¿Una empresa con pérdidas debe declarar?</summary><p>Sí, debe presentar la declaración aunque no tenga impuesto a pagar, y puede compensar pérdidas fiscales en los términos de la ley.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

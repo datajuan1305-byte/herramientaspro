@@ -143,6 +143,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Se deprecia el terreno?", "acceptedAnswer": {"@type": "Answer", "text": "No. El terreno no se deprecia porque se considera que no pierde su capacidad de servicio con el uso; sí se deprecia la construcción que está sobre él."}}, {"@type": "Question", "name": "¿Qué pasa cuando el activo llega a valor residual?", "acceptedAnswer": {"@type": "Answer", "text": "Deja de depreciarse. Si sigue en uso, el valor en libros permanece igual al residual hasta su baja o venta."}}, {"@type": "Question", "name": "¿Puedo cambiar la vida útil?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, la vida útil se revisa al menos una vez al año y el cambio se trata como un cambio de estimación contable, de forma prospectiva."}}, {"@type": "Question", "name": "¿El valor residual puede ser cero?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, cuando se espera que el activo no tenga valor al terminar su uso o que el costo de venderlo supere lo que se recuperaría."}}]}</script>
 </head>
 <body>
 
@@ -303,17 +315,17 @@
       <table class="tabla-vu">
         <thead><tr><th>Tipo de activo</th><th>Vida útil NIIF</th><th>Vida útil fiscal ET</th><th>Tasa línea recta</th><th>Observación</th></tr></thead>
         <tbody>
-          <tr><td>🏢 Edificios y construcciones</td><td>20–50 años</td><td>20 años</td><td>2–5%</td><td>Según materiales y uso. Sin terreno.</td></tr>
-          <tr><td>🏭 Maquinaria y equipo industrial</td><td>5–15 años</td><td>10 años</td><td>7–20%</td><td>Depende de intensidad de uso y mantenimiento.</td></tr>
-          <tr><td>🚗 Vehículos automotores</td><td>5–10 años</td><td>5 años</td><td>10–20%</td><td>Vehículos de carga pueden tener menor vida útil.</td></tr>
-          <tr><td>🖥️ Equipos de cómputo</td><td>3–5 años</td><td>5 años</td><td>20–33%</td><td>La obsolescencia tecnológica puede reducir la vida útil.</td></tr>
-          <tr><td>🪑 Muebles y enseres</td><td>5–10 años</td><td>10 años</td><td>10–20%</td><td>Depende del uso y mantenimiento.</td></tr>
-          <tr><td>🌾 Equipo agrícola</td><td>5–10 años</td><td>10 años</td><td>10–20%</td><td>Tractores, cosechadoras, aspersoras.</td></tr>
-          <tr><td>🏥 Equipo médico</td><td>5–10 años</td><td>10 años</td><td>10–20%</td><td>Alta obsolescencia tecnológica.</td></tr>
-          <tr><td>💡 Instalaciones eléctricas</td><td>10–20 años</td><td>20 años</td><td>5–10%</td><td>Parte de la construcción o separado.</td></tr>
-          <tr><td>📡 Equipos de comunicación</td><td>3–5 años</td><td>5 años</td><td>20–33%</td><td>Celulares, radios, antenas.</td></tr>
+          <tr><td>🏢 Edificios y construcciones</td><td>20–50 años</td><td>45 años (máx. 2,22 %)</td><td>2–5%</td><td>Según materiales y uso. Sin terreno.</td></tr>
+          <tr><td>🏭 Maquinaria y equipo industrial</td><td>5–15 años</td><td>10 años (máx. 10 %)</td><td>7–20%</td><td>Depende de intensidad de uso y mantenimiento.</td></tr>
+          <tr><td>🚗 Vehículos automotores</td><td>5–10 años</td><td>10 años (máx. 10 %)</td><td>10–20%</td><td>Vehículos de carga pueden tener menor vida útil.</td></tr>
+          <tr><td>🖥️ Equipos de cómputo</td><td>3–5 años</td><td>5 años (máx. 20 %)</td><td>20–33%</td><td>La obsolescencia tecnológica puede reducir la vida útil.</td></tr>
+          <tr><td>🪑 Muebles y enseres</td><td>5–10 años</td><td>10 años (máx. 10 %)</td><td>10–20%</td><td>Depende del uso y mantenimiento.</td></tr>
+          <tr><td>🌾 Equipo agrícola</td><td>5–10 años</td><td>Como maquinaria: 10 años (máx. 10 %)</td><td>10–20%</td><td>Tractores, cosechadoras, aspersoras.</td></tr>
+          <tr><td>🏥 Equipo médico</td><td>5–10 años</td><td>8 años (máx. 12,5 %)</td><td>10–20%</td><td>Alta obsolescencia tecnológica.</td></tr>
+          <tr><td>💡 Instalaciones eléctricas</td><td>10–20 años</td><td>Ver Art. 137 E.T.</td><td>5–10%</td><td>Parte de la construcción o separado.</td></tr>
+          <tr><td>📡 Equipos de comunicación</td><td>3–5 años</td><td>5 años (máx. 20 %)</td><td>20–33%</td><td>Celulares, radios, antenas.</td></tr>
           <tr><td>🌳 Cultivos permanentes</td><td>10–25 años</td><td>Variable</td><td>4–10%</td><td>Café 10 años, palma 20 años, cacao 20 años.</td></tr>
-          <tr><td>🔧 Herramientas y accesorios</td><td>2–5 años</td><td>5 años</td><td>20–50%</td><td>Depreciación acelerada por desgaste.</td></tr>
+          <tr><td>🔧 Herramientas y accesorios</td><td>2–5 años</td><td>Ver Art. 137 E.T.</td><td>20–50%</td><td>Depreciación acelerada por desgaste.</td></tr>
         </tbody>
       </table>
     </div>
@@ -326,7 +338,7 @@
         </div>
         <div style="background:var(--morado-light);border:1px solid #CECBF6;border-radius:8px;padding:1rem;">
           <strong style="color:var(--morado);display:block;margin-bottom:8px;">🏛️ Depreciación fiscal (ET Art. 137)</strong>
-          El Estatuto Tributario fija vidas útiles mínimas para efectos fiscales. Si la depreciación contable es mayor a la fiscal, la diferencia no es deducible. Se puede solicitar a la DIAN una vida útil diferente. Aplica para el cálculo del impuesto de renta.
+          El Art. 137 del Estatuto Tributario fija tasas anuales máximas de depreciación para efectos fiscales (por ejemplo, 2,22 % para construcciones, 10 % para maquinaria, muebles y vehículos, y 20 % para equipos de cómputo). La empresa puede depreciar contablemente a un ritmo mayor, pero el exceso sobre la tasa máxima no es deducible en el año. Aplica para el cálculo del impuesto de renta.
         </div>
       </div>
     </div>
@@ -590,6 +602,25 @@
   }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Depreciación de activos: métodos, vida útil y valor residual</h2>
+<h3>Qué es la depreciación</h3>
+<p>La <strong>depreciación</strong> distribuye el costo de un activo fijo (equipo, vehículo, edificio) entre los años en que se usa. No es una salida de dinero: es el reconocimiento contable del desgaste. Para calcularla se necesitan tres datos: el <strong>costo</strong>, la <strong>vida útil</strong> y el <strong>valor residual</strong> (lo que se espera recuperar al final).</p>
+<h3>Línea recta</h3>
+<p>Es el método más usado: <code>depreciación anual = (costo − valor residual) ÷ vida útil</code>. Cada año se reconoce el mismo valor. Es simple, fácil de auditar y razonable cuando el activo se usa de forma pareja.</p>
+<h3>Métodos acelerados</h3>
+<p>La <strong>suma de dígitos de los años</strong> y el <strong>saldo decreciente</strong> concentran más depreciación en los primeros años. Se usan cuando el activo pierde valor o productividad más rápido al comienzo, como un computador o un vehículo. Bajo normas internacionales (NIC 16 / NIIF) el método debe reflejar el patrón real de consumo del activo.</p>
+<h3>Depreciación contable y fiscal</h3>
+<p>La contabilidad bajo NIIF y la norma fiscal pueden diferir. El artículo 137 del Estatuto Tributario fija tasas máximas anuales de depreciación para efectos fiscales; por ejemplo, 2,22 % para construcciones y edificaciones, 10 % para maquinaria, muebles y vehículos terrestres, y 20 % para equipos de cómputo y comunicación. Esa diferencia genera partidas conciliatorias que su contador debe controlar.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Elija el tipo de activo, escriba costo, valor residual y vida útil, y obtenga la tabla año por año con depreciación del periodo, acumulada y valor en libros. Compare métodos para ver cómo cambia el gasto de cada año.</p><p><em>Esta guía es informativa y la herramienta entrega estimaciones. Antes de presentar declaraciones o tomar decisiones, confirme los valores con un contador público o con la norma vigente.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: equipo de $12.000.000, residual $2.000.000, 5 años</h3><p>Línea recta: ($12.000.000 − $2.000.000) ÷ 5 = <strong>$2.000.000 por año</strong> (≈ $166.667 al mes). Al cierre del año 5 el valor en libros es $2.000.000.</p><p>Con <strong>suma de dígitos</strong> (1+2+3+4+5 = 15) sobre $10.000.000 depreciables: año 1 → 5/15 = <strong>$3.333.333</strong>; año 2 → $2.666.667; año 3 → $2.000.000; año 4 → $1.333.333; año 5 → $666.667. El total es el mismo, pero el gasto se concentra al inicio.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Se deprecia el terreno?</summary><p>No. El terreno no se deprecia porque se considera que no pierde su capacidad de servicio con el uso; sí se deprecia la construcción que está sobre él.</p></details>
+<details><summary>¿Qué pasa cuando el activo llega a valor residual?</summary><p>Deja de depreciarse. Si sigue en uso, el valor en libros permanece igual al residual hasta su baja o venta.</p></details>
+<details><summary>¿Puedo cambiar la vida útil?</summary><p>Sí, la vida útil se revisa al menos una vez al año y el cambio se trata como un cambio de estimación contable, de forma prospectiva.</p></details>
+<details><summary>¿El valor residual puede ser cero?</summary><p>Sí, cuando se espera que el activo no tenga valor al terminar su uso o que el costo de venderlo supere lo que se recuperaría.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

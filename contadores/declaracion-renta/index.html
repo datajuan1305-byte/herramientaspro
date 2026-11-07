@@ -119,6 +119,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuándo se presenta la declaración?", "acceptedAnswer": {"@type": "Answer", "text": "Entre agosto y octubre de cada año, según los dos últimos dígitos del NIT, de acuerdo con el calendario que expide el Gobierno."}}, {"@type": "Question", "name": "¿Qué pasa si no declaro estando obligado?", "acceptedAnswer": {"@type": "Answer", "text": "La DIAN puede imponer sanción por no declarar, calculada sobre los ingresos o el patrimonio, además de intereses. Es preferible presentar una declaración, así sea extemporánea."}}, {"@type": "Question", "name": "¿Los aportes voluntarios a pensión o AFC reducen el impuesto?", "acceptedAnswer": {"@type": "Answer", "text": "Pueden ser rentas exentas dentro de los límites que fija la ley, siempre que cumplan los requisitos de permanencia. Se consideran dentro del tope global."}}, {"@type": "Question", "name": "¿Qué UVT se usa?", "acceptedAnswer": {"@type": "Answer", "text": "La del año gravable que se declara. Para el año gravable 2025 es $49.799; la UVT de 2026 ($52.374) se usa para las obligaciones del año 2026."}}]}</script>
 </head>
 <body>
 
@@ -671,6 +683,25 @@
   }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Declaración de renta de personas naturales: quién declara y cómo se calcula</h2>
+<h3>¿Quién está obligado a declarar?</h3>
+<p>Una persona natural debe declarar renta cuando, en el año gravable, supera alguno de los topes que fija el Estatuto Tributario: <strong>ingresos brutos de 1.400 UVT</strong> o más, <strong>patrimonio bruto de 4.500 UVT</strong> o más, o consumos con tarjeta de crédito, compras o consignaciones bancarias de 1.400 UVT o más. Para el año gravable 2025 la UVT es <strong>$49.799</strong>. Quienes cumplen cualquiera de los topes deben declarar aunque no tengan impuesto a pagar.</p>
+<h3>De los ingresos a la renta líquida</h3>
+<p>Se parte de los ingresos brutos y se restan los <strong>ingresos no constitutivos de renta</strong> (por ejemplo, los aportes obligatorios a salud y pensión). Luego se restan costos, deducciones y <strong>rentas exentas</strong>. En rentas de trabajo, una parte importante es la exención del 25 % del pago laboral, y las deducciones y exenciones están sujetas a un límite global del <strong>40 % de los ingresos netos, sin superar 1.340 UVT</strong> al año. El resultado es la renta líquida gravable.</p>
+<h3>La tarifa progresiva</h3>
+<p>La renta líquida se convierte a UVT y se aplica la tabla del artículo 241 del Estatuto Tributario: los primeros 1.090 UVT tienen tarifa de 0 %, el tramo siguiente tributa al 19 %, luego 28 %, y así hasta el 39 % en los tramos más altos. El impuesto depende solo de la parte de la renta que cae en cada tramo, no de toda la renta.</p>
+<h3>Retenciones, anticipo y saldo</h3>
+<p>Al impuesto se restan las <strong>retenciones en la fuente</strong> que le practicaron durante el año y el anticipo del año anterior. Además, la declaración calcula un <strong>anticipo del año siguiente</strong>, que se suma al saldo a pagar y funciona como pago adelantado. Por eso una persona con impuesto menor a sus retenciones puede ver un saldo a favor reducido, o incluso a pagar, al incluir el anticipo.</p>
+<h3>Cómo usar el simulador</h3>
+<p>Ingrese ingresos, deducciones, patrimonio y retenciones. El simulador indica si estaría obligado a declarar, calcula el impuesto estimado y el saldo. Es un cálculo de referencia: la declaración definitiva incluye cédulas, descuentos y reglas particulares que dependen de su situación.</p><p><em>Esta guía es informativa y la herramienta entrega estimaciones. Antes de presentar declaraciones o tomar decisiones, confirme los valores con un contador público o con la norma vigente.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: salario de $96.000.000 al año y retenciones de $4.500.000</h3><ul><li>Ingresos brutos: $96.000.000. Deducciones y exentas aplicadas (límite 25 %): $24.000.000.</li><li>Renta líquida gravable: <strong>$72.000.000</strong> ≈ 1.445,8 UVT.</li><li>Impuesto: (1.445,8 − 1.090) × 19 % ≈ 67,6 UVT ≈ <strong>$3.366.627</strong>.</li><li>Retenciones $4.500.000 − impuesto = $1.133.373 a favor. Se resta el anticipo del año siguiente ($841.657 = 25 % del impuesto) y queda un saldo a favor de <strong>$291.716</strong>.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuándo se presenta la declaración?</summary><p>Entre agosto y octubre de cada año, según los dos últimos dígitos del NIT, de acuerdo con el calendario que expide el Gobierno.</p></details>
+<details><summary>¿Qué pasa si no declaro estando obligado?</summary><p>La DIAN puede imponer sanción por no declarar, calculada sobre los ingresos o el patrimonio, además de intereses. Es preferible presentar una declaración, así sea extemporánea.</p></details>
+<details><summary>¿Los aportes voluntarios a pensión o AFC reducen el impuesto?</summary><p>Pueden ser rentas exentas dentro de los límites que fija la ley, siempre que cumplan los requisitos de permanencia. Se consideran dentro del tope global.</p></details>
+<details><summary>¿Qué UVT se usa?</summary><p>La del año gravable que se declara. Para el año gravable 2025 es $49.799; la UVT de 2026 ($52.374) se usa para las obligaciones del año 2026.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>
