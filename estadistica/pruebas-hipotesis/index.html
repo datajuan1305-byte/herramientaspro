@@ -475,11 +475,14 @@ function preguntar() {
 <h3>Cómo interpretar el resultado</h3>
 <p>"No rechazar H₀" no demuestra que sea cierta: solo indica que no hay evidencia suficiente en contra. Y un valor p pequeño no mide la importancia práctica; acompáñalo del tamaño del efecto y de un intervalo de confianza.</p>
 <div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>Se quiere probar H₀: μ = 50 contra H₁: μ ≠ 50. Con n = 25, media muestral 53 y desviación estándar 10, el estadístico es t = (53 − 50)/(10/√25) = 1,5, con 24 grados de libertad. El valor p de dos colas es 0,147, mayor que 0,05, así que no se rechaza H₀: con estos datos no hay evidencia suficiente de que la media sea distinta de 50. Nota que el intervalo de confianza al 95 % (48,87; 57,13) contiene el 50, lo que es coherente con la decisión.</p></div>
+<h3>Errores frecuentes y buenas prácticas</h3>
+<ul><li><strong>Definir la hipótesis antes de ver los datos.</strong> Elegir la hipótesis después de mirar los resultados invalida el valor p.</li><li><strong>Pruebas múltiples.</strong> Si hace muchas pruebas, aumenta la probabilidad de un falso positivo; aplique correcciones o reduzca el número de comparaciones.</li><li><strong>"No significativo" no es "sin efecto".</strong> Puede significar que la muestra era pequeña. Revise la potencia.</li><li><strong>Datos pareados.</strong> Si las mediciones son del mismo sujeto antes y después, use una prueba pareada, no dos muestras independientes.</li><li><strong>Supuestos.</strong> Verifique normalidad y varianzas, o use alternativas no paramétricas.</li></ul>
 <h3>Preguntas frecuentes</h3>
 <details><summary>¿Qué es el valor p?</summary><p>La probabilidad, si H₀ fuera cierta, de obtener un resultado al menos tan extremo como el observado. No es la probabilidad de que H₀ sea cierta.</p></details>
 <details><summary>¿Prueba de una cola o de dos colas?</summary><p>Dos colas si buscas cualquier diferencia; una cola solo si, antes de ver los datos, tienes una razón para esperar una dirección específica.</p></details>
 <details><summary>¿Qué pasa si mi valor p es 0,06?</summary><p>Con α = 0,05 no se rechaza H₀, pero 0,05 es una convención; informa el valor p exacto y el tamaño del efecto.</p></details>
 <details><summary>¿Cuándo uso datos pareados?</summary><p>Cuando las dos mediciones provienen de las mismas unidades (antes y después en el mismo sujeto).</p></details>
+<p class="edu-meta" style="font-size:12.5px;color:#666;border-top:1px solid #e0e0dc;margin-top:1.2rem;padding-top:.7rem">Última revisión: noviembre de 2026. Conozca <a href="/metodologia/">cómo se construyen y revisan las herramientas</a>, las <a href="/fuentes/">fuentes de referencia</a> y la <a href="/politica-editorial/">política editorial</a>.</p>
 </article>
 
 <div class="hp-footer" role="contentinfo">

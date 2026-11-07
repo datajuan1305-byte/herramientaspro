@@ -493,11 +493,14 @@ function preguntarM() {
 <h3>Simulador interactivo</h3>
 <p>Además de calcular probabilidades sobre la media o la proporción muestral, la herramienta incluye un simulador: cambia la población y el tamaño de muestra y observa cómo el histograma de las medias se vuelve más angosto y más parecido a una campana a medida que n aumenta.</p>
 <div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>Una población tiene media 100 y desviación estándar 15. Con muestras de n = 36, el error estándar de la media es 15/√36 = 2,5. La probabilidad de que una media muestral supere 105 es P(Z &gt; (105 − 100)/2,5) = P(Z &gt; 2) = 0,0228, es decir, cerca de 2,3 %. Con n = 144 el error estándar baja a 1,25 y esa probabilidad se vuelve prácticamente despreciable.</p></div>
+<h3>Errores frecuentes y buenas prácticas</h3>
+<p>Un error frecuente es confundir la desviación estándar de los datos con el error estándar de la media: la primera describe cuánto varían los individuos; el segundo, cuánto varía el promedio entre muestras, y disminuye con la raíz del tamaño de muestra. Otro es creer que el teorema del límite central "arregla" cualquier muestra: con muestras pequeñas y distribuciones muy asimétricas, o con valores atípicos extremos, la aproximación normal puede ser pobre.</p><p>Como práctica, use el simulador con distribuciones distintas (simétrica, sesgada) y varios tamaños de muestra, y observe cuándo la distribución del promedio se vuelve aproximadamente normal. Eso da una idea intuitiva de cuánto necesita "n" en cada caso.</p>
 <h3>Preguntas frecuentes</h3>
 <details><summary>¿Cuál es la diferencia entre desviación estándar y error estándar?</summary><p>La desviación estándar describe la variabilidad de los datos individuales; el error estándar describe la variabilidad del estadístico (por ejemplo, la media) entre muestras.</p></details>
 <details><summary>¿Qué pasa si la población no es normal?</summary><p>Con n grande, la media muestral sigue siendo aproximadamente normal por el teorema del límite central. Con n pequeño, la forma de la población sí importa.</p></details>
 <details><summary>¿Por qué n ≥ 30?</summary><p>Es una regla práctica, no una ley: con poblaciones casi simétricas bastan menos datos, con muy asimétricas se necesitan más.</p></details>
 <details><summary>¿La distribución muestral es la de mi muestra?</summary><p>No. Tu muestra es una sola realización; la distribución muestral es el comportamiento teórico de todas las muestras posibles.</p></details>
+<p class="edu-meta" style="font-size:12.5px;color:#666;border-top:1px solid #e0e0dc;margin-top:1.2rem;padding-top:.7rem">Última revisión: noviembre de 2026. Conozca <a href="/metodologia/">cómo se construyen y revisan las herramientas</a>, las <a href="/fuentes/">fuentes de referencia</a> y la <a href="/politica-editorial/">política editorial</a>.</p>
 </article>
 
 <div class="hp-footer" role="contentinfo">

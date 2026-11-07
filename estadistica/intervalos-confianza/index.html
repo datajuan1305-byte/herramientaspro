@@ -455,11 +455,14 @@ function preguntar() {
 <h3>Tipos incluidos</h3>
 <p>La herramienta calcula intervalos para la media con σ conocida (Z) y desconocida (t de Student), para proporciones, para la varianza (ji-cuadrado, asimétrico) y el <strong>tamaño de muestra</strong> necesario para lograr un margen de error dado.</p>
 <div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>En una muestra de n = 25 se obtiene media 50 y desviación estándar 10. Con σ desconocida se usa t con 24 grados de libertad: t = 2,064 para 95 %. El margen de error es 2,064 × 10/√25 = 4,13, por lo que el intervalo de confianza del 95 % es (45,87; 54,13). Si quisieras un margen de error de 2 con la misma variabilidad, necesitarías aproximadamente n = (1,96 × 10/2)² ≈ 97 observaciones.</p></div>
+<h3>Errores frecuentes y buenas prácticas</h3>
+<ul><li><strong>Interpretación.</strong> Un intervalo del 95 % no significa que haya 95 % de probabilidad de que el parámetro esté en ese intervalo concreto; significa que el procedimiento captura el valor verdadero en el 95 % de las muestras.</li><li><strong>Elegir el intervalo correcto.</strong> Para medias con σ desconocida, use t; para proporciones, verifique el tamaño de muestra o use métodos alternativos si es pequeño.</li><li><strong>Muestra no aleatoria.</strong> Ningún intervalo corrige un muestreo sesgado.</li><li><strong>Planeación.</strong> Si necesita un margen de error determinado, calcule el tamaño de muestra antes de recolectar los datos.</li></ul>
 <h3>Preguntas frecuentes</h3>
 <details><summary>¿Z o t?</summary><p>Si conoces la desviación estándar poblacional, usa Z. Si solo tienes la de la muestra (lo habitual), usa t de Student.</p></details>
 <details><summary>¿Qué nivel de confianza elijo?</summary><p>95 % es el estándar. Sube a 99 % si el error es costoso; baja a 90 % si aceptas más riesgo a cambio de un intervalo más angosto.</p></details>
 <details><summary>¿Por qué el intervalo de la varianza no es simétrico?</summary><p>Porque se basa en la distribución ji-cuadrado, que es asimétrica.</p></details>
 <details><summary>¿Cuántos datos necesito para un margen de error dado?</summary><p>Usa el módulo de tamaño de muestra: depende del margen deseado, la confianza y la variabilidad esperada.</p></details>
+<p class="edu-meta" style="font-size:12.5px;color:#666;border-top:1px solid #e0e0dc;margin-top:1.2rem;padding-top:.7rem">Última revisión: noviembre de 2026. Conozca <a href="/metodologia/">cómo se construyen y revisan las herramientas</a>, las <a href="/fuentes/">fuentes de referencia</a> y la <a href="/politica-editorial/">política editorial</a>.</p>
 </article>
 
 <div class="hp-footer" role="contentinfo">

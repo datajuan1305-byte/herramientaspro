@@ -577,11 +577,14 @@ function buscarValorCritico() {
 <h3>Cómo usar la calculadora</h3>
 <p>Elige la distribución en el panel lateral, ingresa sus parámetros y el valor o intervalo que te interesa. Obtendrás la probabilidad, los estadísticos (media, varianza) y la gráfica con el área sombreada. Es útil para verificar ejercicios de clase y para entender cómo cambian la forma y la probabilidad al variar los parámetros.</p>
 <div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>Una prueba tiene 10 preguntas de verdadero/falso y alguien responde al azar. El número de aciertos es binomial con n = 10 y p = 0,5. La probabilidad de acertar exactamente 6 es P(X = 6) = 0,2051 y la de acertar 6 o menos, P(X ≤ 6) = 0,8281. En otro caso, si una línea recibe en promedio 3 llamadas por minuto, el número de llamadas es Poisson con λ = 3 y P(X = 2) = 0,2240. Ingresa esos parámetros y verifica.</p></div>
+<h3>Errores frecuentes y buenas prácticas</h3>
+<ul><li><strong>Elegir la distribución por el tipo de variable.</strong> Conteos de éxitos en ensayos fijos sugieren binomial; eventos por unidad de tiempo, Poisson; mediciones continuas simétricas, normal.</li><li><strong>Parámetros.</strong> Confirme si el parámetro de dispersión es la varianza o la desviación estándar; confundirlos es un error frecuente.</li><li><strong>Discreta versus continua.</strong> En distribuciones discretas P(X ≤ k) y P(X &lt; k) son distintas; en continuas, coinciden.</li><li><strong>Ajuste.</strong> Antes de asumir que sus datos siguen una distribución, compare un histograma con la curva teórica.</li></ul>
 <h3>Preguntas frecuentes</h3>
 <details><summary>¿Cómo sé qué distribución usar?</summary><p>Pregúntate qué mide la variable: conteo de éxitos en ensayos fijos (binomial), eventos por unidad de tiempo (Poisson), mediciones continuas simétricas (normal) o tiempos de espera (exponencial).</p></details>
 <details><summary>¿Qué significa P(X ≤ x)?</summary><p>Es la probabilidad acumulada: la probabilidad de que la variable sea menor o igual al valor x.</p></details>
 <details><summary>¿La densidad de una continua puede ser mayor que 1?</summary><p>Sí. La densidad no es una probabilidad; lo que no puede superar 1 es el área total bajo la curva.</p></details>
 <details><summary>¿Cuándo se aproxima una binomial con una normal?</summary><p>Cuando n es grande y p no está cerca de 0 ni de 1; una regla común es n·p ≥ 5 y n·(1 − p) ≥ 5.</p></details>
+<p class="edu-meta" style="font-size:12.5px;color:#666;border-top:1px solid #e0e0dc;margin-top:1.2rem;padding-top:.7rem">Última revisión: noviembre de 2026. Conozca <a href="/metodologia/">cómo se construyen y revisan las herramientas</a>, las <a href="/fuentes/">fuentes de referencia</a> y la <a href="/politica-editorial/">política editorial</a>.</p>
 </article>
 
 <div class="hp-footer" role="contentinfo">

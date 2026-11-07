@@ -128,11 +128,16 @@ function copiarScript(id) {
 <h3>Limitaciones</h3>
 <p>La primera carga puede tardar unos segundos y algunos paquetes no están disponibles en WebR. Para proyectos grandes conviene instalar R y RStudio en tu equipo.</p>
 <div class="ejemplo"><h3 style="margin-top:.6rem">Ejercicio sugerido</h3><p>Reproduce el ANOVA del ejemplo de la calculadora: <code>grupo &lt;- factor(rep(c("A","B","C"), each = 3))</code>, <code>y &lt;- c(5,6,7,8,9,10,11,12,13)</code> y luego <code>summary(aov(y ~ grupo))</code>. Debes obtener F = 27 con 2 y 6 grados de libertad. Prueba también <code>cor.test(c(1,2,3,4,5), c(2,4,5,4,5))</code> y compara con r = 0,775.</p></div>
+<h3>Errores frecuentes y buenas prácticas</h3>
+<p>El error más común al empezar con R es copiar código sin entenderlo. Ejecute cada línea por separado y observe qué devuelve antes de pasar a la siguiente. Revise siempre los nombres de las variables (R distingue mayúsculas de minúsculas), el separador decimal al importar datos y los valores faltantes (<code>NA</code>), que pueden hacer que funciones como <code>mean()</code> devuelvan <code>NA</code> si no se usa <code>na.rm = TRUE</code>.</p><p>Como buena práctica, guarde su código en un archivo de texto, comente lo que hace cada bloque y fije una semilla con <code>set.seed()</code> cuando use números aleatorios, para que otra persona pueda reproducir su resultado. El entorno en el navegador sirve para aprender y probar ideas; para proyectos grandes conviene instalar R y RStudio en su equipo.</p>
+<h3>Del navegador al análisis propio</h3>
+<p>Cuando domine los comandos básicos, el siguiente paso es analizar sus propios datos: cárguelos desde un archivo CSV, revise su estructura con <code>str()</code> y <code>summary()</code>, haga gráficos exploratorios con <code>hist()</code> y <code>boxplot()</code> y luego aplique las pruebas que necesite (<code>t.test()</code>, <code>cor.test()</code>, <code>lm()</code>, <code>aov()</code>). Cada función de R tiene documentación: escribir <code>?t.test</code> abre su ayuda con ejemplos. Practique con conjuntos de datos que incluye R, como <code>mtcars</code> o <code>iris</code>, antes de usar datos reales, para comprobar que entiende lo que hace cada comando.</p>
 <h3>Preguntas frecuentes</h3>
 <details><summary>¿Necesito instalar algo?</summary><p>No. Solo un navegador moderno y conexión a internet para la primera carga.</p></details>
 <details><summary>¿Se guardan mis datos?</summary><p>El código se ejecuta en tu navegador; no se envían a nuestros servidores. Guarda tu script por tu cuenta si quieres conservarlo.</p></details>
 <details><summary>¿Puedo usar cualquier paquete de R?</summary><p>No todos; WebR ofrece un conjunto de paquetes compatibles con el navegador.</p></details>
 <details><summary>¿Sirve para aprender?</summary><p>Sí: es ideal para practicar lo visto en clase y contrastar resultados con las calculadoras.</p></details>
+<p class="edu-meta" style="font-size:12.5px;color:#666;border-top:1px solid #e0e0dc;margin-top:1.2rem;padding-top:.7rem">Última revisión: noviembre de 2026. Conozca <a href="/metodologia/">cómo se construyen y revisan las herramientas</a>, las <a href="/fuentes/">fuentes de referencia</a> y la <a href="/politica-editorial/">política editorial</a>.</p>
 </article>
 
 <div class="hp-footer" role="contentinfo">

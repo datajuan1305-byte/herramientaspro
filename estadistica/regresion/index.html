@@ -615,11 +615,16 @@ function preguntarR() {
 <h3>Precauciones</h3>
 <p>Un R² alto no garantiza un buen modelo, y extrapolar fuera del rango de los datos es riesgoso. Recuerda también que asociación no implica causalidad.</p>
 <div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>Con los mismos datos, X = (1, 2, 3, 4, 5) y Y = (2, 4, 5, 4, 5), la recta ajustada es Ŷ = 2,2 + 0,6·X: por cada unidad que aumenta X, Y aumenta en promedio 0,6. El R² es 0,60 y el error estándar de la pendiente es 0,283 (t = 2,12, valor p = 0,124). Para X = 6 el modelo predice 5,8, pero eso extrapola fuera del rango observado (1 a 5), por lo que debe tomarse con cautela.</p></div>
+<h3>Errores frecuentes y buenas prácticas</h3>
+<ul><li><strong>No extrapole.</strong> La recta solo es confiable dentro del rango de datos observados; fuera de él, la predicción es una conjetura.</li><li><strong>Revise los residuos.</strong> Si muestran un patrón (curva, abanico), el modelo lineal no es adecuado o falta una variable.</li><li><strong>R² alto no basta.</strong> Un R² elevado no prueba causalidad ni garantiza buenas predicciones.</li><li><strong>Puntos influyentes.</strong> Un solo dato extremo puede inclinar la recta; compruebe qué pasa al quitarlo.</li><li><strong>Unidades y significado.</strong> Interprete la pendiente en las unidades del problema: "por cada unidad adicional de X, Y cambia en promedio…".</li></ul>
+<h3>Cómo reportar un modelo de regresión</h3>
+<p>Un reporte claro incluye la ecuación estimada con las unidades, el R², el error estándar de la estimación, la significancia de la pendiente y el tamaño de muestra. Por ejemplo: "Por cada hora adicional de estudio, la calificación aumenta en promedio 0,45 puntos (IC 95 % [0,20; 0,70]; R² = 0,38; n = 30)". Añada el gráfico con la recta ajustada y los residuos, y aclare el rango de X en el que el modelo es válido. Si usa el modelo para predecir, distinga entre el intervalo de confianza de la media y el intervalo de predicción de un valor individual, que es más ancho.</p>
 <h3>Preguntas frecuentes</h3>
 <details><summary>¿Qué significa R² = 0,80?</summary><p>Que el modelo explica aproximadamente el 80 % de la variabilidad de la respuesta en la muestra.</p></details>
 <details><summary>¿Cuándo usar regresión múltiple?</summary><p>Cuando varias variables pueden influir en la respuesta y quieres estimar el efecto de cada una controlando las demás.</p></details>
 <details><summary>¿Qué indica un coeficiente con valor p alto?</summary><p>Que no hay evidencia suficiente de que esa variable aporte al modelo, dado el resto.</p></details>
 <details><summary>¿Puedo usar variables categóricas?</summary><p>Sí, codificándolas como variables indicadoras (0/1).</p></details>
+<p class="edu-meta" style="font-size:12.5px;color:#666;border-top:1px solid #e0e0dc;margin-top:1.2rem;padding-top:.7rem">Última revisión: noviembre de 2026. Conozca <a href="/metodologia/">cómo se construyen y revisan las herramientas</a>, las <a href="/fuentes/">fuentes de referencia</a> y la <a href="/politica-editorial/">política editorial</a>.</p>
 </article>
 
 <div class="hp-footer" role="contentinfo">

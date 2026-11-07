@@ -545,11 +545,14 @@ function preguntar() {
 <h3>Cómo usar la herramienta</h3>
 <p>Selecciona el módulo (combinatoria, probabilidad de eventos, condicional o Bayes), ingresa los datos y obtén el resultado con el procedimiento. Recomendamos resolver primero a mano y usar la calculadora para verificar.</p>
 <div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>De un grupo de 10 personas se elige un comité de 3: hay C(10,3) = 120 comités posibles (el orden no importa); pero si se asignan presidente, secretario y tesorero, hay P(10,3) = 720 formas. Con Bayes: una enfermedad tiene prevalencia de 1 %, la prueba detecta al 95 % de los enfermos (sensibilidad) y da negativo en el 90 % de los sanos (especificidad). Si el resultado es positivo, la probabilidad de estar enfermo es 0,0095/(0,0095 + 0,099) ≈ 8,8 %: con una enfermedad poco frecuente, la mayoría de los positivos son falsos positivos.</p></div>
+<h3>Errores frecuentes y buenas prácticas</h3>
+<ul><li><strong>Confundir permutaciones y combinaciones.</strong> Si el orden importa, son permutaciones; si no, combinaciones. Pregúntese: ¿cambiar el orden produce un resultado distinto?</li><li><strong>Sucesos independientes y excluyentes no son lo mismo.</strong> Dos sucesos excluyentes con probabilidad positiva son dependientes, porque si ocurre uno el otro no puede ocurrir.</li><li><strong>Falacia de la tasa base.</strong> En Bayes, ignorar la prevalencia lleva a sobreestimar la probabilidad tras una prueba positiva.</li><li><strong>Verifique que sumen 1.</strong> Las probabilidades de todos los resultados posibles deben sumar 1; es la comprobación más rápida de un planteamiento.</li></ul>
 <h3>Preguntas frecuentes</h3>
 <details><summary>¿Cuál es la diferencia entre permutación y combinación?</summary><p>En la permutación importa el orden (podios, claves); en la combinación no (comités, manos de cartas).</p></details>
 <details><summary>¿Qué significa que dos eventos sean independientes?</summary><p>Que P(A∩B) = P(A)·P(B); la ocurrencia de uno no modifica la probabilidad del otro.</p></details>
 <details><summary>¿Eventos mutuamente excluyentes son independientes?</summary><p>No. Si son excluyentes y tienen probabilidad positiva, saber que uno ocurrió implica que el otro no, así que son dependientes.</p></details>
 <details><summary>¿Para qué sirve Bayes en la práctica?</summary><p>Para calcular, por ejemplo, la probabilidad de tener una enfermedad dado un resultado positivo, combinando la prevalencia con la sensibilidad y especificidad de la prueba.</p></details>
+<p class="edu-meta" style="font-size:12.5px;color:#666;border-top:1px solid #e0e0dc;margin-top:1.2rem;padding-top:.7rem">Última revisión: noviembre de 2026. Conozca <a href="/metodologia/">cómo se construyen y revisan las herramientas</a>, las <a href="/fuentes/">fuentes de referencia</a> y la <a href="/politica-editorial/">política editorial</a>.</p>
 </article>
 
 <div class="hp-footer" role="contentinfo">

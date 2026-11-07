@@ -367,11 +367,16 @@ function preguntar() {
 <h3>Significancia y tamaño</h3>
 <p>La herramienta entrega el coeficiente y la prueba de significancia (valor p). Con muestras grandes, correlaciones pequeñas pueden ser significativas sin ser relevantes en la práctica; valora el tamaño del coeficiente, no solo el valor p.</p>
 <div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>Con X = (1, 2, 3, 4, 5) y Y = (2, 4, 5, 4, 5) el coeficiente de Pearson es r = 0,775, una correlación positiva fuerte; r² = 0,60. Sin embargo, con solo 5 pares el valor p es 0,124, de modo que la correlación no es significativa al 5 %: muestras pequeñas dejan mucha incertidumbre. Spearman da 0,738 con p = 0,155. Verifica en la calculadora y observa el diagrama de dispersión.</p></div>
+<h3>Errores frecuentes y buenas prácticas</h3>
+<ul><li><strong>Grafique primero.</strong> Un diagrama de dispersión revela relaciones curvas, grupos y valores atípicos que un coeficiente único oculta.</li><li><strong>Un valor atípico puede cambiar todo.</strong> Pearson es sensible a ellos; Spearman o Kendall son más robustos.</li><li><strong>Rango restringido.</strong> Si solo observa una parte del rango de las variables, la correlación aparente será menor que la real.</li><li><strong>Correlaciones espurias.</strong> Dos series que crecen con el tiempo suelen correlacionarse sin relación causal; revise si existe un mecanismo plausible.</li><li><strong>Muestras pequeñas.</strong> Con pocos datos, un coeficiente alto puede deberse al azar: mire el intervalo de confianza, no solo el valor de r.</li></ul>
+<h3>Cómo reportar una correlación</h3>
+<p>Al informar un resultado, indique el coeficiente utilizado (Pearson, Spearman o Kendall), su valor, el tamaño de la muestra y el valor p o el intervalo de confianza. Por ejemplo: "Se observó una correlación positiva moderada entre horas de estudio y calificación (r = 0,62; IC 95 % [0,31; 0,81]; n = 30)". Añadir el diagrama de dispersión ayuda al lector a ver la forma de la relación. Evite frases que sugieran causalidad, como "las horas de estudio producen la calificación", salvo que el diseño del estudio lo respalde.</p>
 <h3>Preguntas frecuentes</h3>
 <details><summary>¿Qué valor de r se considera fuerte?</summary><p>Como guía: |r| < 0,3 débil, 0,3 a 0,7 moderada, > 0,7 fuerte. Depende de la disciplina.</p></details>
 <details><summary>¿Cuándo uso Spearman en lugar de Pearson?</summary><p>Cuando los datos son ordinales, hay atípicos marcados o la relación es monótona pero no lineal.</p></details>
 <details><summary>¿Qué es r²?</summary><p>En la correlación de Pearson, r² es la proporción de variabilidad de una variable asociada linealmente a la otra.</p></details>
 <details><summary>¿Puedo correlacionar variables categóricas?</summary><p>No con estos coeficientes; para categorías se usan tablas de contingencia y pruebas como ji-cuadrado.</p></details>
+<p class="edu-meta" style="font-size:12.5px;color:#666;border-top:1px solid #e0e0dc;margin-top:1.2rem;padding-top:.7rem">Última revisión: noviembre de 2026. Conozca <a href="/metodologia/">cómo se construyen y revisan las herramientas</a>, las <a href="/fuentes/">fuentes de referencia</a> y la <a href="/politica-editorial/">política editorial</a>.</p>
 </article>
 
 <div class="hp-footer" role="contentinfo">

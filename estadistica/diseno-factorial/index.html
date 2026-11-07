@@ -331,11 +331,14 @@ function preguntarFactorial() {
 <h3>Buenas prácticas</h3>
 <p>Aleatoriza el orden de las corridas, incluye réplicas siempre que puedas y define niveles lo bastante separados como para producir un cambio medible. Los efectos grandes sobre la respuesta señalan los factores a controlar.</p>
 <div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo resuelto</h3><p>Un diseño 2² mide el rendimiento con las combinaciones (1) = 20, a = 30, b = 25 y ab = 45. El efecto del factor A es (a + ab − b − (1))/2 = (30 + 45 − 25 − 20)/2 = 15; el de B, (b + ab − a − (1))/2 = 10; y la interacción AB, (ab + (1) − a − b)/2 = 5. Ambos factores aumentan el rendimiento y, además, su efecto combinado es mayor que la suma de los individuales (hay una interacción positiva).</p></div>
+<h3>Errores frecuentes y buenas prácticas</h3>
+<ul><li><strong>Aleatorice el orden de las corridas.</strong> Así evita que factores no controlados (cansancio, temperatura, lote de materia prima) se confundan con los efectos.</li><li><strong>Réplicas.</strong> Sin repeticiones no se puede estimar el error experimental; con una sola corrida por tratamiento, las pruebas de significancia son limitadas.</li><li><strong>Elija niveles amplios pero realistas.</strong> Niveles muy cercanos ocultan los efectos; niveles extremos pueden salirse de la región de operación.</li><li><strong>Interprete las interacciones antes que los efectos principales.</strong> Si hay interacción importante, el efecto de un factor depende del nivel del otro.</li><li><strong>Confirme.</strong> Antes de adoptar las condiciones óptimas, haga una corrida de confirmación.</li></ul>
 <h3>Preguntas frecuentes</h3>
 <details><summary>¿Cuántas corridas necesito?</summary><p>2ᵏ por réplica. Con k = 3 son 8 corridas; con dos réplicas, 16.</p></details>
 <details><summary>¿Qué pasa si hay interacción significativa?</summary><p>Interpreta los efectos principales con cautela: el efecto de un factor cambia según el nivel del otro.</p></details>
 <details><summary>¿Por qué aleatorizar?</summary><p>Para evitar que factores externos (tiempo, operario) se confundan con los efectos estudiados.</p></details>
 <details><summary>¿Y si necesito más de dos niveles?</summary><p>Se requieren diseños factoriales generales o de superficie de respuesta, que no cubre esta herramienta.</p></details>
+<p class="edu-meta" style="font-size:12.5px;color:#666;border-top:1px solid #e0e0dc;margin-top:1.2rem;padding-top:.7rem">Última revisión: noviembre de 2026. Conozca <a href="/metodologia/">cómo se construyen y revisan las herramientas</a>, las <a href="/fuentes/">fuentes de referencia</a> y la <a href="/politica-editorial/">política editorial</a>.</p>
 </article>
 
 <div class="hp-footer" role="contentinfo">
