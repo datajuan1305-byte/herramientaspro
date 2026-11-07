@@ -164,6 +164,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cada cuánto se repite?", "acceptedAnswer": {"@type": "Answer", "text": "Para seguimiento suele repetirse cada 2 a 4 semanas durante el tratamiento, según el criterio clínico."}}, {"@type": "Question", "name": "¿Qué hago con una respuesta positiva en la pregunta 9?", "acceptedAnswer": {"@type": "Answer", "text": "Realizar una evaluación inmediata del riesgo suicida y seguir el protocolo de su institución."}}, {"@type": "Question", "name": "¿Pueden usarse en niños?", "acceptedAnswer": {"@type": "Answer", "text": "Existen versiones para adolescentes; en niños se usan otros instrumentos."}}, {"@type": "Question", "name": "¿Reemplazan a la entrevista clínica?", "acceptedAnswer": {"@type": "Answer", "text": "No; solo orientan la necesidad de valoración."}}]}</script>
 </head>
 <body>
 
@@ -414,6 +426,7 @@ function calcularPHQ9() {
         <b>Puntaje total: ${score} / 27 (${pct}%)</b><br>
         <b>Clasificación:</b> ${clas.clase}<br>
         <b>Recomendación clínica:</b> ${clas.rec}<br>
+        <i>Resultado de tamizaje: no es un diagnóstico; confirme con una evaluación clínica.</i><br>
         ${item9 >= 1 ? `<b style="color:#ef9a9a;">⚠️ ALERTA — Pregunta 9 (ideación suicida): ${item9} punto(s). Evaluar riesgo suicida inmediatamente.</b>` : '✅ Pregunta 9 (ideación suicida): 0 — Sin indicador de riesgo suicida.'}
       </div>
     </div>
@@ -445,7 +458,8 @@ function calcularGAD7() {
       <div class="resultado-detalle">
         <b>Puntaje total: ${score} / 21 (${pct}%)</b><br>
         <b>Clasificación:</b> ${clas.clase}<br>
-        <b>Recomendación clínica:</b> ${clas.rec}
+        <b>Recomendación clínica:</b> ${clas.rec}<br>
+        <i>Resultado de tamizaje: no es un diagnóstico; confirme con una evaluación clínica.</i>
       </div>
     </div>
     <div class="alerta alerta-violeta" style="margin-top:0.8rem;">
@@ -468,6 +482,25 @@ renderPreguntas(preguntasPHQ, 'phq', 'phq-preguntas', 'phq-progress', 'phq-progr
 renderPreguntas(preguntasGAD, 'gad', 'gad-preguntas', 'gad-progress', 'gad-progreso-txt');
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>PHQ-9 y GAD-7: tamizaje de depresión y ansiedad</h2>
+<h3>Qué miden</h3>
+<p>El <strong>PHQ-9</strong> evalúa los síntomas de depresión de las últimas dos semanas con 9 preguntas (0 a 27 puntos). El <strong>GAD-7</strong> evalúa ansiedad generalizada con 7 preguntas (0 a 21 puntos). Son cuestionarios de autorreporte breves, validados en español y de uso común en atención primaria.</p>
+<h3>Puntos de corte</h3>
+<p>PHQ-9: 0 a 4 mínima; 5 a 9 leve; 10 a 14 moderada; 15 a 19 moderadamente grave; 20 a 27 grave. GAD-7: 0 a 4 mínima; 5 a 9 leve; 10 a 14 moderada; 15 a 21 grave. Un puntaje de 10 o más suele usarse como umbral para una evaluación más completa.</p>
+<h3>Son tamizaje, no diagnóstico</h3>
+<p>Un puntaje alto indica la necesidad de una valoración clínica; no confirma un trastorno depresivo o de ansiedad. El diagnóstico requiere una entrevista que considere duración, deterioro funcional, causas médicas, uso de sustancias y otros trastornos. Un puntaje bajo tampoco excluye un problema.</p>
+<h3>La pregunta 9 y el riesgo suicida</h3>
+<p>La pregunta 9 del PHQ-9 explora pensamientos de muerte o autolesión. <strong>Cualquier respuesta distinta de cero exige una evaluación inmediata del riesgo</strong> por un profesional, sin importar el puntaje total. Pregunte directamente, de manera calmada y sin juzgar; preguntar no induce la conducta.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Responda según las últimas dos semanas. La herramienta calcula el puntaje y la categoría y muestra un recordatorio de que es un resultado de tamizaje. Úsela para el seguimiento: repetir el cuestionario permite ver la evolución.</p><p><em>Esta herramienta es de tamizaje y apoyo para profesionales: no es un diagnóstico y no sustituye la valoración clínica. Si usted o alguien cercano está en riesgo inmediato, llame a la línea de emergencias 123 o acuda al servicio de urgencias más cercano; también puede consultar las líneas de salud mental de su departamento o del Ministerio de Salud.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo de interpretación</h3><p>Una persona obtiene en el PHQ-9: 4 ítems con puntaje 2 (8 puntos) y 3 ítems con puntaje 1 (3 puntos), para <strong>11 puntos</strong>, que corresponden a síntomas depresivos <em>moderados</em>. Como el resultado es de tamizaje, se recomienda una entrevista clínica y revisar la pregunta 9.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cada cuánto se repite?</summary><p>Para seguimiento suele repetirse cada 2 a 4 semanas durante el tratamiento, según el criterio clínico.</p></details>
+<details><summary>¿Qué hago con una respuesta positiva en la pregunta 9?</summary><p>Realizar una evaluación inmediata del riesgo suicida y seguir el protocolo de su institución.</p></details>
+<details><summary>¿Pueden usarse en niños?</summary><p>Existen versiones para adolescentes; en niños se usan otros instrumentos.</p></details>
+<details><summary>¿Reemplazan a la entrevista clínica?</summary><p>No; solo orientan la necesidad de valoración.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

@@ -146,6 +146,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué ecuación es la mejor?", "acceptedAnswer": {"@type": "Answer", "text": "Mifflin-St Jeor suele ser la más precisa en adultos, pero ninguna es perfecta."}}, {"@type": "Question", "name": "¿Cómo escojo el factor de actividad?", "acceptedAnswer": {"@type": "Answer", "text": "Sea realista: sobrestimar la actividad es un error muy común."}}, {"@type": "Question", "name": "¿Sirve para niños?", "acceptedAnswer": {"@type": "Answer", "text": "No; en la infancia se usan ecuaciones específicas."}}, {"@type": "Question", "name": "¿Cuándo recalcular?", "acceptedAnswer": {"@type": "Answer", "text": "Cada vez que el peso cambie de forma importante."}}]}</script>
 </head>
 <body>
 
@@ -569,6 +581,25 @@ function calcularPatologia() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Requerimiento calórico: TMB, factor de actividad y gasto energético</h2>
+<h3>TMB y gasto total</h3>
+<p>La <strong>tasa metabólica basal (TMB)</strong> es la energía que el cuerpo gasta en reposo. El gasto energético total se obtiene multiplicándola por un factor de actividad (aproximadamente 1,2 sedentario, 1,375 ligero, 1,55 moderado, 1,725 intenso y 1,9 muy intenso). Es una estimación: el gasto real varía entre personas.</p>
+<h3>Ecuaciones disponibles</h3>
+<p>La ecuación de <strong>Mifflin-St Jeor</strong> es de las más usadas en adultos; la de <strong>Harris-Benedict</strong> (revisada) y las de <strong>OMS/Schofield</strong> dan resultados cercanos pero no idénticos. Para hombres, Mifflin es <code>10 × peso + 6,25 × talla − 5 × edad + 5</code>; para mujeres, el último término es −161.</p>
+<h3>Ajustes por objetivo</h3>
+<p>Para bajar de peso se resta un déficit moderado, y para ganar se suma un superávit. Evite aportes por debajo de las necesidades mínimas sin supervisión. En enfermedad, embarazo, lactancia o infancia, los requerimientos cambian y se calculan con otros métodos.</p>
+<h3>Limitaciones</h3>
+<p>Las ecuaciones no distinguen composición corporal y pueden desviarse en obesidad grave, deportistas con mucha masa muscular y adultos mayores. Use el resultado como punto de partida y ajústelo con el seguimiento del peso.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese sexo, edad, peso, talla y nivel de actividad. La herramienta calcula la TMB con tres ecuaciones y el gasto total.</p><p><em>Esta guía es informativa y las cifras son estimaciones. No reemplaza la valoración de un nutricionista-dietista ni del médico tratante, especialmente en personas con enfermedades, embarazo o niños.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: hombre de 30 años, 70 kg, 175 cm, actividad ligera</h3><p>Mifflin-St Jeor: 10 × 70 + 6,25 × 175 − 5 × 30 + 5 = <strong>1.649 kcal</strong> de TMB. Con factor 1,375, el gasto total es de aproximadamente <strong>2.267 kcal/día</strong>. Harris-Benedict da 1.696 y OMS 1.691 de TMB.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué ecuación es la mejor?</summary><p>Mifflin-St Jeor suele ser la más precisa en adultos, pero ninguna es perfecta.</p></details>
+<details><summary>¿Cómo escojo el factor de actividad?</summary><p>Sea realista: sobrestimar la actividad es un error muy común.</p></details>
+<details><summary>¿Sirve para niños?</summary><p>No; en la infancia se usan ecuaciones específicas.</p></details>
+<details><summary>¿Cuándo recalcular?</summary><p>Cada vez que el peso cambie de forma importante.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

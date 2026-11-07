@@ -151,6 +151,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Por qué se eliminó el coeficiente de raza?", "acceptedAnswer": {"@type": "Answer", "text": "Porque la raza es una construcción social y no una variable biológica adecuada; la ecuación de 2021 se calculó sin ese factor para evitar sesgos en el diagnóstico."}}, {"@type": "Question", "name": "¿Qué fórmula uso para dosificar medicamentos?", "acceptedAnswer": {"@type": "Answer", "text": "Depende del fármaco y del prospecto; muchos se basan en Cockcroft-Gault, otros en TFGe. Siga la referencia de cada medicamento."}}, {"@type": "Question", "name": "¿Una TFGe de 60 a 89 significa enfermedad renal?", "acceptedAnswer": {"@type": "Answer", "text": "No necesariamente. Se requiere evidencia de daño renal durante más de tres meses, por ejemplo albuminuria."}}, {"@type": "Question", "name": "¿Hay que tomar la creatinina en ayunas?", "acceptedAnswer": {"@type": "Answer", "text": "La creatinina varía poco con la ingesta, pero una comida muy rica en carne cocida puede elevarla de forma transitoria; siga las indicaciones del laboratorio."}}]}</script>
 </head>
 <body>
 
@@ -186,7 +198,7 @@
     <div class="card">
       <h2>🧮 Tasa de Filtración Glomerular Estimada (TFGe)</h2>
       <div class="info-box">
-        <strong>¿Qué fórmula usar?</strong> <b>CKD-EPI</b> es la más precisa para adultos (recomendada por KDIGO 2022). <b>Cockcroft-Gault</b> es útil para ajuste de dosis de medicamentos. <b>MDRD</b> se sigue usando en reportes de laboratorio.
+        <strong>¿Qué fórmula usar?</strong> <b>CKD-EPI 2021</b> (sin coeficiente de raza) es la ecuación recomendada por KDIGO para estimar la TFG en adultos. <b>Cockcroft-Gault</b> es útil para ajuste de dosis de medicamentos. <b>MDRD</b> se sigue usando en reportes de laboratorio.
       </div>
       <div class="form-grid">
         <div class="form-group">
@@ -210,15 +222,7 @@
           <input type="number" id="peso" value="70" min="20" max="200" step="1" />
           <span class="form-hint">Requerido para Cockcroft-Gault</span>
         </div>
-        <div class="form-group">
-          <label>Raza / Etnia</label>
-          <select id="raza">
-            <option value="otras" selected>Mestizo / Otras (Colombia)</option>
-            <option value="negra">Afrodescendiente</option>
-          </select>
-          <span class="form-hint">Afecta la fórmula MDRD (factor ×1.212)</span>
-        </div>
-        <div class="form-group">
+                <div class="form-group">
           <label>Creatinina en orina 24h (mg/dL)</label>
           <input type="number" id="cr-orina" value="" min="0" step="1" placeholder="Opcional" />
           <span class="form-hint">Para clearance medido (opcional)</span>
@@ -406,7 +410,7 @@ function calcularTFG() {
   const edad  = parseFloat(document.getElementById('edad').value);
   const sexo  = document.getElementById('sexo').value;
   const peso  = parseFloat(document.getElementById('peso').value);
-  const raza  = document.getElementById('raza').value;
+  const raza  = 'otras'; // las ecuaciones vigentes (CKD-EPI 2021) no usan coeficiente de raza
   const crO   = parseFloat(document.getElementById('cr-orina').value) || null;
   const volO  = parseFloat(document.getElementById('vol-orina').value) || null;
 
@@ -419,20 +423,13 @@ function calcularTFG() {
   // ── MDRD-4 ──
   let mdrd = 175 * Math.pow(cr, -1.154) * Math.pow(edad, -0.203);
   if (sexo === 'F') mdrd *= 0.742;
-  if (raza === 'negra') mdrd *= 1.212;
 
-  // ── CKD-EPI 2009 ──
-  let ckdepi;
+  // ── CKD-EPI 2021 (creatinina, sin coeficiente de raza) ──
   const kappa = sexo === 'F' ? 0.7 : 0.9;
-  const alpha = sexo === 'F' ? -0.329 : -0.411;
+  const alpha = sexo === 'F' ? -0.241 : -0.302;
   const crK   = cr / kappa;
-  if (crK < 1) {
-    ckdepi = 141 * Math.pow(crK, alpha) * Math.pow(0.9929, edad);
-  } else {
-    ckdepi = 141 * Math.pow(crK, -1.209) * Math.pow(0.9929, edad);
-  }
-  if (sexo === 'F') ckdepi *= 1.018;
-  if (raza === 'negra') ckdepi *= 1.159;
+  let ckdepi = 142 * Math.pow(Math.min(crK, 1), alpha) * Math.pow(Math.max(crK, 1), -1.200) * Math.pow(0.9938, edad);
+  if (sexo === 'F') ckdepi *= 1.012;
 
   // ── Clearance medido (si hay orina 24h) ──
   let clMedido = null;
@@ -460,7 +457,7 @@ function calcularTFG() {
       <div class="resultado-titulo">Resultado — Tasa de Filtración Glomerular Estimada</div>
       <div class="resultado-tfg">${fmt(ckdepi)} <span class="resultado-unidad">mL/min/1.73m²</span></div>
       <div class="resultado-estadio">Estadio ${estadio} — ${color.label}</div>
-      <div class="resultado-desc">Fórmula principal: CKD-EPI 2009 (recomendada por KDIGO 2022)</div>
+      <div class="resultado-desc">Fórmula principal: CKD-EPI 2021 (creatinina, sin coeficiente de raza)</div>
       <div class="formulas-grid">
         <div class="formula-item">
           <div class="formula-valor">${fmt(ckdepi)}</div>
@@ -478,7 +475,7 @@ function calcularTFG() {
       </div>
       <div class="resultado-detalle">
         <b>Datos ingresados:</b><br>
-        Creatinina: ${cr} mg/dL | Edad: ${edad} años | Sexo: ${sexo === 'M' ? 'Masculino' : 'Femenino'} | Peso: ${peso} kg | Raza: ${raza === 'negra' ? 'Afrodescendiente' : 'Mestizo/Otras'}<br><br>
+        Creatinina: ${cr} mg/dL | Edad: ${edad} años | Sexo: ${sexo === 'M' ? 'Masculino' : 'Femenino'} | Peso: ${peso} kg<br><br>
         <b>Interpretación clínica — Estadio ${estadio}:</b><br>
         ${getRecomendaciones(estadio)}
       </div>
@@ -507,6 +504,25 @@ function getRecomendaciones(estadio) {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Tasa de filtración glomerular estimada: CKD-EPI, Cockcroft-Gault y estadios de ERC</h2>
+<h3>TFGe y clearance: no son lo mismo</h3>
+<p>La <strong>tasa de filtración glomerular estimada (TFGe)</strong> se calcula a partir de la creatinina sérica, la edad y el sexo, y se expresa en mL/min/1,73 m². El <strong>clearance de creatinina</strong> medido usa orina de 24 horas. En la práctica, la TFGe sirve para detectar y estadificar la enfermedad renal crónica, y las estimaciones por fórmula son el método de rutina.</p>
+<h3>CKD-EPI 2021</h3>
+<p>La ecuación <strong>CKD-EPI 2021</strong> con creatinina, recomendada por KDIGO para adultos, <strong>no incluye coeficiente de raza</strong>. Usa un factor distinto según el sexo y una pendiente diferente por encima y por debajo de un valor de creatinina de referencia (0,7 mg/dL en mujeres y 0,9 en hombres). Reemplazó a la versión de 2009, que ajustaba por raza.</p>
+<h3>Cockcroft-Gault y ajuste de fármacos</h3>
+<p>La fórmula de <strong>Cockcroft-Gault</strong> estima el aclaramiento en mL/min usando el peso: <code>(140 − edad) × peso ÷ (72 × creatinina)</code>, multiplicado por 0,85 en mujeres. Muchos prospectos y estudios de dosificación de fármacos se basan en ella. El <strong>MDRD</strong> es una ecuación más antigua que sigue apareciendo en algunos reportes de laboratorio.</p>
+<h3>Estadios de la ERC (KDIGO)</h3>
+<p>G1 ≥ 90; G2 60 a 89; G3a 45 a 59; G3b 30 a 44; G4 15 a 29; G5 &lt; 15 mL/min/1,73 m². El diagnóstico de enfermedad renal crónica exige <strong>más de tres meses</strong> de alteración y se complementa con albuminuria u otros marcadores de daño. Un G2 sin marcadores de daño no es ERC.</p>
+<h3>Cuándo la estimación falla</h3>
+<p>Las fórmulas suponen creatinina estable. No son confiables en lesión renal aguda, embarazo, desnutrición, amputaciones, masa muscular muy alta o baja, o con dietas especiales. En esos casos considere depuración medida o cistatina C. Interprete siempre en el contexto clínico.</p><p><em>Uso exclusivo de apoyo para profesionales de la salud. Esta herramienta no sustituye el juicio clínico ni los protocolos de su institución; verifique siempre los resultados y las dosis con fuentes oficiales y con un segundo profesional.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: mujer de 60 años, creatinina 1,0 mg/dL, 70 kg</h3><ul><li><strong>CKD-EPI 2021:</strong> 142 × (1,0 ÷ 0,7)<sup>−1,2</sup> × 0,9938<sup>60</sup> × 1,012 ≈ <strong>64,5 mL/min/1,73 m²</strong> (estadio G2).</li><li><strong>Cockcroft-Gault:</strong> (140 − 60) × 70 ÷ (72 × 1,0) × 0,85 ≈ <strong>66,1 mL/min</strong>.</li><li><strong>MDRD-4:</strong> ≈ <strong>56,6 mL/min/1,73 m²</strong>.</li></ul><p>Las fórmulas no coinciden exactamente: por eso cada una tiene usos distintos.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Por qué se eliminó el coeficiente de raza?</summary><p>Porque la raza es una construcción social y no una variable biológica adecuada; la ecuación de 2021 se calculó sin ese factor para evitar sesgos en el diagnóstico.</p></details>
+<details><summary>¿Qué fórmula uso para dosificar medicamentos?</summary><p>Depende del fármaco y del prospecto; muchos se basan en Cockcroft-Gault, otros en TFGe. Siga la referencia de cada medicamento.</p></details>
+<details><summary>¿Una TFGe de 60 a 89 significa enfermedad renal?</summary><p>No necesariamente. Se requiere evidencia de daño renal durante más de tres meses, por ejemplo albuminuria.</p></details>
+<details><summary>¿Hay que tomar la creatinina en ayunas?</summary><p>La creatinina varía poco con la ingesta, pero una comida muy rica en carne cocida puede elevarla de forma transitoria; siga las indicaciones del laboratorio.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

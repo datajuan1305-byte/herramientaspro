@@ -103,6 +103,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuánto sodio se recomienda?", "acceptedAnswer": {"@type": "Answer", "text": "Las guías suelen sugerir menos de 2.000 mg de sodio al día (unos 5 g de sal); en hipertensión se aconsejan metas aún más bajas bajo supervisión."}}, {"@type": "Question", "name": "¿Cuánto peso conviene bajar al inicio?", "acceptedAnswer": {"@type": "Answer", "text": "Una meta inicial razonable es de 5 % a 10 % del peso actual, a un ritmo gradual."}}, {"@type": "Question", "name": "¿La dieta DASH sirve solo en hipertensión?", "acceptedAnswer": {"@type": "Answer", "text": "Es un patrón saludable útil también en prevención cardiovascular; se adapta si hay enfermedad renal."}}, {"@type": "Question", "name": "¿Una sola medida de presión confirma hipertensión?", "acceptedAnswer": {"@type": "Answer", "text": "No. El diagnóstico requiere mediciones repetidas en condiciones adecuadas."}}]}</script>
 </head>
 <body>
 <nav>
@@ -380,18 +392,18 @@ function calcularPlan() {
   // Análisis de presión arterial
   const [sis, dia] = pa.split('/').map(s => parseInt(s.trim()) || 0);
   let claseHTA, colorHTA;
-  if (sis < 120 && dia < 80)       { claseHTA = 'Normal'; colorHTA = '#2e7d32'; }
-  else if (sis < 130)              { claseHTA = 'Elevada'; colorHTA = '#f9a825'; }
-  else if (sis < 140 || dia < 90)  { claseHTA = 'HTA Estadio 1'; colorHTA = '#f57c00'; }
-  else if (sis < 180)              { claseHTA = 'HTA Estadio 2'; colorHTA = '#c62828'; }
-  else                              { claseHTA = '⚠️ Crisis hipertensiva — Derivar urgente'; colorHTA = '#b71c1c'; }
+  if (sis > 180 || dia > 120)      { claseHTA = '⚠️ Crisis hipertensiva — Derivar urgente'; colorHTA = '#b71c1c'; }
+  else if (sis >= 140 || dia >= 90) { claseHTA = 'HTA Estadio 2'; colorHTA = '#c62828'; }
+  else if (sis >= 130 || dia >= 80) { claseHTA = 'HTA Estadio 1'; colorHTA = '#f57c00'; }
+  else if (sis >= 120)             { claseHTA = 'Elevada'; colorHTA = '#f9a825'; }
+  else                             { claseHTA = 'Normal'; colorHTA = '#2e7d32'; }
 
   // Análisis glicemia
   let claseGlic, colorGlic;
   if (glicemia < 100)       { claseGlic = 'Normal'; colorGlic = '#2e7d32'; }
   else if (glicemia < 126)  { claseGlic = 'Prediabetes (glic. alterada)'; colorGlic = '#f9a825'; }
-  else if (glicemia < 180)  { claseGlic = 'Diabetes — control aceptable'; colorGlic = '#f57c00'; }
-  else                       { claseGlic = '⚠️ Diabetes — control deficiente'; colorGlic = '#c62828'; }
+  else if (glicemia < 180)  { claseGlic = 'Rango de diabetes (≥ 126 mg/dL en ayunas)'; colorGlic = '#f57c00'; }
+  else                       { claseGlic = '⚠️ Hiperglucemia marcada — evaluar con su médico'; colorGlic = '#c62828'; }
 
   // Distribución de comidas (5 comidas, fraccionando CHO para diabetes)
   const comidas = [
@@ -436,8 +448,8 @@ function calcularPlan() {
 
       <div class="resultado-detalle">
         <b>IMC actual:</b> ${fmtD(imc)} kg/m² | <b>Peso ideal estimado:</b> ${fmt(pesoIdeal)} kg<br>
-        ${objetivo==='perder' && pesoPerder>0 ? `<b>Meta de pérdida:</b> ${fmt(pesoPerder)} kg (5–10% del peso actual)<br>` : ''}
-        <b>HbA1c actual:</b> ${hba1c}% ${hba1c < 7 ? '✅ Meta cumplida (&lt;7%)' : hba1c < 8 ? '⚠️ Cerca de la meta' : '🔴 Por encima de la meta — ajustar plan'}<br><br>
+        ${objetivo==='perder' && pesoPerder>0 ? `<b>Meta inicial de pérdida:</b> ${fmt(peso*0.05)}–${fmt(peso*0.10)} kg (5–10% del peso actual)<br>` : ''}
+        <b>HbA1c actual:</b> ${hba1c}% ${hba1c < 7 ? '✅ Meta cumplida (&lt;7%)' : hba1c < 8 ? '⚠️ Por encima de la meta general (&lt;7%); la meta se individualiza' : '🔴 Por encima de la meta — ajustar plan'}<br><br>
         <b>Recomendaciones clave:</b><br>
         ${condKey.includes('diabetes') || condKey === 'ambas' || condKey === 'prediabetes' ? '• Fraccionar carbohidratos en 5 comidas para evitar picos glicémicos<br>• Preferir carbohidratos de bajo índice glicémico (avena, quinua, legumbres)<br>' : ''}
         ${condKey.includes('hta') || condKey === 'ambas' ? '• Eliminar sal de mesa y caldos concentrados<br>• Aumentar potasio (frutas, verduras) salvo contraindicación renal<br>' : ''}
@@ -448,6 +460,25 @@ function calcularPlan() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Dieta en patologías frecuentes: cómo se plantea un plan inicial</h2>
+<h3>Punto de partida: energía y proteína</h3>
+<p>Un plan nutricional inicia con la <strong>tasa metabólica basal</strong> (por ejemplo, con la ecuación de Mifflin-St Jeor), que se multiplica por un factor de actividad para obtener el gasto energético total. Si el objetivo es bajar de peso, se resta un déficit moderado, habitualmente de unas 500 kcal/día. La proteína y los demás macronutrientes se reparten según la condición clínica.</p>
+<h3>Hipertensión arterial</h3>
+<p>La clasificación ACC/AHA 2017 define: presión elevada 120 a 129 y menos de 80; estadio 1 de 130 a 139 u 80 a 89; estadio 2 desde 140 o 90; y crisis hipertensiva por encima de 180 o 120. La dieta tipo DASH, rica en frutas, verduras y lácteos bajos en grasa, y la reducción del sodio (en general por debajo de 2.000 mg/día, y cerca de 1.500 mg en personas de mayor riesgo) ayudan a bajar la presión.</p>
+<h3>Diabetes y dislipidemia</h3>
+<p>En diabetes se busca un reparto regular de carbohidratos, preferir cereales integrales y fibra, y limitar azúcares libres; las metas de glucosa y HbA1c las define el equipo tratante. En dislipidemia se reduce la grasa saturada y trans, se aumentan la fibra soluble y las grasas insaturadas, y se controla el peso. En obesidad, una pérdida inicial de 5 % a 10 % del peso ya mejora los marcadores metabólicos.</p>
+<h3>Enfermedad renal y otras condiciones</h3>
+<p>En enfermedad renal crónica la proteína, el potasio, el fósforo y el líquido se individualizan según el estadio y los laboratorios. Esta herramienta no sustituye ese manejo. Las personas con embarazo, desnutrición, cáncer, cirugía reciente o trastornos de la conducta alimentaria requieren atención especializada.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese datos antropométricos, actividad, condición y valores clínicos. Obtendrá una estimación de calorías y macronutrientes, la clasificación de la presión y recomendaciones generales. Úselas como borrador para discutir con el profesional.</p><p><em>Esta guía es informativa y las cifras son estimaciones. No reemplaza la valoración de un nutricionista-dietista ni del médico tratante, especialmente en personas con enfermedades, embarazo o niños.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: hombre de 55 años, 85 kg, 168 cm, con presión 150/95</h3><ul><li>TMB (Mifflin-St Jeor) ≈ <strong>1.630 kcal</strong>; con actividad ligera (×1,375) ≈ <strong>2.241 kcal</strong>.</li><li>Con un déficit de 500 kcal: <strong>1.741 kcal/día</strong>, con unos 185 g de carbohidratos, 98 g de proteína y 53 g de grasa.</li><li>Presión 150/95: <strong>estadio 2</strong> según ACC/AHA; sodio máximo de 1.500 mg/día como meta de apoyo y remisión al médico.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuánto sodio se recomienda?</summary><p>Las guías suelen sugerir menos de 2.000 mg de sodio al día (unos 5 g de sal); en hipertensión se aconsejan metas aún más bajas bajo supervisión.</p></details>
+<details><summary>¿Cuánto peso conviene bajar al inicio?</summary><p>Una meta inicial razonable es de 5 % a 10 % del peso actual, a un ritmo gradual.</p></details>
+<details><summary>¿La dieta DASH sirve solo en hipertensión?</summary><p>Es un patrón saludable útil también en prevención cardiovascular; se adapta si hay enfermedad renal.</p></details>
+<details><summary>¿Una sola medida de presión confirma hipertensión?</summary><p>No. El diagnóstico requiere mediciones repetidas en condiciones adecuadas.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

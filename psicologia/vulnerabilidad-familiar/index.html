@@ -177,6 +177,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué es hacinamiento crítico?", "acceptedAnswer": {"@type": "Answer", "text": "Según el DANE, hogares con más de tres personas por cuarto (sin contar cocina, baño ni garaje)."}}, {"@type": "Question", "name": "¿NBI y Sisbén son lo mismo?", "acceptedAnswer": {"@type": "Answer", "text": "No: son métodos distintos de medición y focalización."}}, {"@type": "Question", "name": "¿Quién puede aplicar esta valoración?", "acceptedAnswer": {"@type": "Answer", "text": "Profesionales de trabajo social, psicología y salud, o equipos de programas sociales."}}, {"@type": "Question", "name": "¿La herramienta guarda datos de las familias?", "acceptedAnswer": {"@type": "Answer", "text": "Los datos se calculan en su navegador; usted decide cómo registrarlos en los sistemas de su institución."}}]}</script>
 </head>
 <body>
 
@@ -596,7 +608,7 @@ function calcularVulnerabilidad() {
 
   const familia     = document.getElementById('vf-familia').value || 'Familia evaluada';
   const profesional = document.getElementById('vf-profesional').value || '—';
-  const fecha       = document.getElementById('vf-fecha').value || new Date().toISOString().split('T')[0];
+  const fecha       = document.getElementById('vf-fecha').value || new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().split('T')[0];
   const integrantes = parseInt(document.getElementById('vf-integrantes').value) || 4;
 
   // Calcular puntaje por dimensión
@@ -662,10 +674,29 @@ function calcularVulnerabilidad() {
 document.addEventListener('DOMContentLoaded', () => {
   renderNBI();
   renderVF();
-  document.getElementById('vf-fecha').value = new Date().toISOString().split('T')[0];
+  document.getElementById('vf-fecha').value = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().split('T')[0];
 });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Vulnerabilidad familiar y NBI: cómo se mide la pobreza multidimensional básica</h2>
+<h3>Necesidades Básicas Insatisfechas (NBI)</h3>
+<p>El método de <strong>NBI</strong> del DANE usa cinco indicadores: vivienda inadecuada, vivienda con servicios inadecuados, hacinamiento crítico, inasistencia escolar de niños de 7 a 11 años y alta dependencia económica. Un hogar con <strong>al menos una</strong> necesidad insatisfecha se considera pobre por NBI, y con <strong>dos o más</strong> en miseria.</p>
+<h3>Qué más mira una valoración familiar</h3>
+<p>La vulnerabilidad familiar también involucra redes de apoyo, violencia, salud, vivienda, ingresos y acceso a servicios. En trabajo social y psicología se usan instrumentos como el genograma y el ecomapa. Esta herramienta es una guía de apoyo y no sustituye la valoración profesional.</p>
+<h3>Relación con el Sisbén</h3>
+<p>Para la focalización de programas sociales en Colombia se usa el <strong>Sisbén IV</strong>, que clasifica a los hogares por grupos según capacidad de generación de ingresos. El NBI es otro método de medición y no equivale a la clasificación del Sisbén.</p>
+<h3>Cómo interpretar el resultado</h3>
+<p>El resultado ayuda a identificar necesidades y priorizar la derivación o el seguimiento. Es una estimación basada en las respuestas ingresadas y debe validarse con visita, documentos y la valoración profesional del caso.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Registre los datos del hogar (vivienda, servicios, personas por cuarto, asistencia escolar y dependencia económica). La herramienta calcula los indicadores NBI y orienta el nivel de vulnerabilidad.</p><p><em>Esta herramienta es de tamizaje y apoyo para profesionales: no es un diagnóstico y no sustituye la valoración clínica. Si usted o alguien cercano está en riesgo inmediato, llame a la línea de emergencias 123 o acuda al servicio de urgencias más cercano; también puede consultar las líneas de salud mental de su departamento o del Ministerio de Salud.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo</h3><p>Un hogar de 6 personas vive en 1 cuarto para dormir (6 por cuarto: <strong>hacinamiento crítico</strong>) y un niño de 9 años no asiste a la escuela (<strong>inasistencia escolar</strong>). Tiene <strong>2 NBI</strong>, lo que lo clasifica en <strong>miseria</strong> según el método del DANE; el equipo profesional debe verificar los datos en visita.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué es hacinamiento crítico?</summary><p>Según el DANE, hogares con más de tres personas por cuarto (sin contar cocina, baño ni garaje).</p></details>
+<details><summary>¿NBI y Sisbén son lo mismo?</summary><p>No: son métodos distintos de medición y focalización.</p></details>
+<details><summary>¿Quién puede aplicar esta valoración?</summary><p>Profesionales de trabajo social, psicología y salud, o equipos de programas sociales.</p></details>
+<details><summary>¿La herramienta guarda datos de las familias?</summary><p>Los datos se calculan en su navegador; usted decide cómo registrarlos en los sistemas de su institución.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

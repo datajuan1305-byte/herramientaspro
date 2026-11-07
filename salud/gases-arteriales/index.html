@@ -155,6 +155,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Por qué debo ajustar la presión atmosférica en altura?", "acceptedAnswer": {"@type": "Answer", "text": "Porque a mayor altitud la presión de oxígeno inspirado es menor, y por tanto el gradiente A-a y la PaO₂ esperada cambian."}}, {"@type": "Question", "name": "¿Qué pasa si no tengo la albúmina?", "acceptedAnswer": {"@type": "Answer", "text": "Puede calcular el anión gap sin corregir, sabiendo que una albúmina baja puede ocultar un anión gap elevado."}}, {"@type": "Question", "name": "¿Una gasometría venosa sirve?", "acceptedAnswer": {"@type": "Answer", "text": "Para pH y bicarbonato da información útil, pero no sustituye la gasometría arterial para evaluar oxigenación."}}, {"@type": "Question", "name": "¿La compensación puede ser completa?", "acceptedAnswer": {"@type": "Answer", "text": "En trastornos crónicos la compensación puede acercar el pH a lo normal, pero rara vez lo lleva por completo a rangos normales."}}]}</script>
 </head>
 <body>
 
@@ -605,6 +617,25 @@ function calcularOxigenacion() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Interpretación de gases arteriales paso a paso</h2>
+<h3>Un método ordenado</h3>
+<p>Interpretar una gasometría con un método fijo evita errores. Los pasos son: (1) mirar el pH, (2) identificar el trastorno primario, (3) comprobar si la compensación es la esperada, (4) calcular el anión gap y la relación delta-delta en las acidosis metabólicas, y (5) evaluar la oxigenación. La interpretación siempre debe unirse al contexto clínico del paciente.</p>
+<h3>pH, trastorno primario y compensación</h3>
+<p>Un pH menor de 7,35 es acidemia y mayor de 7,45 alcalemia. Si el pH es bajo y el HCO₃⁻ está bajo, el trastorno primario es metabólico; si el PaCO₂ está alto, es respiratorio. La compensación esperada en la acidosis metabólica se calcula con la fórmula de Winter: <code>PaCO₂ = 1,5 × HCO₃⁻ + 8 (± 2)</code>. Si el PaCO₂ real se aparta de ese valor, hay un trastorno mixto.</p>
+<h3>Anión gap y delta-delta</h3>
+<p>El <strong>anión gap</strong> es <code>Na − (Cl + HCO₃⁻)</code>; el valor normal es de 8 a 12 mEq/L, y debe corregirse cuando la albúmina es baja (se suman cerca de 2,5 por cada g/dL por debajo de 4). Un anión gap elevado orienta a causas como cetoacidosis, lactato, uremia o intoxicaciones. La relación <strong>delta-delta</strong> compara el aumento del anión gap con la caída del bicarbonato para detectar una segunda alteración metabólica asociada.</p>
+<h3>Oxigenación y altitud</h3>
+<p>El <strong>gradiente alvéolo-arterial</strong> es <code>PAO₂ − PaO₂</code>, con <code>PAO₂ = FiO₂ × (Patm − 47) − PaCO₂ ÷ 0,8</code>. La presión atmosférica depende de la altitud: en ciudades como Bogotá es de unos 560 mmHg, y los valores normales de PaO₂ son más bajos que a nivel del mar. Por eso la herramienta permite ingresar la presión atmosférica local. La relación PaO₂/FiO₂ ayuda a clasificar la gravedad de la hipoxemia.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese pH, PaCO₂, HCO₃⁻ y, si los tiene, PaO₂, sodio, cloro, albúmina, FiO₂ (como fracción, por ejemplo 0,21) y presión atmosférica. La herramienta recorre los cinco pasos y señala los hallazgos. Confirme siempre con la clínica del paciente.</p><p><em>Uso exclusivo de apoyo para profesionales de la salud. Esta herramienta no sustituye el juicio clínico ni los protocolos de su institución; verifique siempre los resultados y las dosis con fuentes oficiales y con un segundo profesional.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: pH 7,25, PaCO₂ 30, HCO₃⁻ 13, Na 140, Cl 108, PaO₂ 90 y FiO₂ 0,21</h3><ul><li>pH bajo con HCO₃⁻ bajo: <strong>acidosis metabólica</strong>.</li><li>Winter: 1,5 × 13 + 8 = 27,5 (± 2). El PaCO₂ observado de 30 es algo mayor, lo que sugiere un componente respiratorio concomitante.</li><li>Anión gap: 140 − (108 + 13) = <strong>19</strong> (elevado). Delta-delta: (19 − 12) ÷ (24 − 13) ≈ <strong>0,64</strong>, compatible con una acidosis mixta de anión gap alto y normal.</li><li>PAO₂ a nivel del mar: 0,21 × 713 − 30 ÷ 0,8 ≈ 112; gradiente A-a ≈ <strong>22 mmHg</strong>; PaO₂/FiO₂ ≈ <strong>429</strong>.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Por qué debo ajustar la presión atmosférica en altura?</summary><p>Porque a mayor altitud la presión de oxígeno inspirado es menor, y por tanto el gradiente A-a y la PaO₂ esperada cambian.</p></details>
+<details><summary>¿Qué pasa si no tengo la albúmina?</summary><p>Puede calcular el anión gap sin corregir, sabiendo que una albúmina baja puede ocultar un anión gap elevado.</p></details>
+<details><summary>¿Una gasometría venosa sirve?</summary><p>Para pH y bicarbonato da información útil, pero no sustituye la gasometría arterial para evaluar oxigenación.</p></details>
+<details><summary>¿La compensación puede ser completa?</summary><p>En trastornos crónicos la compensación puede acercar el pH a lo normal, pero rara vez lo lleva por completo a rangos normales.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

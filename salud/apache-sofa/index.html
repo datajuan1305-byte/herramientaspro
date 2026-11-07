@@ -149,6 +149,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuándo se calcula el APACHE II?", "acceptedAnswer": {"@type": "Answer", "text": "Con los peores valores de las primeras 24 horas en UCI. No se recalcula durante la estancia."}}, {"@type": "Question", "name": "¿El SOFA se repite?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Se calcula al ingreso y de forma seriada, normalmente cada 24 horas, para seguir la evolución de la disfunción orgánica."}}, {"@type": "Question", "name": "¿Puedo usar estos puntajes para limitar el tratamiento?", "acceptedAnswer": {"@type": "Answer", "text": "No de forma aislada. Deben integrarse con la valoración clínica y con las decisiones compartidas con el paciente y la familia."}}, {"@type": "Question", "name": "¿Qué es el qSOFA?", "acceptedAnswer": {"@type": "Answer", "text": "Es una herramienta rápida de cabecera (frecuencia respiratoria, estado mental y presión arterial sistólica) para identificar pacientes con posible mal pronóstico por infección; no reemplaza al SOFA completo."}}]}</script>
 </head>
 <body>
 
@@ -325,15 +337,7 @@
         </div>
         <div class="form-group">
           <label>Escala de Glasgow (GCS)</label>
-          <select id="a-gcs">
-            <option value="0" selected>15 — Alerta total (0)</option>
-            <option value="1">13–14 (+1)</option>
-            <option value="2">11–12 (+2)</option>
-            <option value="3">9–10 (+3)</option>
-            <option value="4">7–8 (+4)</option>
-            <option value="5">5–6 (+5)</option>
-            <option value="6">3–4 (+6)</option>
-          </select>
+          <select id="a-gcs"><option value="0" selected>GCS 15 — Alerta total (0)</option><option value="1">GCS 14 (+1)</option><option value="2">GCS 13 (+2)</option><option value="3">GCS 12 (+3)</option><option value="4">GCS 11 (+4)</option><option value="5">GCS 10 (+5)</option><option value="6">GCS 9 (+6)</option><option value="7">GCS 8 (+7)</option><option value="8">GCS 7 (+8)</option><option value="9">GCS 6 (+9)</option><option value="10">GCS 5 (+10)</option><option value="11">GCS 4 (+11)</option><option value="12">GCS 3 (+12)</option></select>
           <span class="form-hint">Puntos = 15 − GCS</span>
         </div>
       </div>
@@ -489,17 +493,16 @@
         <table class="ref-table">
           <thead><tr><th>Score SOFA</th><th>Mortalidad estimada</th><th>Interpretación clínica</th></tr></thead>
           <tbody>
-            <tr><td>0 – 1</td><td>&lt; 10%</td><td style="color:#2e7d32; font-weight:700;">Sin disfunción significativa</td></tr>
-            <tr><td>2 – 3</td><td>10–20%</td><td style="color:#2e7d32; font-weight:700;">Disfunción leve</td></tr>
-            <tr><td>4 – 5</td><td>20–30%</td><td style="color:#f57c00; font-weight:700;">Disfunción moderada</td></tr>
-            <tr><td>6 – 8</td><td>30–40%</td><td style="color:#f57c00; font-weight:700;">Disfunción moderada-severa</td></tr>
-            <tr><td>9 – 11</td><td>40–50%</td><td style="color:#c62828; font-weight:700;">Falla orgánica severa</td></tr>
-            <tr><td>12 – 14</td><td>50–60%</td><td style="color:#c62828; font-weight:700;">Falla orgánica múltiple</td></tr>
-            <tr><td>≥ 15</td><td>&gt; 90%</td><td style="color:#7b0000; font-weight:700;">Falla orgánica múltiple crítica</td></tr>
+            <tr><td>0 – 6</td><td>&lt; 10%</td><td style="color:#2e7d32; font-weight:700;">Disfunción orgánica baja</td></tr>
+            <tr><td>7 – 9</td><td>15–20%</td><td style="color:#f57c00; font-weight:700;">Disfunción moderada</td></tr>
+            <tr><td>10 – 12</td><td>40–50%</td><td style="color:#c62828; font-weight:700;">Disfunción severa</td></tr>
+            <tr><td>13 – 14</td><td>50–60%</td><td style="color:#c62828; font-weight:700;">Falla orgánica múltiple</td></tr>
+            <tr><td>15</td><td>&gt; 80%</td><td style="color:#7b0000; font-weight:700;">Falla orgánica múltiple crítica</td></tr>
+            <tr><td>16 – 24</td><td>&gt; 90%</td><td style="color:#7b0000; font-weight:700;">Falla orgánica múltiple crítica</td></tr>
           </tbody>
         </table>
       </div>
-      <p style="font-size:0.8rem; color:var(--texto-suave); margin-top:0.8rem;">⚠️ Un aumento de ≥ 2 puntos en el SOFA respecto al basal es criterio diagnóstico de <strong>sepsis</strong> según Sepsis-3 (2016).</p>
+      <p style="font-size:0.8rem; color:var(--texto-suave); margin-top:0.8rem;">⚠️ Un aumento de ≥ 2 puntos en el SOFA respecto al basal es criterio diagnóstico de <strong>sepsis</strong> según Sepsis-3 (2016). Las mortalidades son aproximaciones de cohortes históricas (SOFA al ingreso) y no deben usarse para decidir sobre un paciente individual.</p>
     </div>
 
     <div class="card">
@@ -578,7 +581,7 @@ function calcularApache() {
     <div class="resultado-box ${colorClass}">
       <div class="resultado-titulo">Score APACHE II — Resultado</div>
       <div class="resultado-score">${total} pts</div>
-      <div class="resultado-mortalidad">Mortalidad hospitalaria estimada: ~${mortalidad}%</div>
+      <div class="resultado-mortalidad">Mortalidad hospitalaria aproximada (tabla no quirúrgica de Knaus): ~${mortalidad}%</div>
       <div class="resultado-interpretacion">${clase}</div>
       <div class="resultado-grid">
         <div class="resultado-item">
@@ -628,13 +631,12 @@ function calcularSofa() {
   const total = resp + coag + hepa + cardio + neuro + renal;
 
   let mortalidad, clase, colorClass;
-  if      (total <= 1)  { mortalidad = '<10'; clase = 'Sin disfunción significativa';      colorClass = 'verde'; }
-  else if (total <= 3)  { mortalidad = '10–20'; clase = 'Disfunción orgánica leve';       colorClass = 'verde'; }
-  else if (total <= 5)  { mortalidad = '20–30'; clase = 'Disfunción moderada';            colorClass = 'amarillo'; }
-  else if (total <= 8)  { mortalidad = '30–40'; clase = 'Disfunción moderada-severa';     colorClass = 'amarillo'; }
-  else if (total <= 11) { mortalidad = '40–50'; clase = 'Falla orgánica severa';          colorClass = 'naranja'; }
-  else if (total <= 14) { mortalidad = '50–60'; clase = 'Falla orgánica múltiple';        colorClass = 'naranja'; }
-  else                  { mortalidad = '>90';   clase = 'Falla orgánica múltiple crítica';colorClass = 'rojo'; }
+  if      (total <= 6)  { mortalidad = '&lt;10';  clase = 'Disfunción orgánica baja';         colorClass = 'verde'; }
+  else if (total <= 9)  { mortalidad = '15–20'; clase = 'Disfunción orgánica moderada';     colorClass = 'amarillo'; }
+  else if (total <= 12) { mortalidad = '40–50'; clase = 'Disfunción orgánica severa';       colorClass = 'naranja'; }
+  else if (total <= 14) { mortalidad = '50–60'; clase = 'Falla orgánica múltiple';          colorClass = 'naranja'; }
+  else if (total === 15){ mortalidad = '&gt;80';  clase = 'Falla orgánica múltiple crítica'; colorClass = 'rojo'; }
+  else                  { mortalidad = '&gt;90';  clase = 'Falla orgánica múltiple crítica'; colorClass = 'rojo'; }
 
   const organos = ['Respiratorio','Coagulación','Hepático','Cardiovascular','Neurológico','Renal'];
   const vals    = [resp, coag, hepa, cardio, neuro, renal];
@@ -670,6 +672,25 @@ function resetSofa() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>APACHE II y SOFA: cómo se calculan y cómo interpretarlos en cuidado crítico</h2>
+<h3>Para qué se usan estas escalas</h3>
+<p>El <strong>APACHE II</strong> y el <strong>SOFA</strong> resumen la gravedad de un paciente crítico en un número. Sirven para describir poblaciones de UCI, comparar grupos, evaluar la calidad de la atención y estratificar el riesgo en investigación. No fueron diseñadas para decidir por sí solas el tratamiento ni la limitación del esfuerzo terapéutico de un paciente individual.</p>
+<h3>APACHE II</h3>
+<p>Se calcula con los <strong>peores valores de las primeras 24 horas</strong> de ingreso a UCI. Suma tres bloques: 12 variables fisiológicas (temperatura, presión arterial media, frecuencia cardiaca y respiratoria, oxigenación, pH, sodio, potasio, creatinina, hematocrito, leucocitos y escala de Glasgow, que aporta 15 menos el valor de Glasgow), puntos por edad y puntos por enfermedad crónica grave. El máximo es 71. La mortalidad asociada a cada rango proviene de la cohorte original de Knaus (1985), por lo que puede no reflejar la atención actual.</p>
+<h3>SOFA</h3>
+<p>El <strong>SOFA</strong> evalúa seis sistemas (respiratorio, coagulación, hepático, cardiovascular, neurológico y renal) con 0 a 4 puntos cada uno, para un máximo de 24. Su valor está en la <strong>evolución</strong>: un aumento de 2 puntos o más sobre el basal, en presencia de infección, es el criterio de disfunción orgánica de la definición de sepsis (Sepsis-3, 2016). Un SOFA seriado dice más que una cifra aislada.</p>
+<h3>Limitaciones que debe tener presentes</h3>
+<p>Las escalas se calibraron en poblaciones y décadas distintas de las actuales y no ajustan por el diagnóstico de ingreso. Pueden subestimar o sobrestimar el riesgo en un paciente concreto. Los datos faltantes, los medicamentos que modifican las variables y el momento de la medición cambian el puntaje. Úselas como un elemento más junto con el estado funcional, las comorbilidades y los deseos del paciente y su familia.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Seleccione el rango de cada variable (el puntaje se asigna automáticamente) y calcule. La pestaña SOFA entrega el puntaje por órgano y una aproximación de mortalidad según cohortes históricas. Revise las tablas de referencia para verificar cada rango.</p><p><em>Uso exclusivo de apoyo para profesionales de la salud. Esta herramienta no sustituye el juicio clínico ni los protocolos de su institución; verifique siempre los resultados y las dosis con fuentes oficiales y con un segundo profesional.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo aritmético de SOFA y APACHE II</h3><p><strong>SOFA:</strong> PaO₂/FiO₂ 150 con ventilación mecánica (3), plaquetas 80.000 (2), bilirrubina 2,5 mg/dL (2), PAM &lt; 70 mmHg (1), Glasgow 13 (1) y creatinina 2,2 mg/dL (2) suman <strong>11 puntos</strong>.</p><p><strong>APACHE II:</strong> temperatura 39,5 °C (3), PAM 55 (2), frecuencia cardiaca 120 (2), frecuencia respiratoria 30 (1), PaO₂ 65 con FiO₂ &lt; 0,5 (1), pH 7,30 (2), leucocitos 18 (1), Glasgow 13 (2 puntos) y edad 70 años (5) suman <strong>19 puntos</strong>, que en la tabla no quirúrgica de Knaus corresponden a una mortalidad cercana al 25 %, un dato de cohorte y no un pronóstico individual.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuándo se calcula el APACHE II?</summary><p>Con los peores valores de las primeras 24 horas en UCI. No se recalcula durante la estancia.</p></details>
+<details><summary>¿El SOFA se repite?</summary><p>Sí. Se calcula al ingreso y de forma seriada, normalmente cada 24 horas, para seguir la evolución de la disfunción orgánica.</p></details>
+<details><summary>¿Puedo usar estos puntajes para limitar el tratamiento?</summary><p>No de forma aislada. Deben integrarse con la valoración clínica y con las decisiones compartidas con el paciente y la familia.</p></details>
+<details><summary>¿Qué es el qSOFA?</summary><p>Es una herramienta rápida de cabecera (frecuencia respiratoria, estado mental y presión arterial sistólica) para identificar pacientes con posible mal pronóstico por infección; no reemplaza al SOFA completo.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

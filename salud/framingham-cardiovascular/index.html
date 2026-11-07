@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Calculadora Score de Riesgo Cardiovascular Framingham Colombia. Calcula riesgo de evento cardiovascular a 10 años: infarto, ACV, angina. Para médicos, residentes y enfermeras." />
+  <meta name="description" content="Calculadora Score de Riesgo Cardiovascular Framingham Colombia. Estima el riesgo de infarto o muerte coronaria a 10 años (puntaje Framingham ATP III). Para médicos, residentes y enfermeras." />
   <meta name="keywords" content="score Framingham Colombia, riesgo cardiovascular 10 años, calculadora infarto Colombia, riesgo coronario Framingham médicos, prevención cardiovascular" />
   <title>Score de Riesgo Cardiovascular Framingham | HerramientasPro Colombia</title>
   <link rel="canonical" href="https://herramientaspro.com.co/salud/framingham-cardiovascular/">
@@ -141,6 +141,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Sirve para personas con diabetes?", "acceptedAnswer": {"@type": "Answer", "text": "No se calcula en ese caso: en el ATP III la diabetes se trata como equivalente de riesgo coronario y se clasifica en riesgo alto."}}, {"@type": "Question", "name": "¿Qué pasa si el paciente ya tuvo un infarto?", "acceptedAnswer": {"@type": "Answer", "text": "Se trata de prevención secundaria y no se usa el puntaje de riesgo."}}, {"@type": "Question", "name": "¿Por qué el riesgo de dos personas con los mismos valores puede diferir entre escalas?", "acceptedAnswer": {"@type": "Answer", "text": "Porque cada escala se derivó en una población y estima un evento distinto; la elección depende de la guía local."}}, {"@type": "Question", "name": "¿Mide solo infarto?", "acceptedAnswer": {"@type": "Answer", "text": "Sí: infarto de miocardio y muerte coronaria. Algunas escalas más recientes incluyen también ACV."}}]}</script>
 </head>
 <body>
 
@@ -155,7 +167,7 @@
 <div class="hero">
   <div class="badge">❤️ Cardiología · Medicina Interna</div>
   <h1>Score de Riesgo Cardiovascular<br>Framingham</h1>
-  <p>Calcula el riesgo de evento cardiovascular mayor (infarto de miocardio, ACV, angina, muerte coronaria) a 10 años. Versión ATP III validada para población latinoamericana.</p>
+  <p>Estima el riesgo de infarto de miocardio o muerte coronaria a 10 años con el puntaje de Framingham del Panel ATP III. No está calibrado para población colombiana y puede sobrestimar o subestimar el riesgo individual.</p>
   <div class="chips">
     <span class="chip">👨‍⚕️ Para médicos y residentes</span>
     <span class="chip">📊 Riesgo a 10 años</span>
@@ -277,7 +289,7 @@
         <h3>Riesgo cardiovascular a 10 años (Framingham ATP III)</h3>
         <div class="pct" id="res-pct">0%</div>
         <div class="categoria" id="res-categoria">BAJO</div>
-        <div class="sub" id="res-sub">Probabilidad de evento cardiovascular mayor en los próximos 10 años</div>
+        <div class="sub" id="res-sub">Probabilidad de infarto o muerte coronaria en los próximos 10 años</div>
       </div>
 
       <!-- Gauge visual -->
@@ -315,7 +327,7 @@
           <div class="ksub">puntaje total</div>
         </div>
         <div class="kpi azul">
-          <div class="klbl">Edad vascular estimada</div>
+          <div class="klbl">Riesgo vs. perfil óptimo</div>
           <div class="kval" id="kpi-edad-vasc">—</div>
           <div class="ksub">vs. edad real</div>
         </div>
@@ -352,92 +364,31 @@
   <!-- TAB 2: TABLAS -->
   <div id="tab-tabla" style="display:none">
     <div class="card">
-      <h2>📊 Tabla de puntuación Framingham — Hombres</h2>
+      <h2>📊 Puntuación ATP III (Framingham) — Hombres</h2>
       <table class="ref-table" style="margin-bottom:20px;">
-        <thead><tr><th>Variable</th><th>Valor</th><th>Puntos</th></tr></thead>
-        <tbody>
-          <tr><td rowspan="6"><strong>Edad</strong></td><td>20–34 años</td><td>-9</td></tr>
-          <tr><td>35–39 años</td><td>-4</td></tr>
-          <tr><td>40–44 años</td><td>0</td></tr>
-          <tr><td>45–49 años</td><td>3</td></tr>
-          <tr><td>50–54 años</td><td>6</td></tr>
-          <tr><td>55–59 años</td><td>8</td></tr>
-          <tr><td rowspan="5"><strong>Colesterol total</strong></td><td>&lt; 160 mg/dL</td><td>0</td></tr>
-          <tr><td>160–199</td><td>4</td></tr>
-          <tr><td>200–239</td><td>7</td></tr>
-          <tr><td>240–279</td><td>9</td></tr>
-          <tr><td>≥ 280</td><td>11</td></tr>
-          <tr><td rowspan="3"><strong>Tabaquismo</strong></td><td>No fumador</td><td>0</td></tr>
-          <tr><td>Exfumador</td><td>0</td></tr>
-          <tr><td>Fumador actual</td><td>8</td></tr>
-          <tr><td rowspan="5"><strong>HDL colesterol</strong></td><td>≥ 60 mg/dL</td><td>-1</td></tr>
-          <tr><td>50–59</td><td>0</td></tr>
-          <tr><td>40–49</td><td>1</td></tr>
-          <tr><td>&lt; 40</td><td>2</td></tr>
-          <tr><td>—</td><td>—</td></tr>
-          <tr><td rowspan="5"><strong>PAS no tratada</strong></td><td>&lt; 120</td><td>0</td></tr>
-          <tr><td>120–129</td><td>0</td></tr>
-          <tr><td>130–139</td><td>1</td></tr>
-          <tr><td>140–159</td><td>1</td></tr>
-          <tr><td>≥ 160</td><td>2</td></tr>
-          <tr><td rowspan="5"><strong>PAS tratada</strong></td><td>&lt; 120</td><td>0</td></tr>
-          <tr><td>120–129</td><td>3</td></tr>
-          <tr><td>130–139</td><td>4</td></tr>
-          <tr><td>140–159</td><td>5</td></tr>
-          <tr><td>≥ 160</td><td>6</td></tr>
-        </tbody>
-      </table>
+<thead><tr><th>Edad</th><th>Puntos</th></tr></thead><tbody><tr><td>20–34</td><td>-9</td></tr><tr><td>35–39</td><td>-4</td></tr><tr><td>40–44</td><td>0</td></tr><tr><td>45–49</td><td>3</td></tr><tr><td>50–54</td><td>6</td></tr><tr><td>55–59</td><td>8</td></tr><tr><td>60–64</td><td>10</td></tr><tr><td>65–69</td><td>11</td></tr><tr><td>70–74</td><td>12</td></tr><tr><td>75–79</td><td>13</td></tr></tbody></table>
+<table class="ref-table" style="margin-bottom:20px;">
+<thead><tr><th>Colesterol total (mg/dL)</th><th>20–39 años</th><th>40–49</th><th>50–59</th><th>60–69</th><th>70–79</th></tr></thead><tbody><tr><td>&lt; 160</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>160–199</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr><tr><td>200–239</td><td>7</td><td>5</td><td>3</td><td>1</td><td>0</td></tr><tr><td>240–279</td><td>9</td><td>6</td><td>4</td><td>2</td><td>1</td></tr><tr><td>≥ 280</td><td>11</td><td>8</td><td>5</td><td>3</td><td>1</td></tr><tr><td><strong>Fumador actual</strong></td><td>8</td><td>5</td><td>3</td><td>1</td><td>1</td></tr></tbody></table>
+<table class="ref-table" style="margin-bottom:20px;">
+<thead><tr><th>Variable</th><th>Valor</th><th>Puntos</th></tr></thead><tbody><tr><td rowspan="4"><strong>HDL (mg/dL)</strong></td><td>≥ 60</td><td>-1</td></tr><tr><td>50–59</td><td>0</td></tr><tr><td>40–49</td><td>1</td></tr><tr><td>&lt; 40</td><td>2</td></tr><tr><td rowspan="5"><strong>PAS sin tratamiento (mmHg)</strong></td><td>&lt; 120</td><td>0</td></tr><tr><td>120–129</td><td>0</td></tr><tr><td>130–139</td><td>1</td></tr><tr><td>140–159</td><td>1</td></tr><tr><td>≥ 160</td><td>2</td></tr><tr><td rowspan="5"><strong>PAS con tratamiento (mmHg)</strong></td><td>&lt; 120</td><td>0</td></tr><tr><td>120–129</td><td>1</td></tr><tr><td>130–139</td><td>2</td></tr><tr><td>140–159</td><td>2</td></tr><tr><td>≥ 160</td><td>3</td></tr></tbody></table>
 
-      <h2 style="margin-top:16px;">📊 Conversión puntos → riesgo % a 10 años (Hombres)</h2>
-      <table class="ref-table">
-        <thead><tr><th>Puntos</th><th>Riesgo 10 años</th><th>Puntos</th><th>Riesgo 10 años</th></tr></thead>
-        <tbody>
-          <tr class="bajo-r"><td>≤ 0</td><td>&lt; 1%</td><td>8</td><td>10%</td></tr>
-          <tr class="bajo-r"><td>1</td><td>1%</td><td>9</td><td>12%</td></tr>
-          <tr class="bajo-r"><td>2</td><td>1%</td><td>10</td><td>14%</td></tr>
-          <tr class="bajo-r"><td>3</td><td>1%</td><td>11</td><td>16%</td></tr>
-          <tr class="bajo-r"><td>4</td><td>1%</td><td>12</td><td>18%</td></tr>
-          <tr class="bajo-r"><td>5</td><td>2%</td><td>13</td><td>22%</td></tr>
-          <tr class="mod-r"><td>6</td><td>2%</td><td>14</td><td>27%</td></tr>
-          <tr class="mod-r"><td>7</td><td>3%</td><td>≥ 15</td><td>≥ 30%</td></tr>
-        </tbody>
-      </table>
+      <h2 style="margin-top:16px;">📊 Puntos → riesgo a 10 años (Hombres)</h2>
+      <table class="ref-table"><thead><tr><th>Puntos</th><th>Riesgo a 10 años</th></tr></thead><tbody><tr><td>≤ 0</td><td>&lt; 1%</td></tr><tr><td>1–4</td><td>1%</td></tr><tr><td>5–6</td><td>2%</td></tr><tr><td>7</td><td>3%</td></tr><tr><td>8</td><td>4%</td></tr><tr><td>9</td><td>5%</td></tr><tr><td>10</td><td>6%</td></tr><tr><td>11</td><td>8%</td></tr><tr><td>12</td><td>10%</td></tr><tr><td>13</td><td>12%</td></tr><tr><td>14</td><td>16%</td></tr><tr><td>15</td><td>20%</td></tr><tr><td>16</td><td>25%</td></tr><tr><td>≥ 17</td><td>≥ 30%</td></tr></tbody></table>
+
     </div>
-
     <div class="card">
-      <h2>📊 Tabla de puntuación Framingham — Mujeres</h2>
+      <h2>📊 Puntuación ATP III (Framingham) — Mujeres</h2>
       <table class="ref-table" style="margin-bottom:20px;">
-        <thead><tr><th>Variable</th><th>Valor</th><th>Puntos</th></tr></thead>
-        <tbody>
-          <tr><td rowspan="6"><strong>Edad</strong></td><td>20–34 años</td><td>-7</td></tr>
-          <tr><td>35–39 años</td><td>-3</td></tr>
-          <tr><td>40–44 años</td><td>0</td></tr>
-          <tr><td>45–49 años</td><td>3</td></tr>
-          <tr><td>50–54 años</td><td>6</td></tr>
-          <tr><td>55–59 años</td><td>8</td></tr>
-          <tr><td rowspan="5"><strong>Colesterol total</strong></td><td>&lt; 160 mg/dL</td><td>0</td></tr>
-          <tr><td>160–199</td><td>4</td></tr>
-          <tr><td>200–239</td><td>8</td></tr>
-          <tr><td>240–279</td><td>11</td></tr>
-          <tr><td>≥ 280</td><td>13</td></tr>
-          <tr><td rowspan="2"><strong>Tabaquismo</strong></td><td>No fumadora</td><td>0</td></tr>
-          <tr><td>Fumadora actual</td><td>9</td></tr>
-          <tr><td rowspan="4"><strong>HDL colesterol</strong></td><td>≥ 60 mg/dL</td><td>-1</td></tr>
-          <tr><td>50–59</td><td>0</td></tr>
-          <tr><td>40–49</td><td>1</td></tr>
-          <tr><td>&lt; 40</td><td>2</td></tr>
-          <tr><td rowspan="5"><strong>PAS no tratada</strong></td><td>&lt; 120</td><td>0</td></tr>
-          <tr><td>120–129</td><td>1</td></tr>
-          <tr><td>130–139</td><td>2</td></tr>
-          <tr><td>140–159</td><td>3</td></tr>
-          <tr><td>≥ 160</td><td>4</td></tr>
-          <tr><td rowspan="5"><strong>PAS tratada</strong></td><td>&lt; 120</td><td>0</td></tr>
-          <tr><td>120–129</td><td>3</td></tr>
-          <tr><td>130–139</td><td>4</td></tr>
-          <tr><td>140–159</td><td>5</td></tr>
-          <tr><td>≥ 160</td><td>6</td></tr>
-        </tbody>
-      </table>
+<thead><tr><th>Edad</th><th>Puntos</th></tr></thead><tbody><tr><td>20–34</td><td>-7</td></tr><tr><td>35–39</td><td>-3</td></tr><tr><td>40–44</td><td>0</td></tr><tr><td>45–49</td><td>3</td></tr><tr><td>50–54</td><td>6</td></tr><tr><td>55–59</td><td>8</td></tr><tr><td>60–64</td><td>10</td></tr><tr><td>65–69</td><td>12</td></tr><tr><td>70–74</td><td>14</td></tr><tr><td>75–79</td><td>16</td></tr></tbody></table>
+<table class="ref-table" style="margin-bottom:20px;">
+<thead><tr><th>Colesterol total (mg/dL)</th><th>20–39 años</th><th>40–49</th><th>50–59</th><th>60–69</th><th>70–79</th></tr></thead><tbody><tr><td>&lt; 160</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>160–199</td><td>4</td><td>3</td><td>2</td><td>1</td><td>1</td></tr><tr><td>200–239</td><td>8</td><td>6</td><td>4</td><td>2</td><td>1</td></tr><tr><td>240–279</td><td>11</td><td>8</td><td>5</td><td>3</td><td>2</td></tr><tr><td>≥ 280</td><td>13</td><td>10</td><td>7</td><td>4</td><td>2</td></tr><tr><td><strong>Fumador actual</strong></td><td>9</td><td>7</td><td>4</td><td>2</td><td>1</td></tr></tbody></table>
+<table class="ref-table" style="margin-bottom:20px;">
+<thead><tr><th>Variable</th><th>Valor</th><th>Puntos</th></tr></thead><tbody><tr><td rowspan="4"><strong>HDL (mg/dL)</strong></td><td>≥ 60</td><td>-1</td></tr><tr><td>50–59</td><td>0</td></tr><tr><td>40–49</td><td>1</td></tr><tr><td>&lt; 40</td><td>2</td></tr><tr><td rowspan="5"><strong>PAS sin tratamiento (mmHg)</strong></td><td>&lt; 120</td><td>0</td></tr><tr><td>120–129</td><td>1</td></tr><tr><td>130–139</td><td>2</td></tr><tr><td>140–159</td><td>3</td></tr><tr><td>≥ 160</td><td>4</td></tr><tr><td rowspan="5"><strong>PAS con tratamiento (mmHg)</strong></td><td>&lt; 120</td><td>0</td></tr><tr><td>120–129</td><td>3</td></tr><tr><td>130–139</td><td>4</td></tr><tr><td>140–159</td><td>5</td></tr><tr><td>≥ 160</td><td>6</td></tr></tbody></table>
+
+      <h2 style="margin-top:16px;">📊 Puntos → riesgo a 10 años (Mujeres)</h2>
+      <table class="ref-table"><thead><tr><th>Puntos</th><th>Riesgo a 10 años</th></tr></thead><tbody><tr><td>≤ 8</td><td>&lt; 1%</td></tr><tr><td>9–12</td><td>1%</td></tr><tr><td>13–14</td><td>2%</td></tr><tr><td>15</td><td>3%</td></tr><tr><td>16</td><td>4%</td></tr><tr><td>17</td><td>5%</td></tr><tr><td>18</td><td>6%</td></tr><tr><td>19</td><td>8%</td></tr><tr><td>20</td><td>11%</td></tr><tr><td>21</td><td>14%</td></tr><tr><td>22</td><td>17%</td></tr><tr><td>23</td><td>22%</td></tr><tr><td>24</td><td>27%</td></tr><tr><td>≥ 25</td><td>≥ 30%</td></tr></tbody></table>
+
+      <p class="hint" style="margin-top:12px;">Fuente: tablas del puntaje de Framingham del Panel ATP III (NCEP, 2001). Estima el riesgo de infarto de miocardio o muerte coronaria a 10 años en personas de 20 a 79 años sin enfermedad cardiovascular ni diabetes.</p>
     </div>
   </div>
 
@@ -450,8 +401,8 @@
         <tbody>
           <tr class="bajo-r"><td><strong>BAJO</strong></td><td>&lt; 10%</td><td>&lt; 160 mg/dL</td><td>&lt; 140/90</td><td>Cambios estilo de vida. Control en 5 años.</td></tr>
           <tr class="mod-r"><td><strong>MODERADO</strong></td><td>10–19%</td><td>&lt; 130 mg/dL</td><td>&lt; 140/90</td><td>Estatinas si LDL ≥ 130. Control anual.</td></tr>
-          <tr class="alto-r"><td><strong>ALTO</strong></td><td>20–30%</td><td>&lt; 100 mg/dL</td><td>&lt; 130/80</td><td>Estatinas obligatorias. AAS 100 mg/día. Control semestral.</td></tr>
-          <tr class="muyalto-r"><td><strong>MUY ALTO</strong></td><td>&gt; 30% o ECV establecida</td><td>&lt; 70 mg/dL</td><td>&lt; 130/80</td><td>Estatinas alta intensidad + AAS. Referir a cardiología.</td></tr>
+          <tr class="alto-r"><td><strong>ALTO</strong></td><td>20–29% o diabetes</td><td>&lt; 100 mg/dL</td><td>&lt; 130/80</td><td>Tratamiento hipolipemiante según criterio clínico. Control semestral.</td></tr>
+          <tr class="muyalto-r"><td><strong>MUY ALTO</strong></td><td>≥ 30% o ECV establecida</td><td>&lt; 70 mg/dL</td><td>&lt; 130/80</td><td>Tratamiento intensivo según criterio clínico. Valorar cardiología.</td></tr>
         </tbody>
       </table>
 
@@ -478,7 +429,7 @@
         <tbody>
           <tr><td>Atorvastatina</td><td>Riesgo moderado-alto</td><td>10–80 mg/día (baja a alta intensidad)</td><td>Reducción LDL &gt; 30–50%</td></tr>
           <tr><td>Rosuvastatina</td><td>Riesgo alto-muy alto</td><td>10–40 mg/día</td><td>LDL &lt; 70 mg/dL</td></tr>
-          <tr><td>AAS 100 mg</td><td>Prevención secundaria / riesgo alto</td><td>100 mg/día con alimentos</td><td>Prevención trombótica</td></tr>
+          <tr><td>AAS 100 mg</td><td>Prevención secundaria (en primaria no se recomienda de rutina)</td><td>100 mg/día con alimentos</td><td>Prevención trombótica</td></tr>
           <tr><td>IECA / ARA II</td><td>HTA + DM o HTA + proteinuria</td><td>Según molécula y PA objetivo</td><td>PAS &lt; 130 mmHg</td></tr>
           <tr><td>Metformina</td><td>DM tipo 2 o prediabetes con alto riesgo</td><td>500–2000 mg/día</td><td>HbA1c &lt; 7%</td></tr>
           <tr><td>Ezetimibe</td><td>LDL no controlado con estatina</td><td>10 mg/día</td><td>Adicional 15–20% de reducción LDL</td></tr>
@@ -488,7 +439,7 @@
   </div>
 
   <div class="disclaimer">
-    <strong>⚠️ Solo para profesionales de la salud.</strong> El Score de Framingham es una herramienta de estimación epidemiológica validada en población norteamericana con ajustes para Latinoamérica. No reemplaza el juicio clínico. Factores como etnia, origen socioeconómico, acceso a tratamiento y comorbilidades específicas pueden modificar significativamente el riesgo individual. Las decisiones terapéuticas son responsabilidad exclusiva del médico tratante. Framingham Risk Score original: Wilson et al. Circulation 1998;97:1837-47. Adaptación ATP III: NCEP Expert Panel, JAMA 2001.
+    <strong>⚠️ Solo para profesionales de la salud.</strong> El Score de Framingham es una herramienta de estimación epidemiológica derivada de población norteamericana y no calibrada para Colombia. No reemplaza el juicio clínico. Factores como etnia, origen socioeconómico, acceso a tratamiento y comorbilidades específicas pueden modificar significativamente el riesgo individual. Las decisiones terapéuticas son responsabilidad exclusiva del médico tratante. Framingham Risk Score original: Wilson et al. Circulation 1998;97:1837-47. Adaptación ATP III: NCEP Expert Panel, JAMA 2001.
     <br><br>
     🗓️ <em>Referencia: NCEP-ATP III | ACC/AHA Guidelines 2019 | Guía Colombiana de RCV - Minsalud 2015. Actualización: Junio 2026.</em>
   </div>
@@ -527,13 +478,15 @@
     for (const [desde, hasta, pts] of tab) if (edad>=desde && edad<=hasta) return pts;
     return 0;
   }
+  // ATP III (Framingham, riesgo de IAM o muerte coronaria a 10 años). Columnas por edad: 20-39, 40-49, 50-59, 60-69, 70-79
+  function idxEdad(edad) { return edad<40?0 : edad<50?1 : edad<60?2 : edad<70?3 : 4; }
+  const COL_M = [[160,[0,0,0,0,0]],[200,[4,3,2,1,0]],[240,[7,5,3,1,0]],[280,[9,6,4,2,1]],[9999,[11,8,5,3,1]]];
+  const COL_F = [[160,[0,0,0,0,0]],[200,[4,3,2,1,1]],[240,[8,6,4,2,1]],[280,[11,8,5,3,2]],[9999,[13,10,7,4,2]]];
+  const TAB_M = [8,5,3,1,1], TAB_F = [9,7,4,2,1];
   function puntosColTotal(col, edad, sexo) {
-    // Puntos varían según grupo de edad en ATP III. Simplificado a valores para 40-49.
-    const tabM = [[0,160,0],[160,200,4],[200,240,7],[240,280,9],[280,999,11]];
-    const tabF = [[0,160,0],[160,200,4],[200,240,8],[240,280,11],[280,999,13]];
-    const tab = sexo==='M'?tabM:tabF;
-    for (const [desde, hasta, pts] of tab) if (col>=desde && col<hasta) return pts;
-    return tab[tab.length-1][2];
+    const tab = sexo==='M'?COL_M:COL_F;
+    for (const [lim, pts] of tab) if (col<lim) return pts[idxEdad(edad)];
+    return 0;
   }
   function puntosHDL(hdl) {
     if (hdl>=60) return -1;
@@ -541,55 +494,22 @@
     if (hdl>=40) return 1;
     return 2;
   }
+  // PAS: <120, 120-129, 130-139, 140-159, >=160
+  const PAS_TAB = { M:{no:[0,0,1,1,2], si:[0,1,2,2,3]}, F:{no:[0,1,2,3,4], si:[0,3,4,5,6]} };
   function puntosPAS(pas, tratado, sexo) {
-    if (sexo==='M') {
-      if (!tratado) {
-        if (pas<120) return 0;
-        if (pas<130) return 0;
-        if (pas<140) return 1;
-        if (pas<160) return 1;
-        return 2;
-      } else {
-        if (pas<120) return 0;
-        if (pas<130) return 3;
-        if (pas<140) return 4;
-        if (pas<160) return 5;
-        return 6;
-      }
-    } else {
-      if (!tratado) {
-        if (pas<120) return 0;
-        if (pas<130) return 1;
-        if (pas<140) return 2;
-        if (pas<160) return 3;
-        return 4;
-      } else {
-        if (pas<120) return 0;
-        if (pas<130) return 3;
-        if (pas<140) return 4;
-        if (pas<160) return 5;
-        return 6;
-      }
-    }
+    const i = pas<120?0 : pas<130?1 : pas<140?2 : pas<160?3 : 4;
+    return PAS_TAB[sexo][tratado?'si':'no'][i];
   }
-  function puntosTabaco(fuma, sexo) { return fuma ? (sexo==='M'?8:9) : 0; }
+  function puntosTabaco(fuma, sexo, edad) { return fuma ? (sexo==='M'?TAB_M:TAB_F)[idxEdad(edad)] : 0; }
 
   function puntoADriesgo(puntos, sexo) {
     const tabM = [[-99,0,0.01],[1,4,0.01],[5,5,0.02],[6,6,0.02],[7,7,0.03],[8,8,0.04],[9,9,0.05],[10,10,0.06],[11,11,0.08],[12,12,0.10],[13,13,0.12],[14,14,0.16],[15,15,0.20],[16,16,0.25],[17,999,0.30]];
-    const tabF = [[-99,8,0.01],[9,12,0.01],[13,13,0.02],[14,14,0.02],[15,15,0.03],[16,16,0.04],[17,17,0.05],[18,18,0.06],[19,19,0.08],[20,20,0.11],[21,21,0.14],[22,22,0.17],[23,23,0.22],[24,999,0.27]];
+    const tabF = [[-99,8,0.01],[9,12,0.01],[13,13,0.02],[14,14,0.02],[15,15,0.03],[16,16,0.04],[17,17,0.05],[18,18,0.06],[19,19,0.08],[20,20,0.11],[21,21,0.14],[22,22,0.17],[23,23,0.22],[24,24,0.27],[25,999,0.30]];
     const tab = sexo==='M'?tabM:tabF;
     for (const [desde,hasta,pct] of tab) if (puntos>=desde && puntos<=hasta) return pct;
     return 0.30;
   }
 
-  function edadVascular(puntos, sexo) {
-    // Aproximación: edad vascular según puntuación promedio para esa edad
-    const tabM = [[-99,-1,30],[0,0,30],[1,1,32],[2,2,34],[3,3,36],[4,4,38],[5,5,40],[6,6,42],[7,7,45],[8,8,48],[9,9,50],[10,10,53],[11,11,56],[12,12,60],[13,13,65],[14,999,70]];
-    const tabF = [[-99,8,30],[9,12,30],[13,14,35],[15,15,40],[16,16,45],[17,17,50],[18,18,52],[19,19,55],[20,20,60],[21,21,65],[22,999,70]];
-    const tab = sexo==='M'?tabM:tabF;
-    for (const [desde,hasta,ed] of tab) if (puntos>=desde && puntos<=hasta) return ed;
-    return 70;
-  }
 
   function calcFramingham() {
     if (!sexo) { alert('Seleccione el sexo biológico del paciente.'); return; }
@@ -616,7 +536,7 @@
     const pCol    = puntosColTotal(col, edad, sexo);
     const pHDL    = puntosHDL(hdl);
     const pPAS    = puntosPAS(pas, tto, sexo);
-    const pTabaco = puntosTabaco(fuma, sexo);
+    const pTabaco = puntosTabaco(fuma, sexo, edad);
     const total   = pEdad + pCol + pHDL + pPAS + pTabaco;
 
     let riesgo = puntoADriesgo(total, sexo);
@@ -625,28 +545,25 @@
     if (dm && riesgo < 0.20) riesgo = 0.20;
     // Ajuste por ECV establecida
     if (ecv) riesgo = Math.max(riesgo, 0.30);
-    // Ajuste por IRC
-    if (irc && riesgo < 0.15) riesgo = 0.15;
 
     const riesgoPct = Math.min(riesgo * 100, 99);
-    const edVasc    = edadVascular(total, sexo);
 
     // Categoría
     let cat, clsCss;
-    if (ecv || dm || riesgoPct >= 30) { cat='MUY ALTO'; clsCss='muy-alto'; }
-    else if (riesgoPct >= 20) { cat='ALTO'; clsCss='alto'; }
+    if (ecv || riesgoPct >= 30) { cat='MUY ALTO'; clsCss='muy-alto'; }
+    else if (dm || riesgoPct >= 20) { cat='ALTO'; clsCss='alto'; }
     else if (riesgoPct >= 10) { cat='MODERADO'; clsCss='moderado'; }
     else { cat='BAJO'; clsCss='bajo'; }
 
     // Riesgo óptimo (sin tabaco, HDL ficticio 60, col <160, PAS <120, no tratado)
-    const ptsOpt = puntosEdad(edad,sexo) + 0 + (-1) + 0 + 0;
+    const ptsOpt = puntosEdad(edad,sexo) + puntosColTotal(150, edad, sexo) + (-1) + 0 + 0;
     const riesgoOpt = puntoADriesgo(ptsOpt, sexo) * 100;
 
     // Banner
     document.getElementById('riesgo-banner').className = 'riesgo-banner ' + clsCss;
     document.getElementById('res-pct').textContent = riesgoPct.toFixed(0) + '%';
     document.getElementById('res-categoria').textContent = cat;
-    document.getElementById('res-sub').textContent = `Probabilidad de evento cardiovascular mayor en los próximos 10 años • Puntuación Framingham: ${total} pts`;
+    document.getElementById('res-sub').textContent = `Probabilidad de infarto o muerte coronaria en los próximos 10 años • Puntuación Framingham: ${total} pts`;
 
     // Gauge
     const arcLen = 345;
@@ -657,7 +574,7 @@
 
     // KPIs
     document.getElementById('kpi-puntos').textContent = total + ' pts';
-    document.getElementById('kpi-edad-vasc').textContent = edVasc <= edad ? `${edVasc} años ✅` : `${edVasc} años ⚠️`;
+    document.getElementById('kpi-edad-vasc').textContent = riesgoOpt > 0 ? '×' + (riesgoPct / riesgoOpt).toFixed(1) : '—';
     document.getElementById('kpi-riesgo-opt').textContent = riesgoOpt.toFixed(1) + '%';
     document.getElementById('kpi-categ').textContent = cat;
 
@@ -706,13 +623,12 @@
     recs.push({ ico:'📋', txt:`<strong>Control en ${cat==='BAJO'?'5 años':cat==='MODERADO'?'1 año':'6 meses'}.</strong> Reevaluar score de Framingham periódicamente.` });
     if (fuma) recs.push({ ico:'🚭', txt:`<strong>Cese del tabaquismo (prioridad máxima).</strong> El tabaquismo es el factor de riesgo modificable individual más importante. Ofrecer apoyo farmacológico (vareniclina, bupropión) y terapia conductual.` });
     if (cat==='MODERADO'||cat==='ALTO'||cat==='MUY ALTO') recs.push({ ico:'💊', txt:`<strong>Estatinas.</strong> Meta LDL ${metaLDLlbl}. Iniciar con atorvastatina ${cat==='MUY ALTO'?'40–80':'10–20'} mg/día o rosuvastatina ${cat==='MUY ALTO'?'20–40':'10'} mg/día.` });
-    if (ecv||cat==='ALTO'||cat==='MUY ALTO') recs.push({ ico:'💊', txt:`<strong>AAS 100 mg/día</strong> en prevención secundaria o primaria de alto riesgo (valorar riesgo-beneficio individual vs. sangrado).` });
+    if (ecv) recs.push({ ico:'💊', txt:`<strong>Antiagregación</strong> en prevención secundaria según criterio clínico. En prevención primaria no se recomienda de rutina; valore el riesgo de sangrado frente al beneficio individual.`, cls:'' });
     if (pas>=130) recs.push({ ico:'🫀', txt:`<strong>Control de presión arterial.</strong> Meta ${metaPASlbl}. ${tto?'Optimizar o escalar terapia antihipertensiva actual.':'Iniciar tratamiento farmacológico según guías.'}` });
     if (col>=200 || (ldl && ldl>=metaLDL)) recs.push({ ico:'🥗', txt:`<strong>Dieta cardioprotectora.</strong> Patrón mediterráneo: aumentar consumo de vegetales, frutas, legumbres, pescado y aceite de oliva. Reducir grasas saturadas y grasas trans.` });
     if (obeso) recs.push({ ico:'⚖️', txt:`<strong>Control de peso.</strong> Reducción del 5–10% del peso corporal mejora significativamente el perfil lipídico, la PA y la sensibilidad a la insulina.` });
     recs.push({ ico:'🏃', txt:`<strong>Actividad física.</strong> Mínimo 150 min/semana de ejercicio aeróbico de moderada intensidad (30 min/día, 5 días). Reduce el riesgo CV un 30–35%.` });
     if (dm) recs.push({ ico:'🩸', txt:`<strong>Control glucémico (DM).</strong> Meta HbA1c &lt; 7%. La DM es equivalente a enfermedad cardiovascular establecida: tratar como riesgo muy alto.` });
-    if (edVasc > edad + 5) recs.push({ ico:'⏰', txt:`<strong>Edad vascular estimada (${edVasc} años) mayor a la edad real (${edad} años).</strong> Los factores de riesgo presentes están envejeciendo el sistema cardiovascular prematuramente. Intervención intensiva.` });
     if (cat==='MUY ALTO'||ecv) recs.push({ ico:'🏥', txt:`<strong>Referir a cardiología.</strong> Paciente de riesgo muy alto o con ECV establecida. Considerar perfil lipídico completo, prueba de esfuerzo y estudio de imagen según indicación.` });
 
     document.getElementById('recomendaciones').innerHTML = recs.map(r => `
@@ -739,6 +655,25 @@
   }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Puntaje de Framingham (ATP III): qué estima y cómo interpretarlo</h2>
+<h3>Qué estima exactamente</h3>
+<p>El puntaje de Framingham del <strong>Panel ATP III</strong> estima la probabilidad de <strong>infarto de miocardio o muerte coronaria en los próximos 10 años</strong> en personas de 20 a 79 años sin enfermedad cardiovascular ni diabetes. No predice accidente cerebrovascular ni otros eventos. Se deriva de una población norteamericana, y no está calibrado para la población colombiana, por lo que puede sobrestimar o subestimar el riesgo individual.</p>
+<h3>Las variables y los puntos</h3>
+<p>Se suman puntos por edad, colesterol total, tabaquismo, colesterol HDL y presión arterial sistólica (con o sin tratamiento antihipertensivo). Los puntos del colesterol total y del tabaquismo <strong>dependen del grupo de edad</strong>, porque su peso relativo disminuye con los años. La tabla de conversión pasa de puntos a porcentaje de riesgo a 10 años, con tablas distintas para hombres y mujeres.</p>
+<h3>Categorías de riesgo</h3>
+<p>El ATP III considera riesgo <strong>bajo</strong> menos de 10 %, <strong>intermedio</strong> de 10 % a 20 % y <strong>alto</strong> más de 20 %. Las personas con diabetes o enfermedad cardiovascular establecida se consideran de alto riesgo sin calcular el puntaje. Las metas de colesterol LDL y de presión arterial dependen de la categoría y de las guías vigentes.</p>
+<h3>Límites y alternativas</h3>
+<p>El puntaje no incluye antecedentes familiares, obesidad, sedentarismo, enfermedad renal ni marcadores como el calcio coronario, que pueden reclasificar el riesgo. Otras guías usan ecuaciones más recientes, como las cohortes combinadas, SCORE2 o las tablas de la OMS por región. La decisión de tratar es del médico y debe compartirse con el paciente.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese edad, sexo, colesterol total, HDL, presión sistólica, tratamiento antihipertensivo y tabaquismo. La herramienta muestra los puntos, el riesgo a 10 años, la categoría y las metas orientativas. Las tablas de puntuación completas están en la pestaña de referencia.</p><p><em>Uso exclusivo de apoyo para profesionales de la salud. Esta herramienta no sustituye el juicio clínico ni los protocolos de su institución; verifique siempre los resultados y las dosis con fuentes oficiales y con un segundo profesional.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: hombre de 55 años</h3><p>Colesterol total 220 mg/dL, HDL 45 mg/dL, presión sistólica 130 mmHg sin tratamiento, no fumador.</p><ul><li>Edad 55–59: <strong>8</strong> puntos.</li><li>Colesterol total 200–239 en el grupo de 50–59 años: <strong>3</strong>.</li><li>HDL 40–49: <strong>1</strong>. Presión 130–139 sin tratamiento: <strong>1</strong>. Tabaquismo: <strong>0</strong>.</li></ul><p>Total: <strong>13 puntos</strong>, equivalente a un riesgo de <strong>12 %</strong> a 10 años, en la categoría intermedia.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Sirve para personas con diabetes?</summary><p>No se calcula en ese caso: en el ATP III la diabetes se trata como equivalente de riesgo coronario y se clasifica en riesgo alto.</p></details>
+<details><summary>¿Qué pasa si el paciente ya tuvo un infarto?</summary><p>Se trata de prevención secundaria y no se usa el puntaje de riesgo.</p></details>
+<details><summary>¿Por qué el riesgo de dos personas con los mismos valores puede diferir entre escalas?</summary><p>Porque cada escala se derivó en una población y estima un evento distinto; la elección depende de la guía local.</p></details>
+<details><summary>¿Mide solo infarto?</summary><p>Sí: infarto de miocardio y muerte coronaria. Algunas escalas más recientes incluyen también ACV.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

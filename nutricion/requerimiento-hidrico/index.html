@@ -147,6 +147,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuántos vasos de agua son?", "acceptedAnswer": {"@type": "Answer", "text": "2 L son aproximadamente 8 vasos de 250 mL, pero parte del agua viene de los alimentos."}}, {"@type": "Question", "name": "¿El café y el té cuentan?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, aportan líquido; el efecto diurético es pequeño con consumo habitual."}}, {"@type": "Question", "name": "¿Se puede tomar demasiada agua?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, rara vez, puede causar hiponatremia; evite tomas excesivas en poco tiempo."}}, {"@type": "Question", "name": "¿Holiday-Segar sirve para adultos?", "acceptedAnswer": {"@type": "Answer", "text": "Se diseñó para niños; en adultos se usan otros métodos."}}]}</script>
 </head>
 <body>
 
@@ -664,6 +676,25 @@ function calcularClinico() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Requerimiento hídrico: cuánta agua necesita el cuerpo</h2>
+<h3>Referencias para adultos</h3>
+<p>La EFSA sugiere una ingesta total de agua de unos <strong>2,5 L/día en hombres y 2,0 L/día en mujeres</strong>, incluyendo el agua de los alimentos. Otros métodos de estimación usan unos 35 mL por kg de peso o 1 mL por kcal de gasto energético. Las necesidades reales varían con el clima, la actividad y la salud.</p>
+<h3>Método de Holiday-Segar en niños</h3>
+<p>Para el mantenimiento en niños se usa: 100 mL/kg los primeros 10 kg, 50 mL/kg los siguientes 10 kg y 20 mL/kg por cada kg adicional, por día. Es una estimación de líquidos de mantenimiento para uso clínico, no una recomendación general de ingesta.</p>
+<h3>Ajustes</h3>
+<p>Se necesitan más líquidos con calor, ejercicio, fiebre, vómito o diarrea. En insuficiencia cardiaca, renal o hepática avanzada puede requerirse restricción. Estas decisiones deben ser del equipo de salud.</p>
+<h3>Señales de hidratación</h3>
+<p>Orina clara a amarillo pálido y poca sed suelen indicar buena hidratación. La sed, la orina oscura y el mareo pueden indicar deshidratación; los síntomas intensos requieren atención médica.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese edad, peso y condiciones. La herramienta muestra el requerimiento por distintos métodos y los ajustes comunes.</p><p><em>Esta guía es informativa y las cifras son estimaciones. No reemplaza la valoración de un nutricionista-dietista ni del médico tratante, especialmente en personas con enfermedades, embarazo o niños.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplos</h3><ul><li><strong>Niño de 12 kg:</strong> 100 × 10 + 50 × 2 = <strong>1.100 mL/día</strong>, unos 45,8 mL/h.</li><li><strong>Adulto de 70 kg:</strong> 35 mL/kg da 2.450 mL; con los ajustes de actividad y clima, la recomendación ronda <strong>2,8 L/día</strong>.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuántos vasos de agua son?</summary><p>2 L son aproximadamente 8 vasos de 250 mL, pero parte del agua viene de los alimentos.</p></details>
+<details><summary>¿El café y el té cuentan?</summary><p>Sí, aportan líquido; el efecto diurético es pequeño con consumo habitual.</p></details>
+<details><summary>¿Se puede tomar demasiada agua?</summary><p>Sí, rara vez, puede causar hiponatremia; evite tomas excesivas en poco tiempo.</p></details>
+<details><summary>¿Holiday-Segar sirve para adultos?</summary><p>Se diseñó para niños; en adultos se usan otros métodos.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

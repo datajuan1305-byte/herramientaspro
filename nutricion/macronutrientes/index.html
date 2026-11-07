@@ -110,6 +110,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuánta proteína necesito?", "acceptedAnswer": {"@type": "Answer", "text": "En adultos sanos la referencia es 0,8 g/kg al día; deportistas y adultos mayores pueden requerir más según criterio profesional."}}, {"@type": "Question", "name": "¿Los carbohidratos engordan?", "acceptedAnswer": {"@type": "Answer", "text": "El balance total de energía determina el cambio de peso; la calidad del carbohidrato afecta la saciedad y la salud metabólica."}}, {"@type": "Question", "name": "¿Por qué 7.700 kcal por kilo?", "acceptedAnswer": {"@type": "Answer", "text": "Es una estimación del contenido energético del tejido perdido; es una aproximación y no una promesa."}}, {"@type": "Question", "name": "¿Puedo bajar de 1.200 kcal?", "acceptedAnswer": {"@type": "Answer", "text": "Las dietas muy bajas en calorías solo deben hacerse bajo supervisión médica."}}]}</script>
 </head>
 <body>
 
@@ -536,6 +548,25 @@ function calcularDeficit() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Distribución de macronutrientes: proteínas, carbohidratos y grasas</h2>
+<h3>Rangos aceptables</h3>
+<p>Los rangos de distribución aceptable de macronutrientes (AMDR) del Institute of Medicine son: carbohidratos del 45 % al 65 % de la energía, proteínas del 10 % al 35 % y grasas del 20 % al 35 %. Dentro de estos rangos se ajustan las proporciones según objetivos, preferencias y condiciones clínicas.</p>
+<h3>De porcentajes a gramos</h3>
+<p>Los carbohidratos y las proteínas aportan 4 kcal/g y las grasas 9 kcal/g. Para convertir: <code>gramos = (calorías × % ÷ 100) ÷ kcal por gramo</code>. La proteína también puede fijarse por peso corporal (por ejemplo, 0,8 g/kg en adultos sanos, y más en deportistas o adultos mayores).</p>
+<h3>Pérdida de peso y proyección</h3>
+<p>Un déficit sostenido de energía produce pérdida de peso. Una regla aproximada usa unas <strong>7.700 kcal por kg</strong> de tejido perdido, pero es una aproximación: el metabolismo se adapta y la pérdida real suele ser más lenta con el tiempo. Evite déficits extremos sin supervisión.</p>
+<h3>Calidad además de cantidad</h3>
+<p>La calidad importa: carbohidratos de cereales integrales, legumbres, frutas y verduras; proteínas magras, pescado y vegetales; grasas insaturadas. Conviene limitar azúcares libres, grasas trans y ultraprocesados.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese las calorías objetivo y el reparto deseado. La herramienta devuelve gramos de cada macronutriente y una proyección del tiempo de pérdida o ganancia de peso.</p><p><em>Esta guía es informativa y las cifras son estimaciones. No reemplaza la valoración de un nutricionista-dietista ni del médico tratante, especialmente en personas con enfermedades, embarazo o niños.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: dieta de 2.267 kcal con reparto 25/50/25</h3><p>Proteína: 2.267 × 0,25 ÷ 4 ≈ <strong>142 g</strong>; carbohidratos: 2.267 × 0,50 ÷ 4 ≈ <strong>283 g</strong>; grasa: 2.267 × 0,25 ÷ 9 ≈ <strong>63 g</strong>. Si una persona de 95 kg desea llegar a 70 kg con un déficit de 500 kcal/día, la proyección aproximada es de 25 × 7.700 ÷ 500 ≈ <strong>385 días</strong>.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuánta proteína necesito?</summary><p>En adultos sanos la referencia es 0,8 g/kg al día; deportistas y adultos mayores pueden requerir más según criterio profesional.</p></details>
+<details><summary>¿Los carbohidratos engordan?</summary><p>El balance total de energía determina el cambio de peso; la calidad del carbohidrato afecta la saciedad y la salud metabólica.</p></details>
+<details><summary>¿Por qué 7.700 kcal por kilo?</summary><p>Es una estimación del contenido energético del tejido perdido; es una aproximación y no una promesa.</p></details>
+<details><summary>¿Puedo bajar de 1.200 kcal?</summary><p>Las dietas muy bajas en calorías solo deben hacerse bajo supervisión médica.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

@@ -125,6 +125,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿El AUDIT diagnostica alcoholismo?", "acceptedAnswer": {"@type": "Answer", "text": "No. Detecta consumo de riesgo y posible dependencia; el diagnóstico requiere una valoración clínica."}}, {"@type": "Question", "name": "¿Qué es una bebida estándar?", "acceptedAnswer": {"@type": "Answer", "text": "Equivale aproximadamente a 10 a 14 g de alcohol puro, según el país: una cerveza, una copa de vino o un trago de licor."}}, {"@type": "Question", "name": "¿Cuándo usar el AUDIT-C?", "acceptedAnswer": {"@type": "Answer", "text": "Como tamizaje rápido; si es positivo se aplica el AUDIT completo."}}, {"@type": "Question", "name": "¿Es válido en adolescentes?", "acceptedAnswer": {"@type": "Answer", "text": "Se ha usado en adolescentes con puntos de corte ajustados; consulte las guías específicas."}}]}</script>
 </head>
 <body>
 
@@ -220,14 +232,14 @@
         <table class="ref-table">
           <thead><tr><th>Puntaje</th><th>Hombres</th><th>Mujeres</th><th>Acción</th></tr></thead>
           <tbody>
-            <tr><td>0–2</td><td colspan="2" style="text-align:center;">Consumo de bajo riesgo</td><td>Sin intervención específica</td></tr>
-            <tr><td>3–4</td><td>Bajo riesgo</td><td style="color:#f57c00; font-weight:700;">Consumo de riesgo</td><td>Mujeres: intervención breve</td></tr>
-            <tr><td>4–5</td><td style="color:#f57c00; font-weight:700;">Consumo de riesgo</td><td style="color:#c62828; font-weight:700;">Consumo perjudicial</td><td>Intervención breve todos</td></tr>
-            <tr><td>≥ 6</td><td colspan="2" style="color:#c62828; font-weight:700; text-align:center;">Consumo perjudicial / posible dependencia</td><td>Referir a especialista</td></tr>
+            <tr><td>0–2</td><td colspan="2" style="text-align:center;">Bajo riesgo</td><td>Sin intervención específica</td></tr>
+            <tr><td>3</td><td>Bajo riesgo</td><td style="color:#f57c00; font-weight:700;">Tamizaje positivo</td><td>Mujeres: completar AUDIT de 10 preguntas</td></tr>
+            <tr><td>4–7</td><td colspan="2" style="color:#f57c00; font-weight:700; text-align:center;">Tamizaje positivo: consumo de riesgo</td><td>Completar AUDIT y ofrecer intervención breve</td></tr>
+            <tr><td>≥ 8</td><td colspan="2" style="color:#c62828; font-weight:700; text-align:center;">Alto riesgo: consumo perjudicial o posible dependencia</td><td>Evaluación diagnóstica completa y derivación según el caso</td></tr>
           </tbody>
         </table>
       </div>
-      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">Puntos de corte: Hombres ≥ 4 puntos = consumo de riesgo | Mujeres ≥ 3 puntos = consumo de riesgo (Bush et al. 1998, adaptación OMS).</p>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">Puntos de corte de tamizaje positivo: hombres ≥ 4, mujeres ≥ 3 (Bush et al. 1998). Un puntaje de 8 o más indica alto riesgo. El AUDIT-C es una prueba de tamizaje: no diagnostica.</p>
     </div>
 
     <div class="card">
@@ -432,11 +444,13 @@ function calcularAUDITC() {
   const score    = puntajes.reduce((a,b) => a+b, 0);
 
   let clasH, clasM, colorH, colorM;
-  if (score <= 2)       { clasH='Bajo riesgo'; colorH='zona-I';   clasM='Bajo riesgo'; colorM='zona-I'; }
-  else if (score <= 3)  { clasH='Bajo riesgo'; colorH='zona-I';   clasM='Consumo de riesgo'; colorM='zona-II'; }
-  else if (score <= 4)  { clasH='Bajo riesgo'; colorH='zona-I';   clasM='Consumo de riesgo'; colorM='zona-II'; }
-  else if (score <= 5)  { clasH='Consumo de riesgo'; colorH='zona-II'; clasM='Consumo perjudicial'; colorM='zona-III'; }
-  else                  { clasH='Consumo perjudicial / dependencia'; colorH='zona-III'; clasM='Posible dependencia'; colorM='zona-IV'; }
+  // Punto de corte de tamizaje positivo: >= 4 hombres, >= 3 mujeres. Puntajes de 8 o más sugieren consumo de alto riesgo o posible dependencia.
+  if (score <= 3)       { clasH='Bajo riesgo'; colorH='zona-I'; }
+  else if (score <= 7)  { clasH='Tamizaje positivo: consumo de riesgo'; colorH='zona-II'; }
+  else                  { clasH='Alto riesgo: consumo perjudicial o posible dependencia'; colorH='zona-III'; }
+  if (score <= 2)       { clasM='Bajo riesgo'; colorM='zona-I'; }
+  else if (score <= 7)  { clasM='Tamizaje positivo: consumo de riesgo'; colorM='zona-II'; }
+  else                  { clasM='Alto riesgo: consumo perjudicial o posible dependencia'; colorM='zona-III'; }
 
   document.getElementById('resultado-auditc').style.display = 'block';
   document.getElementById('resultado-auditc').innerHTML = `
@@ -481,6 +495,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>AUDIT y AUDIT-C: tamizaje del consumo de alcohol</h2>
+<h3>Qué es el AUDIT</h3>
+<p>El <strong>AUDIT</strong> (Alcohol Use Disorders Identification Test) fue desarrollado por la OMS para detectar consumo de riesgo y problemas por alcohol en atención primaria. Tiene 10 preguntas sobre frecuencia y cantidad de consumo, síntomas de dependencia y consecuencias, con un puntaje de 0 a 40. Es una herramienta de tamizaje: orienta la intervención, no establece un diagnóstico.</p>
+<h3>Zonas de riesgo</h3>
+<p>Los puntos de corte habituales son: 0 a 7 consumo de bajo riesgo; 8 a 15 consumo de riesgo (consejo breve); 16 a 19 consumo perjudicial (consejo breve y seguimiento); 20 o más posible dependencia (evaluación especializada). Algunos países ajustan el corte en mujeres o adultos mayores, por lo que conviene confirmar el criterio local.</p>
+<h3>AUDIT-C: la versión corta</h3>
+<p>El <strong>AUDIT-C</strong> usa solo las tres primeras preguntas (puntaje 0 a 12). Se considera positivo con <strong>4 o más puntos en hombres y 3 o más en mujeres</strong>; un puntaje de 8 o más indica consumo de alto riesgo. Un resultado positivo se debe completar con el AUDIT de 10 preguntas.</p>
+<h3>Intervención breve</h3>
+<p>Según la zona de riesgo, se entrega información, consejo breve o se deriva. La intervención breve consiste en devolver el resultado, explicar los riesgos, explorar la motivación y acordar una meta realista. Las personas con posible dependencia pueden requerir manejo médico supervisado porque la abstinencia puede ser peligrosa.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Responda cada pregunta con la opción que mejor describa los últimos 12 meses. La herramienta suma el puntaje, muestra la zona de riesgo y las acciones sugeridas. Consulte la tabla de referencia para los puntos de corte.</p><p><em>Esta herramienta es de tamizaje y apoyo para profesionales: no es un diagnóstico y no sustituye la valoración clínica. Si usted o alguien cercano está en riesgo inmediato, llame a la línea de emergencias 123 o acuda al servicio de urgencias más cercano; también puede consultar las líneas de salud mental de su departamento o del Ministerio de Salud.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo de AUDIT-C</h3><p>Un hombre responde: consume alcohol 2 a 3 veces por semana (3 puntos), toma 5 o 6 tragos en un día típico (2 puntos) y 6 o más tragos una vez al mes (2 puntos). El AUDIT-C suma <strong>7</strong>: es positivo (≥ 4 en hombres) pero no llega al alto riesgo (≥ 8). Corresponde completar el AUDIT de 10 preguntas.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿El AUDIT diagnostica alcoholismo?</summary><p>No. Detecta consumo de riesgo y posible dependencia; el diagnóstico requiere una valoración clínica.</p></details>
+<details><summary>¿Qué es una bebida estándar?</summary><p>Equivale aproximadamente a 10 a 14 g de alcohol puro, según el país: una cerveza, una copa de vino o un trago de licor.</p></details>
+<details><summary>¿Cuándo usar el AUDIT-C?</summary><p>Como tamizaje rápido; si es positivo se aplica el AUDIT completo.</p></details>
+<details><summary>¿Es válido en adolescentes?</summary><p>Se ha usado en adolescentes con puntos de corte ajustados; consulte las guías específicas.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

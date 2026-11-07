@@ -121,6 +121,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué pasa si la FPP pasa y no hay parto?", "acceptedAnswer": {"@type": "Answer", "text": "Es frecuente. El control prenatal define la vigilancia y la conducta según la semana y la condición materno-fetal."}}, {"@type": "Question", "name": "¿La FPP puede cambiar?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, hasta que se establece la fecha definitiva con la ecografía temprana. Después se mantiene."}}, {"@type": "Question", "name": "¿Cuántos controles prenatales se recomiendan?", "acceptedAnswer": {"@type": "Answer", "text": "Depende de la guía vigente y del riesgo de la gestante. La herramienta muestra un calendario de referencia; la gestante debe seguir las indicaciones de su equipo de salud."}}, {"@type": "Question", "name": "¿Sirve para embarazos por fertilización in vitro?", "acceptedAnswer": {"@type": "Answer", "text": "Para esos casos se usa la fecha de transferencia embrionaria, que permite calcular la edad gestacional con mayor exactitud."}}]}</script>
 </head>
 <body>
 
@@ -135,7 +147,7 @@
 <div class="hero">
   <div class="hero-badge">🩺 Médicos — Obstetricia — Enfermería</div>
   <h1>Calculadora Fecha Probable de Parto 2026</h1>
-  <p>Calcula la FPP por Regla de Naegele, edad gestacional en semanas y días, trimestre actual, controles prenatales y fecha de viabilidad fetal. Guías MinSalud Colombia.</p>
+  <p>Calcula la FPP por Regla de Naegele, edad gestacional en semanas y días, trimestre actual, controles prenatales y umbral de viabilidad fetal. Guías MinSalud Colombia.</p>
   <div class="hero-chips">
     <span class="hero-chip">🇨🇴 Guías MinSalud Colombia</span>
     <span class="hero-chip">📅 Regla de Naegele</span>
@@ -240,11 +252,11 @@
       </div>
       <div class="trimestre-card trim-2">
         <div class="trim-titulo" style="color:#2e7d32;">🟢 Segundo Trimestre — Semanas 14 a 27</div>
-        <p style="font-size:0.85rem;">Semana 18–20: ecografía morfológica. Semana 20: movimientos fetales perceptibles. Semana 24: límite de viabilidad fetal. Semana 26: apertura de ojos. <strong>Período más estable del embarazo.</strong></p>
+        <p style="font-size:0.85rem;">Semana 18–20: ecografía morfológica. Semana 20: movimientos fetales perceptibles. Semana 22–24: umbral de viabilidad (varía según el nivel de atención neonatal). Semana 26: apertura de ojos. <strong>Período más estable del embarazo.</strong></p>
       </div>
       <div class="trimestre-card trim-3">
         <div class="trim-titulo" style="color:#1565c0;">🔵 Tercer Trimestre — Semanas 28 a 40</div>
-        <p style="font-size:0.85rem;">Semana 28: maduración pulmonar. Semana 32: posición cefálica. Semana 36: pulmones maduros. Semana 37: término completo. Semana 40: FPP. <strong>Monitoreo frecuente del bienestar fetal.</strong></p>
+        <p style="font-size:0.85rem;">Semana 28: maduración pulmonar. Semana 32: posición cefálica. Semana 36: pulmones maduros. Semana 37: inicio del término temprano; 39 a 40+6: término completo. Semana 40: FPP. <strong>Monitoreo frecuente del bienestar fetal.</strong></p>
       </div>
     </div>
 
@@ -332,19 +344,19 @@ function calcularFPP() {
   if (metodo === 'fum') {
     const val = document.getElementById('f-fum').value;
     if (!val) { alert('Ingresa la fecha de última menstruación.'); return; }
-    fum = new Date(val);
+    fum = new Date(val + 'T00:00:00');
     // Ajuste por ciclo diferente a 28 días
     fum = addDays(fum, ciclo - 28);
   } else if (metodo === 'concepcion') {
     const val = document.getElementById('f-concepcion').value;
     if (!val) { alert('Ingresa la fecha de concepción.'); return; }
-    fum = addDays(new Date(val), -14);
+    fum = addDays(new Date(val + 'T00:00:00'), -14);
   } else {
     const semEco  = parseInt(document.getElementById('f-eco-sem').value) || 12;
     const diasEco = parseInt(document.getElementById('f-eco-dias').value) || 0;
     const fechaEco= document.getElementById('f-eco-fecha').value;
     if (!fechaEco) { alert('Ingresa la fecha de la ecografía.'); return; }
-    const ecoDate = new Date(fechaEco);
+    const ecoDate = new Date(fechaEco + 'T00:00:00');
     const diasGestEco = semEco * 7 + diasEco;
     fum = addDays(ecoDate, -diasGestEco);
   }
@@ -406,16 +418,16 @@ function calcularFPP() {
         <thead><tr><th>Fecha clave</th><th>Semana</th><th>Descripción</th></tr></thead>
         <tbody>
           <tr class="${hoy >= viabilidad ? 'pasado' : 'proximo'}">
-            <td>${formatFecha(viabilidad)}</td><td>Semana 24</td><td>Límite de viabilidad fetal</td>
+            <td>${formatFecha(viabilidad)}</td><td>Semana 24</td><td>Umbral de viabilidad (varía según el centro; 22–24 sem)</td>
           </tr>
           <tr class="${hoy >= termino ? 'pasado' : 'proximo'}">
-            <td>${formatFecha(termino)}</td><td>Semana 37</td><td>Embarazo a término completo</td>
+            <td>${formatFecha(termino)}</td><td>Semana 37</td><td>Inicio de término temprano (término completo desde la semana 39)</td>
           </tr>
           <tr class="actual">
             <td>${formatFecha(fpp)}</td><td>Semana 40</td><td>⭐ Fecha Probable de Parto (FPP)</td>
           </tr>
           <tr class="${hoy >= postermino ? 'pasado' : 'proximo'}">
-            <td>${formatFecha(postermino)}</td><td>Semana 42</td><td>⚠️ Embarazo postérmino — evaluar inducción</td>
+            <td>${formatFecha(postermino)}</td><td>Semana 42</td><td>⚠️ Embarazo postérmino — valorar conducta obstétrica según protocolo</td>
           </tr>
         </tbody>
       </table>
@@ -435,7 +447,7 @@ function calcularControles() {
   const paciente = document.getElementById('c-paciente').value || 'Paciente';
   if (!fumVal) { alert('Ingresa la fecha de última menstruación.'); return; }
 
-  const fum = new Date(fumVal);
+  const fum = new Date(fumVal + 'T00:00:00');
   fum.setHours(0,0,0,0);
   const hoy = new Date(); hoy.setHours(0,0,0,0);
   const fpp = addDays(fum, 280);
@@ -499,7 +511,7 @@ function calcularControles() {
 
 // Inicializar fechas
 document.addEventListener('DOMContentLoaded', () => {
-  const hoy = new Date().toISOString().split('T')[0];
+  const hoy = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().split('T')[0];
   const hace10sem = new Date();
   hace10sem.setDate(hace10sem.getDate() - 70);
   const fumDefault = hace10sem.toISOString().split('T')[0];
@@ -510,6 +522,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Fecha probable de parto: regla de Naegele y edad gestacional</h2>
+<h3>Cómo se calcula</h3>
+<p>La <strong>fecha probable de parto (FPP)</strong> más usada se obtiene de la fecha de la última menstruación (FUM) sumando <strong>280 días</strong> (40 semanas). La regla de Naegele es equivalente: se suman 7 días a la FUM y se restan 3 meses; ambas dan fechas que pueden diferir uno o dos días. Si se conoce la fecha de concepción, se suman 266 días.</p>
+<h3>Cuándo es confiable la FUM</h3>
+<p>Asume ciclos de 28 días con ovulación el día 14. Es menos exacta si los ciclos son irregulares, más largos o más cortos, si la mujer usó anticonceptivos hormonales recientemente o si no recuerda la fecha. En esos casos la herramienta permite ajustar la duración del ciclo.</p>
+<h3>La ecografía temprana</h3>
+<p>La ecografía del primer trimestre, que mide la longitud cráneo-caudal, es el método más preciso para datar el embarazo. Las guías suelen corregir la fecha cuando la diferencia con la FUM supera unos 5 a 7 días en el primer trimestre; confirme el criterio con la guía de su institución. Una vez establecida la FPP definitiva, no se vuelve a cambiar con ecografías posteriores.</p>
+<h3>Edad gestacional y términos</h3>
+<p>La edad gestacional se expresa en semanas completas y días. Se clasifica como <strong>término temprano</strong> (37+0 a 38+6), <strong>término completo</strong> (39+0 a 40+6), <strong>término tardío</strong> (41+0 a 41+6) y <strong>postérmino</strong> (42+0 o más). Solo una minoría de los partos ocurre exactamente en la FPP; es una referencia, no una fecha segura.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Elija el método (FUM, concepción o ecografía), ingrese los datos y obtendrá la FPP, la edad gestacional actual, el trimestre y las fechas clave de control prenatal. Los controles propuestos son una referencia; siga la guía de atención prenatal vigente.</p><p><em>Uso exclusivo de apoyo para profesionales de la salud. Esta herramienta no sustituye el juicio clínico ni los protocolos de su institución; verifique siempre los resultados y las dosis con fuentes oficiales y con un segundo profesional.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: FUM el 10 de marzo de 2026</h3><p>Sumando 280 días a la FUM, la fecha probable de parto es el <strong>15 de diciembre de 2026</strong> (la regla de Naegele da una fecha muy cercana). Con una FUM del 10 de marzo, el 6 de noviembre de 2026 la gestante tendría <strong>34 semanas y 3 días</strong>, es decir, tercer trimestre.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué pasa si la FPP pasa y no hay parto?</summary><p>Es frecuente. El control prenatal define la vigilancia y la conducta según la semana y la condición materno-fetal.</p></details>
+<details><summary>¿La FPP puede cambiar?</summary><p>Sí, hasta que se establece la fecha definitiva con la ecografía temprana. Después se mantiene.</p></details>
+<details><summary>¿Cuántos controles prenatales se recomiendan?</summary><p>Depende de la guía vigente y del riesgo de la gestante. La herramienta muestra un calendario de referencia; la gestante debe seguir las indicaciones de su equipo de salud.</p></details>
+<details><summary>¿Sirve para embarazos por fertilización in vitro?</summary><p>Para esos casos se usa la fecha de transferencia embrionaria, que permite calcular la edad gestacional con mayor exactitud.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

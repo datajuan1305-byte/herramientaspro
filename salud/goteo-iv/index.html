@@ -137,6 +137,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuántas microgotas hay en un mL?", "acceptedAnswer": {"@type": "Answer", "text": "En un microgotero estándar son 60 microgotas por mL, de modo que las microgotas por minuto equivalen a los mL por hora."}}, {"@type": "Question", "name": "¿Por qué conviene verificar el factor del equipo?", "acceptedAnswer": {"@type": "Answer", "text": "Porque no todos los equipos tienen el mismo factor de goteo; usar un factor equivocado cambia la velocidad real."}}, {"@type": "Question", "name": "¿Qué hago si la dosis se prescribe en mcg/min y no por kg?", "acceptedAnswer": {"@type": "Answer", "text": "No se multiplica por el peso: mg/h = dosis × 60 ÷ 1000."}}, {"@type": "Question", "name": "¿La bomba reemplaza el cálculo?", "acceptedAnswer": {"@type": "Answer", "text": "No. La bomba ejecuta lo que se programa; el cálculo y la verificación siguen siendo responsabilidad del profesional."}}]}</script>
 </head>
 <body>
 
@@ -262,6 +274,8 @@
             <option value="mcg/kg/h">mcg/kg/h</option>
             <option value="UI/kg/h">UI/kg/h (heparina/insulina)</option>
             <option value="mg/h">mg/h (independiente de peso)</option>
+            <option value="mcg/min">mcg/min (independiente de peso)</option>
+            <option value="mg/min">mg/min (independiente de peso)</option>
             <option value="UI/h">UI/h</option>
           </select>
         </div>
@@ -469,15 +483,15 @@ function calcularGoteo() {
 const perfusionesPre = {
   dopamina:      { dosis: 5, unidad: 'mcg/kg/min', conc: 1.6,  concOrig: 40,   volDil: 230 },
   dobutamina:    { dosis: 5, unidad: 'mcg/kg/min', conc: 1.0,  concOrig: 12.5, volDil: 240 },
-  norepinefrina: { dosis: 0.1, unidad: 'mcg/kg/min', conc: 0.1, concOrig: 1,   volDil: 240 },
-  epinefrina:    { dosis: 0.1, unidad: 'mcg/kg/min', conc: 0.1, concOrig: 1,   volDil: 240 },
+  norepinefrina: { dosis: 0.1, unidad: 'mcg/kg/min', conc: 0.016, concOrig: 1,   volDil: 240 },
+  epinefrina:    { dosis: 0.1, unidad: 'mcg/kg/min', conc: 0.016, concOrig: 1,   volDil: 240 },
   morfina:       { dosis: 2,   unidad: 'mg/h',        conc: 1.0, concOrig: 10,  volDil: 240 },
   midazolam:     { dosis: 0.05,unidad: 'mg/kg/h',     conc: 1.0, concOrig: 5,   volDil: 240 },
   propofol:      { dosis: 1,   unidad: 'mg/kg/h',     conc: 10,  concOrig: 10,  volDil: 0   },
   heparina:      { dosis: 18,  unidad: 'UI/kg/h',     conc: 100, concOrig: 5000,volDil: 245 },
   insulina:      { dosis: 0.1, unidad: 'UI/kg/h',     conc: 1,   concOrig: 100, volDil: 99  },
-  amiodarona:    { dosis: 1,   unidad: 'mg/h',        conc: 1.8, concOrig: 50,  volDil: 230 },
-  nitroglicerina:{ dosis: 10,  unidad: 'mcg/kg/min',  conc: 0.2, concOrig: 5,   volDil: 240 },
+  amiodarona:    { dosis: 1,   unidad: 'mg/min',      conc: 1.8, concOrig: 50,  volDil: 230 },
+  nitroglicerina:{ dosis: 10,  unidad: 'mcg/min',     conc: 0.2, concOrig: 5,   volDil: 240 },
   custom:        { dosis: 1,   unidad: 'mg/h',        conc: 1,   concOrig: 10,  volDil: 240 },
 };
 
@@ -512,6 +526,8 @@ function calcularPerfusion() {
   else if (unidad === 'mcg/kg/h')   mgH = dosis * peso / 1000;
   else if (unidad === 'UI/kg/h')    mgH = dosis * peso; // UI/h
   else if (unidad === 'mg/h')       mgH = dosis;
+  else if (unidad === 'mcg/min')    mgH = dosis * 60 / 1000;
+  else if (unidad === 'mg/min')     mgH = dosis * 60;
   else if (unidad === 'UI/h')       mgH = dosis;
 
   const mlH = mgH / conc;
@@ -527,6 +543,7 @@ function calcularPerfusion() {
       <div class="resultado-titulo">Perfusión Continua — ${med.charAt(0).toUpperCase()+med.slice(1)}</div>
       <div class="resultado-grande">${fmt(mlH, 2)} mL/h</div>
       <div class="resultado-sub">Velocidad de bomba para ${dosis} ${unidad} en paciente de ${peso} kg</div>
+      <div class="resultado-sub" style="margin-top:6px">⚠️ Los valores precargados son solo ejemplos de formato. Use la dosis, la concentración y los límites del protocolo de su institución y verifique con una segunda persona.</div>
       <div class="resultado-grid">
         <div class="resultado-item"><div class="resultado-valor">${fmt(mlH,2)} mL/h</div><div class="resultado-label">Velocidad bomba</div></div>
         <div class="resultado-item"><div class="resultado-valor">${fmt(mgH,2)}</div><div class="resultado-label">Dosis ${unidad.includes('UI') ? 'UI' : 'mg'}/h</div></div>
@@ -624,6 +641,25 @@ function calcularRegla3() {
 autoPerfusion();
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Goteo y perfusión intravenosa: fórmulas y seguridad</h2>
+<h3>Velocidad de infusión por gravedad</h3>
+<p>Cuando se usa un equipo de venoclisis por gravedad, la velocidad se expresa en gotas por minuto: <code>gotas/min = volumen (mL) × factor de goteo ÷ tiempo (min)</code>. El factor de goteo depende del equipo: el macrogoteo suele ser de 10, 15 o 20 gotas/mL según el fabricante, y el microgoteo es de 60 microgotas/mL. <strong>Verifique el factor impreso en el empaque</strong> del equipo que está usando. Con bomba de infusión se programa directamente en mL/h.</p>
+<h3>Perfusión de fármacos por peso</h3>
+<p>Muchos fármacos de infusión continua se prescriben por peso y por minuto. La conversión es <code>mg/h = dosis (mcg/kg/min) × peso (kg) × 60 ÷ 1000</code> y luego <code>mL/h = mg/h ÷ concentración (mg/mL)</code>. Otras dosis se prescriben en mg/h, mcg/min o UI/h. Confirme las unidades antes de calcular: el error de unidades es una causa clásica de eventos adversos graves.</p>
+<h3>Diluciones y regla de tres</h3>
+<p>Para preparar una dilución se usa <code>C₁ × V₁ = C₂ × V₂</code>: la cantidad de fármaco no cambia al diluir. Con ella se calcula el volumen de la presentación que debe añadirse al volumen final. También sirve la regla de tres para convertir entre dosis por peso y dosis total.</p>
+<h3>Seguridad del paciente</h3>
+<p>Los fármacos de infusión continua suelen ser de alto riesgo. Verifique con un segundo profesional el fármaco, la concentración, la dosis y la velocidad de la bomba, use bombas con biblioteca de fármacos cuando existan y siga el protocolo de su institución. Los valores precargados en la herramienta son solo ejemplos de formato, no recomendaciones de dosis.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Use la pestaña de goteo para volumen y tiempo, la de perfusión para dosis por peso, la de dilución para preparar concentraciones y la regla de tres para conversiones rápidas.</p><p><em>Uso exclusivo de apoyo para profesionales de la salud. Esta herramienta no sustituye el juicio clínico ni los protocolos de su institución; verifique siempre los resultados y las dosis con fuentes oficiales y con un segundo profesional.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplos aritméticos</h3><ul><li><strong>Solución de 1.000 mL en 8 horas:</strong> 125 mL/h; con macrogoteo de 20 gotas/mL son 1.000 × 20 ÷ 480 ≈ <strong>41,7 gotas/min</strong>.</li><li><strong>Fármaco X a 5 mcg/kg/min en un paciente de 70 kg:</strong> 5 × 70 × 60 ÷ 1000 = <strong>21 mg/h</strong>; con una concentración de 1,6 mg/mL, la bomba se programa a 21 ÷ 1,6 ≈ <strong>13,1 mL/h</strong>.</li></ul><p>La dosis del segundo ejemplo es ilustrativa y no una recomendación clínica.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuántas microgotas hay en un mL?</summary><p>En un microgotero estándar son 60 microgotas por mL, de modo que las microgotas por minuto equivalen a los mL por hora.</p></details>
+<details><summary>¿Por qué conviene verificar el factor del equipo?</summary><p>Porque no todos los equipos tienen el mismo factor de goteo; usar un factor equivocado cambia la velocidad real.</p></details>
+<details><summary>¿Qué hago si la dosis se prescribe en mcg/min y no por kg?</summary><p>No se multiplica por el peso: mg/h = dosis × 60 ÷ 1000.</p></details>
+<details><summary>¿La bomba reemplaza el cálculo?</summary><p>No. La bomba ejecuta lo que se programa; el cálculo y la verificación siguen siendo responsabilidad del profesional.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>
