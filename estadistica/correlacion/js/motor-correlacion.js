@@ -35,11 +35,18 @@ const MC = {
     return t >= 0 ? 1 - p : p;
   },
   normCDF: function(x) {
-    const t = 1 / (1 + 0.2316419 * Math.abs(x));
-    const d = 0.3989422820 * Math.exp(-x * x / 2);
-    const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.7814779 + t * (-1.8212560 + t * 1.3302744))));
-    return x > 0 ? 1 - p : p;
-  }
+    // Cola superior Q(|x|) con precisión ~1e-15 (serie de erf para |x|<3, fracción continua en la cola)
+    const ax = Math.abs(x); let Q;
+    if (ax < 3) {
+      const z = ax / Math.SQRT2; let term = z, sum = z;
+      for (let n = 1; n < 300; n++) { term *= 2 * z * z / (2 * n + 1); sum += term; if (term < 1e-17 * sum) break; }
+      Q = 0.5 - 0.5 * (2 / Math.sqrt(Math.PI)) * Math.exp(-z * z) * sum;
+    } else {
+      let fc = ax; for (let k = 80; k >= 1; k--) fc = ax + k / fc;
+      Q = Math.exp(-ax * ax / 2) / Math.sqrt(2 * Math.PI) / fc;
+    }
+    return x >= 0 ? 1 - Q : Q;
+  },
 };
 
 function parsearParejas(textoX, textoY) {
@@ -105,21 +112,20 @@ function correlacionKendall(x, y) {
       else if (prod < 0) nd++;
     }
   }
-  // conteo de grupos empatados en x y en y (para la corrección tau-b)
-  function contarGruposEmpatados(valores) {
+  // tamaños de los grupos empatados en x y en y (corrección tau-b y varianza con empates)
+  function gruposEmpatados(valores) {
     const conteos = new Map();
     valores.forEach(v => conteos.set(v, (conteos.get(v) || 0) + 1));
-    let suma = 0;
-    conteos.forEach(t => { if (t > 1) suma += t * (t - 1) / 2; });
-    return suma;
+    return Array.from(conteos.values()).filter(t => t > 1);
   }
-  const n1 = contarGruposEmpatados(x);
-  const n2 = contarGruposEmpatados(y);
+  const gx = gruposEmpatados(x), gy = gruposEmpatados(y);
+  const n1 = gx.reduce((a, t) => a + t * (t - 1) / 2, 0);
+  const n2 = gy.reduce((a, t) => a + t * (t - 1) / 2, 0);
   const n0 = n * (n - 1) / 2;
 
   const denom = Math.sqrt((n0 - n1) * (n0 - n2));
   const tau = denom > 0 ? (nc - nd) / denom : NaN;
-  return { tau, nc, nd, n0, n1, n2 };
+  return { tau, nc, nd, n0, n1, n2, gx, gy };
 }
 
 // ═══ PRUEBAS DE SIGNIFICANCIA ═══
@@ -132,9 +138,21 @@ function pruebaSignificanciaR(r, n) {
   return { t, df, pValor: Math.max(0, Math.min(1, pValor)) };
 }
 
-function pruebaSignificanciaKendall(tau, n) {
-  // Aproximación normal asintótica (válida para n moderado/grande)
-  const z = (3 * tau * Math.sqrt(n * (n - 1))) / Math.sqrt(2 * (2 * n + 5));
+function pruebaSignificanciaKendall(tau, n, det) {
+  // Aproximación normal asintótica. Con empates (det.gx, det.gy) usa la varianza corregida de S = nc − nd,
+  // la misma que emplean cor.test de R y scipy.stats.kendalltau (method = "asymptotic").
+  let z;
+  if (det && det.gx && Number.isFinite(det.nc)) {
+    const S = det.nc - det.nd, s1 = (g, f) => g.reduce((a, t) => a + f(t), 0);
+    const v0 = n * (n - 1) * (2 * n + 5);
+    const vt = s1(det.gx, t => t * (t - 1) * (2 * t + 5)), vu = s1(det.gy, t => t * (t - 1) * (2 * t + 5));
+    const v1 = s1(det.gx, t => t * (t - 1)) * s1(det.gy, t => t * (t - 1));
+    const v2 = s1(det.gx, t => t * (t - 1) * (t - 2)) * s1(det.gy, t => t * (t - 1) * (t - 2));
+    const varS = (v0 - vt - vu) / 18 + v1 / (2 * n * (n - 1)) + (n > 2 ? v2 / (9 * n * (n - 1) * (n - 2)) : 0);
+    z = S / Math.sqrt(varS);
+  } else {
+    z = (3 * tau * Math.sqrt(n * (n - 1))) / Math.sqrt(2 * (2 * n + 5));
+  }
   const pValor = 2 * (1 - MC.normCDF(Math.abs(z)));
   return { z, pValor: Math.max(0, Math.min(1, pValor)) };
 }

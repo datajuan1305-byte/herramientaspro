@@ -191,8 +191,11 @@
 
 <script src="js/motor-factorial.js"></script>
 <script src="js/interpretacion-factorial.js"></script>
+<script src="../js/hp-codigo.js"></script>
+<script src="js/codigo-factorial.js"></script>
 <script>
 let currentResultadoFactorial = null;
+let currentDatosFactorial = null;
 let chartFactorial = null;
 
 function configurarDiseno() {
@@ -230,7 +233,7 @@ function calcularFactorial() {
   errBox.style.display = 'none';
 
   const r = analizarFactorial(k, datosPorCorrida);
-  currentResultadoFactorial = r;
+  currentResultadoFactorial = r; currentDatosFactorial = datosPorCorrida;
   renderResultadoFactorial(r);
   const rb = document.getElementById('respuesta-box'); if (rb) rb.classList.remove('visible');
 }
@@ -261,8 +264,10 @@ function renderResultadoFactorial(r) {
     </table>
     <div class="chart-container"><canvas id="factorial-chart"></canvas></div>
     <div class="conclusion-text">${generarResumenFactorial(armarPayloadFactorial({}, r, '', ''))}</div>
+    <div id="hpc-host"></div>
   `;
   renderChartFactorial(r);
+  CodigoFactorial.montar(document.getElementById('hpc-host'), currentDatosFactorial, r);
 }
 
 function renderChartFactorial(r) {

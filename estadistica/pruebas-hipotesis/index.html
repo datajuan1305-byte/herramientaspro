@@ -159,6 +159,8 @@
 
 <script src="js/motor-pruebas.js"></script>
 <script src="js/interpretacion-pruebas.js"></script>
+<script src="../js/hp-codigo.js"></script>
+<script src="js/codigo-pruebas.js"></script>
 <script>
 const PRUEBAS = {
   z_media: {
@@ -433,7 +435,9 @@ function renderResultado(r, params) {
       ${r.rechazaH0 ? '❌ Se rechaza H₀' : '✅ No se rechaza H₀'}
       <div class="conclusion-text">${generarConclusionFormal(armarPayloadPrueba(currentPrueba, params, r, '', ''))}</div>
     </div>
+    <div id="hpc-host"></div>
   `;
+  CodigoPruebas.montar(document.getElementById('hpc-host'), currentPrueba, PRUEBAS[currentPrueba], params, r);
 }
 
 function usarSugerencia(texto) {

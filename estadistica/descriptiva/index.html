@@ -179,6 +179,8 @@
 
 <script src="js/motor-descriptiva.js"></script>
 <script src="js/interpretacion-descriptiva.js"></script>
+<script src="../js/hp-codigo.js"></script>
+<script src="js/codigo-descriptiva.js"></script>
 <script>
 let currentDatos = null;
 let currentResultados = null;
@@ -348,8 +350,10 @@ function renderResultados(r, datos) {
     </table>
     ${notaTrim}
     <div class="chart-container"><canvas id="hist-chart"></canvas></div>
+    <div id="hpc-host"></div>
   `;
   renderHistograma(datos);
+  CodigoDescriptiva.montar(document.getElementById('hpc-host'), datos, r);
 }
 
 function renderHistograma(datos) {

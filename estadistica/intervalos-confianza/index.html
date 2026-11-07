@@ -158,6 +158,8 @@
 
 <script src="js/motor-intervalos.js"></script>
 <script src="js/interpretacion-intervalos.js"></script>
+<script src="../js/hp-codigo.js"></script>
+<script src="js/codigo-intervalos.js"></script>
 <script>
 const CONFIGS = {
   media_z: {
@@ -392,7 +394,9 @@ function renderResultadoIC(r, params) {
         <div style="font-size:0.75rem;color:var(--text3);margin-top:0.4rem;">(cálculo exacto: ${fmtIC2(r.nExacto,3)}, redondeado hacia arriba)</div>
         <div class="conclusion-text">${conclusion}</div>
       </div>
+      <div id="hpc-host"></div>
     `;
+    CodigoIntervalos.montar(document.getElementById('hpc-host'), currentIC, CONFIGS[currentIC], params, r);
     return;
   }
 
@@ -411,7 +415,9 @@ function renderResultadoIC(r, params) {
       <div class="rango">[ ${fmtIC2(r.inferior, dec)} , ${fmtIC2(r.superior, dec)} ]</div>
       <div class="conclusion-text">${conclusion}</div>
     </div>
+    <div id="hpc-host"></div>
   `;
+  CodigoIntervalos.montar(document.getElementById('hpc-host'), currentIC, CONFIGS[currentIC], params, r);
 }
 
 function usarSugerencia(texto) {

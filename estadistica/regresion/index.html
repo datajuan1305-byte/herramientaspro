@@ -171,6 +171,8 @@
 
 <script src="js/motor-regresion.js"></script>
 <script src="js/interpretacion-regresion.js"></script>
+<script src="../js/hp-codigo.js"></script>
+<script src="js/codigo-regresion.js"></script>
 <script>
 let currentModuloR = null;
 let currentResultadoR = null;
@@ -299,7 +301,9 @@ function calcularSimple() {
     </div>
     <div id="prediccion-resultado" style="margin-top:0.6rem;font-family:'Space Mono',monospace;color:var(--accent4);"></div>
     <div class="conclusion-text" style="margin-top:1rem;">${generarResumenReg(armarPayloadReg('simple', {}, r, '', ''))}</div>
+    <div id="hpc-host"></div>
   `;
+  CodigoRegresion.montar(document.getElementById('hpc-host'), 'simple', { x, y }, r);
   renderChartSimple(x, y, r);
   const rb = document.getElementById('respuesta-box'); if (rb) rb.classList.remove('visible');
 }
@@ -499,7 +503,9 @@ function calcularMultiple() {
     </div>
     <div id="prediccion-resultado" style="margin-top:0.6rem;font-family:'Space Mono',monospace;color:var(--accent4);"></div>
     <div class="conclusion-text" style="margin-top:1rem;">${generarResumenReg(armarPayloadReg('multiple', {}, r, '', ''))}</div>
+    <div id="hpc-host"></div>
   `;
+  CodigoRegresion.montar(document.getElementById('hpc-host'), 'multiple', { X: columnasX, y }, r);
   const rb = document.getElementById('respuesta-box'); if (rb) rb.classList.remove('visible');
 }
 

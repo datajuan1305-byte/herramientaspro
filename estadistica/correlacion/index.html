@@ -178,6 +178,8 @@
 
 <script src="js/motor-correlacion.js"></script>
 <script src="js/interpretacion-correlacion.js"></script>
+<script src="../js/hp-codigo.js"></script>
+<script src="js/codigo-correlacion.js"></script>
 <script>
 let currentX = null, currentY = null;
 let currentResultados = null;
@@ -275,7 +277,7 @@ function calcularTodo() {
   const resultados = {
     pearson: { coef: rPearson, r2: coeficienteDeterminacion(rPearson), significancia: pruebaSignificanciaR(rPearson, n) },
     spearman: { coef: rSpearman, significancia: pruebaSignificanciaR(rSpearman, n) },
-    kendall: { tau: kendall.tau, detalles: kendall, significancia: pruebaSignificanciaKendall(kendall.tau, n) }
+    kendall: { tau: kendall.tau, detalles: kendall, significancia: pruebaSignificanciaKendall(kendall.tau, n, kendall) }
   };
   currentResultados = resultados;
 
@@ -306,8 +308,10 @@ function renderResultados(r, x, y, n) {
     </div>
     <div class="chart-container"><canvas id="scatter-chart"></canvas></div>
     <div class="conclusion-text">${generarResumenCorr(armarPayloadCorr('pearson', {}, r.pearson, '', ''))}</div>
+    <div id="hpc-host"></div>
   `;
   renderScatter(x, y);
+  CodigoCorrelacion.montar(document.getElementById('hpc-host'), x, y, r);
 }
 
 function renderScatter(x, y) {
