@@ -127,6 +127,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿El auxilio de transporte cuenta para prestaciones?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, forma parte de la base de prima y cesantías, pero no de la base de vacaciones ni de los aportes a seguridad social."}}, {"@type": "Question", "name": "¿Qué es el costo total del empleador?", "acceptedAnswer": {"@type": "Answer", "text": "Es el neto del trabajador más sus deducciones, los aportes del empleador y las provisiones de prestaciones."}}, {"@type": "Question", "name": "¿Las horas extra se incluyen en el IBC?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, constituyen salario y hacen parte de la base de cotización."}}, {"@type": "Question", "name": "¿Puedo pagar parte del salario sin efectos prestacionales?", "acceptedAnswer": {"@type": "Answer", "text": "Solo pagos que realmente no sean salario, pactados por escrito y sin retribuir directamente el servicio; abusar de esta figura genera reclamaciones y sanciones de la UGPP."}}]}</script>
 </head>
 <body>
 
@@ -219,10 +231,10 @@
           <input type="number" id="e-embargo" value="0" min="0" step="50000" />
         </div>
         <div class="form-group">
-          <label>Tamaño de la empresa</label>
+          <label>Exoneración Art. 114-1 ET</label>
           <select id="e-tamano">
-            <option value="micro">Microempresa — exenta SENA e ICBF</option>
-            <option value="pequena" selected>Pequeña / mediana / grande — paga todo</option>
+            <option value="micro">Exonerado — sin salud empleador, SENA ni ICBF (salario &lt; 10 SMMLV)</option>
+            <option value="pequena" selected>No exonerado — paga salud, SENA e ICBF</option>
           </select>
         </div>
       </div>
@@ -256,10 +268,10 @@
       <hr class="sep" />
       <div class="form-grid">
         <div class="form-group">
-          <label>Tamaño empresa</label>
+          <label>Exoneración Art. 114-1 ET</label>
           <select id="m-tamano">
-            <option value="micro">Microempresa — exenta SENA e ICBF</option>
-            <option value="pequena" selected>Pequeña / mediana / grande</option>
+            <option value="micro">Exonerado — sin salud empleador, SENA ni ICBF (salario &lt; 10 SMMLV)</option>
+            <option value="pequena" selected>No exonerado — paga salud, SENA e ICBF</option>
           </select>
         </div>
         <div class="form-group">
@@ -302,7 +314,7 @@
           </tbody>
         </table>
       </div>
-      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">⚠️ Esta herramienta solo omite SENA (2%) e ICBF (3%) cuando se elige «microempresa». Además, el Art. 114-1 del Estatuto Tributario exonera a las personas jurídicas contribuyentes de renta (y a personas naturales con dos o más trabajadores) de SENA, ICBF y salud del empleador (8,5%) por los trabajadores que devenguen menos de 10 SMMLV. Confirme con su contador si aplica a su empresa; el costo mostrado puede estar sobrestimado.</p>
+      <p style="font-size:0.78rem; color:var(--texto-suave); margin-top:0.6rem;">⚠️ El Art. 114-1 del Estatuto Tributario exonera a las sociedades y personas jurídicas contribuyentes de renta (y a personas naturales con dos o más trabajadores) de salud del empleador (8,5 %), SENA (2 %) e ICBF (3 %) por los trabajadores que devenguen menos de 10 SMMLV. Seleccione «Exonerado» solo si le corresponde; si no, el costo es el completo. Confirme con su contador.</p>
     </div>
     <div class="card">
       <h2>📋 Recargos y Horas Extras — CST Colombia</h2>
@@ -368,11 +380,12 @@ function liquidarEmpleado(salario, dias, heDiurnas, heNocturnas, comisiones, noS
   const netoPagar  = totalDevengado - totalDesc;
 
   // Aportes empleador
-  const aSalud   = ibc * 0.085;
+  const exon     = tamano === 'micro' && ibc < 10 * SMMLV; // Art. 114-1 ET
+  const aSalud   = exon ? 0 : ibc * 0.085;
   const aPension = ibc * 0.12;
   const aARL     = ibc * 0.00522;
-  const aSENA    = tamano === 'micro' ? 0 : ibc * 0.02;
-  const aICBF    = tamano === 'micro' ? 0 : ibc * 0.03;
+  const aSENA    = exon ? 0 : ibc * 0.02;
+  const aICBF    = exon ? 0 : ibc * 0.03;
   const aCCF     = ibc * 0.04;
   const totalEmpleador = aSalud + aPension + aARL + aSENA + aICBF + aCCF;
 
@@ -447,8 +460,8 @@ function calcularNomina() {
         <tr class="empleador"><td>Salud empleador (8.5%)</td><td>$ ${fmt(Math.round(r.aSalud))}</td></tr>
         <tr class="empleador"><td>Pensión empleador (12%)</td><td>$ ${fmt(Math.round(r.aPension))}</td></tr>
         <tr class="empleador"><td>ARL (0.522% — riesgo I)</td><td>$ ${fmt(Math.round(r.aARL))}</td></tr>
-        ${r.aSENA > 0 ? `<tr class="empleador"><td>SENA (2%)</td><td>$ ${fmt(Math.round(r.aSENA))}</td></tr>` : `<tr class="empleador"><td>SENA — Exento (microempresa)</td><td>$ 0</td></tr>`}
-        ${r.aICBF > 0 ? `<tr class="empleador"><td>ICBF (3%)</td><td>$ ${fmt(Math.round(r.aICBF))}</td></tr>` : `<tr class="empleador"><td>ICBF — Exento (microempresa)</td><td>$ 0</td></tr>`}
+        ${r.aSENA > 0 ? `<tr class="empleador"><td>SENA (2%)</td><td>$ ${fmt(Math.round(r.aSENA))}</td></tr>` : `<tr class="empleador"><td>SENA — Exento (Art. 114-1)</td><td>$ 0</td></tr>`}
+        ${r.aICBF > 0 ? `<tr class="empleador"><td>ICBF (3%)</td><td>$ ${fmt(Math.round(r.aICBF))}</td></tr>` : `<tr class="empleador"><td>ICBF — Exento (Art. 114-1)</td><td>$ 0</td></tr>`}
         <tr class="empleador"><td>Caja de Compensación (4%)</td><td>$ ${fmt(Math.round(r.aCCF))}</td></tr>
         <tr class="empleador" style="font-weight:700;"><td>TOTAL APORTES EMPLEADOR</td><td>$ ${fmt(Math.round(r.totalEmpleador))}</td></tr>
 
@@ -581,6 +594,25 @@ function calcularMultiple() {
 document.addEventListener('DOMContentLoaded', () => { cargarEjemplo(); });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Nómina PYME: costo real de un empleado en Colombia</h2>
+<h3>Del salario al costo total</h3>
+<p>Contratar a un empleado cuesta bastante más que su salario. Al devengado (salario y auxilio de transporte cuando aplica) se suman los <strong>aportes del empleador</strong> y las <strong>prestaciones sociales</strong>. Por eso conviene calcular el costo total mensual antes de presupuestar una contratación.</p>
+<h3>Aportes y deducciones</h3>
+<p>Al trabajador se le descuenta 4 % para salud y 4 % para pensión; cuando devenga cuatro SMMLV o más se suma el aporte al fondo de solidaridad pensional. El empleador aporta pensión (12 %), ARL según el riesgo, caja de compensación (4 %) y, salvo exoneración, salud (8,5 %), SENA (2 %) e ICBF (3 %).</p>
+<h3>La exoneración del artículo 114-1</h3>
+<p>No depende del tamaño de la empresa. Las sociedades y personas jurídicas contribuyentes de renta, y las personas naturales con dos o más trabajadores, están <strong>exoneradas de salud del empleador, SENA e ICBF</strong> por los trabajadores que ganen menos de 10 SMMLV. Active la opción en la herramienta solo si le corresponde.</p>
+<h3>Prestaciones mensualizadas</h3>
+<p>Cada mes se causa una parte de la prima (1/12 del salario más auxilio), de las cesantías (8,33 %), de los intereses sobre cesantías y de las vacaciones. No se pagan todos los meses, pero conviene provisionarlas para no enfrentar un golpe de caja en junio, diciembre o en la liquidación.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Use la pestaña individual para un empleado, con horas extra, comisiones y deducciones, o la múltiple para toda la planta. El resultado es una referencia: la nómina oficial debe ajustarse a su contrato y a la planilla PILA.</p><p><em>Esta guía es informativa y las herramientas entregan estimaciones. Valide los resultados con su contador o asesor financiero antes de tomar decisiones de inversión, crédito o contratación.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: salario de $2.500.000 con auxilio de transporte</h3><ul><li>Devengado: $2.500.000 + $249.095 = <strong>$2.749.095</strong>; neto a pagar <strong>$2.549.095</strong> tras $200.000 de salud y pensión.</li><li>Sin exoneración: aportes del empleador <strong>$750.550</strong> (salud $212.500, pensión $300.000, ARL $13.050, SENA $50.000, ICBF $75.000, caja $100.000). Con prestaciones mensualizadas de $564.548, el costo total es <strong>$4.064.193</strong> al mes.</li><li>Con exoneración del artículo 114-1: aportes de <strong>$413.050</strong> y costo total de <strong>$3.726.693</strong>.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿El auxilio de transporte cuenta para prestaciones?</summary><p>Sí, forma parte de la base de prima y cesantías, pero no de la base de vacaciones ni de los aportes a seguridad social.</p></details>
+<details><summary>¿Qué es el costo total del empleador?</summary><p>Es el neto del trabajador más sus deducciones, los aportes del empleador y las provisiones de prestaciones.</p></details>
+<details><summary>¿Las horas extra se incluyen en el IBC?</summary><p>Sí, constituyen salario y hacen parte de la base de cotización.</p></details>
+<details><summary>¿Puedo pagar parte del salario sin efectos prestacionales?</summary><p>Solo pagos que realmente no sean salario, pactados por escrito y sin retribuir directamente el servicio; abusar de esta figura genera reclamaciones y sanciones de la UGPP.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

@@ -97,6 +97,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué hago si estoy sobrecargado?", "acceptedAnswer": {"@type": "Answer", "text": "Reduzca animales, aumente el área, mejore la oferta con fertilización o riego, o rote con más descanso."}}, {"@type": "Question", "name": "¿La capacidad de carga es constante todo el año?", "acceptedAnswer": {"@type": "Answer", "text": "No. Cambia entre lluvias y sequía; planifique reservas, ensilaje o suplementación para épocas críticas."}}, {"@type": "Question", "name": "¿Por qué hay que convertir a UGG?", "acceptedAnswer": {"@type": "Answer", "text": "Para comparar animales de distinto peso y categoría en una misma unidad."}}, {"@type": "Question", "name": "¿Qué es el pastoreo rotacional?", "acceptedAnswer": {"@type": "Answer", "text": "Dividir el área en potreros que se pastorean por turnos, con tiempos de descanso que dejan recuperar el pasto."}}]}</script>
 </head>
 <body>
 <nav>
@@ -426,6 +438,25 @@ function calcularAforo() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Capacidad de carga animal: cuántos animales soporta su potrero</h2>
+<h3>Qué es la capacidad de carga</h3>
+<p>Es el número de animales que una pradera puede sostener sin degradarse. Sobrecargar el potrero reduce la producción, compacta y erosiona el suelo y empobrece el pasto; subcargarlo desperdicia forraje y dinero. Se expresa en <strong>UGG por hectárea</strong>.</p>
+<h3>La unidad gran ganado (UGG)</h3>
+<p>Una UGG equivale a una vaca adulta de 450 kg que consume cerca del 2,5 % de su peso vivo en materia seca al día (unos 11,25 kg MS/día). Todos los animales del hato se convierten a UGG según su peso, lo que permite sumar vacas, novillas, toros y terneros en una sola cifra.</p>
+<h3>Oferta de forraje y eficiencia de uso</h3>
+<p>La oferta depende del tipo de pasto, la fertilización, el riego, el clima y la época. No todo el forraje producido se aprovecha: la <strong>eficiencia de utilización</strong> va de cerca de 45 % en pastoreo continuo a 65 % o más en rotacional intensivo y mayor en sistemas silvopastoriles. La capacidad de carga es <code>forraje aprovechable al año ÷ consumo anual de una UGG</code>.</p>
+<h3>Descanso del potrero y aforo</h3>
+<p>Los días de descanso permiten que el pasto se recupere entre pastoreos y varían entre trópico alto y bajo. Un <strong>aforo</strong> (medir el forraje disponible por área) ajusta la estimación a la realidad del potrero y a la época del año.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Elija el tipo de pastura, la producción de forraje, la eficiencia y el área, e ingrese la composición del hato. Obtendrá la capacidad de carga, la carga actual y si hay sobrecarga o subutilización.</p><p><em>Esta guía es informativa y no reemplaza el criterio del médico veterinario zootecnista. Los resultados son estimaciones orientativas.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: pasto con 12.000 kg MS/ha/año y pastoreo rotacional de 55 %</h3><ul><li>Forraje aprovechable: 12.000 × 0,55 = <strong>6.600 kg MS/ha/año</strong>.</li><li>Consumo anual de una UGG: 11,25 × 365 ≈ <strong>4.106 kg MS</strong>.</li><li>Capacidad de carga: 6.600 ÷ 4.106 ≈ <strong>1,6 UGG/ha</strong>; en 8 ha, unas 12,9 UGG.</li></ul><p>Valores ilustrativos: la oferta real depende del lote y la época.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué hago si estoy sobrecargado?</summary><p>Reduzca animales, aumente el área, mejore la oferta con fertilización o riego, o rote con más descanso.</p></details>
+<details><summary>¿La capacidad de carga es constante todo el año?</summary><p>No. Cambia entre lluvias y sequía; planifique reservas, ensilaje o suplementación para épocas críticas.</p></details>
+<details><summary>¿Por qué hay que convertir a UGG?</summary><p>Para comparar animales de distinto peso y categoría en una misma unidad.</p></details>
+<details><summary>¿Qué es el pastoreo rotacional?</summary><p>Dividir el área en potreros que se pastorean por turnos, con tiempos de descanso que dejan recuperar el pasto.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

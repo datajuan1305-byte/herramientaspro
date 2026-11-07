@@ -122,6 +122,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Los rendimientos de referencia aplican a mi zona?", "acceptedAnswer": {"@type": "Answer", "text": "Son promedios. Las condiciones agroclimáticas de cada zona cambian el resultado; consulte datos locales de Agrosavia, gremios o UMATA."}}, {"@type": "Question", "name": "¿Cómo se calcula la rentabilidad?", "acceptedAnswer": {"@type": "Answer", "text": "Utilidad dividida entre los costos totales, o ingreso menos costos por hectárea; la herramienta muestra ambos."}}, {"@type": "Question", "name": "¿Debo incluir el costo de la tierra?", "acceptedAnswer": {"@type": "Answer", "text": "Si es arrendada, sí; si es propia, conviene incluir su costo de oportunidad para comparar de forma justa."}}, {"@type": "Question", "name": "¿Qué hago ante un precio bajo?", "acceptedAnswer": {"@type": "Answer", "text": "Evalúe almacenamiento, transformación o venta directa, y compare con el precio de equilibrio."}}]}</script>
 </head>
 <body>
 
@@ -601,6 +613,25 @@
   }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Estimar rendimiento, ingresos y rentabilidad por cultivo</h2>
+<h3>Qué estima la herramienta</h3>
+<p>A partir del cultivo, el área y el rendimiento esperado, la herramienta estima la producción total, el ingreso y la rentabilidad por hectárea, con costos de referencia que usted puede reemplazar. Sirve para comparar cultivos o escenarios antes de decidir qué sembrar.</p>
+<h3>De qué depende el rendimiento</h3>
+<p>El rendimiento real depende de la variedad, el clima, el suelo, la fertilización, el manejo de plagas y enfermedades, el riego y la cosecha. Los valores típicos son una referencia, no una promesa: un lote bien manejado puede superarlos y uno con restricciones quedar muy por debajo. Ajuste el dato a su experiencia y a datos de su zona.</p>
+<h3>Precios y costos</h3>
+<p>Los precios fluctúan por temporada, oferta y demanda. Use el precio que realmente recibe en finca o plaza, y considere el costo de transporte y de comercialización. Los costos de producción por hectárea se desglosan en preparación, semilla, fertilizantes, agroquímicos, mano de obra, riego y otros.</p>
+<h3>Punto de equilibrio y sensibilidad</h3>
+<p>Calcule el <strong>rendimiento mínimo</strong> y el <strong>precio mínimo</strong> que cubren los costos y pruebe escenarios: ¿qué pasa si el rendimiento baja 20 % o el precio cae 15 %? Si el cultivo deja de ser rentable con cambios pequeños, es muy riesgoso para su situación.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Seleccione el cultivo, ajuste rendimiento, precio y costos, y revise los indicadores. Compare dos o tres escenarios y use los datos de su finca cuando los tenga.</p><p><em>Esta guía es informativa y los cálculos son estimaciones. Para decisiones de fertilización, riego o uso de agroquímicos consulte a un ingeniero agrónomo y siga siempre la etiqueta del producto y las normas del ICA.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo de comparación entre dos escenarios</h3><p>Un lote de 3 ha con costos de $6.000.000 por hectárea. Escenario A: 8 t/ha a $1.000/kg → ingreso por hectárea $8.000.000 y utilidad $2.000.000. Escenario B: 6,4 t/ha (20 % menos) al mismo precio → ingreso $6.400.000 y utilidad $400.000. La utilidad cae 80 % con una pérdida de rendimiento de 20 %: el margen es muy sensible. Cifras ilustrativas.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Los rendimientos de referencia aplican a mi zona?</summary><p>Son promedios. Las condiciones agroclimáticas de cada zona cambian el resultado; consulte datos locales de Agrosavia, gremios o UMATA.</p></details>
+<details><summary>¿Cómo se calcula la rentabilidad?</summary><p>Utilidad dividida entre los costos totales, o ingreso menos costos por hectárea; la herramienta muestra ambos.</p></details>
+<details><summary>¿Debo incluir el costo de la tierra?</summary><p>Si es arrendada, sí; si es propia, conviene incluir su costo de oportunidad para comparar de forma justa.</p></details>
+<details><summary>¿Qué hago ante un precio bajo?</summary><p>Evalúe almacenamiento, transformación o venta directa, y compare con el precio de equilibrio.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

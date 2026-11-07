@@ -213,6 +213,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué es el margen de seguridad?", "acceptedAnswer": {"@type": "Answer", "text": "El porcentaje que pueden caer las ventas actuales antes de llegar al punto de equilibrio."}}, {"@type": "Question", "name": "¿El punto de equilibrio incluye impuestos?", "acceptedAnswer": {"@type": "Answer", "text": "El cálculo básico es antes de impuestos; para una utilidad neta se debe ajustar por la tarifa."}}, {"@type": "Question", "name": "¿Qué hago si el costo variable es mayor que el precio?", "acceptedAnswer": {"@type": "Answer", "text": "No hay equilibrio posible: cada venta aumenta la pérdida. Revise precio o costos."}}, {"@type": "Question", "name": "¿Sirve para decidir precios?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, al simular cuánto debe venderse con cada precio posible."}}]}</script>
 </head>
 <body>
 
@@ -587,6 +599,25 @@ agregarProducto();
 document.getElementById('m-mix-2').value = 50;
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Punto de equilibrio: cuántas unidades debe vender para no perder</h2>
+<h3>Idea central</h3>
+<p>El punto de equilibrio es el nivel de ventas en que los ingresos cubren exactamente los costos. Por debajo hay pérdida y por encima, utilidad. Es una de las herramientas más simples y útiles para fijar precios, evaluar un negocio nuevo o decidir si vale la pena una inversión.</p>
+<h3>La fórmula</h3>
+<p>Con tres datos basta: <strong>costos fijos</strong>, <strong>precio</strong> y <strong>costo variable por unidad</strong>. <code>Margen de contribución = precio − costo variable</code> y <code>PE en unidades = costos fijos ÷ margen de contribución</code>. En pesos: <code>PE = costos fijos ÷ razón de margen de contribución</code>.</p>
+<h3>Cómo cambia con el precio y los costos</h3>
+<p>Subir el precio o bajar el costo variable aumenta el margen y reduce el equilibrio. Subir costos fijos lo eleva. Simular escenarios ayuda a decidir si es mejor vender más barato y más, o más caro y menos.</p>
+<h3>Utilidad objetivo</h3>
+<p>Si quiere ganar una cifra concreta al mes, sume esa utilidad a los costos fijos y divida entre el margen: <code>(CF + utilidad) ÷ margen</code>. La tabla de escenarios muestra la utilidad para distintos niveles de ventas.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese costos fijos, precio, costo variable y las unidades que vende hoy. Obtendrá el equilibrio en unidades y pesos, el margen de seguridad y la utilidad actual. La pestaña multiproducto permite combinar varios productos.</p><p><em>Esta guía es informativa y las herramientas entregan estimaciones. Valide los resultados con su contador o asesor financiero antes de tomar decisiones de inversión, crédito o contratación.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: costos fijos de $6.000.000</h3><p>Precio $25.000 y costo variable $15.000.</p><ul><li>Margen de contribución: <strong>$10.000</strong> (40 %).</li><li>Equilibrio: 6.000.000 ÷ 10.000 = <strong>600 unidades</strong>, o <strong>$15.000.000</strong> en ventas.</li><li>Vendiendo 800 unidades: utilidad de (800 − 600) × 10.000 = <strong>$2.000.000</strong> y margen de seguridad de <strong>25 %</strong>.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué es el margen de seguridad?</summary><p>El porcentaje que pueden caer las ventas actuales antes de llegar al punto de equilibrio.</p></details>
+<details><summary>¿El punto de equilibrio incluye impuestos?</summary><p>El cálculo básico es antes de impuestos; para una utilidad neta se debe ajustar por la tarifa.</p></details>
+<details><summary>¿Qué hago si el costo variable es mayor que el precio?</summary><p>No hay equilibrio posible: cada venta aumenta la pérdida. Revise precio o costos.</p></details>
+<details><summary>¿Sirve para decidir precios?</summary><p>Sí, al simular cuánto debe venderse con cada precio posible.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

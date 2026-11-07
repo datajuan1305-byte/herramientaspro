@@ -135,6 +135,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Los costos fijos son fijos para siempre?", "acceptedAnswer": {"@type": "Answer", "text": "Solo dentro de un rango de actividad. Si crece mucho, pueden aparecer nuevos costos, como otro local o más personal."}}, {"@type": "Question", "name": "¿Qué hago si el equilibrio está por encima de mis ventas?", "acceptedAnswer": {"@type": "Answer", "text": "Suba precios, reduzca costos variables o fijos, o cambie la mezcla hacia productos de mayor margen."}}, {"@type": "Question", "name": "¿Incluyo la depreciación?", "acceptedAnswer": {"@type": "Answer", "text": "Puede incluirse entre los costos fijos si se quiere medir el equilibrio contable; para el de caja se excluye."}}, {"@type": "Question", "name": "¿Sirve para servicios?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Se define una unidad de servicio (hora, proyecto) y su costo variable."}}]}</script>
 </head>
 <body>
 
@@ -747,6 +759,25 @@
   addProducto('Producto C', 15000, 8000,  10);
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Punto de equilibrio con varios productos y utilidad objetivo</h2>
+<h3>Qué es el punto de equilibrio</h3>
+<p>Es el volumen de ventas en el que los ingresos igualan los costos totales: ni se gana ni se pierde. Para calcularlo hay que separar los <strong>costos fijos</strong> (arriendo, nómina fija, cuotas de crédito) de los <strong>costos variables</strong> (materia prima, comisiones, empaque), que crecen con cada unidad vendida.</p>
+<h3>Margen de contribución</h3>
+<p>El margen de contribución unitario es <code>precio − costo variable</code>: lo que cada unidad aporta para cubrir los costos fijos y, después, generar utilidad. El punto de equilibrio en unidades es <code>costos fijos ÷ margen de contribución</code>. Si el costo variable sube o el precio baja, el margen se reduce y el equilibrio se aleja.</p>
+<h3>Varios productos y mezcla de ventas</h3>
+<p>Cuando se vende más de un producto, se calcula un <strong>margen de contribución ponderado</strong> según la mezcla de ventas esperada. El resultado es el total de unidades en equilibrio, que luego se reparte según la mezcla. Si la mezcla cambia hacia productos de menor margen, el equilibrio sube aunque las ventas totales no cambien.</p>
+<h3>Utilidad objetivo y margen de seguridad</h3>
+<p>Para ganar una utilidad deseada se aplica <code>(costos fijos + utilidad) ÷ margen de contribución</code>. Si la utilidad es después de impuestos, se divide primero entre (1 − tasa de impuesto). El <strong>margen de seguridad</strong> indica cuánto pueden caer las ventas actuales antes de entrar en pérdidas.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Cargue precios, costos variables, costos fijos mensuales, la utilidad deseada y las ventas actuales. La herramienta entrega el equilibrio, el gráfico costo-volumen-utilidad y un análisis de sensibilidad.</p><p><em>Esta guía es informativa y las herramientas entregan estimaciones. Valide los resultados con su contador o asesor financiero antes de tomar decisiones de inversión, crédito o contratación.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo con dos productos</h3><p>Costos fijos de $9.000.000 al mes. Producto A: precio $20.000 y costo variable $12.000 (60 % de la mezcla). Producto B: precio $10.000 y costo variable $5.000 (40 %).</p><ul><li>Margen ponderado: 0,6 × 8.000 + 0,4 × 5.000 = <strong>$6.800</strong> por unidad.</li><li>Equilibrio: 9.000.000 ÷ 6.800 ≈ <strong>1.324 unidades</strong> (794 de A y 530 de B).</li><li>Para una utilidad de $3.400.000: 12.400.000 ÷ 6.800 ≈ <strong>1.824 unidades</strong>.</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Los costos fijos son fijos para siempre?</summary><p>Solo dentro de un rango de actividad. Si crece mucho, pueden aparecer nuevos costos, como otro local o más personal.</p></details>
+<details><summary>¿Qué hago si el equilibrio está por encima de mis ventas?</summary><p>Suba precios, reduzca costos variables o fijos, o cambie la mezcla hacia productos de mayor margen.</p></details>
+<details><summary>¿Incluyo la depreciación?</summary><p>Puede incluirse entre los costos fijos si se quiere medir el equilibrio contable; para el de caja se excluye.</p></details>
+<details><summary>¿Sirve para servicios?</summary><p>Sí. Se define una unidad de servicio (hora, proyecto) y su costo variable.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

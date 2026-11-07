@@ -147,6 +147,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Por qué el P se expresa como P2O5?", "acceptedAnswer": {"@type": "Answer", "text": "Es una convención histórica para declarar el contenido de fertilizantes. El fósforo elemental es aproximadamente 44 % del P2O5."}}, {"@type": "Question", "name": "¿Puedo usar fertilizante orgánico?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, pero su contenido de nutrientes varía mucho; conviene analizarlo y descontar su aporte del plan."}}, {"@type": "Question", "name": "¿Qué pasa si fertilizo de más?", "acceptedAnswer": {"@type": "Answer", "text": "Se desperdicia dinero, se contaminan aguas y suelos y pueden aparecer desbalances o toxicidad."}}, {"@type": "Question", "name": "¿Cuándo aplicar el fertilizante?", "acceptedAnswer": {"@type": "Answer", "text": "En etapas de mayor demanda del cultivo y con suelo húmedo, evitando lluvias muy fuertes que lixivien el nitrógeno."}}]}</script>
 </head>
 <body>
 
@@ -535,6 +547,25 @@ function resetear() {
 </script>
 
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Fertilización con N, P y K: del requerimiento al fertilizante comercial</h2>
+<h3>Qué es un plan de fertilización</h3>
+<p>Las plantas extraen nitrógeno (N), fósforo (P) y potasio (K) del suelo. Un plan de fertilización calcula cuánto debe aportarse para cubrir lo que el cultivo requiere según su rendimiento esperado, descontando lo que el suelo ya entrega. Su meta es producir más con menos desperdicio y menos costo.</p>
+<h3>Requerimiento y rendimiento esperado</h3>
+<p>A mayor rendimiento esperado, mayor requerimiento. La herramienta parte de tablas de requerimiento por cultivo y las ajusta por nivel de producción, tipo de suelo y, si se ingresan, por los resultados del análisis de suelo. El fósforo se expresa como P<sub>2</sub>O<sub>5</sub> y el potasio como K<sub>2</sub>O, que es como se declaran en los fertilizantes.</p>
+<h3>Del nutriente al bulto</h3>
+<p>Cada fertilizante tiene un porcentaje de nutrientes: la urea tiene 46 % de N, el DAP 18-46-0 y el cloruro de potasio cerca de 60 % de K<sub>2</sub>O. La cantidad de fertilizante es <code>kg de nutriente ÷ porcentaje</code>. Algunas fuentes aportan más de un nutriente (el DAP aporta N y P), y esto debe descontarse para no sobrefertilizar.</p>
+<h3>Fraccionamiento y eficiencia</h3>
+<p>Aplicar todo el nitrógeno de una vez aumenta las pérdidas por lavado y volatilización. Lo común es <strong>fraccionar</strong> las dosis a lo largo del ciclo, aplicar con humedad en el suelo y cerca de la zona de raíces. Un análisis de suelo ajusta las dosis y evita pagar por nutrientes que ya están disponibles.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Elija cultivo, área, nivel de rendimiento y suelo. Si tiene análisis de suelo, ingréselo. Obtendrá los kilos por hectárea y por lote, los fertilizantes sugeridos y un plan de aplicación orientativo.</p><p><em>Esta guía es informativa y los cálculos son estimaciones. Para decisiones de fertilización, riego o uso de agroquímicos consulte a un ingeniero agrónomo y siga siempre la etiqueta del producto y las normas del ICA.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: 120 kg N, 60 kg P₂O₅ y 90 kg K₂O por hectárea</h3><ul><li>DAP (18-46-0) para el fósforo: 60 ÷ 0,46 ≈ <strong>130 kg</strong>, que ya aportan unos 23,5 kg de N.</li><li>Urea para el nitrógeno restante: (120 − 23,5) ÷ 0,46 ≈ <strong>210 kg</strong> (sin descontar el DAP serían 261 kg).</li><li>Cloruro de potasio (60 % K₂O): 90 ÷ 0,60 = <strong>150 kg</strong>.</li></ul><p>Los valores son un ejemplo aritmético, no una recomendación para un cultivo específico.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Por qué el P se expresa como P2O5?</summary><p>Es una convención histórica para declarar el contenido de fertilizantes. El fósforo elemental es aproximadamente 44 % del P2O5.</p></details>
+<details><summary>¿Puedo usar fertilizante orgánico?</summary><p>Sí, pero su contenido de nutrientes varía mucho; conviene analizarlo y descontar su aporte del plan.</p></details>
+<details><summary>¿Qué pasa si fertilizo de más?</summary><p>Se desperdicia dinero, se contaminan aguas y suelos y pueden aparecer desbalances o toxicidad.</p></details>
+<details><summary>¿Cuándo aplicar el fertilizante?</summary><p>En etapas de mayor demanda del cultivo y con suelo húmedo, evitando lluvias muy fuertes que lixivien el nitrógeno.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

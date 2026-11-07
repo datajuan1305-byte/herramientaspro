@@ -160,6 +160,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Es mejor abonar a capital o reducir cuota?", "acceptedAnswer": {"@type": "Answer", "text": "Reducir plazo ahorra más intereses; reducir cuota alivia el flujo. Pregunte al banco las opciones y si hay costos de prepago."}}, {"@type": "Question", "name": "¿Qué es la tasa nominal frente a la efectiva?", "acceptedAnswer": {"@type": "Answer", "text": "La nominal no considera la capitalización; la efectiva sí, y por eso permite comparar créditos entre sí."}}, {"@type": "Question", "name": "¿La cuota incluye el seguro?", "acceptedAnswer": {"@type": "Answer", "text": "La cuota de capital e intereses se calcula aparte; el seguro se suma según las condiciones de la entidad."}}, {"@type": "Question", "name": "¿Una tasa menor siempre es mejor?", "acceptedAnswer": {"@type": "Answer", "text": "Casi siempre, pero compare el costo total incluyendo seguros, comisiones y plazo, que pueden cambiar el resultado."}}]}</script>
 </head>
 <body>
 
@@ -588,6 +600,25 @@
   actualizarSliders();
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Crédito bancario: cuota fija, intereses y capacidad de pago</h2>
+<h3>Cómo se calcula la cuota</h3>
+<p>La mayoría de los créditos en Colombia usa el sistema de <strong>cuota fija</strong> (sistema francés). Con la tasa efectiva anual se obtiene la tasa mensual, <code>(1 + EA)<sup>1/12</sup> − 1</code>, y luego la cuota con <code>capital × i ÷ (1 − (1 + i)<sup>−n</sup>)</code>. La cuota es constante, pero su composición cambia: al principio casi todo es interés y al final casi todo es capital.</p>
+<h3>Costo total del crédito</h3>
+<p>Para comparar ofertas mire el <strong>total pagado</strong> y los <strong>intereses totales</strong>, no solo la cuota. Sume seguros de vida, cuotas de manejo y comisiones. Un plazo más largo reduce la cuota pero aumenta el costo; un periodo de gracia reduce la cuota inicial pero los intereses siguen corriendo sobre el capital.</p>
+<h3>Tipos de crédito y tasas</h3>
+<p>Libre inversión, hipotecario, vehicular y empresarial tienen tasas distintas según garantía, plazo y perfil. Ninguna entidad puede cobrar por encima de la <strong>tasa de usura</strong> que certifica la Superintendencia Financiera. Las tasas del simulador son referencias de mercado; la tasa real depende de su historial crediticio.</p>
+<h3>Capacidad de pago</h3>
+<p>Una práctica prudente es que el total de cuotas mensuales de deuda no supere cerca del 30 % al 40 % de los ingresos. Calcule su capacidad con la herramienta antes de pedir el crédito, no después de que el banco lo apruebe.</p>
+<h3>Cómo usar el simulador</h3>
+<p>Escoja el tipo de crédito, ingrese monto, plazo y tasa, y revise cuota, intereses y tabla de amortización. Use el comparador de bancos y el módulo de capacidad de pago para completar la decisión.</p><p><em>Esta guía es informativa y las herramientas entregan estimaciones. Valide los resultados con su contador o asesor financiero antes de tomar decisiones de inversión, crédito o contratación.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: $20.000.000 a 36 meses con tasa de 22,5 % EA</h3><ul><li>Tasa mensual equivalente: <strong>1,71 %</strong>.</li><li>Cuota fija: <strong>$748.036</strong>.</li><li>Intereses totales: <strong>$6.929.286</strong>; total pagado <strong>$26.929.286</strong>.</li><li>En la primera cuota, $341.111 son interés y $406.925 abono a capital; el saldo baja a $19.593.075.</li></ul><p>No incluye seguros ni comisiones.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Es mejor abonar a capital o reducir cuota?</summary><p>Reducir plazo ahorra más intereses; reducir cuota alivia el flujo. Pregunte al banco las opciones y si hay costos de prepago.</p></details>
+<details><summary>¿Qué es la tasa nominal frente a la efectiva?</summary><p>La nominal no considera la capitalización; la efectiva sí, y por eso permite comparar créditos entre sí.</p></details>
+<details><summary>¿La cuota incluye el seguro?</summary><p>La cuota de capital e intereses se calcula aparte; el seguro se suma según las condiciones de la entidad.</p></details>
+<details><summary>¿Una tasa menor siempre es mejor?</summary><p>Casi siempre, pero compare el costo total incluyendo seguros, comisiones y plazo, que pueden cambiar el resultado.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

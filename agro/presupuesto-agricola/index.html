@@ -103,6 +103,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué precio uso?", "acceptedAnswer": {"@type": "Answer", "text": "El de su zona, en finca o plaza, que suele ser menor al de los reportes de mercado mayorista; el SIPSA publica referencias."}}, {"@type": "Question", "name": "¿Cómo incluyo los riesgos?", "acceptedAnswer": {"@type": "Answer", "text": "Haga escenarios con rendimientos y precios más bajos para ver cuánto aguanta el cultivo."}}, {"@type": "Question", "name": "¿Debo incluir mi mano de obra?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, valorarla permite ver si el negocio paga su trabajo y no solo los insumos."}}, {"@type": "Question", "name": "¿Y los cultivos perennes?", "acceptedAnswer": {"@type": "Answer", "text": "Reparta la inversión de establecimiento en los años productivos, y presupueste por año de producción."}}]}</script>
 </head>
 <body>
 <nav>
@@ -471,6 +483,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Presupuesto de producción agrícola: costos, rentabilidad y punto de equilibrio</h2>
+<h3>Por qué presupuestar antes de sembrar</h3>
+<p>Sembrar sin presupuesto es apostar. Un presupuesto de producción estima cuánto costará el ciclo, cuánto se espera vender y cuánto quedará. Permite decidir si el cultivo conviene, cuánto dinero hay que conseguir y qué precio mínimo se necesita para no perder.</p>
+<h3>Costos directos e indirectos</h3>
+<p>Los <strong>costos directos</strong> se asocian al cultivo: preparación del suelo, semilla, fertilizantes, agroquímicos, mano de obra, riego, cosecha y postcosecha. Los <strong>indirectos</strong> incluyen administración, transporte general, imprevistos y asistencia técnica, que suelen estimarse como un porcentaje de los directos. También conviene valorar el costo de oportunidad de la tierra y el de su propio trabajo.</p>
+<h3>Ingreso, utilidad y rentabilidad</h3>
+<p>El ingreso esperado es <code>rendimiento × precio de venta</code>. La utilidad es el ingreso menos los costos totales. La <strong>rentabilidad</strong> relaciona la utilidad con los costos del ciclo. Calcule también la relación beneficio/costo y el ingreso mensual por hectárea para comparar cultivos de ciclos distintos.</p>
+<h3>Punto de equilibrio agrícola</h3>
+<p>Hay dos equilibrios útiles: el <strong>rendimiento mínimo</strong> (costos totales ÷ precio) que debe lograrse y el <strong>precio mínimo</strong> (costos totales ÷ rendimiento esperado). Si el precio de mercado está cerca del mínimo, el cultivo es muy sensible a un mal año.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Cargue los datos del cultivo y agregue cada ítem de costo con cantidad y precio. La herramienta calcula costos por hectárea, ingreso, rentabilidad y punto de equilibrio. Sustituya los valores de referencia por los de su región.</p><p><em>Esta guía es informativa y los cálculos son estimaciones. Para decisiones de fertilización, riego o uso de agroquímicos consulte a un ingeniero agrónomo y siga siempre la etiqueta del producto y las normas del ICA.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: 2 hectáreas con 6 t/ha y precio de $1.200/kg</h3><ul><li>Ingreso esperado: 12.000 kg × $1.200 = <strong>$14.400.000</strong>.</li><li>Si los costos totales son $11.000.000: utilidad de <strong>$3.400.000</strong> y rentabilidad de ≈ 31 % sobre los costos.</li><li>Precio mínimo de equilibrio: 11.000.000 ÷ 12.000 ≈ <strong>$917/kg</strong>; rendimiento mínimo a $1.200/kg: ≈ <strong>4,6 t/ha</strong>.</li></ul><p>Cifras ilustrativas para mostrar el cálculo.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Qué precio uso?</summary><p>El de su zona, en finca o plaza, que suele ser menor al de los reportes de mercado mayorista; el SIPSA publica referencias.</p></details>
+<details><summary>¿Cómo incluyo los riesgos?</summary><p>Haga escenarios con rendimientos y precios más bajos para ver cuánto aguanta el cultivo.</p></details>
+<details><summary>¿Debo incluir mi mano de obra?</summary><p>Sí, valorarla permite ver si el negocio paga su trabajo y no solo los insumos.</p></details>
+<details><summary>¿Y los cultivos perennes?</summary><p>Reparta la inversión de establecimiento en los años productivos, y presupueste por año de producción.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

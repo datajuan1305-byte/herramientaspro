@@ -142,6 +142,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Puedo aumentar la dosis para mayor efecto?", "acceptedAnswer": {"@type": "Answer", "text": "No. Una dosis mayor a la registrada es riesgosa, ilegal para el uso del producto y puede generar fitotoxicidad, residuos y resistencia."}}, {"@type": "Question", "name": "¿Qué es el periodo de carencia?", "acceptedAnswer": {"@type": "Answer", "text": "El tiempo mínimo entre la última aplicación y la cosecha para que los residuos queden dentro de los límites permitidos."}}, {"@type": "Question", "name": "¿Cómo calibro la aspersora?", "acceptedAnswer": {"@type": "Answer", "text": "Mida cuánta agua gasta en un área conocida, caminando a velocidad constante, y calcule el volumen por hectárea."}}, {"@type": "Question", "name": "¿Qué hago con los envases vacíos?", "acceptedAnswer": {"@type": "Answer", "text": "Haga triple lavado, inutilice el envase y llévelo a los puntos de recolección autorizados; nunca los reutilice."}}]}</script>
 </head>
 <body>
 
@@ -621,6 +633,25 @@
   }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Dosis de agroquímicos por hectárea y por tanque</h2>
+<h3>Siempre la etiqueta primero</h3>
+<p>La dosis la define el <strong>registro del producto</strong>: su etiqueta indica la dosis, el cultivo, el momento, el periodo de carencia y las precauciones. La calculadora no decide cuánto aplicar; convierte la dosis de la etiqueta a cantidades por tanque, por lote y por envase para evitar errores de dilución.</p>
+<h3>Dosis por hectárea y por 100 litros</h3>
+<p>Algunas etiquetas dan la dosis por hectárea y otras por 100 litros de agua. Si es por hectárea, la cantidad por tanque depende del <strong>volumen de agua por hectárea</strong> de su equipo: <code>producto por tanque = dosis/ha × capacidad del tanque ÷ volumen de agua por ha</code>. Calibrar la aspersora es indispensable: sin ello el volumen real es incierto.</p>
+<h3>Mezclas de tanque</h3>
+<p>Mezclar productos puede ahorrar pasadas, pero no todos son compatibles y algunas mezclas dañan el cultivo. Verifique la compatibilidad en las etiquetas y haga una prueba pequeña. Agregue los productos en el orden recomendado y con el tanque parcialmente lleno de agua.</p>
+<h3>Categoría toxicológica y seguridad</h3>
+<p>En Colombia los plaguicidas se clasifican por categoría toxicológica, indicada en la banda de color de la etiqueta: roja (I), amarilla (II), azul (III) y verde (IV). Use siempre el equipo de protección personal indicado, respete el <strong>periodo de carencia</strong> (días entre la última aplicación y la cosecha) y el intervalo de reingreso, y deseche los envases con triple lavado.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese la dosis de la etiqueta, el área, el volumen de agua y la capacidad del tanque. Obtendrá producto por tanque, total y envases a comprar, además de recordatorios de seguridad.</p><p><em>Esta guía es informativa y los cálculos son estimaciones. Para decisiones de fertilización, riego o uso de agroquímicos consulte a un ingeniero agrónomo y siga siempre la etiqueta del producto y las normas del ICA.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: dosis de etiqueta de 2 L/ha en 5 hectáreas</h3><p>Volumen de agua: 200 L/ha y tanque de 20 L.</p><ul><li>Cada tanque cubre 20 ÷ 200 = <strong>0,1 ha</strong>.</li><li>Producto por tanque: 2 L × 0,1 = <strong>0,2 L (200 cc)</strong>.</li><li>Tanques necesarios: 5 ÷ 0,1 = <strong>50</strong>; producto total: <strong>10 L</strong>.</li></ul><p>El ejemplo ilustra el cálculo, no una recomendación de dosis.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Puedo aumentar la dosis para mayor efecto?</summary><p>No. Una dosis mayor a la registrada es riesgosa, ilegal para el uso del producto y puede generar fitotoxicidad, residuos y resistencia.</p></details>
+<details><summary>¿Qué es el periodo de carencia?</summary><p>El tiempo mínimo entre la última aplicación y la cosecha para que los residuos queden dentro de los límites permitidos.</p></details>
+<details><summary>¿Cómo calibro la aspersora?</summary><p>Mida cuánta agua gasta en un área conocida, caminando a velocidad constante, y calcule el volumen por hectárea.</p></details>
+<details><summary>¿Qué hago con los envases vacíos?</summary><p>Haga triple lavado, inutilice el envase y llévelo a los puntos de recolección autorizados; nunca los reutilice.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

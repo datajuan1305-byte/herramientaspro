@@ -143,6 +143,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Puedo usar la dosis de una especie en otra?", "acceptedAnswer": {"@type": "Answer", "text": "No. Las dosis y la seguridad cambian entre especies; use solo productos y dosis autorizados para la especie tratada."}}, {"@type": "Question", "name": "¿Qué hago si no sé el peso exacto?", "acceptedAnswer": {"@type": "Answer", "text": "Pese al animal o use una cinta de estimación; en caso de duda consulte a su veterinario antes de dosificar."}}, {"@type": "Question", "name": "¿Los antibióticos se pueden usar sin fórmula?", "acceptedAnswer": {"@type": "Answer", "text": "El uso debe ser orientado por un veterinario; usarlos sin necesidad o mal dosificados favorece la resistencia antimicrobiana."}}, {"@type": "Question", "name": "¿Qué es el período de retiro?", "acceptedAnswer": {"@type": "Answer", "text": "El tiempo entre la última dosis y el aprovechamiento de la carne, leche o huevos, para que los residuos desaparezcan."}}]}</script>
 </head>
 <body>
 
@@ -680,6 +692,25 @@ function calcularLote() {
 actualizarMedicamentos();
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Cálculo de dosis veterinaria: cómo pasar de mg/kg a mililitros</h2>
+<h3>La prescripción es del veterinario</h3>
+<p>La dosis, la vía y la duración de un tratamiento las define el <strong>médico veterinario</strong>, con base en el diagnóstico, la especie y el producto. La calculadora no prescribe: convierte una dosis ya indicada en la cantidad de producto que debe administrarse, para reducir errores de cálculo, que son una causa frecuente de fallas de tratamiento y de intoxicaciones.</p>
+<h3>De mg/kg a mililitros</h3>
+<p>Las dosis suelen expresarse en miligramos por kilo de peso. La cantidad total es <code>dosis (mg/kg) × peso (kg)</code>, y el volumen es <code>dosis total (mg) ÷ concentración (mg/mL)</code>. Si la concentración está en porcentaje, 1 % equivale a 10 mg/mL. Use siempre la concentración que dice el envase del producto comercial que va a aplicar.</p>
+<h3>Peso, vía y volumen</h3>
+<p>Pese al animal o estime su peso con una cinta de forma cuidadosa: una estimación por exceso o por defecto cambia la dosis. La vía (intramuscular, subcutánea, intravenosa, oral) cambia el volumen máximo por punto de inyección y el producto debe estar autorizado para esa vía y esa especie.</p>
+<h3>Período de retiro y residuos</h3>
+<p>En animales de producción respete el <strong>período de retiro</strong> indicado en el prospecto antes de vender carne, leche o huevos. Los residuos de medicamentos en alimentos afectan la salud pública y causan rechazos comerciales. Registre cada tratamiento con fecha, producto, lote y dosis.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Seleccione la especie, el medicamento, el peso y la concentración del producto, y escriba la dosis indicada por su veterinario. La herramienta calcula la dosis total, el volumen y el material necesario para un lote. Verifique siempre con el prospecto y con su veterinario.</p><p><em>Esta guía es informativa y no reemplaza el criterio del médico veterinario zootecnista. Los resultados son estimaciones orientativas.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo de la aritmética de conversión</h3><p>Suponga que su veterinario indicó <strong>10 mg/kg</strong> de un producto de <strong>200 mg/mL</strong> para un animal de <strong>400 kg</strong>.</p><ul><li>Dosis total: 10 × 400 = <strong>4.000 mg</strong>.</li><li>Volumen: 4.000 ÷ 200 = <strong>20 mL</strong>.</li></ul><p>Este ejemplo solo ilustra la operación; no es una recomendación de medicamento ni de dosis.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Puedo usar la dosis de una especie en otra?</summary><p>No. Las dosis y la seguridad cambian entre especies; use solo productos y dosis autorizados para la especie tratada.</p></details>
+<details><summary>¿Qué hago si no sé el peso exacto?</summary><p>Pese al animal o use una cinta de estimación; en caso de duda consulte a su veterinario antes de dosificar.</p></details>
+<details><summary>¿Los antibióticos se pueden usar sin fórmula?</summary><p>El uso debe ser orientado por un veterinario; usarlos sin necesidad o mal dosificados favorece la resistencia antimicrobiana.</p></details>
+<details><summary>¿Qué es el período de retiro?</summary><p>El tiempo entre la última dosis y el aprovechamiento de la carne, leche o huevos, para que los residuos desaparezcan.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

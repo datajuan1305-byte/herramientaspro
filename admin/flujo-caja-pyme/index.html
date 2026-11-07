@@ -133,6 +133,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cada cuánto actualizo el flujo?", "acceptedAnswer": {"@type": "Answer", "text": "Mensualmente, comparando lo proyectado con lo real y ajustando los meses siguientes."}}, {"@type": "Question", "name": "¿Los impuestos van en el flujo?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, en el mes en que se pagan: IVA, retenciones, renta, ICA, con sus fechas del calendario tributario."}}, {"@type": "Question", "name": "¿Qué hago si un mes queda negativo?", "acceptedAnswer": {"@type": "Answer", "text": "Busque cobrar antes, pagar después, reducir gastos o conseguir financiación a tiempo; esperar al mes crítico encarece las opciones."}}, {"@type": "Question", "name": "¿La depreciación se incluye?", "acceptedAnswer": {"@type": "Answer", "text": "No, porque no es una salida de dinero. El flujo de caja solo registra entradas y salidas reales."}}]}</script>
 </head>
 <body>
 
@@ -656,6 +668,25 @@
   }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Flujo de caja proyectado: cómo anticipar los meses críticos</h2>
+<h3>Rentable no significa líquido</h3>
+<p>Muchas empresas con utilidades quiebran por falta de caja: venden a crédito, pagan nómina e impuestos antes de cobrar o compran inventario por adelantado. El <strong>flujo de caja</strong> proyecta mes a mes cuánto dinero entra y sale para saber si habrá liquidez cuando se necesite.</p>
+<h3>Cómo se arma la proyección</h3>
+<p>Parta del <strong>saldo inicial</strong> de caja y bancos. Cada mes sume los ingresos que realmente se cobrarán (no los facturados) y reste los egresos que realmente se pagarán: proveedores, nómina, arriendo, impuestos, cuotas de deuda. El <strong>flujo neto</strong> del mes es ingresos menos egresos, y el <strong>saldo final</strong> es el saldo inicial más el flujo neto. Ese saldo es el inicial del mes siguiente.</p>
+<h3>El saldo mínimo y los meses críticos</h3>
+<p>Defina un <strong>colchón de seguridad</strong>, por ejemplo el equivalente a algunas semanas de egresos fijos. Los meses en que el saldo proyectado queda por debajo de ese mínimo son críticos y exigen actuar con anticipación: negociar plazos, adelantar cobros, financiar con un cupo o postergar compras.</p>
+<h3>Estacionalidad y supuestos</h3>
+<p>Si sus ventas son estacionales, ingrese valores distintos por mes; si crecen de forma pareja, use la tasa de crecimiento mensual. Sea conservador con los ingresos y realista con los egresos: es mejor sorprenderse con más caja que con menos.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Complete la configuración inicial y las filas de ingresos y egresos de los 12 meses, y calcule. Obtendrá el saldo mes a mes, los meses críticos y un gráfico. Actualice la proyección con los datos reales cada mes.</p><p><em>Esta guía es informativa y las herramientas entregan estimaciones. Valide los resultados con su contador o asesor financiero antes de tomar decisiones de inversión, crédito o contratación.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo de dos meses</h3><p>Saldo inicial $10.000.000 y colchón mínimo de $10.000.000.</p><ul><li>Enero: ingresos $30.000.000, egresos $32.000.000 → flujo neto −$2.000.000 → saldo <strong>$8.000.000</strong>, por debajo del mínimo: mes crítico.</li><li>Febrero: ingresos $38.000.000, egresos $30.000.000 → flujo neto +$8.000.000 → saldo <strong>$16.000.000</strong>.</li></ul><p>Aunque febrero compensa, enero exigía una decisión previa, como adelantar un cobro o negociar un pago.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cada cuánto actualizo el flujo?</summary><p>Mensualmente, comparando lo proyectado con lo real y ajustando los meses siguientes.</p></details>
+<details><summary>¿Los impuestos van en el flujo?</summary><p>Sí, en el mes en que se pagan: IVA, retenciones, renta, ICA, con sus fechas del calendario tributario.</p></details>
+<details><summary>¿Qué hago si un mes queda negativo?</summary><p>Busque cobrar antes, pagar después, reducir gastos o conseguir financiación a tiempo; esperar al mes crítico encarece las opciones.</p></details>
+<details><summary>¿La depreciación se incluye?</summary><p>No, porque no es una salida de dinero. El flujo de caja solo registra entradas y salidas reales.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

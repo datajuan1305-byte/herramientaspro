@@ -147,6 +147,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuál es un buen ICA?", "acceptedAnswer": {"@type": "Answer", "text": "Depende de la especie, la línea genética y el sistema. Compare con las metas de su línea y su propio histórico."}}, {"@type": "Question", "name": "¿Cómo mido el alimento consumido?", "acceptedAnswer": {"@type": "Answer", "text": "Registrando lo suministrado menos lo sobrante, por lote y por periodo, con báscula calibrada."}}, {"@type": "Question", "name": "¿El ICA incluye mortalidad?", "acceptedAnswer": {"@type": "Answer", "text": "El ICA básico no; por eso se analiza junto con la mortalidad del lote."}}, {"@type": "Question", "name": "¿Cambiar de alimento mejora el ICA?", "acceptedAnswer": {"@type": "Answer", "text": "Puede, pero evalúe el costo por kilo producido y pruebe en un lote antes de cambiar toda la producción."}}]}</script>
 </head>
 <body>
 
@@ -560,6 +572,25 @@ function actualizarReferencia() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Conversión alimenticia: cuánto alimento cuesta cada kilo producido</h2>
+<h3>Qué mide el índice de conversión</h3>
+<p>El <strong>índice de conversión alimenticia (ICA)</strong> indica cuántos kilos de alimento se consumen para producir un kilo de peso vivo: <code>ICA = alimento consumido ÷ ganancia de peso</code>. A menor ICA, mayor eficiencia. Como el alimento es el mayor costo de la mayoría de explotaciones pecuarias, el ICA determina buena parte de la rentabilidad.</p>
+<h3>Qué lo hace subir o bajar</h3>
+<p>Influyen la genética, la calidad y formulación del alimento, el desperdicio, la sanidad, el clima, la densidad y el manejo. Una conversión que empeora suele ser señal de enfermedad, mal estado del alimento, estrés térmico o desperdicio. Se compara contra el histórico del propio lote y contra las metas de la especie y la línea genética.</p>
+<h3>Costo del alimento por kilo producido</h3>
+<p>Multiplicar el ICA por el precio del alimento da el <strong>costo de alimento por kilo de peso producido</strong>. Dos alimentos con precios distintos pueden costar lo mismo por kilo producido si el más caro convierte mejor. Compare por costo por kilo producido, no por precio por bulto.</p>
+<h3>Ganancia diaria, mortalidad y rentabilidad</h3>
+<p>Evalúe el ICA junto con la <strong>ganancia diaria de peso</strong> y la <strong>mortalidad</strong>: un buen ICA con alta mortalidad no es un buen resultado. El análisis de lote combina estos datos con el precio de venta para estimar el margen por animal.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Escoja la especie, ingrese alimento consumido, ganancia de peso y costos, y la herramienta calcula ICA, costo por kilo y margen. Compare con los valores de referencia y con sus lotes anteriores.</p><p><em>Esta guía es informativa y no reemplaza el criterio del médico veterinario zootecnista. Los resultados son estimaciones orientativas.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo: lote de pollos de engorde</h3><p>Un lote consumió <strong>4.600 kg</strong> de alimento y ganó <strong>2.500 kg</strong> de peso vivo.</p><ul><li>ICA: 4.600 ÷ 2.500 = <strong>1,84</strong>.</li><li>Si el alimento cuesta $2.400/kg, el costo de alimento por kilo producido es 1,84 × 2.400 ≈ <strong>$4.416</strong>.</li></ul><p>Cifras ilustrativas: compare siempre con las metas de su línea genética.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuál es un buen ICA?</summary><p>Depende de la especie, la línea genética y el sistema. Compare con las metas de su línea y su propio histórico.</p></details>
+<details><summary>¿Cómo mido el alimento consumido?</summary><p>Registrando lo suministrado menos lo sobrante, por lote y por periodo, con báscula calibrada.</p></details>
+<details><summary>¿El ICA incluye mortalidad?</summary><p>El ICA básico no; por eso se analiza junto con la mortalidad del lote.</p></details>
+<details><summary>¿Cambiar de alimento mejora el ICA?</summary><p>Puede, pero evalúe el costo por kilo producido y pruebe en un lote antes de cambiar toda la producción.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

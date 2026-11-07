@@ -127,6 +127,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuál es una buena razón corriente?", "acceptedAnswer": {"@type": "Answer", "text": "Depende del sector. Valores cercanos a 1,5 suelen verse como cómodos, pero un comercio y una empresa de servicios tienen estructuras distintas."}}, {"@type": "Question", "name": "¿Endeudarse es malo?", "acceptedAnswer": {"@type": "Answer", "text": "No necesariamente. Es un problema cuando la empresa no genera flujo para atender la deuda."}}, {"@type": "Question", "name": "¿Qué indicador es el más importante?", "acceptedAnswer": {"@type": "Answer", "text": "Ninguno por sí solo. Interprételos en conjunto y a lo largo del tiempo."}}, {"@type": "Question", "name": "¿Cada cuánto se calculan?", "acceptedAnswer": {"@type": "Answer", "text": "Al menos trimestralmente, con los estados financieros del periodo."}}]}</script>
 </head>
 <body>
 
@@ -501,6 +513,25 @@ function calcularTodos() {
 }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Indicadores financieros: liquidez, endeudamiento, rentabilidad y actividad</h2>
+<h3>Para qué sirven</h3>
+<p>Los indicadores convierten el balance y el estado de resultados en razones comparables en el tiempo y frente a empresas del mismo sector. No dan una respuesta única, pero muestran dónde mirar: si la empresa puede pagar sus deudas, cuánto depende de terceros, qué tan rentable es y qué tan eficiente es su operación.</p>
+<h3>Liquidez</h3>
+<p>La <strong>razón corriente</strong> es <code>activo corriente ÷ pasivo corriente</code> y mide la capacidad de pagar deudas de corto plazo. La <strong>prueba ácida</strong> excluye los inventarios, que tardan más en convertirse en efectivo. El <strong>capital de trabajo</strong> es la diferencia entre activo y pasivo corriente. Una razón demasiado alta también puede indicar recursos ociosos.</p>
+<h3>Endeudamiento</h3>
+<p>El <strong>nivel de endeudamiento</strong> (pasivo total ÷ activo total) muestra qué parte de los activos se financia con deuda. La <strong>cobertura de intereses</strong> (utilidad operacional ÷ gastos financieros) indica si la operación genera lo suficiente para pagar los intereses. Más deuda aumenta el riesgo, aunque puede mejorar la rentabilidad del patrimonio.</p>
+<h3>Rentabilidad y actividad</h3>
+<p>Los <strong>márgenes</strong> (bruto, operacional y neto) miden cuánto queda de cada peso vendido. El <strong>ROA</strong> y el <strong>ROE</strong> miden el retorno sobre activos y sobre patrimonio. Los indicadores de actividad, como la rotación de cartera, de inventarios y de proveedores, muestran cuántos días tarda la empresa en cobrar, vender y pagar.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese los datos del balance y del estado de resultados en millones de pesos, elija sector y tamaño, y consulte cada grupo de indicadores con su semáforo. Los referentes son orientativos: compárelos con su propio histórico y con su sector.</p><p><em>Esta guía es informativa y las herramientas entregan estimaciones. Valide los resultados con su contador o asesor financiero antes de tomar decisiones de inversión, crédito o contratación.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo con cifras en millones</h3><p>Activo corriente 800, pasivo corriente 500 e inventarios 300.</p><ul><li>Razón corriente: 800 ÷ 500 = <strong>1,6</strong>.</li><li>Prueba ácida: (800 − 300) ÷ 500 = <strong>1,0</strong>.</li><li>Capital de trabajo: 800 − 500 = <strong>300</strong>.</li></ul><p>La empresa cubre sus deudas de corto plazo, pero buena parte de su liquidez depende de vender inventario.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cuál es una buena razón corriente?</summary><p>Depende del sector. Valores cercanos a 1,5 suelen verse como cómodos, pero un comercio y una empresa de servicios tienen estructuras distintas.</p></details>
+<details><summary>¿Endeudarse es malo?</summary><p>No necesariamente. Es un problema cuando la empresa no genera flujo para atender la deuda.</p></details>
+<details><summary>¿Qué indicador es el más importante?</summary><p>Ninguno por sí solo. Interprételos en conjunto y a lo largo del tiempo.</p></details>
+<details><summary>¿Cada cuánto se calculan?</summary><p>Al menos trimestralmente, con los estados financieros del periodo.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

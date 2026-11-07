@@ -116,6 +116,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Utilidad neta es lo mismo que caja?", "acceptedAnswer": {"@type": "Answer", "text": "No. La utilidad se mide por causación y la caja por pagos y cobros reales. Una empresa rentable puede tener problemas de caja; revise el flujo de caja aparte."}}, {"@type": "Question", "name": "¿Dónde va la depreciación?", "acceptedAnswer": {"@type": "Answer", "text": "Es un gasto que no implica salida de caja; se incluye en gastos operacionales o en el costo, según el uso del activo."}}, {"@type": "Question", "name": "¿Qué es el EBITDA?", "acceptedAnswer": {"@type": "Answer", "text": "Es la utilidad operacional antes de depreciación y amortización; sirve para medir la generación operativa de caja."}}, {"@type": "Question", "name": "¿Qué tasa de impuesto uso?", "acceptedAnswer": {"@type": "Answer", "text": "La tarifa general de renta para sociedades es 35 %. Regímenes especiales o beneficios pueden cambiarla; consulte a su contador."}}]}</script>
 </head>
 <body>
 
@@ -529,6 +541,25 @@ function calcularComparativo() {
 const refTable = document.querySelector('.ref-table');
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Estado de resultados: cómo leer utilidades y márgenes</h2>
+<h3>Qué muestra el estado de resultados</h3>
+<p>El <strong>estado de resultados</strong> (o P&amp;G) resume los ingresos, costos y gastos de un periodo y termina en la utilidad neta. Responde a la pregunta: ¿ganó o perdió la empresa en este periodo? Se presenta bajo NIIF para PYMES como una cascada que va de las ventas a la utilidad.</p>
+<h3>La cascada de utilidades</h3>
+<p>Se parte de las <strong>ventas netas</strong> (ventas brutas menos devoluciones y descuentos). Al restar el <strong>costo de ventas</strong> se obtiene la <em>utilidad bruta</em>. Al restar gastos de administración, de ventas y la depreciación se llega a la <em>utilidad operacional</em>. Luego se suman o restan los resultados no operacionales (intereses, diferencia en cambio) para obtener la <em>utilidad antes de impuestos</em>, y al descontar el impuesto de renta, la <em>utilidad neta</em>.</p>
+<h3>Análisis vertical</h3>
+<p>El análisis vertical expresa cada línea como porcentaje de las ventas netas. Así se ve cuánto de cada peso vendido se va en costos, gastos e impuestos, y se comparan márgenes entre periodos o contra el sector. Un margen bruto que baja suele indicar aumento de costos o presión de precios.</p>
+<h3>Comparativo de periodos</h3>
+<p>Comparar dos periodos muestra la variación absoluta y porcentual de cada línea. Es útil para detectar qué rubro explica un cambio en la utilidad y para separar el efecto de las ventas del efecto de los gastos.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese los valores en millones de pesos y la tasa de impuesto (35 % general para sociedades). La herramienta arma el estado completo con márgenes. Ajuste la tasa si su caso es distinto.</p><p><em>Esta guía es informativa y las herramientas entregan estimaciones. Valide los resultados con su contador o asesor financiero antes de tomar decisiones de inversión, crédito o contratación.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Ejemplo en millones de pesos</h3><ul><li>Ventas brutas 1.000 − devoluciones 50 = ventas netas <strong>950</strong>.</li><li>Costo de ventas 600 → utilidad bruta <strong>350</strong> (36,8 % de las ventas).</li><li>Administración 120, ventas 80 y depreciación 30 → utilidad operacional <strong>120</strong> (12,6 %).</li><li>Gastos financieros 20 → utilidad antes de impuestos <strong>100</strong>.</li><li>Impuesto 35 % = 35 → utilidad neta <strong>65</strong> (6,8 % de las ventas).</li></ul></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Utilidad neta es lo mismo que caja?</summary><p>No. La utilidad se mide por causación y la caja por pagos y cobros reales. Una empresa rentable puede tener problemas de caja; revise el flujo de caja aparte.</p></details>
+<details><summary>¿Dónde va la depreciación?</summary><p>Es un gasto que no implica salida de caja; se incluye en gastos operacionales o en el costo, según el uso del activo.</p></details>
+<details><summary>¿Qué es el EBITDA?</summary><p>Es la utilidad operacional antes de depreciación y amortización; sirve para medir la generación operativa de caja.</p></details>
+<details><summary>¿Qué tasa de impuesto uso?</summary><p>La tarifa general de renta para sociedades es 35 %. Regímenes especiales o beneficios pueden cambiarla; consulte a su contador.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

@@ -139,6 +139,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cada cuánto se hace un análisis?", "acceptedAnswer": {"@type": "Answer", "text": "Al menos una vez al año o antes de cada ciclo, y cuando cambie el manejo del lote."}}, {"@type": "Question", "name": "¿Cómo tomo la muestra?", "acceptedAnswer": {"@type": "Answer", "text": "Recoja submuestras en zigzag del lote, a la profundidad radicular del cultivo, mézclelas y envíe la muestra compuesta a un laboratorio confiable."}}, {"@type": "Question", "name": "¿Por qué difieren los resultados entre laboratorios?", "acceptedAnswer": {"@type": "Answer", "text": "Porque usan métodos de extracción distintos. Compare siempre resultados del mismo laboratorio y método."}}, {"@type": "Question", "name": "¿Cuánta cal debo aplicar?", "acceptedAnswer": {"@type": "Answer", "text": "Depende de la acidez, el aluminio, la CIC y el cultivo. Use la recomendación calculada como referencia y valídela con un agrónomo."}}]}</script>
 </head>
 <body>
 
@@ -651,6 +663,25 @@
   }
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Cómo interpretar un análisis de suelo</h2>
+<h3>Para qué sirve el análisis</h3>
+<p>El análisis de suelo muestra qué nutrientes tiene el lote, qué tan ácido es y qué limitaciones presenta. Fertilizar sin él es adivinar: se puede gastar de más en un nutriente que ya abunda o dejar sin corregir un factor, como la acidez, que impide que la planta aproveche los abonos.</p>
+<h3>pH y materia orgánica</h3>
+<p>El <strong>pH</strong> mide la acidez. La mayoría de cultivos rinde mejor en suelos ligeramente ácidos a neutros (alrededor de 5,5 a 7), porque a pH muy bajo se bloquean nutrientes como el fósforo y aumenta el aluminio tóxico. La <strong>materia orgánica</strong> mejora la estructura, retiene agua y aporta nitrógeno al mineralizarse.</p>
+<h3>Macronutrientes y bases</h3>
+<p>Fósforo (ppm), potasio, calcio y magnesio (meq/100 g) se interpretan en niveles bajo, medio y alto, que varían por cultivo. Importa también la <strong>relación entre bases</strong> (Ca, Mg y K): un exceso de una puede inducir deficiencia de otra. El aluminio más acidez intercambiable indica la necesidad de encalar.</p>
+<h3>CIC, saturación y encalado</h3>
+<p>La <strong>capacidad de intercambio catiónico (CIC)</strong> indica la capacidad del suelo de retener nutrientes. La <strong>saturación de bases</strong> y de aluminio guía la recomendación de cal: en suelos ácidos con aluminio alto, encalar es lo primero. La cantidad depende de la CIC, de la textura y del cultivo.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Ingrese los resultados del laboratorio, el cultivo y la textura. La herramienta clasifica cada nutriente, calcula saturaciones y ofrece recomendaciones de manejo y encalado. Use las unidades del informe del laboratorio.</p><p><em>Esta guía es informativa y los cálculos son estimaciones. Para decisiones de fertilización, riego o uso de agroquímicos consulte a un ingeniero agrónomo y siga siempre la etiqueta del producto y las normas del ICA.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Cómo leer un caso típico</h3><p>Un lote de pastos con <strong>pH 4,8</strong>, aluminio alto, fósforo bajo y materia orgánica media. La lectura: la acidez limita el aprovechamiento del fósforo, por lo que primero se corrige con cal y después se fertiliza. Aplicar fósforo sin encalar desperdicia parte del abono, porque queda retenido por el suelo ácido.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Cada cuánto se hace un análisis?</summary><p>Al menos una vez al año o antes de cada ciclo, y cuando cambie el manejo del lote.</p></details>
+<details><summary>¿Cómo tomo la muestra?</summary><p>Recoja submuestras en zigzag del lote, a la profundidad radicular del cultivo, mézclelas y envíe la muestra compuesta a un laboratorio confiable.</p></details>
+<details><summary>¿Por qué difieren los resultados entre laboratorios?</summary><p>Porque usan métodos de extracción distintos. Compare siempre resultados del mismo laboratorio y método.</p></details>
+<details><summary>¿Cuánta cal debo aplicar?</summary><p>Depende de la acidez, el aluminio, la CIC y el cultivo. Use la recomendación calculada como referencia y valídela con un agrónomo.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>

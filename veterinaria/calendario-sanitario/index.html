@@ -114,6 +114,18 @@
 .hp-footer a{color:inherit;text-decoration:underline;margin:0 .35rem}
 .hp-footer small{display:block;margin-top:.4rem;opacity:.8;font-size:11.5px}
 </style>
+<style id="edu-pro-css">
+.edu-pro{position:relative;z-index:5;max-width:960px;margin:2.5rem auto 0;padding:1.8rem 2rem 3rem;color:var(--text2,#8a9bb8);line-height:1.75;font-size:.95rem;border-top:1px solid var(--border,#2a3a5c)}
+.edu-pro h2{color:var(--text,#e8edf8);font-size:1.35rem;margin:0 0 .8rem}
+.edu-pro h3{color:var(--accent,#00d4ff);font-size:1.02rem;margin:1.4rem 0 .4rem}
+.edu-pro p,.edu-pro ul{margin:0 0 .8rem}.edu-pro ul{padding-left:1.3rem}.edu-pro li{margin-bottom:.35rem}
+.edu-pro strong{color:var(--text,#e8edf8)}.edu-pro code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:.85em}
+.edu-pro details{background:var(--panel,#1a2340);border:1px solid var(--border,#2a3a5c);border-radius:8px;padding:.7rem 1rem;margin-bottom:.5rem}
+.edu-pro summary{cursor:pointer;color:var(--text,#e8edf8);font-weight:600}.edu-pro details p{margin:.5rem 0 0}
+.edu-pro .ejemplo{background:rgba(0,212,255,.06);border-left:3px solid var(--accent,#00d4ff);padding:.2rem 1rem;border-radius:0 8px 8px 0;margin:1.2rem 0}
+@media(max-width:700px){.edu-pro{padding:1.4rem 1rem 2.5rem}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Quién puede vacunar contra la aftosa?", "acceptedAnswer": {"@type": "Answer", "text": "Los vacunadores autorizados por el ICA y los ciclos definidos por los gestores de los programas oficiales. Consulte el procedimiento en su región."}}, {"@type": "Question", "name": "¿Qué es el período de retiro?", "acceptedAnswer": {"@type": "Answer", "text": "El tiempo que debe pasar tras un tratamiento antes de vender carne o leche, para que los residuos estén dentro de los límites; está en el prospecto."}}, {"@type": "Question", "name": "¿Los esquemas aplican a cualquier finca?", "acceptedAnswer": {"@type": "Answer", "text": "Son una guía general. El veterinario ajusta el plan al riesgo sanitario, la zona y el sistema productivo."}}, {"@type": "Question", "name": "¿Qué hago si olvidé una dosis?", "acceptedAnswer": {"@type": "Answer", "text": "Consulte a su veterinario; en general se retoma el esquema sin duplicar dosis, pero depende del producto."}}]}</script>
 </head>
 <body>
 
@@ -481,6 +493,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<article class="edu-pro" id="guia-educativa">
+<h2>Calendario sanitario: vacunación y desparasitación por especie</h2>
+<h3>Prevenir es más barato que curar</h3>
+<p>Un calendario sanitario organiza vacunaciones, desparasitaciones y controles en las fechas que corresponden según la especie y la edad. Evita olvidos, reduce enfermedades y pérdidas productivas y facilita cumplir las obligaciones frente al ICA y los programas oficiales.</p>
+<h3>Vacunación obligatoria</h3>
+<p>En bovinos, la vacunación contra <strong>fiebre aftosa</strong> y <strong>brucelosis</strong> hace parte de los programas oficiales del ICA y tiene reglas de obligatoriedad, ciclos y registro de vacunadores. Su incumplimiento puede restringir la movilización de animales y generar sanciones. Consulte el calendario y las resoluciones vigentes con el ICA o la oficina local de su región.</p>
+<h3>Desparasitación y manejo</h3>
+<p>La desparasitación debe basarse en la especie, la edad, la carga parasitaria y la zona. Rotar principios activos y evitar subdosificar reduce la resistencia. Para mascotas y animales de producción, el plan debe definirlo un veterinario según el riesgo del hato y el clima (trópico bajo, medio o alto).</p>
+<h3>Registro y trazabilidad</h3>
+<p>Anote fecha, producto, lote, dosis y responsable de cada intervención. Estos registros respaldan la movilización, la venta y el control de períodos de retiro de medicamentos. Un calendario que se cumple y se registra es una herramienta de gestión, no solo de salud.</p>
+<h3>Cómo usar la herramienta</h3>
+<p>Elija la especie, la fecha de nacimiento o ingreso y la región. La herramienta genera el calendario con fechas, que puede imprimir. Confirme con su veterinario los productos y esquemas que corresponden a su hato.</p><p><em>Esta guía es informativa y no reemplaza el criterio del médico veterinario zootecnista. Los resultados son estimaciones orientativas.</em></p>
+<div class="ejemplo"><h3 style="margin-top:.6rem">Cómo usar el calendario en la finca</h3><p>Si un lote de terneras ingresó el 1 de marzo, ingrese esa fecha y la especie. La herramienta propone las fechas de cada intervención a partir de la edad del animal. Imprima el calendario, regístrelo en el cuaderno sanitario y marque cada intervención cuando se cumpla. Valide con su veterinario los productos y las edades antes de ejecutar.</p></div>
+<h3>Preguntas frecuentes</h3>
+<details><summary>¿Quién puede vacunar contra la aftosa?</summary><p>Los vacunadores autorizados por el ICA y los ciclos definidos por los gestores de los programas oficiales. Consulte el procedimiento en su región.</p></details>
+<details><summary>¿Qué es el período de retiro?</summary><p>El tiempo que debe pasar tras un tratamiento antes de vender carne o leche, para que los residuos estén dentro de los límites; está en el prospecto.</p></details>
+<details><summary>¿Los esquemas aplican a cualquier finca?</summary><p>Son una guía general. El veterinario ajusta el plan al riesgo sanitario, la zona y el sistema productivo.</p></details>
+<details><summary>¿Qué hago si olvidé una dosis?</summary><p>Consulte a su veterinario; en general se retoma el esquema sin duplicar dosis, pero depende del producto.</p></details>
+</article>
 <div class="hp-footer" role="contentinfo">
   <strong>HerramientasPro Colombia</strong> — herramientas digitales gratuitas para profesionales colombianos.<br>
   Desarrollado por Juan Carlos Gaviria Chaverra, docente de la Universidad de Antioquia.<br>
