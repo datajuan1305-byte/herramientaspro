@@ -57,7 +57,7 @@ function decidirRuta(sup, A, alpha) {
   return { id, color, titulo, texto, pasos, normOk, varOk, indepOk, desbal };
 }
 
-function generarResumenAnova(payload) {
+function _generarResumenAnova0(payload) {
   const r = payload.resultados, contexto = payload.contexto, A = r.A, alpha = r.alpha, partes = [];
   if (contexto && contexto.trim()) partes.push(`Con base en tu contexto ("${contexto.trim()}"):`);
   const sig = A.p < alpha;
@@ -72,7 +72,7 @@ function generarResumenAnova(payload) {
   return partes.join(' ');
 }
 
-function generarRespuestaAnova(payload) {
+function _generarRespuestaAnova0(payload) {
   const { pregunta, resultados: r, contexto } = payload; const A = r.A;
   if (!pregunta || !pregunta.trim()) return generarResumenAnova(payload);
   const q = pregunta.toLowerCase(), intro = contexto && contexto.trim() ? `Tomando en cuenta tu contexto ("${contexto.trim()}"): ` : '';
@@ -109,3 +109,7 @@ function generarRespuestaAnova(payload) {
   if (/resumen|interpretar|explica|significa/.test(q)) return generarResumenAnova(payload);
   return intro + 'Puedo responder sobre: cuáles tratamientos difieren, qué prueba de rangos múltiples usar, normalidad, homogeneidad, independencia, si seguir con ANOVA o usar Kruskal-Wallis, potencia y número de repeticiones, y tamaño del efecto.';
 }
+
+// Redacción: evita «p = < 0,0001» (debe leerse «p < 0,0001»)
+function generarResumenAnova(payload) { return _generarResumenAnova0(payload).replace(/= < /g, '< '); }
+function generarRespuestaAnova(payload) { return _generarRespuestaAnova0(payload).replace(/= < /g, '< '); }
